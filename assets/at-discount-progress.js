@@ -171,13 +171,20 @@ class AtDiscountProgressBar extends HTMLElement {
   };
 
   /**
+   * Formatted money with no fractional part (milestone labels, “add more” amounts).
    * @param {number} amountCents
    * @returns {string}
    */
-  #money(amountCents) {
+  #moneyWhole(amountCents) {
     const fmt = this.dataset.moneyFormat || '{{amount}}';
     const cur = this.dataset.currency || 'USD';
-    return formatMoney(amountCents, fmt, cur);
+    const wholeFmt = fmt
+      .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/g, '{{amount_no_decimals_with_comma_separator}}')
+      .replace(/\{\{\s*amount_with_space_separator\s*\}\}/g, '{{amount_no_decimals_with_space_separator}}')
+      .replace(/\{\{\s*amount_with_period_and_space_separator\s*\}\}/g, '{{amount_no_decimals_with_space_separator}}')
+      .replace(/\{\{\s*amount_with_apostrophe_separator\s*\}\}/g, '{{amount_no_decimals}}')
+      .replace(/\{\{\s*amount\s*\}\}/g, '{{amount_no_decimals}}');
+    return formatMoney(amountCents, wholeFmt, cur);
   }
 
   /**
@@ -270,44 +277,29 @@ class AtDiscountProgressBar extends HTMLElement {
     const pendingLeft = actualPct;
     const pendingWidth = Math.max(0, projectedPct - actualPct);
 
-    /** Status line */
-    let statusHtml = '';
+    /** Top row: “Add {{ amount }} more for {{ benefit }}” toward next tier (uses projected cart). */
+    let topAddMoreHtml = '';
+    if (highest < n - 1 && nextIdx >= 0) {
+      const need = m[nextIdx].threshold - projected;
+      if (need > 0) {
+        const amount = this.#moneyWhole(need);
+        const benefit = m[nextIdx].name;
+        const tpl = this.#i18n.add_more_for || '';
+        topAddMoreHtml = applyLiquidPlaceholders(tpl, { amount, benefit });
+      }
+    }
+
+    /** Bottom: current highest tier achieved (cart subtotal only). */
+    let achievementHtml = '';
     if (highest === n - 1) {
-      statusHtml = `<span class="at-dp__status-icon" aria-hidden="true">✓</span>${this.#i18n.max_tier_reached || ''}`;
+      achievementHtml = `<span class="at-dp__achievement-icon" aria-hidden="true">✓</span>${this.#i18n.max_tier_reached || ''}`;
     } else if (highest >= 0) {
       const tier = m[highest].name;
       const benefit = m[highest].benefitShort;
       const tpl = this.#i18n.tier_unlocked || '';
-      statusHtml = `<span class="at-dp__status-icon" aria-hidden="true">✓</span>${applyLiquidPlaceholders(tpl, { tier, benefit })}`;
+      achievementHtml = `<span class="at-dp__achievement-icon" aria-hidden="true">✓</span>${applyLiquidPlaceholders(tpl, { tier, benefit })}`;
     } else {
-      const need = m[0].threshold - subtotal;
-      const amount = this.#money(Math.max(0, need));
-      const benefit = m[0].name;
-      const tpl = this.#i18n.add_more_for || '';
-      statusHtml = applyLiquidPlaceholders(tpl, { amount, benefit });
-    }
-
-    /** Nudge (next tier) */
-    let nudgeText = '';
-    if (highest === n - 1) {
-      nudgeText = '';
-    } else if (nextIdx >= 0) {
-      const need = m[nextIdx].threshold - projected;
-      const nextBenefit =
-        m[nextIdx].kind === 'shipping'
-          ? m[nextIdx].benefitShort
-          : `${m[nextIdx].benefitLabel ? `${m[nextIdx].benefitLabel} off` : m[nextIdx].benefitShort}`;
-      if (need > 0) {
-        const amount = this.#money(need);
-        const benefit = nextBenefit;
-        const tpl = this.#i18n.add_more_for || '';
-        nudgeText = applyLiquidPlaceholders(tpl, { amount, benefit });
-      } else {
-        nudgeText = applyLiquidPlaceholders(this.#i18n.tier_unlocked || '', {
-          tier: m[nextIdx].name,
-          benefit: m[nextIdx].benefitShort,
-        });
-      }
+      achievementHtml = this.#i18n.achievement_none || '';
     }
 
     const uid = this.dataset.sectionUid || 'at-dp';
@@ -336,7 +328,7 @@ class AtDiscountProgressBar extends HTMLElement {
       .map((ms, i) => {
         const left = n === 1 ? 0 : (i / (n - 1)) * 100;
         const active = subtotal >= ms.threshold ? ' at-dp__amount--active' : '';
-        return `<span class="at-dp__amount${active}" style="left:${left}%">${this.#money(ms.threshold)}</span>`;
+        return `<span class="at-dp__amount${active}" style="left:${left}%">${this.#moneyWhole(ms.threshold)}</span>`;
       })
       .join('');
 
@@ -353,7 +345,7 @@ class AtDiscountProgressBar extends HTMLElement {
     this.innerHTML = `
       <div class="at-dp">
         <div class="at-dp__header">
-          <p class="at-dp__status" role="status" aria-live="polite">${statusHtml}</p>
+          <p class="at-dp__nudge-top" role="status" aria-live="polite">${topAddMoreHtml}</p>
           <div class="at-dp__info-wrap">
             <button
               type="button"
@@ -387,7 +379,7 @@ class AtDiscountProgressBar extends HTMLElement {
           <div class="at-dp__dots">${dots}</div>
           <div class="at-dp__amounts">${amounts}</div>
         </div>
-        ${nudgeText ? `<p class="at-dp__nudge">${nudgeText}</p>` : ''}
+        ${achievementHtml ? `<p class="at-dp__achievement" role="status" aria-live="polite">${achievementHtml}</p>` : ''}
       </div>
     `;
 
