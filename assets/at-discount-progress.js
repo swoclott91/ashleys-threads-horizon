@@ -228,8 +228,8 @@ class AtDiscountProgressBar extends HTMLElement {
       const input = form?.querySelector('quantity-selector-component input[name="quantity"]');
       const qty = Number(input?.value) || defaultQty;
       const unit = Number(this.dataset.variantPrice) || 0;
-      if (qty === defaultQty) return 0;
-      return qty * unit;
+      /* Value of this add-to-cart line (always include default qty so empty-cart preview works). */
+      return Math.max(0, qty * unit);
     }
     if (ctx === 'bulk-modal') {
       const inner = findBulkDiscountHost(this);
@@ -258,44 +258,48 @@ class AtDiscountProgressBar extends HTMLElement {
     const subtotal = this.#subtotal;
     const pending = this.#getPendingCents();
     const projected = subtotal + pending;
+    const ctx = this.dataset.context || 'cart';
+    /** Cart page/drawer: actual cart only. PDP / bulk: include form line so preview matches “after add”. */
+    const previewBasis = ctx === 'cart' ? subtotal : projected;
 
-    let highest = -1;
+    let highestPreview = -1;
     for (let i = 0; i < n; i++) {
-      if (subtotal >= m[i].threshold) highest = i;
+      if (previewBasis >= m[i].threshold) highestPreview = i;
     }
 
-    let nextIdx = -1;
+    const actualPct = this.#amountToPercent(subtotal);
+    const projectedPct = ctx !== 'cart' ? this.#amountToPercent(projected) : actualPct;
+    const pendingLeft = actualPct;
+    const pendingWidth = Math.max(0, projectedPct - actualPct);
+
+    /** First milestone not yet reached at preview level — drives top “add more” toward that tier. */
+    let targetIdx = -1;
     for (let i = 0; i < n; i++) {
-      if (subtotal < m[i].threshold) {
-        nextIdx = i;
+      if (projected < m[i].threshold) {
+        targetIdx = i;
         break;
       }
     }
 
-    const actualPct = this.#amountToPercent(subtotal);
-    const projectedPct = pending > 0 ? this.#amountToPercent(projected) : actualPct;
-    const pendingLeft = actualPct;
-    const pendingWidth = Math.max(0, projectedPct - actualPct);
-
-    /** Top row: “Add {{ amount }} more for {{ benefit }}” toward next tier (uses projected cart). */
+    /** Top row: “Add {{ amount }} more for {{ benefit }}” — always use projected so crossing a tier advances to the next goal. */
     let topAddMoreHtml = '';
-    if (highest < n - 1 && nextIdx >= 0) {
-      const need = m[nextIdx].threshold - projected;
+    if (targetIdx >= 0) {
+      const need = m[targetIdx].threshold - projected;
       if (need > 0) {
         const amount = this.#moneyWhole(need);
-        const benefit = m[nextIdx].name;
+        const benefit = m[targetIdx].name;
         const tpl = this.#i18n.add_more_for || '';
         topAddMoreHtml = applyLiquidPlaceholders(tpl, { amount, benefit });
       }
     }
 
-    /** Bottom: current highest tier achieved (cart subtotal only). */
+    /** Bottom: tier messaging uses preview on PDP/bulk (pre–add-to-cart), cart subtotal on cart. */
     let achievementHtml = '';
-    if (highest === n - 1) {
+    if (highestPreview === n - 1) {
       achievementHtml = `<span class="at-dp__achievement-icon" aria-hidden="true">✓</span>${this.#i18n.max_tier_reached || ''}`;
-    } else if (highest >= 0) {
-      const tier = m[highest].name;
-      const benefit = m[highest].benefitShort;
+    } else if (highestPreview >= 0) {
+      const tier = m[highestPreview].name;
+      const benefit = m[highestPreview].benefitShort;
       const tpl = this.#i18n.tier_unlocked || '';
       achievementHtml = `<span class="at-dp__achievement-icon" aria-hidden="true">✓</span>${applyLiquidPlaceholders(tpl, { tier, benefit })}`;
     } else {
@@ -306,10 +310,18 @@ class AtDiscountProgressBar extends HTMLElement {
     const panelId = `at-dp-panel-${uid}`;
     const nonSaleUrl = (this.dataset.nonSaleUrl || '').trim();
 
+    let nextTierIdx = -1;
+    for (let i = 0; i < n; i++) {
+      if (previewBasis < m[i].threshold) {
+        nextTierIdx = i;
+        break;
+      }
+    }
+
     const benefitsRow = m
       .map((ms, i) => {
         const left = n === 1 ? 0 : (i / (n - 1)) * 100;
-        const active = subtotal >= ms.threshold ? ' at-dp__benefit--active' : '';
+        const active = previewBasis >= ms.threshold ? ' at-dp__benefit--active' : '';
         return `<span class="at-dp__benefit${active}" style="left:${left}%">${ms.benefitLabel}</span>`;
       })
       .join('');
@@ -318,8 +330,8 @@ class AtDiscountProgressBar extends HTMLElement {
       .map((ms, i) => {
         const left = n === 1 ? 0 : (i / (n - 1)) * 100;
         let cls = 'at-dp__dot';
-        if (subtotal >= ms.threshold) cls += ' at-dp__dot--reached';
-        else if (nextIdx === i) cls += ' at-dp__dot--next';
+        if (previewBasis >= ms.threshold) cls += ' at-dp__dot--reached';
+        else if (nextTierIdx === i) cls += ' at-dp__dot--next';
         return `<span class="${cls}" style="left:${left}%"></span>`;
       })
       .join('');
@@ -327,13 +339,13 @@ class AtDiscountProgressBar extends HTMLElement {
     const amounts = m
       .map((ms, i) => {
         const left = n === 1 ? 0 : (i / (n - 1)) * 100;
-        const active = subtotal >= ms.threshold ? ' at-dp__amount--active' : '';
+        const active = previewBasis >= ms.threshold ? ' at-dp__amount--active' : '';
         return `<span class="at-dp__amount${active}" style="left:${left}%">${this.#moneyWhole(ms.threshold)}</span>`;
       })
       .join('');
 
     const previewNote =
-      pending > 0 && (this.dataset.context === 'product' || this.dataset.context === 'bulk-modal')
+      ctx !== 'cart' && pending > 0 && (ctx === 'product' || ctx === 'bulk-modal')
         ? `<p class="at-dp__preview-note">${this.#i18n.preview_helper || ''}</p>`
         : '';
 
