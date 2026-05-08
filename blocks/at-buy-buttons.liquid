@@ -42,14 +42,6 @@
     assign at_has_bulk = true
   endif
 
-  assign at_dp_color_scheme = settings.at_discount_progress_color_scheme
-  for child in block.blocks
-    if child.type == 'at-discount-progress'
-      assign at_dp_color_scheme = child.settings.color_scheme
-      break
-    endif
-  endfor
-
   assign dpg = block_settings.discount_progress_gap | default: 20
   assign _dpg_scale_min = 20
   if dpg > _dpg_scale_min
@@ -109,7 +101,7 @@
         </h2>
         <div class="at-buy-buttons__bulk-dialog-inner">
           {% if settings.at_discount_progress_enabled %}
-            <div class="at-discount-progress-scheme-wrap{% if at_dp_color_scheme != blank %} color-{{ at_dp_color_scheme }}{% endif %}">
+            <div class="at-discount-progress-scheme-wrap{% if settings.at_discount_progress_color_scheme != blank %} color-{{ settings.at_discount_progress_color_scheme }}{% endif %}">
               {% render 'at-discount-progress',
                 context: 'bulk-modal',
                 section_id: section.id | append: '-' | append: block.id,
@@ -1016,8 +1008,7 @@
           "type": "at-discount-progress",
           "static": true,
           "settings": {
-            "show_discount_bar": true,
-            "color_scheme": "scheme-1"
+            "show_discount_bar": true
           }
         }
       }

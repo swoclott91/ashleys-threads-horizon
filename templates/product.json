@@ -372,7 +372,6 @@
                   "static": true,
                   "settings": {
                     "show_discount_bar": true,
-                    "color_scheme": "scheme-4",
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,

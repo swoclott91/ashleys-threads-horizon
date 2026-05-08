@@ -52,6 +52,7 @@
     "carousel_pagination": "Carousel pagination",
     "cart_features": "Cart features",
     "at_discount_progress_heading": "Volume discount progress",
+    "at_discount_progress_theme_scheme_note": "Colors use the theme Cart setting “Discount bar color scheme” so the bar matches cart and drawer everywhere.",
     "at_discount_progress_spacing_header": "Discount progress spacing",
     "colors": "Colors",
     "collection_page": "Collection page",
@@ -243,7 +244,8 @@
     "at_categories_menu": "Optional separate navigation menu for the left sidebar. If blank, the brands link's sub-items are used.",
     "at_highlight_handle": "The handle of the navigation link to display in the accent color (e.g., \"sale\")",
     "at_non_sale_collection_url": "Shown in the discount bar info panel so customers can browse items that qualify for member tier discounts.",
-    "discount_progress_gap": "Vertical space between the quantity / add to cart row and the discount progress bar."
+    "discount_progress_gap": "Vertical space between the quantity / add to cart row and the discount progress bar.",
+    "at_discount_progress_color_scheme": "Applies to the discount bar on product pages, cart, cart drawer, and bulk modals."
   },
   "names": {
     "column": "Column",

@@ -1,7 +1,7 @@
 {%- doc -%}
   Access Threads: discount tier progress bar for product pages (nested under AT Buy buttons).
 
-  Applies `color-{{ scheme }}` so backgrounds, primary fill, text, and borders follow the selected theme color group.
+  Color scheme comes from theme settings `at_discount_progress_color_scheme` (Cart settings) so PDP matches cart / drawer.
 
   Parent `blocks/at-buy-buttons.liquid` renders this via `content_for` with static id `discount-progress`.
 {%- enddoc -%}
@@ -10,8 +10,8 @@
   assign product = closest.product
   assign variant = product.selected_or_first_available_variant
   assign scheme_class = ''
-  if bs.color_scheme != blank
-    assign scheme_class = 'color-' | append: bs.color_scheme
+  if settings.at_discount_progress_color_scheme != blank
+    assign scheme_class = 'color-' | append: settings.at_discount_progress_color_scheme
   endif
 %}
 {% if product != blank and bs.show_discount_bar and settings.at_discount_progress_enabled %}
@@ -36,16 +36,14 @@
   "tag": null,
   "settings": [
     {
+      "type": "paragraph",
+      "content": "t:content.at_discount_progress_theme_scheme_note"
+    },
+    {
       "type": "checkbox",
       "id": "show_discount_bar",
       "label": "t:settings.at_discount_progress_show",
       "default": true
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:settings.color_scheme",
-      "default": "scheme-1"
     },
     {
       "type": "header",
