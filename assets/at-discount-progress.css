@@ -74,8 +74,9 @@
   line-height: normal;
 }
 
+/* Icon stroke uses currentColor — inherit from `.button` (`--button-color`), not section/foreground text */
 .at-discount-progress__account .account-button__icon {
-  color: var(--color-account-icon, var(--color-foreground));
+  color: currentColor;
   flex-shrink: 0;
 }
 
