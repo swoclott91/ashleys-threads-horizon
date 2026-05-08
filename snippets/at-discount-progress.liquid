@@ -40,7 +40,7 @@
       {{ 'at_discount_progress.log_in_prompt' | t }}
     </p>
     {% if shop.customer_accounts_enabled %}
-      <div class="at-discount-progress__account account-button color-{{ settings.popover_color_scheme }}">
+      <div class="at-discount-progress__account">
         <shopify-account menu="{{ dp_customer_account_menu }}">
           <span
             slot="signed-out-avatar"

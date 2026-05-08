@@ -37,7 +37,36 @@
 .at-discount-progress__account {
   align-self: flex-start;
   max-width: 100%;
-  background: transparent;
+}
+
+/*
+ * Primary button tokens from the active color scheme (parent `.color-*` on cart / discount block).
+ * Do not wrap with `popover_color_scheme` — that applies a different scheme than the bar/card.
+ */
+.at-discount-progress--logged-out .at-discount-progress__account-trigger.button {
+  --button-color: var(--color-primary-button-text);
+  --button-background-color: var(--color-primary-button-background);
+  --button-border-color: var(--color-primary-button-border);
+  --button-border-width: var(--style-border-width-primary);
+}
+
+.at-discount-progress--logged-out .at-discount-progress__account-trigger.button:hover {
+  --button-color: var(--color-primary-button-hover-text);
+  --button-background-color: var(--color-primary-button-hover-background);
+  --button-border-color: var(--color-primary-button-hover-border);
+}
+
+.at-discount-progress--logged-out .at-discount-progress__login--legacy.button {
+  --button-color: var(--color-primary-button-text);
+  --button-background-color: var(--color-primary-button-background);
+  --button-border-color: var(--color-primary-button-border);
+  --button-border-width: var(--style-border-width-primary);
+}
+
+.at-discount-progress--logged-out .at-discount-progress__login--legacy.button:hover {
+  --button-color: var(--color-primary-button-hover-text);
+  --button-background-color: var(--color-primary-button-hover-background);
+  --button-border-color: var(--color-primary-button-hover-border);
 }
 
 /* Match header `shopify-account` so the same login / Shop sign-in modal is used (see snippets/header-actions.liquid) */
