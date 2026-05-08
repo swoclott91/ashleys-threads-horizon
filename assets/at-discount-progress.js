@@ -269,8 +269,9 @@ class AtDiscountProgressBar extends HTMLElement {
 
     const actualPct = this.#amountToPercent(subtotal);
     const projectedPct = ctx !== 'cart' ? this.#amountToPercent(projected) : actualPct;
-    const pendingLeft = actualPct;
-    const pendingWidth = Math.max(0, projectedPct - actualPct);
+    /** Layer pending from 0 → projectedPct (smooth width transition); committed fill on top masks 0 → actualPct. */
+    const showPendingLayer =
+      ctx !== 'cart' && pending > 0 && projectedPct > actualPct + 0.001;
 
     /** First milestone not yet reached at preview level — drives top “add more” toward that tier. */
     let targetIdx = -1;
@@ -397,12 +398,12 @@ class AtDiscountProgressBar extends HTMLElement {
         <div class="at-dp__benefits">${benefitsRow}</div>
         <div class="at-dp__track-wrap">
           <div class="at-dp__track">
-            <div class="at-dp__fill" style="width:${actualPct}%"></div>
             ${
-              pendingWidth > 0.5
-                ? `<div class="at-dp__fill at-dp__fill--pending" style="left:${pendingLeft}%;width:${pendingWidth}%"></div>`
+              showPendingLayer
+                ? `<div class="at-dp__fill at-dp__fill--pending" style="width:${projectedPct}%"></div>`
                 : ''
             }
+            <div class="at-dp__fill at-dp__fill--committed" style="width:${actualPct}%"></div>
           </div>
           <div class="at-dp__dots">${dots}</div>
           <div class="at-dp__amounts">${amounts}</div>

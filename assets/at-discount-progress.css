@@ -337,21 +337,25 @@
   overflow: hidden;
 }
 
-/* Achieved progress: “Selected variants” — background */
+/* Full-width preview layer (0 → projected %); committed bar stacks above and covers cart-only portion */
 .at-dp__fill {
   position: absolute;
   inset-block: 0;
   inset-inline-start: 0;
   width: 0;
   border-radius: var(--style-border-radius-pills);
-  background: var(--color-selected-variant-background);
   transition: width 0.35s ease;
 }
 
-/* Pending / projected cart fill: “Variants” — hover background (preview before commit) */
+.at-dp__fill--committed {
+  z-index: 2;
+  background: var(--color-selected-variant-background);
+}
+
+/* Pending / projected: “Variants” — hover background; sits under committed so width animates from track start */
 .at-dp__fill--pending {
-  background: var(--color-variant-hover-background);
   z-index: 1;
+  background: var(--color-variant-hover-background);
 }
 
 .at-dp__dots {
