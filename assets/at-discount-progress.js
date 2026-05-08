@@ -361,33 +361,31 @@ class AtDiscountProgressBar extends HTMLElement {
 
     const achievementBlock = `
       <p class="at-dp__achievement" role="status" aria-live="polite">
-        <span class="at-dp__achievement-inner">
-          ${achievementHtml}
-          <span class="at-dp__tip at-dp__info-wrap at-dp__info-wrap--sup">
-            <button
-              type="button"
-              class="at-dp__info-ref button-unstyled"
-              aria-expanded="false"
-              aria-controls="${panelId}"
-              aria-label="${this.#i18n.info_open || 'Discount details'}"
-            >
-              ${INFO_ICON_SVG}
+        <span class="at-dp__achievement-text">${achievementHtml}</span>
+        <span class="at-dp__tip at-dp__info-wrap at-dp__info-wrap--sup">
+          <button
+            type="button"
+            class="at-dp__info-ref button-unstyled"
+            aria-expanded="false"
+            aria-controls="${panelId}"
+            aria-label="${this.#i18n.info_open || 'Discount details'}"
+          >
+            ${INFO_ICON_SVG}
+          </button>
+          <div
+            class="at-dp__panel at-dp__panel--sup"
+            id="${panelId}"
+            hidden
+            role="region"
+            aria-label="${this.#i18n.info_open || ''}"
+          >
+            <p class="at-dp__panel-line">${this.#i18n.non_sale_disclaimer || ''}</p>
+            ${qualifyingLink}
+            ${previewNote}
+            <button type="button" class="at-dp__close-panel button-unstyled">
+              ${this.#i18n.info_close || 'Close'}
             </button>
-            <div
-              class="at-dp__panel at-dp__panel--sup"
-              id="${panelId}"
-              hidden
-              role="region"
-              aria-label="${this.#i18n.info_open || ''}"
-            >
-              <p class="at-dp__panel-line">${this.#i18n.non_sale_disclaimer || ''}</p>
-              ${qualifyingLink}
-              ${previewNote}
-              <button type="button" class="at-dp__close-panel button-unstyled">
-                ${this.#i18n.info_close || 'Close'}
-              </button>
-            </div>
-          </span>
+          </div>
         </span>
       </p>
     `;
