@@ -6,8 +6,10 @@
   @param {number} [product_price] - Selected variant price in cents (product context).
   @param {object} [product] - Product for data-product-id (product context).
   @param {string} [non_sale_collection_url] - Link for qualifying items in info panel.
+  @param {string} [customer_account_menu] - Menu handle for shopify-account (default matches header: customer-account-main-menu).
 {%- enddoc -%}
 {%- liquid
+  assign dp_customer_account_menu = customer_account_menu | default: 'customer-account-main-menu'
   assign dp_context = context | default: 'cart'
   assign dp_section = section_id | default: 'global'
   assign dp_uid = dp_section | append: '-' | append: dp_context | handleize
@@ -37,12 +39,67 @@
     <p class="at-discount-progress__prompt">
       {{ 'at_discount_progress.log_in_prompt' | t }}
     </p>
-    <a
-      href="{{ routes.account_login_url }}"
-      class="button at-discount-progress__login"
-    >
-      {{ 'at_discount_progress.log_in' | t }}
-    </a>
+    {% if shop.customer_accounts_enabled %}
+      <div class="at-discount-progress__account account-button color-{{ settings.popover_color_scheme }}">
+        <shopify-account menu="{{ dp_customer_account_menu }}">
+          <span
+            slot="signed-out-avatar"
+            class="at-discount-progress__account-trigger button"
+          >
+            <span
+              class="svg-wrapper account-button__icon"
+              aria-hidden="true"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="15"
+                height="17"
+                viewBox="0 0 15 17"
+                fill="none"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linejoin="round"
+                  stroke-width="var(--icon-stroke-width)"
+                  d="M10.375 3.813a3.063 3.063 0 1 1-6.125 0 3.063 3.063 0 0 1 6.125 0ZM7.313 9.5c-3.667 0-6.24 2.691-6.563 6.125h13.125C13.552 12.191 10.979 9.5 7.312 9.5Z"
+                />
+              </svg>
+            </span>
+            <span class="at-discount-progress__login-label">
+              {{- 'at_discount_progress.log_in' | t -}}
+            </span>
+          </span>
+        </shopify-account>
+      </div>
+    {% else %}
+      <a
+        href="{{ routes.account_login_url }}"
+        class="button at-discount-progress__login at-discount-progress__login--legacy"
+      >
+        <span
+          class="svg-wrapper account-button__icon"
+          aria-hidden="true"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="17"
+            viewBox="0 0 15 17"
+            fill="none"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linejoin="round"
+              stroke-width="var(--icon-stroke-width)"
+              d="M10.375 3.813a3.063 3.063 0 1 1-6.125 0 3.063 3.063 0 0 1 6.125 0ZM7.313 9.5c-3.667 0-6.24 2.691-6.563 6.125h13.125C13.552 12.191 10.979 9.5 7.312 9.5Z"
+            />
+          </svg>
+        </span>
+        <span class="at-discount-progress__login-label">
+          {{- 'at_discount_progress.log_in' | t -}}
+        </span>
+      </a>
+    {% endif %}
   </div>
 {%- else -%}
   <at-discount-progress-bar

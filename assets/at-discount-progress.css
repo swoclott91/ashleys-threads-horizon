@@ -34,8 +34,77 @@
   color: var(--color-foreground);
 }
 
-.at-discount-progress__login {
+.at-discount-progress__account {
   align-self: flex-start;
+  max-width: 100%;
+  background: transparent;
+}
+
+/* Match header `shopify-account` so the same login / Shop sign-in modal is used (see snippets/header-actions.liquid) */
+.at-discount-progress--logged-out shopify-account {
+  --shopify-account-font-heading: var(--font-heading--family);
+  --shopify-account-font-heading-weight: var(--font-heading--weight);
+  --shopify-account-font-body: var(--font-body--family);
+  --shopify-account-font-body-weight: var(--font-body--weight);
+  --shopify-account-radius-base: var(--style-border-radius-popover);
+  --shopify-account-radius-button: var(--style-border-radius-buttons-primary);
+  --shopify-account-radius-button-small: var(--style-border-radius-buttons-primary);
+  --shopify-account-radius-input: var(--style-border-radius-buttons-primary);
+  --shopify-account-color-background: var(--color-background);
+  --shopify-account-color-text: var(--color-foreground);
+  --shopify-account-color-accent: var(--color-primary-button-background);
+  --shopify-account-color-accent-text: var(--color-primary-button-text);
+  /* Same effective offset as header actions (snippets/header-actions.liquid); vars come from body/header scripts */
+  --shopify-account-dialog-position-top: calc(
+    var(--header-group-height, var(--header-height, 60px))
+    + (var(--header-height, 60px) * var(--transparent-header-offset-boolean, 0))
+  );
+
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.at-discount-progress--logged-out shopify-account:not(:defined) {
+  display: flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  line-height: normal;
+}
+
+.at-discount-progress__account .account-button__icon {
+  color: var(--color-account-icon, var(--color-foreground));
+  flex-shrink: 0;
+}
+
+.at-discount-progress__account-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-xs);
+  width: auto;
+  max-width: 100%;
+  cursor: pointer;
+}
+
+.at-discount-progress__login-label {
+  white-space: nowrap;
+}
+
+.at-discount-progress__login--legacy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-xs);
+  align-self: flex-start;
+  max-width: 100%;
+}
+
+.at-discount-progress__login--legacy .account-button__icon {
+  color: inherit;
+  flex-shrink: 0;
 }
 
 .at-dp {
