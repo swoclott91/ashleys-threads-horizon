@@ -359,10 +359,15 @@ class AtDiscountProgressBar extends HTMLElement {
       ? `<div class="at-dp__header"><p class="at-dp__nudge-top" role="status" aria-live="polite">${topAddMoreHtml}</p></div>`
       : '';
 
+    /*
+     * Achievement row must use <div>, not <p>: a block-level panel inside <p> is invalid HTML and
+     * browsers hoist the panel out of the tip anchor — `top: 100%` then resolves against a tall
+     * ancestor. Tip wrapper must be <div> too — <div> cannot nest inside <span>.
+     */
     const achievementBlock = `
-      <p class="at-dp__achievement" role="status" aria-live="polite">
+      <div class="at-dp__achievement" role="status" aria-live="polite">
         <span class="at-dp__achievement-text">${achievementHtml}</span>
-        <span class="at-dp__tip at-dp__info-wrap at-dp__info-wrap--sup">
+        <div class="at-dp__tip at-dp__info-wrap at-dp__info-wrap--sup">
           <button
             type="button"
             class="at-dp__info-ref button-unstyled"
@@ -386,8 +391,8 @@ class AtDiscountProgressBar extends HTMLElement {
               ${this.#i18n.info_close || 'Close'}
             </button>
           </div>
-        </span>
-      </p>
+        </div>
+      </div>
     `;
 
     this.innerHTML = `

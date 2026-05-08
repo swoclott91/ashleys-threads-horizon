@@ -203,8 +203,8 @@ at-discount-progress-bar {
 }
 
 /*
- * Anchor for `.at-dp__panel--sup` must be only the icon — sibling of achievement copy under flex
- * (avoid nesting inside `display: inline` wrappers, which made `top: 100%` resolve to a tall parent).
+ * Anchor for `.at-dp__panel--sup`: `.at-dp__info-wrap--sup` (JS uses `<div>` wrappers — never `<p>`/`<span>`
+ * around a block panel; invalid HTML hoists the panel in the DOM so `top: 100%` targets a tall ancestor).
  */
 .at-dp__tip.at-dp__info-wrap--sup,
 .at-dp__info-wrap--sup {
