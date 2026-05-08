@@ -127,7 +127,6 @@
     {
       "type": "product-custom-property"
     },
-    {%- comment -%} AT CUSTOM: Access Threads bulk order blocks {%- endcomment -%}
     {
       "type": "at-popup-link"
     },
@@ -137,7 +136,6 @@
     {
       "type": "at-buy-buttons"
     }
-    {%- comment -%} /AT CUSTOM {%- endcomment -%}
   ],
   "tag": null,
   "settings": [
@@ -246,7 +244,7 @@
         }
       ],
       "default": "flex-start",
-      "visible_if": "{{ block.settings.height == \"fill\" }}"
+      "visible_if": "{{ block.settings.height == 'fill' }}"
     },
     {
       "type": "range",
