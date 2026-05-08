@@ -1,0 +1,62 @@
+{%- doc -%}
+  Access Threads: member tier discount progress bar (cart, drawer, PDP, bulk modal).
+
+  @param {string} context - 'cart' | 'product' | 'bulk-modal'
+  @param {string} [section_id] - Unique id suffix for a11y (popover). Defaults to 'cart'.
+  @param {number} [product_price] - Selected variant price in cents (product context).
+  @param {object} [product] - Product for data-product-id (product context).
+  @param {string} [non_sale_collection_url] - Link for qualifying items in info panel.
+{%- enddoc -%}
+{%- liquid
+  assign dp_context = context | default: 'cart'
+  assign dp_section = section_id | default: 'global'
+  assign dp_uid = dp_section | append: '-' | append: dp_context | handleize
+  assign dp_non_sale_url = non_sale_collection_url | default: settings.at_non_sale_collection_url
+  assign dp_subtotal = cart.items_subtotal_price
+  assign dp_product_price = product_price | default: 0
+  assign dp_product_id = ''
+  if product != blank
+    assign dp_product_id = product.id
+  endif
+  assign milestones_json = '[{"threshold":15000,"name":"Stock-up pricing","benefitShort":"12% off non-sale items","benefitLabel":"12%"},{"threshold":20000,"name":"Free shipping","benefitShort":"Free shipping","benefitLabel":"Free ship","kind":"shipping"},{"threshold":30000,"name":"Bulk pricing","benefitShort":"15% off non-sale items","benefitLabel":"15%"},{"threshold":75000,"name":"Volume pricing","benefitShort":"18% off non-sale items","benefitLabel":"18%"},{"threshold":150000,"name":"Pro pricing","benefitShort":"20% off non-sale items","benefitLabel":"20%"},{"threshold":300000,"name":"Max Member Pricing","benefitShort":"25% off non-sale items","benefitLabel":"25%"}]'
+-%}
+{%- capture dp_i18n -%}
+{"log_in_prompt":{{ 'at_discount_progress.log_in_prompt' | t | json }},"log_in":{{ 'at_discount_progress.log_in' | t | json }},"tier_unlocked":{{ 'at_discount_progress.tier_unlocked' | t | json }},"add_more_for":{{ 'at_discount_progress.add_more_for' | t | json }},"max_tier_reached":{{ 'at_discount_progress.max_tier_reached' | t | json }},"non_sale_disclaimer":{{ 'at_discount_progress.non_sale_disclaimer' | t | json }},"browse_qualifying":{{ 'at_discount_progress.browse_qualifying' | t | json }},"info_open":{{ 'at_discount_progress.info_open' | t | json }},"info_close":{{ 'at_discount_progress.info_close' | t | json }},"preview_helper":{{ 'at_discount_progress.preview_helper' | t | json }}}
+{%- endcapture -%}
+{{ 'at-discount-progress.css' | asset_url | stylesheet_tag }}
+<script
+  src="{{ 'at-discount-progress.js' | asset_url }}"
+  type="module"
+></script>
+
+{%- unless customer -%}
+  <div
+    class="at-discount-progress at-discount-progress--logged-out spacing-style"
+    data-testid="at-discount-progress-logged-out"
+  >
+    <p class="at-discount-progress__prompt">
+      {{ 'at_discount_progress.log_in_prompt' | t }}
+    </p>
+    <a
+      href="{{ routes.account_login_url }}"
+      class="button at-discount-progress__login"
+    >
+      {{ 'at_discount_progress.log_in' | t }}
+    </a>
+  </div>
+{%- else -%}
+  <at-discount-progress-bar
+    class="at-discount-progress"
+    data-context="{{ dp_context | escape }}"
+    data-section-uid="{{ dp_uid | escape }}"
+    data-subtotal="{{ dp_subtotal }}"
+    data-milestones="{{ milestones_json | escape }}"
+    data-money-format="{{ shop.money_format | escape }}"
+    data-currency="{{ shop.currency | escape }}"
+    data-product-id="{{ dp_product_id }}"
+    data-variant-price="{{ dp_product_price }}"
+    data-non-sale-url="{{ dp_non_sale_url | default: '' | escape }}"
+    data-i18n="{{ dp_i18n | strip_newlines | escape }}"
+    data-testid="at-discount-progress-bar"
+  ></at-discount-progress-bar>
+{%- endunless -%}

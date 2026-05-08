@@ -1764,6 +1764,22 @@
         "info": "t:info.checkout_buttons",
         "default": true
       },
+      {
+        "type": "header",
+        "content": "t:content.at_discount_progress_heading"
+      },
+      {
+        "type": "checkbox",
+        "id": "at_discount_progress_enabled",
+        "label": "t:settings.at_discount_progress_enabled",
+        "default": true
+      },
+      {
+        "type": "url",
+        "id": "at_non_sale_collection_url",
+        "label": "t:settings.at_non_sale_collection_url",
+        "info": "t:info.at_non_sale_collection_url"
+      },
 
       {
         "type": "url",

@@ -92,6 +92,13 @@
           {{ block_settings.at_bulk_trigger_label | default: 'Bulk Add to Cart' }}
         </h2>
         <div class="at-buy-buttons__bulk-dialog-inner">
+          {% if settings.at_discount_progress_enabled %}
+            {% render 'at-discount-progress',
+              context: 'bulk-modal',
+              section_id: section.id | append: '-' | append: block.id,
+              non_sale_collection_url: settings.at_non_sale_collection_url
+            %}
+          {% endif %}
           <div
             class="at-bulk-grid"
             data-at-bulk-grid
@@ -310,6 +317,15 @@
         </div>
       {%- endform -%}
     </product-form-component>
+    {%- if settings.at_discount_progress_enabled and product != blank -%}
+      {% render 'at-discount-progress',
+        context: 'product',
+        section_id: section.id,
+        product: product,
+        product_price: variant.price,
+        non_sale_collection_url: settings.at_non_sale_collection_url
+      %}
+    {%- endif -%}
   {%- else -%}
     <div class="product-form-buttons">
       <button

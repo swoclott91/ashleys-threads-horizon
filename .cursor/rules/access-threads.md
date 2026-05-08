@@ -77,8 +77,17 @@ These core Horizon files contain AT customizations and may need manual conflict 
 | `snippets/product-media-gallery-content.liquid` | Variant metafield gallery logic (custom.variant_gallery_images) |
 | `snippets/slideshow-controls.liquid` | File reference support for thumbnail aspect ratios and image sources |
 | `templates/product.json` | Uses AT blocks in product information section |
+| `snippets/cart-summary.liquid` | Renders `at-discount-progress` when theme setting enabled (cart page + drawer). |
+| `snippets/at-bulk-grid-modal.liquid` | Renders `at-discount-progress` above quick-add bulk grid. |
+| `assets/at-bulk-grid.js` | `data-at-bulk-variant-price` on qty inputs for discount-bar pending totals. |
 
 When resolving conflicts, preserve both the upstream changes and the AT customizations.
+
+## Member discount progress bar (`at-discount-progress`)
+
+- **Files:** `snippets/at-discount-progress.liquid`, `assets/at-discount-progress.js`, `assets/at-discount-progress.css`.
+- **Settings:** Theme **Cart** section — `at_discount_progress_enabled`, `at_non_sale_collection_url` (link in info panel).
+- **Behavior:** Logged-out customers see a login prompt; logged-in see tier milestones (cart `items_subtotal_price`). Listens for `cart:update`, `discount:update`, and fetches `/cart.js` when the event payload omits `items_subtotal_price`. **Product** context: pending (grey) fill when quantity differs from `product-form-component` `data-quantity-default`; listens for `variant:update` and `quantity-selector:update`. **Bulk** context: sum of `qty × data-at-bulk-variant-price` when any qty &gt; 0; host wrapper resolved via `findBulkDiscountHost()` (`at-bulk-grid-modal__inner`, `at-buy-buttons__bulk-dialog-inner`, `popup-link__inner`).
 
 ## AT menu (`at-brands-panel`)
 
@@ -91,3 +100,7 @@ When resolving conflicts, preserve both the upstream changes and the AT customiz
 - **AT mega panel `top`:** Menu row can be `.header__row--bottom` (`menu_row`). **Home vs inner pages:** link `getBoundingClientRect()` can read much lower than the real first-row seam (e.g. ~92px vs ~66px). When the trigger is in **`.header__row--top`**, use **`Math.min(#header-component.top + --top-row-height, .header__row--top.bottom)`** — `--top-row-height` is set on `#header-component` in `utilities.js` / inherited from `body` (`theme.liquid`). **`.header__row--bottom`:** use that row’s **`bottom`**. Else **`Math.min(nav, row, trigger)`** fallback. Re-run **`#updatePanelTop`** in **`queueMicrotask`** after the double `rAF` on open so `--top-row-height` is current. Seam overlap **`max(2, 1 + borderBottomWidth)`** on the relevant row. Dropdown **`z-index: calc(var(--layer-header-menu) + 1)`**.
 - **Products / dropdown chevron:** There is no `icon-chevron-down.svg` in Horizon assets; `snippets/icon.liquid` has no `chevron-down` case. Use **`icon-caret.svg`** with `inline_asset_content` inside **`svg-wrapper`** (same as `sections/header.liquid` localization). Open state: rotate the wrapper **`180deg`** (not 90°), matching `dropdown-localization`.
 - **AT nav + `menu-list__link`:** In the header block, links use both classes. **`blocks/_header-menu.liquid`** sets `.menu-list__link { flex-direction: column }` for the mega-menu bridge; override with **`.menu-list__link.at-menu__nav-link { flex-direction: row }`** in `at-menu.css` so titles and carets stay inline.
+
+## Troubleshooting: Dev theme missing JSON templates (e.g. product)
+
+If **Online Store → Themes → … → Edit code** on a development theme shows no `templates/product.json` (or other JSON templates) but **`main` and `dev` branches both contain them in Git**, the store copy is stale or was created from an incomplete source. **Fix:** From this repo root, push the full theme (or at least `templates/`) to that theme, for example with Shopify CLI: `shopify theme push` and select the dev theme, or `shopify theme push --only templates/product.json templates/product.access-threads.json` to upload the product templates only. Avoid habitually using `--only` for unrelated paths, which can leave the remote theme missing folders that exist in Git. If the theme is connected to GitHub in Admin, confirm the connected branch is the one that includes `templates/` and trigger a sync or reconnect.

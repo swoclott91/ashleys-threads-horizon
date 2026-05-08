@@ -454,7 +454,9 @@ function renderDesktopGrid(container, config, sectionId) {
         v.id +
         '">' +
         '<div class="at-bulk-grid__cell-inner">' +
-        '<input type="number" class="at-bulk-grid__qty-input" min="0" value="0" data-at-bulk-qty data-variant-id="' +
+        '<input type="number" class="at-bulk-grid__qty-input" min="0" value="0" data-at-bulk-qty data-at-bulk-variant-price="' +
+        v.price +
+        '" data-variant-id="' +
         v.id +
         '" aria-label="Quantity ' +
         escapeAttr(color) +
@@ -677,7 +679,9 @@ function renderMobileGrid(container, config, sectionId) {
         '<span class="visually-hidden">Decrease quantity</span><span class="svg-wrapper icon-plus">' +
         ICON_MINUS_SVG +
         '</span></button>' +
-        '<input type="number" class="at-bulk-grid__qty-input" min="0" value="0" data-at-bulk-qty data-variant-id="' +
+        '<input type="number" class="at-bulk-grid__qty-input" min="0" value="0" data-at-bulk-qty data-at-bulk-variant-price="' +
+        v.price +
+        '" data-variant-id="' +
         v.id +
         '" aria-label="Quantity ' +
         escapeAttr(size) +

@@ -51,6 +51,7 @@
     "carousel_navigation": "Carousel navigation",
     "carousel_pagination": "Carousel pagination",
     "cart_features": "Cart features",
+    "at_discount_progress_heading": "Volume discount progress",
     "colors": "Colors",
     "collection_page": "Collection page",
     "complementary_products": "Complementary products must be set up using the Search & Discovery app. [Learn more](https://help.shopify.com/manual/online-store/search-and-discovery)",
@@ -239,7 +240,8 @@
     "icon_link_collection_or_url": "Connect a collection (including from a metaobject) here, or use Link for a custom URL. Collection is used when both are set.",
     "at_brands_item_handle": "The handle of the top-level navigation link that triggers the brands mega menu (e.g., \"brands\")",
     "at_categories_menu": "Optional separate navigation menu for the left sidebar. If blank, the brands link's sub-items are used.",
-    "at_highlight_handle": "The handle of the navigation link to display in the accent color (e.g., \"sale\")"
+    "at_highlight_handle": "The handle of the navigation link to display in the accent color (e.g., \"sale\")",
+    "at_non_sale_collection_url": "Shown in the discount bar info panel so customers can browse items that qualify for member tier discounts."
   },
   "names": {
     "column": "Column",
@@ -771,6 +773,8 @@
     "animation": "Animation",
     "animation_repeat": "Repeat animation",
     "add_discount_code": "Allow discounts in cart",
+    "at_discount_progress_enabled": "Show discount progress bar",
+    "at_non_sale_collection_url": "Non-sale items collection URL",
     "add_to_cart_animation": "Add to cart",
     "always_stack_buttons": "Always stack buttons",
     "aspect_ratio": "Aspect ratio",
