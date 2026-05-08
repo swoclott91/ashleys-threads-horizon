@@ -336,10 +336,10 @@
                 "at_bulk_trigger_label": "Bulk Add to Cart",
                 "at_bulk_behavior": "default",
                 "at_enable_bulk_quantities": true,
-                "discount_progress_gap": 20,
                 "stacking": false,
                 "show_pickup_availability": false,
                 "gift_card_form": false,
+                "discount_progress_gap": 20,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -372,7 +372,11 @@
                   "static": true,
                   "settings": {
                     "show_discount_bar": true,
-                    "color_scheme": "scheme-4"
+                    "color_scheme": "scheme-4",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
                   },
                   "blocks": {}
                 }
