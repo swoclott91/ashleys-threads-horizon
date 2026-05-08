@@ -81,10 +81,12 @@
   margin-inline-end: var(--margin-3xs);
 }
 
-/* Superscript-style info control on the discount-applied line */
+/* Superscript-style info control — inline-flex so absolute panel anchors to this box, not the row */
+.at-dp__tip.at-dp__info-wrap--sup,
 .at-dp__info-wrap--sup {
-  display: inline;
   position: relative;
+  display: inline-flex;
+  align-items: center;
   vertical-align: super;
   margin-inline-start: 0.12em;
   font-size: 0.72em;
@@ -123,15 +125,16 @@
   height: 0.95em;
 }
 
-/* Subtle note panel (anchored below superscript) */
+/* Subtle note panel — absolute so inset-inline-start 50% + translate centers on the icon wrapper only */
 .at-dp__panel--sup {
   position: absolute;
   z-index: var(--layer-raised);
-  inset-block-start: calc(100% + 6px);
+  inset-block-start: calc(100% + 8px);
   inset-inline-start: 50%;
-  translate: -50% 0;
-  min-width: min(16rem, calc(100vw - 2rem));
+  transform: translateX(-50%);
+  width: min(16rem, calc(100vw - 2rem));
   max-width: 18rem;
+  box-sizing: border-box;
   padding: var(--padding-sm) var(--padding-md);
   border: 1px solid rgb(var(--color-border-rgb) / 0.55);
   border-radius: var(--style-border-radius-inputs);

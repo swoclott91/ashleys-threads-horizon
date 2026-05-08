@@ -350,7 +350,7 @@ class AtDiscountProgressBar extends HTMLElement {
       <p class="at-dp__achievement" role="status" aria-live="polite">
         <span class="at-dp__achievement-inner">
           ${achievementHtml}
-          <span class="at-dp__info-wrap at-dp__info-wrap--sup">
+          <span class="at-dp__tip at-dp__info-wrap at-dp__info-wrap--sup">
             <button
               type="button"
               class="at-dp__info-ref button-unstyled"
