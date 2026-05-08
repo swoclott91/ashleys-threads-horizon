@@ -247,7 +247,7 @@
           "variant_background_color": "#ffffff",
           "variant_text_color": "#111111",
           "variant_border_color": "#d8e6e8",
-          "variant_hover_background_color": "#f4f8f9",
+          "variant_hover_background_color": "#3a6b7372",
           "variant_hover_text_color": "#111111",
           "variant_hover_border_color": "#d8e6e8",
           "selected_variant_background_color": "#3a6b73",
