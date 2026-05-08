@@ -88,6 +88,7 @@ When resolving conflicts, preserve both the upstream changes and the AT customiz
 - **Files:** `snippets/at-discount-progress.liquid`, `assets/at-discount-progress.js`, `assets/at-discount-progress.css`.
 - **Settings:** Theme **Cart** section — `at_discount_progress_enabled`, `at_non_sale_collection_url` (link in info panel).
 - **Behavior:** Logged-out customers see a login prompt; logged-in see tier milestones (cart `items_subtotal_price`). Listens for `cart:update`, `discount:update`, and fetches `/cart.js` when the event payload omits `items_subtotal_price`. **Product** context: pending (grey) fill when quantity differs from `product-form-component` `data-quantity-default`; listens for `variant:update` and `quantity-selector:update`. **Bulk** context: sum of `qty × data-at-bulk-variant-price` when any qty &gt; 0; host wrapper resolved via `findBulkDiscountHost()` (`at-bulk-grid-modal__inner`, `at-buy-buttons__bulk-dialog-inner`, `popup-link__inner`).
+- **UI:** Top line = “add more” toward next tier; bottom line = current discount message. Below threshold, baseline copy is **`at_discount_progress.achievement_none`** (“10% Member Access Discount Applied”). Non-sale disclaimer + collection link live in a **low-contrast superscript** info control (`.at-dp__info-ref`) on that bottom line, not in the header.
 
 ## AT menu (`at-brands-panel`)
 

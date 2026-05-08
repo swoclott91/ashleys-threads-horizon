@@ -160,7 +160,7 @@ class AtDiscountProgressBar extends HTMLElement {
   /** @param {Event} e */
   #onDocPointerDown = (e) => {
     const panel = this.querySelector('.at-dp__panel');
-    const btn = this.querySelector('.at-dp__info-btn');
+    const btn = this.querySelector('.at-dp__info-ref');
     if (!(panel instanceof HTMLElement) || !(btn instanceof HTMLElement)) return;
     if (panel.hidden) return;
     const t = e.target;
@@ -339,33 +339,49 @@ class AtDiscountProgressBar extends HTMLElement {
 
     const qualifyingLink =
       nonSaleUrl !== ''
-        ? `<p><a href="${nonSaleUrl}">${this.#i18n.browse_qualifying || 'Shop qualifying items'}</a></p>`
+        ? `<p class="at-dp__panel-line"><a href="${nonSaleUrl}">${this.#i18n.browse_qualifying || 'Shop qualifying items'}</a></p>`
         : '';
 
-    this.innerHTML = `
-      <div class="at-dp">
-        <div class="at-dp__header">
-          <p class="at-dp__nudge-top" role="status" aria-live="polite">${topAddMoreHtml}</p>
-          <div class="at-dp__info-wrap">
+    const headerBlock = topAddMoreHtml
+      ? `<div class="at-dp__header"><p class="at-dp__nudge-top" role="status" aria-live="polite">${topAddMoreHtml}</p></div>`
+      : '';
+
+    const achievementBlock = `
+      <p class="at-dp__achievement" role="status" aria-live="polite">
+        <span class="at-dp__achievement-inner">
+          ${achievementHtml}
+          <span class="at-dp__info-wrap at-dp__info-wrap--sup">
             <button
               type="button"
-              class="at-dp__info-btn button-unstyled"
+              class="at-dp__info-ref button-unstyled"
               aria-expanded="false"
               aria-controls="${panelId}"
               aria-label="${this.#i18n.info_open || 'Discount details'}"
             >
               ${INFO_ICON_SVG}
             </button>
-            <div class="at-dp__panel" id="${panelId}" hidden role="region" aria-label="${this.#i18n.info_open || ''}">
-              <p>${this.#i18n.non_sale_disclaimer || ''}</p>
+            <div
+              class="at-dp__panel at-dp__panel--sup"
+              id="${panelId}"
+              hidden
+              role="region"
+              aria-label="${this.#i18n.info_open || ''}"
+            >
+              <p class="at-dp__panel-line">${this.#i18n.non_sale_disclaimer || ''}</p>
               ${qualifyingLink}
               ${previewNote}
-              <button type="button" class="button button-secondary at-dp__close-panel" style="margin-top:var(--margin-sm);width:100%">
+              <button type="button" class="at-dp__close-panel button-unstyled">
                 ${this.#i18n.info_close || 'Close'}
               </button>
             </div>
-          </div>
-        </div>
+          </span>
+        </span>
+      </p>
+    `;
+
+    this.innerHTML = `
+      <div class="at-dp">
+        ${headerBlock}
         <div class="at-dp__benefits">${benefitsRow}</div>
         <div class="at-dp__track-wrap">
           <div class="at-dp__track">
@@ -379,13 +395,14 @@ class AtDiscountProgressBar extends HTMLElement {
           <div class="at-dp__dots">${dots}</div>
           <div class="at-dp__amounts">${amounts}</div>
         </div>
-        ${achievementHtml ? `<p class="at-dp__achievement" role="status" aria-live="polite">${achievementHtml}</p>` : ''}
+        ${achievementBlock}
       </div>
     `;
 
-    const infoBtn = this.querySelector('.at-dp__info-btn');
+    const infoBtn = this.querySelector('.at-dp__info-ref');
     const panel = this.querySelector('.at-dp__panel');
     const closeBtn = this.querySelector('.at-dp__close-panel');
+    const infoWrap = this.querySelector('.at-dp__info-wrap--sup');
 
     const togglePanel = (open) => {
       if (!(panel instanceof HTMLElement) || !(infoBtn instanceof HTMLElement)) return;
@@ -408,7 +425,7 @@ class AtDiscountProgressBar extends HTMLElement {
       }
     });
 
-    this.querySelector('.at-dp__info-wrap')?.addEventListener('mouseleave', () => {
+    infoWrap?.addEventListener('mouseleave', () => {
       if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
         if (panel instanceof HTMLElement && !panel.matches(':focus-within')) togglePanel(false);
       }
