@@ -52,6 +52,7 @@
     "carousel_pagination": "Carousel pagination",
     "cart_features": "Cart features",
     "at_discount_progress_heading": "Volume discount progress",
+    "at_discount_progress_spacing_header": "Discount progress spacing",
     "colors": "Colors",
     "collection_page": "Collection page",
     "complementary_products": "Complementary products must be set up using the Search & Discovery app. [Learn more](https://help.shopify.com/manual/online-store/search-and-discovery)",
@@ -241,7 +242,8 @@
     "at_brands_item_handle": "The handle of the top-level navigation link that triggers the brands mega menu (e.g., \"brands\")",
     "at_categories_menu": "Optional separate navigation menu for the left sidebar. If blank, the brands link's sub-items are used.",
     "at_highlight_handle": "The handle of the navigation link to display in the accent color (e.g., \"sale\")",
-    "at_non_sale_collection_url": "Shown in the discount bar info panel so customers can browse items that qualify for member tier discounts."
+    "at_non_sale_collection_url": "Shown in the discount bar info panel so customers can browse items that qualify for member tier discounts.",
+    "discount_progress_gap": "Vertical space between the quantity / add to cart row and the discount progress bar."
   },
   "names": {
     "column": "Column",
@@ -776,6 +778,7 @@
     "add_discount_code": "Allow discounts in cart",
     "at_discount_progress_enabled": "Show discount progress bar",
     "at_discount_progress_color_scheme": "Discount bar color scheme",
+    "discount_progress_gap": "Spacing above discount bar",
     "at_discount_progress_show": "Show discount progress bar",
     "at_non_sale_collection_url": "Non-sale items collection URL",
     "add_to_cart_animation": "Add to cart",

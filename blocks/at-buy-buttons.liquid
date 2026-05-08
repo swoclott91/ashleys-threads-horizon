@@ -49,6 +49,14 @@
       break
     endif
   endfor
+
+  assign dpg = block_settings.discount_progress_gap | default: 20
+  assign _dpg_scale_min = 20
+  if dpg > _dpg_scale_min
+    assign at_discount_progress_gap_css = 'max(20px, calc(var(--spacing-scale) * ' | append: dpg | append: 'px))'
+  else
+    assign at_discount_progress_gap_css = dpg | append: 'px'
+  endif
 %}
 
 {%- if block_settings.at_enable_bulk_popup -%}
@@ -327,10 +335,15 @@
         </div>
       {%- endform -%}
     </product-form-component>
-    {% content_for 'block',
-      type: 'at-discount-progress',
-      id: 'discount-progress'
-    %}
+    <div
+      class="at-buy-buttons__discount-slot spacing-style"
+      style="--margin-block-start: {{ at_discount_progress_gap_css }};"
+    >
+      {% content_for 'block',
+        type: 'at-discount-progress',
+        id: 'discount-progress'
+      %}
+    </div>
   {%- else -%}
     <div class="product-form-buttons">
       <button
@@ -525,6 +538,13 @@
   .buy-buttons-block {
     --buy-button-preferred-width: 185px;
 
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .at-buy-buttons__discount-slot {
     width: 100%;
   }
 
@@ -897,6 +917,21 @@
     {
       "type": "paragraph",
       "content": "t:content.gift_card_form_description"
+    },
+    {
+      "type": "header",
+      "content": "t:content.at_discount_progress_spacing_header"
+    },
+    {
+      "type": "range",
+      "id": "discount_progress_gap",
+      "label": "t:settings.discount_progress_gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20,
+      "info": "t:info.discount_progress_gap"
     },
     {
       "type": "header",
