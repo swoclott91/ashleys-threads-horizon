@@ -258,6 +258,7 @@
     "announcement_bar": "Announcement bar",
     // AT custom section name for the brands mega-menu navigation
     "at_menu": "AT Menu",
+    "at_discount_progress": "Discount progress",
     "badges": "Badges",
     "blog": "Blog",
     "blog_card": "Blog card",
@@ -774,6 +775,8 @@
     "animation_repeat": "Repeat animation",
     "add_discount_code": "Allow discounts in cart",
     "at_discount_progress_enabled": "Show discount progress bar",
+    "at_discount_progress_color_scheme": "Discount bar color scheme",
+    "at_discount_progress_show": "Show discount progress bar",
     "at_non_sale_collection_url": "Non-sale items collection URL",
     "add_to_cart_animation": "Add to cart",
     "always_stack_buttons": "Always stack buttons",

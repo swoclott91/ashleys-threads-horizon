@@ -1780,6 +1780,12 @@
         "label": "t:settings.at_non_sale_collection_url",
         "info": "t:info.at_non_sale_collection_url"
       },
+      {
+        "type": "color_scheme",
+        "id": "at_discount_progress_color_scheme",
+        "label": "t:settings.at_discount_progress_color_scheme",
+        "default": "scheme-1"
+      },
 
       {
         "type": "url",

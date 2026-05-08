@@ -77,8 +77,9 @@ These core Horizon files contain AT customizations and may need manual conflict 
 | `snippets/product-media-gallery-content.liquid` | Variant metafield gallery logic (custom.variant_gallery_images) |
 | `snippets/slideshow-controls.liquid` | File reference support for thumbnail aspect ratios and image sources |
 | `templates/product.json` | Uses AT blocks in product information section |
-| `snippets/cart-summary.liquid` | Renders `at-discount-progress` when theme setting enabled (cart page + drawer). |
-| `snippets/at-bulk-grid-modal.liquid` | Renders `at-discount-progress` above quick-add bulk grid. |
+| `snippets/cart-summary.liquid` | Renders `at-discount-progress` when theme setting enabled (cart page + drawer). Wrapped in `at-discount-progress-scheme-wrap color-{{ settings.at_discount_progress_color_scheme }}` so cart matches theme-scoped scheme tokens. |
+| `snippets/at-bulk-grid-modal.liquid` | Same wrap + global scheme setting for quick-add bulk dialog. |
+| `blocks/at-discount-progress.liquid` | Nested block under **AT Buy buttons**: PDP discount bar with **Color scheme** picker (`show_discount_bar`, `color_scheme`). Parent applies the same scheme to its bulk modal by reading `block.blocks` (`at-discount-progress`). |
 | `assets/at-bulk-grid.js` | `data-at-bulk-variant-price` on qty inputs for discount-bar pending totals. |
 
 When resolving conflicts, preserve both the upstream changes and the AT customizations.
@@ -86,7 +87,7 @@ When resolving conflicts, preserve both the upstream changes and the AT customiz
 ## Member discount progress bar (`at-discount-progress`)
 
 - **Files:** `snippets/at-discount-progress.liquid`, `assets/at-discount-progress.js`, `assets/at-discount-progress.css`.
-- **Settings:** Theme **Cart** section — `at_discount_progress_enabled`, `at_non_sale_collection_url` (link in info panel).
+- **Settings:** Theme **Cart** — `at_discount_progress_enabled`, `at_non_sale_collection_url`, **`at_discount_progress_color_scheme`** (cart, drawer, quick-add bulk, popup bulk when block scheme absent). **Product PDP:** configure **`blocks/at-discount-progress`** nested under AT Buy buttons (static id `discount-progress`); bulk modal inherits that block’s scheme.
 - **Behavior:** Logged-out customers see a login prompt; logged-in see tier milestones (cart `items_subtotal_price`). Listens for `cart:update`, `discount:update`, and fetches `/cart.js` when the event payload omits `items_subtotal_price`. **Product** context: pending (grey) fill when quantity differs from `product-form-component` `data-quantity-default`; listens for `variant:update` and `quantity-selector:update`. **Bulk** context: sum of `qty × data-at-bulk-variant-price` when any qty &gt; 0; host wrapper resolved via `findBulkDiscountHost()` (`at-bulk-grid-modal__inner`, `at-buy-buttons__bulk-dialog-inner`, `popup-link__inner`).
 - **UI:** Top line = “add more” toward next tier; bottom line = current discount message. Below threshold, baseline copy is **`at_discount_progress.achievement_none`** (“10% Member Access Discount Applied”). Non-sale disclaimer + collection link live in a **low-contrast superscript** info control (`.at-dp__info-ref`) on that bottom line, not in the header.
 

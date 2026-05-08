@@ -1,0 +1,51 @@
+{%- doc -%}
+  Access Threads: discount tier progress bar for product pages (nested under AT Buy buttons).
+
+  Applies `color-{{ scheme }}` so backgrounds, primary fill, text, and borders follow the selected theme color group.
+
+  Parent `blocks/at-buy-buttons.liquid` renders this via `content_for` with static id `discount-progress`.
+{%- enddoc -%}
+{% liquid
+  assign bs = block.settings
+  assign product = closest.product
+  assign variant = product.selected_or_first_available_variant
+  assign scheme_class = ''
+  if bs.color_scheme != blank
+    assign scheme_class = 'color-' | append: bs.color_scheme
+  endif
+%}
+{% if product != blank and bs.show_discount_bar and settings.at_discount_progress_enabled %}
+  <div
+    class="at-discount-progress-block {{ scheme_class }}"
+    {{ block.shopify_attributes }}
+  >
+    {% render 'at-discount-progress',
+      context: 'product',
+      section_id: section.id,
+      product: product,
+      product_price: variant.price,
+      non_sale_collection_url: settings.at_non_sale_collection_url
+    %}
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:names.at_discount_progress",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_discount_bar",
+      "label": "t:settings.at_discount_progress_show",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

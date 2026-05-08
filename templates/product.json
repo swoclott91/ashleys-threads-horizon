@@ -365,6 +365,15 @@
                   "static": true,
                   "settings": {},
                   "blocks": {}
+                },
+                "discount-progress": {
+                  "type": "at-discount-progress",
+                  "static": true,
+                  "settings": {
+                    "show_discount_bar": true,
+                    "color_scheme": "scheme-1"
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": []

@@ -41,6 +41,14 @@
   if block_settings.at_enable_bulk_quantities or block_settings.at_enable_bulk_popup
     assign at_has_bulk = true
   endif
+
+  assign at_dp_color_scheme = settings.at_discount_progress_color_scheme
+  for child in block.blocks
+    if child.type == 'at-discount-progress'
+      assign at_dp_color_scheme = child.settings.color_scheme
+      break
+    endif
+  endfor
 %}
 
 {%- if block_settings.at_enable_bulk_popup -%}
@@ -93,11 +101,13 @@
         </h2>
         <div class="at-buy-buttons__bulk-dialog-inner">
           {% if settings.at_discount_progress_enabled %}
-            {% render 'at-discount-progress',
-              context: 'bulk-modal',
-              section_id: section.id | append: '-' | append: block.id,
-              non_sale_collection_url: settings.at_non_sale_collection_url
-            %}
+            <div class="at-discount-progress-scheme-wrap{% if at_dp_color_scheme != blank %} color-{{ at_dp_color_scheme }}{% endif %}">
+              {% render 'at-discount-progress',
+                context: 'bulk-modal',
+                section_id: section.id | append: '-' | append: block.id,
+                non_sale_collection_url: settings.at_non_sale_collection_url
+              %}
+            </div>
           {% endif %}
           <div
             class="at-bulk-grid"
@@ -317,15 +327,10 @@
         </div>
       {%- endform -%}
     </product-form-component>
-    {%- if settings.at_discount_progress_enabled and product != blank -%}
-      {% render 'at-discount-progress',
-        context: 'product',
-        section_id: section.id,
-        product: product,
-        product_price: variant.price,
-        non_sale_collection_url: settings.at_non_sale_collection_url
-      %}
-    {%- endif -%}
+    {% content_for 'block',
+      type: 'at-discount-progress',
+      id: 'discount-progress'
+    %}
   {%- else -%}
     <div class="product-form-buttons">
       <button
@@ -938,6 +943,20 @@
       "default": 0
     }
   ],
+  "blocks": [
+    {
+      "type": "quantity"
+    },
+    {
+      "type": "add-to-cart"
+    },
+    {
+      "type": "accelerated-checkout"
+    },
+    {
+      "type": "at-discount-progress"
+    }
+  ],
   "presets": [
     {
       "name": "AT Buy buttons",
@@ -957,6 +976,14 @@
         "accelerated-checkout": {
           "type": "accelerated-checkout",
           "static": true
+        },
+        "discount-progress": {
+          "type": "at-discount-progress",
+          "static": true,
+          "settings": {
+            "show_discount_bar": true,
+            "color_scheme": "scheme-1"
+          }
         }
       }
     }

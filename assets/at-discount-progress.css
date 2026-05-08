@@ -228,6 +228,17 @@
   overflow: hidden;
 }
 
+/* When wrapped with theme color scheme group (cart / PDP block / bulk), tie empty track + preview fill to scheme tokens */
+.at-discount-progress-block .at-dp__track,
+.at-discount-progress-scheme-wrap .at-dp__track {
+  background: rgb(var(--color-border-rgb) / 0.55);
+}
+
+.at-discount-progress-block .at-dp__fill--pending,
+.at-discount-progress-scheme-wrap .at-dp__fill--pending {
+  background: rgb(var(--color-primary-rgb) / 0.38);
+}
+
 .at-dp__fill {
   position: absolute;
   inset-block: 0;

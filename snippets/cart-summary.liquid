@@ -6,11 +6,13 @@
 {%- enddoc -%}
 
 {% if settings.at_discount_progress_enabled %}
-  {% render 'at-discount-progress',
-    context: 'cart',
-    section_id: section_id,
-    non_sale_collection_url: settings.at_non_sale_collection_url
-  %}
+  <div class="at-discount-progress-scheme-wrap{% if settings.at_discount_progress_color_scheme != blank %} color-{{ settings.at_discount_progress_color_scheme }}{% endif %}">
+    {% render 'at-discount-progress',
+      context: 'cart',
+      section_id: section_id,
+      non_sale_collection_url: settings.at_non_sale_collection_url
+    %}
+  </div>
 {% endif %}
 
 <div class="cart-totals">
