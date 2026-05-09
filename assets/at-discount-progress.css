@@ -2,7 +2,7 @@
  * AT discount progress — maps Progress UI to color scheme “Inputs” + “Variants” groups:
  *
  * - Shell (card): Inputs background + border (reads like a control strip).
- * - Empty track: Scheme Background (contrast inside the input-tinted shell).
+ * - Empty track: Theme Cart setting `at_discount_progress_empty_track` (default tinted mix); tooltip uses scheme Background.
  * - Achieved fill + reached milestone dots: Selected variants — background.
  * - Pending / preview fill (cart projection): Variants — hover background (“pre-select”).
  * - Primary copy / active tier labels: Selected variants — text (“achieved”).
@@ -347,13 +347,34 @@ at-discount-progress-bar {
   width: 100%;
 }
 
-/* Empty segment: scheme “Background” so it reads clearly inside the input-colored shell */
+/*
+ * Empty track fill is controlled by theme Cart setting `at_discount_progress_empty_track`
+ * (class `at-dp-empty-track--*` on `at-discount-progress-bar`). Default “tinted” is distinct from
+ * the info tooltip (`.at-dp__panel--sup`), which uses `--color-background`.
+ */
 .at-dp__track {
   position: relative;
   height: 0.625rem;
   border-radius: var(--style-border-radius-pills);
-  background: var(--color-background);
   overflow: hidden;
+  /* Fallback when host has no modifier (older cached HTML): same as tinted */
+  background: color-mix(in srgb, var(--color-foreground) 10%, var(--color-background));
+}
+
+.at-dp-empty-track--tinted .at-dp__track {
+  background: color-mix(in srgb, var(--color-foreground) 10%, var(--color-background));
+}
+
+.at-dp-empty-track--scheme_background .at-dp__track {
+  background: var(--color-background);
+}
+
+.at-dp-empty-track--scheme_variant .at-dp__track {
+  background: var(--color-variant-background);
+}
+
+.at-dp-empty-track--scheme_input .at-dp__track {
+  background: var(--color-input-background);
 }
 
 /* Full-width preview layer (0 → projected %); committed bar stacks above and covers cart-only portion */

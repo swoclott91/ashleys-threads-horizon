@@ -245,7 +245,8 @@
     "at_highlight_handle": "The handle of the navigation link to display in the accent color (e.g., \"sale\")",
     "at_non_sale_collection_url": "Shown in the discount bar info panel so customers can browse items that qualify for member tier discounts.",
     "discount_progress_gap": "Vertical space between the quantity / add to cart row and the discount progress bar.",
-    "at_discount_progress_color_scheme": "Applies to the discount bar on product pages, cart, cart drawer, and bulk modals."
+    "at_discount_progress_color_scheme": "Applies to the discount bar on product pages, cart, cart drawer, and bulk modals.",
+    "at_discount_progress_empty_track": "Independent from the info tooltip, which uses the scheme “Background” color."
   },
   "names": {
     "column": "Column",
@@ -780,6 +781,11 @@
     "add_discount_code": "Allow discounts in cart",
     "at_discount_progress_enabled": "Show discount progress bar",
     "at_discount_progress_color_scheme": "Discount bar color scheme",
+    "at_discount_progress_empty_track": "Empty progress track fill",
+    "at_discount_progress_empty_track_tinted": "Tinted mix (recommended)",
+    "at_discount_progress_empty_track_scheme_background": "Scheme background",
+    "at_discount_progress_empty_track_scheme_variant": "Variant tiles background",
+    "at_discount_progress_empty_track_scheme_input": "Inputs background",
     "discount_progress_gap": "Spacing above discount bar",
     "at_discount_progress_show": "Show discount progress bar",
     "at_non_sale_collection_url": "Non-sale items collection URL",

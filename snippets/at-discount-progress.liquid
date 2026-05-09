@@ -14,6 +14,7 @@
   assign dp_section = section_id | default: 'global'
   assign dp_uid = dp_section | append: '-' | append: dp_context | handleize
   assign dp_non_sale_url = non_sale_collection_url | default: settings.at_non_sale_collection_url
+  assign dp_empty_track = settings.at_discount_progress_empty_track | default: 'tinted'
   assign dp_subtotal = cart.items_subtotal_price
   assign dp_product_price = product_price | default: 0
   assign dp_product_id = ''
@@ -103,7 +104,7 @@
   </div>
 {%- else -%}
   <at-discount-progress-bar
-    class="at-discount-progress"
+    class="at-discount-progress at-dp-empty-track--{{ dp_empty_track }}"
     data-context="{{ dp_context | escape }}"
     data-section-uid="{{ dp_uid | escape }}"
     data-subtotal="{{ dp_subtotal }}"

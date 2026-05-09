@@ -1787,6 +1787,31 @@
         "info": "t:info.at_discount_progress_color_scheme",
         "default": "scheme-1"
       },
+      {
+        "type": "select",
+        "id": "at_discount_progress_empty_track",
+        "label": "t:settings.at_discount_progress_empty_track",
+        "info": "t:info.at_discount_progress_empty_track",
+        "options": [
+          {
+            "value": "tinted",
+            "label": "t:settings.at_discount_progress_empty_track_tinted"
+          },
+          {
+            "value": "scheme_background",
+            "label": "t:settings.at_discount_progress_empty_track_scheme_background"
+          },
+          {
+            "value": "scheme_variant",
+            "label": "t:settings.at_discount_progress_empty_track_scheme_variant"
+          },
+          {
+            "value": "scheme_input",
+            "label": "t:settings.at_discount_progress_empty_track_scheme_input"
+          }
+        ],
+        "default": "tinted"
+      },
 
       {
         "type": "url",
