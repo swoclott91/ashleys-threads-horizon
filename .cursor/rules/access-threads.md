@@ -77,7 +77,7 @@ These core Horizon files contain AT customizations and may need manual conflict 
 | `snippets/product-media-gallery-content.liquid` | Variant metafield gallery logic (custom.variant_gallery_images) |
 | `snippets/slideshow-controls.liquid` | File reference support for thumbnail aspect ratios and image sources |
 | `templates/product.json` | Uses AT blocks in product information section |
-| `snippets/cart-summary.liquid` | Renders `at-discount-progress` when theme setting enabled (cart page + drawer). Wrapped in `at-discount-progress-scheme-wrap color-{{ settings.at_discount_progress_color_scheme }}` so cart matches theme-scoped scheme tokens. |
+| `snippets/cart-summary.liquid` | Renders `at-discount-progress` when theme setting enabled (cart page + drawer). Wrapped in `at-discount-progress-scheme-wrap color-{{ settings.at_discount_progress_color_scheme }}` so cart matches theme-scoped scheme tokens. Totals + checkout sit in `.cart-summary__scrollfade` so the drawer’s top-edge fade mask (`header-actions.liquid`) does not hide the discount bar. |
 | `snippets/at-bulk-grid-modal.liquid` | Same wrap + global scheme setting for quick-add bulk dialog. |
 | `blocks/at-discount-progress.liquid` | Nested block under **AT Buy buttons**: PDP discount bar (`show_discount_bar`, padding). **Color scheme** is theme-only: `settings.at_discount_progress_color_scheme` (Cart settings). |
 | `assets/at-bulk-grid.js` | `data-at-bulk-variant-price` on qty inputs for discount-bar pending totals. |

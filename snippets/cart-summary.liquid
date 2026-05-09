@@ -15,6 +15,11 @@
   </div>
 {% endif %}
 
+{%- comment -%}
+  Wrapper isolates the drawer scroll-fade mask (see header-actions) so it does not hide the
+  discount progress bar, which must stay above this block.
+{%- endcomment -%}
+<div class="cart-summary__scrollfade">
 <div class="cart-totals">
   {% # We need to keep this node in place to allow morphing to work properly # %}
   <div class="cart-totals__original-container cart-primary-typography">
@@ -291,7 +296,17 @@
   {% endif %}
 </div>
 
+</div>
+
 {% stylesheet %}
+  .cart-summary__scrollfade {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--gap-xl);
+    width: 100%;
+  }
+
   .cart-actions {
     display: flex;
     flex-direction: column;

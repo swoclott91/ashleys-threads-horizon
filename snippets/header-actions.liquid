@@ -404,16 +404,26 @@
     padding: var(--cart-drawer-summary-padding);
     margin-top: auto;
     background-color: var(--color-background);
-    /* stylelint-disable-next-line color-named */
-    mask-image: linear-gradient(to bottom, transparent, black var(--cart-drawer-summary-padding));
 
     @media screen and (min-width: 750px) {
       --cart-drawer-summary-padding: var(--padding-2xl);
     }
   }
 
+  /*
+   * Fade only the totals + checkout block into the scrolling line items. Applying the mask on
+   * `.cart-drawer__summary` hid the top (discount progress lived there — looked “missing”).
+   */
+  .cart-drawer__summary .cart-summary__scrollfade {
+    /* stylelint-disable-next-line color-named */
+    mask-image: linear-gradient(to bottom, transparent, black var(--cart-drawer-summary-padding));
+  }
+
   .cart-drawer__dialog[cart-summary-sticky='false'] .cart-drawer__summary {
     position: static;
+  }
+
+  .cart-drawer__dialog[cart-summary-sticky='false'] .cart-drawer__summary .cart-summary__scrollfade {
     mask-image: none;
   }
 
