@@ -29,6 +29,17 @@ at-discount-progress-bar {
   margin-block-end: var(--margin-md);
 }
 
+/*
+ * Cart page / drawer: `.cart-summary__inner` and `.cart-drawer__summary` use `align-items: center`,
+ * which otherwise shrink-wraps the scheme wrap. Stretch to full column width.
+ */
+.cart-summary .at-discount-progress-scheme-wrap,
+.cart-drawer__summary .at-discount-progress-scheme-wrap {
+  width: 100%;
+  align-self: stretch;
+  box-sizing: border-box;
+}
+
 .at-discount-progress--logged-out {
   display: flex;
   flex-direction: column;
