@@ -912,7 +912,9 @@
       "settings": {
         "collection_list": [
           "custom-apparel-sellers",
-          "teams-schools"
+          "teams-schools",
+          "local-merch-staff-apparel",
+          "churches-camps-events"
         ],
         "layout_type": "grid",
         "carousel_on_mobile": false,
