@@ -202,15 +202,21 @@
                 </button>
               </div>
 
-              <scroll-hint
-                class="cart-drawer__content"
-                aria-label="{{ 'accessibility.cart' | t }}"
-                style="--header-height: 60px;"
-              >
+              {%- comment -%}
+                Summary must NOT live inside scroll-hint: ScrollHint applies a scroll-based mask-image
+                to its host, which hides the discount progress strip (and other summary UI) unpredictably.
+              {%- endcomment -%}
+              <div class="cart-drawer__main">
                 <scroll-hint
-                  class="cart-drawer__items"
+                  class="cart-drawer__content"
+                  aria-label="{{ 'accessibility.cart' | t }}"
+                  style="--header-height: 60px;"
                 >
-                  {% render 'cart-products', drawer_context: 'drawer' %}
+                  <scroll-hint
+                    class="cart-drawer__items"
+                  >
+                    {% render 'cart-products', drawer_context: 'drawer' %}
+                  </scroll-hint>
                 </scroll-hint>
 
                 <div
@@ -218,7 +224,7 @@
                 >
                   {% render 'cart-summary', section_id: section.id %}
                 </div>
-              </scroll-hint>
+              </div>
             {%- endif -%}
           </cart-items-component>
         </div>
@@ -341,13 +347,22 @@
     overflow: hidden;
   }
 
+  /* Fills space below drawer header; summary sits outside scroll-hint (see markup comment). */
+  .cart-drawer__main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+  }
+
   .cart-drawer__content {
-    height: calc(100% - var(--header-height));
+    flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     padding: 0;
     background-color: var(--color-background);
-    flex-grow: 1;
     overflow-y: auto;
   }
 
@@ -394,15 +409,13 @@
   .cart-drawer__summary {
     --cart-drawer-summary-padding: var(--padding-lg);
 
-    position: sticky;
-    bottom: 0;
+    flex-shrink: 0;
     z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--gap-xl);
     padding: var(--cart-drawer-summary-padding);
-    margin-top: auto;
     background-color: var(--color-background);
 
     @media screen and (min-width: 750px) {
