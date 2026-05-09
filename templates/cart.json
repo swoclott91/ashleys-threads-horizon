@@ -48,7 +48,7 @@
           "settings": {
             "extend_summary": true,
             "inherit_color_scheme": false,
-            "color_scheme": "scheme-2",
+            "color_scheme": "scheme-1",
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
@@ -239,7 +239,7 @@
       },
       "name": "t:names.featured_collection",
       "settings": {
-        "collection": "all",
+        "collection": "popular",
         "layout_type": "grid",
         "carousel_on_mobile": false,
         "max_products": 4,

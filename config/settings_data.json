@@ -50,7 +50,7 @@
     "card_hover_effect": "none",
     "badge_position": "top-right",
     "badge_corner_radius": 100,
-    "badge_sale_color_scheme": "scheme-5",
+    "badge_sale_color_scheme": "scheme-1fe19262-de0a-481c-84a1-50ea7e51e6aa",
     "badge_sold_out_color_scheme": "scheme-3",
     "badge_text_transform": "none",
     "primary_button_border_width": 0,
@@ -224,7 +224,7 @@
       },
       "scheme-4": {
         "settings": {
-          "background": "#f4f8f9",
+          "background": "#ffffff",
           "foreground_heading": "#111111",
           "foreground": "#2f2f2f",
           "primary": "#2f5f66",
@@ -376,6 +376,45 @@
           "selected_variant_hover_background_color": "#1a1a1a",
           "selected_variant_hover_text_color": "#ffffff",
           "selected_variant_hover_border_color": "#1a1a1a"
+        }
+      },
+      "scheme-1fe19262-de0a-481c-84a1-50ea7e51e6aa": {
+        "settings": {
+          "background": "#3a6b73",
+          "foreground_heading": "#111111",
+          "foreground": "#FFFFFF",
+          "primary": "#111111",
+          "primary_hover": "#3a6b73",
+          "border": "#eaeaea",
+          "shadow": "#000000",
+          "primary_button_background": "#111111",
+          "primary_button_text": "#ffffff",
+          "primary_button_border": "#111111",
+          "primary_button_hover_background": "#333333",
+          "primary_button_hover_text": "#ffffff",
+          "primary_button_hover_border": "#333333",
+          "secondary_button_background": "rgba(0,0,0,0)",
+          "secondary_button_text": "#111111",
+          "secondary_button_border": "#111111",
+          "secondary_button_hover_background": "#f5f5f5",
+          "secondary_button_hover_text": "#111111",
+          "secondary_button_hover_border": "#111111",
+          "input_background": "#ffffff",
+          "input_text_color": "#2f2f2f",
+          "input_border_color": "#eaeaea",
+          "input_hover_background": "#f5f5f5",
+          "variant_background_color": "#ffffff",
+          "variant_text_color": "#111111",
+          "variant_border_color": "#eaeaea",
+          "variant_hover_background_color": "#f5f5f5",
+          "variant_hover_text_color": "#111111",
+          "variant_hover_border_color": "#eaeaea",
+          "selected_variant_background_color": "#111111",
+          "selected_variant_text_color": "#ffffff",
+          "selected_variant_border_color": "#111111",
+          "selected_variant_hover_background_color": "#333333",
+          "selected_variant_hover_text_color": "#ffffff",
+          "selected_variant_hover_border_color": "#333333"
         }
       }
     }
