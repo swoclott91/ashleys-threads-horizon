@@ -304,7 +304,7 @@
         "settings": {
           "background": "rgba(0,0,0,0)",
           "foreground_heading": "#ffffff",
-          "foreground": "#f2f2f2",
+          "foreground": "#111111",
           "primary": "#eaeaea",
           "primary_hover": "#ffffffb0",
           "border": "#e6e6e6",
@@ -382,7 +382,7 @@
         "settings": {
           "background": "#3a6b73",
           "foreground_heading": "#111111",
-          "foreground": "#FFFFFF",
+          "foreground": "#ffffff",
           "primary": "#111111",
           "primary_hover": "#3a6b73",
           "border": "#eaeaea",
