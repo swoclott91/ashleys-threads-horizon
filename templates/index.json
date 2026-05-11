@@ -1140,7 +1140,8 @@
           "tank-tops",
           "polos",
           "unisex-mens",
-          "womens-blank-apparel"
+          "womens-blank-apparel",
+          "youth-apparel"
         ],
         "layout_type": "grid",
         "carousel_on_mobile": false,
