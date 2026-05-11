@@ -314,10 +314,6 @@
               },
               "blocks": {}
             },
-            "smart_discounts_widget_JtUTrX": {
-              "type": "shopify://apps/smart-discounts/blocks/widget/019d1c1c-2c4b-704e-be88-ea7fd20c9afb",
-              "settings": {}
-            },
             "at_buy_buttons_GVGM4b": {
               "type": "at-buy-buttons",
               "name": "AT Buy buttons",
@@ -403,7 +399,6 @@
             "group_icgrde",
             "divider_VJhene",
             "variant_picker_R3rGDr",
-            "smart_discounts_widget_JtUTrX",
             "at_buy_buttons_GVGM4b",
             "text_aEtTtq"
           ]
