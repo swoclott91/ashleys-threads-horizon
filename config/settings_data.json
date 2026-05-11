@@ -90,7 +90,7 @@
     "blocks": {
       "8023178096671368477": {
         "type": "shopify://apps/smart-discounts/blocks/embed/019d1c1c-2c4b-704e-be88-ea7fd20c9afb",
-        "disabled": true,
+        "disabled": false,
         "settings": {}
       }
     },

@@ -393,6 +393,10 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "smart_discounts_widget_QaTkGK": {
+              "type": "shopify://apps/smart-discounts/blocks/widget/019d1c1c-2c4b-704e-be88-ea7fd20c9afb",
+              "settings": {}
             }
           },
           "block_order": [
@@ -400,7 +404,8 @@
             "divider_VJhene",
             "variant_picker_R3rGDr",
             "at_buy_buttons_GVGM4b",
-            "text_aEtTtq"
+            "text_aEtTtq",
+            "smart_discounts_widget_QaTkGK"
           ]
         }
       },
