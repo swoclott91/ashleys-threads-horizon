@@ -962,6 +962,7 @@
       "block_order": [
         "group_R8gU47"
       ],
+      "disabled": true,
       "name": "t:names.collections_grid",
       "settings": {
         "collection_list": [
@@ -1521,7 +1522,7 @@
       "block_order": [
         "group_WaewjN"
       ],
-      "name": "t:names.collections_bento",
+      "name": "Popular Categories",
       "settings": {
         "collection_list": [
           "t-shirts",
@@ -2021,9 +2022,9 @@
     "hero_jVaWmY",
     "section_3UC6Lr",
     "collection_list_YNhPde",
+    "collection_list_Q6DqRw",
     "product_list_fa6P9H",
     "collection_list_ghRzTk",
-    "collection_list_Q6DqRw",
     "product_list_epL4j7",
     "product_list_wYtecK"
   ]
