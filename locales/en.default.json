@@ -113,10 +113,10 @@
   "at_discount_progress": {
     "log_in_prompt": "Log in to qualify for additional discounts",
     "log_in": "Log in",
-    "tier_unlocked": "{{ tier }} – {{ benefit }}",
-    "achievement_none": "10% Member Discount Applied",
+    "tier_unlocked": "{{ tier }}",
+    "achievement_none": "10% Member Discount",
     "add_more_for": "Add {{ amount }} more for {{ benefit }}",
-    "max_tier_reached": "You've reached 25% Bulk Discount – off non-sale items",
+    "max_tier_reached": "25% Bulk Discount",
     "non_sale_disclaimer": "Percentage discounts apply to non-discounted (full-price) items only.",
     "browse_qualifying": "Shop qualifying items",
     "info_open": "How member discounts apply",

@@ -300,9 +300,8 @@ class AtDiscountProgressBar extends HTMLElement {
       achievementHtml = `<span class="at-dp__achievement-icon" aria-hidden="true">✓</span>${this.#i18n.max_tier_reached || ''}`;
     } else if (highestPreview >= 0) {
       const tier = m[highestPreview].name;
-      const benefit = m[highestPreview].benefitShort;
       const tpl = this.#i18n.tier_unlocked || '';
-      achievementHtml = `<span class="at-dp__achievement-icon" aria-hidden="true">✓</span>${applyLiquidPlaceholders(tpl, { tier, benefit })}`;
+      achievementHtml = `<span class="at-dp__achievement-icon" aria-hidden="true">✓</span>${applyLiquidPlaceholders(tpl, { tier })}`;
     } else {
       achievementHtml = this.#i18n.achievement_none || '';
     }
