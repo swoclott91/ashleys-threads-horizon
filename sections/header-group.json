@@ -40,11 +40,25 @@
             "case": "none"
           },
           "blocks": {}
+        },
+        "announcement_dxbimV": {
+          "type": "_announcement",
+          "settings": {
+            "text": "Bulk Savings Start at $150",
+            "link": "",
+            "font": "var(--font-subheading--family)",
+            "font_size": "0.75rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none"
+          },
+          "blocks": {}
         }
       },
       "block_order": [
         "announcement_7VMGqq",
-        "announcement_BxgCk9"
+        "announcement_BxgCk9",
+        "announcement_dxbimV"
       ],
       "name": "t:names.announcement_bar",
       "settings": {
