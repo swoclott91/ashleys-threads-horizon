@@ -460,12 +460,11 @@ class AtBrandsPanel extends Component {
   /**
    * Sets `top` / `--at-brands-panel-top` flush under the header seam.
    *
-   * When the trigger lives inside `#header-component`, use **`getBoundingClientRect().bottom`** on
-   * that element. It already includes the announcement offset (`rect.top` is below the bar) and
-   * the full header height (logo + nav rows, ~66px for the component body). Do **not** use
-   * `.at-menu__nav.bottom` in a `Math.min` with row seams — the nav strip is shorter than the
-   * component, which incorrectly pinned the panel around ~92px instead of ~109px with a 43px bar,
-   * or ~66px when the header is stuck at the viewport top.
+   * Uses `#header-component.getBoundingClientRect().bottom`, then **subtracts the in-flow
+   * `at-brands-panel::after` bridge height** (read via `getComputedStyle(host, '::after').height`, with
+   * fallback to resolved **`--header-padding`** on the header). The panel’s `::after` mirrors the
+   * mega-menu hover bridge while **`.at-brands-panel__dropdown` is `position: fixed`**, so the bridge
+   * still extends the header’s layout bottom **below** the painted bar.
    */
   #updatePanelTop() {
     const { panel, trigger } = this.refs;
@@ -498,6 +497,19 @@ class AtBrandsPanel extends Component {
   }
 
   /**
+   * Resolved numeric px for a length custom property (e.g. `--header-padding` → `12px`).
+   * @param {CSSStyleDeclaration} computed
+   * @param {string} prop
+   * @returns {number}
+   */
+  #parseCssLengthPx(computed, prop) {
+    const raw = computed.getPropertyValue(prop).trim();
+    if (!raw) return Number.NaN;
+    const n = parseFloat(raw);
+    return Number.isFinite(n) ? n : Number.NaN;
+  }
+
+  /**
    * Viewport Y of the bottom edge of the header region the mega panel should meet.
    * @param {HTMLElement | undefined} trigger
    * @param {Element | null} headerComponent
@@ -510,7 +522,25 @@ class AtBrandsPanel extends Component {
     }
 
     if (headerComponent.contains(trigger)) {
-      return headerComponent.getBoundingClientRect().bottom;
+      let bottom = headerComponent.getBoundingClientRect().bottom;
+      const host = trigger.closest('at-brands-panel');
+      // In-flow ::after bridge while .at-brands-panel__dropdown is position:fixed — see at-menu.css
+      if (host instanceof HTMLElement) {
+        let bridge = Number.NaN;
+        try {
+          const after = getComputedStyle(host, '::after');
+          bridge = parseFloat(after.height);
+        } catch {
+          // Some environments may not support pseudo-element computed style
+        }
+        if (Number.isNaN(bridge) || bridge <= 0) {
+          bridge = this.#parseCssLengthPx(getComputedStyle(headerComponent), '--header-padding');
+        }
+        if (!Number.isNaN(bridge) && bridge > 0) {
+          bottom -= bridge;
+        }
+      }
+      return bottom;
     }
 
     return this.#fallbackPanelSeamBottom(nav, row, trigger, headerComponent);
