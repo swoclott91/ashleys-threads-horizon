@@ -257,6 +257,46 @@
   flex-shrink: 0;
 }
 
+/*
+ * Desktop (≥750px): while at-menu-data is in flight, show the same ring spinner
+ * pattern as mobile drawer nav (see .at-panel__nav-btn--loading / at-panel-nav-spin).
+ */
+.at-brands-panel__async-loading {
+  flex: 1 1 auto;
+  min-height: 10rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(var(--color-background-rgb) / 0.85);
+}
+
+.at-brands-panel__async-loading[hidden] {
+  display: none !important;
+}
+
+@media screen and (max-width: 749px) {
+  .at-brands-panel__async-loading {
+    display: none !important;
+  }
+}
+
+.at-brands-panel__spinner {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 3px solid rgb(var(--color-foreground-rgb) / var(--opacity-20));
+  border-block-start-color: rgb(var(--color-foreground-rgb) / var(--opacity-70));
+  border-radius: 50%;
+  animation: at-panel-nav-spin 0.7s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .at-brands-panel__spinner {
+    animation-duration: 2s;
+  }
+}
+
 .at-brands-panel__heading {
   font-size: var(--font-size--xlarge);
   font-weight: 600;

@@ -148,6 +148,9 @@ class AtBrandsPanel extends Component {
   /** Desktop: primary pointer can hover (excludes most phones). */
   static #desktopFinePointerMql = window.matchMedia('(hover: hover) and (pointer: fine)');
 
+  /** Theme breakpoint: match .at-menu__nav and mega menus (750px). */
+  static #desktopLayoutMql = window.matchMedia('(min-width: 750px)');
+
   /** @type {ReturnType<typeof setTimeout> | null} */
   #closeTimer = null;
 
@@ -172,8 +175,13 @@ class AtBrandsPanel extends Component {
    */
   #dataAdopted = false;
 
+  /** @type {(() => void) | null} */
+  #desktopLayoutMqlListener = null;
+
   connectedCallback() {
     super.connectedCallback();
+    this.#desktopLayoutMqlListener = () => this.#syncDesktopLoadingOverlay();
+    AtBrandsPanel.#desktopLayoutMql.addEventListener('change', this.#desktopLayoutMqlListener);
     this.addEventListener('pointerenter', this.#onPointerEnter);
     this.addEventListener('pointerleave', this.#onPointerLeave);
     this.addEventListener('focusout', this.#onFocusOut);
@@ -214,6 +222,10 @@ class AtBrandsPanel extends Component {
     this.#unbindHeaderLayoutListeners();
     this.#avatarObserver?.disconnect();
     this.#avatarObserver = null;
+    if (this.#desktopLayoutMqlListener) {
+      AtBrandsPanel.#desktopLayoutMql.removeEventListener('change', this.#desktopLayoutMqlListener);
+      this.#desktopLayoutMqlListener = null;
+    }
   }
 
   #onPointerEnter = () => {
@@ -236,7 +248,28 @@ class AtBrandsPanel extends Component {
     }
     this.#dataRequested = true;
     MenuDataFetcher.get().request();
+    this.#syncDesktopLoadingOverlay();
   };
+
+  /** Shows desktop async loading ring while at-menu-data has not been adopted yet. */
+  #syncDesktopLoadingOverlay() {
+    const { panel } = this.refs;
+    const slots = this.querySelectorAll('[data-at-async-loading]');
+    if (!slots.length) return;
+
+    const desktop = AtBrandsPanel.#desktopLayoutMql.matches;
+    const panelOpen = this.dataset.open !== undefined;
+    const show = desktop && panelOpen && !this.#dataAdopted;
+
+    for (const el of slots) {
+      el.hidden = !show;
+    }
+
+    if (panel) {
+      if (show) panel.setAttribute('aria-busy', 'true');
+      else panel.removeAttribute('aria-busy');
+    }
+  }
 
   /**
    * Clone heavy desktop views from the fetched at-menu-data document
@@ -272,10 +305,13 @@ class AtBrandsPanel extends Component {
       if (!(target instanceof HTMLElement)) continue;
 
       const footer = target.querySelector('.at-brands-panel__footer');
+      const loadingSlot = target.querySelector('[data-at-async-loading]');
 
       for (const child of Array.from(mount.children)) {
         const clone = child.cloneNode(true);
-        if (footer) {
+        if (loadingSlot) {
+          target.insertBefore(clone, loadingSlot);
+        } else if (footer) {
           target.insertBefore(clone, footer);
         } else {
           target.appendChild(clone);
@@ -286,6 +322,10 @@ class AtBrandsPanel extends Component {
 
     if (adoptedAny) {
       this.#dataAdopted = true;
+      for (const el of this.querySelectorAll('[data-at-async-loading]')) {
+        el.remove();
+      }
+      this.refs.panel?.removeAttribute('aria-busy');
       hydrateAvatarsIn(this);
       // If the panel is currently open and showing a category whose
       // grid we just inserted, re-apply any active search filter.
@@ -355,6 +395,8 @@ class AtBrandsPanel extends Component {
     if (firstBtn instanceof HTMLElement) {
       this.#activateCategory(firstBtn.dataset.cat ?? '');
     }
+
+    this.#syncDesktopLoadingOverlay();
   }
 
   /**
@@ -377,6 +419,8 @@ class AtBrandsPanel extends Component {
     trigger?.setAttribute('aria-expanded', 'false');
 
     AtBrandsPanel.#fixHeaderGroupHeight();
+
+    this.#syncDesktopLoadingOverlay();
   }
 
   #onPointerLeave = () => {

@@ -144,6 +144,20 @@
             </div>
 
             {%- comment -%}
+              Desktop: placeholder until at-menu-data is adopted (hidden via JS once loaded).
+              Spinner matches AT mobile drawer / panel loading ring (at-menu.css).
+            {%- endcomment -%}
+            <div
+              class="at-brands-panel__async-loading"
+              data-at-async-loading
+              hidden
+            >
+              <div class="at-brands-panel__spinner" role="status">
+                <span class="visually-hidden">{{ 'accessibility.loading_menu' | t }}</span>
+              </div>
+            </div>
+
+            {%- comment -%}
               Brand grid is fetched on demand from at-menu-data and
               adopted into this cat-content panel by assets/at-menu.js.
               See sections/at-menu-data.liquid.
@@ -185,6 +199,17 @@
                 </a>
               </div>
             {%- endif -%}
+
+            <div
+              class="at-brands-panel__async-loading"
+              data-at-async-loading
+              hidden
+            >
+              <div class="at-brands-panel__spinner" role="status">
+                <span class="visually-hidden">{{ 'accessibility.loading_menu' | t }}</span>
+              </div>
+            </div>
+
             {%- comment -%}
               Category subnav grid is fetched on demand from at-menu-data
               and adopted into this cat-content panel by assets/at-menu.js
