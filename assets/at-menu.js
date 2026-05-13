@@ -460,11 +460,17 @@ class AtBrandsPanel extends Component {
   /**
    * Sets `top` / `--at-brands-panel-top` flush under the header seam.
    *
-   * Uses `#header-component.getBoundingClientRect().bottom`, then **subtracts the in-flow
-   * `at-brands-panel::after` bridge height** (read via `getComputedStyle(host, '::after').height`, with
-   * fallback to resolved **`--header-padding`** on the header). The panel’s `::after` mirrors the
-   * mega-menu hover bridge while **`.at-brands-panel__dropdown` is `position: fixed`**, so the bridge
-   * still extends the header’s layout bottom **below** the painted bar.
+   * Uses **`#header-component.getBoundingClientRect().bottom`**, tightened with **`Math.min`** against
+   * the lowest **`.header__row`** bottom (visible rows only) so extra layout extent on the host does
+   * not sit below the painted row.
+   *
+   * When **`#header-group`** stacks **`aside.announcement-bar`** above the header (`spacing-style`
+   * block padding from `spacing-padding.liquid`), storefront measurements can leave a gap matching
+   * **`padding-top + padding-bottom`** on that bar — subtract that sum **only** while the bar still
+   * stacks immediately above the header (`header.top` not flush to the viewport top).
+   *
+   * For **`at-brands-panel`**, also subtract the in-flow **`::after`** bridge (fixed dropdown is out of
+   * flow) — see `at-menu.css`.
    */
   #updatePanelTop() {
     const { panel, trigger } = this.refs;
@@ -510,6 +516,51 @@ class AtBrandsPanel extends Component {
   }
 
   /**
+   * Max `getBoundingClientRect().bottom` among visible `.header__row` nodes inside the header host.
+   * @param {HTMLElement} headerComponent
+   * @returns {number} 0 if none
+   */
+  #headerRowsMaxBottom(headerComponent) {
+    let max = 0;
+    for (const row of headerComponent.querySelectorAll('.header__row')) {
+      if (!(row instanceof HTMLElement)) continue;
+      const { display } = getComputedStyle(row);
+      if (display === 'none' || row.offsetHeight === 0) continue;
+      const b = row.getBoundingClientRect().bottom;
+      if (b > max) max = b;
+    }
+    return max;
+  }
+
+  /**
+   * `padding-top + padding-bottom` on `#header-group .announcement-bar` when it stacks above the header.
+   * @param {HTMLElement} headerComponent
+   * @returns {number}
+   */
+  #announcementBarStackedBlockPaddingPx(headerComponent) {
+    const bar = document.querySelector('#header-group .announcement-bar');
+    if (!(bar instanceof HTMLElement)) return 0;
+
+    const barRect = bar.getBoundingClientRect();
+    const headRect = headerComponent.getBoundingClientRect();
+    const cs = getComputedStyle(bar);
+    if (cs.display === 'none' || cs.visibility === 'hidden') return 0;
+
+    // Header stuck to viewport top — announcement is not eating layout above; do not pull seam up.
+    if (headRect.top < 4) return 0;
+    // Bar scrolled away above the fold
+    if (barRect.bottom < 1) return 0;
+    // Overlap / unusual stacking — skip
+    if (barRect.bottom > headRect.top + 2) return 0;
+
+    const pt = parseFloat(cs.paddingTop);
+    const pb = parseFloat(cs.paddingBottom);
+    const a = Number.isFinite(pt) ? pt : 0;
+    const b = Number.isFinite(pb) ? pb : 0;
+    return a + b;
+  }
+
+  /**
    * Viewport Y of the bottom edge of the header region the mega panel should meet.
    * @param {HTMLElement | undefined} trigger
    * @param {Element | null} headerComponent
@@ -522,7 +573,14 @@ class AtBrandsPanel extends Component {
     }
 
     if (headerComponent.contains(trigger)) {
-      let bottom = headerComponent.getBoundingClientRect().bottom;
+      const headRect = headerComponent.getBoundingClientRect();
+      let bottom = headRect.bottom;
+
+      const rowsBottom = this.#headerRowsMaxBottom(headerComponent);
+      if (rowsBottom > 0) {
+        bottom = Math.min(bottom, rowsBottom);
+      }
+
       const host = trigger.closest('at-brands-panel');
       // In-flow ::after bridge while .at-brands-panel__dropdown is position:fixed — see at-menu.css
       if (host instanceof HTMLElement) {
@@ -540,6 +598,12 @@ class AtBrandsPanel extends Component {
           bottom -= bridge;
         }
       }
+
+      const annInset = this.#announcementBarStackedBlockPaddingPx(headerComponent);
+      if (annInset > 0) {
+        bottom -= annInset;
+      }
+
       return bottom;
     }
 
