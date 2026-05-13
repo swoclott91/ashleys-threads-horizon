@@ -462,8 +462,11 @@ class AtBrandsPanel extends Component {
    *
    * Home vs other pages: link `getBoundingClientRect()` can sit much lower than the real first-row
    * seam (e.g. ~92px vs ~66px). Horizon sets `--top-row-height` on `#header-component` (utilities.js);
-   * when the trigger lives in `.header__row--top`, use `min(header.top + --top-row-height, topRow.bottom)`.
-   * Menu in `.header__row--bottom` uses that row’s bottom. Otherwise fall back to min(nav, row, trigger).
+   * when the trigger lives in `.header__row--top`, use
+   * `min(header.top + --top-row-height, topRow.bottom, .at-menu__nav.bottom)` so the AT mega panel
+   * meets the nav strip, not the taller logo row (large `top` values were often mistaken for an
+   * announcement-bar offset). Menu in `.header__row--bottom` uses `min(row.bottom, .at-menu__nav.bottom)`.
+   * Otherwise fall back to min(nav, row, trigger).
    */
   #updatePanelTop() {
     const { panel, trigger } = this.refs;
@@ -496,6 +499,22 @@ class AtBrandsPanel extends Component {
   }
 
   /**
+   * Bottom edge of `.at-menu__nav` when the trigger lives inside it (AT header block).
+   * The top header row often spans taller than the nav strip (e.g. logo column); seam
+   * for the mega panel should meet the nav, not the full row — otherwise `top` sits too
+   * low (~row.bottom vs ~nav.bottom). Announcement offset in `headerRect.top` can make
+   * that gap look like an "announcement bar" bug.
+   *
+   * @param {HTMLElement | undefined} trigger
+   * @returns {number}
+   */
+  #atMenuNavSeamBottom(trigger) {
+    if (!(trigger instanceof HTMLElement)) return Number.POSITIVE_INFINITY;
+    const atNav = trigger.closest('.at-menu__nav');
+    return atNav instanceof HTMLElement ? atNav.getBoundingClientRect().bottom : Number.POSITIVE_INFINITY;
+  }
+
+  /**
    * Viewport Y of the bottom edge of the header region the mega panel should meet.
    * @param {HTMLElement | undefined} trigger
    * @param {Element | null} headerComponent
@@ -509,17 +528,18 @@ class AtBrandsPanel extends Component {
 
     const headerRect = headerComponent.getBoundingClientRect();
     const topRowPx = parseFloat(getComputedStyle(headerComponent).getPropertyValue('--top-row-height'));
+    const atNavBottom = this.#atMenuNavSeamBottom(trigger);
 
     if (trigger.closest('.header__row--top') && !Number.isNaN(topRowPx) && topRowPx > 0) {
       const fromThemeVar = headerRect.top + topRowPx;
       const topRowEl = trigger.closest('.header__row--top');
       const fromRect =
         topRowEl instanceof HTMLElement ? topRowEl.getBoundingClientRect().bottom : Number.POSITIVE_INFINITY;
-      return Math.min(fromThemeVar, fromRect);
+      return Math.min(fromThemeVar, fromRect, atNavBottom);
     }
 
     if (trigger.closest('.header__row--bottom') && row instanceof HTMLElement) {
-      return row.getBoundingClientRect().bottom;
+      return Math.min(row.getBoundingClientRect().bottom, atNavBottom);
     }
 
     return this.#fallbackPanelSeamBottom(nav, row, trigger, headerComponent);
