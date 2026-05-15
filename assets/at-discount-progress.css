@@ -489,6 +489,29 @@ at-discount-progress-bar {
   margin-block-end: 0;
 }
 
+/* Cart page: same single-row strip as drawer */
+.cart-page__at-dp-strip .at-dp__cart-expand {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--gap-sm);
+  text-align: start;
+}
+
+.cart-page__at-dp-strip .at-dp__cart-status {
+  flex: 0 1 46%;
+  min-width: 0;
+  text-align: start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cart-page__at-dp-strip .at-dp__cart-railwrap {
+  flex: 1 1 0;
+  min-width: 0;
+  padding-block-start: 0;
+}
+
 .cart-drawer__at-dp-strip .at-dp__cart-status,
 .cart-page__at-dp-strip .at-dp__cart-status {
   font-size: var(--font-size--2xs);
@@ -519,23 +542,22 @@ at-discount-progress-bar {
 
 .cart-drawer__at-dp-strip .at-dp__cart-node-mount .svg-wrapper,
 .cart-drawer__at-dp-strip .at-dp__cart-node-mount .at-dp__icon,
+.cart-drawer__at-dp-strip .at-dp__cart-node-hit > .svg-wrapper,
 .cart-page__at-dp-strip .at-dp__cart-node-mount .svg-wrapper,
-.cart-page__at-dp-strip .at-dp__cart-node-mount .at-dp__icon {
+.cart-page__at-dp-strip .at-dp__cart-node-mount .at-dp__icon,
+.cart-page__at-dp-strip .at-dp__cart-node-hit > .svg-wrapper {
   width: 0.95rem;
   height: 0.95rem;
 }
 
 .cart-drawer__at-dp-strip .at-dp__cart-node-mount svg,
-.cart-page__at-dp-strip .at-dp__cart-node-mount svg {
+.cart-drawer__at-dp-strip .at-dp__cart-node-hit > .svg-wrapper svg,
+.cart-page__at-dp-strip .at-dp__cart-node-mount svg,
+.cart-page__at-dp-strip .at-dp__cart-node-hit > .svg-wrapper svg {
   width: 0.95rem;
   height: 0.95rem;
 }
 
-.at-dp__cart-node--future.at-dp__cart-node--shipping .at-dp__cart-node-mount {
-  color: rgb(var(--color-variant-text-rgb) / 0.5);
-}
-
-.at-dp__cart-expand {
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -643,8 +665,35 @@ at-discount-progress-bar {
   color: var(--color-selected-variant-background);
 }
 
+/* Filled “reached” nodes: cloned icons replace mount placeholder — target direct children */
+.at-dp__cart-node--reached .at-dp__cart-node-mount {
+  color: var(--color-selected-variant-text);
+}
+
+.at-dp__cart-node--reached .at-dp__cart-node-hit > .svg-wrapper {
+  color: var(--color-selected-variant-text);
+}
+
+.at-dp__cart-node--future.at-dp__cart-node--shipping .at-dp__cart-node-hit > .svg-wrapper {
+  color: rgb(var(--color-variant-text-rgb) / 0.5);
+}
+
+/* Checkmark burst scaled to fit milestone dot (theme ATC animation is scoped to .at-dp below) */
+.at-dp__cart-node--check .at-dp__cart-node-hit {
+  overflow: hidden;
+}
+
+.at-dp__cart-node--check .add-to-cart__added-icon {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  flex-shrink: 0;
+  transform: scale(0.7);
+  transform-origin: center;
+}
+
 .at-dp__cart-node-mount .svg-wrapper,
-.at-dp__cart-node-mount .at-dp__icon {
+.at-dp__cart-node-mount .at-dp__icon,
+.at-dp__cart-node-hit > .svg-wrapper {
   display: flex;
   width: 1.05rem;
   height: 1.05rem;
@@ -652,7 +701,8 @@ at-discount-progress-bar {
   justify-content: center;
 }
 
-.at-dp__cart-node-mount svg {
+.at-dp__cart-node-mount svg,
+.at-dp__cart-node-hit > .svg-wrapper svg {
   width: 1.05rem;
   height: 1.05rem;
 }

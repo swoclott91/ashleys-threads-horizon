@@ -308,16 +308,17 @@ class AtDiscountProgressBar extends HTMLElement {
         const shipping = ms.kind === 'shipping';
         let cls = 'at-dp__cart-node';
         if (shipping) cls += ' at-dp__cart-node--shipping';
+        if (reached && !shipping) cls += ' at-dp__cart-node--check';
         if (reached) cls += ' at-dp__cart-node--reached';
         else if (current) cls += ' at-dp__cart-node--current';
         else cls += ' at-dp__cart-node--future';
 
-        /** Free-shipping step: always truck (text label like “Free ship” only appears for non-shipping tiers). */
+        /** Shipping: always truck. Completed discount tiers: checkmark burst; else benefit label text. */
         let inner = '';
         if (shipping) {
           inner = '<span class="at-dp__cart-node-mount" data-at-dp-mount="truck"></span>';
         } else if (reached) {
-          inner = `<span class="at-dp__cart-node-text">${escapeHtml(ms.benefitLabel)}</span>`;
+          inner = '<span class="at-dp__cart-node-mount" data-at-dp-mount="check"></span>';
         } else if (current) {
           inner = `<span class="at-dp__cart-node-text">${escapeHtml(ms.benefitLabel)}</span>`;
         } else {
