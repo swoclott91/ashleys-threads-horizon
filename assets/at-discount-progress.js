@@ -22,6 +22,15 @@ function applyLiquidPlaceholders(str, vars) {
   return out;
 }
 
+/** @param {string} s */
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 /** Wrapper that contains a bulk grid + optional discount bar (quick-add, PDP bulk, popup-link). */
 function findBulkDiscountHost(el) {
   return (
@@ -247,6 +256,209 @@ class AtDiscountProgressBar extends HTMLElement {
     return 0;
   }
 
+  /**
+   * @param {ParentNode} scope
+   */
+  #mountTemplateIcons(scope) {
+    const uid = this.dataset.sectionUid || 'at-dp';
+    scope.querySelectorAll('[data-at-dp-mount]').forEach((el) => {
+      const kind = el.getAttribute('data-at-dp-mount');
+      if (kind !== 'truck' && kind !== 'check' && kind !== 'lock') return;
+      const tpl = document.getElementById(`at-dp-${kind}-${uid}`);
+      const node = tpl?.content?.firstElementChild;
+      if (!(node instanceof HTMLElement)) return;
+      el.replaceWith(node.cloneNode(true));
+    });
+  }
+
+  /**
+   * @param {{
+   *   m: Array<{ threshold: number; name: string; benefitShort: string; benefitLabel: string; kind?: string }>;
+   *   n: number;
+   *   previewBasis: number;
+   *   nextTierIdx: number;
+   *   uid: string;
+   *   nonSaleUrl: string;
+   * }} p
+   */
+  #renderCartCondensed(p) {
+    const { m, n, previewBasis, nextTierIdx, uid, nonSaleUrl } = p;
+
+    let statusLine = '';
+    if (nextTierIdx < 0) {
+      statusLine = this.#i18n.max_tier_reached || '';
+    } else {
+      const need = m[nextTierIdx].threshold - previewBasis;
+      if (need > 0) {
+        const amount = this.#moneyWhole(need);
+        const benefit = m[nextTierIdx].name;
+        const tpl = this.#i18n.cart_condensed_status || this.#i18n.add_more_for || '';
+        statusLine = applyLiquidPlaceholders(tpl, { amount, benefit });
+      }
+    }
+
+    const fillEndIdx = nextTierIdx >= 0 ? nextTierIdx : n - 1;
+    const lineActivePct = n <= 1 ? 100 : (fillEndIdx / (n - 1)) * 100;
+
+    const nodesHtml = m
+      .map((ms, i) => {
+        const left = n === 1 ? 50 : (i / (n - 1)) * 100;
+        const reached = previewBasis >= ms.threshold;
+        const current = nextTierIdx === i;
+        const shipping = ms.kind === 'shipping';
+        let cls = 'at-dp__cart-node';
+        if (reached) cls += ' at-dp__cart-node--reached';
+        else if (current) cls += ' at-dp__cart-node--current';
+        else cls += ' at-dp__cart-node--future';
+
+        let inner = '';
+        if (reached) {
+          inner = `<span class="at-dp__cart-node-text">${escapeHtml(ms.benefitLabel)}</span>`;
+        } else if (current) {
+          inner = shipping
+            ? '<span class="at-dp__cart-node-mount" data-at-dp-mount="truck"></span>'
+            : `<span class="at-dp__cart-node-text">${escapeHtml(ms.benefitLabel)}</span>`;
+        } else {
+          inner = `<span class="at-dp__cart-node-text">${escapeHtml(ms.benefitLabel)}</span>`;
+        }
+        return `<div class="${cls}" style="--at-dp-node-left:${left}%"><span class="at-dp__cart-node-hit">${inner}</span></div>`;
+      })
+      .join('');
+
+    const modalListHtml = m
+      .map((ms, i) => {
+        const reached = previewBasis >= ms.threshold;
+        const current = nextTierIdx === i;
+        const shipping = ms.kind === 'shipping';
+
+        const iconMount = reached
+          ? shipping
+            ? '<div class="at-dp__modal-iconwrap"><span data-at-dp-mount="truck"></span></div>'
+            : '<div class="at-dp__modal-iconwrap"><span data-at-dp-mount="check"></span></div>'
+          : current
+            ? '<div class="at-dp__modal-iconwrap at-dp__modal-iconwrap--current"><span class="at-dp__modal-target" aria-hidden="true"></span></div>'
+            : '<div class="at-dp__modal-iconwrap"><span data-at-dp-mount="lock"></span></div>';
+
+        let rightHtml = '';
+        if (reached) {
+          rightHtml = `<span class="at-dp__modal-badge">${escapeHtml(this.#i18n.unlocked_badge || '')}</span>`;
+        } else if (current) {
+          const need = m[i].threshold - previewBasis;
+          const amountAway = this.#moneyWhole(Math.max(0, need));
+          rightHtml = `<span class="at-dp__modal-away">${applyLiquidPlaceholders(this.#i18n.modal_away || '', { amount: amountAway })}</span>`;
+        } else {
+          rightHtml = `<span class="at-dp__modal-threshold">${applyLiquidPlaceholders(this.#i18n.modal_at || '', { amount: this.#moneyWhole(ms.threshold) })}</span>`;
+        }
+
+        const subRaw = reached
+          ? applyLiquidPlaceholders(this.#i18n.modal_unlocked_at || '', {
+              amount: this.#moneyWhole(ms.threshold),
+            })
+          : current
+            ? applyLiquidPlaceholders(this.#i18n.modal_spend_for || '', {
+                amount: this.#moneyWhole(ms.threshold),
+                name: ms.name,
+              })
+            : '';
+        const subHtml = subRaw ? `<p class="at-dp__modal-sub">${escapeHtml(subRaw)}</p>` : '';
+
+        const rowCls = ['at-dp__modal-step'];
+        if (reached) rowCls.push('at-dp__modal-step--reached');
+        if (current) rowCls.push('at-dp__modal-step--current');
+        if (!reached && !current) rowCls.push('at-dp__modal-step--locked');
+
+        return `<li class="${rowCls.join(' ')}">
+          <div class="at-dp__modal-gutter" aria-hidden="true">
+            ${iconMount}
+          </div>
+          <div class="at-dp__modal-main">
+            <div class="at-dp__modal-title-row">
+              <span class="at-dp__modal-title">${escapeHtml(ms.name)}</span>
+              ${rightHtml}
+            </div>
+            ${subHtml}
+          </div>
+        </li>`;
+      })
+      .join('');
+
+    const qualifyingLink =
+      nonSaleUrl !== ''
+        ? `<p class="at-dp__dialog-qualify"><a href="${escapeHtml(nonSaleUrl)}">${escapeHtml(this.#i18n.browse_qualifying || '')}</a></p>`
+        : '';
+
+    const dialogId = `at-dp-sheet-${uid}`;
+    const statusId = `at-dp-status-${uid}`;
+    const expandLabel = escapeHtml(this.#i18n.expand_savings_aria || '');
+
+    this.innerHTML = `
+      <div class="at-dp at-dp--cart-condensed">
+        <button
+          type="button"
+          class="at-dp__cart-expand button-unstyled"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+          aria-controls="${dialogId}"
+          aria-describedby="${statusId}"
+          aria-label="${expandLabel}"
+        >
+          <span class="at-dp__cart-status" id="${statusId}" role="status" aria-live="polite">${escapeHtml(statusLine)}</span>
+          <div class="at-dp__cart-railwrap" aria-hidden="true">
+            <div class="at-dp__cart-line">
+              <span class="at-dp__cart-line-active" style="width:${lineActivePct}%"></span>
+            </div>
+            <div class="at-dp__cart-nodes">${nodesHtml}</div>
+          </div>
+        </button>
+        <dialog id="${dialogId}" class="at-dp__dialog">
+          <div class="at-dp__dialog-panel">
+            <div class="at-dp__dialog-handle" aria-hidden="true"></div>
+            <h2 class="at-dp__dialog-title">${escapeHtml(this.#i18n.bulk_savings_title || '')}</h2>
+            <p class="at-dp__dialog-lede">${escapeHtml(this.#i18n.bulk_savings_subtitle || '')}</p>
+            <ul class="at-dp__modal-list">${modalListHtml}</ul>
+            <div class="at-dp__dialog-foot">
+              <p class="at-dp__dialog-note">
+                <span class="at-dp__dialog-infoic" aria-hidden="true">${INFO_ICON_SVG}</span>
+                <span>${escapeHtml(this.#i18n.modal_footer_note || '')}</span>
+              </p>
+              <p class="at-dp__dialog-disclaimer">${escapeHtml(this.#i18n.non_sale_disclaimer || '')}</p>
+              ${qualifyingLink}
+            </div>
+            <button type="button" class="button button-secondary at-dp__dialog-got-it">${escapeHtml(this.#i18n.modal_got_it || '')}</button>
+          </div>
+        </dialog>
+      </div>
+    `;
+
+    this.#mountTemplateIcons(this);
+
+    const expandBtn = this.querySelector('.at-dp__cart-expand');
+    const dlg = /** @type {HTMLDialogElement | null} */ (document.getElementById(dialogId));
+    const gotIt = this.querySelector('.at-dp__dialog-got-it');
+
+    const setOpen = (open) => {
+      if (expandBtn instanceof HTMLElement) {
+        expandBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+    };
+
+    expandBtn?.addEventListener('click', () => {
+      if (dlg instanceof HTMLDialogElement) {
+        dlg.showModal();
+        setOpen(true);
+      }
+    });
+
+    dlg?.addEventListener('close', () => {
+      setOpen(false);
+      expandBtn?.focus?.();
+    });
+
+    gotIt?.addEventListener('click', () => {
+      dlg?.close();
+    });
+  }
+
   render() {
     const m = this.#milestones;
     const n = m.length;
@@ -316,6 +528,18 @@ class AtDiscountProgressBar extends HTMLElement {
         nextTierIdx = i;
         break;
       }
+    }
+
+    if (ctx === 'cart') {
+      this.#renderCartCondensed({
+        m,
+        n,
+        previewBasis,
+        nextTierIdx,
+        uid,
+        nonSaleUrl,
+      });
+      return;
     }
 
     const benefitsRow = m

@@ -117,12 +117,23 @@
     "tier_unlocked": "{{ tier }}",
     "achievement_none": "10% Member Discount",
     "add_more_for": "Add {{ amount }} more for {{ benefit }}",
+    "cart_condensed_status": "{{ amount }} away from {{ benefit }}",
     "max_tier_reached": "25% Bulk Discount",
     "non_sale_disclaimer": "Percentage discounts apply to non-discounted (full-price) items only.",
     "browse_qualifying": "Shop qualifying items",
     "info_open": "How member discounts apply",
     "info_close": "Close details",
-    "preview_helper": "If you add your current selection, your cart would reach the progress shown in grey."
+    "preview_helper": "If you add your current selection, your cart would reach the progress shown in grey.",
+    "bulk_savings_title": "Bulk savings",
+    "bulk_savings_subtitle": "The more you spend, the more you save.",
+    "expand_savings_aria": "View savings tiers and details",
+    "modal_got_it": "Got it",
+    "unlocked_badge": "Unlocked",
+    "modal_unlocked_at": "You've unlocked this tier at {{ amount }}",
+    "modal_spend_for": "Spend {{ amount }} to reach {{ name }}",
+    "modal_at": "at {{ amount }}",
+    "modal_away": "{{ amount }} away",
+    "modal_footer_note": "Discounts apply to eligible items only. Shipping discount applies to standard shipping."
   },
   "blocks": {
     "contact_form": {

@@ -24,7 +24,7 @@
   assign milestones_json = '[{"threshold":15000,"name":"12% Bulk Discount","benefitShort":"off non-sale items","benefitLabel":"12%"},{"threshold":20000,"name":"Free shipping","benefitShort":"Free shipping","benefitLabel":"Free ship","kind":"shipping"},{"threshold":30000,"name":"15% Bulk Discount","benefitShort":"off non-sale items","benefitLabel":"15%"},{"threshold":75000,"name":"18% Bulk Discount","benefitShort":"off non-sale items","benefitLabel":"18%"},{"threshold":150000,"name":"20% Bulk Discount","benefitShort":"off non-sale items","benefitLabel":"20%"},{"threshold":300000,"name":"25% Bulk Discount","benefitShort":"off non-sale items","benefitLabel":"25%"}]'
 -%}
 {%- capture dp_i18n -%}
-{"log_in_prompt":{{ 'at_discount_progress.log_in_prompt' | t | json }},"log_in":{{ 'at_discount_progress.log_in' | t | json }},"tier_unlocked":{{ 'at_discount_progress.tier_unlocked' | t | json }},"achievement_none":{{ 'at_discount_progress.achievement_none' | t | json }},"add_more_for":{{ 'at_discount_progress.add_more_for' | t | json }},"max_tier_reached":{{ 'at_discount_progress.max_tier_reached' | t | json }},"non_sale_disclaimer":{{ 'at_discount_progress.non_sale_disclaimer' | t | json }},"browse_qualifying":{{ 'at_discount_progress.browse_qualifying' | t | json }},"info_open":{{ 'at_discount_progress.info_open' | t | json }},"info_close":{{ 'at_discount_progress.info_close' | t | json }},"preview_helper":{{ 'at_discount_progress.preview_helper' | t | json }}}
+{"log_in_prompt":{{ 'at_discount_progress.log_in_prompt' | t | json }},"log_in":{{ 'at_discount_progress.log_in' | t | json }},"tier_unlocked":{{ 'at_discount_progress.tier_unlocked' | t | json }},"achievement_none":{{ 'at_discount_progress.achievement_none' | t | json }},"add_more_for":{{ 'at_discount_progress.add_more_for' | t | json }},"cart_condensed_status":{{ 'at_discount_progress.cart_condensed_status' | t | json }},"max_tier_reached":{{ 'at_discount_progress.max_tier_reached' | t | json }},"non_sale_disclaimer":{{ 'at_discount_progress.non_sale_disclaimer' | t | json }},"browse_qualifying":{{ 'at_discount_progress.browse_qualifying' | t | json }},"info_open":{{ 'at_discount_progress.info_open' | t | json }},"info_close":{{ 'at_discount_progress.info_close' | t | json }},"preview_helper":{{ 'at_discount_progress.preview_helper' | t | json }},"bulk_savings_title":{{ 'at_discount_progress.bulk_savings_title' | t | json }},"bulk_savings_subtitle":{{ 'at_discount_progress.bulk_savings_subtitle' | t | json }},"expand_savings_aria":{{ 'at_discount_progress.expand_savings_aria' | t | json }},"modal_got_it":{{ 'at_discount_progress.modal_got_it' | t | json }},"unlocked_badge":{{ 'at_discount_progress.unlocked_badge' | t | json }},"modal_unlocked_at":{{ 'at_discount_progress.modal_unlocked_at' | t | json }},"modal_spend_for":{{ 'at_discount_progress.modal_spend_for' | t | json }},"modal_at":{{ 'at_discount_progress.modal_at' | t | json }},"modal_away":{{ 'at_discount_progress.modal_away' | t | json }},"modal_footer_note":{{ 'at_discount_progress.modal_footer_note' | t | json }}}
 {%- endcapture -%}
 {{ 'at-discount-progress.css' | asset_url | stylesheet_tag }}
 <script
@@ -103,6 +103,27 @@
     {% endif %}
   </div>
 {%- else -%}
+  {%- if settings.at_discount_progress_enabled -%}
+    <template id="at-dp-truck-{{ dp_uid }}">
+      <span class="svg-wrapper at-dp__icon at-dp__icon--truck" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          {%- render 'icon', icon: 'truck' -%}
+        </svg>
+      </span>
+    </template>
+    <template id="at-dp-check-{{ dp_uid }}">
+      <span class="svg-wrapper add-to-cart__added-icon at-dp__icon at-dp__icon--check" aria-hidden="true">
+        {{- 'icon-checkmark-burst.svg' | inline_asset_content -}}
+      </span>
+    </template>
+    <template id="at-dp-lock-{{ dp_uid }}">
+      <span class="svg-wrapper at-dp__icon at-dp__icon--lock" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          {%- render 'icon', icon: 'lock' -%}
+        </svg>
+      </span>
+    </template>
+  {%- endif -%}
   <at-discount-progress-bar
     class="at-discount-progress at-dp-empty-track--{{ dp_empty_track }}"
     data-context="{{ dp_context | escape }}"
