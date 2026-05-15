@@ -488,13 +488,17 @@ at-discount-progress-bar {
   font-size: var(--font-size--xs);
 }
 
-/* Fixed square milestones (see `.at-dp__cart-node-hit`): width must not grow with label text */
-.cart-page__at-dp-strip {
-  --at-dp-cart-node-size: calc(1.45rem + 2px);
+/*
+ * Node size must be set on `.at-dp--cart-condensed` (ancestor of rail + hits), not only on the
+ * outer strip: `--*` inheritance through `<at-discount-progress-bar>` can skip applying to inner
+ * layout in some cases; defining here keeps rail inset + circles in sync.
+ */
+.cart-page__at-dp-strip .at-dp--cart-condensed {
+  --at-dp-cart-node-size: calc(1.45rem + 4px);
 }
 
-.cart-drawer__at-dp-strip {
-  --at-dp-cart-node-size: calc(1.125rem + 2px);
+.cart-drawer__at-dp-strip .at-dp--cart-condensed {
+  --at-dp-cart-node-size: calc(1.125rem + 4px);
 }
 
 .cart-drawer__at-dp-strip .at-discount-progress,
