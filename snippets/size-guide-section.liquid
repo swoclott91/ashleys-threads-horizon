@@ -22,25 +22,33 @@
   endif
 -%}
 
+{%- if gs_heading != blank -%}
+  {%- capture sec_heading_clean -%}{% render 'size-guide-sanitize-text', text: gs_heading %}{%- endcapture -%}
+  {%- assign sec_heading_clean = sec_heading_clean | strip -%}
+{%- endif -%}
+
 <section class="size-guide__section">
-  {%- if gs_heading != blank -%}
+  {%- if sec_heading_clean != blank -%}
     <h3
       class="size-guide__section-heading"
       id="{{ heading_element_id }}"
     >
-      {{- gs_heading | escape -}}
+      {{- sec_heading_clean | escape -}}
     </h3>
   {%- endif -%}
 
   {%- if gs_desc != blank -%}
-    <p class="size-guide__section-desc paragraph">{{ gs_desc | escape }}</p>
+    {%- capture gs_desc_clean -%}{% render 'size-guide-sanitize-text', text: gs_desc %}{%- endcapture -%}
+    {%- if gs_desc_clean != blank -%}
+      <p class="size-guide__section-desc paragraph">{{ gs_desc_clean | strip | escape }}</p>
+    {%- endif -%}
   {%- endif -%}
 
   {%- if gs_rows != blank and col_count > 0 -%}
     <div class="size-guide__scroll rte-table-wrapper">
       <table
-        class="size-guide__table"
-        {% if gs_heading != blank %}
+        class="size-guide__table size-guide__table--responsive"
+        {% if sec_heading_clean != blank %}
           aria-labelledby="{{ heading_element_id }}"
         {% else %}
           aria-label="{{ 'products.size_guide.table_fallback' | t }}"
@@ -52,7 +60,8 @@
               {{- 'products.size_guide.measurement_label' | t -}}
             </th>
             {%- for col in gs_columns -%}
-              <th scope="col">{{ col | escape }}</th>
+              {%- capture col_clean -%}{% render 'size-guide-sanitize-text', text: col %}{%- endcapture -%}
+              <th scope="col">{{ col_clean | strip | escape }}</th>
             {%- endfor -%}
           </tr>
         </thead>
@@ -62,27 +71,38 @@
               assign val_arr = row['values']
               assign row_label = row.display_label | default: row.source_label | default: ''
             -%}
+            {%- capture row_label_clean -%}{% render 'size-guide-sanitize-text', text: row_label %}{%- endcapture -%}
             <tr>
               <th
                 class="size-guide__label-cell"
                 scope="row"
               >
-                {{- row_label | escape -}}
+                {{- row_label_clean | strip | escape -}}
               </th>
               {%- for col in gs_columns -%}
                 {%- liquid
                   assign ci = forloop.index0
                   assign cell = val_arr[ci]
                 -%}
-                <td class="size-guide__value-cell">{{ cell | escape }}</td>
+                {%- capture col_label_clean -%}{% render 'size-guide-sanitize-text', text: col %}{%- endcapture -%}
+                {%- capture cell_clean -%}{% render 'size-guide-sanitize-text', text: cell %}{%- endcapture -%}
+                <td
+                  class="size-guide__value-cell"
+                  data-size-label="{{ col_label_clean | strip | escape }}"
+                >
+                  {{- cell_clean | strip | escape -}}
+                </td>
               {%- endfor -%}
             </tr>
             {%- assign row_note = row.note | default: '' -%}
             {%- if row_note != blank -%}
-              <tr class="size-guide__row-note">
-                <td></td>
-                <td colspan="{{ col_count }}">{{ row_note | escape }}</td>
-              </tr>
+              {%- capture row_note_clean -%}{% render 'size-guide-sanitize-text', text: row_note %}{%- endcapture -%}
+              {%- if row_note_clean != blank -%}
+                <tr class="size-guide__row-note">
+                  <td class="size-guide__row-note-spacer"></td>
+                  <td colspan="{{ col_count }}">{{ row_note_clean | strip | escape }}</td>
+                </tr>
+              {%- endif -%}
             {%- endif -%}
           {%- endfor -%}
         </tbody>
@@ -91,8 +111,8 @@
   {%- elsif gs_rows != blank and col_count == 0 -%}
     <div class="size-guide__scroll rte-table-wrapper">
       <table
-        class="size-guide__table"
-        {% if gs_heading != blank %}
+        class="size-guide__table size-guide__table--responsive"
+        {% if sec_heading_clean != blank %}
           aria-labelledby="{{ heading_element_id }}"
         {% else %}
           aria-label="{{ 'products.size_guide.table_fallback' | t }}"
@@ -105,21 +125,26 @@
               assign row_label = row.display_label | default: row.source_label | default: ''
               assign joined_vals = val_arr | join: ', '
             -%}
+            {%- capture row_label_clean -%}{% render 'size-guide-sanitize-text', text: row_label %}{%- endcapture -%}
+            {%- capture joined_clean -%}{% render 'size-guide-sanitize-text', text: joined_vals %}{%- endcapture -%}
             <tr>
               <th
                 class="size-guide__label-cell"
                 scope="row"
               >
-                {{- row_label | escape -}}
+                {{- row_label_clean | strip | escape -}}
               </th>
-              <td class="size-guide__value-cell">{{ joined_vals | escape }}</td>
+              <td class="size-guide__value-cell size-guide__value-cell--plain">{{ joined_clean | strip | escape }}</td>
             </tr>
             {%- assign row_note = row.note | default: '' -%}
             {%- if row_note != blank -%}
-              <tr class="size-guide__row-note">
-                <td></td>
-                <td>{{ row_note | escape }}</td>
-              </tr>
+              {%- capture row_note_clean -%}{% render 'size-guide-sanitize-text', text: row_note %}{%- endcapture -%}
+              {%- if row_note_clean != blank -%}
+                <tr class="size-guide__row-note">
+                  <td class="size-guide__row-note-spacer"></td>
+                  <td>{{ row_note_clean | strip | escape }}</td>
+                </tr>
+              {%- endif -%}
             {%- endif -%}
           {%- endfor -%}
         </tbody>
@@ -132,7 +157,10 @@
       <ul>
         {%- for note in gs_notes -%}
           {%- if note != blank -%}
-            <li>{{ note | escape }}</li>
+            {%- capture note_clean -%}{% render 'size-guide-sanitize-text', text: note %}{%- endcapture -%}
+            {%- if note_clean != blank -%}
+              <li>{{ note_clean | strip | escape }}</li>
+            {%- endif -%}
           {%- endif -%}
         {%- endfor -%}
       </ul>

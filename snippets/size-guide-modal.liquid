@@ -53,7 +53,8 @@
     endif
   -%}
   {%- if parts != blank -%}
-    <p class="size-guide__subtitle paragraph">{{ parts | escape }}</p>
+    {%- capture parts_sanitized -%}{% render 'size-guide-sanitize-text', text: parts %}{%- endcapture -%}
+    <p class="size-guide__subtitle paragraph">{{ parts_sanitized | strip | escape }}</p>
   {%- endif -%}
 {%- endcapture -%}
 
@@ -94,7 +95,10 @@
       <ul class="size-guide__notes-list">
         {%- for note in size_guide_data.notes -%}
           {%- if note != blank -%}
-            <li>{{ note | escape }}</li>
+            {%- capture note_clean -%}{% render 'size-guide-sanitize-text', text: note %}{%- endcapture -%}
+            {%- if note_clean != blank -%}
+              <li>{{ note_clean | strip | escape }}</li>
+            {%- endif -%}
           {%- endif -%}
         {%- endfor -%}
       </ul>
@@ -257,6 +261,92 @@
     font-size: max(0.875rem, 0.92em);
     color: rgb(var(--color-foreground-rgb) / var(--opacity-80));
     border-bottom: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10));
+  }
+
+  /* Mobile: stack each measurement as a card with size chips (no horizontal scroll). */
+  @media screen and (max-width: 749px) {
+    .size-guide__scroll:has(.size-guide__table--responsive) {
+      overflow-x: visible;
+    }
+
+    .size-guide__table--responsive {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .size-guide__table--responsive thead {
+      display: none;
+    }
+
+    .size-guide__table--responsive tbody tr {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--gap-xs);
+      padding-block: var(--gap-sm) var(--gap-md);
+      border-bottom: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-12));
+    }
+
+    .size-guide__table--responsive tbody tr.size-guide__row-note {
+      display: block;
+      padding-block-start: 0;
+    }
+
+    .size-guide__table--responsive th[scope='row'],
+    .size-guide__table--responsive .size-guide__label-cell {
+      position: static;
+      box-shadow: none;
+      max-width: none;
+      white-space: normal;
+      grid-column: 1 / -1;
+      padding-block-end: 0;
+      border-bottom: none;
+      font-size: var(--font-paragraph--size);
+    }
+
+    .size-guide__table--responsive td.size-guide__value-cell[data-size-label] {
+      white-space: normal;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--margin-3xs);
+      padding: var(--padding-sm);
+      border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-12));
+      border-radius: var(--style-border-radius-buttons-secondary, 4px);
+      background-color: rgb(var(--color-foreground-rgb) / var(--opacity-3));
+    }
+
+    .size-guide__table--responsive td.size-guide__value-cell[data-size-label]::before {
+      content: attr(data-size-label);
+      font-weight: 600;
+      font-size: max(0.75rem, 0.85em);
+      color: rgb(var(--color-foreground-rgb) / var(--opacity-75));
+      line-height: 1.2;
+    }
+
+    .size-guide__table--responsive:not(:has(thead)) tbody td.size-guide__value-cell--plain {
+      grid-column: 1 / -1;
+      white-space: normal;
+      border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-12));
+      border-radius: var(--style-border-radius-buttons-secondary, 4px);
+      padding: var(--padding-sm);
+      background-color: rgb(var(--color-foreground-rgb) / var(--opacity-3));
+    }
+
+    .size-guide__table--responsive tr.size-guide__row-note td {
+      display: block;
+      border: none;
+      padding-inline: 0;
+      padding-block-start: 0;
+    }
+
+    .size-guide__table--responsive td.size-guide__row-note-spacer {
+      display: none;
+    }
+
+    .size-guide__table--responsive tr.size-guide__row-note td:not(.size-guide__row-note-spacer) {
+      font-size: max(0.875rem, 0.92em);
+      color: rgb(var(--color-foreground-rgb) / var(--opacity-80));
+    }
   }
 
   .size-guide__section-notes {

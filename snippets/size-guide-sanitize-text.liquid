@@ -1,0 +1,28 @@
+{%- doc -%}
+  Strips vendor-specific wording from size guide copy before escape/display.
+  Data is publisher-controlled; this keeps storefront copy vendor-neutral.
+
+  @param {string} text - Raw string from JSON or metafields
+{%- enddoc -%}
+{%- liquid
+  assign out = text | default: ''
+  assign out = out | replace: 'SanMar', ''
+  assign out = out | replace: 'SANMAR', ''
+  assign out = out | replace: 'sanmar', ''
+  assign out = out | replace: 'San Mar', ''
+  assign out = out | replace: 'S&S Activewear', ''
+  assign out = out | replace: 'S & S Activewear', ''
+  assign out = out | replace: 'S&S', ''
+  assign out = out | replace: 'S & S', ''
+  assign out = out | replace: 'S and S', ''
+  assign out = out | replace: 'S. & S.', ''
+  assign out = out | replace: 'provided by  ', 'provided by '
+  assign out = out | replace: 'by  ', 'by '
+  assign out = out | replace: '  ', ' '
+  assign out = out | replace: ' .', '.'
+  assign out = out | replace: ', .', '.'
+  assign out = out | replace: '( )', ''
+  assign out = out | replace: '()', ''
+  assign out = out | strip
+-%}
+{{- out -}}
