@@ -485,7 +485,7 @@ at-discount-progress-bar {
 }
 
 .at-dp--cart-condensed .at-dp__cart-expand {
-  font-size: var(--font-size--2xs);
+  font-size: var(--font-size--xs);
 }
 
 /* Fixed square milestones (see `.at-dp__cart-node-hit`): width must not grow with label text */
