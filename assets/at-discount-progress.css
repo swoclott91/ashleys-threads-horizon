@@ -529,9 +529,13 @@ at-discount-progress-bar {
 }
 
 .cart-drawer__at-dp-strip .at-dp__cart-railwrap {
-  --at-dp-cart-node-inset: calc(0.5625rem + 2px);
+  /*
+   * End nodes use translateX(-50%); pad by ≥ half outer diameter (circle + 2px border + label).
+   * Slightly generous so the last milestone never clips or sits under the drawer close control.
+   */
+  --at-dp-cart-node-inset: calc(0.5625rem + 5px);
   padding-inline: var(--at-dp-cart-node-inset);
-  padding-block-start: 0.12rem;
+  padding-block-start: 0.1rem;
   box-sizing: border-box;
 }
 
@@ -546,8 +550,8 @@ at-discount-progress-bar {
 }
 
 .cart-drawer__at-dp-strip .at-dp__cart-nodes {
-  min-height: 1.32rem;
-  margin-block-start: -0.66rem;
+  min-height: 1.2rem;
+  margin-block-start: -0.6rem;
 }
 
 .cart-page__at-dp-strip .at-dp__cart-node-hit {
@@ -557,9 +561,10 @@ at-discount-progress-bar {
 }
 
 .cart-drawer__at-dp-strip .at-dp__cart-node-hit {
-  min-width: 1.125rem;
-  min-height: 1.125rem;
-  font-size: clamp(0.45rem, 0.5rem, 0.55rem);
+  min-width: 0.9rem;
+  min-height: 0.9rem;
+  padding: 0;
+  font-size: clamp(0.4rem, 2.5vw, 0.5rem);
 }
 
 .cart-page__at-dp-strip .at-dp__cart-node-mount .svg-wrapper,
@@ -572,8 +577,8 @@ at-discount-progress-bar {
 .cart-drawer__at-dp-strip .at-dp__cart-node-mount .svg-wrapper,
 .cart-drawer__at-dp-strip .at-dp__cart-node-mount .at-dp__icon,
 .cart-drawer__at-dp-strip .at-dp__cart-node-hit > .svg-wrapper {
-  width: 0.72rem;
-  height: 0.72rem;
+  width: 0.6rem;
+  height: 0.6rem;
 }
 
 .cart-page__at-dp-strip .at-dp__cart-node-mount svg,
@@ -584,8 +589,12 @@ at-discount-progress-bar {
 
 .cart-drawer__at-dp-strip .at-dp__cart-node-mount svg,
 .cart-drawer__at-dp-strip .at-dp__cart-node-hit > .svg-wrapper svg {
-  width: 0.72rem;
-  height: 0.72rem;
+  width: 0.6rem;
+  height: 0.6rem;
+}
+
+.cart-drawer__at-dp-strip .at-dp__cart-node-text {
+  padding-inline: 0.06rem;
 }
 
 .at-dp__cart-expand {

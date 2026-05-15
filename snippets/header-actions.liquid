@@ -544,7 +544,8 @@
     flex-wrap: nowrap;
     align-items: center;
     justify-content: flex-start;
-    gap: var(--gap-xs);
+    /* Extra space before close so condensed rail nodes don’t sit under the control */
+    gap: var(--gap-xs) var(--gap-sm);
     width: 100%;
   }
 
@@ -554,10 +555,12 @@
     margin: 0;
   }
 
-  /* Fills all space between title and close — no max-width (that caused a dead gap). */
+  /* Fills space between title and close; avoid width:100% here (it inflates min-content vs flex siblings). */
   .cart-drawer__header-top .cart-drawer__at-dp-strip {
     flex: 1 1 0;
     min-width: 0;
+    width: auto;
+    max-width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -569,6 +572,8 @@
   .cart-drawer__header-top .cart-drawer__close-button {
     flex: 0 0 auto;
     align-self: center;
+    position: relative;
+    z-index: 2;
   }
 
   .cart-drawer__at-dp-strip {
