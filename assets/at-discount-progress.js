@@ -553,7 +553,7 @@ class AtDiscountProgressBar extends HTMLElement {
       }
     }
 
-    if (ctx === 'cart') {
+    if (ctx === 'cart' || ctx === 'bulk-modal') {
       this.#renderCartCondensed({
         m,
         n,
