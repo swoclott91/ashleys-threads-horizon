@@ -1,0 +1,289 @@
+{%- doc -%}
+  Renders size guide content from the product `custom.size_guide` JSON metafield.
+
+  @param {object} product - Product with metafields (required)
+  @param {object} size_guide_data - Parsed JSON from `product.metafields.custom.size_guide.value` (required)
+  @param {string} layout_mode - `standalone` (full dialog markup) or `content_only` (inner body for Popup link)
+  @param {object} [block] - Current block; used for ids and shopify_attributes in standalone mode
+  @param {string} [behavior] - `default` or `drawer` (standalone dialog classes)
+  @param {string} [type_preset] - Typography preset class for the trigger (standalone)
+  @param {object} [spacing_settings] - Block settings passed to spacing-style for the trigger
+{%- enddoc -%}
+{%- liquid
+  assign layout_mode = layout_mode | default: 'standalone'
+  assign behavior = behavior | default: 'default'
+  assign type_preset = type_preset | default: ''
+  assign spacing_settings = spacing_settings | default: block.settings
+
+  assign range_display = product.metafields.custom.size_range_display.value | default: size_guide_data.size_range_display | default: ''
+  assign type_display = product.metafields.custom.size_guide_type.value | default: size_guide_data.guide_type | default: ''
+  assign unit_display = size_guide_data.unit | default: ''
+
+  assign section_order = 'size_chart,product_measurements,additional_specs,tolerances,how_to_measure' | split: ','
+
+  assign trigger_label = 'products.size_guide.title' | t
+  if range_display != blank
+    assign trigger_label = 'products.size_guide.trigger_with_range' | t: range: range_display
+  endif
+
+  assign heading_id = 'size-guide-heading-' | append: block.id
+  assign sg_section_index = 0
+-%}
+
+{%- capture size_guide_subtitle -%}
+  {%- liquid
+    assign parts = ''
+    if type_display != blank
+      assign parts = type_display
+    endif
+    if range_display != blank
+      if parts != blank
+        assign parts = parts | append: ' · ' | append: range_display
+      else
+        assign parts = range_display
+      endif
+    endif
+    if unit_display != blank
+      assign unit_line = 'products.size_guide.unit_suffix' | t: unit: unit_display
+      if parts != blank
+        assign parts = parts | append: ' · ' | append: unit_line
+      else
+        assign parts = unit_line
+      endif
+    endif
+  -%}
+  {%- if parts != blank -%}
+    <p class="size-guide__subtitle paragraph">{{ parts | escape }}</p>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- capture size_guide_sections -%}
+  {%- if size_guide_data.sections != blank -%}
+    {%- for step_key in section_order -%}
+      {%- for guide_section in size_guide_data.sections -%}
+        {%- if guide_section.section_key == step_key -%}
+          {%- assign sg_section_uid = block.id | append: '-' | append: sg_section_index -%}
+          {% render 'size-guide-section', guide_section: guide_section, section_uid: sg_section_uid %}
+          {%- assign sg_section_index = sg_section_index | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endfor -%}
+
+    {%- for guide_section in size_guide_data.sections -%}
+      {%- liquid
+        assign sk = guide_section.section_key | default: '__none__'
+        assign is_ordered = false
+        for step_key in section_order
+          if sk == step_key
+            assign is_ordered = true
+          endif
+        endfor
+      -%}
+      {%- unless is_ordered -%}
+        {%- assign sg_section_uid = block.id | append: '-' | append: sg_section_index -%}
+        {% render 'size-guide-section', guide_section: guide_section, section_uid: sg_section_uid %}
+        {%- assign sg_section_index = sg_section_index | plus: 1 -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- capture size_guide_footer_notes -%}
+  {%- if size_guide_data.notes != blank -%}
+    <div class="size-guide__global-notes rte">
+      <ul class="size-guide__notes-list">
+        {%- for note in size_guide_data.notes -%}
+          {%- if note != blank -%}
+            <li>{{ note | escape }}</li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- if layout_mode == 'content_only' -%}
+  <div
+    class="size-guide size-guide--embedded rte"
+    {{ block.shopify_attributes }}
+  >
+    {{ size_guide_subtitle }}
+    {{ size_guide_sections }}
+    {{ size_guide_footer_notes }}
+  </div>
+{%- else -%}
+  <script
+    src="{{ 'dialog.js' | asset_url }}"
+    type="module"
+  ></script>
+
+  <dialog-component
+    class="size-guide-popup"
+    {{ block.shopify_attributes }}
+  >
+    <button
+      type="button"
+      on:click="/showDialog"
+      class="button button-unstyled size-guide-popup__trigger text-left spacing-style {{ type_preset }}"
+      style="{% render 'spacing-style', settings: spacing_settings %}"
+      aria-haspopup="dialog"
+    >
+      {{- trigger_label -}}
+    </button>
+
+    <dialog
+      id="size-guide-dialog-{{ block.id }}"
+      ref="dialog"
+      class="popup-link__content dialog-modal color-{{ settings.popover_color_scheme }}{% if behavior == 'drawer' %} popup-link__content--drawer dialog-drawer{% endif %}"
+      scroll-lock
+      aria-labelledby="{{ heading_id }}"
+      aria-modal="true"
+    >
+      <div class="popup-link__inner size-guide-popup__inner">
+        <h2
+          id="{{ heading_id }}"
+          class="size-guide__title h4"
+        >
+          {{ 'products.size_guide.title' | t }}
+        </h2>
+        {{ size_guide_subtitle }}
+        {{ size_guide_sections }}
+        {{ size_guide_footer_notes }}
+      </div>
+      <button
+        type="button"
+        ref="closeButton"
+        on:click="/closeDialog"
+        class="button button-unstyled close-button popup-link__close"
+        aria-label="{{ 'accessibility.close_dialog' | t }}"
+      >
+        {{- 'icon-close.svg' | inline_asset_content -}}
+      </button>
+    </dialog>
+  </dialog-component>
+{%- endif -%}
+
+{% stylesheet %}
+  .size-guide-popup__trigger {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .size-guide-popup__trigger:focus-visible {
+    outline: 0.2rem solid rgba(var(--color-foreground-rgb) / 0.5);
+    outline-offset: 0.2rem;
+  }
+
+  .size-guide-popup__inner {
+    min-width: 0;
+  }
+
+  .size-guide__title {
+    margin-block: 0 var(--gap-sm);
+  }
+
+  .size-guide__subtitle {
+    margin-block: 0 var(--gap-md);
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-80));
+  }
+
+  .size-guide__section {
+    margin-block-end: var(--gap-xl);
+  }
+
+  .size-guide__section-heading {
+    margin-block: 0 var(--gap-xs);
+  }
+
+  .size-guide__section-desc {
+    margin-block: 0 var(--gap-sm);
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-85));
+  }
+
+  .size-guide__scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: var(--gap-sm) var(--gap-md);
+    max-width: 100%;
+  }
+
+  .size-guide__table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-paragraph--size);
+    line-height: var(--font-paragraph--line-height);
+  }
+
+  .size-guide__table thead th {
+    background-color: rgb(var(--color-foreground-rgb) / var(--opacity-5));
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .size-guide__table thead th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background-color: rgb(var(--color-foreground-rgb) / var(--opacity-5));
+    box-shadow: 1px 0 0 rgb(var(--color-foreground-rgb) / var(--opacity-10));
+  }
+
+  .size-guide__table th,
+  .size-guide__table td {
+    text-align: start;
+    padding: var(--padding-sm) var(--padding-md);
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10));
+    vertical-align: top;
+  }
+
+  .size-guide__table th[scope='row'],
+  .size-guide__table .size-guide__label-cell {
+    font-weight: 600;
+    white-space: nowrap;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background-color: var(--color-background);
+    box-shadow: 1px 0 0 rgb(var(--color-foreground-rgb) / var(--opacity-10));
+    max-width: 12rem;
+  }
+
+  .size-guide__value-cell {
+    white-space: nowrap;
+  }
+
+  .size-guide__row-note td {
+    font-size: max(0.875rem, 0.92em);
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-80));
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10));
+  }
+
+  .size-guide__section-notes {
+    margin-block-start: var(--gap-sm);
+    font-size: max(0.875rem, 0.92em);
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-85));
+  }
+
+  .size-guide__section-notes ul {
+    margin: 0;
+    padding-inline-start: 1.25em;
+  }
+
+  .size-guide__global-notes {
+    margin-block-start: var(--gap-lg);
+    padding-block-start: var(--gap-md);
+    border-top: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-12));
+  }
+
+  .size-guide__notes-list {
+    margin: 0;
+    padding-inline-start: 1.25em;
+  }
+
+  @media (forced-colors: active) {
+    .size-guide-popup__trigger:focus-visible {
+      outline: 0.2rem solid transparent;
+    }
+  }
+{% endstylesheet %}

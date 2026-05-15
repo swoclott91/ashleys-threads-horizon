@@ -63,7 +63,7 @@
   }
 {% endstylesheet %}
 
-{%- comment -%} AT CUSTOM: schema `blocks` includes at-popup-link, at-variant-picker, at-buy-buttons (do not put Liquid comments inside the JSON below — Shopify rejects the schema). {%- endcomment -%}
+{%- comment -%} AT CUSTOM: schema `blocks` includes at-popup-link, at-variant-picker, at-buy-buttons, size-guide (do not put Liquid comments inside the JSON below — Shopify rejects the schema). {%- endcomment -%}
 {% schema %}
 {
   "name": "t:names.details",
@@ -136,6 +136,9 @@
     },
     {
       "type": "at-buy-buttons"
+    },
+    {
+      "type": "size-guide"
     }
   ],
   "tag": null,
@@ -503,6 +506,18 @@
             "padding-inline-end": 0
           }
         },
+        "size_guide_pdp": {
+          "type": "size-guide",
+          "settings": {
+            "layout_mode": "standalone",
+            "behavior": "default",
+            "type_preset": "paragraph",
+            "padding-block-start": 0,
+            "padding-block-end": 4,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          }
+        },
         "buy_buttons_eYQEYi": {
           "type": "buy-buttons",
           "settings": {
@@ -709,6 +724,7 @@
         "text_GMQR8L",
         "price_a7krng",
         "variant_picker_R3rGDr",
+        "size_guide_pdp",
         "buy_buttons_eYQEYi",
         "group_Q4eVWb",
         "accordion",

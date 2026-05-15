@@ -381,6 +381,13 @@
       "in_cart": "in cart",
       "default_title": "Default Title",
       "sticky_add_to_cart": "Quick add to cart bar"
+    },
+    "size_guide": {
+      "title": "Size guide",
+      "trigger_with_range": "Size guide: {{ range }}",
+      "measurement_label": "Measurement",
+      "table_fallback": "Measurements and specifications",
+      "unit_suffix": "Unit: {{ unit }}"
     }
   }
 }

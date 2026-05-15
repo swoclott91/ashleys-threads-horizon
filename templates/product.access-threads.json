@@ -290,6 +290,19 @@
               },
               "blocks": {}
             },
+            "size_guide_pdp": {
+              "type": "size-guide",
+              "settings": {
+                "layout_mode": "standalone",
+                "behavior": "default",
+                "type_preset": "paragraph",
+                "padding-block-start": 0,
+                "padding-block-end": 4,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
               "settings": {
@@ -356,6 +369,7 @@
             "group_icgrde",
             "divider_VJhene",
             "variant_picker_R3rGDr",
+            "size_guide_pdp",
             "buy_buttons_eYQEYi",
             "text_aEtTtq"
           ]

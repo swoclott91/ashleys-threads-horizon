@@ -1,0 +1,183 @@
+{%- liquid
+  assign is_pdp = false
+  if template.name == 'product'
+    assign is_pdp = true
+  endif
+
+  assign product_resource = closest.product
+  if request.visual_preview_mode and product_resource == blank
+    assign product_resource = collections.all.products.first
+  endif
+
+  assign show_size_guide = false
+
+  if is_pdp and product_resource
+    assign size_guide_metafield = product_resource.metafields.custom.size_guide
+    if size_guide_metafield != blank
+      assign size_guide_data = size_guide_metafield.value
+      if size_guide_data != blank
+        if size_guide_data.sections != blank or size_guide_data.notes != blank
+          assign show_size_guide = true
+        endif
+      endif
+    endif
+  endif
+-%}
+
+{%- if show_size_guide -%}
+  {% render 'size-guide-modal',
+    product: product_resource,
+    size_guide_data: size_guide_data,
+    layout_mode: block.settings.layout_mode,
+    block: block,
+    behavior: block.settings.behavior,
+    type_preset: block.settings.type_preset,
+    spacing_settings: block.settings
+  %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:names.size_guide",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:content.size_guide_block_intro"
+    },
+    {
+      "type": "select",
+      "id": "layout_mode",
+      "label": "t:settings.size_guide_layout_mode",
+      "options": [
+        {
+          "value": "standalone",
+          "label": "t:options.size_guide_standalone"
+        },
+        {
+          "value": "content_only",
+          "label": "t:options.size_guide_content_only"
+        }
+      ],
+      "default": "standalone"
+    },
+    {
+      "type": "select",
+      "id": "behavior",
+      "label": "t:settings.behavior",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:options.default"
+        },
+        {
+          "value": "drawer",
+          "label": "t:options.drawer"
+        }
+      ],
+      "default": "default",
+      "visible_if": "{{ block.settings.layout_mode == 'standalone' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.typography"
+    },
+    {
+      "type": "select",
+      "id": "type_preset",
+      "label": "t:settings.preset",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        }
+      ],
+      "default": "paragraph",
+      "info": "t:info.size_guide_type_preset",
+      "visible_if": "{{ block.settings.layout_mode == 'standalone' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.link_padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.layout_mode == 'standalone' }}"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.layout_mode == 'standalone' }}"
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.layout_mode == 'standalone' }}"
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.layout_mode == 'standalone' }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.size_guide",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

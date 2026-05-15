@@ -1,0 +1,141 @@
+{%- doc -%}
+  Renders one size guide JSON section (heading, description, table, notes).
+
+  @param {object} guide_section - Section object from size guide JSON (required)
+  @param {string} section_uid - Unique suffix for heading id (required)
+{%- enddoc -%}
+{%- liquid
+  assign section_uid = section_uid | default: '0'
+  assign gs_heading = guide_section.heading | default: ''
+  assign gs_desc = guide_section.description | default: ''
+  assign gs_columns = guide_section.columns
+  assign gs_rows = guide_section.rows
+  assign gs_notes = guide_section.notes
+
+  assign heading_element_id = 'size-guide-sec-' | append: section_uid
+
+  assign col_count = 0
+  if gs_columns != blank
+    for col_item in gs_columns
+      assign col_count = col_count | plus: 1
+    endfor
+  endif
+-%}
+
+<section class="size-guide__section">
+  {%- if gs_heading != blank -%}
+    <h3
+      class="size-guide__section-heading"
+      id="{{ heading_element_id }}"
+    >
+      {{- gs_heading | escape -}}
+    </h3>
+  {%- endif -%}
+
+  {%- if gs_desc != blank -%}
+    <p class="size-guide__section-desc paragraph">{{ gs_desc | escape }}</p>
+  {%- endif -%}
+
+  {%- if gs_rows != blank and col_count > 0 -%}
+    <div class="size-guide__scroll rte-table-wrapper">
+      <table
+        class="size-guide__table"
+        {% if gs_heading != blank %}
+          aria-labelledby="{{ heading_element_id }}"
+        {% else %}
+          aria-label="{{ 'products.size_guide.table_fallback' | t }}"
+        {% endif %}
+      >
+        <thead>
+          <tr>
+            <th scope="col">
+              {{- 'products.size_guide.measurement_label' | t -}}
+            </th>
+            {%- for col in gs_columns -%}
+              <th scope="col">{{ col | escape }}</th>
+            {%- endfor -%}
+          </tr>
+        </thead>
+        <tbody>
+          {%- for row in gs_rows -%}
+            {%- liquid
+              assign val_arr = row['values']
+              assign row_label = row.display_label | default: row.source_label | default: ''
+            -%}
+            <tr>
+              <th
+                class="size-guide__label-cell"
+                scope="row"
+              >
+                {{- row_label | escape -}}
+              </th>
+              {%- for col in gs_columns -%}
+                {%- liquid
+                  assign ci = forloop.index0
+                  assign cell = val_arr[ci]
+                -%}
+                <td class="size-guide__value-cell">{{ cell | escape }}</td>
+              {%- endfor -%}
+            </tr>
+            {%- assign row_note = row.note | default: '' -%}
+            {%- if row_note != blank -%}
+              <tr class="size-guide__row-note">
+                <td></td>
+                <td colspan="{{ col_count }}">{{ row_note | escape }}</td>
+              </tr>
+            {%- endif -%}
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  {%- elsif gs_rows != blank and col_count == 0 -%}
+    <div class="size-guide__scroll rte-table-wrapper">
+      <table
+        class="size-guide__table"
+        {% if gs_heading != blank %}
+          aria-labelledby="{{ heading_element_id }}"
+        {% else %}
+          aria-label="{{ 'products.size_guide.table_fallback' | t }}"
+        {% endif %}
+      >
+        <tbody>
+          {%- for row in gs_rows -%}
+            {%- liquid
+              assign val_arr = row['values']
+              assign row_label = row.display_label | default: row.source_label | default: ''
+              assign joined_vals = val_arr | join: ', '
+            -%}
+            <tr>
+              <th
+                class="size-guide__label-cell"
+                scope="row"
+              >
+                {{- row_label | escape -}}
+              </th>
+              <td class="size-guide__value-cell">{{ joined_vals | escape }}</td>
+            </tr>
+            {%- assign row_note = row.note | default: '' -%}
+            {%- if row_note != blank -%}
+              <tr class="size-guide__row-note">
+                <td></td>
+                <td>{{ row_note | escape }}</td>
+              </tr>
+            {%- endif -%}
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  {%- endif -%}
+
+  {%- if gs_notes != blank -%}
+    <div class="size-guide__section-notes rte">
+      <ul>
+        {%- for note in gs_notes -%}
+          {%- if note != blank -%}
+            <li>{{ note | escape }}</li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+</section>

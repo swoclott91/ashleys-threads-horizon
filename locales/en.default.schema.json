@@ -135,6 +135,7 @@
     "section_layout": "Section layout",
     "section_link": "Section link",
     "section_size": "Section size",
+    "size_guide_block_intro": "Shows on product pages when the product has the custom.size_guide metafield. Use Standalone next to the variant picker, or Content only inside a Popup link block.",
     // Section header for width and height controls
     "size": "Size",
     "slideshow_width": "Slide width",
@@ -247,6 +248,7 @@
     "discount_progress_gap": "Vertical space between the quantity / add to cart row and the discount progress bar.",
     "at_discount_progress_color_scheme": "Applies to the discount bar on product pages, cart, cart drawer, and bulk modals.",
     "at_discount_progress_empty_track": "Background of the condensed progress rail (the line behind the green segment).",
+    "size_guide_type_preset": "Applies to the open-dialog control when layout is Standalone.",
   },
   "names": {
     "column": "Column",
@@ -422,6 +424,7 @@
     "section": "Section",
     "selected_variants": "Selected variants",
     "size": "Size",
+    "size_guide": "Size guide",
     "slide": "Slide",
     "slideshow": "Slideshow",
     "slideshow_full_frame": "Slideshow: Full frame",
@@ -697,6 +700,8 @@
     "show_second_image": "Show second image",
     "silhouette": "Silhouette",
     "single": "Single",
+    "size_guide_content_only": "Content only (inside Popup link)",
+    "size_guide_standalone": "Standalone (trigger + dialog)",
     "slide_left": "Slide left",
     "slide_up": "Slide up",
     "small": "Small",
@@ -1122,6 +1127,7 @@
     "show_search": "Show search",
     "show_second_image_on_hover": "Show second image on hover",
     "show_swatch_label": "Text labels for swatches",
+    "size_guide_layout_mode": "Size guide layout",
     "show_tax_info": "Tax information",
     // Font size or element dimensions setting
     "size": "Size",
