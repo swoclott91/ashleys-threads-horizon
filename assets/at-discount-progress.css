@@ -1,15 +1,11 @@
 /**
- * AT discount progress — maps Progress UI to color scheme “Inputs” + “Variants” groups:
+ * AT discount progress — maps UI to color scheme “Inputs” + “Variants” groups:
  *
- * - Shell (card): Inputs background + border (reads like a control strip).
- * - Empty track: Theme Cart setting `at_discount_progress_empty_track` (default tinted mix); tooltip uses scheme Background.
- * - Achieved fill + reached milestone dots: Selected variants — background.
- * - Pending / preview fill (cart projection): Variants — hover background (“pre-select”).
- * - Primary copy / filled tier labels: Selected variants — text (“achieved”).
- * - Next milestone (full bar `.at-dp__dot--next`, condensed hollow node): ring = selected variant bg, interior = input background — not variant-hover color-mix (can wash out on light schemes).
- * - Secondary labels / amounts: Variants — text (muted where noted).
- *
- * Cart / drawer / bulk modals (`at-dp--cart-condensed`): condensed status + horizontal nodes; `<dialog>` uses same scheme tokens.
+ * - All contexts (cart, drawer, bulk, PDP): same condensed strip (`at-dp--cart-condensed`) + “Bulk savings” `<dialog>`.
+ * - Shell (`.at-dp` when not in a tight strip): Inputs background + border.
+ * - Condensed rail trough: Theme Cart `at_discount_progress_empty_track` → `.at-dp__cart-line` (see `.at-dp-empty-track--*`).
+ * - Reached milestone nodes + committed mini-line: Selected variants — background; on-fill copy/icons: Selected variants — text.
+ * - Next (hollow) node: ring = selected variant bg; interior = input background; label = selected variant bg (not on-fill text).
  *
  * Login button stays Primary button tokens (see `.at-discount-progress--logged-out .button` rules).
  */
@@ -178,302 +174,28 @@ at-discount-progress-bar {
   overflow: visible;
 }
 
-.at-dp__header {
-  width: 100%;
-  text-align: center;
-}
-
-.at-dp__nudge-top {
-  margin: 0;
-  font-size: var(--font-size--sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-input-text);
-  line-height: 1.4;
-  max-width: 100%;
-}
-
-.at-dp__achievement {
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: baseline;
-  gap: 0.12em;
-  text-align: center;
-  font-size: var(--font-size--sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-selected-variant-text);
-  line-height: 1.45;
-  overflow: visible;
-}
-
-.at-dp__achievement-text {
-  display: inline;
-  text-align: center;
-}
-
-.at-dp__achievement-icon {
-  color: var(--color-selected-variant-text);
-  margin-inline-end: var(--margin-3xs);
-}
-
 /*
- * Anchor for `.at-dp__panel--sup`: `.at-dp__info-wrap--sup` (JS uses `<div>` wrappers — never `<p>`/`<span>`
- * around a block panel; invalid HTML hoists the panel in the DOM so `top: 100%` targets a tall ancestor).
+ * Condensed rail “empty track” (theme Cart `at_discount_progress_empty_track`, class on host).
+ * Targets `.at-dp__cart-line` (all contexts use the condensed strip).
  */
-.at-dp__tip.at-dp__info-wrap--sup,
-.at-dp__info-wrap--sup {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  align-self: flex-start;
-  margin-block-start: 0.15em;
-  font-size: 0.72em;
-  line-height: 1;
-  isolation: isolate;
-}
-
-.at-dp__info-ref {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  margin: 0;
-  border: none;
-  border-radius: 50%;
-  background: transparent;
-  color: rgb(var(--color-foreground-rgb) / 0.42);
-  cursor: pointer;
-  line-height: 1;
-  vertical-align: inherit;
-}
-
-.at-dp__info-ref:hover {
-  color: rgb(var(--color-foreground-rgb) / 0.72);
-}
-
-.at-dp__info-ref:focus-visible {
-  outline: var(--focus-outline-width) solid currentcolor;
-  outline-offset: 2px;
-  border-radius: 50%;
-  color: var(--color-foreground);
-}
-
-.at-dp__info-ref svg {
-  display: block;
-  width: 0.95em;
-  height: 0.95em;
-}
-
-/* Panel hangs below the icon wrapper only (`position: relative` on `.at-dp__info-wrap--sup`) */
-.at-dp__panel--sup {
-  position: absolute;
-  z-index: var(--layer-raised);
-  inset-block-start: calc(100% + 6px);
-  inset-inline-start: 50%;
-  transform: translateX(-50%);
-  width: min(16rem, calc(100vw - 2rem));
-  max-width: 18rem;
-  box-sizing: border-box;
-  padding: var(--padding-sm) var(--padding-md);
-  border: var(--style-border-width-inputs) solid var(--color-input-border);
-  border-radius: var(--style-border-radius-inputs);
-  background: var(--color-background);
-  color: var(--color-input-text);
-  box-shadow: 0 2px 10px rgb(var(--color-shadow-rgb) / 0.08);
-  font-size: var(--font-size--2xs);
-  font-weight: normal;
-  text-align: start;
-}
-
-.at-dp__panel[hidden] {
-  display: none !important;
-}
-
-.at-dp__panel-line {
-  margin: 0 0 var(--margin-xs);
-  font-size: inherit;
-  line-height: 1.45;
-  color: inherit;
-}
-
-.at-dp__panel-line:last-of-type {
-  margin-block-end: 0;
-}
-
-.at-dp__panel a {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-primary);
-}
-
-.at-dp__close-panel {
-  display: block;
-  width: 100%;
-  margin-block-start: var(--margin-sm);
-  padding: var(--padding-2xs);
-  font-size: inherit;
-  text-align: center;
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
-  color: rgb(var(--color-foreground-rgb) / 0.55);
-  cursor: pointer;
-}
-
-.at-dp__close-panel:hover {
-  color: var(--color-foreground);
-}
-
-.at-dp__preview-note {
-  margin-block-start: var(--margin-sm) !important;
-  font-size: var(--font-size--2xs);
-  color: rgb(var(--color-variant-text-rgb) / var(--opacity-subdued-text));
-}
-
-.at-dp__benefits {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  margin-block-end: var(--margin-xs);
-  min-height: 1.25rem;
-}
-
-.at-dp__benefit {
-  position: absolute;
-  transform: translateX(-50%);
-  font-size: var(--font-size--2xs);
-  font-weight: var(--font-weight-medium);
-  white-space: nowrap;
-  max-width: 4.5rem;
-  text-align: center;
-  line-height: 1.2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: rgb(var(--color-variant-text-rgb) / var(--opacity-subdued-text));
-}
-
-.at-dp__benefit--active {
-  color: var(--color-selected-variant-text);
-}
-
-.at-dp__track-wrap {
-  position: relative;
-  width: 100%;
-}
-
-/*
- * Empty track fill is controlled by theme Cart setting `at_discount_progress_empty_track`
- * (class `at-dp-empty-track--*` on `at-discount-progress-bar`). Default “tinted” is distinct from
- * the info tooltip (`.at-dp__panel--sup`), which uses `--color-background`.
- */
-.at-dp__track {
-  position: relative;
-  height: 0.625rem;
-  border-radius: var(--style-border-radius-pills);
-  overflow: hidden;
-  /* Fallback when host has no modifier (older cached HTML): same as tinted */
+.at-dp-empty-track--tinted .at-dp__cart-line {
   background: color-mix(in srgb, var(--color-foreground) 10%, var(--color-background));
 }
 
-.at-dp-empty-track--tinted .at-dp__track {
-  background: color-mix(in srgb, var(--color-foreground) 10%, var(--color-background));
-}
-
-.at-dp-empty-track--scheme_background .at-dp__track {
+.at-dp-empty-track--scheme_background .at-dp__cart-line {
   background: var(--color-background);
 }
 
-.at-dp-empty-track--scheme_variant .at-dp__track {
+.at-dp-empty-track--scheme_variant .at-dp__cart-line {
   background: var(--color-variant-background);
 }
 
-.at-dp-empty-track--scheme_input .at-dp__track {
+.at-dp-empty-track--scheme_input .at-dp__cart-line {
   background: var(--color-input-background);
-}
-
-/* Full-width preview layer (0 → projected %); committed bar stacks above and covers cart-only portion */
-.at-dp__fill {
-  position: absolute;
-  inset-block: 0;
-  inset-inline-start: 0;
-  width: 0;
-  border-radius: var(--style-border-radius-pills);
-  transition: width 0.35s ease;
-}
-
-.at-dp__fill--committed {
-  z-index: 2;
-  background: var(--color-selected-variant-background);
-}
-
-/* Pending / projected: “Variants” — hover background; sits under committed so width animates from track start */
-.at-dp__fill--pending {
-  z-index: 1;
-  background: var(--color-variant-hover-background);
-}
-
-.at-dp__dots {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  margin-block-start: var(--margin-xs);
-  margin-block-end: var(--margin-2xs);
-  min-height: 0.75rem;
-}
-
-.at-dp__dot {
-  position: absolute;
-  width: 0.625rem;
-  height: 0.625rem;
-  border-radius: 50%;
-  transform: translateX(-50%);
-  background: rgb(var(--color-variant-text-rgb) / 0.35);
-  border: 2px solid var(--color-input-background);
-  box-sizing: content-box;
-}
-
-.at-dp__dot--reached {
-  background: var(--color-selected-variant-background);
-}
-
-/*
- * Next milestone (full PDP / non-condensed bar): do not use variant-hover mix — on light schemes it
- * reads as white-on-white. Hollow ring matches condensed “current” node + `.at-dp__modal-iconwrap--current`.
- */
-.at-dp__dot--next {
-  background: var(--color-input-background);
-  border-color: var(--color-selected-variant-background);
-}
-
-.at-dp__amounts {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  min-height: 1rem;
-}
-
-.at-dp__amount {
-  position: absolute;
-  transform: translateX(-50%);
-  font-size: var(--font-size--2xs);
-  color: rgb(var(--color-variant-text-rgb) / var(--opacity-subdued-text));
-}
-
-.at-dp__amount--active {
-  color: var(--color-selected-variant-text);
-  font-weight: var(--font-weight-medium);
-}
-
-
-@media (prefers-reduced-motion: reduce) {
-  .at-dp__fill {
-    transition: none;
-  }
 }
 
 /* -------------------------------------------------------------------------- */
-/* Cart / drawer / bulk modals: condensed bar + “Bulk savings” dialog       */
+/* Cart / drawer / bulk modals / PDP: condensed bar + “Bulk savings” dialog */
 /* -------------------------------------------------------------------------- */
 
 .at-dp--cart-condensed {

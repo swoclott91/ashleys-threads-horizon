@@ -238,36 +238,6 @@ class AtDiscountProgressBar extends HTMLElement {
     return formatMoney(amountCents, wholeFmt, cur);
   }
 
-  /**
-   * @param {number} amount
-   * @returns {number}
-   */
-  #amountToPercent(amount) {
-    const m = this.#milestones;
-    const n = m.length;
-    if (n === 0) return 0;
-    if (amount <= 0) return 0;
-    const lastT = m[n - 1].threshold;
-    if (amount >= lastT) return 100;
-
-    const visuals = m.map((_, i) => (n === 1 ? 0 : (i / (n - 1)) * 100));
-
-    if (amount < m[0].threshold) {
-      return (amount / m[0].threshold) * visuals[0];
-    }
-
-    for (let i = 0; i < n - 1; i++) {
-      const t0 = m[i].threshold;
-      const t1 = m[i + 1].threshold;
-      if (amount >= t0 && amount < t1) {
-        const v0 = visuals[i];
-        const v1 = visuals[i + 1];
-        return v0 + ((amount - t0) / (t1 - t0)) * (v1 - v0);
-      }
-    }
-    return visuals[n - 1];
-  }
-
   /** @returns {number} */
   #getPendingCents() {
     const ctx = this.dataset.context || 'cart';
@@ -517,55 +487,10 @@ class AtDiscountProgressBar extends HTMLElement {
     const pending = this.#getPendingCents();
     const projected = subtotal + pending;
     const ctx = this.dataset.context || 'cart';
-    /** Cart page/drawer: actual cart only. PDP / bulk: include form line so preview matches “after add”. */
+    /** Cart: cart subtotal only. PDP / bulk: include pending line so preview matches “after add”. */
     const previewBasis = ctx === 'cart' ? subtotal : projected;
 
-    let highestPreview = -1;
-    for (let i = 0; i < n; i++) {
-      if (previewBasis >= m[i].threshold) highestPreview = i;
-    }
-
-    const actualPct = this.#amountToPercent(subtotal);
-    const projectedPct = ctx !== 'cart' ? this.#amountToPercent(projected) : actualPct;
-    /** Layer pending from 0 → projectedPct (smooth width transition); committed fill on top masks 0 → actualPct. */
-    const showPendingLayer =
-      ctx !== 'cart' && pending > 0 && projectedPct > actualPct + 0.001;
-
-    /** First milestone not yet reached at preview level — drives top “add more” toward that tier. */
-    let targetIdx = -1;
-    for (let i = 0; i < n; i++) {
-      if (projected < m[i].threshold) {
-        targetIdx = i;
-        break;
-      }
-    }
-
-    /** Top row: “Add {{ amount }} more for {{ benefit }}” — always use projected so crossing a tier advances to the next goal. */
-    let topAddMoreHtml = '';
-    if (targetIdx >= 0) {
-      const need = m[targetIdx].threshold - projected;
-      if (need > 0) {
-        const amount = this.#moneyWhole(need);
-        const benefit = m[targetIdx].name;
-        const tpl = this.#i18n.add_more_for || '';
-        topAddMoreHtml = applyLiquidPlaceholders(tpl, { amount, benefit });
-      }
-    }
-
-    /** Bottom: tier messaging uses preview on PDP/bulk (pre–add-to-cart), cart subtotal on cart. */
-    let achievementHtml = '';
-    if (highestPreview === n - 1) {
-      achievementHtml = `<span class="at-dp__achievement-icon" aria-hidden="true">✓</span>${this.#i18n.max_tier_reached || ''}`;
-    } else if (highestPreview >= 0) {
-      const tier = m[highestPreview].name;
-      const tpl = this.#i18n.tier_unlocked || '';
-      achievementHtml = `<span class="at-dp__achievement-icon" aria-hidden="true">✓</span>${applyLiquidPlaceholders(tpl, { tier })}`;
-    } else {
-      achievementHtml = this.#i18n.achievement_none || '';
-    }
-
     const uid = this.dataset.sectionUid || 'at-dp';
-    const panelId = `at-dp-panel-${uid}`;
     const nonSaleUrl = (this.dataset.nonSaleUrl || '').trim();
 
     let nextTierIdx = -1;
@@ -576,7 +501,8 @@ class AtDiscountProgressBar extends HTMLElement {
       }
     }
 
-    if (ctx === 'cart' || ctx === 'bulk-modal') {
+    /** Cart, drawer, bulk modals, and PDP all use the same condensed strip + “Bulk savings” sheet. */
+    if (ctx === 'cart' || ctx === 'bulk-modal' || ctx === 'product') {
       this.#renderCartCondensed({
         m,
         n,
@@ -588,133 +514,7 @@ class AtDiscountProgressBar extends HTMLElement {
       return;
     }
 
-    const benefitsRow = m
-      .map((ms, i) => {
-        const left = n === 1 ? 0 : (i / (n - 1)) * 100;
-        const active = previewBasis >= ms.threshold ? ' at-dp__benefit--active' : '';
-        return `<span class="at-dp__benefit${active}" style="left:${left}%">${ms.benefitLabel}</span>`;
-      })
-      .join('');
-
-    const dots = m
-      .map((ms, i) => {
-        const left = n === 1 ? 0 : (i / (n - 1)) * 100;
-        let cls = 'at-dp__dot';
-        if (previewBasis >= ms.threshold) cls += ' at-dp__dot--reached';
-        else if (nextTierIdx === i) cls += ' at-dp__dot--next';
-        return `<span class="${cls}" style="left:${left}%"></span>`;
-      })
-      .join('');
-
-    const amounts = m
-      .map((ms, i) => {
-        const left = n === 1 ? 0 : (i / (n - 1)) * 100;
-        const active = previewBasis >= ms.threshold ? ' at-dp__amount--active' : '';
-        return `<span class="at-dp__amount${active}" style="left:${left}%">${this.#moneyWhole(ms.threshold)}</span>`;
-      })
-      .join('');
-
-    const previewNote =
-      ctx !== 'cart' && pending > 0 && (ctx === 'product' || ctx === 'bulk-modal')
-        ? `<p class="at-dp__preview-note">${this.#i18n.preview_helper || ''}</p>`
-        : '';
-
-    const qualifyingLink =
-      nonSaleUrl !== ''
-        ? `<p class="at-dp__panel-line"><a href="${nonSaleUrl}">${this.#i18n.browse_qualifying || 'Shop qualifying items'}</a></p>`
-        : '';
-
-    const headerBlock = topAddMoreHtml
-      ? `<div class="at-dp__header"><p class="at-dp__nudge-top" role="status" aria-live="polite">${topAddMoreHtml}</p></div>`
-      : '';
-
-    /*
-     * Achievement row must use <div>, not <p>: a block-level panel inside <p> is invalid HTML and
-     * browsers hoist the panel out of the tip anchor — `top: 100%` then resolves against a tall
-     * ancestor. Tip wrapper must be <div> too — <div> cannot nest inside <span>.
-     */
-    const achievementBlock = `
-      <div class="at-dp__achievement" role="status" aria-live="polite">
-        <span class="at-dp__achievement-text">${achievementHtml}</span>
-        <div class="at-dp__tip at-dp__info-wrap at-dp__info-wrap--sup">
-          <button
-            type="button"
-            class="at-dp__info-ref button-unstyled"
-            aria-expanded="false"
-            aria-controls="${panelId}"
-            aria-label="${this.#i18n.info_open || 'Discount details'}"
-          >
-            ${INFO_ICON_SVG}
-          </button>
-          <div
-            class="at-dp__panel at-dp__panel--sup"
-            id="${panelId}"
-            hidden
-            role="region"
-            aria-label="${this.#i18n.info_open || ''}"
-          >
-            <p class="at-dp__panel-line">${this.#i18n.non_sale_disclaimer || ''}</p>
-            ${qualifyingLink}
-            ${previewNote}
-            <button type="button" class="at-dp__close-panel button-unstyled">
-              ${this.#i18n.info_close || 'Close'}
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-
-    this.innerHTML = `
-      <div class="at-dp">
-        ${headerBlock}
-        <div class="at-dp__benefits">${benefitsRow}</div>
-        <div class="at-dp__track-wrap">
-          <div class="at-dp__track">
-            ${
-              showPendingLayer
-                ? `<div class="at-dp__fill at-dp__fill--pending" style="width:${projectedPct}%"></div>`
-                : ''
-            }
-            <div class="at-dp__fill at-dp__fill--committed" style="width:${actualPct}%"></div>
-          </div>
-          <div class="at-dp__dots">${dots}</div>
-          <div class="at-dp__amounts">${amounts}</div>
-        </div>
-        ${achievementBlock}
-      </div>
-    `;
-
-    const infoBtn = this.querySelector('.at-dp__info-ref');
-    const panel = this.querySelector('.at-dp__panel');
-    const closeBtn = this.querySelector('.at-dp__close-panel');
-    const infoWrap = this.querySelector('.at-dp__info-wrap--sup');
-
-    const togglePanel = (open) => {
-      if (!(panel instanceof HTMLElement) || !(infoBtn instanceof HTMLElement)) return;
-      panel.hidden = !open;
-      infoBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      if (open) closeBtn?.focus?.();
-    };
-
-    infoBtn?.addEventListener('click', (ev) => {
-      ev.stopPropagation();
-      if (!(panel instanceof HTMLElement)) return;
-      togglePanel(panel.hidden);
-    });
-
-    closeBtn?.addEventListener('click', () => togglePanel(false));
-
-    infoBtn?.addEventListener('mouseenter', () => {
-      if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        if (panel instanceof HTMLElement && panel.hidden) togglePanel(true);
-      }
-    });
-
-    infoWrap?.addEventListener('mouseleave', () => {
-      if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        if (panel instanceof HTMLElement && !panel.matches(':focus-within')) togglePanel(false);
-      }
-    });
+    this.innerHTML = '';
   }
 }
 

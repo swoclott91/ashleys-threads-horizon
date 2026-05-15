@@ -8,7 +8,7 @@
 
 {% unless skip_discount_strip %}
   {% if settings.at_discount_progress_enabled %}
-    <div class="at-discount-progress-scheme-wrap{% if settings.at_discount_progress_color_scheme != blank %} color-{{ settings.at_discount_progress_color_scheme }}{% endif %}">
+    <div class="at-dp-condensed-strip--tight at-discount-progress-scheme-wrap{% if settings.at_discount_progress_color_scheme != blank %} color-{{ settings.at_discount_progress_color_scheme }}{% endif %}">
       {% render 'at-discount-progress',
         context: 'cart',
         section_id: section_id,

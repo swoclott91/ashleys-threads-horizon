@@ -1,7 +1,7 @@
 {%- doc -%}
   Access Threads: member tier discount progress bar (cart, drawer, PDP, bulk modal).
 
-  @param {string} context - 'cart' (condensed + sheet) | 'bulk-modal' (same condensed + sheet; grid sums) | 'product' (full bar + info popover)
+  @param {string} context - 'cart' | 'bulk-modal' | 'product' — all use the same condensed strip + “Bulk savings” sheet (PDP includes pending line in preview; bulk sums grid qty)
   @param {string} [section_id] - Unique id suffix for a11y (popover). Defaults to 'cart'.
   @param {number} [product_price] - Selected variant price in cents (product context).
   @param {object} [product] - Product for data-product-id (product context).
