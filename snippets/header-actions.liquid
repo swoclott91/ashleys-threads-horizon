@@ -160,7 +160,7 @@
 
       <dialog
         ref="dialog"
-        class="cart-drawer__dialog dialog-modal dialog-drawer color-{{ settings.drawer_color_scheme }}{% if cart.empty? %} cart-drawer--empty{%endif%}"
+        class="cart-drawer__dialog dialog-modal dialog-drawer color-{{ settings.drawer_color_scheme }}"
         data-testid="cart-drawer-dialog"
         aria-labelledby="{% if cart.empty? %}cart-drawer-heading-empty{% else %}cart-drawer-heading{% endif %}"
         scroll-lock
@@ -400,13 +400,19 @@
     }
   }
 
-  .cart-drawer--empty .cart-drawer__content {
+  /*
+   * Empty-cart layout must depend on DOM inside the drawer, not on `cart-drawer--empty` on this dialog:
+   * Section hydration only morphs `[data-hydration-key="cart-drawer-inner"]`, so the dialog’s class
+   * stayed "empty" after AJAX cart updates — empty-state flex centering hid the header + discount bar.
+   */
+  .cart-drawer__dialog:has(.cart-drawer__heading--empty) .cart-drawer__content {
     text-align: center;
     min-height: auto;
   }
 
-  .cart-drawer--empty .cart-drawer__heading {
+  .cart-drawer__dialog:has(.cart-drawer__heading--empty) .cart-drawer__heading {
     margin-bottom: var(--margin-md);
+    text-align: center;
   }
 
   .cart-drawer__items .cart-items__table-row {
@@ -508,7 +514,7 @@
     margin-block-end: 0;
   }
 
-  .cart-drawer--empty .cart-drawer__inner {
+  .cart-drawer__dialog:has(.cart-drawer__heading--empty) .cart-drawer__inner {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -594,7 +600,7 @@
     width: 100%;
   }
 
-.cart-drawer__at-dp-strip .at-dp__cart-status {
+  .cart-drawer__at-dp-strip .at-dp__cart-status {
     flex: none;
     width: 100%;
     max-width: 100%;
@@ -612,16 +618,12 @@
     min-width: 0;
   }
 
-  .cart-drawer--empty .cart-drawer__header {
+  .cart-drawer__dialog:has(.cart-drawer__heading--empty) .cart-drawer__header {
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
     border-bottom: none;
     padding-bottom: 0;
-  }
-
-  .cart-drawer--empty .cart-drawer__heading {
-    text-align: center;
   }
 
   header-actions {
