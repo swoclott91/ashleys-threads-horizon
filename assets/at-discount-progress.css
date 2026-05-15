@@ -334,7 +334,7 @@ at-discount-progress-bar {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-sm);
   text-align: center;
   width: 100%;
 }
