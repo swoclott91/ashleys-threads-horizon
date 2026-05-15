@@ -484,6 +484,10 @@ at-discount-progress-bar {
   box-shadow: none;
 }
 
+.at-dp--cart-condensed .at-dp__cart-expand {
+  font-size: var(--font-size--2xs);
+}
+
 /* Fixed square milestones (see `.at-dp__cart-node-hit`): width must not grow with label text */
 .cart-page__at-dp-strip {
   --at-dp-cart-node-size: 1.45rem;
@@ -519,11 +523,6 @@ at-discount-progress-bar {
 .cart-page__at-dp-strip .at-dp__cart-railwrap {
   width: 100%;
   min-width: 0;
-}
-
-.cart-drawer__at-dp-strip .at-dp__cart-status,
-.cart-page__at-dp-strip .at-dp__cart-status {
-  font-size: var(--font-size--2xs);
 }
 
 /*
@@ -616,7 +615,7 @@ at-discount-progress-bar {
 .at-dp__cart-status {
   display: block;
   margin: 0;
-  font-size: var(--font-size--sm);
+  font-size: inherit;
   font-weight: var(--font-weight-medium);
   color: rgb(var(--color-variant-text-rgb) / var(--opacity-subdued-text));
   line-height: 1.35;
