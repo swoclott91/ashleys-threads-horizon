@@ -5,7 +5,8 @@
  * - Empty track: Theme Cart setting `at_discount_progress_empty_track` (default tinted mix); tooltip uses scheme Background.
  * - Achieved fill + reached milestone dots: Selected variants — background.
  * - Pending / preview fill (cart projection): Variants — hover background (“pre-select”).
- * - Primary copy / active tier labels: Selected variants — text (“achieved”).
+ * - Primary copy / filled tier labels: Selected variants — text (“achieved”).
+ * - Next / “current” ring (unfilled interior): border = selected variant bg; label + icons = same (readable on input/background fill), not selected-variant-text (often white).
  * - Secondary labels / amounts: Variants — text (muted where noted).
  *
  * Cart / drawer / bulk modals (`at-dp--cart-condensed`): condensed status + horizontal nodes; `<dialog>` uses same scheme tokens.
@@ -723,10 +724,19 @@ at-discount-progress-bar {
   color: var(--color-selected-variant-text);
 }
 
+/* Current = next tier (hollow ring): light interior — must not use selected-variant-text (often white on white). Match `.at-dp__modal-iconwrap--current`. */
 .at-dp__cart-node--current .at-dp__cart-node-hit {
   border: 2px solid var(--color-selected-variant-background);
   background: var(--color-input-background);
-  color: var(--color-selected-variant-text);
+  color: var(--color-selected-variant-background);
+}
+
+.at-dp__cart-node--current .at-dp__cart-node-mount {
+  color: var(--color-selected-variant-background);
+}
+
+.at-dp__cart-node--current .at-dp__cart-node-hit > .svg-wrapper {
+  color: var(--color-selected-variant-background);
 }
 
 .at-dp__cart-node--future .at-dp__cart-node-hit {
