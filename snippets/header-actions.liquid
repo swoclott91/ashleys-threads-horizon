@@ -543,22 +543,21 @@
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: var(--gap-xs);
     width: 100%;
   }
 
   .cart-drawer__header-top .cart-drawer__heading {
-    flex: 0 1 auto;
+    flex: 0 0 auto;
     min-width: 0;
     margin: 0;
   }
 
-  /* Spec: Cart | centered strip | close — single row */
+  /* Fills all space between title and close — no max-width (that caused a dead gap). */
   .cart-drawer__header-top .cart-drawer__at-dp-strip {
     flex: 1 1 0;
     min-width: 0;
-    max-width: min(240px, 48vw);
     display: flex;
     justify-content: center;
     align-items: center;
