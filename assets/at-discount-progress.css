@@ -492,7 +492,7 @@ at-discount-progress-bar {
 /* Cart page: same single-row strip as drawer */
 .cart-page__at-dp-strip .at-dp__cart-expand {
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--gap-sm);
   text-align: start;
 }
@@ -517,9 +517,17 @@ at-discount-progress-bar {
   font-size: var(--font-size--2xs);
 }
 
+/*
+ * Milestone centers are at 0% / 100% with translateX(-50%). Inset the track by half a node’s
+ * outer diameter so end circles stay inside the container (matches strip node min size + border).
+ */
 .cart-drawer__at-dp-strip .at-dp__cart-railwrap,
 .cart-page__at-dp-strip .at-dp__cart-railwrap {
+  /* Half of 1.45rem hit + half of 2px border each side ≈ 0.725rem + 2px */
+  --at-dp-cart-node-inset: calc(0.725rem + 2px);
+  padding-inline: var(--at-dp-cart-node-inset);
   padding-block-start: 0.2rem;
+  box-sizing: border-box;
 }
 
 .cart-drawer__at-dp-strip .at-dp__cart-line,
@@ -558,6 +566,7 @@ at-discount-progress-bar {
   height: 0.95rem;
 }
 
+.at-dp__cart-expand {
   display: flex;
   width: 100%;
   flex-direction: column;
