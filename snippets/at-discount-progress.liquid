@@ -124,8 +124,14 @@
       </span>
     </template>
   {%- endif -%}
+  {%- comment -%}
+    AT: omit cart-drawer-inner only morphs keyed nodes — this bar is morphed as part of the header section.
+    Server HTML is an empty custom element; JS fills children. Morph's updateChildren would strip those
+    children to match SSR unless we skip subtree updates (see assets/morph.js).
+  {%- endcomment -%}
   <at-discount-progress-bar
     class="at-discount-progress at-dp-empty-track--{{ dp_empty_track }}"
+    data-skip-subtree-update
     data-context="{{ dp_context | escape }}"
     data-section-uid="{{ dp_uid | escape }}"
     data-subtotal="{{ dp_subtotal }}"

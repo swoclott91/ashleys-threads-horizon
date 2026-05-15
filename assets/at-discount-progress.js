@@ -60,6 +60,19 @@ function findBulkDiscountHost(el) {
 }
 
 class AtDiscountProgressBar extends HTMLElement {
+  static observedAttributes = [
+    'data-subtotal',
+    'data-milestones',
+    'data-i18n',
+    'data-money-format',
+    'data-currency',
+    'data-product-id',
+    'data-variant-price',
+    'data-non-sale-url',
+    'data-context',
+    'data-section-uid',
+  ];
+
   /** @type {Array<{ threshold: number, name: string, benefitShort: string, benefitLabel: string, kind?: string }>} */
   #milestones = [];
 
@@ -83,6 +96,16 @@ class AtDiscountProgressBar extends HTMLElement {
 
   disconnectedCallback() {
     this.#unbindEvents();
+  }
+
+  /**
+   * Section re-renders (cart change, quantity updates) morph this node against SSR: empty children + fresh data-*.
+   * We use data-skip-subtree-update so morph does not delete our rendered UI; when attrs copy over, re-render.
+   */
+  attributeChangedCallback(_name, oldVal, newVal) {
+    if (oldVal === newVal) return;
+    this.#parseAttributes();
+    if (this.isConnected) this.render();
   }
 
   #parseAttributes() {
