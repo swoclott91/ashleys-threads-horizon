@@ -307,17 +307,19 @@ class AtDiscountProgressBar extends HTMLElement {
         const current = nextTierIdx === i;
         const shipping = ms.kind === 'shipping';
         let cls = 'at-dp__cart-node';
+        if (shipping) cls += ' at-dp__cart-node--shipping';
         if (reached) cls += ' at-dp__cart-node--reached';
         else if (current) cls += ' at-dp__cart-node--current';
         else cls += ' at-dp__cart-node--future';
 
+        /** Free-shipping step: always truck (text label like “Free ship” only appears for non-shipping tiers). */
         let inner = '';
-        if (reached) {
+        if (shipping) {
+          inner = '<span class="at-dp__cart-node-mount" data-at-dp-mount="truck"></span>';
+        } else if (reached) {
           inner = `<span class="at-dp__cart-node-text">${escapeHtml(ms.benefitLabel)}</span>`;
         } else if (current) {
-          inner = shipping
-            ? '<span class="at-dp__cart-node-mount" data-at-dp-mount="truck"></span>'
-            : `<span class="at-dp__cart-node-text">${escapeHtml(ms.benefitLabel)}</span>`;
+          inner = `<span class="at-dp__cart-node-text">${escapeHtml(ms.benefitLabel)}</span>`;
         } else {
           inner = `<span class="at-dp__cart-node-text">${escapeHtml(ms.benefitLabel)}</span>`;
         }
@@ -336,7 +338,9 @@ class AtDiscountProgressBar extends HTMLElement {
             ? '<div class="at-dp__modal-iconwrap"><span data-at-dp-mount="truck"></span></div>'
             : '<div class="at-dp__modal-iconwrap"><span data-at-dp-mount="check"></span></div>'
           : current
-            ? '<div class="at-dp__modal-iconwrap at-dp__modal-iconwrap--current"><span class="at-dp__modal-target" aria-hidden="true"></span></div>'
+            ? shipping
+              ? '<div class="at-dp__modal-iconwrap at-dp__modal-iconwrap--current"><span data-at-dp-mount="truck"></span></div>'
+              : '<div class="at-dp__modal-iconwrap at-dp__modal-iconwrap--current"><span class="at-dp__modal-target" aria-hidden="true"></span></div>'
             : '<div class="at-dp__modal-iconwrap"><span data-at-dp-mount="lock"></span></div>';
 
         let rightHtml = '';

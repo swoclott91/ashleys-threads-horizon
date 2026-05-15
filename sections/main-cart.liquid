@@ -41,6 +41,24 @@
         {%- content_for 'block', id: 'cart-page-title', type: '_cart-title' %}
       </div>
 
+      {%- unless cart.empty? -%}
+        {%- if settings.at_discount_progress_enabled -%}
+          <div
+            class="
+              cart-page__at-dp-strip
+              at-discount-progress-scheme-wrap
+              {% if settings.at_discount_progress_color_scheme != blank %} color-{{ settings.at_discount_progress_color_scheme }}{% endif %}
+            "
+          >
+            {% render 'at-discount-progress',
+              context: 'cart',
+              section_id: section.id,
+              non_sale_collection_url: settings.at_non_sale_collection_url
+            %}
+          </div>
+        {%- endif -%}
+      {%- endunless -%}
+
       <div class="cart-page__items">
         {%- content_for 'block', id: 'cart-page-items', type: '_cart-products' %}
       </div>
@@ -96,10 +114,22 @@
     margin-block-start: var(--margin-lg);
   }
 
+  .cart-page__title + .cart-page__at-dp-strip {
+    margin-block-start: var(--margin-md);
+  }
+
+  .cart-page__at-dp-strip + .cart-page__items {
+    margin-block-start: var(--margin-md);
+  }
+
   @media screen and (min-width: 750px) {
     .cart-page {
       grid-template-columns: 1fr min(50vw, var(--sidebar-width));
       grid-template-rows: min-content min-content 1fr;
+    }
+
+    .cart-page:has(.cart-page__at-dp-strip) {
+      grid-template-rows: min-content min-content min-content 1fr;
     }
 
     .cart-page__summary {

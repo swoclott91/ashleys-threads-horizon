@@ -3,17 +3,20 @@
 
   @param {string} [accelerated_checkout_buttons_layout] - { 'vertical' } Forced layout of the additional checkout buttons, instead of relying on platform's layout.
   @param {string} [section_id] - The section ID for cart discount component.
+  @param {boolean} [skip_discount_strip] - When true, omit the discount progress strip (render it beside the cart header instead).
 {%- enddoc -%}
 
-{% if settings.at_discount_progress_enabled %}
-  <div class="at-discount-progress-scheme-wrap{% if settings.at_discount_progress_color_scheme != blank %} color-{{ settings.at_discount_progress_color_scheme }}{% endif %}">
-    {% render 'at-discount-progress',
-      context: 'cart',
-      section_id: section_id,
-      non_sale_collection_url: settings.at_non_sale_collection_url
-    %}
-  </div>
-{% endif %}
+{% unless skip_discount_strip %}
+  {% if settings.at_discount_progress_enabled %}
+    <div class="at-discount-progress-scheme-wrap{% if settings.at_discount_progress_color_scheme != blank %} color-{{ settings.at_discount_progress_color_scheme }}{% endif %}">
+      {% render 'at-discount-progress',
+        context: 'cart',
+        section_id: section_id,
+        non_sale_collection_url: settings.at_non_sale_collection_url
+      %}
+    </div>
+  {% endif %}
+{% endunless %}
 
 {%- comment -%}
   Wrapper isolates the drawer scroll-fade mask (see header-actions) so it does not hide the

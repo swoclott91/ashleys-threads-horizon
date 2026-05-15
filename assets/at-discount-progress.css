@@ -470,8 +470,69 @@ at-discount-progress-bar {
 /* -------------------------------------------------------------------------- */
 
 .at-dp--cart-condensed {
-  gap: var(--gap-sm);
-  padding: var(--padding-sm) var(--padding-md);
+  gap: var(--gap-2xs);
+  padding: var(--padding-2xs) var(--padding-sm);
+}
+
+/* Tight strip beside cart title (drawer + cart page) — less “card”, smaller type */
+.cart-drawer__at-dp-strip .at-dp--cart-condensed,
+.cart-page__at-dp-strip .at-dp--cart-condensed {
+  gap: var(--gap-2xs);
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.cart-drawer__at-dp-strip .at-discount-progress,
+.cart-page__at-dp-strip .at-discount-progress {
+  margin-block-end: 0;
+}
+
+.cart-drawer__at-dp-strip .at-dp__cart-status,
+.cart-page__at-dp-strip .at-dp__cart-status {
+  font-size: var(--font-size--2xs);
+}
+
+.cart-drawer__at-dp-strip .at-dp__cart-railwrap,
+.cart-page__at-dp-strip .at-dp__cart-railwrap {
+  padding-block-start: 0.2rem;
+}
+
+.cart-drawer__at-dp-strip .at-dp__cart-line,
+.cart-page__at-dp-strip .at-dp__cart-line {
+  height: 2px;
+}
+
+.cart-drawer__at-dp-strip .at-dp__cart-nodes,
+.cart-page__at-dp-strip .at-dp__cart-nodes {
+  min-height: 1.75rem;
+  margin-block-start: -0.875rem;
+}
+
+.cart-drawer__at-dp-strip .at-dp__cart-node-hit,
+.cart-page__at-dp-strip .at-dp__cart-node-hit {
+  min-width: 1.45rem;
+  min-height: 1.45rem;
+  font-size: clamp(0.5625rem, 0.65rem, var(--font-size--3xs));
+}
+
+.cart-drawer__at-dp-strip .at-dp__cart-node-mount .svg-wrapper,
+.cart-drawer__at-dp-strip .at-dp__cart-node-mount .at-dp__icon,
+.cart-page__at-dp-strip .at-dp__cart-node-mount .svg-wrapper,
+.cart-page__at-dp-strip .at-dp__cart-node-mount .at-dp__icon {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.cart-drawer__at-dp-strip .at-dp__cart-node-mount svg,
+.cart-page__at-dp-strip .at-dp__cart-node-mount svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.at-dp__cart-node--future.at-dp__cart-node--shipping .at-dp__cart-node-mount {
+  color: rgb(var(--color-variant-text-rgb) / 0.5);
 }
 
 .at-dp__cart-expand {
