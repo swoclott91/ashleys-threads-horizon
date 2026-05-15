@@ -6,7 +6,7 @@
  * - Achieved fill + reached milestone dots: Selected variants — background.
  * - Pending / preview fill (cart projection): Variants — hover background (“pre-select”).
  * - Primary copy / filled tier labels: Selected variants — text (“achieved”).
- * - Next / “current” ring (unfilled interior): border = selected variant bg; label + icons = same (readable on input/background fill), not selected-variant-text (often white).
+ * - Next milestone (full bar `.at-dp__dot--next`, condensed hollow node): ring = selected variant bg, interior = input background — not variant-hover color-mix (can wash out on light schemes).
  * - Secondary labels / amounts: Variants — text (muted where noted).
  *
  * Cart / drawer / bulk modals (`at-dp--cart-condensed`): condensed status + horizontal nodes; `<dialog>` uses same scheme tokens.
@@ -437,8 +437,13 @@ at-discount-progress-bar {
   background: var(--color-selected-variant-background);
 }
 
+/*
+ * Next milestone (full PDP / non-condensed bar): do not use variant-hover mix — on light schemes it
+ * reads as white-on-white. Hollow ring matches condensed “current” node + `.at-dp__modal-iconwrap--current`.
+ */
 .at-dp__dot--next {
-  background: color-mix(in srgb, var(--color-variant-hover-background) 70%, var(--color-background));
+  background: var(--color-input-background);
+  border-color: var(--color-selected-variant-background);
 }
 
 .at-dp__amounts {
@@ -724,18 +729,18 @@ at-discount-progress-bar {
   color: var(--color-selected-variant-text);
 }
 
-/* Current = next tier (hollow ring): light interior — must not use selected-variant-text (often white on white). Match `.at-dp__modal-iconwrap--current`. */
-.at-dp__cart-node--current .at-dp__cart-node-hit {
+/* Condensed strip only: full bar uses `.at-dp__dot`, not cart nodes. */
+.at-dp--cart-condensed .at-dp__cart-node--current .at-dp__cart-node-hit {
   border: 2px solid var(--color-selected-variant-background);
   background: var(--color-input-background);
   color: var(--color-selected-variant-background);
 }
 
-.at-dp__cart-node--current .at-dp__cart-node-mount {
+.at-dp--cart-condensed .at-dp__cart-node--current .at-dp__cart-node-mount {
   color: var(--color-selected-variant-background);
 }
 
-.at-dp__cart-node--current .at-dp__cart-node-hit > .svg-wrapper {
+.at-dp--cart-condensed .at-dp__cart-node--current .at-dp__cart-node-hit > .svg-wrapper {
   color: var(--color-selected-variant-background);
 }
 
