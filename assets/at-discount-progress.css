@@ -490,11 +490,11 @@ at-discount-progress-bar {
 
 /* Fixed square milestones (see `.at-dp__cart-node-hit`): width must not grow with label text */
 .cart-page__at-dp-strip {
-  --at-dp-cart-node-size: 1.45rem;
+  --at-dp-cart-node-size: calc(1.45rem + 2px);
 }
 
 .cart-drawer__at-dp-strip {
-  --at-dp-cart-node-size: 1.125rem;
+  --at-dp-cart-node-size: calc(1.125rem + 2px);
 }
 
 .cart-drawer__at-dp-strip .at-discount-progress,
