@@ -4,6 +4,7 @@ import {
   QuantitySelectorUpdateEvent,
 } from '@theme/events';
 import { formatMoney } from '@theme/money-formatting';
+import { isClickedOutside } from '@theme/utilities';
 
 const INFO_ICON_SVG =
   '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><circle cx="9" cy="9" r="7.25" stroke="currentColor" stroke-width="1.5"/><path d="M9 8.25V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="5.25" r="0.75" fill="currentColor"/></svg>';
@@ -28,6 +29,30 @@ function escapeHtml(s) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/**
+ * Decode entities so copy from `data-i18n` (Liquid `| escape` on the attribute) is not double-encoded.
+ * @param {string} s
+ */
+function decodeHtmlEntities(s) {
+  if (!s) return '';
+  const el = document.createElement('textarea');
+  el.innerHTML = s;
+  return el.value;
+}
+
+/** Theme i18n + safe placeholders: decode then escape for innerHTML text nodes. */
+function textForInnerHtml(s) {
+  return escapeHtml(decodeHtmlEntities(String(s)));
+}
+
+/** Decode then escape `"` and `&` for use inside double-quoted HTML attributes (e.g. aria-label). */
+function escapeAttr(s) {
+  return decodeHtmlEntities(String(s || ''))
+    .replace(/&/g, '&amp;')
     .replace(/"/g, '&quot;');
 }
 
@@ -41,9 +66,10 @@ function cartCondensedStatusRich(tpl, amount, benefit) {
   const amt = escapeHtml(amount);
   const ben = escapeHtml(benefit);
   const benSpan = `<span class="at-dp__cart-status-goal">${ben}</span>`;
-  let s = applyLiquidPlaceholders(tpl, { amount: '__AT_DP_AMT__', benefit: '__AT_DP_BEN__' });
+  const tplDecoded = decodeHtmlEntities(tpl);
+  let s = applyLiquidPlaceholders(tplDecoded, { amount: '__AT_DP_AMT__', benefit: '__AT_DP_BEN__' });
   if (s.includes('__AT_DP_AMT__') || s.includes('__AT_DP_BEN__')) {
-    return escapeHtml(applyLiquidPlaceholders(tpl, { amount, benefit }));
+    return textForInnerHtml(applyLiquidPlaceholders(tplDecoded, { amount, benefit }));
   }
   s = s.split('__AT_DP_AMT__').join(amt);
   s = s.split('__AT_DP_BEN__').join(benSpan);
@@ -275,7 +301,7 @@ class AtDiscountProgressBar extends HTMLElement {
     const uid = this.dataset.sectionUid || 'at-dp';
     scope.querySelectorAll('[data-at-dp-mount]').forEach((el) => {
       const kind = el.getAttribute('data-at-dp-mount');
-      if (kind !== 'truck' && kind !== 'check' && kind !== 'lock') return;
+      if (kind !== 'truck' && kind !== 'check' && kind !== 'lock' && kind !== 'close') return;
       const tpl = document.getElementById(`at-dp-${kind}-${uid}`);
       const node = tpl?.content?.firstElementChild;
       if (!(node instanceof HTMLElement)) return;
@@ -298,7 +324,7 @@ class AtDiscountProgressBar extends HTMLElement {
 
     let statusInner = '';
     if (nextTierIdx < 0) {
-      statusInner = escapeHtml(this.#i18n.max_tier_reached || '');
+      statusInner = textForInnerHtml(this.#i18n.max_tier_reached || '');
     } else {
       const need = m[nextTierIdx].threshold - previewBasis;
       if (need > 0) {
@@ -329,11 +355,11 @@ class AtDiscountProgressBar extends HTMLElement {
         if (shipping) {
           inner = '<span class="at-dp__cart-node-mount" data-at-dp-mount="truck"></span>';
         } else if (reached) {
-          inner = `<span class="at-dp__cart-node-text">${escapeHtml(ms.benefitLabel)}</span>`;
+          inner = `<span class="at-dp__cart-node-text">${textForInnerHtml(ms.benefitLabel)}</span>`;
         } else if (current) {
-          inner = `<span class="at-dp__cart-node-text">${escapeHtml(ms.benefitLabel)}</span>`;
+          inner = `<span class="at-dp__cart-node-text">${textForInnerHtml(ms.benefitLabel)}</span>`;
         } else {
-          inner = `<span class="at-dp__cart-node-text">${escapeHtml(ms.benefitLabel)}</span>`;
+          inner = `<span class="at-dp__cart-node-text">${textForInnerHtml(ms.benefitLabel)}</span>`;
         }
         return `<div class="${cls}" style="--at-dp-node-left:${left}%"><span class="at-dp__cart-node-hit">${inner}</span></div>`;
       })
@@ -357,26 +383,26 @@ class AtDiscountProgressBar extends HTMLElement {
 
         let rightHtml = '';
         if (reached) {
-          rightHtml = `<span class="at-dp__modal-badge">${escapeHtml(this.#i18n.unlocked_badge || '')}</span>`;
+          rightHtml = `<span class="at-dp__modal-badge">${textForInnerHtml(this.#i18n.unlocked_badge || '')}</span>`;
         } else if (current) {
           const need = m[i].threshold - previewBasis;
           const amountAway = this.#moneyWhole(Math.max(0, need));
-          rightHtml = `<span class="at-dp__modal-away">${applyLiquidPlaceholders(this.#i18n.modal_away || '', { amount: amountAway })}</span>`;
+          rightHtml = `<span class="at-dp__modal-away">${textForInnerHtml(applyLiquidPlaceholders(decodeHtmlEntities(this.#i18n.modal_away || ''), { amount: amountAway }))}</span>`;
         } else {
-          rightHtml = `<span class="at-dp__modal-threshold">${applyLiquidPlaceholders(this.#i18n.modal_at || '', { amount: this.#moneyWhole(ms.threshold) })}</span>`;
+          rightHtml = `<span class="at-dp__modal-threshold">${textForInnerHtml(applyLiquidPlaceholders(decodeHtmlEntities(this.#i18n.modal_at || ''), { amount: this.#moneyWhole(ms.threshold) }))}</span>`;
         }
 
         const subRaw = reached
-          ? applyLiquidPlaceholders(this.#i18n.modal_unlocked_at || '', {
+          ? applyLiquidPlaceholders(decodeHtmlEntities(this.#i18n.modal_unlocked_at || ''), {
               amount: this.#moneyWhole(ms.threshold),
             })
           : current
-            ? applyLiquidPlaceholders(this.#i18n.modal_spend_for || '', {
+            ? applyLiquidPlaceholders(decodeHtmlEntities(this.#i18n.modal_spend_for || ''), {
                 amount: this.#moneyWhole(ms.threshold),
                 name: ms.name,
               })
             : '';
-        const subHtml = subRaw ? `<p class="at-dp__modal-sub">${escapeHtml(subRaw)}</p>` : '';
+        const subHtml = subRaw ? `<p class="at-dp__modal-sub">${textForInnerHtml(subRaw)}</p>` : '';
 
         const rowCls = ['at-dp__modal-step'];
         if (reached) rowCls.push('at-dp__modal-step--reached');
@@ -389,7 +415,7 @@ class AtDiscountProgressBar extends HTMLElement {
           </div>
           <div class="at-dp__modal-main">
             <div class="at-dp__modal-title-row">
-              <span class="at-dp__modal-title">${escapeHtml(ms.name)}</span>
+              <span class="at-dp__modal-title">${textForInnerHtml(ms.name)}</span>
               ${rightHtml}
             </div>
             ${subHtml}
@@ -400,12 +426,13 @@ class AtDiscountProgressBar extends HTMLElement {
 
     const qualifyingLink =
       nonSaleUrl !== ''
-        ? `<p class="at-dp__dialog-qualify"><a href="${escapeHtml(nonSaleUrl)}">${escapeHtml(this.#i18n.browse_qualifying || '')}</a></p>`
+        ? `<p class="at-dp__dialog-qualify"><a href="${escapeHtml(nonSaleUrl)}">${textForInnerHtml(this.#i18n.browse_qualifying || '')}</a></p>`
         : '';
 
     const dialogId = `at-dp-sheet-${uid}`;
     const statusId = `at-dp-status-${uid}`;
-    const expandLabel = escapeHtml(this.#i18n.expand_savings_aria || '');
+    const expandLabelAttr = escapeAttr(this.#i18n.expand_savings_aria || '');
+    const closeLabelAttr = escapeAttr(this.#i18n.close_dialog || '');
 
     this.innerHTML = `
       <div class="at-dp at-dp--cart-condensed">
@@ -416,7 +443,7 @@ class AtDiscountProgressBar extends HTMLElement {
           aria-expanded="false"
           aria-controls="${dialogId}"
           aria-describedby="${statusId}"
-          aria-label="${expandLabel}"
+          aria-label="${expandLabelAttr}"
         >
           <span class="at-dp__cart-status" id="${statusId}" role="status" aria-live="polite">${statusInner}</span>
           <div class="at-dp__cart-railwrap" aria-hidden="true">
@@ -426,21 +453,28 @@ class AtDiscountProgressBar extends HTMLElement {
             <div class="at-dp__cart-nodes">${nodesHtml}</div>
           </div>
         </button>
-        <dialog id="${dialogId}" class="at-dp__dialog">
+        <dialog id="${dialogId}" class="at-dp__dialog dialog-modal">
           <div class="at-dp__dialog-panel">
+            <button
+              type="button"
+              class="button button-unstyled close-button at-dp__dialog-close"
+              aria-label="${closeLabelAttr}"
+            >
+              <span data-at-dp-mount="close"></span>
+            </button>
             <div class="at-dp__dialog-handle" aria-hidden="true"></div>
-            <h2 class="at-dp__dialog-title">${escapeHtml(this.#i18n.bulk_savings_title || '')}</h2>
-            <p class="at-dp__dialog-lede">${escapeHtml(this.#i18n.bulk_savings_subtitle || '')}</p>
+            <h2 class="at-dp__dialog-title">${textForInnerHtml(this.#i18n.bulk_savings_title || '')}</h2>
+            <p class="at-dp__dialog-lede">${textForInnerHtml(this.#i18n.bulk_savings_subtitle || '')}</p>
             <ul class="at-dp__modal-list">${modalListHtml}</ul>
             <div class="at-dp__dialog-foot">
               <p class="at-dp__dialog-note">
                 <span class="at-dp__dialog-infoic" aria-hidden="true">${INFO_ICON_SVG}</span>
-                <span>${escapeHtml(this.#i18n.modal_footer_note || '')}</span>
+                <span>${textForInnerHtml(this.#i18n.modal_footer_note || '')}</span>
               </p>
-              <p class="at-dp__dialog-disclaimer">${escapeHtml(this.#i18n.non_sale_disclaimer || '')}</p>
+              <p class="at-dp__dialog-disclaimer">${textForInnerHtml(this.#i18n.non_sale_disclaimer || '')}</p>
               ${qualifyingLink}
             </div>
-            <button type="button" class="button button-secondary at-dp__dialog-got-it">${escapeHtml(this.#i18n.modal_got_it || '')}</button>
+            <button type="button" class="button button-secondary at-dp__dialog-got-it">${textForInnerHtml(this.#i18n.modal_got_it || '')}</button>
           </div>
         </dialog>
       </div>
@@ -451,6 +485,7 @@ class AtDiscountProgressBar extends HTMLElement {
     const expandBtn = this.querySelector('.at-dp__cart-expand');
     const dlg = /** @type {HTMLDialogElement | null} */ (document.getElementById(dialogId));
     const gotIt = this.querySelector('.at-dp__dialog-got-it');
+    const dialogClose = this.querySelector('.at-dp__dialog-close');
 
     const setOpen = (open) => {
       if (expandBtn instanceof HTMLElement) {
@@ -463,6 +498,15 @@ class AtDiscountProgressBar extends HTMLElement {
         dlg.showModal();
         setOpen(true);
       }
+    });
+
+    dlg?.addEventListener('click', (e) => {
+      if (!(dlg instanceof HTMLDialogElement)) return;
+      if (isClickedOutside(e, dlg)) dlg.close();
+    });
+
+    dialogClose?.addEventListener('click', () => {
+      dlg?.close();
     });
 
     dlg?.addEventListener('close', () => {

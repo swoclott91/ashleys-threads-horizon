@@ -572,6 +572,7 @@ at-discount-progress-bar {
 }
 
 .at-dp__dialog-panel {
+  position: relative;
   display: flex;
   max-height: inherit;
   flex-direction: column;
@@ -579,6 +580,30 @@ at-discount-progress-bar {
   padding: var(--padding-md) var(--padding-lg) var(--padding-lg);
   box-sizing: border-box;
   overflow: auto;
+}
+
+/* Override global `.close-button { position: fixed }` so control stays inside the sheet (see at-bulk-grid quick-add). */
+.at-dp__dialog .at-dp__dialog-close {
+  position: absolute;
+  top: var(--margin-2xs);
+  right: var(--margin-2xs);
+  z-index: 1;
+  width: var(--minimum-touch-target);
+  height: var(--minimum-touch-target);
+  opacity: 0.85;
+  animation: none;
+}
+
+@media (max-width: 749px) {
+  .at-dp__dialog .at-dp__dialog-close {
+    top: max(var(--margin-2xs), env(safe-area-inset-top, 0px));
+    right: max(var(--margin-2xs), env(safe-area-inset-right, 0px));
+  }
+}
+
+.at-dp__dialog .at-dp__dialog-close:focus-visible {
+  outline: var(--focus-outline-width) solid currentColor;
+  outline-offset: var(--focus-outline-offset);
 }
 
 .at-dp__dialog-handle {
