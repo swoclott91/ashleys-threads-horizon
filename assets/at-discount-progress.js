@@ -31,6 +31,25 @@ function escapeHtml(s) {
     .replace(/"/g, '&quot;');
 }
 
+/**
+ * @param {string} tpl
+ * @param {string} amount
+ * @param {string} benefit
+ */
+function cartCondensedStatusRich(tpl, amount, benefit) {
+  if (!tpl) return '';
+  const amt = escapeHtml(amount);
+  const ben = escapeHtml(benefit);
+  const benSpan = `<span class="at-dp__cart-status-goal">${ben}</span>`;
+  let s = applyLiquidPlaceholders(tpl, { amount: '__AT_DP_AMT__', benefit: '__AT_DP_BEN__' });
+  if (s.includes('__AT_DP_AMT__') || s.includes('__AT_DP_BEN__')) {
+    return escapeHtml(applyLiquidPlaceholders(tpl, { amount, benefit }));
+  }
+  s = s.split('__AT_DP_AMT__').join(amt);
+  s = s.split('__AT_DP_BEN__').join(benSpan);
+  return s;
+}
+
 /** Wrapper that contains a bulk grid + optional discount bar (quick-add, PDP bulk, popup-link). */
 function findBulkDiscountHost(el) {
   return (
@@ -284,16 +303,16 @@ class AtDiscountProgressBar extends HTMLElement {
   #renderCartCondensed(p) {
     const { m, n, previewBasis, nextTierIdx, uid, nonSaleUrl } = p;
 
-    let statusLine = '';
+    let statusInner = '';
     if (nextTierIdx < 0) {
-      statusLine = this.#i18n.max_tier_reached || '';
+      statusInner = escapeHtml(this.#i18n.max_tier_reached || '');
     } else {
       const need = m[nextTierIdx].threshold - previewBasis;
       if (need > 0) {
         const amount = this.#moneyWhole(need);
         const benefit = m[nextTierIdx].name;
         const tpl = this.#i18n.cart_condensed_status || this.#i18n.add_more_for || '';
-        statusLine = applyLiquidPlaceholders(tpl, { amount, benefit });
+        statusInner = cartCondensedStatusRich(tpl, amount, benefit);
       }
     }
 
@@ -308,17 +327,16 @@ class AtDiscountProgressBar extends HTMLElement {
         const shipping = ms.kind === 'shipping';
         let cls = 'at-dp__cart-node';
         if (shipping) cls += ' at-dp__cart-node--shipping';
-        if (reached && !shipping) cls += ' at-dp__cart-node--check';
         if (reached) cls += ' at-dp__cart-node--reached';
         else if (current) cls += ' at-dp__cart-node--current';
         else cls += ' at-dp__cart-node--future';
 
-        /** Shipping: always truck. Completed discount tiers: checkmark burst; else benefit label text. */
+        /** Original spec: shipping → truck; unlocked discount → short label (e.g. 12%) on solid fill; future/current → labels. */
         let inner = '';
         if (shipping) {
           inner = '<span class="at-dp__cart-node-mount" data-at-dp-mount="truck"></span>';
         } else if (reached) {
-          inner = '<span class="at-dp__cart-node-mount" data-at-dp-mount="check"></span>';
+          inner = `<span class="at-dp__cart-node-text">${escapeHtml(ms.benefitLabel)}</span>`;
         } else if (current) {
           inner = `<span class="at-dp__cart-node-text">${escapeHtml(ms.benefitLabel)}</span>`;
         } else {
@@ -407,7 +425,7 @@ class AtDiscountProgressBar extends HTMLElement {
           aria-describedby="${statusId}"
           aria-label="${expandLabel}"
         >
-          <span class="at-dp__cart-status" id="${statusId}" role="status" aria-live="polite">${escapeHtml(statusLine)}</span>
+          <span class="at-dp__cart-status" id="${statusId}" role="status" aria-live="polite">${statusInner}</span>
           <div class="at-dp__cart-railwrap" aria-hidden="true">
             <div class="at-dp__cart-line">
               <span class="at-dp__cart-line-active" style="width:${lineActivePct}%"></span>

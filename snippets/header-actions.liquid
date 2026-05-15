@@ -191,17 +191,6 @@
                     {% render 'cart-bubble' %}
                   </h2>
 
-                  <button
-                    ref="closeButton"
-                    on:click="cart-drawer-component/close"
-                    class="button close-button cart-drawer__close-button button-unstyled"
-                    aria-label="{{ 'actions.close_dialog' | t }}"
-                  >
-                    <span class="svg-wrapper">
-                      {{- 'icon-close.svg' | inline_asset_content -}}
-                    </span>
-                  </button>
-
                   {% if settings.at_discount_progress_enabled %}
                     <div
                       class="
@@ -217,6 +206,17 @@
                       %}
                     </div>
                   {% endif %}
+
+                  <button
+                    ref="closeButton"
+                    on:click="cart-drawer-component/close"
+                    class="button close-button cart-drawer__close-button button-unstyled"
+                    aria-label="{{ 'actions.close_dialog' | t }}"
+                  >
+                    <span class="svg-wrapper">
+                      {{- 'icon-close.svg' | inline_asset_content -}}
+                    </span>
+                  </button>
                 </div>
               </div>
 
@@ -541,32 +541,35 @@
 
   .cart-drawer__header-top {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
-    column-gap: var(--gap-sm);
-    row-gap: var(--padding-2xs);
+    gap: var(--gap-xs);
     width: 100%;
   }
 
   .cart-drawer__header-top .cart-drawer__heading {
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     min-width: 0;
     margin: 0;
   }
 
-  .cart-drawer__header-top .cart-drawer__close-button {
-    flex: 0 0 auto;
-    align-self: flex-start;
+  /* Spec: Cart | centered strip | close — single row */
+  .cart-drawer__header-top .cart-drawer__at-dp-strip {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: min(240px, 48vw);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    border: none;
   }
 
-  .cart-drawer__header-top .cart-drawer__at-dp-strip {
-    flex: 1 0 100%;
-    width: 100%;
-    max-width: 100%;
-    margin-block-start: 0;
-    padding-block-start: 0;
-    border-block-start: none;
+  .cart-drawer__header-top .cart-drawer__close-button {
+    flex: 0 0 auto;
+    align-self: center;
   }
 
   .cart-drawer__at-dp-strip {
@@ -577,25 +580,31 @@
     margin-block-end: 0;
   }
 
-  /* One compact row: status (left) + rail (right) — full-width row under title/close */
+  /* Original spec: status above rail, centered in the middle column */
   .cart-drawer__at-dp-strip .at-dp__cart-expand {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: var(--gap-sm);
-    text-align: start;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-2xs);
+    text-align: center;
+    width: 100%;
   }
 
   .cart-drawer__at-dp-strip .at-dp__cart-status {
-    flex: 0 1 46%;
-    min-width: 0;
-    text-align: start;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    font-size: var(--font-size--3xs);
+    line-height: 1.25;
   }
 
   .cart-drawer__at-dp-strip .at-dp__cart-railwrap {
-    flex: 1 1 0;
+    flex: none;
+    width: 100%;
     min-width: 0;
   }
 

@@ -489,27 +489,27 @@ at-discount-progress-bar {
   margin-block-end: 0;
 }
 
-/* Cart page: same single-row strip as drawer */
+/* Cart page: centered stack under title (matches condensed spec) */
 .cart-page__at-dp-strip .at-dp__cart-expand {
-  flex-direction: row;
-  align-items: flex-start;
-  gap: var(--gap-sm);
-  text-align: start;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-2xs);
+  text-align: center;
 }
 
 .cart-page__at-dp-strip .at-dp__cart-status {
-  flex: 0 1 46%;
-  min-width: 0;
-  text-align: start;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  flex: none;
+  width: 100%;
+  text-align: center;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
 }
 
 .cart-page__at-dp-strip .at-dp__cart-railwrap {
-  flex: 1 1 0;
+  width: 100%;
   min-width: 0;
-  padding-block-start: 0;
 }
 
 .cart-drawer__at-dp-strip .at-dp__cart-status,
@@ -519,14 +519,19 @@ at-discount-progress-bar {
 
 /*
  * Milestone centers are at 0% / 100% with translateX(-50%). Inset the track by half a node’s
- * outer diameter so end circles stay inside the container (matches strip node min size + border).
+ * outer diameter so end circles stay inside the container.
  */
-.cart-drawer__at-dp-strip .at-dp__cart-railwrap,
 .cart-page__at-dp-strip .at-dp__cart-railwrap {
-  /* Half of 1.45rem hit + half of 2px border each side ≈ 0.725rem + 2px */
   --at-dp-cart-node-inset: calc(0.725rem + 2px);
   padding-inline: var(--at-dp-cart-node-inset);
   padding-block-start: 0.2rem;
+  box-sizing: border-box;
+}
+
+.cart-drawer__at-dp-strip .at-dp__cart-railwrap {
+  --at-dp-cart-node-inset: calc(0.5625rem + 2px);
+  padding-inline: var(--at-dp-cart-node-inset);
+  padding-block-start: 0.12rem;
   box-sizing: border-box;
 }
 
@@ -535,22 +540,28 @@ at-discount-progress-bar {
   height: 2px;
 }
 
-.cart-drawer__at-dp-strip .at-dp__cart-nodes,
 .cart-page__at-dp-strip .at-dp__cart-nodes {
   min-height: 1.75rem;
   margin-block-start: -0.875rem;
 }
 
-.cart-drawer__at-dp-strip .at-dp__cart-node-hit,
+.cart-drawer__at-dp-strip .at-dp__cart-nodes {
+  min-height: 1.32rem;
+  margin-block-start: -0.66rem;
+}
+
 .cart-page__at-dp-strip .at-dp__cart-node-hit {
   min-width: 1.45rem;
   min-height: 1.45rem;
   font-size: clamp(0.5625rem, 0.65rem, var(--font-size--3xs));
 }
 
-.cart-drawer__at-dp-strip .at-dp__cart-node-mount .svg-wrapper,
-.cart-drawer__at-dp-strip .at-dp__cart-node-mount .at-dp__icon,
-.cart-drawer__at-dp-strip .at-dp__cart-node-hit > .svg-wrapper,
+.cart-drawer__at-dp-strip .at-dp__cart-node-hit {
+  min-width: 1.125rem;
+  min-height: 1.125rem;
+  font-size: clamp(0.45rem, 0.5rem, 0.55rem);
+}
+
 .cart-page__at-dp-strip .at-dp__cart-node-mount .svg-wrapper,
 .cart-page__at-dp-strip .at-dp__cart-node-mount .at-dp__icon,
 .cart-page__at-dp-strip .at-dp__cart-node-hit > .svg-wrapper {
@@ -558,12 +569,23 @@ at-discount-progress-bar {
   height: 0.95rem;
 }
 
-.cart-drawer__at-dp-strip .at-dp__cart-node-mount svg,
-.cart-drawer__at-dp-strip .at-dp__cart-node-hit > .svg-wrapper svg,
+.cart-drawer__at-dp-strip .at-dp__cart-node-mount .svg-wrapper,
+.cart-drawer__at-dp-strip .at-dp__cart-node-mount .at-dp__icon,
+.cart-drawer__at-dp-strip .at-dp__cart-node-hit > .svg-wrapper {
+  width: 0.72rem;
+  height: 0.72rem;
+}
+
 .cart-page__at-dp-strip .at-dp__cart-node-mount svg,
 .cart-page__at-dp-strip .at-dp__cart-node-hit > .svg-wrapper svg {
   width: 0.95rem;
   height: 0.95rem;
+}
+
+.cart-drawer__at-dp-strip .at-dp__cart-node-mount svg,
+.cart-drawer__at-dp-strip .at-dp__cart-node-hit > .svg-wrapper svg {
+  width: 0.72rem;
+  height: 0.72rem;
 }
 
 .at-dp__cart-expand {
@@ -587,8 +609,13 @@ at-discount-progress-bar {
   margin: 0;
   font-size: var(--font-size--sm);
   font-weight: var(--font-weight-medium);
-  color: var(--color-selected-variant-text);
+  color: rgb(var(--color-variant-text-rgb) / var(--opacity-subdued-text));
   line-height: 1.35;
+}
+
+.at-dp__cart-status-goal {
+  color: var(--color-selected-variant-background);
+  font-weight: var(--font-weight-semibold);
 }
 
 .at-dp__cart-railwrap {
@@ -685,19 +712,6 @@ at-discount-progress-bar {
 
 .at-dp__cart-node--future.at-dp__cart-node--shipping .at-dp__cart-node-hit > .svg-wrapper {
   color: rgb(var(--color-variant-text-rgb) / 0.5);
-}
-
-/* Checkmark burst scaled to fit milestone dot (theme ATC animation is scoped to .at-dp below) */
-.at-dp__cart-node--check .at-dp__cart-node-hit {
-  overflow: hidden;
-}
-
-.at-dp__cart-node--check .add-to-cart__added-icon {
-  width: 1.5rem !important;
-  height: 1.5rem !important;
-  flex-shrink: 0;
-  transform: scale(0.7);
-  transform-origin: center;
 }
 
 .at-dp__cart-node-mount .svg-wrapper,
