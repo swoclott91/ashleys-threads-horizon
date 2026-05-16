@@ -1,0 +1,29 @@
+{%- doc -%}
+  Detects generic supplier disclaimer copy so it can be omitted from the UI.
+  Pass **sanitized** text (after `size-guide-sanitize-text`). Outputs `1` when the string should not be shown.
+
+  @param {string} text - Sanitized plain text
+{%- enddoc -%}
+{%- liquid
+  assign t = text | default: '' | strip | downcase
+  assign suppress = false
+  if t == blank
+    assign suppress = true
+  endif
+  if suppress == false
+    if t contains 'measurements are provided by' and t contains 'may vary'
+      assign suppress = true
+    endif
+  endif
+  if suppress == false
+    if t contains 'measurements are provided' and t contains 'may vary slightly'
+      assign suppress = true
+    endif
+  endif
+  if suppress == false
+    if t contains 'provided by and may'
+      assign suppress = true
+    endif
+  endif
+-%}
+{%- if suppress -%}1{%- endif -%}

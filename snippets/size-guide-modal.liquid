@@ -88,18 +88,26 @@
 
 {%- capture size_guide_footer_notes -%}
   {%- if size_guide_data.notes != blank -%}
-    <div class="size-guide__global-notes rte">
-      <ul class="size-guide__notes-list">
-        {%- for note in size_guide_data.notes -%}
-          {%- if note != blank -%}
-            {%- capture note_clean -%}{% render 'size-guide-sanitize-text', text: note %}{%- endcapture -%}
-            {%- if note_clean != blank -%}
-              <li>{{ note_clean | strip | escape }}</li>
-            {%- endif -%}
+    {%- capture size_guide_footer_notes_inner -%}
+      {%- for note in size_guide_data.notes -%}
+        {%- if note != blank -%}
+          {%- capture note_clean -%}{% render 'size-guide-sanitize-text', text: note %}{%- endcapture -%}
+          {%- assign note_clean = note_clean | strip -%}
+          {%- capture note_suppress -%}{% render 'size-guide-suppress-boilerplate-text', text: note_clean %}{%- endcapture -%}
+          {%- if note_clean != blank and note_suppress != '1' -%}
+            <li>{{ note_clean | escape }}</li>
           {%- endif -%}
-        {%- endfor -%}
-      </ul>
-    </div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+    {%- assign size_guide_footer_notes_inner = size_guide_footer_notes_inner | strip -%}
+    {%- if size_guide_footer_notes_inner != blank -%}
+      <div class="size-guide__global-notes rte">
+        <ul class="size-guide__notes-list">
+          {{ size_guide_footer_notes_inner }}
+        </ul>
+      </div>
+    {%- endif -%}
   {%- endif -%}
 {%- endcapture -%}
 

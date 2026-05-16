@@ -39,8 +39,10 @@
 
   {%- if gs_desc != blank -%}
     {%- capture gs_desc_clean -%}{% render 'size-guide-sanitize-text', text: gs_desc %}{%- endcapture -%}
-    {%- if gs_desc_clean != blank -%}
-      <p class="size-guide__section-desc paragraph">{{ gs_desc_clean | strip | escape }}</p>
+    {%- assign gs_desc_clean = gs_desc_clean | strip -%}
+    {%- capture gs_desc_suppress -%}{% render 'size-guide-suppress-boilerplate-text', text: gs_desc_clean %}{%- endcapture -%}
+    {%- if gs_desc_clean != blank and gs_desc_suppress != '1' -%}
+      <p class="size-guide__section-desc paragraph">{{ gs_desc_clean | escape }}</p>
     {%- endif -%}
   {%- endif -%}
 
@@ -97,10 +99,12 @@
             {%- assign row_note = row.note | default: '' -%}
             {%- if row_note != blank -%}
               {%- capture row_note_clean -%}{% render 'size-guide-sanitize-text', text: row_note %}{%- endcapture -%}
-              {%- if row_note_clean != blank -%}
+              {%- assign row_note_clean = row_note_clean | strip -%}
+              {%- capture row_note_suppress -%}{% render 'size-guide-suppress-boilerplate-text', text: row_note_clean %}{%- endcapture -%}
+              {%- if row_note_clean != blank and row_note_suppress != '1' -%}
                 <tr class="size-guide__row-note">
                   <td class="size-guide__row-note-spacer"></td>
-                  <td colspan="{{ col_count }}">{{ row_note_clean | strip | escape }}</td>
+                  <td colspan="{{ col_count }}">{{ row_note_clean | escape }}</td>
                 </tr>
               {%- endif -%}
             {%- endif -%}
@@ -139,10 +143,12 @@
             {%- assign row_note = row.note | default: '' -%}
             {%- if row_note != blank -%}
               {%- capture row_note_clean -%}{% render 'size-guide-sanitize-text', text: row_note %}{%- endcapture -%}
-              {%- if row_note_clean != blank -%}
+              {%- assign row_note_clean = row_note_clean | strip -%}
+              {%- capture row_note_suppress -%}{% render 'size-guide-suppress-boilerplate-text', text: row_note_clean %}{%- endcapture -%}
+              {%- if row_note_clean != blank and row_note_suppress != '1' -%}
                 <tr class="size-guide__row-note">
                   <td class="size-guide__row-note-spacer"></td>
-                  <td>{{ row_note_clean | strip | escape }}</td>
+                  <td>{{ row_note_clean | escape }}</td>
                 </tr>
               {%- endif -%}
             {%- endif -%}
@@ -153,17 +159,25 @@
   {%- endif -%}
 
   {%- if gs_notes != blank -%}
-    <div class="size-guide__section-notes rte">
-      <ul>
-        {%- for note in gs_notes -%}
-          {%- if note != blank -%}
-            {%- capture note_clean -%}{% render 'size-guide-sanitize-text', text: note %}{%- endcapture -%}
-            {%- if note_clean != blank -%}
-              <li>{{ note_clean | strip | escape }}</li>
-            {%- endif -%}
+    {%- capture gs_section_notes_inner -%}
+      {%- for note in gs_notes -%}
+        {%- if note != blank -%}
+          {%- capture note_clean -%}{% render 'size-guide-sanitize-text', text: note %}{%- endcapture -%}
+          {%- assign note_clean = note_clean | strip -%}
+          {%- capture note_suppress -%}{% render 'size-guide-suppress-boilerplate-text', text: note_clean %}{%- endcapture -%}
+          {%- if note_clean != blank and note_suppress != '1' -%}
+            <li>{{ note_clean | escape }}</li>
           {%- endif -%}
-        {%- endfor -%}
-      </ul>
-    </div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+    {%- assign gs_section_notes_inner = gs_section_notes_inner | strip -%}
+    {%- if gs_section_notes_inner != blank -%}
+      <div class="size-guide__section-notes rte">
+        <ul>
+          {{ gs_section_notes_inner }}
+        </ul>
+      </div>
+    {%- endif -%}
   {%- endif -%}
 </section>
