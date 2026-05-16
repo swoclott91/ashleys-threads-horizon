@@ -269,8 +269,8 @@
     .size-guide__table--responsive {
       width: 100%;
       min-width: 0;
-      border: 1px solid rgb(var(--color-foreground-rgb) / 0.2);
-      border-radius: var(--style-border-radius-popover, 8px);
+      border: none;
+      border-radius: 0;
       border-collapse: separate;
       border-spacing: 0;
     }
@@ -285,7 +285,7 @@
       gap: var(--gap-xs);
       padding: var(--padding-sm);
       margin-block: 0 var(--gap-sm);
-      margin-inline: var(--padding-3xs, 2px);
+      margin-inline: 0;
       border: 1px solid rgb(var(--color-foreground-rgb) / 0.22);
       border-radius: var(--style-border-radius-buttons-primary, 8px);
       background-color: rgb(var(--color-foreground-rgb) / var(--opacity-4));
@@ -298,7 +298,7 @@
     .size-guide__table--responsive tbody tr.size-guide__row-note {
       display: block;
       margin-block: 0 var(--gap-sm);
-      margin-inline: var(--padding-3xs, 2px);
+      margin-inline: 0;
       padding: 0;
       border: none;
       background: none;
@@ -323,9 +323,9 @@
       align-items: stretch;
       gap: var(--margin-3xs);
       padding: var(--padding-sm);
-      border: 1px solid rgb(var(--color-foreground-rgb) / 0.24);
+      border: none;
       border-radius: var(--style-border-radius-buttons-secondary, 4px);
-      background-color: var(--color-background);
+      background-color: rgb(var(--color-foreground-rgb) / 0.08);
     }
 
     .size-guide__table--responsive td.size-guide__value-cell[data-size-label]::before {
@@ -339,10 +339,10 @@
     .size-guide__table--responsive:not(:has(thead)) tbody td.size-guide__value-cell--plain {
       grid-column: 1 / -1;
       white-space: normal;
-      border: 1px solid rgb(var(--color-foreground-rgb) / 0.24);
+      border: none;
       border-radius: var(--style-border-radius-buttons-secondary, 4px);
       padding: var(--padding-sm);
-      background-color: var(--color-background);
+      background-color: rgb(var(--color-foreground-rgb) / 0.08);
     }
 
     .size-guide__table--responsive tr.size-guide__row-note td {
@@ -358,10 +358,10 @@
     .size-guide__table--responsive tr.size-guide__row-note td:not(.size-guide__row-note-spacer) {
       font-size: max(0.875rem, 0.92em);
       color: rgb(var(--color-foreground-rgb) / var(--opacity-80));
-      border: 1px solid rgb(var(--color-foreground-rgb) / 0.18);
+      border: 1px solid rgb(var(--color-foreground-rgb) / 0.2);
       border-radius: var(--style-border-radius-buttons-secondary, 4px);
       padding: var(--padding-sm);
-      background-color: var(--color-background);
+      background-color: rgb(var(--color-foreground-rgb) / 0.06);
     }
   }
 
