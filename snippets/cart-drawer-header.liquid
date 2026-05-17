@@ -16,22 +16,25 @@
           {{- 'accessibility.cart_count' | t }}: {{ cart.item_count -}}
         {%- endunless -%}
       </h2>
-      {%- comment -%} Same markup/classes as header cart trigger (snippets/header-actions.liquid `cart_icon` capture, icon-only). {%- endcomment -%}
-      <cart-icon
-        class="header-actions__cart-icon{% unless cart == empty %} header-actions__cart-icon--has-cart{% endunless %}"
-        data-testid="cart-drawer-header-cart-icon"
-        aria-hidden="true"
-      >
-        <span class="hidden">
-          {{ 'content.cart_title' | t }}
-        </span>
+      {%- comment -%}
+        Mirror header cart trigger: `button.header-actions__action` > `cart-icon` (see sections/header.liquid action svg sizing).
+      {%- endcomment -%}
+      <span class="header-actions__action cart-drawer__header-cart-action" aria-hidden="true">
+        <cart-icon
+          class="header-actions__cart-icon{% unless cart == empty %} header-actions__cart-icon--has-cart{% endunless %}"
+          data-testid="cart-drawer-header-cart-icon"
+        >
+          <span class="hidden">
+            {{ 'content.cart_title' | t }}
+          </span>
 
-        <span class="svg-wrapper" aria-hidden="true">
-          {{- 'icon-cart.svg' | inline_asset_content -}}
-        </span>
+          <span class="svg-wrapper" aria-hidden="true">
+            {{- 'icon-cart.svg' | inline_asset_content -}}
+          </span>
 
-        {% render 'cart-bubble', limit: 100, text_id: 'cart-drawer-bubble-text' %}
-      </cart-icon>
+          {% render 'cart-bubble', limit: 100, text_id: 'cart-drawer-bubble-text' %}
+        </cart-icon>
+      </span>
     </div>
 
     {% if settings.at_discount_progress_enabled %}

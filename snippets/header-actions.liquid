@@ -506,8 +506,30 @@
     min-width: 0;
   }
 
-  .cart-drawer__cart-mark .header-actions__cart-icon {
+  /*
+   * Match sections/header.liquid `.header-actions__action` sizing so the drawer bubble
+   * aligns with the header cart (same icon box + count position).
+   */
+  .cart-drawer__header-cart-action {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: center;
+    color: var(--color-foreground);
     pointer-events: none;
+  }
+
+  .cart-drawer__header-cart-action .svg-wrapper {
+    width: var(--button-size);
+    height: var(--button-size);
+  }
+
+  .cart-drawer__header-cart-action svg {
+    width: var(--icon-size-md);
+    height: var(--icon-size-md);
+  }
+
+  .cart-drawer__header-cart-action .header-actions__cart-icon {
+    position: relative;
   }
 
   /* Fills space between title and close; avoid width:100% here (it inflates min-content vs flex siblings). */
