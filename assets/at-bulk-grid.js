@@ -153,9 +153,9 @@ function getBulkGridLoadingHtml(container) {
     .replace(/</g, '&lt;')
     .replace(/"/g, '&quot;');
   return (
-    '<motion.div class="at-bulk-grid__loading" aria-live="polite" aria-busy="true">' +
-    '<motion.div class="at-bulk-grid__spinner" role="status">' +
-    `<motion.span class="visually-hidden">${safeLabel}</motion.span>` +
+    '<div class="at-bulk-grid__loading" aria-live="polite" aria-busy="true">' +
+    '<div class="at-bulk-grid__spinner" role="status">' +
+    `<span class="visually-hidden">${safeLabel}</span>` +
     '</div></div>'
   );
 }
@@ -875,7 +875,7 @@ function renderGrid(container) {
 
   if (needDeferred) {
     bulkGridConfigCache.delete(sectionId);
-    container.innerHTML = '<p class="at-bulk-grid__loading" aria-live="polite">Loading variants…</p>';
+    container.innerHTML = getBulkGridLoadingHtml(container);
     const fetchPromise = deferredLoadPromises.get(sectionId) || fetchDeferredVariants(config);
     deferredLoadPromises.delete(sectionId);
     fetchPromise
@@ -1060,7 +1060,7 @@ window.atBulkGridDebug = function (searchOptionValue) {
   if (!config) {
     const script = document.querySelector('script[data-at-bulk-grid-config]');
     if (!script || !script.textContent) {
-      console.warn('atBulkGridDebug: No config. Open the bulk grid on a product page (and wait for "Loading variants…" to finish if it appears).');
+      console.warn('atBulkGridDebug: No config. Open the bulk grid on a product page (and wait for variants to finish loading if the spinner appears).');
       return null;
     }
     sectionId = script.dataset.atSectionId || script.getAttribute('data-at-section-id');

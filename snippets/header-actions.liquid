@@ -511,7 +511,6 @@
   }
 
   .cart-drawer__cart-icon {
-    position: relative;
     display: flex;
     align-items: center;
     color: var(--color-foreground);
@@ -521,6 +520,11 @@
     display: flex;
     width: var(--icon-size-md);
     height: var(--icon-size-md);
+    color: var(--color-foreground);
+  }
+
+  .cart-drawer__cart-icon svg {
+    stroke: currentColor;
   }
 
   .cart-drawer__cart-mark .cart-bubble {
@@ -528,15 +532,45 @@
     width: var(--cart-bubble-size, 20px);
     top: var(--cart-bubble-top);
     right: var(--cart-bubble-right);
+    color: var(--color-foreground);
   }
 
-  .cart-drawer__cart-mark:has(.cart-bubble__text-count:not(:empty)) .cart-drawer__cart-icon svg {
+  .cart-drawer__cart-mark .cart-bubble__background {
+    background-color: rgb(var(--color-foreground-rgb) / var(--opacity-10-25));
+  }
+
+  .cart-drawer__cart-mark .cart-bubble__text,
+  .cart-drawer__cart-mark .cart-bubble__text-count {
+    color: var(--color-foreground);
+  }
+
+  .cart-drawer__cart-mark--has-cart .cart-bubble {
+    color: var(--color-primary-button-text);
+  }
+
+  .cart-drawer__cart-mark--has-cart .cart-bubble__background {
+    background-color: var(--color-primary-button-background);
+  }
+
+  .cart-drawer__cart-mark--has-cart .cart-bubble__text,
+  .cart-drawer__cart-mark--has-cart .cart-bubble__text-count {
+    color: var(--color-primary-button-text);
+  }
+
+  .cart-drawer__cart-mark--has-cart .cart-drawer__cart-icon svg {
     mask: radial-gradient(
       calc(var(--cart-bubble-size) + 2px) at calc(100% - var(--cart-bubble-right)) var(--cart-bubble-top),
       transparent 45.45%,
       #fff 45.45%,
       #fff 100%
     );
+  }
+
+  /* Empty cart with no visible count: small dot like the header icon. */
+  .cart-drawer__cart-mark:not(.cart-drawer__cart-mark--has-cart):has(.cart-bubble__text-count:empty) {
+    --cart-bubble-size: 10px;
+    --cart-bubble-top: 9px;
+    --cart-bubble-right: 9px;
   }
 
   /* Fills space between title and close; avoid width:100% here (it inflates min-content vs flex siblings). */
@@ -661,15 +695,6 @@
       #fff 45.45%,
       #fff 100%
     );
-  }
-
-  .cart-drawer__cart-mark .cart-bubble__background {
-    background-color: var(--color-primary-button-background);
-  }
-
-  .cart-drawer__cart-mark .cart-bubble__text {
-    color: var(--color-primary-button-text);
-    font-size: var(--font-size--3xs);
   }
 
   .cart-bubble--animating .cart-bubble__background {

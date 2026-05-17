@@ -9,7 +9,7 @@
 -%}
 <div class="cart-drawer__header" id="cart-drawer-header">
   <div class="cart-drawer__header-top">
-    <div class="cart-drawer__cart-mark">
+    <div class="cart-drawer__cart-mark{% unless cart.empty? %} cart-drawer__cart-mark--has-cart{% endunless %}">
       <h2 class="visually-hidden" id="{{ drawer_heading_id }}">
         {{ 'content.cart_title' | t }}
         {%- unless cart.empty? -%}
@@ -20,8 +20,8 @@
         <span class="svg-wrapper">
           {{- 'icon-cart.svg' | inline_asset_content -}}
         </span>
-        {% render 'cart-bubble', limit: 100 %}
       </span>
+      {% render 'cart-bubble', limit: 100, drawer_header: true %}
     </div>
 
     {% if settings.at_discount_progress_enabled %}

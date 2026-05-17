@@ -161,7 +161,39 @@
   min-width: 0;
 }
 
-.at-bulk-grid__loading,
+/* Ring spinner while deferred variants load (matches AT menu / modal loading pattern) */
+.at-bulk-grid__loading {
+  flex: 1 1 auto;
+  min-height: 10rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gap-md, 1rem);
+}
+
+.at-bulk-grid__spinner {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 3px solid rgb(var(--color-foreground-rgb) / var(--opacity-20));
+  border-block-start-color: rgb(var(--color-foreground-rgb) / var(--opacity-70));
+  border-radius: 50%;
+  animation: at-bulk-grid-spin 0.7s linear infinite;
+}
+
+@keyframes at-bulk-grid-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .at-bulk-grid__spinner {
+    animation-duration: 2s;
+  }
+}
+
 .at-bulk-grid__empty {
   padding: var(--gap-md, 1rem);
   text-align: center;

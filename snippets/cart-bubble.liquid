@@ -1,14 +1,22 @@
 {%- doc -%}
   @param [limit] - {number}
   @param [live_region] - {boolean}
+  @param [drawer_header] - {boolean} When true, keep the bubble visible in the cart drawer header (shows 0 when empty).
 
   The maximum number of items in the cart to display. If the number of items in the cart is greater than this limit, the
   count will be displayed as "99+".
 {%- enddoc -%}
 
+{%- liquid
+  assign hide_empty_bubble = false
+  if cart == empty and drawer_header != true
+    assign hide_empty_bubble = true
+  endif
+-%}
+
 <div
   ref="cartBubble"
-  class="cart-bubble{% if cart == empty %} visually-hidden{% endif %}"
+  class="cart-bubble{% if hide_empty_bubble %} visually-hidden{% endif %}"
   {% assign item_count = cart.item_count %}
   {% if item_count <= 99 %}
     data-maintain-ratio
@@ -28,7 +36,7 @@
       : {{ cart.item_count }}
     </span>
     <span
-      class="cart-bubble__text-count{% if cart == empty %} hidden{% endif %}"
+      class="cart-bubble__text-count{% if hide_empty_bubble %} hidden{% endif %}"
       ref="cartBubbleCount"
       aria-hidden="true"
       data-testid="cart-bubble"

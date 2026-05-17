@@ -39,6 +39,7 @@
     "play_video": "Play video",
     "loading_product_recommendations": "Loading product recommendations",
     "loading_menu": "Loading menu",
+    "loading_variants": "Loading variants",
     "rating": "Rating of this product is {{ rating }} out of 5",
     "remove_item": "Remove {{ title}}",
     "remove": "Remove",
