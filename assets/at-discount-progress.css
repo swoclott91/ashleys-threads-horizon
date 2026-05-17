@@ -52,7 +52,7 @@ at-discount-progress-bar {
   box-sizing: border-box;
 }
 
-/* Cart drawer header: “Member discounts • Log in” inline (no card chrome). */
+/* Cart drawer header: “Get member discounts” + Log in inline (no card chrome). */
 .at-discount-progress--drawer-header {
   flex-direction: row;
   flex-wrap: wrap;
@@ -72,11 +72,6 @@ at-discount-progress-bar {
 .at-discount-progress--drawer-header .at-discount-progress__label {
   font-weight: var(--font-weight-medium);
   white-space: nowrap;
-}
-
-.at-discount-progress--drawer-header .at-discount-progress__sep {
-  color: rgb(var(--color-variant-text-rgb) / var(--opacity-subdued-text));
-  user-select: none;
 }
 
 .at-discount-progress--drawer-header .at-discount-progress__account {
