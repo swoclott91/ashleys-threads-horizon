@@ -112,6 +112,7 @@
     "sort": "Sort"
   },
   "at_discount_progress": {
+    "member_discounts": "Member discounts",
     "log_in_prompt": "Log in to qualify for additional discounts",
     "log_in": "Log in",
     "tier_unlocked": "{{ tier }}",

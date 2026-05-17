@@ -1,0 +1,55 @@
+{%- doc -%}
+  Compact cart drawer header: cart icon + item count, optional discount strip, close control.
+
+  @param {string} section_id - Section id for at-discount-progress.
+  @param {string} [heading_id] - Id for the visually hidden cart title (dialog aria-labelledby).
+{%- enddoc -%}
+{%- liquid
+  assign drawer_heading_id = heading_id | default: 'cart-drawer-heading'
+-%}
+<div class="cart-drawer__header" id="cart-drawer-header">
+  <div class="cart-drawer__header-top">
+    <div class="cart-drawer__cart-mark">
+      <h2 class="visually-hidden" id="{{ drawer_heading_id }}">
+        {{ 'content.cart_title' | t }}
+        {%- unless cart.empty? -%}
+          {{- 'accessibility.cart_count' | t }}: {{ cart.item_count -}}
+        {%- endunless -%}
+      </h2>
+      <span class="cart-drawer__cart-icon" aria-hidden="true">
+        <span class="svg-wrapper">
+          {{- 'icon-cart.svg' | inline_asset_content -}}
+        </span>
+        {% render 'cart-bubble', limit: 100 %}
+      </span>
+    </div>
+
+    {% if settings.at_discount_progress_enabled %}
+      <div
+        class="
+          cart-drawer__at-dp-strip
+          at-discount-progress-scheme-wrap
+          {% if settings.at_discount_progress_color_scheme != blank %} color-{{ settings.at_discount_progress_color_scheme }}{% endif %}
+        "
+      >
+        {% render 'at-discount-progress',
+          context: 'cart',
+          layout: 'drawer_header',
+          section_id: section_id,
+          non_sale_collection_url: settings.at_non_sale_collection_url
+        %}
+      </div>
+    {% endif %}
+
+    <button
+      ref="closeButton"
+      on:click="cart-drawer-component/close"
+      class="button close-button cart-drawer__close-button button-unstyled"
+      aria-label="{{ 'actions.close_dialog' | t }}"
+    >
+      <span class="svg-wrapper">
+        {{- 'icon-close.svg' | inline_asset_content -}}
+      </span>
+    </button>
+  </div>
+</div>

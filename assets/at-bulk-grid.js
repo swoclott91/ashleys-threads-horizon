@@ -142,6 +142,25 @@ const ICON_PLUS_SVG =
   '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path class="vertical" d="M2.75 7H11.25" stroke="currentColor" stroke-width="var(--icon-stroke-width)" stroke-linecap="round"/><path class="horizontal" d="M7 2.75L7 11.25" stroke="currentColor" stroke-width="var(--icon-stroke-width)" stroke-linecap="round"/></svg>';
 
 /**
+ * Centered ring spinner while deferred variants load (matches AT menu / modal loading pattern).
+ * @param {HTMLElement} container
+ * @returns {string}
+ */
+function getBulkGridLoadingHtml(container) {
+  const label = container?.dataset?.atBulkLoadingLabel?.trim() || 'Loading variants…';
+  const safeLabel = label
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/"/g, '&quot;');
+  return (
+    '<motion.div class="at-bulk-grid__loading" aria-live="polite" aria-busy="true">' +
+    '<motion.div class="at-bulk-grid__spinner" role="status">' +
+    `<motion.span class="visually-hidden">${safeLabel}</motion.span>` +
+    '</div></div>'
+  );
+}
+
+/**
  * @param {string} sectionId
  * @returns {{ productId: number, productUrl: string, sectionId: string, variants: Array<{ id: number, available: boolean, inventory_quantity: number, inventory_policy: string, option1: string, option2?: string, option3?: string }>, options: Array<{ name: string, position: number, values: string[] }> } | null}
  */

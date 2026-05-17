@@ -52,6 +52,51 @@ at-discount-progress-bar {
   box-sizing: border-box;
 }
 
+/* Cart drawer header: “Member discounts • Log in” inline (no card chrome). */
+.at-discount-progress--drawer-header {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-2xs) var(--gap-xs);
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font-size: var(--font-size--sm);
+  line-height: 1.25;
+  color: var(--color-foreground);
+}
+
+.at-discount-progress--drawer-header .at-discount-progress__label {
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+
+.at-discount-progress--drawer-header .at-discount-progress__sep {
+  color: rgb(var(--color-variant-text-rgb) / var(--opacity-subdued-text));
+  user-select: none;
+}
+
+.at-discount-progress--drawer-header .at-discount-progress__account {
+  align-self: center;
+}
+
+.at-discount-progress--drawer-header .at-discount-progress__login-trigger,
+.at-discount-progress--drawer-header .at-discount-progress__login--legacy {
+  --button-padding-block: var(--padding-2xs);
+  --button-padding-inline: var(--padding-sm);
+  min-height: var(--minimum-touch-target);
+  font-size: var(--font-size--sm);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.cart-drawer__at-dp-strip .at-discount-progress--drawer-header {
+  margin-block-end: 0;
+}
+
 .at-discount-progress__prompt {
   margin: 0;
   font-size: var(--font-size--sm);
@@ -126,6 +171,17 @@ at-discount-progress-bar {
   align-items: center;
   justify-content: center;
   line-height: normal;
+}
+
+.at-discount-progress--drawer-header shopify-account {
+  display: inline-block;
+  width: auto;
+  max-width: 100%;
+}
+
+.at-discount-progress--drawer-header shopify-account:not(:defined) {
+  min-width: auto;
+  min-height: var(--minimum-touch-target);
 }
 
 /* Icon stroke uses currentColor — inherit from `.button` (`--button-color`), not section/foreground text */
