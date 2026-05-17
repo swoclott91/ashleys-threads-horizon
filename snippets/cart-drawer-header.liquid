@@ -9,19 +9,29 @@
 -%}
 <div class="cart-drawer__header" id="cart-drawer-header">
   <div class="cart-drawer__header-top">
-    <div class="cart-drawer__cart-mark{% unless cart.empty? %} cart-drawer__cart-mark--has-cart{% endunless %}">
+    <div class="cart-drawer__cart-mark">
       <h2 class="visually-hidden" id="{{ drawer_heading_id }}">
         {{ 'content.cart_title' | t }}
         {%- unless cart.empty? -%}
           {{- 'accessibility.cart_count' | t }}: {{ cart.item_count -}}
         {%- endunless -%}
       </h2>
-      <span class="cart-drawer__cart-icon" aria-hidden="true">
-        <span class="svg-wrapper">
+      {%- comment -%} Same markup/classes as header cart trigger (snippets/header-actions.liquid `cart_icon` capture, icon-only). {%- endcomment -%}
+      <cart-icon
+        class="header-actions__cart-icon{% unless cart == empty %} header-actions__cart-icon--has-cart{% endunless %}"
+        data-testid="cart-drawer-header-cart-icon"
+        aria-hidden="true"
+      >
+        <span class="hidden">
+          {{ 'content.cart_title' | t }}
+        </span>
+
+        <span class="svg-wrapper" aria-hidden="true">
           {{- 'icon-cart.svg' | inline_asset_content -}}
         </span>
-      </span>
-      {% render 'cart-bubble', limit: 100, drawer_header: true %}
+
+        {% render 'cart-bubble', limit: 100, text_id: 'cart-drawer-bubble-text' %}
+      </cart-icon>
     </div>
 
     {% if settings.at_discount_progress_enabled %}
