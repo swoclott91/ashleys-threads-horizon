@@ -42,7 +42,7 @@
           "type": "text",
           "name": "t:names.text",
           "settings": {
-            "text": "<p>Source tees, fleece, polos, hats, and more for teams, schools, churches, events, cusotom apparel businesses, and local merch brands</p>",
+            "text": "<p>Source tees, fleece, polos, hats, and more for teams, schools, churches, events, custom apparel businesses, and local merch brands</p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
