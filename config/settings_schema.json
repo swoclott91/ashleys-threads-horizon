@@ -1481,6 +1481,266 @@
       },
       {
         "type": "header",
+        "content": "Custom badges"
+      },
+      {
+        "type": "header",
+        "content": "Custom badge 1"
+      },
+      {
+        "type": "checkbox",
+        "id": "badge_custom_1_enabled",
+        "label": "Enable badge",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_1_label",
+        "label": "Label",
+        "default": "New Arrival",
+        "visible_if": "{{ settings.badge_custom_1_enabled == true }}"
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_1_tag",
+        "label": "Product tag",
+        "default": "badge:new-arrival",
+        "info": "Match product tags exactly; comparison is case-insensitive. Example: badge:new-arrival.",
+        "visible_if": "{{ settings.badge_custom_1_enabled == true }}"
+      },
+      {
+        "type": "color_scheme",
+        "id": "badge_custom_1_color_scheme",
+        "label": "Color scheme",
+        "default": "scheme-4",
+        "visible_if": "{{ settings.badge_custom_1_enabled == true }}"
+      },
+      {
+        "type": "header",
+        "content": "Custom badge 2"
+      },
+      {
+        "type": "checkbox",
+        "id": "badge_custom_2_enabled",
+        "label": "Enable badge",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_2_label",
+        "label": "Label",
+        "default": "Best Seller",
+        "visible_if": "{{ settings.badge_custom_2_enabled == true }}"
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_2_tag",
+        "label": "Product tag",
+        "default": "badge:best-seller",
+        "info": "Match product tags exactly; comparison is case-insensitive. Example: badge:new-arrival.",
+        "visible_if": "{{ settings.badge_custom_2_enabled == true }}"
+      },
+      {
+        "type": "color_scheme",
+        "id": "badge_custom_2_color_scheme",
+        "label": "Color scheme",
+        "default": "scheme-4",
+        "visible_if": "{{ settings.badge_custom_2_enabled == true }}"
+      },
+      {
+        "type": "header",
+        "content": "Custom badge 3"
+      },
+      {
+        "type": "checkbox",
+        "id": "badge_custom_3_enabled",
+        "label": "Enable badge",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_3_label",
+        "label": "Label",
+        "default": "Bulk Favorite",
+        "visible_if": "{{ settings.badge_custom_3_enabled == true }}"
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_3_tag",
+        "label": "Product tag",
+        "default": "badge:bulk-favorite",
+        "info": "Match product tags exactly; comparison is case-insensitive. Example: badge:new-arrival.",
+        "visible_if": "{{ settings.badge_custom_3_enabled == true }}"
+      },
+      {
+        "type": "color_scheme",
+        "id": "badge_custom_3_color_scheme",
+        "label": "Color scheme",
+        "default": "scheme-4",
+        "visible_if": "{{ settings.badge_custom_3_enabled == true }}"
+      },
+      {
+        "type": "header",
+        "content": "Custom badge 4"
+      },
+      {
+        "type": "checkbox",
+        "id": "badge_custom_4_enabled",
+        "label": "Enable badge",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_4_label",
+        "label": "Label",
+        "default": "Decorates Well",
+        "visible_if": "{{ settings.badge_custom_4_enabled == true }}"
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_4_tag",
+        "label": "Product tag",
+        "default": "badge:decorates-well",
+        "info": "Match product tags exactly; comparison is case-insensitive. Example: badge:new-arrival.",
+        "visible_if": "{{ settings.badge_custom_4_enabled == true }}"
+      },
+      {
+        "type": "color_scheme",
+        "id": "badge_custom_4_color_scheme",
+        "label": "Color scheme",
+        "default": "scheme-4",
+        "visible_if": "{{ settings.badge_custom_4_enabled == true }}"
+      },
+      {
+        "type": "header",
+        "content": "Custom badge 5"
+      },
+      {
+        "type": "checkbox",
+        "id": "badge_custom_5_enabled",
+        "label": "Enable badge",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_5_label",
+        "label": "Label",
+        "default": "Staff Pick",
+        "visible_if": "{{ settings.badge_custom_5_enabled == true }}"
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_5_tag",
+        "label": "Product tag",
+        "default": "badge:staff-pick",
+        "info": "Match product tags exactly; comparison is case-insensitive. Example: badge:new-arrival.",
+        "visible_if": "{{ settings.badge_custom_5_enabled == true }}"
+      },
+      {
+        "type": "color_scheme",
+        "id": "badge_custom_5_color_scheme",
+        "label": "Color scheme",
+        "default": "scheme-4",
+        "visible_if": "{{ settings.badge_custom_5_enabled == true }}"
+      },
+      {
+        "type": "header",
+        "content": "Custom badge 6"
+      },
+      {
+        "type": "checkbox",
+        "id": "badge_custom_6_enabled",
+        "label": "Enable badge",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_6_label",
+        "label": "Label",
+        "default": "Custom Badge 6",
+        "visible_if": "{{ settings.badge_custom_6_enabled == true }}"
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_6_tag",
+        "label": "Product tag",
+        "default": "badge:custom-6",
+        "info": "Match product tags exactly; comparison is case-insensitive. Example: badge:new-arrival.",
+        "visible_if": "{{ settings.badge_custom_6_enabled == true }}"
+      },
+      {
+        "type": "color_scheme",
+        "id": "badge_custom_6_color_scheme",
+        "label": "Color scheme",
+        "default": "scheme-4",
+        "visible_if": "{{ settings.badge_custom_6_enabled == true }}"
+      },
+      {
+        "type": "header",
+        "content": "Custom badge 7"
+      },
+      {
+        "type": "checkbox",
+        "id": "badge_custom_7_enabled",
+        "label": "Enable badge",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_7_label",
+        "label": "Label",
+        "default": "Custom Badge 7",
+        "visible_if": "{{ settings.badge_custom_7_enabled == true }}"
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_7_tag",
+        "label": "Product tag",
+        "default": "badge:custom-7",
+        "info": "Match product tags exactly; comparison is case-insensitive. Example: badge:new-arrival.",
+        "visible_if": "{{ settings.badge_custom_7_enabled == true }}"
+      },
+      {
+        "type": "color_scheme",
+        "id": "badge_custom_7_color_scheme",
+        "label": "Color scheme",
+        "default": "scheme-4",
+        "visible_if": "{{ settings.badge_custom_7_enabled == true }}"
+      },
+      {
+        "type": "header",
+        "content": "Custom badge 8"
+      },
+      {
+        "type": "checkbox",
+        "id": "badge_custom_8_enabled",
+        "label": "Enable badge",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_8_label",
+        "label": "Label",
+        "default": "Custom Badge 8",
+        "visible_if": "{{ settings.badge_custom_8_enabled == true }}"
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_8_tag",
+        "label": "Product tag",
+        "default": "badge:custom-8",
+        "info": "Match product tags exactly; comparison is case-insensitive. Example: badge:new-arrival.",
+        "visible_if": "{{ settings.badge_custom_8_enabled == true }}"
+      },
+      {
+        "type": "color_scheme",
+        "id": "badge_custom_8_color_scheme",
+        "label": "Color scheme",
+        "default": "scheme-4",
+        "visible_if": "{{ settings.badge_custom_8_enabled == true }}"
+      },
+      {
+        "type": "header",
         "content": "t:names.typography"
       },
       {
