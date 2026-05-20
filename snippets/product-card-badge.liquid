@@ -1,0 +1,58 @@
+{%- doc -%}
+  Resolves and renders the highest-priority product card badge.
+
+  @param {object} product - Product resource used to determine badge eligibility.
+{%- enddoc -%}
+
+{%- liquid
+  assign badge_label = blank
+  assign badge_color_scheme = blank
+
+  if product != blank
+    if product.available == false
+      assign badge_label = 'content.product_badge_sold_out' | t
+      assign badge_color_scheme = settings.badge_sold_out_color_scheme
+    elsif product.compare_at_price > product.price
+      assign badge_label = 'content.product_badge_sale' | t
+      assign badge_color_scheme = settings.badge_sale_color_scheme
+    else
+      assign badge_slots = '1,2,3,4,5,6,7,8' | split: ','
+
+      for badge_slot in badge_slots
+        assign enabled_setting_id = 'badge_custom_' | append: badge_slot | append: '_enabled'
+        assign label_setting_id = 'badge_custom_' | append: badge_slot | append: '_label'
+        assign tag_setting_id = 'badge_custom_' | append: badge_slot | append: '_tag'
+        assign color_scheme_setting_id = 'badge_custom_' | append: badge_slot | append: '_color_scheme'
+
+        if settings[enabled_setting_id]
+          assign custom_badge_label = settings[label_setting_id] | strip
+          assign custom_badge_tag = settings[tag_setting_id] | strip | downcase
+
+          if custom_badge_label != blank and custom_badge_tag != blank
+            for product_tag in product.tags
+              assign normalized_product_tag = product_tag | strip | downcase
+
+              if normalized_product_tag == custom_badge_tag
+                assign badge_label = custom_badge_label
+                assign badge_color_scheme = settings[color_scheme_setting_id]
+                break
+              endif
+            endfor
+          endif
+        endif
+
+        if badge_label != blank
+          break
+        endif
+      endfor
+    endif
+  endif
+
+  assign badge_color_scheme = badge_color_scheme | default: settings.badge_sale_color_scheme | default: 'scheme-4'
+-%}
+
+{%- if badge_label != blank -%}
+  <div class="product-badges__badge product-badges__badge--rectangle color-{{ badge_color_scheme | escape }}">
+    {{ badge_label | escape }}
+  </div>
+{%- endif -%}

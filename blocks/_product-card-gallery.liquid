@@ -1,36 +1,37 @@
-{% assign product = closest.product %}
+{% liquid
+  assign product = closest.product
+
+  capture product_badge
+    render 'product-card-badge', product: product
+  endcapture
+  assign product_badge = product_badge | strip
+
+  assign has_badges = false
+  if product_badge != blank
+    assign has_badges = true
+  endif
+%}
 
 {% capture children %}
   {% unless product == blank %}
-    <div
-      class="product-badges product-badges--{{ settings.badge_position }}"
-      style="
-        --badge-border-radius: {{ settings.badge_corner_radius }}px;
-        --badge-font-family: var(--font-{{ settings.badge_font_family }}--family); --badge-font-weight: var(--font-{{ settings.badge_font_family }}--weight); --badge-text-transform: {{ settings.badge_text_transform }};
-      "
-    >
-      {%- if product.available == false or product.compare_at_price > product.price -%}
-        <div
-          class="
-            product-badges__badge product-badges__badge--rectangle
-            {% if product.available == false %} color-{{ settings.badge_sold_out_color_scheme }}{% elsif product.compare_at_price > product.price %} color-{{ settings.badge_sale_color_scheme }}{% endif %}
-          "
-        >
-          {%- if product.available == false -%}
-            {{ 'content.product_badge_sold_out' | t }}
-          {%- elsif product.compare_at_price > product.price -%}
-            {{ 'content.product_badge_sale' | t }}
-          {%- endif -%}
-        </div>
-      {%- endif -%}
-    </div>
+    {% if product_badge != blank %}
+      <div
+        class="product-badges product-badges--{{ settings.badge_position }}"
+        style="
+          --badge-border-radius: {{ settings.badge_corner_radius }}px;
+          --badge-font-family: var(--font-{{ settings.badge_font_family }}--family); --badge-font-weight: var(--font-{{ settings.badge_font_family }}--weight); --badge-text-transform: {{ settings.badge_text_transform }};
+        "
+      >
+        {{ product_badge }}
+      </div>
+    {% endif %}
     {%  if settings.quick_add or settings.mobile_quick_add %}
       {% render 'quick-add', product: product, section_id: section.id %}
     {% endif %}
   {% endunless %}
 {% endcapture %}
 
-{% render 'card-gallery', children: children %}
+{% render 'card-gallery', children: children, has_badges: has_badges %}
 
 {% # Title and price for the zoomed out grid view %}
 <div class="product-grid-view-zoom-out--details">
