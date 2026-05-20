@@ -1657,14 +1657,14 @@
         "type": "text",
         "id": "badge_custom_6_label",
         "label": "Label",
-        "default": "",
+        "default": "Custom Badge 6",
         "visible_if": "{{ settings.badge_custom_6_enabled == true }}"
       },
       {
         "type": "text",
         "id": "badge_custom_6_tag",
         "label": "Product tag",
-        "default": "",
+        "default": "badge:custom-6",
         "info": "Match product tags exactly; comparison is case-insensitive. Example: badge:new-arrival.",
         "visible_if": "{{ settings.badge_custom_6_enabled == true }}"
       },
@@ -1689,14 +1689,14 @@
         "type": "text",
         "id": "badge_custom_7_label",
         "label": "Label",
-        "default": "",
+        "default": "Custom Badge 7",
         "visible_if": "{{ settings.badge_custom_7_enabled == true }}"
       },
       {
         "type": "text",
         "id": "badge_custom_7_tag",
         "label": "Product tag",
-        "default": "",
+        "default": "badge:custom-7",
         "info": "Match product tags exactly; comparison is case-insensitive. Example: badge:new-arrival.",
         "visible_if": "{{ settings.badge_custom_7_enabled == true }}"
       },
@@ -1721,14 +1721,14 @@
         "type": "text",
         "id": "badge_custom_8_label",
         "label": "Label",
-        "default": "",
+        "default": "Custom Badge 8",
         "visible_if": "{{ settings.badge_custom_8_enabled == true }}"
       },
       {
         "type": "text",
         "id": "badge_custom_8_tag",
         "label": "Product tag",
-        "default": "",
+        "default": "badge:custom-8",
         "info": "Match product tags exactly; comparison is case-insensitive. Example: badge:new-arrival.",
         "visible_if": "{{ settings.badge_custom_8_enabled == true }}"
       },
