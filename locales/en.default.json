@@ -151,6 +151,7 @@
       "placeholder": "Email address",
       "success": "Thanks for subscribing!"
     },
+    "fe_designer_heading": "Product Designer",
     "filter": "Filter",
     "load_video": "Load video: {{ description }}",
     "sold_out": "Sold out",

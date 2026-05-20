@@ -234,6 +234,7 @@
 
 /* Right content area */
 .at-brands-panel__content {
+  position: relative;
   flex: 1 1 0;
   min-width: 0;
   min-height: 0;
@@ -262,8 +263,9 @@
  * pattern as mobile drawer nav (see .at-panel__nav-btn--loading / at-panel-nav-spin).
  */
 .at-brands-panel__async-loading {
-  flex: 1 1 auto;
-  min-height: 10rem;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
