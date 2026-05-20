@@ -305,13 +305,10 @@ class AtBrandsPanel extends Component {
       if (!(target instanceof HTMLElement)) continue;
 
       const footer = target.querySelector('.at-brands-panel__footer');
-      const loadingSlot = target.querySelector('[data-at-async-loading]');
 
       for (const child of Array.from(mount.children)) {
         const clone = child.cloneNode(true);
-        if (loadingSlot) {
-          target.insertBefore(clone, loadingSlot);
-        } else if (footer) {
+        if (footer) {
           target.insertBefore(clone, footer);
         } else {
           target.appendChild(clone);
