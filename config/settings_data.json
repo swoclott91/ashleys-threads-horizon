@@ -56,7 +56,7 @@
     "badge_custom_1_label": "New Arrival",
     "badge_custom_1_tag": "new",
     "badge_custom_1_color_scheme": "scheme-5",
-    "badge_custom_2_enabled": true,
+    "badge_custom_2_enabled": false,
     "badge_custom_2_label": "Best Seller",
     "badge_custom_2_tag": "badge:best-seller",
     "badge_custom_2_color_scheme": "scheme-1fe19262-de0a-481c-84a1-50ea7e51e6aa",

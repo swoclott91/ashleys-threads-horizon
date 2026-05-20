@@ -56,6 +56,7 @@
         <div class="at-dp-condensed-strip--tight at-discount-progress-scheme-wrap{% if settings.at_discount_progress_color_scheme != blank %} color-{{ settings.at_discount_progress_color_scheme }}{% endif %}">
           {% render 'at-discount-progress',
             context: 'bulk-modal',
+            layout: 'drawer_header',
             section_id: section.id | append: '-' | append: block.id,
             non_sale_collection_url: settings.at_non_sale_collection_url
           %}

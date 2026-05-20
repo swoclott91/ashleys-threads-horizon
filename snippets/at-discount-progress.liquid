@@ -7,7 +7,7 @@
   @param {object} [product] - Product for data-product-id (product context).
   @param {string} [non_sale_collection_url] - Link for qualifying items in info panel.
   @param {string} [customer_account_menu] - Menu handle for shopify-account (default matches header: customer-account-main-menu).
-  @param {string} [layout] - 'drawer_header' for a single-line “Get member discounts” + Log in row in the cart drawer; default is the card prompt.
+  @param {string} [layout] - 'drawer_header' for inline “Get member discounts” + Log in (cart drawer header, bulk modals when logged out); default is the card prompt.
 {%- enddoc -%}
 {%- liquid
   assign dp_customer_account_menu = customer_account_menu | default: 'customer-account-main-menu'

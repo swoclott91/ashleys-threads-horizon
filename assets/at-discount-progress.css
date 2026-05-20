@@ -88,8 +88,15 @@ at-discount-progress-bar {
   white-space: nowrap;
 }
 
-.cart-drawer__at-dp-strip .at-discount-progress--drawer-header {
+.cart-drawer__at-dp-strip .at-discount-progress--drawer-header,
+.at-dp-condensed-strip--tight .at-discount-progress--drawer-header {
   margin-block-end: 0;
+  width: 100%;
+}
+
+/* Bulk modals: left-align under the close control; drawer header centers in its column. */
+.at-dp-condensed-strip--tight .at-discount-progress--drawer-header {
+  justify-content: flex-start;
 }
 
 .at-discount-progress__prompt {
