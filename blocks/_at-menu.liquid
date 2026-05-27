@@ -253,15 +253,114 @@
 
 {% endcase %}
 
+{% stylesheet %}
+  .header__drawer {
+    --header-drawer-min-height: 60px;
+    display: flex;
+    min-height: var(--header-drawer-min-height);
+    align-items: center;
+  }
+
+  #header-component[data-menu-style='drawer'] .header__drawer {
+    display: flex;
+    min-height: var(--header-drawer-min-height);
+  }
+
+  @media screen and (min-width: 750px) {
+    #header-component[data-menu-style='menu'] .header__drawer {
+      display: none;
+      min-height: 0;
+    }
+  }
+
+  .header--compact .header__drawer {
+    min-height: var(--minimum-touch-target);
+  }
+
+  .header__icon--menu {
+    position: initial;
+  }
+
+  .menu-drawer-container .header__icon--summary {
+    color: var(--color-foreground);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--padding-lg);
+  }
+
+  .header__icon--summary .header-drawer-icon {
+    margin: auto;
+    width: var(--icon-size-xs);
+    height: var(--icon-size-xs);
+  }
+
+  #at-menu-drawer-container:not(.menu-open) .header__icon--menu .header-drawer-icon--close {
+    display: none;
+  }
+
+  #at-menu-drawer-container.menu-open .header__icon--menu .header-drawer-icon--open {
+    display: none;
+  }
+
+  @media screen and (min-width: 750px) {
+    #at-menu-drawer-container.menu-open .header__icon--menu .header-drawer-icon--close {
+      display: none;
+    }
+
+    #at-menu-drawer-container.menu-open .header__icon--menu .header-drawer-icon--open {
+      display: flex;
+    }
+  }
+
+  #at-menu-drawer-container > .menu-drawer {
+    position: fixed;
+    transform: translateX(-100%);
+    visibility: hidden;
+    height: var(--drawer-height);
+    width: var(--drawer-width);
+    max-width: var(--drawer-max-width);
+    z-index: var(--layer-menu-drawer);
+    left: 0;
+    top: 0;
+    padding: 0;
+    background-color: var(--color-background);
+    overflow: auto;
+    display: flex;
+    border-right: var(--style-border-drawer);
+    box-shadow: var(--shadow-drawer);
+    flex-direction: column;
+    transition: transform var(--drawer-animation-speed) ease, visibility var(--drawer-animation-speed) ease,
+      opacity var(--drawer-animation-speed) ease;
+  }
+
+  @media screen and (min-width: 750px) {
+    #at-menu-drawer-container > .menu-drawer {
+      width: 25rem;
+    }
+  }
+
+  #at-menu-drawer-container.menu-open > .menu-drawer {
+    transform: translateX(0);
+    visibility: visible;
+    opacity: 1;
+  }
+
+  #at-menu-drawer-container > .menu-drawer.menu-drawer--has-submenu-opened {
+    overflow: initial;
+  }
+{% endstylesheet %}
+
 <script src="{{ 'at-menu.js' | asset_url }}" type="module"></script>
 
 {%- comment -%}
   ══════════════════════════════════════════════════════════════════════
   PERF: Load at-menu.css non-render-blocking
   ══════════════════════════════════════════════════════════════════════
-  The closed-drawer state (hamburger button + cart/logo) is styled by
-  Horizon's stock header CSS, so at-menu.css only matters once the user
-  opens the drawer or hovers the desktop mega-panel. Loading it
+  The lightweight drawer shell rules are emitted above because the AT menu
+  replaces Horizon's stock _header-menu block in production previews. The
+  larger at-menu.css file only matters once the user opens the drawer or
+  hovers the desktop mega-panel. Loading it
   render-blocking forces the browser to parse 27KB of CSS before painting
   anything below the fold — particularly punishing on cold-cache pages
   (newly-created collections, low-traffic PDPs) where TTFB is already

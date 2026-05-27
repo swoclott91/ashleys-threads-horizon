@@ -1,3 +1,17 @@
+{% doc %}
+  Header Actions Component
+
+  Renders the header actions.
+
+  @param {object} [section] - The section object providing settings such as actions_font.
+  @param {block} [block] - The block object, used for Shopify editor attributes.
+  @param {string} [display_style] - Controls display mode for header actions: 'icon' or 'text'.
+  @param {string} [customer_account_menu] - The menu handle passed to the shopify-account component.
+
+  @example
+  {% render 'header-actions', section: section %}
+{% enddoc %}
+
 <script
   type="module"
   src="{{ 'cart-icon.js' | asset_url }}"
@@ -20,7 +34,7 @@
       {{ 'icon-cart.svg' | inline_asset_content }}
     </span>
 
-    {% render 'cart-bubble', limit: 100, live_region: true %}
+    {% render 'cart-bubble', limit: 100 %}
   </cart-icon>
 {% endcapture %}
 
@@ -155,15 +169,16 @@
         scroll-lock
         cart-summary-sticky="true"
       >
+        <span
+          ref="liveRegion"
+          class="visually-hidden"
+          role="status"
+        ></span>
         <div
           class="cart-drawer__inner"
           data-hydration-key="cart-drawer-inner"
         >
-          <cart-items-component
-            class="cart-items-component"
-            data-drawer
-            data-section-id="{{ section.id }}"
-          >
+          {% capture cart_items_children %}
             {%- if cart.empty? -%}
               {{ empty_cart_drawer_content }}
             {%- else -%}
@@ -193,7 +208,8 @@
                 </div>
               </div>
             {%- endif -%}
-          </cart-items-component>
+          {% endcapture %}
+          {% render 'cart-items-component', children: cart_items_children, is_drawer: true, section_id: section.id %}
         </div>
       </dialog>
     </cart-drawer-component>
@@ -207,7 +223,20 @@
       {{ cart_icon }}
     </a>
   {% endif %}
+
+  <span
+    ref="liveRegion"
+    class="visually-hidden"
+    role="status"
+    data-testid="cart-count-live-region"
+  ></span>
 </header-actions>
+
+<script
+  type="module"
+  src="{{ 'header-actions.js' | asset_url }}"
+  fetchpriority="low"
+></script>
 
 {% stylesheet %}
   .header {
@@ -655,7 +684,16 @@
     );
   }
 
-  .cart-bubble--animating .cart-bubble__background {
+  .cart-drawer__heading .cart-bubble .cart-bubble__background {
+    background-color: rgb(var(--color-foreground-rgb) / var(--opacity-10-25));
+  }
+
+  .cart-drawer__heading .cart-bubble__text {
+    color: var(--color-foreground);
+    font-size: clamp(var(--font-size--3xs), 0.75em, var(--font-size--xs));
+  }
+
+  .cart-bubble.cart-bubble--animating .cart-bubble__background {
     animation: grow var(--animation-speed) var(--animation-easing);
   }
 
@@ -689,10 +727,6 @@
     html:active-view-transition-type(empty-cart-drawer) {
       .cart-drawer__close-button {
         view-transition-name: cart-drawer-close-button;
-      }
-
-      .cart-items-component {
-        view-transition-name: cart-drawer-content;
       }
     }
   }
