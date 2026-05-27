@@ -16,7 +16,7 @@
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<p>Blank Apparel Unlocked</p>",
+            "text": "<p>Make Belonging Wearable</p>",
             "width": "fit-content",
             "max_width": "narrow",
             "alignment": "left",
@@ -1072,7 +1072,7 @@
             "horizontal_alignment": "flex-start",
             "vertical_alignment": "center",
             "collection_card_gap": 0,
-            "inherit_color_scheme": false,
+            "inherit_color_scheme": true,
             "color_scheme": "",
             "border": "solid",
             "border_width": 2,
