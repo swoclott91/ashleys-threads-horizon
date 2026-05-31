@@ -191,7 +191,7 @@
           "type": "at-footer-utility-text",
           "name": "AT Footer text",
           "settings": {
-            "line": "<p>Operated by TLW Holdings, LLC<br/>Brand names are used to identify the manufacturers of the products sold. Access Threads is an independent retailer and is not affiliated with or endorsed by these brands unless expressly stated.</p>",
+            "line": "<p>Operated by TLW Holdings, LLC </p><p>Brand names are used to identify the manufacturers of the products sold. Access Threads is an independent retailer and is not affiliated with or endorsed by these brands unless expressly stated.</p>",
             "font_size": "0.75rem",
             "case": "none"
           },
