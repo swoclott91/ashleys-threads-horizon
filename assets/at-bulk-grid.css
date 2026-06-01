@@ -153,12 +153,36 @@
   min-height: 200px;
 }
 
+/*
+ * Separate the discount progress strip from the grid/search below it. Uses the
+ * adjacent sibling so it applies in both modal contexts (quick-add modal and the
+ * buy-buttons bulk dialog) regardless of the inner container's flex/gap setup.
+ */
+.at-dp-condensed-strip--tight + .at-bulk-grid {
+  margin-block-start: var(--gap-lg);
+}
+
+@media screen and (min-width: 750px) {
+  .at-dp-condensed-strip--tight + .at-bulk-grid {
+    margin-block-start: var(--gap-xl);
+  }
+}
+
 /* Scrollable region (search + grid/accordions); footer sits outside on mobile modals with fixed height */
 .at-bulk-grid__body {
   display: flex;
   flex-direction: column;
   gap: var(--at-bulk-grid-gap);
   min-width: 0;
+  /*
+   * The search input's "border" is a spread box-shadow ring (--input-box-shadow)
+   * that paints --input-box-shadow-width outside its border box. The body's
+   * left/right edges sit flush against the overflow-clipping ancestors
+   * (.at-bulk-grid / .at-bulk-grid-modal__inner), which would clip that ring on
+   * the flush side. Inset children by just over the ring width so the full
+   * border renders; search and table stay aligned since both shift equally.
+   */
+  padding-inline: calc(var(--input-box-shadow-width, 1px) + 1px);
 }
 
 /* Ring spinner while deferred variants load (matches AT menu / modal loading pattern) */
