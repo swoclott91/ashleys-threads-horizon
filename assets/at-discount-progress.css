@@ -483,6 +483,25 @@ at-discount-progress-bar {
   }
 }
 
+/* -------------------------------------------------------------------------- */
+/* Cart page + slideout cart: same controlled text↔rail gap as the modal.     */
+/* `--at-dp-rail-gap` is the single knob; railwrap padding consumes it plus    */
+/* half a node (nodes are centered on the 2px line) so the node top sits       */
+/* exactly that gap below the status text. Placed after the shared `:is()`     */
+/* rules above so these win at equal specificity. The cart-drawer expand gap   */
+/* and `--at-dp-rail-gap` are set in snippets/header-actions.liquid.           */
+/* -------------------------------------------------------------------------- */
+
+.cart-page__at-dp-strip .at-dp__cart-expand {
+  --at-dp-rail-gap: 0.55rem;
+  gap: 0;
+}
+
+.cart-page__at-dp-strip .at-dp__cart-railwrap,
+.cart-drawer__at-dp-strip .at-dp__cart-railwrap {
+  padding-block-start: calc(var(--at-dp-rail-gap) + 0.5 * var(--at-dp-cart-node-size) - 2px);
+}
+
 .at-dp__cart-expand {
   display: flex;
   width: 100%;

@@ -592,10 +592,12 @@
 
   /* Original spec: status above rail, centered in the middle column */
   .cart-drawer__at-dp-strip .at-dp__cart-expand {
+    /* Single knob for the text→rail gap; railwrap padding consumes it (see at-discount-progress.css). */
+    --at-dp-rail-gap: 0.5rem;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--gap-xs);
+    gap: 0;
     text-align: center;
     width: 100%;
   }
