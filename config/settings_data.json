@@ -9,10 +9,10 @@
  */
 {
   "current": {
-    "logo": "shopify://shop_images/Logo.svg",
+    "logo": "shopify://shop_images/Ashley_s_Threads_Main.svg",
     "logo_inverse": "shopify://shop_images/Logo_Inverse.svg",
-    "logo_height": 34,
-    "logo_height_mobile": 28,
+    "logo_height": 50,
+    "logo_height_mobile": 50,
     "favicon": "shopify://shop_images/Logo_Square.svg",
     "type_body_font": "inter_n4",
     "type_subheading_font": "inter_n4",
@@ -121,18 +121,6 @@
     "variant_button_width": "equal-width-buttons",
     "button_font_weight_secondary": "default",
     "content_for_index": [],
-    "blocks": {
-      "8023178096671368477": {
-        "type": "shopify://apps/smart-discounts/blocks/embed/019d1c1c-2c4b-704e-be88-ea7fd20c9afb",
-        "disabled": false,
-        "settings": {}
-      },
-      "14060646107696862457": {
-        "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-        "disabled": false,
-        "settings": {}
-      }
-    },
     "color_schemes": {
       "scheme-1": {
         "settings": {
