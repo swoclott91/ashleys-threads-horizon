@@ -64,7 +64,7 @@
       "settings": {
         "speed": 5,
         "section_width": "page-width",
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-3",
         "divider_width": 1,
         "padding-block-start": 15,
         "padding-block-end": 15
@@ -79,9 +79,7 @@
           "settings": {
             "hide_logo_on_home_page": false,
             "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-block-end": 0
           },
           "blocks": {}
         },
@@ -114,9 +112,9 @@
           "settings": {
             "menu": "main-menu",
             "at_panel_item_handle": "products",
-            "at_categories_menu": "at-categories",
+            "at_categories_menu": "",
             "at_brands_item_handle": "brands",
-            "at_brands_menu": "at-brands",
+            "at_brands_menu": "",
             "at_highlight_handle": "sale",
             "at_brand_icon_source": "auto",
             "at_show_brand_search": true,
