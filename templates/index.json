@@ -28,17 +28,18 @@
             "custom_width": 100,
             "width_mobile": "fill",
             "custom_width_mobile": 100,
-            "height": "fit",
+            "height": "fill",
             "custom_height": 100,
             "inherit_color_scheme": false,
             "color_scheme": "scheme-1",
-            "background_media": "none",
+            "background_media": "image",
             "video_position": "cover",
+            "background_image": "shopify://shop_images/AL2100_multiple_flat_SP21.png",
             "background_image_position": "cover",
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
-            "border_radius": 0,
+            "border_radius": 20,
             "toggle_overlay": false,
             "overlay_color": "#00000026",
             "overlay_style": "solid",
@@ -96,7 +97,7 @@
                   "type": "text",
                   "name": "t:names.heading",
                   "settings": {
-                    "text": "<h2>Premium blanks for people making something.</h2>",
+                    "text": "<h2>Better Blanks Ready To Order</h2>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
@@ -139,7 +140,7 @@
               "type": "button",
               "name": "t:names.button",
               "settings": {
-                "label": "FIND THE RIGHT SHIRT",
+                "label": "Shop Popular Blanks",
                 "link": "shopify://collections/all",
                 "open_in_new_tab": false,
                 "style_class": "button",
@@ -147,41 +148,6 @@
                 "custom_width": 100,
                 "width_mobile": "fit-content",
                 "custom_width_mobile": 100
-              },
-              "blocks": {}
-            },
-            "button_gHBm6B": {
-              "type": "button",
-              "name": "t:names.button",
-              "settings": {
-                "label": "SHOP PREMIUM BLANKS →",
-                "link": "shopify://collections/all",
-                "open_in_new_tab": false,
-                "style_class": "button",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            },
-            "logo_wb9XRT": {
-              "type": "logo",
-              "name": "t:names.logo",
-              "settings": {
-                "inverse": false,
-                "font": "heading",
-                "unit": "pixel",
-                "percent_width": 100,
-                "pixel_height": 48,
-                "custom_mobile_size": false,
-                "unit_mobile": "percent",
-                "percent_width_mobile": 100,
-                "pixel_height_mobile": 120,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
               },
               "blocks": {}
             }
@@ -189,9 +155,7 @@
           "block_order": [
             "group_eJhbgt",
             "divider_i89bFM",
-            "button_wUTJrN",
-            "button_gHBm6B",
-            "logo_wb9XRT"
+            "button_wUTJrN"
           ]
         },
         "group_JedPLY": {
@@ -906,7 +870,7 @@
         "horizontal_alignment_flex_direction_column": "flex-start",
         "vertical_alignment_flex_direction_column": "center",
         "gap": 0,
-        "section_width": "page-width",
+        "section_width": "full-width",
         "section_height": "small",
         "section_height_custom": 50,
         "color_scheme": "",
