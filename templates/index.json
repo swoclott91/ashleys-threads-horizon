@@ -540,8 +540,8 @@
                       "type": "image",
                       "name": "Gildan",
                       "settings": {
-                        "image": "shopify://shop_images/Next_Level_Apparel.svg",
-                        "link": "shopify://collections/next-level-apparel",
+                        "image": "shopify://shop_images/Champion.svg",
+                        "link": "shopify://collections/champion",
                         "image_ratio": "adapt",
                         "width": "fill",
                         "custom_width": 100,
@@ -563,8 +563,8 @@
                       "type": "image",
                       "name": "Comfort Colors",
                       "settings": {
-                        "image": "shopify://shop_images/Port_Co_Logo.svg",
-                        "link": "shopify://collections/port-company",
+                        "image": "shopify://shop_images/Hanes.svg",
+                        "link": "shopify://collections/hanes",
                         "image_ratio": "adapt",
                         "width": "fill",
                         "custom_width": 100,
@@ -586,8 +586,8 @@
                       "type": "image",
                       "name": "Gildan",
                       "settings": {
-                        "image": "shopify://shop_images/Independent_Trading_company.svg",
-                        "link": "shopify://collections/independent-trading-co",
+                        "image": "shopify://shop_images/Jerzees.svg",
+                        "link": "shopify://collections/jerzees",
                         "image_ratio": "adapt",
                         "width": "fill",
                         "custom_width": 100,
