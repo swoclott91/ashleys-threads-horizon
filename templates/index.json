@@ -124,7 +124,7 @@
                   "settings": {
                     "size": "pixel",
                     "percent_size": 100,
-                    "pixel_size": 252,
+                    "pixel_size": 172,
                     "custom_mobile_size": true,
                     "size_mobile": "pixel",
                     "percent_size_mobile": 100,
@@ -587,9 +587,9 @@
                       "type": "spacer",
                       "name": "t:names.spacer",
                       "settings": {
-                        "size": "percent",
+                        "size": "pixel",
                         "percent_size": 40,
-                        "pixel_size": 200,
+                        "pixel_size": 152,
                         "custom_mobile_size": true,
                         "size_mobile": "pixel",
                         "percent_size_mobile": 12,
@@ -693,7 +693,7 @@
                       "settings": {
                         "size": "pixel",
                         "percent_size": 100,
-                        "pixel_size": 400,
+                        "pixel_size": 220,
                         "custom_mobile_size": false,
                         "size_mobile": "percent",
                         "percent_size_mobile": 100,
