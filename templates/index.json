@@ -480,7 +480,7 @@
                           "type": "_collection-card-image",
                           "static": true,
                           "settings": {
-                            "image_ratio": "portrait",
+                            "image_ratio": "adapt",
                             "toggle_overlay": false,
                             "overlay_color": "#00000026",
                             "overlay_style": "solid",
@@ -516,7 +516,7 @@
                           "type": "_collection-card-image",
                           "static": true,
                           "settings": {
-                            "image_ratio": "portrait",
+                            "image_ratio": "adapt",
                             "toggle_overlay": false,
                             "overlay_color": "#00000026",
                             "overlay_style": "solid",
@@ -635,7 +635,7 @@
                           "type": "_collection-card-image",
                           "static": true,
                           "settings": {
-                            "image_ratio": "portrait",
+                            "image_ratio": "adapt",
                             "toggle_overlay": false,
                             "overlay_color": "#00000026",
                             "overlay_style": "solid",
@@ -671,7 +671,7 @@
                           "type": "_collection-card-image",
                           "static": true,
                           "settings": {
-                            "image_ratio": "portrait",
+                            "image_ratio": "adapt",
                             "toggle_overlay": false,
                             "overlay_color": "#00000026",
                             "overlay_style": "solid",
@@ -707,7 +707,7 @@
                           "type": "_collection-card-image",
                           "static": true,
                           "settings": {
-                            "image_ratio": "portrait",
+                            "image_ratio": "adapt",
                             "toggle_overlay": false,
                             "overlay_color": "#00000026",
                             "overlay_style": "solid",
