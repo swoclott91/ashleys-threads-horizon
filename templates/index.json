@@ -380,7 +380,7 @@
                     "image_afRERc"
                   ]
                 },
-                "group_GxbbWx": {
+                "group_MGrfPq": {
                   "type": "group",
                   "name": "Brand Row 2",
                   "settings": {
@@ -420,122 +420,83 @@
                     "padding-inline-end": 0
                   },
                   "blocks": {
-                    "collection_card_ddG9ec": {
-                      "type": "collection-card",
-                      "name": "t:names.collection_card",
+                    "image_npXN3H": {
+                      "type": "image",
+                      "name": "Gildan",
                       "settings": {
-                        "collection": "next-level-apparel",
-                        "placement": "below_image",
-                        "horizontal_alignment": "flex-start",
-                        "vertical_alignment": "center",
-                        "collection_card_gap": 8,
-                        "inherit_color_scheme": true,
-                        "color_scheme": "",
+                        "image": "shopify://shop_images/Next_Level_Apparel.svg",
+                        "link": "shopify://collections/next-level-apparel",
+                        "image_ratio": "adapt",
+                        "width": "fill",
+                        "custom_width": 100,
+                        "width_mobile": "fill",
+                        "custom_width_mobile": 100,
+                        "height": "fit",
                         "border": "none",
                         "border_width": 1,
                         "border_opacity": 100,
-                        "border_radius": 0
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
                       },
-                      "blocks": {
-                        "collection-card-image": {
-                          "type": "_collection-card-image",
-                          "static": true,
-                          "settings": {
-                            "image_ratio": "adapt",
-                            "toggle_overlay": false,
-                            "overlay_color": "#00000026",
-                            "overlay_style": "solid",
-                            "gradient_direction": "to top",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
-                          },
-                          "blocks": {}
-                        }
-                      },
-                      "block_order": []
+                      "blocks": {}
                     },
-                    "collection_card_J9UJEi": {
-                      "type": "collection-card",
-                      "name": "t:names.collection_card",
+                    "image_caL7Hx": {
+                      "type": "image",
+                      "name": "Comfort Colors",
                       "settings": {
-                        "collection": "port-company",
-                        "placement": "below_image",
-                        "horizontal_alignment": "flex-start",
-                        "vertical_alignment": "center",
-                        "collection_card_gap": 8,
-                        "inherit_color_scheme": true,
-                        "color_scheme": "",
+                        "image": "shopify://shop_images/Port_Co_Logo.svg",
+                        "link": "shopify://collections/port-company",
+                        "image_ratio": "adapt",
+                        "width": "fill",
+                        "custom_width": 100,
+                        "width_mobile": "fill",
+                        "custom_width_mobile": 100,
+                        "height": "fit",
                         "border": "none",
                         "border_width": 1,
                         "border_opacity": 100,
-                        "border_radius": 0
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
                       },
-                      "blocks": {
-                        "collection-card-image": {
-                          "type": "_collection-card-image",
-                          "static": true,
-                          "settings": {
-                            "image_ratio": "adapt",
-                            "toggle_overlay": false,
-                            "overlay_color": "#00000026",
-                            "overlay_style": "solid",
-                            "gradient_direction": "to top",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
-                          },
-                          "blocks": {}
-                        }
-                      },
-                      "block_order": []
+                      "blocks": {}
                     },
-                    "collection_card_YMQth6": {
-                      "type": "collection-card",
-                      "name": "t:names.collection_card",
+                    "image_DFba9b": {
+                      "type": "image",
+                      "name": "Gildan",
                       "settings": {
-                        "collection": "independent-trading-co",
-                        "placement": "below_image",
-                        "horizontal_alignment": "flex-start",
-                        "vertical_alignment": "center",
-                        "collection_card_gap": 8,
-                        "inherit_color_scheme": true,
-                        "color_scheme": "",
+                        "image": "shopify://shop_images/Independent_Trading_company.svg",
+                        "link": "shopify://collections/independent-trading-co",
+                        "image_ratio": "adapt",
+                        "width": "fill",
+                        "custom_width": 100,
+                        "width_mobile": "fill",
+                        "custom_width_mobile": 100,
+                        "height": "fit",
                         "border": "none",
                         "border_width": 1,
                         "border_opacity": 100,
-                        "border_radius": 0
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
                       },
-                      "blocks": {
-                        "collection-card-image": {
-                          "type": "_collection-card-image",
-                          "static": true,
-                          "settings": {
-                            "image_ratio": "portrait",
-                            "toggle_overlay": false,
-                            "overlay_color": "#00000026",
-                            "overlay_style": "solid",
-                            "gradient_direction": "to top",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
-                          },
-                          "blocks": {}
-                        }
-                      },
-                      "block_order": []
+                      "blocks": {}
                     }
                   },
                   "block_order": [
-                    "collection_card_ddG9ec",
-                    "collection_card_J9UJEi",
-                    "collection_card_YMQth6"
+                    "image_npXN3H",
+                    "image_caL7Hx",
+                    "image_DFba9b"
                   ]
                 },
-                "group_apfBbB": {
+                "group_zcHgcL": {
                   "type": "group",
                   "name": "Brand Row 3",
                   "settings": {
@@ -575,127 +536,88 @@
                     "padding-inline-end": 0
                   },
                   "blocks": {
-                    "collection_card_PW77DQ": {
-                      "type": "collection-card",
-                      "name": "t:names.collection_card",
+                    "image_7ywFTh": {
+                      "type": "image",
+                      "name": "Gildan",
                       "settings": {
-                        "collection": "champion",
-                        "placement": "below_image",
-                        "horizontal_alignment": "flex-start",
-                        "vertical_alignment": "center",
-                        "collection_card_gap": 8,
-                        "inherit_color_scheme": true,
-                        "color_scheme": "",
+                        "image": "shopify://shop_images/Next_Level_Apparel.svg",
+                        "link": "shopify://collections/next-level-apparel",
+                        "image_ratio": "adapt",
+                        "width": "fill",
+                        "custom_width": 100,
+                        "width_mobile": "fill",
+                        "custom_width_mobile": 100,
+                        "height": "fit",
                         "border": "none",
                         "border_width": 1,
                         "border_opacity": 100,
-                        "border_radius": 0
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
                       },
-                      "blocks": {
-                        "collection-card-image": {
-                          "type": "_collection-card-image",
-                          "static": true,
-                          "settings": {
-                            "image_ratio": "adapt",
-                            "toggle_overlay": false,
-                            "overlay_color": "#00000026",
-                            "overlay_style": "solid",
-                            "gradient_direction": "to top",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
-                          },
-                          "blocks": {}
-                        }
-                      },
-                      "block_order": []
+                      "blocks": {}
                     },
-                    "collection_card_M4Pb3m": {
-                      "type": "collection-card",
-                      "name": "t:names.collection_card",
+                    "image_z7DHNn": {
+                      "type": "image",
+                      "name": "Comfort Colors",
                       "settings": {
-                        "collection": "hanes",
-                        "placement": "below_image",
-                        "horizontal_alignment": "flex-start",
-                        "vertical_alignment": "center",
-                        "collection_card_gap": 8,
-                        "inherit_color_scheme": true,
-                        "color_scheme": "",
+                        "image": "shopify://shop_images/Port_Co_Logo.svg",
+                        "link": "shopify://collections/port-company",
+                        "image_ratio": "adapt",
+                        "width": "fill",
+                        "custom_width": 100,
+                        "width_mobile": "fill",
+                        "custom_width_mobile": 100,
+                        "height": "fit",
                         "border": "none",
                         "border_width": 1,
                         "border_opacity": 100,
-                        "border_radius": 0
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
                       },
-                      "blocks": {
-                        "collection-card-image": {
-                          "type": "_collection-card-image",
-                          "static": true,
-                          "settings": {
-                            "image_ratio": "adapt",
-                            "toggle_overlay": false,
-                            "overlay_color": "#00000026",
-                            "overlay_style": "solid",
-                            "gradient_direction": "to top",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
-                          },
-                          "blocks": {}
-                        }
-                      },
-                      "block_order": []
+                      "blocks": {}
                     },
-                    "collection_card_EdQzw9": {
-                      "type": "collection-card",
-                      "name": "t:names.collection_card",
+                    "image_YAdmhL": {
+                      "type": "image",
+                      "name": "Gildan",
                       "settings": {
-                        "collection": "jerzees",
-                        "placement": "below_image",
-                        "horizontal_alignment": "flex-start",
-                        "vertical_alignment": "center",
-                        "collection_card_gap": 8,
-                        "inherit_color_scheme": true,
-                        "color_scheme": "",
+                        "image": "shopify://shop_images/Independent_Trading_company.svg",
+                        "link": "shopify://collections/independent-trading-co",
+                        "image_ratio": "adapt",
+                        "width": "fill",
+                        "custom_width": 100,
+                        "width_mobile": "fill",
+                        "custom_width_mobile": 100,
+                        "height": "fit",
                         "border": "none",
                         "border_width": 1,
                         "border_opacity": 100,
-                        "border_radius": 0
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
                       },
-                      "blocks": {
-                        "collection-card-image": {
-                          "type": "_collection-card-image",
-                          "static": true,
-                          "settings": {
-                            "image_ratio": "adapt",
-                            "toggle_overlay": false,
-                            "overlay_color": "#00000026",
-                            "overlay_style": "solid",
-                            "gradient_direction": "to top",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
-                          },
-                          "blocks": {}
-                        }
-                      },
-                      "block_order": []
+                      "blocks": {}
                     }
                   },
                   "block_order": [
-                    "collection_card_PW77DQ",
-                    "collection_card_M4Pb3m",
-                    "collection_card_EdQzw9"
+                    "image_7ywFTh",
+                    "image_z7DHNn",
+                    "image_YAdmhL"
                   ]
                 }
               },
               "block_order": [
                 "text_MQxaWb",
                 "group_7LRyz6",
-                "group_GxbbWx",
-                "group_apfBbB"
+                "group_MGrfPq",
+                "group_zcHgcL"
               ]
             },
             "group_Mr8EMb": {
