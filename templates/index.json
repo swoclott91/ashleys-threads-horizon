@@ -308,7 +308,7 @@
                       "type": "collection-card",
                       "name": "t:names.collection_card",
                       "settings": {
-                        "collection": "",
+                        "collection": "gildan",
                         "placement": "below_image",
                         "horizontal_alignment": "flex-start",
                         "vertical_alignment": "center",
@@ -370,7 +370,7 @@
                       "type": "collection-card",
                       "name": "t:names.collection_card",
                       "settings": {
-                        "collection": "",
+                        "collection": "comfort-colors",
                         "placement": "below_image",
                         "horizontal_alignment": "flex-start",
                         "vertical_alignment": "center",
@@ -432,7 +432,7 @@
                       "type": "collection-card",
                       "name": "t:names.collection_card",
                       "settings": {
-                        "collection": "",
+                        "collection": "bella-canvas",
                         "placement": "below_image",
                         "horizontal_alignment": "flex-start",
                         "vertical_alignment": "center",
@@ -541,7 +541,7 @@
                       "type": "collection-card",
                       "name": "t:names.collection_card",
                       "settings": {
-                        "collection": "",
+                        "collection": "next-level-apparel",
                         "placement": "below_image",
                         "horizontal_alignment": "flex-start",
                         "vertical_alignment": "center",
@@ -603,7 +603,7 @@
                       "type": "collection-card",
                       "name": "t:names.collection_card",
                       "settings": {
-                        "collection": "",
+                        "collection": "port-company",
                         "placement": "below_image",
                         "horizontal_alignment": "flex-start",
                         "vertical_alignment": "center",
@@ -665,7 +665,7 @@
                       "type": "collection-card",
                       "name": "t:names.collection_card",
                       "settings": {
-                        "collection": "",
+                        "collection": "independent-trading-co",
                         "placement": "below_image",
                         "horizontal_alignment": "flex-start",
                         "vertical_alignment": "center",
@@ -774,7 +774,7 @@
                       "type": "collection-card",
                       "name": "t:names.collection_card",
                       "settings": {
-                        "collection": "",
+                        "collection": "champion",
                         "placement": "below_image",
                         "horizontal_alignment": "flex-start",
                         "vertical_alignment": "center",
@@ -836,7 +836,7 @@
                       "type": "collection-card",
                       "name": "t:names.collection_card",
                       "settings": {
-                        "collection": "",
+                        "collection": "hanes",
                         "placement": "below_image",
                         "horizontal_alignment": "flex-start",
                         "vertical_alignment": "center",
@@ -898,7 +898,7 @@
                       "type": "collection-card",
                       "name": "t:names.collection_card",
                       "settings": {
-                        "collection": "",
+                        "collection": "jerzees",
                         "placement": "below_image",
                         "horizontal_alignment": "flex-start",
                         "vertical_alignment": "center",
