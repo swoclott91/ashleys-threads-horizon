@@ -622,6 +622,21 @@
                         "padding-inline-end": 0
                       },
                       "blocks": {}
+                    },
+                    "button_pfEnjG": {
+                      "type": "button",
+                      "name": "t:names.button",
+                      "settings": {
+                        "label": "+ And More >",
+                        "link": "shopify://collections/all",
+                        "open_in_new_tab": false,
+                        "style_class": "link",
+                        "width": "fit-content",
+                        "custom_width": 100,
+                        "width_mobile": "fit-content",
+                        "custom_width_mobile": 100
+                      },
+                      "blocks": {}
                     }
                   },
                   "block_order": [
@@ -629,7 +644,8 @@
                     "group_6X7Hnh",
                     "group_fDd879",
                     "spacer_KQVbta",
-                    "text_bEqy4n"
+                    "text_bEqy4n",
+                    "button_pfEnjG"
                   ]
                 },
                 "group_pYVnYP": {
@@ -726,12 +742,28 @@
                         "padding-inline-end": 0
                       },
                       "blocks": {}
+                    },
+                    "button_MxCwR6": {
+                      "type": "button",
+                      "name": "t:names.button",
+                      "settings": {
+                        "label": "Shop Sale Items >",
+                        "link": "shopify://collections/all",
+                        "open_in_new_tab": false,
+                        "style_class": "link",
+                        "width": "fit-content",
+                        "custom_width": 100,
+                        "width_mobile": "fit-content",
+                        "custom_width_mobile": 100
+                      },
+                      "blocks": {}
                     }
                   },
                   "block_order": [
                     "spacer_r8ppYD",
                     "spacer_DPDfN8",
-                    "text_YzVJzw"
+                    "text_YzVJzw",
+                    "button_MxCwR6"
                   ]
                 }
               },
@@ -916,7 +948,7 @@
                   "type": "button",
                   "name": "t:names.button",
                   "settings": {
-                    "label": "Shop Fast Shipping",
+                    "label": "Shop Fast Shipping >",
                     "link": "shopify://collections/all",
                     "open_in_new_tab": false,
                     "style_class": "link",
