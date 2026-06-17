@@ -306,9 +306,9 @@
                   "blocks": {
                     "image_4wJahU": {
                       "type": "image",
-                      "name": "t:names.image",
+                      "name": "Gildan",
                       "settings": {
-                        "image": "shopify://shop_images/Gildan_Logo_Color.svg",
+                        "image": "shopify://shop_images/Gildan_Logo_a948f3cc-f084-4224-8433-c8a593bd955c.svg",
                         "link": "shopify://collections/gildan",
                         "image_ratio": "adapt",
                         "width": "fill",
@@ -327,120 +327,57 @@
                       },
                       "blocks": {}
                     },
-                    "collection_card_FUxhFQ": {
-                      "type": "collection-card",
-                      "name": "t:names.collection_card",
+                    "image_MH9Bkf": {
+                      "type": "image",
+                      "name": "Comfort Colors",
                       "settings": {
-                        "collection": "gildan",
-                        "placement": "below_image",
-                        "horizontal_alignment": "flex-start",
-                        "vertical_alignment": "center",
-                        "collection_card_gap": 8,
-                        "inherit_color_scheme": true,
-                        "color_scheme": "",
+                        "image": "shopify://shop_images/Comfort_Colors_Logo_Color_2.svg",
+                        "link": "shopify://collections/comfort-colors",
+                        "image_ratio": "adapt",
+                        "width": "fill",
+                        "custom_width": 100,
+                        "width_mobile": "fill",
+                        "custom_width_mobile": 100,
+                        "height": "fit",
                         "border": "none",
                         "border_width": 1,
                         "border_opacity": 100,
-                        "border_radius": 0
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
                       },
-                      "blocks": {
-                        "collection-card-image": {
-                          "type": "_collection-card-image",
-                          "static": true,
-                          "settings": {
-                            "image_ratio": "adapt",
-                            "toggle_overlay": false,
-                            "overlay_color": "#00000026",
-                            "overlay_style": "solid",
-                            "gradient_direction": "to top",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
-                          },
-                          "blocks": {}
-                        }
-                      },
-                      "block_order": []
+                      "blocks": {}
                     },
-                    "collection_card_iCUtkL": {
-                      "type": "collection-card",
-                      "name": "t:names.collection_card",
+                    "image_afRERc": {
+                      "type": "image",
+                      "name": "Gildan",
                       "settings": {
-                        "collection": "comfort-colors",
-                        "placement": "below_image",
-                        "horizontal_alignment": "flex-start",
-                        "vertical_alignment": "center",
-                        "collection_card_gap": 8,
-                        "inherit_color_scheme": true,
-                        "color_scheme": "",
+                        "image": "shopify://shop_images/Bella_Canvas_Logo_8cc99d19-f3d2-4fd7-97d8-25966d4026e4.svg",
+                        "link": "shopify://collections/bella-canvas",
+                        "image_ratio": "adapt",
+                        "width": "fill",
+                        "custom_width": 100,
+                        "width_mobile": "fill",
+                        "custom_width_mobile": 100,
+                        "height": "fit",
                         "border": "none",
                         "border_width": 1,
                         "border_opacity": 100,
-                        "border_radius": 0
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
                       },
-                      "blocks": {
-                        "collection-card-image": {
-                          "type": "_collection-card-image",
-                          "static": true,
-                          "settings": {
-                            "image_ratio": "adapt",
-                            "toggle_overlay": false,
-                            "overlay_color": "#00000026",
-                            "overlay_style": "solid",
-                            "gradient_direction": "to top",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
-                          },
-                          "blocks": {}
-                        }
-                      },
-                      "block_order": []
-                    },
-                    "collection_card_GxMWHt": {
-                      "type": "collection-card",
-                      "name": "t:names.collection_card",
-                      "settings": {
-                        "collection": "bella-canvas",
-                        "placement": "below_image",
-                        "horizontal_alignment": "flex-start",
-                        "vertical_alignment": "center",
-                        "collection_card_gap": 8,
-                        "inherit_color_scheme": true,
-                        "color_scheme": "",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_radius": 0
-                      },
-                      "blocks": {
-                        "collection-card-image": {
-                          "type": "_collection-card-image",
-                          "static": true,
-                          "settings": {
-                            "image_ratio": "adapt",
-                            "toggle_overlay": false,
-                            "overlay_color": "#00000026",
-                            "overlay_style": "solid",
-                            "gradient_direction": "to top",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
-                          },
-                          "blocks": {}
-                        }
-                      },
-                      "block_order": []
+                      "blocks": {}
                     }
                   },
                   "block_order": [
                     "image_4wJahU",
-                    "collection_card_FUxhFQ",
-                    "collection_card_iCUtkL",
-                    "collection_card_GxMWHt"
+                    "image_MH9Bkf",
+                    "image_afRERc"
                   ]
                 },
                 "group_GxbbWx": {
