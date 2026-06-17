@@ -92,6 +92,20 @@
                 "padding-inline-end": 32
               },
               "blocks": {
+                "spacer_fV3EBc": {
+                  "type": "spacer",
+                  "name": "t:names.spacer",
+                  "settings": {
+                    "size": "pixel",
+                    "percent_size": 100,
+                    "pixel_size": 88,
+                    "custom_mobile_size": false,
+                    "size_mobile": "percent",
+                    "percent_size_mobile": 100,
+                    "pixel_size_mobile": 120
+                  },
+                  "blocks": {}
+                },
                 "text_MQxaWb": {
                   "type": "text",
                   "name": "t:names.heading",
@@ -135,6 +149,7 @@
                 }
               },
               "block_order": [
+                "spacer_fV3EBc",
                 "text_MQxaWb",
                 "button_mmcXFU"
               ]
@@ -568,6 +583,20 @@
                         "image_YAdmhL"
                       ]
                     },
+                    "spacer_KQVbta": {
+                      "type": "spacer",
+                      "name": "t:names.spacer",
+                      "settings": {
+                        "size": "pixel",
+                        "percent_size": 100,
+                        "pixel_size": 200,
+                        "custom_mobile_size": false,
+                        "size_mobile": "percent",
+                        "percent_size_mobile": 100,
+                        "pixel_size_mobile": 120
+                      },
+                      "blocks": {}
+                    },
                     "text_bEqy4n": {
                       "type": "text",
                       "name": "t:names.text",
@@ -599,6 +628,7 @@
                     "group_y3H3zE",
                     "group_6X7Hnh",
                     "group_fDd879",
+                    "spacer_KQVbta",
                     "text_bEqy4n"
                   ]
                 },
@@ -643,6 +673,34 @@
                     "padding-inline-end": 24
                   },
                   "blocks": {
+                    "spacer_r8ppYD": {
+                      "type": "spacer",
+                      "name": "t:names.spacer",
+                      "settings": {
+                        "size": "pixel",
+                        "percent_size": 100,
+                        "pixel_size": 400,
+                        "custom_mobile_size": false,
+                        "size_mobile": "percent",
+                        "percent_size_mobile": 100,
+                        "pixel_size_mobile": 120
+                      },
+                      "blocks": {}
+                    },
+                    "spacer_DPDfN8": {
+                      "type": "spacer",
+                      "name": "t:names.spacer",
+                      "settings": {
+                        "size": "pixel",
+                        "percent_size": 100,
+                        "pixel_size": 400,
+                        "custom_mobile_size": false,
+                        "size_mobile": "percent",
+                        "percent_size_mobile": 100,
+                        "pixel_size_mobile": 120
+                      },
+                      "blocks": {}
+                    },
                     "text_YzVJzw": {
                       "type": "text",
                       "name": "t:names.text",
@@ -671,6 +729,8 @@
                     }
                   },
                   "block_order": [
+                    "spacer_r8ppYD",
+                    "spacer_DPDfN8",
                     "text_YzVJzw"
                   ]
                 }
@@ -797,10 +857,25 @@
               "block_order": [
                 "text_tpw3EU"
               ]
+            },
+            "spacer_hFFTVx": {
+              "type": "spacer",
+              "name": "t:names.spacer",
+              "settings": {
+                "size": "pixel",
+                "percent_size": 100,
+                "pixel_size": 400,
+                "custom_mobile_size": false,
+                "size_mobile": "percent",
+                "percent_size_mobile": 100,
+                "pixel_size_mobile": 120
+              },
+              "blocks": {}
             }
           },
           "block_order": [
-            "group_eJhbgt"
+            "group_eJhbgt",
+            "spacer_hFFTVx"
           ]
         }
       },
