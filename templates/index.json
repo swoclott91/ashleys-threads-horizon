@@ -863,7 +863,7 @@
                   "type": "text",
                   "name": "t:names.heading",
                   "settings": {
-                    "text": "<h4>Fulfilled from U.S. warehouses. Most Standard orders ship within 1 business day. </h4>",
+                    "text": "<h4>Fulfilled from U.S. warehouses. Most Standard orders ship within <strong>1 business day</strong>. </h4>",
                     "width": "100%",
                     "max_width": "narrow",
                     "alignment": "left",
