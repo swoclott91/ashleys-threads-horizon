@@ -748,7 +748,7 @@
                       "type": "text",
                       "name": "t:names.text",
                       "settings": {
-                        "text": "<h4>Discounted Price. <em>No Hoops</em>.</h4>",
+                        "text": "<h4>Bulk Price. <em>No Hoops</em>.</h4>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
