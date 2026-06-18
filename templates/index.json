@@ -976,6 +976,9 @@
         "group_JedPLY",
         "group_RPN64J"
       ],
+      "custom_css": [
+        ".text-block--ANUxkR0ZHcWJvSHRoM__text_YzVJzw em {text-decoration: line-through;}"
+      ],
       "name": "t:names.custom_section",
       "settings": {
         "content_direction": "row",
