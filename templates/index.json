@@ -1154,7 +1154,7 @@
                     "link": "",
                     "open_in_new_tab": false,
                     "placeholder": "",
-                    "padding-block-start": 100,
+                    "padding-block-start": 24,
                     "padding-block-end": 24,
                     "padding-inline-start": 24,
                     "padding-inline-end": 24
@@ -1766,7 +1766,7 @@
                     "link": "",
                     "open_in_new_tab": false,
                     "placeholder": "",
-                    "padding-block-start": 100,
+                    "padding-block-start": 24,
                     "padding-block-end": 24,
                     "padding-inline-start": 24,
                     "padding-inline-end": 24
