@@ -1936,18 +1936,6 @@
                             "text_TYXnhD"
                           ]
                         },
-                        "divider_fiNxPy": {
-                          "type": "_divider",
-                          "name": "t:names.divider",
-                          "settings": {
-                            "thickness": 1,
-                            "corner_radius": "square",
-                            "width_percent": 100,
-                            "padding-block-start": 0,
-                            "padding-block-end": 0
-                          },
-                          "blocks": {}
-                        },
                         "group_hJ4ci7": {
                           "type": "group",
                           "name": "t:names.group",
@@ -2048,7 +2036,6 @@
                       },
                       "block_order": [
                         "at_collection_list_tUrfAa",
-                        "divider_fiNxPy",
                         "group_hJ4ci7"
                       ]
                     }
