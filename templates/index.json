@@ -1234,8 +1234,8 @@
                               "type": "_collection-card",
                               "static": true,
                               "settings": {
-                                "placement": "on_image",
-                                "horizontal_alignment": "flex-start",
+                                "placement": "below_image",
+                                "horizontal_alignment": "center",
                                 "vertical_alignment": "center",
                                 "collection_card_gap": 8,
                                 "inherit_color_scheme": true,
