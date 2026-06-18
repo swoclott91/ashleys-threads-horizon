@@ -1954,7 +1954,7 @@
                           "settings": {
                             "content_direction": "row",
                             "vertical_on_mobile": false,
-                            "horizontal_alignment": "flex-start",
+                            "horizontal_alignment": "center",
                             "vertical_alignment": "center",
                             "align_baseline": false,
                             "horizontal_alignment_flex_direction_column": "flex-start",
@@ -1966,15 +1966,15 @@
                             "custom_width_mobile": 100,
                             "height": "fit",
                             "custom_height": 100,
-                            "inherit_color_scheme": true,
-                            "color_scheme": "",
+                            "inherit_color_scheme": false,
+                            "color_scheme": "scheme-aaf3cf3f-4683-46f4-8c02-05f5e3c75f4a",
                             "background_media": "none",
                             "video_position": "cover",
                             "background_image_position": "cover",
                             "border": "none",
                             "border_width": 1,
                             "border_opacity": 100,
-                            "border_radius": 0,
+                            "border_radius": 20,
                             "toggle_overlay": false,
                             "overlay_color": "#00000026",
                             "overlay_style": "solid",
@@ -1982,10 +1982,10 @@
                             "link": "",
                             "open_in_new_tab": false,
                             "placeholder": "",
-                            "padding-block-start": 0,
-                            "padding-block-end": 0,
-                            "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-block-start": 10,
+                            "padding-block-end": 10,
+                            "padding-inline-start": 20,
+                            "padding-inline-end": 20
                           },
                           "blocks": {
                             "icon_n6dizc": {
