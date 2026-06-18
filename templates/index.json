@@ -96,13 +96,13 @@
                   "type": "text",
                   "name": "t:names.heading",
                   "settings": {
-                    "text": "<h1>BETTER BLANKS,</h1><h1>MADE EASY.</h1>",
+                    "text": "<h1>POPULAR BLANKS,</h1><h1>MADE EASY.</h1>",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "left",
-                    "type_preset": "rte",
-                    "font": "var(--font-body--family)",
-                    "font_size": "",
+                    "type_preset": "custom",
+                    "font": "var(--font-heading--family)",
+                    "font_size": "3rem",
                     "line_height": "normal",
                     "letter_spacing": "normal",
                     "case": "none",
@@ -978,7 +978,7 @@
       ],
       "custom_css": [
         ".text-block--ANUxkR0ZHcWJvSHRoM__text_YzVJzw em {text-decoration: line-through;}",
-        ".color-scheme-3 .group-block-content h4 strong {color: #BB987C;}"
+        ".color-scheme-3 .group-block-content h4 strong {color: #bb987c;}"
       ],
       "name": "t:names.custom_section",
       "settings": {
