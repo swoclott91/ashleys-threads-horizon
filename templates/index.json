@@ -96,7 +96,7 @@
                   "type": "text",
                   "name": "t:names.heading",
                   "settings": {
-                    "text": "<h1>POPULAR BLANKS,</h1><h1>MADE EASY.</h1>",
+                    "text": "<h1><strong>WHOLESALE PRICING ON PREMIUM BLANKS</strong></h1>",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "left",
@@ -112,6 +112,32 @@
                     "background_color": "#00000026",
                     "corner_radius": 0,
                     "padding-block-start": 24,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_YcHFCP": {
+                  "type": "text",
+                  "name": "t:names.text",
+                  "settings": {
+                    "text": "<p>No application. No minimums.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
                     "padding-inline-end": 0
@@ -150,6 +176,7 @@
               },
               "block_order": [
                 "text_MQxaWb",
+                "text_YcHFCP",
                 "spacer_fV3EBc",
                 "button_mmcXFU"
               ]
@@ -721,7 +748,7 @@
                       "type": "text",
                       "name": "t:names.text",
                       "settings": {
-                        "text": "<h4>Wholesale price. <em>No Hoops</em>.</h4>",
+                        "text": "<h4>Discounted Price. <em>No Hoops</em>.</h4>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
