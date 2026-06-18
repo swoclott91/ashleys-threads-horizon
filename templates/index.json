@@ -1266,7 +1266,7 @@
                           "type": "collection-card",
                           "name": "t:names.collection_card",
                           "settings": {
-                            "collection": "t-shirts",
+                            "collection": "hoodies",
                             "placement": "below_image",
                             "horizontal_alignment": "flex-start",
                             "vertical_alignment": "center",
