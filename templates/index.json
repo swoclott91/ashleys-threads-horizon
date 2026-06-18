@@ -1211,11 +1211,11 @@
                               "youth-apparel",
                               "bags"
                             ],
-                            "layout_type": "grid",
+                            "layout_type": "carousel",
                             "carousel_on_mobile": true,
                             "columns": 4,
                             "mobile_columns": "2",
-                            "mobile_card_size": "60cqw",
+                            "mobile_card_size": "44cqw",
                             "columns_gap": 8,
                             "bento_gap": 8,
                             "rows_gap": 8,
