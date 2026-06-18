@@ -1972,6 +1972,7 @@
         "group_9Lqfh4",
         "group_TtVgYK"
       ],
+      "disabled": true,
       "name": "t:names.custom_section",
       "settings": {
         "content_direction": "row",
@@ -2077,6 +2078,7 @@
         "text_4atLQn",
         "button_H9gpTf"
       ],
+      "disabled": true,
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "image",
