@@ -1176,7 +1176,7 @@
                         "custom_width": 100,
                         "width_mobile": "fill",
                         "custom_width_mobile": 100,
-                        "height": "fill",
+                        "height": "fit",
                         "custom_height": 100,
                         "inherit_color_scheme": true,
                         "color_scheme": "",
@@ -1213,7 +1213,7 @@
                             ],
                             "layout_type": "carousel",
                             "carousel_on_mobile": true,
-                            "columns": 4,
+                            "columns": 5,
                             "mobile_columns": "2",
                             "mobile_card_size": "44cqw",
                             "columns_gap": 8,
@@ -1230,6 +1230,32 @@
                             "padding-inline-end": 0
                           },
                           "blocks": {
+                            "text_VTUnX9": {
+                              "type": "text",
+                              "name": "t:names.heading",
+                              "settings": {
+                                "text": "<h2>THOUSANDS OF STYLES. ENDLESS POSIBILITIES.</h2>",
+                                "width": "100%",
+                                "max_width": "normal",
+                                "alignment": "center",
+                                "type_preset": "custom",
+                                "font": "var(--font-body--family)",
+                                "font_size": "1.5rem",
+                                "line_height": "normal",
+                                "letter_spacing": "normal",
+                                "case": "none",
+                                "wrap": "pretty",
+                                "color": "var(--color-foreground)",
+                                "background": false,
+                                "background_color": "#00000026",
+                                "corner_radius": 0,
+                                "padding-block-start": 0,
+                                "padding-block-end": 0,
+                                "padding-inline-start": 0,
+                                "padding-inline-end": 0
+                              },
+                              "blocks": {}
+                            },
                             "static-collection-card": {
                               "type": "_collection-card",
                               "static": true,
@@ -1266,7 +1292,9 @@
                               "block_order": []
                             }
                           },
-                          "block_order": []
+                          "block_order": [
+                            "text_VTUnX9"
+                          ]
                         }
                       },
                       "block_order": [
