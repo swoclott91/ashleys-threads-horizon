@@ -1200,449 +1200,71 @@
                         "padding-inline-end": 0
                       },
                       "blocks": {
-                        "collection_card_aJh64Y": {
-                          "type": "collection-card",
-                          "name": "t:names.collection_card",
+                        "at_collection_list_LcV8gF": {
+                          "type": "at-collection-list",
+                          "name": "t:names.at_collection_list",
                           "settings": {
-                            "collection": "t-shirts",
-                            "placement": "below_image",
-                            "horizontal_alignment": "flex-start",
-                            "vertical_alignment": "center",
-                            "collection_card_gap": 8,
-                            "inherit_color_scheme": true,
+                            "collection_list": [],
+                            "layout_type": "grid",
+                            "carousel_on_mobile": false,
+                            "columns": 4,
+                            "mobile_columns": "2",
+                            "mobile_card_size": "60cqw",
+                            "columns_gap": 8,
+                            "bento_gap": 8,
+                            "rows_gap": 8,
+                            "max_collections": 4,
+                            "icons_style": "arrow",
+                            "icons_shape": "none",
+                            "gap": 12,
                             "color_scheme": "",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
+                            "padding-block-start": 0,
+                            "padding-block-end": 0,
+                            "padding-inline-start": 0,
+                            "padding-inline-end": 0
                           },
                           "blocks": {
-                            "collection_title_qfDF7x": {
-                              "type": "collection-title",
-                              "settings": {
-                                "width": "fit-content",
-                                "max_width": "narrow",
-                                "alignment": "left",
-                                "type_preset": "custom",
-                                "font": "var(--font-body--family)",
-                                "font_size": "0.875rem",
-                                "line_height": "normal",
-                                "letter_spacing": "normal",
-                                "case": "none",
-                                "wrap": "pretty",
-                                "color": "var(--color-foreground)",
-                                "background": false,
-                                "background_color": "#00000026",
-                                "corner_radius": 0,
-                                "padding-block-start": 0,
-                                "padding-block-end": 0,
-                                "padding-inline-start": 0,
-                                "padding-inline-end": 0
-                              },
-                              "blocks": {}
-                            },
-                            "collection-card-image": {
-                              "type": "_collection-card-image",
+                            "static-collection-card": {
+                              "type": "_collection-card",
                               "static": true,
                               "settings": {
-                                "image_ratio": "portrait",
-                                "toggle_overlay": false,
-                                "overlay_color": "#00000026",
-                                "overlay_style": "solid",
-                                "gradient_direction": "to top",
+                                "placement": "on_image",
+                                "horizontal_alignment": "flex-start",
+                                "vertical_alignment": "center",
+                                "collection_card_gap": 8,
+                                "inherit_color_scheme": true,
+                                "color_scheme": "",
                                 "border": "none",
                                 "border_width": 1,
                                 "border_opacity": 100,
                                 "border_radius": 0
                               },
-                              "blocks": {}
+                              "blocks": {
+                                "collection-card-image": {
+                                  "type": "_collection-card-image",
+                                  "static": true,
+                                  "settings": {
+                                    "image_ratio": "portrait",
+                                    "toggle_overlay": false,
+                                    "overlay_color": "#00000026",
+                                    "overlay_style": "solid",
+                                    "gradient_direction": "to top",
+                                    "border": "none",
+                                    "border_width": 1,
+                                    "border_opacity": 100,
+                                    "border_radius": 0
+                                  },
+                                  "blocks": {}
+                                }
+                              },
+                              "block_order": []
                             }
                           },
-                          "block_order": [
-                            "collection_title_qfDF7x"
-                          ]
-                        },
-                        "collection_card_JhnpJi": {
-                          "type": "collection-card",
-                          "name": "t:names.collection_card",
-                          "settings": {
-                            "collection": "hoodies",
-                            "placement": "below_image",
-                            "horizontal_alignment": "flex-start",
-                            "vertical_alignment": "center",
-                            "collection_card_gap": 8,
-                            "inherit_color_scheme": true,
-                            "color_scheme": "",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
-                          },
-                          "blocks": {
-                            "collection_title_U6BDXE": {
-                              "type": "collection-title",
-                              "settings": {
-                                "width": "fit-content",
-                                "max_width": "narrow",
-                                "alignment": "left",
-                                "type_preset": "custom",
-                                "font": "var(--font-body--family)",
-                                "font_size": "0.875rem",
-                                "line_height": "normal",
-                                "letter_spacing": "normal",
-                                "case": "none",
-                                "wrap": "pretty",
-                                "color": "var(--color-foreground)",
-                                "background": false,
-                                "background_color": "#00000026",
-                                "corner_radius": 0,
-                                "padding-block-start": 0,
-                                "padding-block-end": 0,
-                                "padding-inline-start": 0,
-                                "padding-inline-end": 0
-                              },
-                              "blocks": {}
-                            },
-                            "collection-card-image": {
-                              "type": "_collection-card-image",
-                              "static": true,
-                              "settings": {
-                                "image_ratio": "portrait",
-                                "toggle_overlay": false,
-                                "overlay_color": "#00000026",
-                                "overlay_style": "solid",
-                                "gradient_direction": "to top",
-                                "border": "none",
-                                "border_width": 1,
-                                "border_opacity": 100,
-                                "border_radius": 0
-                              },
-                              "blocks": {}
-                            }
-                          },
-                          "block_order": [
-                            "collection_title_U6BDXE"
-                          ]
-                        },
-                        "collection_card_NATYtX": {
-                          "type": "collection-card",
-                          "name": "t:names.collection_card",
-                          "settings": {
-                            "collection": "t-shirts",
-                            "placement": "below_image",
-                            "horizontal_alignment": "flex-start",
-                            "vertical_alignment": "center",
-                            "collection_card_gap": 8,
-                            "inherit_color_scheme": true,
-                            "color_scheme": "",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
-                          },
-                          "blocks": {
-                            "collection_title_CQYNhU": {
-                              "type": "collection-title",
-                              "settings": {
-                                "width": "fit-content",
-                                "max_width": "narrow",
-                                "alignment": "left",
-                                "type_preset": "custom",
-                                "font": "var(--font-body--family)",
-                                "font_size": "0.875rem",
-                                "line_height": "normal",
-                                "letter_spacing": "normal",
-                                "case": "none",
-                                "wrap": "pretty",
-                                "color": "var(--color-foreground)",
-                                "background": false,
-                                "background_color": "#00000026",
-                                "corner_radius": 0,
-                                "padding-block-start": 0,
-                                "padding-block-end": 0,
-                                "padding-inline-start": 0,
-                                "padding-inline-end": 0
-                              },
-                              "blocks": {}
-                            },
-                            "collection-card-image": {
-                              "type": "_collection-card-image",
-                              "static": true,
-                              "settings": {
-                                "image_ratio": "portrait",
-                                "toggle_overlay": false,
-                                "overlay_color": "#00000026",
-                                "overlay_style": "solid",
-                                "gradient_direction": "to top",
-                                "border": "none",
-                                "border_width": 1,
-                                "border_opacity": 100,
-                                "border_radius": 0
-                              },
-                              "blocks": {}
-                            }
-                          },
-                          "block_order": [
-                            "collection_title_CQYNhU"
-                          ]
-                        },
-                        "collection_card_6KxAXr": {
-                          "type": "collection-card",
-                          "name": "t:names.collection_card",
-                          "settings": {
-                            "collection": "t-shirts",
-                            "placement": "below_image",
-                            "horizontal_alignment": "flex-start",
-                            "vertical_alignment": "center",
-                            "collection_card_gap": 8,
-                            "inherit_color_scheme": true,
-                            "color_scheme": "",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
-                          },
-                          "blocks": {
-                            "collection_title_XbdHqE": {
-                              "type": "collection-title",
-                              "settings": {
-                                "width": "fit-content",
-                                "max_width": "narrow",
-                                "alignment": "left",
-                                "type_preset": "custom",
-                                "font": "var(--font-body--family)",
-                                "font_size": "0.875rem",
-                                "line_height": "normal",
-                                "letter_spacing": "normal",
-                                "case": "none",
-                                "wrap": "pretty",
-                                "color": "var(--color-foreground)",
-                                "background": false,
-                                "background_color": "#00000026",
-                                "corner_radius": 0,
-                                "padding-block-start": 0,
-                                "padding-block-end": 0,
-                                "padding-inline-start": 0,
-                                "padding-inline-end": 0
-                              },
-                              "blocks": {}
-                            },
-                            "collection-card-image": {
-                              "type": "_collection-card-image",
-                              "static": true,
-                              "settings": {
-                                "image_ratio": "portrait",
-                                "toggle_overlay": false,
-                                "overlay_color": "#00000026",
-                                "overlay_style": "solid",
-                                "gradient_direction": "to top",
-                                "border": "none",
-                                "border_width": 1,
-                                "border_opacity": 100,
-                                "border_radius": 0
-                              },
-                              "blocks": {}
-                            }
-                          },
-                          "block_order": [
-                            "collection_title_XbdHqE"
-                          ]
-                        },
-                        "collection_card_4PGfBa": {
-                          "type": "collection-card",
-                          "name": "t:names.collection_card",
-                          "settings": {
-                            "collection": "t-shirts",
-                            "placement": "below_image",
-                            "horizontal_alignment": "flex-start",
-                            "vertical_alignment": "center",
-                            "collection_card_gap": 8,
-                            "inherit_color_scheme": true,
-                            "color_scheme": "",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
-                          },
-                          "blocks": {
-                            "collection_title_cJBFWR": {
-                              "type": "collection-title",
-                              "settings": {
-                                "width": "fit-content",
-                                "max_width": "narrow",
-                                "alignment": "left",
-                                "type_preset": "custom",
-                                "font": "var(--font-body--family)",
-                                "font_size": "0.875rem",
-                                "line_height": "normal",
-                                "letter_spacing": "normal",
-                                "case": "none",
-                                "wrap": "pretty",
-                                "color": "var(--color-foreground)",
-                                "background": false,
-                                "background_color": "#00000026",
-                                "corner_radius": 0,
-                                "padding-block-start": 0,
-                                "padding-block-end": 0,
-                                "padding-inline-start": 0,
-                                "padding-inline-end": 0
-                              },
-                              "blocks": {}
-                            },
-                            "collection-card-image": {
-                              "type": "_collection-card-image",
-                              "static": true,
-                              "settings": {
-                                "image_ratio": "portrait",
-                                "toggle_overlay": false,
-                                "overlay_color": "#00000026",
-                                "overlay_style": "solid",
-                                "gradient_direction": "to top",
-                                "border": "none",
-                                "border_width": 1,
-                                "border_opacity": 100,
-                                "border_radius": 0
-                              },
-                              "blocks": {}
-                            }
-                          },
-                          "block_order": [
-                            "collection_title_cJBFWR"
-                          ]
-                        },
-                        "collection_card_rHdaff": {
-                          "type": "collection-card",
-                          "name": "t:names.collection_card",
-                          "settings": {
-                            "collection": "t-shirts",
-                            "placement": "below_image",
-                            "horizontal_alignment": "flex-start",
-                            "vertical_alignment": "center",
-                            "collection_card_gap": 8,
-                            "inherit_color_scheme": true,
-                            "color_scheme": "",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
-                          },
-                          "blocks": {
-                            "collection_title_VzDT8B": {
-                              "type": "collection-title",
-                              "settings": {
-                                "width": "fit-content",
-                                "max_width": "narrow",
-                                "alignment": "left",
-                                "type_preset": "custom",
-                                "font": "var(--font-body--family)",
-                                "font_size": "0.875rem",
-                                "line_height": "normal",
-                                "letter_spacing": "normal",
-                                "case": "none",
-                                "wrap": "pretty",
-                                "color": "var(--color-foreground)",
-                                "background": false,
-                                "background_color": "#00000026",
-                                "corner_radius": 0,
-                                "padding-block-start": 0,
-                                "padding-block-end": 0,
-                                "padding-inline-start": 0,
-                                "padding-inline-end": 0
-                              },
-                              "blocks": {}
-                            },
-                            "collection-card-image": {
-                              "type": "_collection-card-image",
-                              "static": true,
-                              "settings": {
-                                "image_ratio": "portrait",
-                                "toggle_overlay": false,
-                                "overlay_color": "#00000026",
-                                "overlay_style": "solid",
-                                "gradient_direction": "to top",
-                                "border": "none",
-                                "border_width": 1,
-                                "border_opacity": 100,
-                                "border_radius": 0
-                              },
-                              "blocks": {}
-                            }
-                          },
-                          "block_order": [
-                            "collection_title_VzDT8B"
-                          ]
-                        },
-                        "collection_card_GFzNXV": {
-                          "type": "collection-card",
-                          "name": "t:names.collection_card",
-                          "settings": {
-                            "collection": "t-shirts",
-                            "placement": "below_image",
-                            "horizontal_alignment": "flex-start",
-                            "vertical_alignment": "center",
-                            "collection_card_gap": 8,
-                            "inherit_color_scheme": true,
-                            "color_scheme": "",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_radius": 0
-                          },
-                          "blocks": {
-                            "collection_title_Hz6b7t": {
-                              "type": "collection-title",
-                              "settings": {
-                                "width": "fit-content",
-                                "max_width": "narrow",
-                                "alignment": "left",
-                                "type_preset": "custom",
-                                "font": "var(--font-body--family)",
-                                "font_size": "0.875rem",
-                                "line_height": "normal",
-                                "letter_spacing": "normal",
-                                "case": "none",
-                                "wrap": "pretty",
-                                "color": "var(--color-foreground)",
-                                "background": false,
-                                "background_color": "#00000026",
-                                "corner_radius": 0,
-                                "padding-block-start": 0,
-                                "padding-block-end": 0,
-                                "padding-inline-start": 0,
-                                "padding-inline-end": 0
-                              },
-                              "blocks": {}
-                            },
-                            "collection-card-image": {
-                              "type": "_collection-card-image",
-                              "static": true,
-                              "settings": {
-                                "image_ratio": "portrait",
-                                "toggle_overlay": false,
-                                "overlay_color": "#00000026",
-                                "overlay_style": "solid",
-                                "gradient_direction": "to top",
-                                "border": "none",
-                                "border_width": 1,
-                                "border_opacity": 100,
-                                "border_radius": 0
-                              },
-                              "blocks": {}
-                            }
-                          },
-                          "block_order": [
-                            "collection_title_Hz6b7t"
-                          ]
+                          "block_order": []
                         }
                       },
                       "block_order": [
-                        "collection_card_aJh64Y",
-                        "collection_card_JhnpJi",
-                        "collection_card_NATYtX",
-                        "collection_card_6KxAXr",
-                        "collection_card_4PGfBa",
-                        "collection_card_rHdaff",
-                        "collection_card_GFzNXV"
+                        "at_collection_list_LcV8gF"
                       ]
                     }
                   },
