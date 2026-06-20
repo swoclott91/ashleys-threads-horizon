@@ -1303,10 +1303,11 @@
                                 "border_radius": 0
                               },
                               "blocks": {
-                                "collection_title_PraMhK": {
-                                  "type": "collection-title",
-                                  "name": "t:names.collection_title",
+                                "text_CeRh3F": {
+                                  "type": "text",
+                                  "name": "t:names.text",
                                   "settings": {
+                                    "text": "<p>{{ closest.collection.metafields.custom.pretty_title.value }}</p>",
                                     "width": "fit-content",
                                     "max_width": "normal",
                                     "alignment": "left",
@@ -1346,7 +1347,7 @@
                                 }
                               },
                               "block_order": [
-                                "collection_title_PraMhK"
+                                "text_CeRh3F"
                               ]
                             }
                           },
