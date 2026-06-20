@@ -331,7 +331,9 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "hover_scale": false,
+                            "hover_tint_color": ""
                           },
                           "blocks": {}
                         },
@@ -354,7 +356,9 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "hover_scale": false,
+                            "hover_tint_color": ""
                           },
                           "blocks": {}
                         },
@@ -377,7 +381,9 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "hover_scale": true,
+                            "hover_tint_color": "#A0624A"
                           },
                           "blocks": {}
                         }
@@ -449,7 +455,9 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "hover_scale": false,
+                            "hover_tint_color": ""
                           },
                           "blocks": {}
                         },
@@ -472,7 +480,9 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "hover_scale": false,
+                            "hover_tint_color": ""
                           },
                           "blocks": {}
                         },
@@ -495,7 +505,9 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "hover_scale": false,
+                            "hover_tint_color": ""
                           },
                           "blocks": {}
                         }
@@ -567,7 +579,9 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "hover_scale": false,
+                            "hover_tint_color": ""
                           },
                           "blocks": {}
                         },
@@ -590,7 +604,9 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "hover_scale": false,
+                            "hover_tint_color": ""
                           },
                           "blocks": {}
                         },
@@ -613,7 +629,9 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "hover_scale": false,
+                            "hover_tint_color": ""
                           },
                           "blocks": {}
                         }
@@ -2915,7 +2933,9 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "hover_scale": false,
+                "hover_tint_color": ""
               },
               "blocks": {}
             },
@@ -3148,7 +3168,9 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "hover_scale": false,
+                "hover_tint_color": ""
               },
               "blocks": {}
             },
@@ -3381,7 +3403,9 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "hover_scale": false,
+                "hover_tint_color": ""
               },
               "blocks": {}
             },
