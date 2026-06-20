@@ -51,10 +51,6 @@
           },
           "blocks": {}
         },
-        "judge_me_reviews_preview_badge_39QyCL": {
-          "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {}
-        },
         "price_4y7a3f": {
           "type": "price",
           "name": "t:names.product_price",
@@ -95,7 +91,6 @@
       "block_order": [
         "icon_i3aF9j",
         "text_YWfKMf",
-        "judge_me_reviews_preview_badge_39QyCL",
         "price_4y7a3f",
         "review_FMHKM8"
       ],
@@ -208,6 +203,8 @@
                 "custom_width_mobile": 100,
                 "height": "fit",
                 "custom_height": 100,
+                "height_mobile": "fit",
+                "custom_height_mobile": 30,
                 "inherit_color_scheme": true,
                 "color_scheme": "",
                 "background_media": "none",
@@ -269,10 +266,6 @@
                   },
                   "blocks": {}
                 },
-                "judge_me_reviews_preview_badge_nVMREH": {
-                  "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-                  "settings": {}
-                },
                 "price_tVjtKg": {
                   "type": "price",
                   "settings": {
@@ -299,7 +292,6 @@
               "block_order": [
                 "icon_KLB7ij",
                 "text_xpVMaM",
-                "judge_me_reviews_preview_badge_nVMREH",
                 "price_tVjtKg"
               ]
             },
@@ -442,7 +434,7 @@
         "limit_details_width": false,
         "gap": 48,
         "enable_sticky_add_to_cart": true,
-        "color_scheme": "",
+        "color_scheme": "scheme-2",
         "padding-block-start": 0,
         "padding-block-end": 0
       }
@@ -779,20 +771,6 @@
     },
     "1775022707a6a381f3": {
       "type": "_blocks",
-      "blocks": {
-        "judge_me_reviews_review_widget_444zFE": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "review_data": "sample_data",
-            "max_width": 1200,
-            "show_shop_reviews": false,
-            "empty_state": "empty_widget"
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_review_widget_444zFE"
-      ],
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
