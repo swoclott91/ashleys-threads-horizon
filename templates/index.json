@@ -278,7 +278,7 @@
                         "custom_width": 100,
                         "width_mobile": "fill",
                         "custom_width_mobile": 100,
-                        "height": "fit",
+                        "height": "fill",
                         "custom_height": 100,
                         "inherit_color_scheme": true,
                         "color_scheme": "",
@@ -394,7 +394,7 @@
                         "custom_width": 100,
                         "width_mobile": "fill",
                         "custom_width_mobile": 100,
-                        "height": "fit",
+                        "height": "fill",
                         "custom_height": 100,
                         "inherit_color_scheme": true,
                         "color_scheme": "",
@@ -510,7 +510,7 @@
                         "custom_width": 100,
                         "width_mobile": "fill",
                         "custom_width_mobile": 100,
-                        "height": "fit",
+                        "height": "fill",
                         "custom_height": 100,
                         "inherit_color_scheme": true,
                         "color_scheme": "",
@@ -619,8 +619,8 @@
                         "pixel_size": 0,
                         "custom_mobile_size": true,
                         "size_mobile": "pixel",
-                        "percent_size_mobile": 12,
-                        "pixel_size_mobile": 212
+                        "percent_size_mobile": 100,
+                        "pixel_size_mobile": 400
                       },
                       "blocks": {}
                     },
