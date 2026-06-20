@@ -168,6 +168,10 @@ select {
     transform: scale(var(--hover-scale-amount));
   }
 
+  .image-block--hover-scale:hover .image-block__image {
+    transform: scale(var(--hover-scale-amount));
+  }
+
   .card-hover-effect-subtle-zoom .card-gallery,
   .card-hover-effect-subtle-zoom .collection-card__image,
   .card-hover-effect-subtle-zoom .product-card__image {
