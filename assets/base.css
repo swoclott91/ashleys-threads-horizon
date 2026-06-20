@@ -3852,6 +3852,30 @@ fly-to-cart.fly-to-cart--sticky {
   flex-basis: var(--size-style-height);
 }
 
+/* Mobile height overrides — applied below 750 px, take precedence over desktop rules */
+@media screen and (max-width: 749px) {
+  .group-block--height-mobile-fit {
+    height: auto;
+    flex: 0 1 auto;
+  }
+
+  .group-block--height-mobile-fill {
+    height: var(--size-style-height-mobile);
+  }
+
+  .layout-panel-flex--column > .group-block--height-mobile-fill {
+    flex: 1;
+  }
+
+  .group-block--height-mobile-custom {
+    height: var(--size-style-height-mobile);
+  }
+
+  .layout-panel-flex--column > .group-block--height-mobile-custom {
+    flex-basis: var(--size-style-height-mobile);
+  }
+}
+
 text-component {
   --shimmer-text-color: rgb(var(--color-foreground-rgb) / var(--opacity-50));
   --shimmer-color-light: rgb(var(--color-foreground-rgb) / var(--opacity-10));

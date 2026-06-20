@@ -254,6 +254,37 @@
       "visible_if": "{{ block.settings.height == 'custom' }}"
     },
     {
+      "type": "select",
+      "id": "height_mobile",
+      "label": "t:settings.mobile_height",
+      "options": [
+        {
+          "value": "fit",
+          "label": "t:options.fit_content"
+        },
+        {
+          "value": "fill",
+          "label": "t:options.fill"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
+        }
+      ],
+      "default": "fit"
+    },
+    {
+      "type": "range",
+      "id": "custom_height_mobile",
+      "label": "t:settings.custom_height",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100,
+      "visible_if": "{{ block.settings.height_mobile == 'custom' }}"
+    },
+    {
       "type": "header",
       "content": "t:content.appearance"
     },

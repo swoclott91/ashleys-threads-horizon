@@ -31,3 +31,11 @@
 {%- elsif settings.width_mobile == 'fit-content' -%}
   --size-style-width-mobile: {{ settings.width_mobile }}; --size-style-width-mobile-min: {{ settings.width_mobile }};
 {%- endif -%}
+
+{%- if settings.height_mobile == 'custom' -%}
+  --size-style-height-mobile: {{ settings.custom_height_mobile }}%;
+{%- elsif settings.height_mobile == 'fill' -%}
+  --size-style-height-mobile: 100%;
+{%- elsif settings.height_mobile == 'fit' -%}
+  --size-style-height-mobile: auto;
+{%- endif -%}

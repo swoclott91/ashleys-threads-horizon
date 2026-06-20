@@ -15,6 +15,7 @@
   class="
     group-block
     group-block--height-{{ settings.height }}
+    {% if settings.height_mobile %}group-block--height-mobile-{{ settings.height_mobile }}{% endif %}
     group-block--width-{{ settings.width }}
     border-style
     spacing-style
