@@ -3880,11 +3880,15 @@ fly-to-cart.fly-to-cart--sticky {
 
   .group-block--height-mobile-custom {
     height: var(--size-style-height-mobile);
+    /* Prevent the block from being stretched or squashed by a flex parent */
+    flex-grow: 0;
+    flex-shrink: 0;
   }
 
   .layout-panel-flex--column > .group-block--height-mobile-custom,
   .mobile-column > .group-block--height-mobile-custom {
-    flex-basis: var(--size-style-height-mobile);
+    /* Fully fixed: won't grow into or be compressed by siblings */
+    flex: 0 0 var(--size-style-height-mobile);
   }
 }
 
