@@ -1045,13 +1045,13 @@
                   "type": "text",
                   "name": "t:names.heading",
                   "settings": {
-                    "text": "<h4>Fulfilled from U.S. warehouses. Most Standard orders ship within <strong>1 business day</strong>. </h4>",
+                    "text": "<p>Fulfilled from U.S. warehouses. Most Standard orders ship within <strong>1 business day</strong>. </p>",
                     "width": "100%",
                     "max_width": "narrow",
                     "alignment": "left",
-                    "type_preset": "custom",
+                    "type_preset": "rte",
                     "font": "var(--font-body--family)",
-                    "font_size": "",
+                    "font_size": "2.5rem",
                     "line_height": "tight",
                     "letter_spacing": "tight",
                     "case": "none",
@@ -1162,7 +1162,7 @@
       ],
       "custom_css": [
         ".text-block--ANUxkR0ZHcWJvSHRoM__text_YzVJzw em {text-decoration: line-through;}",
-        ".color-scheme-3 .group-block-content h4 strong {color: #bb987c;}"
+        ".color-scheme-3 .group-block-content p strong {color: #bb987c;}"
       ],
       "name": "t:names.custom_section",
       "settings": {
