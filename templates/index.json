@@ -543,7 +543,7 @@
                         "open_in_new_tab": false,
                         "placeholder": "",
                         "padding-block-start": 0,
-                        "padding-block-end": 100,
+                        "padding-block-end": 0,
                         "padding-inline-start": 0,
                         "padding-inline-end": 0
                       },
@@ -632,7 +632,77 @@
                         "percent_size": 40,
                         "pixel_size": 0,
                         "custom_mobile_size": true,
-                        "size_mobile": "pixel",
+                        "size_mobile": "percent",
+                        "percent_size_mobile": 100,
+                        "pixel_size_mobile": 400
+                      },
+                      "blocks": {}
+                    },
+                    "spacer_iAfgDV": {
+                      "type": "spacer",
+                      "name": "t:names.spacer",
+                      "settings": {
+                        "size": "pixel",
+                        "percent_size": 40,
+                        "pixel_size": 0,
+                        "custom_mobile_size": true,
+                        "size_mobile": "percent",
+                        "percent_size_mobile": 100,
+                        "pixel_size_mobile": 400
+                      },
+                      "blocks": {}
+                    },
+                    "spacer_UM4kMW": {
+                      "type": "spacer",
+                      "name": "t:names.spacer",
+                      "settings": {
+                        "size": "pixel",
+                        "percent_size": 40,
+                        "pixel_size": 0,
+                        "custom_mobile_size": true,
+                        "size_mobile": "percent",
+                        "percent_size_mobile": 100,
+                        "pixel_size_mobile": 400
+                      },
+                      "blocks": {}
+                    },
+                    "spacer_KmrHG9": {
+                      "type": "spacer",
+                      "name": "t:names.spacer",
+                      "settings": {
+                        "size": "pixel",
+                        "percent_size": 40,
+                        "pixel_size": 0,
+                        "custom_mobile_size": true,
+                        "size_mobile": "percent",
+                        "percent_size_mobile": 100,
+                        "pixel_size_mobile": 400
+                      },
+                      "blocks": {}
+                    },
+                    "spacer_xmVKDr": {
+                      "type": "spacer",
+                      "name": "t:names.spacer",
+                      "settings": {
+                        "size": "pixel",
+                        "percent_size": 40,
+                        "pixel_size": 0,
+                        "custom_mobile_size": true,
+                        "size_mobile": "percent",
+                        "percent_size_mobile": 100,
+                        "pixel_size_mobile": 400
+                      },
+                      "blocks": {}
+                    },
+                    "spacer_tRX7TV": {
+                      "type": "spacer",
+                      "name": "t:names.spacer",
+                      "settings": {
+                        "size": "pixel",
+                        "percent_size": 40,
+                        "pixel_size": 0,
+                        "custom_mobile_size": true,
+                        "size_mobile": "percent",
                         "percent_size_mobile": 100,
                         "pixel_size_mobile": 400
                       },
@@ -685,6 +755,11 @@
                     "group_6X7Hnh",
                     "group_fDd879",
                     "spacer_KQVbta",
+                    "spacer_iAfgDV",
+                    "spacer_UM4kMW",
+                    "spacer_KmrHG9",
+                    "spacer_xmVKDr",
+                    "spacer_tRX7TV",
                     "text_bEqy4n",
                     "button_pfEnjG"
                   ]
@@ -732,6 +807,62 @@
                     "padding-inline-end": 24
                   },
                   "blocks": {
+                    "spacer_NRmc9D": {
+                      "type": "spacer",
+                      "name": "t:names.spacer",
+                      "settings": {
+                        "size": "pixel",
+                        "percent_size": 40,
+                        "pixel_size": 0,
+                        "custom_mobile_size": true,
+                        "size_mobile": "percent",
+                        "percent_size_mobile": 100,
+                        "pixel_size_mobile": 400
+                      },
+                      "blocks": {}
+                    },
+                    "spacer_Td8aF8": {
+                      "type": "spacer",
+                      "name": "t:names.spacer",
+                      "settings": {
+                        "size": "pixel",
+                        "percent_size": 40,
+                        "pixel_size": 0,
+                        "custom_mobile_size": true,
+                        "size_mobile": "percent",
+                        "percent_size_mobile": 100,
+                        "pixel_size_mobile": 400
+                      },
+                      "blocks": {}
+                    },
+                    "spacer_zDJBMr": {
+                      "type": "spacer",
+                      "name": "t:names.spacer",
+                      "settings": {
+                        "size": "pixel",
+                        "percent_size": 40,
+                        "pixel_size": 0,
+                        "custom_mobile_size": true,
+                        "size_mobile": "percent",
+                        "percent_size_mobile": 100,
+                        "pixel_size_mobile": 400
+                      },
+                      "blocks": {}
+                    },
+                    "spacer_44bNCY": {
+                      "type": "spacer",
+                      "name": "t:names.spacer",
+                      "settings": {
+                        "size": "pixel",
+                        "percent_size": 40,
+                        "pixel_size": 0,
+                        "custom_mobile_size": true,
+                        "size_mobile": "percent",
+                        "percent_size_mobile": 100,
+                        "pixel_size_mobile": 400
+                      },
+                      "blocks": {}
+                    },
                     "spacer_r8ppYD": {
                       "type": "spacer",
                       "name": "t:names.spacer",
@@ -803,6 +934,10 @@
                     }
                   },
                   "block_order": [
+                    "spacer_NRmc9D",
+                    "spacer_Td8aF8",
+                    "spacer_zDJBMr",
+                    "spacer_44bNCY",
                     "spacer_r8ppYD",
                     "spacer_DPDfN8",
                     "text_YzVJzw",
