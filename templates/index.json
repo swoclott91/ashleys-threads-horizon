@@ -383,7 +383,7 @@
                             "padding-inline-start": 0,
                             "padding-inline-end": 0,
                             "hover_scale": true,
-                            "hover_tint_color": "#A0624A"
+                            "hover_tint_color": ""
                           },
                           "blocks": {}
                         }
