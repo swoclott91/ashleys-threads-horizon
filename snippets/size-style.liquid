@@ -33,7 +33,7 @@
 {%- endif -%}
 
 {%- if settings.height_mobile == 'custom' -%}
-  --size-style-height-mobile: {{ settings.custom_height_mobile }}%;
+  --size-style-height-mobile: {{ settings.custom_height_mobile }}px;
 {%- elsif settings.height_mobile == 'fill' -%}
   --size-style-height-mobile: 100%;
 {%- elsif settings.height_mobile == 'fit' -%}

@@ -3856,6 +3856,16 @@ fly-to-cart.fly-to-cart--sticky {
 @media screen and (max-width: 749px) {
   .group-block--height-mobile-fit {
     height: auto;
+  }
+
+  /*
+   * Use compound selectors matching the desktop equivalents so specificity is
+   * equal (two classes) and source-order wins inside the media query.
+   * Also cover .mobile-column, which is the runtime column class applied to
+   * row-direction groups when vertical_on_mobile is true.
+   */
+  .layout-panel-flex--column > .group-block--height-mobile-fit,
+  .mobile-column > .group-block--height-mobile-fit {
     flex: 0 1 auto;
   }
 
@@ -3863,7 +3873,8 @@ fly-to-cart.fly-to-cart--sticky {
     height: var(--size-style-height-mobile);
   }
 
-  .layout-panel-flex--column > .group-block--height-mobile-fill {
+  .layout-panel-flex--column > .group-block--height-mobile-fill,
+  .mobile-column > .group-block--height-mobile-fill {
     flex: 1;
   }
 
@@ -3871,7 +3882,8 @@ fly-to-cart.fly-to-cart--sticky {
     height: var(--size-style-height-mobile);
   }
 
-  .layout-panel-flex--column > .group-block--height-mobile-custom {
+  .layout-panel-flex--column > .group-block--height-mobile-custom,
+  .mobile-column > .group-block--height-mobile-custom {
     flex-basis: var(--size-style-height-mobile);
   }
 }
