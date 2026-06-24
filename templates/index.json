@@ -2193,7 +2193,7 @@
                               "type": "text",
                               "name": "t:names.text",
                               "settings": {
-                                "text": "<p><strong>Big orders or just something for yourself? You're always welcome here. </strong></p><p>Great blanks. Better prices. Friendly service</p>",
+                                "text": "<p><strong>Big orders or just something for yourself? You're always welcome here. </strong></p><p>Better blanks. Great prices. Friendly service</p>",
                                 "width": "100%",
                                 "max_width": "none",
                                 "alignment": "center",
