@@ -1,5 +1,11 @@
 import { Component } from '@theme/component';
-import { onDocumentLoaded, changeMetaThemeColor, setHeaderMenuStyle, calculateHeaderGroupHeight } from '@theme/utilities';
+import { onDocumentLoaded, changeMetaThemeColor, setHeaderMenuStyle } from '@theme/utilities';
+import {
+  getScrollTop,
+  getScrollEventTarget,
+  getIntersectionRoot,
+  scrollContainerMediaQuery,
+} from '@theme/scroll-container';
 
 /**
  * @typedef {Object} HeaderComponentRefs
@@ -33,6 +39,9 @@ class HeaderComponent extends Component {
    */
   #intersectionObserver = null;
 
+  /** @type {EventTarget | null} */
+  #scrollContainer = null;
+
   /**
    * Whether the header has been scrolled offscreen, when sticky behavior is 'scroll-up'
    * @type {boolean}
@@ -58,23 +67,16 @@ class HeaderComponent extends Component {
   #scrollRafId = null;
 
   /**
-   * Keeps the global header height custom properties in sync so other
-   * theme components can consume the current transparent-header offsets.
+   * Keeps the global `--header-height` custom property up to date,
+   * which other theme components can then consume
    */
-  #syncHeaderCustomProperties = (headerHeight = Math.round(this.getBoundingClientRect().height)) => {
-    document.body.style.setProperty('--header-height', `${headerHeight}px`);
-
-    const headerGroupHeight = calculateHeaderGroupHeight(this);
-    document.body.style.setProperty('--header-group-height', `${Math.round(headerGroupHeight)}px`);
-  };
-
   #resizeObserver = new ResizeObserver(([entry]) => {
     if (!entry || !entry.borderBoxSize[0]) return;
 
     // The initial height is calculated using the .offsetHeight property, which returns an integer.
     // We round to the nearest integer to avoid unnecessaary reflows.
     const roundedHeaderHeight = Math.round(entry.borderBoxSize[0].blockSize);
-    this.#syncHeaderCustomProperties(roundedHeaderHeight);
+    document.body.style.setProperty('--header-height', `${roundedHeaderHeight}px`);
 
     // Check if the menu drawer should be hidden in favor of the header menu
     if (this.#menuDrawerHiddenWidth && window.innerWidth > this.#menuDrawerHiddenWidth) {
@@ -91,6 +93,7 @@ class HeaderComponent extends Component {
 
     const config = {
       threshold: alwaysSticky ? 1 : 0,
+      root: getIntersectionRoot(),
     };
 
     this.#intersectionObserver = new IntersectionObserver(([entry]) => {
@@ -126,9 +129,38 @@ class HeaderComponent extends Component {
       this.#menuDrawerHiddenWidth = window.innerWidth;
     } else {
       this.#menuDrawerHiddenWidth = null;
+      // The drawer squeeze can trigger minimum-reached at desktop widths where
+      // it normally wouldn't. Once the menu hides, the overflow-list is
+      // display:none and can't measure to clear it. Resetting it here so
+      // setHeaderMenuStyle() sees a clean state.
+      const overflowList = this.querySelector('overflow-list');
+      if (overflowList) overflowList.removeAttribute('minimum-reached');
     }
     setHeaderMenuStyle();
   }
+
+  /**
+   * Rebinds the scroll listener and IntersectionObserver when the viewport
+   * crosses the squeeze breakpoint (990px). The scroll container switches
+   * between `.page-wrapper` (desktop) and `document.scrollingElement` (mobile),
+   * so cached bindings from initialization become stale after a resize.
+   */
+  #handleBreakpointChange = () => {
+    const stickyMode = this.getAttribute('sticky');
+    if (!stickyMode) return;
+
+    // Rebind scroll listener
+    if (this.#scrollContainer) {
+      this.#scrollContainer.removeEventListener('scroll', this.#handleWindowScroll);
+      this.#scrollContainer = getScrollEventTarget();
+      this.#scrollContainer.addEventListener('scroll', this.#handleWindowScroll);
+    }
+
+    // Recreate IntersectionObserver with the new root
+    this.#intersectionObserver?.disconnect();
+    this.#intersectionObserver = null;
+    this.#observeStickyPosition(stickyMode === 'always');
+  };
 
   #handleWindowScroll = () => {
     if (this.#scrollRafId !== null) return;
@@ -143,7 +175,7 @@ class HeaderComponent extends Component {
     const stickyMode = this.getAttribute('sticky');
     if (!this.#offscreen && stickyMode !== 'always') return;
 
-    const scrollTop = document.scrollingElement?.scrollTop ?? 0;
+    const scrollTop = getScrollTop();
     const headerTop = this.getBoundingClientRect().top;
     const isScrollingUp = scrollTop < this.#lastScrollTop;
     const isAtTop = headerTop >= 0;
@@ -192,7 +224,6 @@ class HeaderComponent extends Component {
   connectedCallback() {
     super.connectedCallback();
     this.#resizeObserver.observe(this);
-    this.#syncHeaderCustomProperties(Math.round(this.offsetHeight));
     this.addEventListener('overflowMinimum', this.#handleOverflowMinimum);
 
     const stickyMode = this.getAttribute('sticky');
@@ -200,8 +231,11 @@ class HeaderComponent extends Component {
       this.#observeStickyPosition(stickyMode === 'always');
 
       if (stickyMode === 'scroll-up' || stickyMode === 'always') {
-        document.addEventListener('scroll', this.#handleWindowScroll);
+        this.#scrollContainer = getScrollEventTarget();
+        this.#scrollContainer.addEventListener('scroll', this.#handleWindowScroll);
       }
+
+      scrollContainerMediaQuery.addEventListener('change', this.#handleBreakpointChange);
     }
   }
 
@@ -210,7 +244,9 @@ class HeaderComponent extends Component {
     this.#resizeObserver.disconnect();
     this.#intersectionObserver?.disconnect();
     this.removeEventListener('overflowMinimum', this.#handleOverflowMinimum);
-    document.removeEventListener('scroll', this.#handleWindowScroll);
+    scrollContainerMediaQuery.removeEventListener('change', this.#handleBreakpointChange);
+    this.#scrollContainer?.removeEventListener('scroll', this.#handleWindowScroll);
+    this.#scrollContainer = null;
     if (this.#scrollRafId !== null) {
       cancelAnimationFrame(this.#scrollRafId);
       this.#scrollRafId = null;
@@ -232,17 +268,20 @@ onDocumentLoaded(() => {
 
   // Update header group height on resize of any child
   if (headerGroup) {
-    const syncHeaderGroupHeight = () => {
-      const headerGroupHeight = calculateHeaderGroupHeight(header, headerGroup);
-      document.body.style.setProperty('--header-group-height', `${Math.round(headerGroupHeight)}px`);
-    };
-
-    // Re-run once after the window load event so an early inline measurement
-    // cannot leave the transparent home-page offset stuck on a stale value.
-    syncHeaderGroupHeight();
-
-    const resizeObserver = new ResizeObserver(() => {
-      syncHeaderGroupHeight();
+    const resizeObserver = new ResizeObserver((entries) => {
+      const headerGroupHeight = entries.reduce((totalHeight, entry) => {
+        if (
+          entry.target !== header ||
+          (header.hasAttribute('transparent') && header.parentElement?.nextElementSibling)
+        ) {
+          return totalHeight + (entry.borderBoxSize[0]?.blockSize ?? 0);
+        }
+        return totalHeight;
+      }, 0);
+      // The initial height is calculated using the .offsetHeight property, which returns an integer.
+      // We round to the nearest integer to avoid unnecessaary reflows.
+      const roundedHeaderGroupHeight = Math.round(headerGroupHeight);
+      document.body.style.setProperty('--header-group-height', `${roundedHeaderGroupHeight}px`);
     });
 
     if (header instanceof HTMLElement) {

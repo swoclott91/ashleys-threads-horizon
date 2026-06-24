@@ -54,7 +54,16 @@ upstream  https://github.com/Shopify/horizon.git
 3. Create a backup branch: `git branch dev-backup-pre-vX.Y.Z`
 4. Merge: `git merge upstream/main --no-commit`
 5. Resolve conflicts in AT-modified core files (see below)
-6. Commit: `git commit -m "Merge upstream Horizon vX.Y.Z"`
+6. Migrate `config/settings_data.json` color palette when crossing Horizon v4.0.0+ (see **Horizon v4 color palette**)
+7. Commit: `git commit -m "feat: merge upstream Horizon vX.Y.Z"`
+
+### Horizon v4 color palette (v4.0.0+)
+
+Upstream removed global `color_schemes` in favor of `settings.color_palette` (5 slots) plus `palette_*` overrides and per-section `background_color` / `text_color` pickers.
+
+- **Access Threads discount bar:** uses `color-custom-at-discount-progress` + `snippets/contrast-override.liquid` (mapped from former scheme-4: `#2c2c2c` / `#f7f2ea`). Do not use `at_discount_progress_color_scheme` or `color-{{ scheme }}` wrappers.
+- **Cart drawer:** lives in `snippets/cart-drawer.liquid` + `sections/cart-drawer-section.liquid`; header trigger is only a button in `snippets/header-actions.liquid`.
+- **Product badges:** `snippets/product-card-badge.liquid` uses `color-custom-badge-sale` / `color-custom-badge-sold-out` (not scheme IDs).
 
 ### Core files with AT modifications (conflict-prone)
 
