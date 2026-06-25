@@ -1205,7 +1205,8 @@
       ],
       "custom_css": [
         ".text-block--ANjYzRWhNV0YvZ0tze__text_YzVJzw em {text-decoration: line-through;}",
-        ".color-custom-template--27191570137363__section_YrFnRz .group-block-content p strong {color: #bb987c;}"
+        ".color-custom-template--27191570137363__section_YrFnRz .group-block-content p strong {color: #bb987c;}",
+        " {padding-inline: 20px;}"
       ],
       "name": "t:names.custom_section",
       "settings": {
@@ -2294,6 +2295,9 @@
       },
       "block_order": [
         "group_gDaWe9"
+      ],
+      "custom_css": [
+        "{padding-inline: 20px;}"
       ],
       "name": "t:names.custom_section",
       "settings": {
