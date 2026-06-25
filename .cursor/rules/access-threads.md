@@ -70,7 +70,14 @@ Upstream removed global `color_schemes` in favor of `settings.color_palette` (5 
 - **GitHub theme sync upload order:** Shopify's GitHub integration can validate files before their dependencies finish uploading. Common failures:
   - Template JSON before section liquid (`Section type 'section' does not refer to an existing section file`)
   - Section liquid before block liquid (`invalid block type "email-signup": undefined block type`)
-  **Workaround:** push in ordered commits — (1) `blocks/*.liquid` dependencies, (2) `sections/*.liquid`, (3) template/group `.json`. Or run `shopify theme push --stable --theme <id>` for a full ordered upload.
+  **Workaround:** push in ordered commits — (1) `blocks/*.liquid` dependencies, (2) `sections/*.liquid`, (3) template/group `.json`. Or use Shopify CLI 4.x staged push (there is no `--stable` flag in CLI 4):
+  ```bash
+  shopify theme push -t <theme-id> --only "config/*"
+  shopify theme push -t <theme-id> --only "blocks/*"
+  shopify theme push -t <theme-id> --only "sections/*" --only "snippets/*" --only "layout/*"
+  shopify theme push -t <theme-id> --only "templates/*" --only "assets/*" --only "locales/*"
+  ```
+  Config must go first — block schemas use `{{ settings.color_palette.* }}` defaults that require `color_palette` in `settings_schema.json`.
 
 ### Core files with AT modifications (conflict-prone)
 
