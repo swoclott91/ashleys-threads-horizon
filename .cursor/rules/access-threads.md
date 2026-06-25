@@ -67,6 +67,7 @@ Upstream removed global `color_schemes` in favor of `settings.color_palette` (5 
 - **No `color_scheme` settings:** Horizon v4 removed the global color scheme system. Do not leave `"type": "color_scheme"` in `config/settings_schema.json` or any block/section schema — Shopify will fail theme upload and the editor will 404. Use `background_color` / `text_color` + `contrast-override` (see `blocks/_header-menu.liquid`) or global classes `color-custom-popover` / `color-custom-drawer`.
 - **Template JSON cleanup:** Remove stale `color_scheme`, `inherit_color_scheme`, and `home_color_scheme` keys from all `templates/*.json` and `sections/*-group.json`. Script: `scripts/migrate-v4-color-schemes.py`.
 - **AT menu block:** `blocks/_at-menu.liquid` mirrors `_header-menu.liquid` color pickers; mobile drawer uses `color-custom-drawer`.
+- **GitHub theme sync upload order:** Shopify's GitHub integration can validate template JSON before section/block liquid files finish uploading, causing false errors like `Section type 'section' does not refer to an existing section file`. **Workaround:** push in two commits — (1) section/block `.liquid` files only, wait for sync; (2) template/group `.json` files. Or run `shopify theme push --stable` from CLI for a full ordered upload.
 
 ### Core files with AT modifications (conflict-prone)
 
