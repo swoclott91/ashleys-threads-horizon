@@ -119,7 +119,7 @@
             "at_brands_panel_columns": 4,
             "at_brands_mobile_columns": 2,
             "at_brand_image_border_radius": 4,
-            "color_scheme": "scheme-2",
+            "background_color": "#fffdf8",
             "type_font_primary_size": "1.125rem",
             "type_font_primary_link": "body",
             "type_case_primary_link": "none",
@@ -160,7 +160,6 @@
         "actions_font": "body",
         "actions_text_case": "none",
         "enable_transparent_header_home": false,
-        "home_color_scheme": "default",
         "enable_transparent_header_product": false,
         "enable_transparent_header_collection": false
       }

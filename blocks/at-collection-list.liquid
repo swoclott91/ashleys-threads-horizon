@@ -17,12 +17,16 @@
   elsif block.settings.layout_type == 'grid'
     assign max_items = block.settings.columns
   endif
+
+  if block.settings.background_color != blank
+    render 'contrast-override', background_color: block.settings.background_color, section_id: block.id
+  endif
 %}
 
 <div
   class="
     at-collection-list-block
-    color-{{ block.settings.color_scheme }}
+    {% if block.settings.background_color != blank %}color-custom-{{ block.id }}{% endif %}
     spacing-style
   "
   style="
@@ -314,10 +318,10 @@
       "default": 12
     },
     {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:settings.color_scheme",
-      "default": "scheme-1"
+      "type": "color",
+      "id": "background_color",
+      "label": "t:settings.background_color",
+      "default": "{{ settings.color_palette.background }}"
     },
     {
       "type": "header",
@@ -374,7 +378,6 @@
         "columns_gap": 8,
         "rows_gap": 8,
         "gap": 12,
-        "color_scheme": "scheme-1",
         "padding-block-start": 0,
         "padding-block-end": 0,
         "padding-inline-start": 0,
@@ -388,8 +391,6 @@
             "horizontal_alignment": "flex-start",
             "vertical_alignment": "flex-start",
             "placement": "on_image",
-            "inherit_color_scheme": true,
-            "color_scheme": "",
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,

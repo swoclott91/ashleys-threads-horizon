@@ -64,6 +64,9 @@ Upstream removed global `color_schemes` in favor of `settings.color_palette` (5 
 - **Access Threads discount bar:** uses `color-custom-at-discount-progress` + `snippets/contrast-override.liquid` (mapped from former scheme-4: `#2c2c2c` / `#f7f2ea`). Do not use `at_discount_progress_color_scheme` or `color-{{ scheme }}` wrappers.
 - **Cart drawer:** lives in `snippets/cart-drawer.liquid` + `sections/cart-drawer-section.liquid`; header trigger is only a button in `snippets/header-actions.liquid`.
 - **Product badges:** `snippets/product-card-badge.liquid` uses `color-custom-badge-sale` / `color-custom-badge-sold-out` (not scheme IDs).
+- **No `color_scheme` settings:** Horizon v4 removed the global color scheme system. Do not leave `"type": "color_scheme"` in `config/settings_schema.json` or any block/section schema — Shopify will fail theme upload and the editor will 404. Use `background_color` / `text_color` + `contrast-override` (see `blocks/_header-menu.liquid`) or global classes `color-custom-popover` / `color-custom-drawer`.
+- **Template JSON cleanup:** Remove stale `color_scheme`, `inherit_color_scheme`, and `home_color_scheme` keys from all `templates/*.json` and `sections/*-group.json`. Script: `scripts/migrate-v4-color-schemes.py`.
+- **AT menu block:** `blocks/_at-menu.liquid` mirrors `_header-menu.liquid` color pickers; mobile drawer uses `color-custom-drawer`.
 
 ### Core files with AT modifications (conflict-prone)
 

@@ -1266,13 +1266,6 @@
         "visible_if": "{{ settings.badge_custom_1_enabled == true }}"
       },
       {
-        "type": "color_scheme",
-        "id": "badge_custom_1_color_scheme",
-        "label": "Color scheme",
-        "default": "scheme-4",
-        "visible_if": "{{ settings.badge_custom_1_enabled == true }}"
-      },
-      {
         "type": "header",
         "content": "Custom badge 2"
       },
@@ -1295,13 +1288,6 @@
         "label": "Product tag",
         "default": "badge:best-seller",
         "info": "Match product tags exactly; comparison is case-insensitive. Example: badge:new-arrival.",
-        "visible_if": "{{ settings.badge_custom_2_enabled == true }}"
-      },
-      {
-        "type": "color_scheme",
-        "id": "badge_custom_2_color_scheme",
-        "label": "Color scheme",
-        "default": "scheme-4",
         "visible_if": "{{ settings.badge_custom_2_enabled == true }}"
       },
       {
@@ -1330,13 +1316,6 @@
         "visible_if": "{{ settings.badge_custom_3_enabled == true }}"
       },
       {
-        "type": "color_scheme",
-        "id": "badge_custom_3_color_scheme",
-        "label": "Color scheme",
-        "default": "scheme-4",
-        "visible_if": "{{ settings.badge_custom_3_enabled == true }}"
-      },
-      {
         "type": "header",
         "content": "Custom badge 4"
       },
@@ -1359,13 +1338,6 @@
         "label": "Product tag",
         "default": "badge:decorates-well",
         "info": "Match product tags exactly; comparison is case-insensitive. Example: badge:new-arrival.",
-        "visible_if": "{{ settings.badge_custom_4_enabled == true }}"
-      },
-      {
-        "type": "color_scheme",
-        "id": "badge_custom_4_color_scheme",
-        "label": "Color scheme",
-        "default": "scheme-4",
         "visible_if": "{{ settings.badge_custom_4_enabled == true }}"
       },
       {
@@ -1394,13 +1366,6 @@
         "visible_if": "{{ settings.badge_custom_5_enabled == true }}"
       },
       {
-        "type": "color_scheme",
-        "id": "badge_custom_5_color_scheme",
-        "label": "Color scheme",
-        "default": "scheme-4",
-        "visible_if": "{{ settings.badge_custom_5_enabled == true }}"
-      },
-      {
         "type": "header",
         "content": "Custom badge 6"
       },
@@ -1423,13 +1388,6 @@
         "label": "Product tag",
         "default": "badge:custom-6",
         "info": "Match product tags exactly; comparison is case-insensitive. Example: badge:new-arrival.",
-        "visible_if": "{{ settings.badge_custom_6_enabled == true }}"
-      },
-      {
-        "type": "color_scheme",
-        "id": "badge_custom_6_color_scheme",
-        "label": "Color scheme",
-        "default": "scheme-4",
         "visible_if": "{{ settings.badge_custom_6_enabled == true }}"
       },
       {
@@ -1458,13 +1416,6 @@
         "visible_if": "{{ settings.badge_custom_7_enabled == true }}"
       },
       {
-        "type": "color_scheme",
-        "id": "badge_custom_7_color_scheme",
-        "label": "Color scheme",
-        "default": "scheme-4",
-        "visible_if": "{{ settings.badge_custom_7_enabled == true }}"
-      },
-      {
         "type": "header",
         "content": "Custom badge 8"
       },
@@ -1487,13 +1438,6 @@
         "label": "Product tag",
         "default": "badge:custom-8",
         "info": "Match product tags exactly; comparison is case-insensitive. Example: badge:new-arrival.",
-        "visible_if": "{{ settings.badge_custom_8_enabled == true }}"
-      },
-      {
-        "type": "color_scheme",
-        "id": "badge_custom_8_color_scheme",
-        "label": "Color scheme",
-        "default": "scheme-4",
         "visible_if": "{{ settings.badge_custom_8_enabled == true }}"
       },
       {
