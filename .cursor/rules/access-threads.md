@@ -70,14 +70,19 @@ Upstream removed global `color_schemes` in favor of `settings.color_palette` (5 
 - **GitHub theme sync upload order:** Shopify's GitHub integration can validate files before their dependencies finish uploading. Common failures:
   - Template JSON before section liquid (`Section type 'section' does not refer to an existing section file`)
   - Section liquid before block liquid (`invalid block type "email-signup": undefined block type`)
-  **Workaround:** push in ordered commits — (1) `blocks/*.liquid` dependencies, (2) `sections/*.liquid`, (3) template/group `.json`. Or use Shopify CLI 4.x staged push (there is no `--stable` flag in CLI 4):
+  **Workaround:** push in ordered commits — (1) `blocks/*.liquid` dependencies, (2) `sections/*.liquid`, (3) template/group `.json`. Or use Shopify CLI 4.x with `shopify.theme.toml` (always `-e ashleys` in this repo):
+
   ```bash
-  shopify theme push -t <theme-id> --only "config/*"
-  shopify theme push -t <theme-id> --only "blocks/*"
-  shopify theme push -t <theme-id> --only "sections/*" --only "snippets/*" --only "layout/*"
-  shopify theme push -t <theme-id> --only "templates/*" --only "assets/*" --only "locales/*"
+  shopify theme push -e ashleys --only "config/*"
+  shopify theme push -e ashleys --only "blocks/*"
+  shopify theme push -e ashleys --only "sections/*" --only "snippets/*" --only "layout/*"
+  shopify theme push -e ashleys --only "templates/*" --only "assets/*" --only "locales/*"
+  shopify theme push -e ashleys
   ```
+
   Config must go first — block schemas use `{{ settings.color_palette.* }}` defaults that require `color_palette` in `settings_schema.json`.
+
+- **CLI store targeting:** Ashley's Threads is `ashleys-threads-3.myshopify.com` (theme `dev-v4-upgrade` #187741045011). Access Threads is a separate store — never run bare `shopify theme push` without `-e ashleys`. See root `shopify.theme.toml`.
 
 ### Core files with AT modifications (conflict-prone)
 

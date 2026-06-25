@@ -1,0 +1,14 @@
+# Ashley's Threads — use: shopify theme <command> -e ashleys
+# Access Threads is a separate store; never push without -e ashleys in this repo.
+
+[environments.ashleys]
+store = "ashleys-threads-3.myshopify.com"
+theme = "187741045011"
+
+[environments.ashleys-dev]
+store = "ashleys-threads-3.myshopify.com"
+theme = "187518845203"
+
+[environments.ashleys-staging]
+store = "ashleys-threads-3.myshopify.com"
+theme = "187518877971"
