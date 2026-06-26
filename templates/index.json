@@ -77,7 +77,7 @@
                 "background_media": "image",
                 "background_color": "{{ settings.color_palette.color3 }}",
                 "video_position": "cover",
-                "background_image": "shopify://shop_images/Main_hero_BG_2.jpg",
+                "background_image": "shopify://shop_images/Frame_23.jpg",
                 "background_image_position": "cover",
                 "toggle_overlay": false,
                 "overlay_color": "#00000026",
