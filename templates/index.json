@@ -101,9 +101,9 @@
                   "type": "text",
                   "name": "t:names.heading",
                   "settings": {
-                    "text": "<h1><strong>WHOLESALE PRICING ON PROFESSIONAL BLANKS</strong></h1>",
-                    "width": "100%",
-                    "max_width": "normal",
+                    "text": "<h1><strong>WHOLESALE PRICE</strong></h1><h1><strong> BLANK APPAREL</strong></h1>",
+                    "width": "fit-content",
+                    "max_width": "narrow",
                     "alignment": "left",
                     "type_preset": "custom",
                     "font": "var(--font-heading--family)",
@@ -127,7 +127,7 @@
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>No application. No minimums.</p>",
+                    "text": "<p>Fast U.S. fulfilment. No application necessary. No minimums. Real inventory. </p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
