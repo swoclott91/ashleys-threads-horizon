@@ -252,11 +252,11 @@
                     "height_mobile": "custom",
                     "custom_height_mobile": 65,
                     "background_media": "none",
-                    "background_color": "{{ settings.color_palette.color4 }}",
+                    "background_color": "{{ settings.color_palette.color3 }}",
                     "video_position": "cover",
                     "background_image": "shopify://shop_images/Frame_8.jpg",
                     "background_image_position": "cover",
-                    "toggle_overlay": true,
+                    "toggle_overlay": false,
                     "overlay_color": "#00000026",
                     "overlay_style": "solid",
                     "gradient_direction": "to top",
@@ -274,6 +274,32 @@
                     "padding-inline-end": 24
                   },
                   "blocks": {
+                    "text_tyDArP": {
+                      "type": "text",
+                      "name": "t:names.text",
+                      "settings": {
+                        "text": "<h4>100+ Trusted Brands</h4>",
+                        "width": "fit-content",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 20,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
                     "group_6X7Hnh": {
                       "type": "group",
                       "name": "Brand Row 1",
@@ -320,7 +346,7 @@
                           "type": "image",
                           "name": "Gildan",
                           "settings": {
-                            "image": "shopify://shop_images/Gildan_Logo_d18d11b1-8fca-41a1-81ba-062aa94d13a0.svg",
+                            "image": "shopify://shop_images/Gildan_Logo_e5ee3a81-eac3-41e5-9988-9c04ab72d02e.svg",
                             "link": "shopify://collections/gildan",
                             "image_ratio": "adapt",
                             "width": "fill",
@@ -346,7 +372,7 @@
                           "type": "image",
                           "name": "Comfort Colors",
                           "settings": {
-                            "image": "shopify://shop_images/Frame_1.svg",
+                            "image": "shopify://shop_images/Frame_1_4044182e-e348-42a2-b207-e585b4b26b22.svg",
                             "link": "shopify://collections/comfort-colors",
                             "image_ratio": "adapt",
                             "width": "fill",
@@ -372,7 +398,7 @@
                           "type": "image",
                           "name": "Gildan",
                           "settings": {
-                            "image": "shopify://shop_images/Bella_Canvas_Logo_065d4bd3-0ec2-4920-bc88-fbdb4ed2e86e.svg",
+                            "image": "shopify://shop_images/Bella_Canvas_Logo_9452ccd7-013b-42b7-b467-bab7be97482f.svg",
                             "link": "shopify://collections/bella-canvas",
                             "image_ratio": "adapt",
                             "width": "fill",
@@ -447,7 +473,7 @@
                           "type": "image",
                           "name": "Champion",
                           "settings": {
-                            "image": "shopify://shop_images/Champion_White_SVG.svg",
+                            "image": "shopify://shop_images/Champion_Charcoal_SVG.svg",
                             "link": "shopify://collections/champion",
                             "image_ratio": "adapt",
                             "width": "fill",
@@ -473,7 +499,7 @@
                           "type": "image",
                           "name": "Hanes",
                           "settings": {
-                            "image": "shopify://shop_images/Vector_aa6ff37b-d141-4b84-a62e-4835c1c823e6.svg",
+                            "image": "shopify://shop_images/Vector_1.svg",
                             "link": "shopify://collections/hanes",
                             "image_ratio": "adapt",
                             "width": "custom",
@@ -499,7 +525,7 @@
                           "type": "image",
                           "name": "Jerzees",
                           "settings": {
-                            "image": "shopify://shop_images/Jerzees_4d3b175c-4563-4f2f-a6f7-4945fcd36a23.svg",
+                            "image": "shopify://shop_images/Jerzees_694ccf7b-779a-46b6-8364-6efba17226e6.svg",
                             "link": "shopify://collections/jerzees",
                             "image_ratio": "adapt",
                             "width": "fill",
@@ -612,32 +638,6 @@
                       },
                       "blocks": {}
                     },
-                    "text_bEqy4n": {
-                      "type": "text",
-                      "name": "t:names.text",
-                      "settings": {
-                        "text": "<h4>100+ Trusted Brands</h4>",
-                        "width": "fit-content",
-                        "max_width": "normal",
-                        "alignment": "left",
-                        "type_preset": "custom",
-                        "font": "var(--font-body--family)",
-                        "font_size": "",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty",
-                        "text_color": "{{ settings.color_palette.background }}",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
                     "text_AzmXEX": {
                       "type": "text",
                       "name": "t:names.text",
@@ -653,7 +653,7 @@
                         "letter_spacing": "normal",
                         "case": "none",
                         "wrap": "pretty",
-                        "text_color": "{{ settings.color_palette.background }}",
+                        "text_color": "{{ settings.color_palette.color1 }}",
                         "background": false,
                         "background_color": "#00000026",
                         "corner_radius": 0,
@@ -666,6 +666,7 @@
                     }
                   },
                   "block_order": [
+                    "text_tyDArP",
                     "group_6X7Hnh",
                     "group_fDd879",
                     "spacer_KQVbta",
@@ -674,7 +675,6 @@
                     "spacer_KmrHG9",
                     "spacer_xmVKDr",
                     "spacer_tRX7TV",
-                    "text_bEqy4n",
                     "text_AzmXEX"
                   ]
                 },
