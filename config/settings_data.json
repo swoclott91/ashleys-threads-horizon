@@ -140,15 +140,15 @@
     "button_font_weight_secondary": "default",
     "content_for_index": [],
     "color_palette": {
-      "background": "#F7F2EA",
-      "foreground": "#BB987C",
-      "color1": "#3D3C3D",
+      "background": "#FFFDF8",
+      "foreground": "#bb987c",
+      "color1": "#3d3c3d",
       "color2": "#000000",
-      "color3": "#FFFDF8",
-      "color4": "#D8CBBB",
-      "color5": "#243E34",
-      "color6": "#B8734F",
-      "color7": "#354C3F"
+      "color3": "#F7F2EA",
+      "color4": "#d8cbbb",
+      "color5": "#243e34",
+      "color6": "#b8734f",
+      "color7": "#354c3f"
     }
   },
   "presets": {
