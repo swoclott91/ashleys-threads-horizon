@@ -140,11 +140,11 @@
     "button_font_weight_secondary": "default",
     "content_for_index": [],
     "color_palette": {
-      "background": "#FFFDF8",
+      "background": "#fffdf8",
       "foreground": "#bb987c",
       "color1": "#3d3c3d",
       "color2": "#000000",
-      "color3": "#F7F2EA",
+      "color3": "#F4EDE8",
       "color4": "#d8cbbb",
       "color5": "#243e34",
       "color6": "#b8734f",
