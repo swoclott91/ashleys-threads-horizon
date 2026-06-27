@@ -82,7 +82,9 @@ Upstream removed global `color_schemes` in favor of `settings.color_palette` (5 
 
   Config must go first — block schemas use `{{ settings.color_palette.* }}` defaults that require `color_palette` in `settings_schema.json`.
 
-- **CLI store targeting:** Ashley's Threads is `ashleys-threads-3.myshopify.com` (theme `dev-v4-upgrade` #187741045011). Access Threads is a separate store — never run bare `shopify theme push` without `-e ashleys`. See root `shopify.theme.toml`.
+- **Mixed v3/v4 on live theme:** GitHub sync can leave **v4 config** (`color_palette` in `settings_data` / `settings_schema`) while **some block files stay on v3** (still declare `"type": "color_scheme"`). Shopify then shows *"color schemes must be defined in settings_data and settings_schema"* and the theme editor 404s. Known stale files on Ashley's main (2026-06): `blocks/email-signup.liquid`, `blocks/_search-input.liquid`. Fix: push v4 blocks via CLI (`shopify theme push -e ashleys-main --only "blocks/*" --allow-live`) or re-sync blocks after config.
+
+- **CLI store targeting:** Ashley's Threads is `ashleys-threads-3.myshopify.com` (live main `#187518812435`, dev-v4-upgrade `#187741045011`). Access Threads is a separate store — never run bare `shopify theme push` without `-e ashleys` or `-e ashleys-main`. See root `shopify.theme.toml`.
 
 ### Core files with AT modifications (conflict-prone)
 

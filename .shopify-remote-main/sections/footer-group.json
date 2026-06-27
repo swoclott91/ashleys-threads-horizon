@@ -1,0 +1,252 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "t:names.footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "menu_aJTyKp": {
+          "type": "menu",
+          "name": "t:names.menu",
+          "settings": {
+            "menu": "footer",
+            "heading": "",
+            "menu_spacing": 12,
+            "show_as_accordion": false,
+            "accordion_icon": "caret",
+            "accordion_dividers": false,
+            "background_color": "",
+            "text_color": "",
+            "heading_preset": "h3",
+            "link_preset": "paragraph",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "group_wErUQf": {
+          "type": "group",
+          "name": "Join our email list",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 6,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "height_mobile": "fit",
+            "custom_height_mobile": 30,
+            "background_media": "none",
+            "background_color": "",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_color": "",
+            "border_radius": 0,
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "text_pF6rVi": {
+              "type": "text",
+              "name": "Heading",
+              "settings": {
+                "text": "<h2>Join our email list</h2>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "h3",
+                "font": "var(--font-body--family)",
+                "font_size": "",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_HafH7P": {
+              "type": "text",
+              "name": "Text",
+              "settings": {
+                "text": "<p>Get exclusive deals and early access to new products.</p>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "text_pF6rVi",
+            "text_HafH7P"
+          ]
+        },
+        "email-signup_HafH7P": {
+          "type": "email-signup",
+          "name": "Email Signup",
+          "settings": {
+            "width": "fill",
+            "custom_width": 100,
+            "heading": "",
+            "heading_preset": "h3",
+            "border_style": "all",
+            "border_width": 1,
+            "border_radius": 100,
+            "input_type_preset": "paragraph",
+            "style_class": "button",
+            "display_type": "text",
+            "label": "Sign up",
+            "integrated_button": false,
+            "button_type_preset": "paragraph",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "menu_aJTyKp",
+        "group_wErUQf",
+        "email-signup_HafH7P"
+      ],
+      "name": "t:names.footer",
+      "settings": {
+        "section_width": "page-width",
+        "gap": 20,
+        "background_color": "{{ settings.color_palette.color2 }}",
+        "padding-block-start": 36,
+        "padding-block-end": 36
+      }
+    },
+    "utilities": {
+      "type": "footer-utilities",
+      "blocks": {
+        "footer_copyright_aLBAbU": {
+          "type": "footer-copyright",
+          "name": "t:names.copyright",
+          "settings": {
+            "show_powered_by": false,
+            "text_color": "",
+            "font_size": "0.75rem",
+            "case": "none"
+          },
+          "blocks": {}
+        },
+        "at_footer_utility_text_RYCGtH": {
+          "type": "at-footer-utility-text",
+          "name": "AT Footer text",
+          "settings": {
+            "line": "<p>Operated by TLW Holdings, LLC </p><p>Brand names are used to identify the manufacturers of the products sold. Access Threads is an independent retailer and is not affiliated with or endorsed by these brands unless expressly stated.</p>",
+            "font_size": "0.75rem",
+            "case": "none"
+          },
+          "blocks": {}
+        },
+        "policy_list": {
+          "type": "footer-policy-list",
+          "settings": {
+            "text_color": "",
+            "font_size": "0.75rem",
+            "case": "none"
+          },
+          "blocks": {}
+        },
+        "social_icons": {
+          "type": "social-links",
+          "settings": {
+            "icon_color": "",
+            "facebook_url": "https://www.facebook.com/people/Access-Threads/61564493957582/",
+            "instagram_url": "https://www.instagram.com/access.threads",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "twitter_url": "",
+            "threads_url": "",
+            "linkedin_url": "",
+            "bluesky_url": "",
+            "snapchat_url": "",
+            "pinterest_url": "",
+            "tumblr_url": "",
+            "vimeo_url": "",
+            "custom_url": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "footer_copyright_aLBAbU",
+        "at_footer_utility_text_RYCGtH",
+        "policy_list",
+        "social_icons"
+      ],
+      "settings": {
+        "section_width": "page-width",
+        "gap": 8,
+        "background_color": "{{ settings.color_palette.color2 }}",
+        "divider_thickness": 1,
+        "divider_color": "",
+        "padding-block-start": 12,
+        "padding-block-end": 16
+      }
+    }
+  },
+  "order": [
+    "footer",
+    "utilities"
+  ]
+}

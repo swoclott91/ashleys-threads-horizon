@@ -1,0 +1,570 @@
+{%- comment -%}
+  AT CUSTOM — AT-Menu Private Block
+  Renders the Access Threads branded mega-menu as a header block sitting in the
+  same row as the logo.  Three variants (via content_for 'block'):
+    – default        : desktop horizontal nav bar (hidden on mobile via CSS)
+    – mobile         : header-drawer with hamburger trigger + AT mobile drawer
+    – navigation_bar : optional swipe-bar for small screens
+
+  The mega-panel is triggered by the nav item whose handle matches
+  at_panel_item_handle (default "products").  It shows:
+    • A left category sidebar from at_categories_menu
+    • When the sidebar item matching at_brands_item_handle is active:
+        a full brand grid sourced from at_brands_menu
+    • For any other sidebar category: a sub-navigation grid of that
+        category's links
+{%- endcomment -%}
+
+{%- liquid
+  assign block_settings   = block.settings
+  assign menu             = block_settings.menu
+  assign menu_links       = menu.links
+  assign panel_handle     = block_settings.at_panel_item_handle   | default: 'products'
+  assign brands_handle    = block_settings.at_brands_item_handle  | default: 'brands'
+  assign highlight_handle = block_settings.at_highlight_handle    | default: 'sale'
+  assign cats_ll          = linklists[block_settings.at_categories_menu]
+  assign brands_ll        = linklists[block_settings.at_brands_menu]
+
+  # ─── Render strategy ──────────────────────────────────────────────────────
+  # This block emits ONLY the lightweight chrome on every page render:
+  #   • Mobile: the main drawer view (top-level nav + non-panel accordions)
+  #   • Desktop: the trigger button, sidebar rail, and per-category content
+  #     headers (title + search input + count badge)
+  #
+  # The heavy content (~100-brand grid, every per-category subnav grid, all
+  # the per-category drill-down views on mobile) lives in
+  # `sections/at-menu-data.liquid`, mounted from `layout/theme.liquid`.
+  # That section renders empty on initial page loads and only emits the
+  # heavy views when assets/at-menu.js explicitly fetches it via the
+  # Section Rendering API after a real user interaction: hamburger
+  # pointerdown on mobile, nav hover on desktop.
+  #
+  # Net effects:
+  #   • Initial page render is identical in cost to a stock Horizon header
+  #     for the AT menu portion — no metaobject lookups, no image deref.
+  #     Cold-cache pages (newly-created collections, low-traffic PDPs)
+  #     stop tripping iOS Safari's renderer timeout.
+  #   • Search-engine and product-feed crawlers that never trigger
+  #     interaction never hit the heavy section, so GMC disapprovals from
+  #     intermittent crawl errors stop.
+  #   • The dedicated section is segment-agnostic (no cart/customer
+  #     state) so origin page_cache + Cloudflare cache it efficiently
+  #     across all visitors — first user in any segment warms the cache
+  #     for everyone.
+
+  # Find the panel trigger link in the main menu
+  assign panel_link = nil
+  for link in menu_links
+    if link.handle == panel_handle
+      assign panel_link = link
+    endif
+  endfor
+-%}
+
+{% case variant %}
+
+  {%- comment -%} ══════════════════════════════════════════════════
+    MOBILE variant — rendered as `first` in the header row, providing
+    the hamburger trigger and the slide-in AT drawer.
+    Uses <header-drawer> so the toggle lives in the exact same place
+    and behaves identically to the built-in _header-menu block.
+  ══════════════════════════════════════════════════════════════════ {%- endcomment -%}
+  {% when 'mobile' %}
+    <div
+      class="header__drawer"
+      ref="headerDrawerContainer"
+      {{ block.shopify_attributes }}
+    >
+      <script src="{{ 'header-drawer.js' | asset_url }}" type="module" fetchpriority="low"></script>
+      <header-drawer class="header-drawer">
+        <details
+          id="at-menu-drawer-container"
+          class="menu-drawer-container"
+          ref="details"
+          scroll-lock
+        >
+          <summary
+            class="header__icon header__icon--menu header__icon--summary"
+            aria-label="{{ 'accessibility.menu' | t }}"
+            on:click="/toggle"
+          >
+            <span class="svg-wrapper header-drawer-icon header-drawer-icon--open">
+              {{- 'icon-menu.svg' | inline_asset_content -}}
+            </span>
+            <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
+              {{- 'icon-close.svg' | inline_asset_content -}}
+            </span>
+          </summary>
+
+          <div
+            ref="menuDrawer"
+            class="menu-drawer color-custom-drawer"
+          >
+            {%- render 'at-menu-mobile-drawer',
+              menu_links: menu_links,
+              panel_handle: panel_handle,
+              categories_linklist: cats_ll,
+              brands_linklist: brands_ll,
+              brands_handle: brands_handle,
+              highlight_handle: highlight_handle,
+              mobile_drawer_label: block_settings.at_mobile_drawer_label
+            -%}
+          </div>
+        </details>
+      </header-drawer>
+    </div>
+
+  {%- comment -%} ══════════════════════════════════════════════════
+    NAVIGATION BAR variant — simple scroll-bar for small screens
+  ══════════════════════════════════════════════════════════════════ {%- endcomment -%}
+  {% when 'navigation_bar' %}
+    {%- if block_settings.at_mobile_navigation_bar -%}
+      {% render 'contrast-override',
+        background_color: block_settings.background_color_navigation_bar,
+        text_color: block_settings.text_color_navigation_bar,
+        section_id: block.id
+      %}
+      <div
+        class="menu-list menu-list--mobile{% if transparent == blank %} color-custom-{{ block.id }}{% endif %}"
+        style="--menu-horizontal-gap: 15px; --mobile-nav-margin: auto;"
+        {{ block.shopify_attributes }}
+      >
+        <div class="menu-list__scroll-container">
+          <ul class="menu-list__list list-unstyled" role="list">
+            {%- for link in menu_links -%}
+              <li>
+                <a
+                  href="{{ link.url }}"
+                  class="menu-list__item{% if link.handle == highlight_handle %} menu-list__item--highlight{% endif %}"
+                  {% if link.current %}aria-current="page"{% endif %}
+                >
+                  {{- link.title -}}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      </div>
+    {%- endif -%}
+
+  {%- comment -%} ══════════════════════════════════════════════════
+    DEFAULT variant — desktop horizontal nav bar.
+    Wrapped in .header-menu so the theme's existing CSS
+    (#header-component[data-menu-style='menu'] .header-menu) correctly
+    shows/hides this block at the right breakpoint, matching the
+    built-in _header-menu block.
+  ══════════════════════════════════════════════════════════════════ {%- endcomment -%}
+  {% else %}
+    {% liquid
+      render 'contrast-override', background_color: block_settings.background_color, text_color: block_settings.text_color, section_id: block.id
+
+      assign background_color_classes = ''
+      assign background_color_setting_id = 'background_color_' | append: section.settings.menu_row
+      assign current_background_color = block_settings.background_color | default: settings.page_background_color
+      assign parent_background_color = section.settings[background_color_setting_id] | default: settings.page_background_color
+
+      if parent_background_color != current_background_color or block_settings.text_color != blank
+        assign background_color_classes = ' color-custom-' | append: block.id
+      endif
+    %}
+
+    <header-menu
+      class="header-menu{{ background_color_classes }}"
+      {{ block.shopify_attributes }}
+    >
+      <div class="header-menu__inner">
+        <nav
+          class="at-menu__nav"
+          aria-label="{{ 'accessibility.header_navigation_label' | t }}"
+          style="{%- render 'menu-font-styles', settings: block_settings -%}"
+        >
+          {%- for link in menu_links -%}
+            {%- liquid
+              assign is_panel   = false
+              assign is_highlight = false
+              if link.handle == panel_handle and panel_link != nil and cats_ll != blank
+                assign is_panel = true
+              endif
+              if link.handle == highlight_handle
+                assign is_highlight = true
+              endif
+            -%}
+
+            {%- if is_panel -%}
+              {%- comment -%} ── Products mega-panel ── {%- endcomment -%}
+              {%- render 'at-menu-brands-panel',
+                panel_link: panel_link,
+                brands_linklist: brands_ll,
+                categories_linklist: cats_ll,
+                brands_handle: brands_handle,
+                section: block
+              -%}
+
+            {%- elsif link.links != blank -%}
+              {%- comment -%} ── Regular dropdown with sub-links ── {%- endcomment -%}
+              {%- assign submenu_id = 'at-submenu-' | append: link.handle -%}
+              <div
+                class="menu-list__list-item"
+                on:pointerenter="/activate"
+                on:pointerleave="/deactivate"
+                on:focus="/activate"
+                on:blur="/deactivate"
+              >
+                <a
+                  href="{{ link.url }}"
+                  class="menu-list__link at-menu__nav-link{% if is_highlight %} at-menu__nav-link--highlight{% endif %}"
+                  aria-expanded="false"
+                  aria-controls="{{ submenu_id }}"
+                  aria-haspopup="true"
+                  {% if link.current %}aria-current="page"{% endif %}
+                >
+                  <span class="menu-list__link-title">{{- link.title -}}</span>
+                </a>
+                <div class="menu-list__submenu{{ background_color_classes }}">
+                  <div id="{{ submenu_id }}" class="menu-list__submenu-inner"
+                    style="{%- render 'submenu-font-styles', settings: block_settings -%}">
+                    <div class="mega-menu section section--full-width-margin section--{{ section.settings.section_width }}">
+                      <div class="mega-menu__grid">
+                        {%- render 'mega-menu-list',
+                          parent_link: link,
+                          id: submenu_id,
+                          section: section,
+                          grid_columns_count: 6,
+                          grid_columns_count_tablet: 4,
+                          grid_columns_count_collection_images: 8,
+                          menu_content_type: 'text',
+                          image_border_radius: block_settings.at_brand_image_border_radius
+                        -%}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            {%- else -%}
+              {%- comment -%} ── Plain link ── {%- endcomment -%}
+              <a
+                href="{{ link.url }}"
+                class="menu-list__link at-menu__nav-link{% if is_highlight %} at-menu__nav-link--highlight{% endif %}"
+                {% if link.current %}aria-current="page"{% endif %}
+              >
+                <span class="menu-list__link-title">{{- link.title -}}</span>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </nav>
+      </div>
+
+      <script src="{{ 'header-menu.js' | asset_url }}" type="module" fetchpriority="low"></script>
+    </header-menu>
+
+{% endcase %}
+
+{% stylesheet %}
+  .header__drawer {
+    --header-drawer-min-height: 60px;
+    display: flex;
+    min-height: var(--header-drawer-min-height);
+    align-items: center;
+  }
+
+  #header-component[data-menu-style='drawer'] .header__drawer {
+    display: flex;
+    min-height: var(--header-drawer-min-height);
+  }
+
+  @media screen and (min-width: 750px) {
+    #header-component[data-menu-style='menu'] .header__drawer {
+      display: none;
+      min-height: 0;
+    }
+  }
+
+  .header--compact .header__drawer {
+    min-height: var(--minimum-touch-target);
+  }
+
+  .header__icon--menu {
+    position: initial;
+  }
+
+  .menu-drawer-container .header__icon--summary {
+    color: var(--color-foreground);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--padding-lg);
+  }
+
+  .header__icon--summary .header-drawer-icon {
+    margin: auto;
+    width: var(--icon-size-xs);
+    height: var(--icon-size-xs);
+  }
+
+  #at-menu-drawer-container:not(.menu-open) .header__icon--menu .header-drawer-icon--close {
+    display: none;
+  }
+
+  #at-menu-drawer-container.menu-open .header__icon--menu .header-drawer-icon--open {
+    display: none;
+  }
+
+  @media screen and (min-width: 750px) {
+    #at-menu-drawer-container.menu-open .header__icon--menu .header-drawer-icon--close {
+      display: none;
+    }
+
+    #at-menu-drawer-container.menu-open .header__icon--menu .header-drawer-icon--open {
+      display: flex;
+    }
+  }
+
+  #at-menu-drawer-container > .menu-drawer {
+    position: fixed;
+    transform: translateX(-100%);
+    visibility: hidden;
+    height: var(--drawer-height);
+    width: var(--drawer-width);
+    max-width: var(--drawer-max-width);
+    z-index: var(--layer-menu-drawer);
+    left: 0;
+    top: 0;
+    padding: 0;
+    background-color: var(--color-background);
+    overflow: auto;
+    display: flex;
+    border-right: var(--style-border-drawer);
+    box-shadow: var(--shadow-drawer);
+    flex-direction: column;
+    transition: transform var(--drawer-animation-speed) ease, visibility var(--drawer-animation-speed) ease,
+      opacity var(--drawer-animation-speed) ease;
+  }
+
+  @media screen and (min-width: 750px) {
+    #at-menu-drawer-container > .menu-drawer {
+      width: 25rem;
+    }
+  }
+
+  #at-menu-drawer-container.menu-open > .menu-drawer {
+    transform: translateX(0);
+    visibility: visible;
+    opacity: 1;
+  }
+
+  #at-menu-drawer-container > .menu-drawer.menu-drawer--has-submenu-opened {
+    overflow: initial;
+  }
+{% endstylesheet %}
+
+<script src="{{ 'at-menu.js' | asset_url }}" type="module"></script>
+
+{%- comment -%}
+  ══════════════════════════════════════════════════════════════════════
+  PERF: Load at-menu.css non-render-blocking
+  ══════════════════════════════════════════════════════════════════════
+  The lightweight drawer shell rules are emitted above because the AT menu
+  replaces Horizon's stock _header-menu block in production previews. The
+  larger at-menu.css file only matters once the user opens the drawer or
+  hovers the desktop mega-panel. Loading it
+  render-blocking forces the browser to parse 27KB of CSS before painting
+  anything below the fold — particularly punishing on cold-cache pages
+  (newly-created collections, low-traffic PDPs) where TTFB is already
+  multiple seconds and any extra render-blocking work can push iOS Safari
+  past its renderer timeout / memory ceiling.
+
+  The `media="print"` trick downloads the stylesheet at low priority but
+  doesn't apply it until onload swaps media to "all". By the time the
+  user actually opens the drawer / hovers the panel (usually seconds
+  later), the CSS is loaded and ready.
+  ══════════════════════════════════════════════════════════════════════
+{%- endcomment -%}
+{%- assign at_menu_css_url = 'at-menu.css' | asset_url -%}
+<link
+  rel="stylesheet"
+  href="{{ at_menu_css_url }}"
+  media="print"
+  onload="this.media='all';this.onload=null;"
+>
+<noscript><link rel="stylesheet" href="{{ at_menu_css_url }}"></noscript>
+
+{% schema %}
+{
+  "name": "AT Menu",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:settings.menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Mega-Panel"
+    },
+    {
+      "type": "text",
+      "id": "at_panel_item_handle",
+      "label": "Panel trigger handle",
+      "info": "Handle of the top-level nav item that opens the mega-panel (e.g. 'products' or 'shop').",
+      "default": "products"
+    },
+    {
+      "type": "link_list",
+      "id": "at_categories_menu",
+      "label": "Categories sidebar menu",
+      "info": "Menu whose top-level links populate the left sidebar. Each link can have sub-links that appear in the right pane."
+    },
+    {
+      "type": "text",
+      "id": "at_brands_item_handle",
+      "label": "Brands sidebar item handle",
+      "info": "Handle of the sidebar item that should show the brand grid (e.g. 'brands').",
+      "default": "brands"
+    },
+    {
+      "type": "link_list",
+      "id": "at_brands_menu",
+      "label": "Brands source menu",
+      "info": "Menu whose links are shown as the brand grid when the Brands sidebar item is active."
+    },
+    {
+      "type": "text",
+      "id": "at_highlight_handle",
+      "label": "t:settings.at_highlight_handle",
+      "info": "t:info.at_highlight_handle",
+      "default": "sale"
+    },
+    {
+      "type": "header",
+      "content": "t:content.at_brands_panel"
+    },
+    {
+      "type": "select",
+      "id": "at_brand_icon_source",
+      "label": "t:settings.at_brand_icon_source",
+      "options": [
+        { "value": "auto",                  "label": "t:options.at_brand_icon_auto" },
+        { "value": "collection_image_only", "label": "t:options.at_collection_image_only" },
+        { "value": "initials_only",         "label": "t:options.at_initials_only" }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "checkbox",
+      "id": "at_show_brand_search",
+      "label": "t:settings.at_show_brand_search",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "at_brands_panel_columns",
+      "label": "t:settings.at_brands_panel_columns",
+      "min": 3, "max": 6, "step": 1, "default": 4
+    },
+    {
+      "type": "range",
+      "id": "at_brands_mobile_columns",
+      "label": "t:settings.at_brands_mobile_columns",
+      "min": 1, "max": 3, "step": 1, "default": 2
+    },
+    {
+      "type": "range",
+      "id": "at_brand_image_border_radius",
+      "label": "t:settings.at_brand_image_border_radius",
+      "min": 0, "max": 32, "step": 1, "unit": "px", "default": 4
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:content.menu_appearance_paragraph"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:settings.background_color",
+      "default": "{{ settings.color_palette.background }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "select",
+      "id": "type_font_primary_size",
+      "label": "t:settings.top_level_size",
+      "options": [
+        { "value": "0.75rem",  "label": "12px" },
+        { "value": "0.875rem", "label": "14px" },
+        { "value": "1rem",     "label": "16px" },
+        { "value": "1.125rem", "label": "18px" }
+      ],
+      "default": "1rem"
+    },
+    {
+      "type": "select",
+      "id": "type_font_primary_link",
+      "label": "t:settings.font",
+      "options": [
+        { "value": "body",       "label": "t:options.body" },
+        { "value": "subheading", "label": "t:options.subheading" },
+        { "value": "heading",    "label": "t:options.heading" },
+        { "value": "accent",     "label": "t:options.accent" }
+      ],
+      "default": "heading"
+    },
+    {
+      "type": "select",
+      "id": "type_case_primary_link",
+      "label": "t:settings.text_case",
+      "options": [
+        { "value": "none",      "label": "t:options.default" },
+        { "value": "uppercase", "label": "t:options.uppercase" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "t:content.mobile_layout"
+    },
+    {
+      "type": "text",
+      "id": "at_mobile_drawer_label",
+      "label": "Mobile drawer heading",
+      "info": "Title shown at the top of the mobile menu drawer.",
+      "default": "Shop"
+    },
+    {
+      "type": "checkbox",
+      "id": "at_mobile_navigation_bar",
+      "label": "t:settings.at_mobile_navigation_bar",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "background_color_navigation_bar",
+      "label": "t:settings.navigation_bar_background_color",
+      "default": "{{ settings.color_palette.background }}",
+      "visible_if": "{{ block.settings.at_mobile_navigation_bar }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color_navigation_bar",
+      "label": "t:settings.navigation_bar_text_color",
+      "placeholder": "t:settings.default",
+      "visible_if": "{{ block.settings.at_mobile_navigation_bar }}"
+    }
+  ]
+}
+{% endschema %}

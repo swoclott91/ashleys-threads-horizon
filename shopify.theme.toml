@@ -5,6 +5,10 @@
 store = "ashleys-threads-3.myshopify.com"
 theme = "187741045011"
 
+[environments.ashleys-main]
+store = "ashleys-threads-3.myshopify.com"
+theme = "187518812435"
+
 [environments.ashleys-dev]
 store = "ashleys-threads-3.myshopify.com"
 theme = "187518845203"

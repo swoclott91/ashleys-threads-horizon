@@ -1,0 +1,84 @@
+{%- comment -%}
+  AT: optional footer utilities line (Policies and links section). Matches copyright typography.
+  Setting id is not `text` — that id is reserved by the theme editor for dynamic block titles.
+{%- endcomment -%}
+{% assign block_settings = block.settings %}
+<div
+  class="
+    footer-utilities__group-copyright
+    custom-typography
+    {% if block_settings.font_size != "" %}custom-font-size{% endif %}
+  "
+  style="{% render 'typography-style', preset: 'custom', settings: block_settings %}"
+  {{ block.shopify_attributes }}
+>
+  {% if block_settings.line != blank %}
+    <div class="footer-utilities__text rte">
+      {{ block_settings.line }}
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "AT Footer text",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "line",
+      "label": "t:settings.text"
+    },
+    {
+      "type": "select",
+      "id": "font_size",
+      "label": "t:settings.size",
+      "options": [
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        }
+      ],
+      "default": "0.75rem"
+    },
+    {
+      "type": "select",
+      "id": "case",
+      "label": "t:settings.case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none"
+    }
+  ],
+  "presets": [
+    {
+      "name": "AT Footer text",
+      "category": "t:categories.footer"
+    }
+  ]
+}
+{% endschema %}
