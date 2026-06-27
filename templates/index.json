@@ -1120,7 +1120,7 @@
                 "height_mobile": "fit",
                 "custom_height_mobile": 100,
                 "background_media": "none",
-                "background_color": "{{ settings.color_palette.color3 }}",
+                "background_color": "{{ settings.color_palette.background }}",
                 "video_position": "cover",
                 "background_image_position": "cover",
                 "toggle_overlay": false,
