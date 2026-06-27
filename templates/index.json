@@ -1304,7 +1304,7 @@
                                   "type": "text",
                                   "name": "t:names.text",
                                   "settings": {
-                                    "text": "<p>{{ closest.collection.title }}</p>",
+                                    "text": "<p>{{ closest.collection.metafields.custom.pretty_title.value }}</p>",
                                     "width": "fit-content",
                                     "max_width": "normal",
                                     "alignment": "left",
@@ -1937,7 +1937,7 @@
                                   "type": "text",
                                   "name": "t:names.text",
                                   "settings": {
-                                    "text": "<p>{{ closest.collection.title }}</p>",
+                                    "text": "<p>{{ closest.collection.metafields.custom.pretty_title.value }}</p>",
                                     "width": "fit-content",
                                     "max_width": "normal",
                                     "alignment": "left",
