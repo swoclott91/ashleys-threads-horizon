@@ -399,8 +399,8 @@
                           "type": "image",
                           "name": "Gildan",
                           "settings": {
-                            "image": "shopify://shop_images/Bella_Canvas_Logo_9452ccd7-013b-42b7-b467-bab7be97482f.svg",
-                            "link": "shopify://collections/bella-canvas",
+                            "image": "shopify://shop_images/Port_Co_Logo_cd362a73-fc1d-46a2-8f5e-c3c650b0a78a.svg",
+                            "link": "shopify://collections/port-company",
                             "image_ratio": "adapt",
                             "width": "fill",
                             "custom_width": 100,
