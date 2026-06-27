@@ -49,7 +49,7 @@
     "type_line_height_h6": "display-loose",
     "type_letter_spacing_h6": "heading-normal",
     "page_background_color": "{{ settings.color_palette.background }}",
-    "page_width": "normal",
+    "page_width": "wide",
     "page_transition_enabled": false,
     "transition_to_main_product": true,
     "card_hover_effect": "scale",
