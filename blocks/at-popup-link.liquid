@@ -41,7 +41,7 @@
 
   <dialog
     ref="dialog"
-    class="popup-link__content dialog-modal color-{{ settings.popover_color_scheme }}{% if block_settings.behavior == 'drawer' %} popup-link__content--drawer dialog-drawer{% endif %}"
+    class="popup-link__content dialog-modal color-custom-popover{% if block_settings.behavior == 'drawer' %} popup-link__content--drawer dialog-drawer{% endif %}"
     scroll-lock
     aria-labelledby="at-popup-dialog-heading-{{ block.id }}"
   >
@@ -53,7 +53,7 @@
     </h2>
     <div class="popup-link__inner">
       {%- if block_settings.at_enable_bulk_grid and settings.at_discount_progress_enabled -%}
-        <div class="at-dp-condensed-strip--tight at-discount-progress-scheme-wrap{% if settings.at_discount_progress_color_scheme != blank %} color-{{ settings.at_discount_progress_color_scheme }}{% endif %}">
+        <div class="at-dp-condensed-strip--tight at-discount-progress-scheme-wrap color-custom-at-discount-progress">
           {% render 'at-discount-progress',
             context: 'bulk-modal',
             layout: 'drawer_header',

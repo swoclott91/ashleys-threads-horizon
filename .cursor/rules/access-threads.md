@@ -54,7 +54,35 @@ upstream  https://github.com/Shopify/horizon.git
 3. Create a backup branch: `git branch dev-backup-pre-vX.Y.Z`
 4. Merge: `git merge upstream/main --no-commit`
 5. Resolve conflicts in AT-modified core files (see below)
-6. Commit: `git commit -m "Merge upstream Horizon vX.Y.Z"`
+6. Migrate `config/settings_data.json` color palette when crossing Horizon v4.0.0+ (see **Horizon v4 color palette**)
+7. Commit: `git commit -m "feat: merge upstream Horizon vX.Y.Z"`
+
+### Horizon v4 color palette (v4.0.0+)
+
+Upstream removed global `color_schemes` in favor of `settings.color_palette` (5 slots) plus `palette_*` overrides and per-section `background_color` / `text_color` pickers.
+
+- **Access Threads discount bar:** uses `color-custom-at-discount-progress` + `snippets/contrast-override.liquid` (mapped from former scheme-4: `#2c2c2c` / `#f7f2ea`). Do not use `at_discount_progress_color_scheme` or `color-{{ scheme }}` wrappers.
+- **Cart drawer:** lives in `snippets/cart-drawer.liquid` + `sections/cart-drawer-section.liquid`; header trigger is only a button in `snippets/header-actions.liquid`.
+- **Product badges:** `snippets/product-card-badge.liquid` uses `color-custom-badge-sale` / `color-custom-badge-sold-out` (not scheme IDs).
+- **No `color_scheme` settings:** Horizon v4 removed the global color scheme system. Do not leave `"type": "color_scheme"` in `config/settings_schema.json` or any block/section schema — Shopify will fail theme upload and the editor will 404. Use `background_color` / `text_color` + `contrast-override` (see `blocks/_header-menu.liquid`) or global classes `color-custom-popover` / `color-custom-drawer`.
+- **Template JSON cleanup:** Remove stale `color_scheme`, `inherit_color_scheme`, and `home_color_scheme` keys from all `templates/*.json` and `sections/*-group.json`. Script: `scripts/migrate-v4-color-schemes.py`.
+- **AT menu block:** `blocks/_at-menu.liquid` mirrors `_header-menu.liquid` color pickers; mobile drawer uses `color-custom-drawer`.
+- **GitHub theme sync upload order:** Shopify's GitHub integration can validate files before their dependencies finish uploading. Common failures:
+  - Template JSON before section liquid (`Section type 'section' does not refer to an existing section file`)
+  - Section liquid before block liquid (`invalid block type "email-signup": undefined block type`)
+  **Workaround:** push in ordered commits — (1) `blocks/*.liquid` dependencies, (2) `sections/*.liquid`, (3) template/group `.json`. Or use Shopify CLI 4.x with `shopify.theme.toml` (always `-e ashleys` in this repo):
+
+  ```bash
+  shopify theme push -e ashleys --only "config/*"
+  shopify theme push -e ashleys --only "blocks/*"
+  shopify theme push -e ashleys --only "sections/*" --only "snippets/*" --only "layout/*"
+  shopify theme push -e ashleys --only "templates/*" --only "assets/*" --only "locales/*"
+  shopify theme push -e ashleys
+  ```
+
+  Config must go first — block schemas use `{{ settings.color_palette.* }}` defaults that require `color_palette` in `settings_schema.json`.
+
+- **CLI store targeting:** Ashley's Threads is `ashleys-threads-3.myshopify.com` (theme `dev-v4-upgrade` #187741045011). Access Threads is a separate store — never run bare `shopify theme push` without `-e ashleys`. See root `shopify.theme.toml`.
 
 ### Core files with AT modifications (conflict-prone)
 

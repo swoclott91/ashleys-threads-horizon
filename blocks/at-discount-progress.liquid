@@ -2,7 +2,7 @@
   Access Threads: discount tier progress for product pages (nested under AT Buy buttons).
   Same condensed strip + “Bulk savings” sheet as cart / drawer / bulk (`at-dp-condensed-strip--tight`).
 
-  Color scheme: theme `at_discount_progress_color_scheme` (Cart settings).
+  Color: fixed Access Threads palette via `color-custom-at-discount-progress` (see `snippets/at-discount-progress.liquid`).
 
   Parent `blocks/at-buy-buttons.liquid` renders this via `content_for` with static id `discount-progress`.
 {%- enddoc -%}
@@ -10,14 +10,10 @@
   assign bs = block.settings
   assign product = closest.product
   assign variant = product.selected_or_first_available_variant
-  assign scheme_class = ''
-  if settings.at_discount_progress_color_scheme != blank
-    assign scheme_class = 'color-' | append: settings.at_discount_progress_color_scheme
-  endif
 %}
 {% if product != blank and bs.show_discount_bar and settings.at_discount_progress_enabled %}
   <div
-    class="at-discount-progress-block at-dp-condensed-strip--tight spacing-style {{ scheme_class }}"
+    class="at-discount-progress-block at-dp-condensed-strip--tight at-discount-progress-scheme-wrap color-custom-at-discount-progress spacing-style"
     style="{% render 'spacing-style', settings: bs %}"
     {{ block.shopify_attributes }}
   >
