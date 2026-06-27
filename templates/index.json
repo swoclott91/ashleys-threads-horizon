@@ -1185,7 +1185,7 @@
               "name": "t:names.group",
               "settings": {
                 "content_direction": "row",
-                "vertical_on_mobile": true,
+                "vertical_on_mobile": false,
                 "horizontal_alignment": "flex-start",
                 "vertical_alignment": "center",
                 "align_baseline": false,
@@ -1222,6 +1222,19 @@
                 "padding-inline-end": 0
               },
               "blocks": {
+                "icon_jETJYW": {
+                  "type": "icon",
+                  "name": "t:names.icon",
+                  "settings": {
+                    "icon": "map_pin",
+                    "width": 24,
+                    "link_collection": "",
+                    "link": "",
+                    "open_in_new_tab": false,
+                    "icon_color": "{{ settings.color_palette.background }}"
+                  },
+                  "blocks": {}
+                },
                 "text_tpw3EU": {
                   "type": "text",
                   "name": "t:names.heading",
@@ -1250,6 +1263,7 @@
                 }
               },
               "block_order": [
+                "icon_jETJYW",
                 "text_tpw3EU"
               ]
             },
