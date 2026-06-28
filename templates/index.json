@@ -720,7 +720,7 @@
                         "align_baseline": false,
                         "horizontal_alignment_flex_direction_column": "flex-start",
                         "vertical_alignment_flex_direction_column": "center",
-                        "gap": 30,
+                        "gap": 50,
                         "width": "fill",
                         "custom_width": 100,
                         "width_mobile": "fill",
@@ -762,7 +762,7 @@
                             "image": "shopify://shop_images/Gildan_Logo_e5ee3a81-eac3-41e5-9988-9c04ab72d02e.svg",
                             "link": "shopify://collections/gildan",
                             "image_ratio": "adapt",
-                            "width": "fill",
+                            "width": "custom",
                             "custom_width": 100,
                             "width_mobile": "custom",
                             "custom_width_mobile": 20,
@@ -851,7 +851,7 @@
                         "align_baseline": false,
                         "horizontal_alignment_flex_direction_column": "flex-start",
                         "vertical_alignment_flex_direction_column": "center",
-                        "gap": 30,
+                        "gap": 50,
                         "width": "fill",
                         "custom_width": 100,
                         "width_mobile": "fill",
@@ -971,37 +971,11 @@
                         "image_YAdmhL"
                       ]
                     },
-                    "text_Jj8fXU": {
-                      "type": "text",
-                      "name": "t:names.text",
-                      "settings": {
-                        "text": "<p>Gildan, Comfort Colors, Bella+Canvas, Champion, and more. </p>",
-                        "width": "fit-content",
-                        "max_width": "normal",
-                        "alignment": "left",
-                        "type_preset": "rte",
-                        "font": "var(--font-body--family)",
-                        "font_size": "1rem",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty",
-                        "text_color": "",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
                     "text_AzmXEX": {
                       "type": "text",
                       "name": "t:names.text",
                       "settings": {
-                        "text": "<p>View more&gt;</p>",
+                        "text": "<p>View all&gt;</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -1028,7 +1002,6 @@
                     "text_tyDArP",
                     "group_6X7Hnh",
                     "group_fDd879",
-                    "text_Jj8fXU",
                     "text_AzmXEX"
                   ]
                 },
