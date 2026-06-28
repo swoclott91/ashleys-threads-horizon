@@ -2204,7 +2204,7 @@
                             "max_collections": 4,
                             "icons_style": "arrow",
                             "icons_shape": "none",
-                            "gap": 12,
+                            "gap": 10,
                             "background_color": "{{ settings.color_palette.color3 }}",
                             "padding-block-start": 0,
                             "padding-block-end": 0,
@@ -2243,8 +2243,8 @@
                               "static": true,
                               "settings": {
                                 "placement": "below_image",
-                                "horizontal_alignment": "center",
-                                "vertical_alignment": "center",
+                                "horizontal_alignment": "flex-start",
+                                "vertical_alignment": "flex-start",
                                 "collection_card_gap": 8,
                                 "background_color": "{{ settings.color_palette.color3 }}",
                                 "border": "none",
@@ -2284,7 +2284,7 @@
                                   "type": "_collection-card-image",
                                   "static": true,
                                   "settings": {
-                                    "image_ratio": "portrait",
+                                    "image_ratio": "square",
                                     "toggle_overlay": false,
                                     "overlay_color": "#00000026",
                                     "overlay_style": "solid",
