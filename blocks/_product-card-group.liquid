@@ -352,6 +352,63 @@
       "visible_if": "{{ block.settings.background_media == 'image' }}"
     },
     {
+      "type": "header",
+      "content": "t:content.mobile_media",
+      "visible_if": "{{ block.settings.background_media != 'none' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_mobile_media",
+      "label": "t:settings.custom_mobile_media",
+      "default": false,
+      "visible_if": "{{ block.settings.background_media != 'none' }}"
+    },
+    {
+      "type": "select",
+      "id": "background_media_mobile",
+      "label": "t:settings.type",
+      "options": [
+        { "value": "image", "label": "t:options.image" },
+        { "value": "video", "label": "t:options.video" }
+      ],
+      "default": "image",
+      "visible_if": "{{ block.settings.custom_mobile_media }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "t:settings.image",
+      "visible_if": "{{ block.settings.custom_mobile_media and block.settings.background_media_mobile == 'image' }}"
+    },
+    {
+      "type": "select",
+      "id": "background_image_position_mobile",
+      "label": "t:settings.image_position",
+      "options": [
+        { "value": "cover", "label": "t:options.cover" },
+        { "value": "fit", "label": "t:options.fit" }
+      ],
+      "default": "cover",
+      "visible_if": "{{ block.settings.custom_mobile_media and block.settings.background_media_mobile == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "video_mobile",
+      "label": "t:settings.video",
+      "visible_if": "{{ block.settings.custom_mobile_media and block.settings.background_media_mobile == 'video' }}"
+    },
+    {
+      "type": "select",
+      "id": "video_position_mobile",
+      "label": "t:settings.video_position",
+      "options": [
+        { "value": "cover", "label": "t:options.cover" },
+        { "value": "contain", "label": "t:options.contain" }
+      ],
+      "default": "cover",
+      "visible_if": "{{ block.settings.custom_mobile_media and block.settings.background_media_mobile == 'video' }}"
+    },
+    {
       "type": "checkbox",
       "id": "toggle_overlay",
       "label": "t:settings.background_overlay"
