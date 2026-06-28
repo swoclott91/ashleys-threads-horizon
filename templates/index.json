@@ -971,90 +971,6 @@
                         "image_YAdmhL"
                       ]
                     },
-                    "spacer_KQVbta": {
-                      "type": "spacer",
-                      "name": "t:names.spacer",
-                      "settings": {
-                        "size": "pixel",
-                        "percent_size": 40,
-                        "pixel_size": 60,
-                        "custom_mobile_size": true,
-                        "size_mobile": "percent",
-                        "percent_size_mobile": 100,
-                        "pixel_size_mobile": 400
-                      },
-                      "blocks": {}
-                    },
-                    "spacer_iAfgDV": {
-                      "type": "spacer",
-                      "name": "t:names.spacer",
-                      "settings": {
-                        "size": "pixel",
-                        "percent_size": 40,
-                        "pixel_size": 0,
-                        "custom_mobile_size": true,
-                        "size_mobile": "percent",
-                        "percent_size_mobile": 100,
-                        "pixel_size_mobile": 400
-                      },
-                      "blocks": {}
-                    },
-                    "spacer_UM4kMW": {
-                      "type": "spacer",
-                      "name": "t:names.spacer",
-                      "settings": {
-                        "size": "pixel",
-                        "percent_size": 40,
-                        "pixel_size": 0,
-                        "custom_mobile_size": true,
-                        "size_mobile": "percent",
-                        "percent_size_mobile": 100,
-                        "pixel_size_mobile": 400
-                      },
-                      "blocks": {}
-                    },
-                    "spacer_KmrHG9": {
-                      "type": "spacer",
-                      "name": "t:names.spacer",
-                      "settings": {
-                        "size": "pixel",
-                        "percent_size": 40,
-                        "pixel_size": 0,
-                        "custom_mobile_size": true,
-                        "size_mobile": "percent",
-                        "percent_size_mobile": 100,
-                        "pixel_size_mobile": 400
-                      },
-                      "blocks": {}
-                    },
-                    "spacer_xmVKDr": {
-                      "type": "spacer",
-                      "name": "t:names.spacer",
-                      "settings": {
-                        "size": "pixel",
-                        "percent_size": 40,
-                        "pixel_size": 0,
-                        "custom_mobile_size": true,
-                        "size_mobile": "percent",
-                        "percent_size_mobile": 100,
-                        "pixel_size_mobile": 400
-                      },
-                      "blocks": {}
-                    },
-                    "spacer_tRX7TV": {
-                      "type": "spacer",
-                      "name": "t:names.spacer",
-                      "settings": {
-                        "size": "pixel",
-                        "percent_size": 40,
-                        "pixel_size": 0,
-                        "custom_mobile_size": true,
-                        "size_mobile": "percent",
-                        "percent_size_mobile": 100,
-                        "pixel_size_mobile": 400
-                      },
-                      "blocks": {}
-                    },
                     "text_Jj8fXU": {
                       "type": "text",
                       "name": "t:names.text",
@@ -1112,12 +1028,6 @@
                     "text_tyDArP",
                     "group_6X7Hnh",
                     "group_fDd879",
-                    "spacer_KQVbta",
-                    "spacer_iAfgDV",
-                    "spacer_UM4kMW",
-                    "spacer_KmrHG9",
-                    "spacer_xmVKDr",
-                    "spacer_tRX7TV",
                     "text_Jj8fXU",
                     "text_AzmXEX"
                   ]
@@ -1138,7 +1048,7 @@
                     "custom_width": 100,
                     "width_mobile": "fill",
                     "custom_width_mobile": 100,
-                    "height": "custom",
+                    "height": "fill",
                     "custom_height": 100,
                     "height_mobile": "custom",
                     "custom_height_mobile": 65,
@@ -1249,7 +1159,7 @@
             "width_mobile": "fill",
             "custom_width_mobile": 100,
             "height": "fill",
-            "custom_height": 100,
+            "custom_height": 45,
             "height_mobile": "custom",
             "custom_height_mobile": 65,
             "background_media": "image",
