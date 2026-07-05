@@ -2564,14 +2564,31 @@ form.payment-terms {
     > .group-block--height-fill {
       height: calc(var(--section-min-height, auto) - var(--section-height-offset, 0px));
     }
+  }
 
-    /* Keep row flex panels filling custom svh/% group heights so vertical alignment works */
-    .group-block--height-fill > .group-block-content.layout-panel-flex--row:not(.mobile-column),
-    .group-block--height-custom > .group-block-content.layout-panel-flex--row:not(.mobile-column),
-    .group-block--height-mobile-fill > .group-block-content.layout-panel-flex--row:not(.mobile-column),
-    .group-block--height-mobile-custom > .group-block-content.layout-panel-flex--row:not(.mobile-column) {
-      height: 100%;
-    }
+  /* Sized groups: keep row flex panels and fill-height children at full height for vertical alignment */
+  :is(.group-block--height-fill, .group-block--height-custom, .group-block--height-mobile-fill, .group-block--height-mobile-custom)
+    > .group-block-content.layout-panel-flex--row:not(.mobile-column) {
+    height: 100%;
+  }
+
+  :is(.group-block--height-fill, .group-block--height-custom, .group-block--height-mobile-fill, .group-block--height-mobile-custom)
+    > .group-block-content.layout-panel-flex--row:not(.mobile-column)
+    > :is(.group-block--height-fill, .group-block--height-custom, .group-block--height-mobile-fill, .group-block--height-mobile-custom) {
+    height: 100%;
+    align-self: stretch;
+  }
+
+  .group-block--height-mobile-custom,
+  .group-block--height-mobile-fill {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .group-block--height-mobile-custom > .group-block-content,
+  .group-block--height-mobile-fill > .group-block-content {
+    flex: 1;
+    min-height: 0;
   }
 }
 
