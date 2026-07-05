@@ -605,7 +605,7 @@
                     "height": "fill",
                     "custom_height": 100,
                     "height_mobile": "custom",
-                    "custom_height_mobile": 65,
+                    "custom_height_mobile": 32,
                     "background_media": "image",
                     "background_color": "{{ settings.color_palette.color3 }}",
                     "video_position": "cover",
