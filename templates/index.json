@@ -135,7 +135,7 @@
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>Fast U.S. fulfilment. No application necessary. No minimums. Real inventory. </p>",
+                    "text": "<p>Fast U.S. fulfillment. No application necessary. No minimums. Real inventory.</p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
