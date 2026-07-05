@@ -2564,6 +2564,14 @@ form.payment-terms {
     > .group-block--height-fill {
       height: calc(var(--section-min-height, auto) - var(--section-height-offset, 0px));
     }
+
+    /* Keep row flex panels filling custom svh/% group heights so vertical alignment works */
+    .group-block--height-fill > .group-block-content.layout-panel-flex--row:not(.mobile-column),
+    .group-block--height-custom > .group-block-content.layout-panel-flex--row:not(.mobile-column),
+    .group-block--height-mobile-fill > .group-block-content.layout-panel-flex--row:not(.mobile-column),
+    .group-block--height-mobile-custom > .group-block-content.layout-panel-flex--row:not(.mobile-column) {
+      height: 100%;
+    }
   }
 }
 
@@ -3670,6 +3678,12 @@ fly-to-cart.fly-to-cart--sticky {
   flex-basis: var(--size-style-width);
 }
 
+/* Stretch fill/custom-height row children so internal vertical alignment has space to center */
+.layout-panel-flex--row > .group-block--height-fill,
+.layout-panel-flex--row > .group-block--height-custom {
+  align-self: stretch;
+}
+
 /* Dimension utilities - Height */
 .group-block--height-fit {
   height: auto;
@@ -3725,6 +3739,11 @@ fly-to-cart.fly-to-cart--sticky {
     .layout-panel-flex--column > .group-block--height-mobile-custom,
     .mobile-column > .group-block--height-mobile-custom {
       flex: 0 0 var(--size-style-height-mobile);
+    }
+
+    .layout-panel-flex--row:not(.mobile-column) > .group-block--height-mobile-fill,
+    .layout-panel-flex--row:not(.mobile-column) > .group-block--height-mobile-custom {
+      align-self: stretch;
     }
   }
 
