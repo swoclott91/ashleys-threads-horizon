@@ -2350,7 +2350,7 @@
                                 "border_width": 1,
                                 "border_opacity": 100,
                                 "border_color": "",
-                                "border_radius": 20
+                                "border_radius": 0
                               },
                               "blocks": {
                                 "text_GMeMGR": {
