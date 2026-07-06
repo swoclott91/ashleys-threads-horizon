@@ -1869,7 +1869,7 @@
                                   "type": "text",
                                   "name": "t:names.text",
                                   "settings": {
-                                    "text": "<p>Multiple Brands</p>",
+                                    "text": "<p>100+ Brands</p>",
                                     "width": "fit-content",
                                     "max_width": "normal",
                                     "alignment": "left",
