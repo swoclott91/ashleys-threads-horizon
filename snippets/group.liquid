@@ -153,4 +153,24 @@
   .group-block__link ~ .group-block-content--design-mode {
     pointer-events: auto;
   }
+
+  /*
+   * Track cumulative group padding so nested blocks (e.g. AT Collection list carousels)
+   * can break out to a grandparent container edge.
+   */
+  .group-block.spacing-style {
+    --group-own-padding-inline-start: var(--padding-inline-start, 0px);
+    --group-own-padding-inline-end: var(--padding-inline-end, 0px);
+    --group-cumulative-padding-inline-start: calc(
+      var(--group-ancestor-padding-inline-start, 0px) + var(--padding-inline-start, 0px)
+    );
+    --group-cumulative-padding-inline-end: calc(
+      var(--group-ancestor-padding-inline-end, 0px) + var(--padding-inline-end, 0px)
+    );
+  }
+
+  .group-block-content {
+    --group-ancestor-padding-inline-start: var(--group-cumulative-padding-inline-start, 0px);
+    --group-ancestor-padding-inline-end: var(--group-cumulative-padding-inline-end, 0px);
+  }
 {% endstylesheet %}
