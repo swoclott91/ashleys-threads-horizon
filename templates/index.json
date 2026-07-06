@@ -2051,7 +2051,7 @@
                                   "type": "text",
                                   "name": "t:names.text",
                                   "settings": {
-                                    "text": "<p>Sizes XS-5XL+</p>",
+                                    "text": "<p>Sizes XS-6XL+</p>",
                                     "width": "fit-content",
                                     "max_width": "normal",
                                     "alignment": "left",
