@@ -300,8 +300,8 @@
                           "type": "icon",
                           "name": "t:names.icon",
                           "settings": {
-                            "icon": "truck",
-                            "width": 24,
+                            "icon": "fast_truck",
+                            "width": 36,
                             "link_collection": "",
                             "link": "",
                             "open_in_new_tab": false,
@@ -1261,8 +1261,8 @@
                   "type": "icon",
                   "name": "t:names.icon",
                   "settings": {
-                    "icon": "map_pin",
-                    "width": 24,
+                    "icon": "fast_truck",
+                    "width": 40,
                     "link_collection": "",
                     "link": "",
                     "open_in_new_tab": false,
@@ -1690,7 +1690,8 @@
                                 "border_width": 1,
                                 "border_opacity": 50,
                                 "border_color": "{{ settings.color_palette.color4 }}",
-                                "border_radius": 20
+                                "border_radius": 20,
+                                "drop_shadow": false
                               },
                               "blocks": {
                                 "text_CeRh3F": {
@@ -2351,7 +2352,8 @@
                                 "border_width": 1,
                                 "border_opacity": 100,
                                 "border_color": "",
-                                "border_radius": 0
+                                "border_radius": 0,
+                                "drop_shadow": false
                               },
                               "blocks": {
                                 "text_GMeMGR": {
@@ -2789,7 +2791,8 @@
             "border_width": 1,
             "border_opacity": 100,
             "border_color": "",
-            "border_radius": 0
+            "border_radius": 0,
+            "drop_shadow": false
           },
           "blocks": {
             "collection_title_kQDpdJ": {
