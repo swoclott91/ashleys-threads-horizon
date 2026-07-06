@@ -155,22 +155,17 @@
   }
 
   /*
-   * Track cumulative group padding so nested blocks (e.g. AT Collection list carousels)
-   * can break out to a grandparent container edge.
+   * Track cumulative group padding-end for AT Collection list carousels that peek
+   * into the grandparent container on the right edge only.
    */
-  .group-block.spacing-style {
-    --group-own-padding-inline-start: var(--padding-inline-start, 0px);
+  .group-block.spacing-style:has(.at-collection-list-block) {
     --group-own-padding-inline-end: var(--padding-inline-end, 0px);
-    --group-cumulative-padding-inline-start: calc(
-      var(--group-ancestor-padding-inline-start, 0px) + var(--padding-inline-start, 0px)
-    );
     --group-cumulative-padding-inline-end: calc(
       var(--group-ancestor-padding-inline-end, 0px) + var(--padding-inline-end, 0px)
     );
   }
 
-  .group-block-content {
-    --group-ancestor-padding-inline-start: var(--group-cumulative-padding-inline-start, 0px);
+  .group-block-content:has(.at-collection-list-block) {
     --group-ancestor-padding-inline-end: var(--group-cumulative-padding-inline-end, 0px);
   }
 {% endstylesheet %}

@@ -84,25 +84,20 @@
   }
 
   /*
-   * Extend carousel slides to the grandparent group container edge so the next card
-   * peeks in and reads as a horizontal slider. The heading/content above stays inset.
+   * Extend the AT carousel to the grandparent group's right edge so the next card
+   * peeks in. Left edge stays aligned with sibling content (heading, icons, etc.).
    */
   .at-collection-list-block > .resource-list.resource-list__carousel,
   .at-collection-list-block > .resource-list.hidden--desktop.resource-list__carousel {
-    --at-carousel-breakout-inline-start: calc(
-      var(--group-ancestor-padding-inline-start, 0px) - var(--group-own-padding-inline-start, 0px)
-    );
     --at-carousel-breakout-inline-end: calc(
       var(--group-ancestor-padding-inline-end, 0px) - var(--group-own-padding-inline-end, 0px)
     );
     --peek-next-slide-size: 4rem;
 
-    width: calc(
-      100% + var(--at-carousel-breakout-inline-start) + var(--at-carousel-breakout-inline-end)
-    );
+    width: calc(100% + var(--at-carousel-breakout-inline-end));
     max-width: none;
-    margin-inline: calc(-1 * var(--at-carousel-breakout-inline-start))
-      calc(-1 * var(--at-carousel-breakout-inline-end));
+    margin-inline-start: 0;
+    margin-inline-end: calc(-1 * var(--at-carousel-breakout-inline-end));
   }
 {% endstylesheet %}
 
