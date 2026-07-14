@@ -59,6 +59,10 @@
             "background_color": "",
             "video_position": "cover",
             "background_image_position": "cover",
+            "custom_mobile_media": false,
+            "background_media_mobile": "image",
+            "background_image_position_mobile": "cover",
+            "video_position_mobile": "cover",
             "toggle_overlay": false,
             "overlay_color": "#00000026",
             "overlay_style": "solid",
@@ -197,16 +201,6 @@
           },
           "blocks": {}
         },
-        "at_footer_utility_text_RYCGtH": {
-          "type": "at-footer-utility-text",
-          "name": "AT Footer text",
-          "settings": {
-            "line": "<p>Operated by TLW Holdings, LLC </p><p>Brand names are used to identify the manufacturers of the products sold. Access Threads is an independent retailer and is not affiliated with or endorsed by these brands unless expressly stated.</p>",
-            "font_size": "0.75rem",
-            "case": "none"
-          },
-          "blocks": {}
-        },
         "policy_list": {
           "type": "footer-policy-list",
           "settings": {
@@ -239,7 +233,6 @@
       },
       "block_order": [
         "footer_copyright_aLBAbU",
-        "at_footer_utility_text_RYCGtH",
         "policy_list",
         "social_icons"
       ],
