@@ -83,7 +83,7 @@
     "badge_custom_8_label": "Custom Badge 8",
     "badge_custom_8_tag": "badge:custom-8",
     "badge_text_transform": "none",
-    "palette_primary_button_background": "#243e34",
+    "palette_primary_button_background": "{{ settings.color_palette.color8 }}",
     "palette_primary_button_text": "#fffdf8",
     "palette_primary_button_border": "#243e34",
     "primary_button_border_width": 0,
@@ -144,11 +144,12 @@
       "foreground": "#bb987c",
       "color1": "#3d3c3d",
       "color2": "#000000",
-      "color3": "#E7DBCE",
+      "color3": "#e7dbce",
       "color4": "#d8cbbb",
       "color5": "#243e34",
       "color6": "#b8734f",
-      "color7": "#354c3f"
+      "color7": "#354c3f",
+      "color8": "#323661"
     }
   },
   "presets": {
