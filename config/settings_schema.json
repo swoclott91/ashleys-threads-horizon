@@ -1806,6 +1806,66 @@
         ],
         "default": "tinted"
       },
+      {
+        "type": "header",
+        "content": "t:content.at_discount_progress_login_button"
+      },
+      {
+        "type": "select",
+        "id": "at_discount_progress_login_style",
+        "label": "t:settings.style",
+        "options": [
+          {
+            "value": "button",
+            "label": "t:options.primary"
+          },
+          {
+            "value": "button-secondary",
+            "label": "t:options.secondary"
+          },
+          {
+            "value": "button-unstyled",
+            "label": "t:options.link"
+          },
+          {
+            "value": "button-custom",
+            "label": "t:options.custom"
+          }
+        ],
+        "default": "button-secondary",
+        "info": "t:info.at_discount_progress_login_style"
+      },
+      {
+        "type": "color",
+        "id": "at_discount_progress_login_custom_background",
+        "label": "t:settings.background",
+        "default": "{{ settings.color_palette.foreground }}",
+        "alpha": true,
+        "visible_if": "{{ settings.at_discount_progress_login_style == 'button-custom' }}"
+      },
+      {
+        "type": "color",
+        "id": "at_discount_progress_login_custom_text",
+        "label": "t:settings.text",
+        "default": "{{ settings.color_palette.background }}",
+        "alpha": true,
+        "visible_if": "{{ settings.at_discount_progress_login_style == 'button-custom' }}"
+      },
+      {
+        "type": "color",
+        "id": "at_discount_progress_login_custom_border",
+        "label": "t:settings.borders",
+        "default": "{{ settings.color_palette.background }}",
+        "alpha": true,
+        "visible_if": "{{ settings.at_discount_progress_login_style == 'button-custom' }}"
+      },
+      {
+        "type": "color",
+        "id": "at_discount_progress_login_link_text_color",
+        "label": "t:settings.link_text_color",
+        "placeholder": "t:settings.default",
+        "visible_if": "{{ settings.at_discount_progress_login_style == 'button-unstyled' }}"
+      },
 
       {
         "type": "url",

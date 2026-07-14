@@ -4,12 +4,14 @@
 
   Color: fixed Access Threads palette via `color-custom-at-discount-progress` (see `snippets/at-discount-progress.liquid`).
 
-  Parent `blocks/at-buy-buttons.liquid` renders this via `content_for` with static id `discount-progress`.
+  Parent `blocks/at-buy-buttons.liquid` renders this via `{% content_for 'blocks' %}` so it can be reordered
+  with Bulk Add to Cart and the quantity / add to cart row. Log in button style mirrors the theme button block.
 {%- enddoc -%}
 {% liquid
   assign bs = block.settings
   assign product = closest.product
   assign variant = product.selected_or_first_available_variant
+  assign login_style = bs.style_class | default: 'button-secondary'
 %}
 {% if product != blank and bs.show_discount_bar and settings.at_discount_progress_enabled %}
   <div
@@ -22,7 +24,13 @@
       section_id: section.id,
       product: product,
       product_price: variant.price,
-      non_sale_collection_url: settings.at_non_sale_collection_url
+      non_sale_collection_url: settings.at_non_sale_collection_url,
+      login_style_class: login_style,
+      login_style_id: block.id,
+      login_custom_button_background: bs.custom_button_background,
+      login_custom_button_text: bs.custom_button_text,
+      login_custom_button_border: bs.custom_button_border,
+      login_link_text_color: bs.link_text_color
     %}
   </div>
 {% endif %}
@@ -41,6 +49,71 @@
       "id": "show_discount_bar",
       "label": "t:settings.at_discount_progress_show",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:content.at_discount_progress_login_button"
+    },
+    {
+      "type": "select",
+      "id": "style_class",
+      "label": "t:settings.style",
+      "options": [
+        {
+          "value": "button",
+          "label": "t:options.primary"
+        },
+        {
+          "value": "button-secondary",
+          "label": "t:options.secondary"
+        },
+        {
+          "value": "button-unstyled",
+          "label": "t:options.link"
+        },
+        {
+          "value": "button-custom",
+          "label": "t:options.custom"
+        }
+      ],
+      "default": "button-secondary",
+      "info": "t:info.edit_button_style_in_theme_settings"
+    },
+    {
+      "type": "header",
+      "content": "t:content.button_colors",
+      "visible_if": "{{ block.settings.style_class == \"button-custom\" }}"
+    },
+    {
+      "type": "color",
+      "id": "custom_button_background",
+      "label": "t:settings.background",
+      "default": "{{ settings.color_palette.foreground }}",
+      "alpha": true,
+      "visible_if": "{{ block.settings.style_class == 'button-custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "custom_button_text",
+      "label": "t:settings.text",
+      "default": "{{ settings.color_palette.background }}",
+      "alpha": true,
+      "visible_if": "{{ block.settings.style_class == 'button-custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "custom_button_border",
+      "label": "t:settings.borders",
+      "default": "{{ settings.color_palette.background }}",
+      "alpha": true,
+      "visible_if": "{{ block.settings.style_class == 'button-custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "link_text_color",
+      "label": "t:settings.link_text_color",
+      "placeholder": "t:settings.default",
+      "visible_if": "{{ block.settings.style_class == 'button-unstyled' }}"
     },
     {
       "type": "header",
