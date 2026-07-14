@@ -70,6 +70,7 @@ Upstream removed global `color_schemes` in favor of `settings.color_palette` (5 
 - **GitHub theme sync upload order:** Shopify's GitHub integration can validate files before their dependencies finish uploading. Common failures:
   - Template JSON before section liquid (`Section type 'section' does not refer to an existing section file`)
   - Section liquid before block liquid (`invalid block type "email-signup": undefined block type`)
+  - Parent block preset before child block schema updates (`invalid block type "at-discount-progress": undefined setting 'style_class'`) — GitHub sync validated `at-buy-buttons` against the **already-deployed** child schema. Fix: push child blocks first (`blocks/at-discount-progress.liquid`, `blocks/at-bulk-add-to-cart.liquid`, `blocks/_at-buy-buttons-form.liquid`), then `blocks/at-buy-buttons.liquid`; or re-push the parent alone after the child succeeded. Prefer omitting new setting keys from parent presets when the child already has a schema `default`.
   **Workaround:** push in ordered commits — (1) `blocks/*.liquid` dependencies, (2) `sections/*.liquid`, (3) template/group `.json`. Or use Shopify CLI 4.x with `shopify.theme.toml` (always `-e ashleys` in this repo):
 
   ```bash
