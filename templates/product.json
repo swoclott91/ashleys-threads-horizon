@@ -366,26 +366,13 @@
                 "padding-inline-end": 0
               },
               "blocks": {
-                "bulk-add-to-cart": {
-                  "type": "at-bulk-add-to-cart",
-                  "settings": {
-                    "at_bulk_trigger_label": "Bulk Add to Cart",
-                    "at_bulk_behavior": "default",
-                    "style_class": "button",
-                    "custom_button_background": "{{ settings.color_palette.foreground }}",
-                    "custom_button_text": "{{ settings.color_palette.background }}",
-                    "custom_button_border": "{{ settings.color_palette.background }}",
-                    "link_text_color": ""
-                  },
-                  "blocks": {}
-                },
                 "buy-buttons-form": {
                   "type": "_at-buy-buttons-form",
                   "settings": {
                     "stacking": false,
                     "gift_card_form": false,
                     "padding-block-start": 0,
-                    "padding-block-end": 0,
+                    "padding-block-end": 24,
                     "padding-inline-start": 0,
                     "padding-inline-end": 0
                   },
@@ -424,6 +411,19 @@
                   },
                   "block_order": []
                 },
+                "bulk-add-to-cart": {
+                  "type": "at-bulk-add-to-cart",
+                  "settings": {
+                    "at_bulk_trigger_label": "Bulk Add to Cart",
+                    "at_bulk_behavior": "default",
+                    "style_class": "button",
+                    "custom_button_background": "{{ settings.color_palette.foreground }}",
+                    "custom_button_text": "{{ settings.color_palette.background }}",
+                    "custom_button_border": "{{ settings.color_palette.background }}",
+                    "link_text_color": ""
+                  },
+                  "blocks": {}
+                },
                 "discount-progress": {
                   "type": "at-discount-progress",
                   "settings": {
@@ -442,8 +442,8 @@
                 }
               },
               "block_order": [
-                "bulk-add-to-cart",
                 "buy-buttons-form",
+                "bulk-add-to-cart",
                 "discount-progress"
               ]
             },
