@@ -8,7 +8,8 @@
  * - Next (hollow) node: ring = selected variant bg; interior = input background; label = selected variant bg (not on-fill text).
  *
  * Logged-out: compact banner row — person-in-circle icon | prompt | underlined Log in
- * (Inputs background + border). Same layout on PDP, cart, drawer header, and bulk modals.
+ * (Inputs background + border). Entire row is the login hit target. Same on PDP, cart,
+ * drawer header, and bulk modals.
  */
 
 at-discount-progress-bar {
@@ -42,17 +43,40 @@ at-discount-progress-bar {
 }
 
 .at-discount-progress--logged-out {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: var(--gap-sm);
-  padding: var(--padding-sm) var(--padding-md);
+  display: block;
+  padding: 0;
   border: var(--style-border-width) solid var(--color-input-border);
   border-radius: var(--style-border-radius-inputs);
   background: var(--color-input-background);
   box-sizing: border-box;
   color: var(--color-input-text);
+  overflow: hidden;
+}
+
+.at-discount-progress__banner-hit {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--gap-sm);
+  width: 100%;
+  margin: 0;
+  padding: var(--padding-sm) var(--padding-md);
+  box-sizing: border-box;
+  color: inherit;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: inherit;
+  font: inherit;
+}
+
+.at-discount-progress__banner-hit:focus-visible {
+  outline: 0.2rem solid rgb(var(--color-foreground-rgb) / var(--opacity-50));
+  outline-offset: -0.2rem;
 }
 
 .at-discount-progress__banner-icon {
@@ -60,6 +84,7 @@ at-discount-progress-bar {
   width: 1.5rem;
   height: 1.5rem;
   color: rgb(var(--color-input-text-rgb) / var(--opacity-subdued-text, 0.7));
+  pointer-events: none;
 }
 
 .at-discount-progress__banner-icon svg {
@@ -76,39 +101,23 @@ at-discount-progress-bar {
   font-weight: var(--font-weight-medium);
   line-height: 1.35;
   color: var(--color-input-text);
+  pointer-events: none;
 }
 
-.at-discount-progress__account {
+.at-discount-progress__login-label {
   flex-shrink: 0;
-  align-self: center;
-  max-width: 100%;
-}
-
-.at-discount-progress__login-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: var(--minimum-touch-target);
-  padding-block: 0;
-  padding-inline: 0;
   font-size: var(--font-size--sm);
   font-weight: var(--font-weight-medium);
   line-height: 1.2;
   text-decoration: underline;
   text-underline-offset: 0.15em;
   white-space: nowrap;
-  cursor: pointer;
-  color: inherit;
+  color: var(--color-input-text);
+  pointer-events: none;
 }
 
-.at-discount-progress__login-link.button-unstyled {
-  display: inline-flex;
-  color: inherit;
-  background: transparent;
-}
-
-.at-discount-progress__login-link:hover {
-  opacity: var(--opacity-70, 0.7);
+.at-discount-progress__banner-hit:hover .at-discount-progress__login-label {
+  color: rgb(var(--color-input-text-rgb) / var(--opacity-70, 0.7));
 }
 
 /* Cart drawer / bulk modal: same banner chrome; fit tight header strips */
@@ -127,19 +136,16 @@ at-discount-progress-bar {
 }
 
 /*
- * Banner Log in is an underlined text link (matches PDP reference).
+ * Full-row hit uses button-unstyled classes for theme hooks, but stays a flex banner.
  * Beat scoped `.button-unstyled--*` color from theme / block settings.
  */
-.at-discount-progress--banner .at-discount-progress__login-link,
+.at-discount-progress--banner .at-discount-progress__banner-hit,
+.at-discount-progress--banner .at-discount-progress__banner-hit.button-unstyled,
 .at-discount-progress--banner .at-discount-progress__login-link.button-unstyled {
+  display: flex;
   color: var(--color-input-text);
   background: transparent;
   box-shadow: none;
-}
-
-.at-discount-progress--banner .at-discount-progress__login-link:hover {
-  color: rgb(var(--color-input-text-rgb) / var(--opacity-70, 0.7));
-  opacity: 1;
 }
 
 /* Match header `shopify-account` so the same login / Shop sign-in modal is used (see snippets/header-actions.liquid) */
@@ -163,51 +169,20 @@ at-discount-progress-bar {
   );
 
   display: block;
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
 }
 
 .at-discount-progress--logged-out shopify-account:not(:defined) {
-  display: flex;
-  min-width: 0;
+  display: block;
+  width: 100%;
   min-height: var(--minimum-touch-target);
-  align-items: center;
-  justify-content: center;
   line-height: normal;
 }
 
-/* Icon stroke uses currentColor */
-.at-discount-progress__account .account-button__icon {
-  color: currentColor;
-  flex-shrink: 0;
-}
-
-.at-account-login-trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--gap-xs);
-  width: auto;
-  max-width: 100%;
-  cursor: pointer;
-}
-
-.at-account-login-trigger__label {
-  white-space: nowrap;
-}
-
 .at-discount-progress__login--legacy {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--gap-xs);
-  align-self: flex-start;
+  display: flex;
   max-width: 100%;
-}
-
-.at-discount-progress__login--legacy .account-button__icon {
-  color: inherit;
-  flex-shrink: 0;
 }
 
 .at-dp {

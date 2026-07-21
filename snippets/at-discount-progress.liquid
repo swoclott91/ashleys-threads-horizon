@@ -33,7 +33,7 @@
   assign dp_login_style_id = login_style_id | default: 'theme-dp-login'
   assign dp_login_class = 'button ' | append: dp_login_style | append: ' ' | append: dp_login_style | append: '--' | append: dp_login_style_id
   assign dp_login_link_class = 'at-discount-progress__login-link ' | append: dp_login_class
-  assign dp_login_legacy_class = 'at-discount-progress__login-link at-discount-progress__login--legacy ' | append: dp_login_class
+  assign dp_login_legacy_class = dp_login_class
   assign dp_login_custom_bg = login_custom_button_background | default: settings.at_discount_progress_login_custom_background
   assign dp_login_custom_text = login_custom_button_text | default: settings.at_discount_progress_login_custom_text
   assign dp_login_custom_border = login_custom_button_border | default: settings.at_discount_progress_login_custom_border
@@ -60,10 +60,7 @@
 ></script>
 
 {%- unless customer -%}
-  <div
-    class="at-discount-progress at-discount-progress--logged-out at-discount-progress--banner{% if dp_layout == 'drawer_header' %} at-discount-progress--drawer-header{% else %} spacing-style{% endif %}"
-    data-testid="at-discount-progress-logged-out"
-  >
+  {%- capture dp_banner_inner -%}
     <span
       class="at-discount-progress__banner-icon svg-wrapper"
       aria-hidden="true"
@@ -90,26 +87,33 @@
         />
       </svg>
     </span>
-    <p class="at-discount-progress__prompt">
+    <span class="at-discount-progress__prompt">
       {{ 'at_discount_progress.log_in_prompt' | t }}
-    </p>
+    </span>
+    <span class="at-discount-progress__login-label">
+      {{- 'at_discount_progress.log_in' | t -}}
+    </span>
+  {%- endcapture -%}
+  <div
+    class="at-discount-progress at-discount-progress--logged-out at-discount-progress--banner{% if dp_layout == 'drawer_header' %} at-discount-progress--drawer-header{% else %} spacing-style{% endif %}"
+    data-testid="at-discount-progress-logged-out"
+  >
     {% if shop.customer_accounts_enabled %}
-      <div class="at-discount-progress__account">
-        <shopify-account menu="{{ dp_customer_account_menu }}">
-          {% render 'at-account-login-trigger',
-            class: dp_login_link_class,
-            slot: 'signed-out-avatar',
-            show_icon: false
-          %}
-        </shopify-account>
-      </div>
+      <shopify-account menu="{{ dp_customer_account_menu }}">
+        <span
+          slot="signed-out-avatar"
+          class="at-discount-progress__banner-hit {{ dp_login_link_class }}"
+        >
+          {{ dp_banner_inner }}
+        </span>
+      </shopify-account>
     {% else %}
-      {% render 'at-account-login-trigger',
-        tag: 'a',
-        href: routes.account_login_url,
-        class: dp_login_legacy_class,
-        show_icon: false
-      %}
+      <a
+        href="{{ routes.account_login_url }}"
+        class="at-discount-progress__banner-hit at-discount-progress__login--legacy {{ dp_login_legacy_class }}"
+      >
+        {{ dp_banner_inner }}
+      </a>
     {% endif %}
   </div>
 {%- else -%}
