@@ -1,5 +1,5 @@
 {% doc %}
-  Shared signed-out Log in control: person icon + label (matches PDP discount strip).
+  Shared signed-out Log in control for discount progress contexts.
 
   @param {string} [label] - Visible label (defaults to at_discount_progress.log_in)
   @param {string} [class] - Extra classes on the outer wrapper
@@ -7,38 +7,46 @@
   @param {string} [href] - Required when tag is a
   @param {string} [slot] - Optional slot attribute (e.g. signed-out-avatar)
   @param {string} [type] - Button type when tag is button (default button)
+  @param {boolean} [show_icon] - Include person icon before the label (default true)
 
   @example
   {% render 'at-account-login-trigger',
-    class: 'at-discount-progress__account-trigger button-unstyled',
-    slot: 'signed-out-avatar'
+    class: 'at-discount-progress__login-link button-unstyled',
+    slot: 'signed-out-avatar',
+    show_icon: false
   %}
 {% enddoc %}
 {%- liquid
   assign trigger_label = label | default: 'at_discount_progress.log_in' | t
   assign trigger_tag = tag | default: 'span'
   assign trigger_type = type | default: 'button'
+  assign trigger_show_icon = true
+  if show_icon == false or show_icon == 'false'
+    assign trigger_show_icon = false
+  endif
 -%}
 {%- capture trigger_inner -%}
-  <span
-    class="svg-wrapper account-button__icon"
-    aria-hidden="true"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="15"
-      height="17"
-      viewBox="0 0 15 17"
-      fill="none"
+  {%- if trigger_show_icon -%}
+    <span
+      class="svg-wrapper account-button__icon"
+      aria-hidden="true"
     >
-      <path
-        stroke="currentColor"
-        stroke-linejoin="round"
-        stroke-width="var(--icon-stroke-width)"
-        d="M10.375 3.813a3.063 3.063 0 1 1-6.125 0 3.063 3.063 0 0 1 6.125 0ZM7.313 9.5c-3.667 0-6.24 2.691-6.563 6.125h13.125C13.552 12.191 10.979 9.5 7.312 9.5Z"
-      />
-    </svg>
-  </span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="15"
+        height="17"
+        viewBox="0 0 15 17"
+        fill="none"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linejoin="round"
+          stroke-width="var(--icon-stroke-width)"
+          d="M10.375 3.813a3.063 3.063 0 1 1-6.125 0 3.063 3.063 0 0 1 6.125 0ZM7.313 9.5c-3.667 0-6.24 2.691-6.563 6.125h13.125C13.552 12.191 10.979 9.5 7.312 9.5Z"
+        />
+      </svg>
+    </span>
+  {%- endif -%}
   <span class="at-account-login-trigger__label">
     {{- trigger_label -}}
   </span>

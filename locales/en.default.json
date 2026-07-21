@@ -124,7 +124,7 @@
   },
   "at_discount_progress": {
     "get_member_discounts": "Get member discounts",
-    "log_in_prompt": "Log in to qualify for additional discounts",
+    "log_in_prompt": "Log in to see qualified site-wide discounts.",
     "log_in": "Log in",
     "tier_unlocked": "{{ tier }}",
     "achievement_none": "10% Member Discount",
