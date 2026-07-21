@@ -106,11 +106,37 @@
                 "padding-inline-end": 32
               },
               "blocks": {
+                "text_QbJz8e": {
+                  "type": "text",
+                  "name": "t:names.text",
+                  "settings": {
+                    "text": "<p>Premium blanks at wholesale prices</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
                 "text_8DqRei": {
                   "type": "text",
                   "name": "t:names.heading",
                   "settings": {
-                    "text": "<h2>WHOLESALE STYLES WITHOUT THE HOOPS</h2>",
+                    "text": "<h2>GET STRAIGHT TO MAKING</h2>",
                     "width": "100%",
                     "max_width": "narrow",
                     "alignment": "left",
@@ -118,9 +144,9 @@
                     "font": "var(--font-heading--family)",
                     "font_size": "2.5rem",
                     "line_height": "tight",
-                    "letter_spacing": "tight",
-                    "case": "none",
-                    "wrap": "pretty",
+                    "letter_spacing": "normal",
+                    "case": "uppercase",
+                    "wrap": "balance",
                     "text_color": "",
                     "background": false,
                     "background_color": "#00000026",
@@ -532,6 +558,7 @@
                 }
               },
               "block_order": [
+                "text_QbJz8e",
                 "text_8DqRei",
                 "text_YcHFCP",
                 "spacer_fV3EBc",
