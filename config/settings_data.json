@@ -142,7 +142,7 @@
     "button_font_weight_secondary": "default",
     "content_for_index": [],
     "color_palette": {
-      "background": "#fffdf8",
+      "background": "#FFFFFF",
       "foreground": "#bb987c",
       "color1": "#3d3c3d",
       "color2": "#000000",
@@ -154,7 +154,8 @@
       "color8": "#34302e",
       "color9": "{{ settings.color_palette.background }}",
       "color10": "{{ settings.color_palette.background }}",
-      "color11": "#FFFFFF"
+      "color11": "#FFFFFF",
+      "color12": "#FFFDF8"
     }
   },
   "presets": {
