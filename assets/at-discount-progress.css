@@ -79,6 +79,7 @@ at-discount-progress-bar {
 }
 
 .at-discount-progress--drawer-header .at-discount-progress__login-trigger,
+.at-discount-progress--drawer-header .at-discount-progress__account-trigger,
 .at-discount-progress--drawer-header .at-discount-progress__login--legacy {
   --button-padding-block: var(--padding-2xs);
   --button-padding-inline: var(--padding-sm);
@@ -192,7 +193,8 @@ at-discount-progress-bar {
   flex-shrink: 0;
 }
 
-.at-discount-progress__account-trigger {
+.at-discount-progress__account-trigger,
+.at-account-login-trigger {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -202,7 +204,15 @@ at-discount-progress-bar {
   cursor: pointer;
 }
 
-.at-discount-progress__login-label {
+/* Beat `.button-unstyled { display: block }` so icon + label stay side-by-side */
+.at-discount-progress__account-trigger.button-unstyled,
+.at-account-login-trigger.button-unstyled,
+.at-discount-progress__login--legacy.button-unstyled {
+  display: inline-flex;
+}
+
+.at-discount-progress__login-label,
+.at-account-login-trigger__label {
   white-space: nowrap;
 }
 

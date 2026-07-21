@@ -38,25 +38,6 @@
   </cart-icon>
 {% endcapture %}
 
-{% capture account_icon %}
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="15"
-    height="17"
-    viewBox="0 0 15 17"
-    fill="none"
-    slot="signed-out-avatar"
-    class="account-button__icon"
-  >
-    <path
-      stroke="currentColor"
-      stroke-linejoin="round"
-      stroke-width="var(--icon-stroke-width)"
-      d="M10.375 3.813a3.063 3.063 0 1 1-6.125 0 3.063 3.063 0 0 1 6.125 0ZM7.313 9.5c-3.667 0-6.24 2.691-6.563 6.125h13.125C13.552 12.191 10.979 9.5 7.312 9.5Z"
-    />
-  </svg>
-{% endcapture %}
-
 <header-actions
   {% if display_style == 'text' %}
     class="header-actions--text"
@@ -81,7 +62,19 @@
         assign font_family_safe = font_family | replace: '"', "'"
         assign account_actions_style = '--header-actions-font-family: ' | append: font_family_safe | append: '; --header-actions-font-weight: ' | append: font_obj.weight | append: ';'
       endif
+      assign header_login_style = settings.at_discount_progress_login_style | default: 'button-unstyled'
+      assign header_login_class = 'button ' | append: header_login_style | append: ' ' | append: header_login_style | append: '--theme-dp-login account-button__login'
     %}
+    {% unless customer %}
+      {% render 'at-apply-button-styles',
+        style_class: header_login_style,
+        style_id: 'theme-dp-login',
+        custom_button_background: settings.at_discount_progress_login_custom_background,
+        custom_button_text: settings.at_discount_progress_login_custom_text,
+        custom_button_border: settings.at_discount_progress_login_custom_border,
+        link_text_color: settings.at_discount_progress_login_link_text_color
+      %}
+    {% endunless %}
     <div
       class="account-button header-actions__action{% if display_style == 'text' %} account-button--text{% endif %} color-custom-popover"
     >
@@ -94,20 +87,10 @@
         {% if customer %}
           <div class="account-button__fallback"></div>
         {% else %}
-          <span
-            slot="signed-out-avatar"
-            class="account-button__text header-actions__text-style {% if display_style == 'icon' %}hidden{% else %}mobile:hidden{% endif %}"
-          >
-            {{ 'content.account_title' | t }}
-          </span>
-
-          <span
-            slot="signed-out-avatar"
-            class="{% if display_style != 'icon' %}desktop:hidden{% endif %}"
-            aria-hidden="true"
-          >
-            {{ account_icon }}
-          </span>
+          {% render 'at-account-login-trigger',
+            class: header_login_class,
+            slot: 'signed-out-avatar'
+          %}
         {% endif %}
       </shopify-account>
     </div>
@@ -165,6 +148,29 @@
   .account-button {
     /* Remove the background color from the color scheme, we want to inherit the color of the header */
     background: transparent;
+  }
+
+  .account-button__login {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-xs);
+    min-height: var(--minimum-touch-target);
+    padding-inline: var(--padding-2xs);
+    font-size: var(--font-size--sm);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .account-button__login.button-unstyled {
+    display: inline-flex;
+  }
+
+  .account-button__login .account-button__icon,
+  .account-button__login .at-account-login-trigger__label {
+    color: inherit;
   }
 
   .account-button__icon,

@@ -1,0 +1,71 @@
+{% doc %}
+  Shared signed-out Log in control: person icon + label (matches PDP discount strip).
+
+  @param {string} [label] - Visible label (defaults to at_discount_progress.log_in)
+  @param {string} [class] - Extra classes on the outer wrapper
+  @param {string} [tag] - Outer tag: span (default), button, or a
+  @param {string} [href] - Required when tag is a
+  @param {string} [slot] - Optional slot attribute (e.g. signed-out-avatar)
+  @param {string} [type] - Button type when tag is button (default button)
+
+  @example
+  {% render 'at-account-login-trigger',
+    class: 'at-discount-progress__account-trigger button-unstyled',
+    slot: 'signed-out-avatar'
+  %}
+{% enddoc %}
+{%- liquid
+  assign trigger_label = label | default: 'at_discount_progress.log_in' | t
+  assign trigger_tag = tag | default: 'span'
+  assign trigger_type = type | default: 'button'
+-%}
+{%- capture trigger_inner -%}
+  <span
+    class="svg-wrapper account-button__icon"
+    aria-hidden="true"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="17"
+      viewBox="0 0 15 17"
+      fill="none"
+    >
+      <path
+        stroke="currentColor"
+        stroke-linejoin="round"
+        stroke-width="var(--icon-stroke-width)"
+        d="M10.375 3.813a3.063 3.063 0 1 1-6.125 0 3.063 3.063 0 0 1 6.125 0ZM7.313 9.5c-3.667 0-6.24 2.691-6.563 6.125h13.125C13.552 12.191 10.979 9.5 7.312 9.5Z"
+      />
+    </svg>
+  </span>
+  <span class="at-account-login-trigger__label">
+    {{- trigger_label -}}
+  </span>
+{%- endcapture -%}
+{%- if trigger_tag == 'a' -%}
+  <a
+    class="at-account-login-trigger {{ class }}"
+    {% if href != blank %}
+      href="{{ href }}"
+    {% endif %}
+  >
+    {{ trigger_inner }}
+  </a>
+{%- elsif trigger_tag == 'button' -%}
+  <button
+    type="{{ trigger_type }}"
+    class="at-account-login-trigger {{ class }}"
+  >
+    {{ trigger_inner }}
+  </button>
+{%- else -%}
+  <span
+    class="at-account-login-trigger {{ class }}"
+    {% if slot != blank %}
+      slot="{{ slot }}"
+    {% endif %}
+  >
+    {{ trigger_inner }}
+  </span>
+{%- endif -%}

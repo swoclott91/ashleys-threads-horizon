@@ -1832,7 +1832,7 @@
             "label": "t:options.custom"
           }
         ],
-        "default": "button-secondary",
+        "default": "button-unstyled",
         "info": "t:info.at_discount_progress_login_style"
       },
       {
@@ -1863,6 +1863,7 @@
         "type": "color",
         "id": "at_discount_progress_login_link_text_color",
         "label": "t:settings.link_text_color",
+        "default": "{{ settings.color_palette.color6 }}",
         "placeholder": "t:settings.default",
         "visible_if": "{{ settings.at_discount_progress_login_style == 'button-unstyled' }}"
       },
