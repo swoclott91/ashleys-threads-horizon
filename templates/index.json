@@ -430,7 +430,7 @@
                           "type": "text",
                           "name": "t:names.text",
                           "settings": {
-                            "text": "<p>Real Inventory Ready To Ship</p>",
+                            "text": "<p>Vast Inventory Ready To Ship</p>",
                             "width": "fit-content",
                             "max_width": "normal",
                             "alignment": "left",
