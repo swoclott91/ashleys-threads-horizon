@@ -56,9 +56,10 @@
 
     <button
       ref="closeButton"
-      on:click="cart-drawer-component/close"
-      class="button close-button cart-drawer__close-button button-unstyled"
-      aria-label="{{ 'actions.close_dialog' | t }}"
+      type="button"
+      on:click="#cart-drawer/close"
+      class="theme-drawer__close-button cart-drawer__close-button"
+      aria-label="{{ 'actions.close' | t }}"
     >
       <span class="svg-wrapper">
         {{- 'icon-close.svg' | inline_asset_content -}}

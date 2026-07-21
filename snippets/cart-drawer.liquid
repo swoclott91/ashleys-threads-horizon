@@ -320,6 +320,8 @@
     align-self: center;
     position: relative;
     z-index: 2;
+    /* Override theme-drawer__close-button margin — strip already fills space via flex. */
+    margin-inline-start: 0;
   }
 
   .cart-drawer__at-dp-strip .at-discount-progress {
