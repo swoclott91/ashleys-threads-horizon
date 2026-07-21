@@ -110,7 +110,7 @@
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>Premium blanks at wholesale prices</p>",
+                    "text": "<p>Premium styles at wholesale prices</p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
@@ -162,7 +162,7 @@
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>Fast U.S. fulfillment. No application necessary. No minimums. Real inventory.</p>",
+                    "text": "<p>Order the apparel you need in any quantity. No application, or minimum required.</p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
@@ -3168,7 +3168,7 @@
         "section_width": "page-width",
         "horizontal_alignment": "flex-start",
         "gap": 28,
-        "background_color": "{{ settings.color_palette.background }}",
+        "background_color": "{{ settings.color_palette.color11 }}",
         "padding-block-start": 48,
         "padding-block-end": 48
       }
@@ -3413,7 +3413,7 @@
         "section_width": "page-width",
         "horizontal_alignment": "flex-start",
         "gap": 28,
-        "background_color": "{{ settings.color_palette.color7 }}",
+        "background_color": "{{ settings.color_palette.color3 }}",
         "padding-block-start": 48,
         "padding-block-end": 48
       }
@@ -3658,7 +3658,7 @@
         "section_width": "page-width",
         "horizontal_alignment": "flex-start",
         "gap": 28,
-        "background_color": "{{ settings.color_palette.background }}",
+        "background_color": "{{ settings.color_palette.color11 }}",
         "padding-block-start": 48,
         "padding-block-end": 48
       }
