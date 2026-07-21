@@ -1,8 +1,5 @@
-import {
-  ThemeEvents,
-  VariantUpdateEvent,
-  QuantitySelectorUpdateEvent,
-} from '@theme/events';
+import { QuantitySelectorUpdateEvent, ThemeEvents } from '@theme/events';
+import { StandardEvents } from '@shopify/events';
 import { formatMoney } from '@theme/money-formatting';
 import { isClickedOutside } from '@theme/utilities';
 
@@ -149,9 +146,9 @@ class AtDiscountProgressBar extends HTMLElement {
   }
 
   #bindEvents() {
-    document.addEventListener(ThemeEvents.cartUpdate, this.#onCartOrDiscount);
-    document.addEventListener(ThemeEvents.discountUpdate, this.#onCartOrDiscount);
-    document.addEventListener(ThemeEvents.variantUpdate, this.#onVariantUpdate);
+    document.addEventListener(StandardEvents.cartLinesUpdate, this.#onCartOrDiscount);
+    document.addEventListener(StandardEvents.cartDiscountUpdate, this.#onCartOrDiscount);
+    document.addEventListener(StandardEvents.productSelect, this.#onVariantUpdate);
     document.addEventListener(ThemeEvents.quantitySelectorUpdate, this.#onQuantityUpdate);
 
     if (this.dataset.context === 'bulk-modal') {
@@ -170,9 +167,9 @@ class AtDiscountProgressBar extends HTMLElement {
   }
 
   #unbindEvents() {
-    document.removeEventListener(ThemeEvents.cartUpdate, this.#onCartOrDiscount);
-    document.removeEventListener(ThemeEvents.discountUpdate, this.#onCartOrDiscount);
-    document.removeEventListener(ThemeEvents.variantUpdate, this.#onVariantUpdate);
+    document.removeEventListener(StandardEvents.cartLinesUpdate, this.#onCartOrDiscount);
+    document.removeEventListener(StandardEvents.cartDiscountUpdate, this.#onCartOrDiscount);
+    document.removeEventListener(StandardEvents.productSelect, this.#onVariantUpdate);
     document.removeEventListener(ThemeEvents.quantitySelectorUpdate, this.#onQuantityUpdate);
     document.removeEventListener('pointerdown', this.#onDocPointerDown, true);
     if (this.#bulkGrid) {
@@ -186,7 +183,18 @@ class AtDiscountProgressBar extends HTMLElement {
 
   /** @param {Event} e */
   #onCartOrDiscount = (e) => {
-    void this.#applyCartResource(/** @type {{ detail?: { resource?: Record<string, unknown> } }} */ (e).detail?.resource);
+    const promise = /** @type {{ promise?: Promise<unknown> }} */ (e).promise;
+    if (promise) {
+      promise
+        .then(() => {
+          void this.#applyCartResource(undefined);
+        })
+        .catch(() => {
+          void this.#applyCartResource(undefined);
+        });
+      return;
+    }
+    void this.#applyCartResource(undefined);
   };
 
   /** @param {Record<string, unknown> | undefined} resource */
@@ -210,14 +218,20 @@ class AtDiscountProgressBar extends HTMLElement {
 
   /** @param {Event} e */
   #onVariantUpdate = (e) => {
-    if (!(e instanceof VariantUpdateEvent)) return;
-    const productId = e.detail?.data?.productId;
-    if (productId != null && String(productId) !== String(this.dataset.productId)) return;
-    const price = e.detail?.resource?.price;
-    if (typeof price === 'number') {
-      this.dataset.variantPrice = String(price);
-      this.render();
-    }
+    const promise = /** @type {{ promise?: Promise<{ detail?: { productId?: string, resource?: { price?: number } } }> }} */ (e)
+      .promise;
+    if (!promise) return;
+    promise
+      .then((result) => {
+        const productId = result?.detail?.productId;
+        if (productId != null && String(productId) !== String(this.dataset.productId)) return;
+        const price = result?.detail?.resource?.price;
+        if (typeof price === 'number') {
+          this.dataset.variantPrice = String(price);
+          this.render();
+        }
+      })
+      .catch(() => {});
   };
 
   /** @param {Event} e */

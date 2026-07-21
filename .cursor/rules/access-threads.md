@@ -87,6 +87,8 @@ Upstream removed global `color_schemes` in favor of `settings.color_palette` (5 
 
 - **CLI store targeting:** Ashley's Threads is `ashleys-threads-3.myshopify.com` (live main `#187518812435`, dev-v4-upgrade `#187741045011`). Access Threads is a separate store — never run bare `shopify theme push` without `-e ashleys` or `-e ashleys-main`. See root `shopify.theme.toml`.
 
+- **Horizon v4 theme events (breaking):** Upstream removed `CartAddEvent`, `CartUpdateEvent`, `VariantUpdateEvent`, and `ThemeEvents.cartUpdate` / `variantUpdate` / `discountUpdate` from `assets/events.js`. Cart/product listeners must use `@shopify/events` (`CartLinesUpdateEvent`, `ProductSelectEvent`, `StandardEvents.cartLinesUpdate`, etc. — see `product-form.js` / `cart-icon.js`). AT scripts that still imported the old names (`at-bulk-grid.js`, `at-discount-progress.js`, `wagner-fe.js`) **failed to load as ES modules**, so the bulk modal opened (Liquid + `dialog.js`) but the grid never rendered. After fixing imports, bump the `?v=` cache-buster on `at-bulk-grid.js` script tags.
+
 ### Core files with AT modifications (conflict-prone)
 
 These core Horizon files contain AT customizations and may need manual conflict resolution during upstream merges:
@@ -115,7 +117,7 @@ These core Horizon files contain AT customizations and may need manual conflict 
 | `snippets/at-bulk-grid-modal.liquid` | Same wrap + global scheme setting for quick-add bulk dialog. |
 | `blocks/at-discount-progress.liquid` | Nested under **AT Buy buttons** (reorderable): same **condensed** strip + Bulk savings dialog as cart (`data-context="product"`). Wrapper includes **`at-dp-condensed-strip--tight`**. **`show_discount_bar`**, padding, and **Log in button style** (`style_class` primary / secondary / link / custom — mirrors button block). |
 | `snippets/at-apply-button-styles.liquid` | Applies custom / link button CSS when style comes from theme settings or explicit params (used by discount progress Log in on cart / drawer / bulk). |
-| `assets/at-bulk-grid.js` | `data-at-bulk-variant-price` on qty inputs for discount-bar pending totals. |
+| `assets/at-bulk-grid.js` | Bulk grid UI + cart add. Uses `@shopify/events` `CartLinesUpdateEvent` (not removed `CartAddEvent`). `data-at-bulk-variant-price` on qty inputs for discount-bar pending totals. |
 
 When resolving conflicts, preserve both the upstream changes and the AT customizations.
 

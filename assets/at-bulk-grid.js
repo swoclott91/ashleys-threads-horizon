@@ -5,7 +5,7 @@
  */
 
 import { formatMoney } from '@theme/money-formatting';
-import { CartAddEvent } from '@theme/events';
+import { CartLinesUpdateEvent } from '@shopify/events';
 import { onAnimationEnd, yieldToMainThread } from '@theme/utilities';
 
 const BULK_GRID_SELECTORS = {
@@ -44,6 +44,27 @@ async function playBulkAddToCartButtonSuccessAnimation(addBtn) {
 }
 
 /**
+ * Dispatch Horizon v4 cart lines-update (replaces removed ThemeEvents CartAddEvent).
+ * @param {Array<{ id: number, quantity: number }>} items
+ * @returns {{ promise: Promise<{ cart: object, detail?: object }>, resolve: Function, reject: Function }}
+ */
+function beginBulkCartLinesUpdate(items) {
+  const deferred = CartLinesUpdateEvent.createPromise();
+  document.dispatchEvent(
+    new CartLinesUpdateEvent({
+      action: 'add',
+      context: 'product',
+      lines: items.map((item) => ({
+        merchandiseId: String(item.id),
+        quantity: item.quantity,
+      })),
+      promise: deferred.promise,
+    })
+  );
+  return deferred;
+}
+
+/**
  * On successful bulk add: same visuals as individual add — fly-to-cart (when enabled) +
  * add-to-cart button burst (always). Mirrors product-form AddToCartComponent.handleClick.
  * @param {HTMLElement} container - Bulk grid container
@@ -51,8 +72,9 @@ async function playBulkAddToCartButtonSuccessAnimation(addBtn) {
  * @param {HTMLButtonElement | null} addBtn - Add to cart button (source for fly animation)
  * @param {string} sectionId - Section ID for config lookup
  * @param {Object} cart - Cart object from cart.js
+ * @param {{ resolve: Function, reject: Function } | null} [deferredEventPromise]
  */
-async function handleBulkAddSuccess(container, updateTotal, addBtn, sectionId, cart) {
+async function handleBulkAddSuccess(container, updateTotal, addBtn, sectionId, cart, deferredEventPromise = null) {
   const doAnimation = container.dataset.atBulkAddToCartAnimation === 'true';
   const config = getBulkConfig(sectionId) || bulkGridConfigCache.get(sectionId);
   const productImage = config?.productFeaturedImage;
@@ -104,7 +126,16 @@ async function handleBulkAddSuccess(container, updateTotal, addBtn, sectionId, c
   if (lineItemsInput) lineItemsInput.value = '';
   updateTotal();
 
-  document.dispatchEvent(new CartAddEvent(cart, 'at-bulk-grid', { source: 'at-bulk-grid' }));
+  if (deferredEventPromise) {
+    deferredEventPromise.resolve({
+      cart: CartLinesUpdateEvent.createCartFromAjaxResponse(cart),
+      detail: {
+        source: 'at-bulk-grid',
+        sourceId: 'at-bulk-grid',
+        itemCount: cart.item_count,
+      },
+    });
+  }
 
   const cartDrawer = document.querySelector('cart-drawer-component');
   if (cartDrawer && typeof cartDrawer.open === 'function') {
@@ -554,6 +585,7 @@ function renderDesktopGrid(container, config, sectionId) {
     const lineItemsInput = form?.querySelector(BULK_GRID_SELECTORS.lineItemsInput);
     if (lineItemsInput) lineItemsInput.value = JSON.stringify(items);
 
+    const deferredEventPromise = beginBulkCartLinesUpdate(items);
     const root = window.Shopify?.routes?.root || '/';
     fetch(root + 'cart/add.js', {
       method: 'POST',
@@ -564,16 +596,20 @@ function renderDesktopGrid(container, config, sectionId) {
       .then((data) => {
         if (data.status && data.status !== 200) {
           console.warn('at-bulk-grid: cart add response', data);
+          deferredEventPromise.reject(data);
+          return;
         }
         window.dispatchEvent(new CustomEvent('at:bulk:added', { detail: { items, response: data } }));
-        fetch(root + 'cart.js')
+        return fetch(root + 'cart.js')
           .then((r) => r.json())
           .then(async (cart) => {
-            await handleBulkAddSuccess(container, updateTotal, addBtn, sectionId, cart);
-          })
-          .catch(() => {});
+            await handleBulkAddSuccess(container, updateTotal, addBtn, sectionId, cart, deferredEventPromise);
+          });
       })
-      .catch((err) => console.error('at-bulk-grid: cart add failed', err));
+      .catch((err) => {
+        console.error('at-bulk-grid: cart add failed', err);
+        deferredEventPromise.reject(err);
+      });
   };
 
   if (addBtn) addBtn.addEventListener('click', submitBulkItems);
@@ -812,6 +848,7 @@ function renderMobileGrid(container, config, sectionId) {
     const lineItemsInput = form?.querySelector(BULK_GRID_SELECTORS.lineItemsInput);
     if (lineItemsInput) lineItemsInput.value = JSON.stringify(items);
 
+    const deferredEventPromise = beginBulkCartLinesUpdate(items);
     const root = window.Shopify?.routes?.root || '/';
     fetch(root + 'cart/add.js', {
       method: 'POST',
@@ -822,16 +859,20 @@ function renderMobileGrid(container, config, sectionId) {
       .then((data) => {
         if (data.status && data.status !== 200) {
           console.warn('at-bulk-grid: cart add response', data);
+          deferredEventPromise.reject(data);
+          return;
         }
         window.dispatchEvent(new CustomEvent('at:bulk:added', { detail: { items, response: data } }));
-        fetch(root + 'cart.js')
+        return fetch(root + 'cart.js')
           .then((r) => r.json())
           .then(async (cart) => {
-            await handleBulkAddSuccess(container, updateTotal, addBtnMobile, sectionId, cart);
-          })
-          .catch(() => {});
+            await handleBulkAddSuccess(container, updateTotal, addBtnMobile, sectionId, cart, deferredEventPromise);
+          });
       })
-      .catch((err) => console.error('at-bulk-grid: cart add failed', err));
+      .catch((err) => {
+        console.error('at-bulk-grid: cart add failed', err);
+        deferredEventPromise.reject(err);
+      });
   };
 
   const addBtnMobile = container.querySelector('[data-at-bulk-add-to-cart]');
