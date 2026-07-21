@@ -15,12 +15,6 @@
   @param {object} [login_custom_button_border] - Custom border when style is button-custom.
   @param {object} [login_link_text_color] - Link color when style is button-unstyled.
 {%- enddoc -%}
-{% render 'contrast-override',
-  background_color: '#2c2c2c',
-  text_color: '#f7f2ea',
-  section_id: 'at-discount-progress',
-  preset: 'ui'
-%}
 {%- liquid
   assign dp_customer_account_menu = customer_account_menu | default: 'customer-account-main-menu'
   assign dp_layout = layout | default: ''
