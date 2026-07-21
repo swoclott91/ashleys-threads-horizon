@@ -151,7 +151,10 @@
       "color5": "#243e34",
       "color6": "#b8734f",
       "color7": "#354c3f",
-      "color8": "#34302E"
+      "color8": "#34302e",
+      "color9": "{{ settings.color_palette.background }}",
+      "color10": "{{ settings.color_palette.background }}",
+      "color11": "#FFFFFF"
     }
   },
   "presets": {
