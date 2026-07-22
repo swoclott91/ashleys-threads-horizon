@@ -1811,7 +1811,7 @@
         "id": "at_discount_progress_accent",
         "label": "t:settings.at_discount_progress_accent",
         "info": "t:info.at_discount_progress_accent",
-        "default": "{{ settings.color_palette.foreground }}"
+        "default": "{{ settings.color_palette.color5 }}"
       },
       {
         "type": "color",

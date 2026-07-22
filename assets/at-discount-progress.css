@@ -383,7 +383,8 @@ at-discount-progress-bar {
 .at-dp__cart-line {
   position: relative;
   height: var(--at-dp-rail-height, 6px);
-  border-radius: var(--style-border-radius-pills);
+  /* Force fully rounded pill ends (theme "pills" radius can be 0) */
+  border-radius: 999px;
   overflow: hidden;
   background: var(--at-dp-track, rgb(var(--color-variant-text-rgb) / 0.22));
 }

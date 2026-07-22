@@ -145,6 +145,21 @@
   animation: none;
 }
 
+/*
+ * This theme's Color Palette uses a gold foreground (#bb987c), so any text that
+ * inherits --color-foreground (headings, color names, prices, discount status,
+ * subtitle, table borders) renders gold. Remap the foreground inside the bulk
+ * modal shells to the store's neutral text color (#2c2c2c) so regular text is
+ * non-gold and matches the reference design. The discount accent (#243e34) and
+ * availability colors are set separately and are unaffected.
+ */
+.at-bulk-grid-modal__inner,
+.at-buy-buttons__bulk-dialog-inner,
+.popup-link__inner:has(.at-bulk-grid) {
+  --color-foreground: #2c2c2c;
+  --color-foreground-rgb: 44 44 44;
+}
+
 /* Visible modal header (title + subtitle) rendered above the discount strip */
 .at-bulk-grid__header {
   display: flex;
@@ -188,6 +203,8 @@
 
 .at-bulk-grid {
   --at-bulk-grid-gap: var(--gap-sm, 0.75rem);
+  /* Subtle neutral hairline for table + accordion separators (non-gold, low weight) */
+  --at-bulk-line: rgb(var(--color-foreground-rgb) / 0.12);
   display: flex;
   flex-direction: column;
   gap: var(--at-bulk-grid-gap);
@@ -329,7 +346,8 @@
 .at-bulk-grid__table th,
 .at-bulk-grid__table td {
   padding: var(--padding-xs) var(--padding-sm);
-  border: 1px solid var(--color-border);
+  /* Light hairline grid lines (was 1px --color-border, which is gold in this palette) */
+  border: 1px solid var(--at-bulk-line);
   text-align: center;
   vertical-align: middle;
 }
@@ -337,7 +355,7 @@
 .at-bulk-grid__table th {
   background: var(--at-bulk-surface, var(--color-background));
   font-weight: 600;
-  box-shadow: 0 1px 0 var(--color-border);
+  box-shadow: 0 1px 0 var(--at-bulk-line);
 }
 
 .at-bulk-grid__table td.at-bulk-grid__color-cell {
@@ -361,7 +379,7 @@
   width: var(--variant-picker-swatch-width, 20px);
   height: var(--variant-picker-swatch-height, 20px);
   border-radius: var(--variant-picker-swatch-radius, 50%);
-  border: var(--style-border-width-inputs) solid var(--color-border);
+  border: var(--style-border-width-inputs) solid rgb(var(--color-foreground-rgb) / 0.25);
   background: var(--swatch-background, rgb(var(--color-foreground-rgb) / var(--opacity-5)));
 }
 
@@ -381,7 +399,7 @@
   width: 4ch;
   min-width: 3rem;
   padding: var(--padding-2xs) var(--padding-xs);
-  border: var(--style-border-width-inputs) solid var(--color-border);
+  border: var(--style-border-width-inputs) solid rgb(var(--color-foreground-rgb) / 0.25);
   border-radius: var(--style-border-radius-inputs);
   text-align: center;
   font-size: 16px;
@@ -404,7 +422,7 @@
 
 .at-bulk-grid__price .compare-at-price {
   text-decoration: line-through;
-  color: var(--color-foreground-secondary);
+  color: rgb(var(--color-foreground-rgb) / 0.55);
   margin-inline-end: 0.25em;
 }
 
@@ -449,7 +467,7 @@
     padding-block-start: var(--gap-md);
     padding-block-end: var(--padding-xs);
     background: var(--color-background);
-    box-shadow: 0 -1px 0 var(--color-border);
+    box-shadow: 0 -1px 0 var(--at-bulk-line);
   }
 }
 
@@ -584,7 +602,7 @@
     padding-block-start: var(--gap-md);
     padding-block-end: 0;
     background: var(--color-background);
-    box-shadow: 0 -1px 0 var(--color-border);
+    box-shadow: 0 -1px 0 var(--at-bulk-line);
   }
 
   .at-bulk-grid__search {
@@ -661,7 +679,7 @@
   }
 
   .at-bulk-grid__mobile-accordion {
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--at-bulk-line);
     border-radius: var(--style-border-radius-inputs);
     overflow: hidden;
   }
@@ -720,7 +738,7 @@
     justify-content: space-between;
     padding: var(--padding-xs) var(--padding-2xs);
     border-radius: var(--style-border-radius-inputs);
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--at-bulk-line);
     transition: background-color var(--animation-speed) ease;
   }
 
