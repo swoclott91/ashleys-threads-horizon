@@ -267,7 +267,10 @@
     "discount_progress_gap": "Vertical space between the quantity / add to cart row and the discount progress bar.",
     "at_discount_progress_login_style": "Applies to the Log in control on cart, cart drawer, and bulk modals when customers are logged out. Product pages use the Discount progress block setting.",
     "at_discount_progress_color_scheme": "Applies to the discount bar on product pages, cart, cart drawer, and bulk modals.",
-    "at_discount_progress_empty_track": "Background of the condensed progress rail (the line behind the green segment).",
+    "at_discount_progress_empty_track": "Background of the condensed progress rail (the line behind the filled segment). Overridden when Progress track is set.",
+    "at_discount_progress_accent": "Filled rail and reached milestone labels on the discount bar (cart, drawer, product, and bulk modals). Defaults to your Color Palette foreground.",
+    "at_discount_progress_track": "Optional color for the unfilled part of the rail. Leave blank to use the Empty progress track fill option.",
+    "at_bulk_grid_surface": "Background for the bulk grid table header and color column. Defaults to your Color Palette background.",
     "size_guide_type_preset": "Applies to the open-dialog control when layout is Standalone."
   },
   "names": {
@@ -819,6 +822,10 @@
     "at_discount_progress_empty_track_scheme_background": "Scheme background",
     "at_discount_progress_empty_track_scheme_variant": "Variant tiles background",
     "at_discount_progress_empty_track_scheme_input": "Inputs background",
+    "at_discount_progress_accent": "Progress accent",
+    "at_discount_progress_track": "Progress track",
+    "at_discount_progress_label": "Milestone labels",
+    "at_bulk_grid_surface": "Bulk table surface",
     "discount_progress_gap": "Spacing above discount bar",
     "at_discount_progress_show": "Show discount progress bar",
     "at_bulk_modal_style": "Modal style",

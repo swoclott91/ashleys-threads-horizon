@@ -19,7 +19,7 @@
 {%- endcomment -%}
 {{ 'at-bulk-grid.css' | asset_url | stylesheet_tag }}
 <script
-  src="{{ 'at-bulk-grid.js' | asset_url }}?v=5"
+  src="{{ 'at-bulk-grid.js' | asset_url }}?v=6"
   type="module"
 ></script>
 <dialog
@@ -27,14 +27,8 @@
   class="at-bulk-grid-modal__dialog color-custom-popover"
   aria-labelledby="at-bulk-grid-quick-add-heading"
 >
-  <h2
-    id="at-bulk-grid-quick-add-heading"
-    class="visually-hidden"
-  >
-    Bulk Add to Cart
-  </h2>
-
   <div class="at-bulk-grid-modal__inner">
+    {% render 'at-bulk-grid-header', heading_id: 'at-bulk-grid-quick-add-heading' %}
     {% if settings.at_discount_progress_enabled %}
       <div class="at-dp-condensed-strip--tight at-discount-progress-scheme-wrap">
         {% render 'at-discount-progress',

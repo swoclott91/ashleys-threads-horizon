@@ -162,6 +162,25 @@ const BULK_ADD_TO_CART_BUTTON_MARKUP =
   CHECKMARK_BURST_SVG +
   '</span></span>';
 
+/**
+ * Enriched footer: item count • subtotal • projected discount %, plus the primary CTA.
+ * Values populated by updateBulkSummary(); button starts disabled until a quantity is entered.
+ * Shared by the desktop table and mobile accordion renderers.
+ */
+const BULK_GRID_ACTIONS_MARKUP =
+  '<div class="at-bulk-grid__actions">' +
+  '<div class="at-bulk-grid__summary" data-at-bulk-summary>' +
+  '<span class="at-bulk-grid__summary-count" data-at-bulk-count>0 items</span>' +
+  '<span class="at-bulk-grid__summary-sep at-bulk-grid__summary-sep--count" aria-hidden="true">•</span>' +
+  '<span class="at-bulk-grid__summary-subtotal" data-at-bulk-subtotal></span>' +
+  '<span class="at-bulk-grid__summary-sep at-bulk-grid__summary-sep--discount" aria-hidden="true" data-at-bulk-discount-sep hidden>•</span>' +
+  '<span class="at-bulk-grid__summary-discount" data-at-bulk-discount hidden></span>' +
+  '</div>' +
+  '<button type="button" class="button add-to-cart-button button-primary at-bulk-grid__add" data-at-bulk-add-to-cart disabled>' +
+  BULK_ADD_TO_CART_BUTTON_MARKUP +
+  '</button>' +
+  '</div>';
+
 /** Theme accordion caret – same as icon-caret.svg (mobile bulk grid expand/collapse) */
 const ICON_CARET_SVG =
   '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5.5L7 9.5L3 5.5" stroke="currentColor" stroke-width="var(--icon-stroke-width)" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -408,6 +427,127 @@ function formatVariantPriceHtml(variant, config) {
 }
 
 /**
+ * Format a minor-unit (cents) amount using the bulk grid config's money format.
+ * @param {number} cents
+ * @param {{ moneyFormat?: string, currency?: string }} config
+ * @returns {string}
+ */
+function formatBulkMoney(cents, config) {
+  let format = config?.moneyFormat?.trim() || '';
+  const currency = (config?.currency || 'USD').toString().toUpperCase();
+  if (!format) format = currency === 'USD' ? '${{amount}}' : '{{amount}} ' + currency;
+  return formatMoney(cents, format, currency);
+}
+
+/**
+ * The discount progress bar shares the modal shell with the grid; use it as the source of
+ * truth for cart subtotal + milestone thresholds so the footer discount matches the strip.
+ * @param {HTMLElement} container
+ * @returns {HTMLElement | null}
+ */
+function findBulkDiscountBar(container) {
+  const host = container.closest(
+    '.at-bulk-grid-modal__inner, .at-buy-buttons__bulk-dialog-inner, .popup-link__inner'
+  );
+  return host?.querySelector('at-discount-progress-bar') || null;
+}
+
+/**
+ * Highest reached (non-shipping) discount percentage for a projected subtotal (cents).
+ * @param {number} projectedCents
+ * @param {HTMLElement} container
+ * @returns {number | null} percent, or null when no discount bar / milestones present
+ */
+function bulkDiscountPercent(projectedCents, container) {
+  const bar = findBulkDiscountBar(container);
+  if (!bar) return null;
+  let milestones = [];
+  try {
+    milestones = JSON.parse(bar.dataset.milestones || '[]');
+  } catch {
+    return null;
+  }
+  if (!Array.isArray(milestones) || milestones.length === 0) return null;
+  let pct = 0;
+  milestones.forEach((m) => {
+    if (!m || m.kind === 'shipping') return;
+    if (projectedCents >= Number(m.threshold)) {
+      const n = parseInt(String(m.benefitLabel).replace(/[^0-9]/g, ''), 10);
+      if (!Number.isNaN(n)) pct = Math.max(pct, n);
+    }
+  });
+  return pct;
+}
+
+/**
+ * Refresh the enriched footer summary (item count, subtotal, projected discount %) + CTA label,
+ * plus per-color item counts (mobile) and active/selected states for quantity fields > 0.
+ * Shared by the desktop table and mobile accordion renderers.
+ * @param {HTMLElement} container
+ * @param {{ moneyFormat?: string, currency?: string }} config
+ * @returns {{ count: number, subtotalCents: number }}
+ */
+function updateBulkSummary(container, config) {
+  let count = 0;
+  let subtotalCents = 0;
+
+  container.querySelectorAll('[data-at-bulk-qty]').forEach((input) => {
+    if (!(input instanceof HTMLInputElement)) return;
+    const q = parseInt(input.value, 10) || 0;
+    input.classList.toggle('at-bulk-grid__qty-input--active', q > 0);
+    if (q <= 0) return;
+    count += q;
+    const price = parseInt(input.getAttribute('data-at-bulk-variant-price') || '0', 10) || 0;
+    subtotalCents += q * price;
+  });
+
+  // Per-color item counts + selected-row tint (mobile accordions; no-ops on desktop).
+  container.querySelectorAll('[data-at-bulk-color-row]').forEach((row) => {
+    let rowCount = 0;
+    row.querySelectorAll('[data-at-bulk-qty]').forEach((input) => {
+      rowCount += parseInt(input.value, 10) || 0;
+    });
+    const badge = row.querySelector('[data-at-bulk-color-count]');
+    if (badge) badge.textContent = rowCount > 0 ? (rowCount === 1 ? '1 item' : rowCount + ' items') : '';
+    row.classList.toggle('at-bulk-grid__mobile-accordion--has-items', rowCount > 0);
+    row.querySelectorAll('.at-bulk-grid__mobile-size-row').forEach((sizeRow) => {
+      const input = sizeRow.querySelector('[data-at-bulk-qty]');
+      const q = input ? parseInt(input.value, 10) || 0 : 0;
+      sizeRow.classList.toggle('at-bulk-grid__mobile-size-row--selected', q > 0);
+    });
+  });
+
+  const countEl = container.querySelector('[data-at-bulk-count]');
+  const subtotalEl = container.querySelector('[data-at-bulk-subtotal]');
+  const discountEl = container.querySelector('[data-at-bulk-discount]');
+  const discountSep = container.querySelector('[data-at-bulk-discount-sep]');
+  const addBtn = container.querySelector('[data-at-bulk-add-to-cart]');
+
+  if (countEl) countEl.textContent = count === 1 ? '1 item' : count + ' items';
+  if (subtotalEl) subtotalEl.textContent = formatBulkMoney(subtotalCents, config);
+
+  const bar = findBulkDiscountBar(container);
+  const cartSubtotal = bar ? Number(bar.dataset.subtotal) || 0 : 0;
+  const pct = bulkDiscountPercent(cartSubtotal + subtotalCents, container);
+  if (discountEl instanceof HTMLElement && discountSep instanceof HTMLElement) {
+    const show = typeof pct === 'number' && pct > 0;
+    discountEl.textContent = show ? pct + '% off' : '';
+    discountEl.hidden = !show;
+    discountSep.hidden = !show;
+  }
+
+  if (addBtn instanceof HTMLButtonElement) {
+    const labelEl = addBtn.querySelector('.add-to-cart-text__content');
+    if (labelEl) {
+      labelEl.textContent = count > 0 ? (count === 1 ? 'Add 1 item' : 'Add ' + count + ' items') : 'Add to cart';
+    }
+    addBtn.disabled = count === 0;
+  }
+
+  return { count, subtotalCents };
+}
+
+/**
  * @param {HTMLElement} container
  * @param {ReturnType<getBulkConfig>} config
  * @param {string} sectionId
@@ -525,29 +665,18 @@ function renderDesktopGrid(container, config, sectionId) {
 
   html += '</tbody></table></div>';
   html += '</div>';
-  html +=
-    '<div class="at-bulk-grid__actions">' +
-    '<span class="at-bulk-grid__total" data-at-bulk-total>Total: 0</span>' +
-    '<button type="button" class="button add-to-cart-button button-primary" data-at-bulk-add-to-cart>' +
-    BULK_ADD_TO_CART_BUTTON_MARKUP +
-    '</button>' +
-    '</div>';
+  html += BULK_GRID_ACTIONS_MARKUP;
 
   container.innerHTML = html;
   container.dataset.atBulkGridSectionId = sectionId;
 
   const searchEl = container.querySelector(BULK_GRID_SELECTORS.search);
-  const totalEl = container.querySelector('[data-at-bulk-total]');
   const addBtn = container.querySelector('[data-at-bulk-add-to-cart]');
 
   const updateTotal = () => {
-    const inputs = container.querySelectorAll('[data-at-bulk-qty]');
-    let sum = 0;
-    inputs.forEach((input) => {
-      sum += parseInt(input.value, 10) || 0;
-    });
-    if (totalEl) totalEl.textContent = 'Total: ' + sum;
+    updateBulkSummary(container, config);
   };
+  updateTotal();
 
   const getLineItems = () => {
     const items = [];
@@ -698,7 +827,7 @@ function renderMobileGrid(container, config, sectionId) {
     if (swatchStyle) {
       html += '<span class="at-bulk-grid__swatch swatch" style="' + swatchStyle + '" aria-hidden="true"></span>';
     }
-    html += '<span class="at-bulk-grid__color-name">' + escapeHtml(color) + '</span> <span class="svg-wrapper icon-caret icon-animated at-bulk-grid__accordion-icon" aria-hidden="true" data-at-bulk-accordion-icon>' + ICON_CARET_SVG + '</span>';
+    html += '<span class="at-bulk-grid__color-name">' + escapeHtml(color) + '</span> <span class="at-bulk-grid__color-count" data-at-bulk-color-count aria-hidden="true"></span> <span class="svg-wrapper icon-caret icon-animated at-bulk-grid__accordion-icon" aria-hidden="true" data-at-bulk-accordion-icon>' + ICON_CARET_SVG + '</span>';
     html += '</button>';
     html += '<div class="at-bulk-grid__mobile-accordion-content" hidden>';
     sizeValues.forEach((size) => {
@@ -753,13 +882,7 @@ function renderMobileGrid(container, config, sectionId) {
 
   html += '</div>';
   html += '</div>';
-  html +=
-    '<div class="at-bulk-grid__actions">' +
-    '<span class="at-bulk-grid__total" data-at-bulk-total>Total: 0</span>' +
-    '<button type="button" class="button add-to-cart-button button-primary" data-at-bulk-add-to-cart>' +
-    BULK_ADD_TO_CART_BUTTON_MARKUP +
-    '</button>' +
-    '</div>';
+  html += BULK_GRID_ACTIONS_MARKUP;
 
   if (container._atBulkMobileAbortController) {
     container._atBulkMobileAbortController.abort();
@@ -770,14 +893,8 @@ function renderMobileGrid(container, config, sectionId) {
   container.innerHTML = html;
   container.dataset.atBulkGridSectionId = sectionId;
 
-  const totalEl = container.querySelector('[data-at-bulk-total]');
   const updateTotal = () => {
-    const inputs = container.querySelectorAll('[data-at-bulk-qty]');
-    let sum = 0;
-    inputs.forEach((input) => {
-      sum += parseInt(input.value, 10) || 0;
-    });
-    if (totalEl) totalEl.textContent = 'Total: ' + sum;
+    updateBulkSummary(container, config);
   };
 
   container.addEventListener('input', (e) => {

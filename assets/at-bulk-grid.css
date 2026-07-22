@@ -145,6 +145,47 @@
   animation: none;
 }
 
+/* Visible modal header (title + subtitle) rendered above the discount strip */
+.at-bulk-grid__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-3xs, 0.25rem);
+  margin-block-end: var(--gap-md);
+  /* Leave room for the top-right close button */
+  padding-inline-end: var(--minimum-touch-target);
+}
+
+.at-bulk-grid__title {
+  margin: 0;
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  font-size: var(--font-size--lg);
+  line-height: 1.2;
+}
+
+.at-bulk-grid__subtitle {
+  margin: 0;
+  font-size: var(--font-size--sm);
+  line-height: 1.4;
+  color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+}
+
+@media screen and (min-width: 750px) {
+  .at-bulk-grid__title {
+    font-size: var(--font-size--xl);
+  }
+}
+
+/* Mobile: centered header; close stays top-right so pad both sides to keep the title centered */
+@media screen and (max-width: 749px) {
+  .at-bulk-grid__header {
+    align-items: center;
+    text-align: center;
+    padding-inline: var(--minimum-touch-target);
+    margin-block-end: var(--gap-sm);
+  }
+}
+
 .at-bulk-grid {
   --at-bulk-grid-gap: var(--gap-sm, 0.75rem);
   display: flex;
@@ -294,7 +335,7 @@
 }
 
 .at-bulk-grid__table th {
-  background: var(--color-background);
+  background: var(--at-bulk-surface, var(--color-background));
   font-weight: 600;
   box-shadow: 0 1px 0 var(--color-border);
 }
@@ -303,6 +344,7 @@
   text-align: left;
   white-space: nowrap;
   vertical-align: middle;
+  background: var(--at-bulk-surface, var(--color-background));
 }
 
 .at-bulk-grid__color-cell-inner {
@@ -343,6 +385,15 @@
   border-radius: var(--style-border-radius-inputs);
   text-align: center;
   font-size: 16px;
+  transition: border-color var(--animation-speed) ease;
+}
+
+/* Accent the quantity field once it has a value (desktop table + mobile stepper) */
+.at-bulk-grid__qty-input--active {
+  border-color: var(--at-dp-accent, var(--color-selected-variant-background));
+  box-shadow: 0 0 0 1px var(--at-dp-accent, var(--color-selected-variant-background));
+  font-weight: var(--font-weight-semibold);
+  color: var(--at-dp-accent, var(--color-selected-variant-background));
 }
 
 .at-bulk-grid__price {
@@ -402,10 +453,49 @@
   }
 }
 
-.at-bulk-grid__total {
-  font-weight: 600;
+/* Footer summary: item count • subtotal • projected discount % */
+.at-bulk-grid__summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem;
   flex: 1 1 auto;
   min-width: 0;
+  font-size: var(--font-size--sm);
+}
+
+.at-bulk-grid__summary-count {
+  font-weight: var(--font-weight-semibold);
+}
+
+.at-bulk-grid__summary-sep {
+  color: rgb(var(--color-foreground-rgb) / var(--opacity-30));
+}
+
+.at-bulk-grid__summary-subtotal {
+  color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+}
+
+.at-bulk-grid__summary-discount {
+  font-weight: var(--font-weight-medium);
+  color: var(--at-dp-accent, var(--color-selected-variant-background));
+}
+
+.at-bulk-grid__summary-discount[hidden],
+.at-bulk-grid__summary-sep[hidden] {
+  display: none;
+}
+
+/* Mobile: stack the count above the subtotal / discount line */
+@media screen and (max-width: 749px) {
+  .at-bulk-grid__summary-count {
+    flex: 1 0 100%;
+    font-size: var(--font-size--md);
+  }
+
+  .at-bulk-grid__summary-sep--count {
+    display: none;
+  }
 }
 
 /* Match theme buy buttons: same height, no quantity selector in this row */
@@ -628,11 +718,40 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--padding-xs) 0;
+    padding: var(--padding-xs) var(--padding-2xs);
+    border-radius: var(--style-border-radius-inputs);
     border-bottom: 1px solid var(--color-border);
+    transition: background-color var(--animation-speed) ease;
   }
 
   .at-bulk-grid__mobile-size-row:last-child {
     border-bottom: none;
+  }
+
+  /* Selected size rows (qty > 0) get a subtle accent tint */
+  .at-bulk-grid__mobile-size-row--selected {
+    background: color-mix(in srgb, var(--at-dp-accent, var(--color-selected-variant-background)) 8%, transparent);
+  }
+
+  /* Per-color item count on the accordion header */
+  .at-bulk-grid__color-count:empty {
+    display: none;
+  }
+
+  .at-bulk-grid__color-count {
+    font-size: var(--font-size--xs);
+    font-weight: var(--font-weight-normal);
+    color: var(--at-dp-accent, var(--color-selected-variant-background));
+    white-space: nowrap;
+  }
+
+  /* Accordion with selections: emphasize the header surface with the bulk surface color */
+  .at-bulk-grid__mobile-accordion--has-items .at-bulk-grid__mobile-accordion-header {
+    background: var(--at-bulk-surface, rgb(var(--color-foreground-rgb) / var(--opacity-5)));
+  }
+
+  /* Add-to-cart button spans full width under the summary on mobile */
+  .at-bulk-grid__actions .at-bulk-grid__add {
+    flex: 1 0 100%;
   }
 }

@@ -1807,6 +1807,34 @@
         "default": "tinted"
       },
       {
+        "type": "color",
+        "id": "at_discount_progress_accent",
+        "label": "t:settings.at_discount_progress_accent",
+        "info": "t:info.at_discount_progress_accent",
+        "default": "{{ settings.color_palette.foreground }}"
+      },
+      {
+        "type": "color",
+        "id": "at_discount_progress_track",
+        "label": "t:settings.at_discount_progress_track",
+        "info": "t:info.at_discount_progress_track",
+        "placeholder": "t:settings.default",
+        "alpha": true
+      },
+      {
+        "type": "color",
+        "id": "at_discount_progress_label",
+        "label": "t:settings.at_discount_progress_label",
+        "placeholder": "t:settings.default"
+      },
+      {
+        "type": "color",
+        "id": "at_bulk_grid_surface",
+        "label": "t:settings.at_bulk_grid_surface",
+        "info": "t:info.at_bulk_grid_surface",
+        "default": "{{ settings.color_palette.background }}"
+      },
+      {
         "type": "header",
         "content": "t:content.at_discount_progress_login_button"
       },

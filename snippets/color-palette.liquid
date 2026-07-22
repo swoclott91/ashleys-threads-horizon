@@ -228,6 +228,20 @@
       --shadow-blur: 20px;
       --shadow-popover: 0px 4px 20px rgb(var(--color-popover-shadow-rgb) / var(--opacity-15));
     {% endif %}
+
+    /* Access Threads discount bar + bulk grid colors (Cart theme settings, tied to Color Palette) */
+    {% if settings.at_discount_progress_accent != blank %}
+      --at-dp-accent: {{ settings.at_discount_progress_accent }};
+    {% endif %}
+    {% if settings.at_discount_progress_track != blank %}
+      --at-dp-track: {{ settings.at_discount_progress_track }};
+    {% endif %}
+    {% if settings.at_discount_progress_label != blank %}
+      --at-dp-label: {{ settings.at_discount_progress_label }};
+    {% endif %}
+    {% if settings.at_bulk_grid_surface != blank %}
+      --at-bulk-surface: {{ settings.at_bulk_grid_surface }};
+    {% endif %}
   }
 
   body {

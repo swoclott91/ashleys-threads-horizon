@@ -1,0 +1,23 @@
+{%- doc -%}
+  Access Threads: visible header for the bulk add modal (title + subtitle).
+  Rendered above the discount strip in each bulk modal shell (quick-add, buy-buttons, popup-link).
+  The heading is the dialog's accessible name, so pass the same id used in the dialog's aria-labelledby.
+
+  @param {string} heading_id - Unique id for the h2 (must match the dialog aria-labelledby).
+  @param {string} [title] - Modal title. Defaults to the bulk grid title.
+  @param {string} [subtitle] - Supporting line under the title.
+
+  @example
+  {% render 'at-bulk-grid-header', heading_id: 'at-bulk-grid-quick-add-heading' %}
+{%- enddoc -%}
+{%- liquid
+  assign at_bulk_heading_id = heading_id | default: 'at-bulk-grid-heading'
+  assign at_bulk_title = title | default: 'Add multiple colors & sizes'
+  assign at_bulk_subtitle = subtitle | default: 'Mix colors and sizes in one order.'
+-%}
+<div class="at-bulk-grid__header">
+  <h2 id="{{ at_bulk_heading_id }}" class="at-bulk-grid__title">{{ at_bulk_title }}</h2>
+  {%- if at_bulk_subtitle != blank -%}
+    <p class="at-bulk-grid__subtitle">{{ at_bulk_subtitle }}</p>
+  {%- endif -%}
+</div>

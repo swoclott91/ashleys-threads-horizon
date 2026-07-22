@@ -24,7 +24,7 @@
   ></script>
   {{ 'at-bulk-grid.css' | asset_url | stylesheet_tag }}
   <script
-    src="{{ 'at-bulk-grid.js' | asset_url }}?v=5"
+    src="{{ 'at-bulk-grid.js' | asset_url }}?v=6"
     type="module"
   ></script>
 
@@ -61,19 +61,16 @@
       scroll-lock
       aria-labelledby="at-bulk-dialog-heading-{{ block.id }}"
     >
-      <h2
-        id="at-bulk-dialog-heading-{{ block.id }}"
-        class="visually-hidden"
-      >
-        {{ trigger_label }}
-      </h2>
       <div class="at-buy-buttons__bulk-dialog-inner">
+        {%- assign at_bulk_dialog_heading_id = 'at-bulk-dialog-heading-' | append: block.id -%}
+        {% render 'at-bulk-grid-header', heading_id: at_bulk_dialog_heading_id %}
         {% if settings.at_discount_progress_enabled %}
+          {%- assign at_bulk_dp_section_id = section.id | append: '-' | append: block.id -%}
           <div class="at-dp-condensed-strip--tight at-discount-progress-scheme-wrap">
             {% render 'at-discount-progress',
               context: 'bulk-modal',
               layout: 'drawer_header',
-              section_id: section.id | append: '-' | append: block.id,
+              section_id: at_bulk_dp_section_id,
               non_sale_collection_url: settings.at_non_sale_collection_url
             %}
           </div>

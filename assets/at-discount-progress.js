@@ -352,30 +352,35 @@ class AtDiscountProgressBar extends HTMLElement {
     const fillEndIdx = nextTierIdx >= 0 ? nextTierIdx : n - 1;
     const lineActivePct = n <= 1 ? 100 : (fillEndIdx / (n - 1)) * 100;
 
-    const nodesHtml = m
+    /**
+     * Milestone labels rendered UNDER the rail (matches restyled mockup):
+     * shipping → tier name ("Free shipping"); reached discount → "{{ label }} applied";
+     * future / current discount → short benefit label (e.g. "15%").
+     */
+    const appliedTpl = this.#i18n.node_applied || '{{ label }} applied';
+    const labelsHtml = m
       .map((ms, i) => {
         const left = n === 1 ? 50 : (i / (n - 1)) * 100;
         const reached = previewBasis >= ms.threshold;
         const current = nextTierIdx === i;
         const shipping = ms.kind === 'shipping';
-        let cls = 'at-dp__cart-node';
-        if (shipping) cls += ' at-dp__cart-node--shipping';
-        if (reached) cls += ' at-dp__cart-node--reached';
-        else if (current) cls += ' at-dp__cart-node--current';
-        else cls += ' at-dp__cart-node--future';
+        let cls = 'at-dp__cart-label';
+        if (i === 0) cls += ' at-dp__cart-label--first';
+        if (i === n - 1) cls += ' at-dp__cart-label--last';
+        if (shipping) cls += ' at-dp__cart-label--shipping';
+        if (reached) cls += ' at-dp__cart-label--reached';
+        else if (current) cls += ' at-dp__cart-label--current';
+        else cls += ' at-dp__cart-label--future';
 
-        /** Original spec: shipping → truck; unlocked discount → short label (e.g. 12%) on solid fill; future/current → labels. */
-        let inner = '';
+        let labelText;
         if (shipping) {
-          inner = '<span class="at-dp__cart-node-mount" data-at-dp-mount="truck"></span>';
+          labelText = ms.name;
         } else if (reached) {
-          inner = `<span class="at-dp__cart-node-text">${textForInnerHtml(ms.benefitLabel)}</span>`;
-        } else if (current) {
-          inner = `<span class="at-dp__cart-node-text">${textForInnerHtml(ms.benefitLabel)}</span>`;
+          labelText = applyLiquidPlaceholders(decodeHtmlEntities(appliedTpl), { label: ms.benefitLabel });
         } else {
-          inner = `<span class="at-dp__cart-node-text">${textForInnerHtml(ms.benefitLabel)}</span>`;
+          labelText = ms.benefitLabel;
         }
-        return `<div class="${cls}" style="--at-dp-node-left:${left}%"><span class="at-dp__cart-node-hit">${inner}</span></div>`;
+        return `<span class="${cls}" style="--at-dp-node-left:${left}%">${textForInnerHtml(labelText)}</span>`;
       })
       .join('');
 
@@ -464,8 +469,8 @@ class AtDiscountProgressBar extends HTMLElement {
             <div class="at-dp__cart-line">
               <span class="at-dp__cart-line-active" style="width:${lineActivePct}%"></span>
             </div>
-            <div class="at-dp__cart-nodes">${nodesHtml}</div>
           </div>
+          <div class="at-dp__cart-labels" aria-hidden="true">${labelsHtml}</div>
         </button>
         <dialog id="${dialogId}" class="at-dp__dialog dialog-modal">
           <div class="at-dp__dialog-panel">

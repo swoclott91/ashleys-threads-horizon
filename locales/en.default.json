@@ -145,7 +145,8 @@
     "modal_spend_for": "Spend {{ amount }} to reach {{ name }}",
     "modal_at": "at {{ amount }}",
     "modal_away": "{{ amount }} away",
-    "modal_footer_note": "Discounts apply to eligible items only. Shipping discount applies to standard shipping."
+    "modal_footer_note": "Discounts apply to eligible items only. Shipping discount applies to standard shipping.",
+    "node_applied": "{{ label }} applied"
   },
   "blocks": {
     "contact_form": {

@@ -11,7 +11,7 @@
 
 {%- if block_settings.at_enable_bulk_grid -%}
   {{ 'at-bulk-grid.css' | asset_url | stylesheet_tag }}
-  <script src="{{ 'at-bulk-grid.js' | asset_url }}?v=5" type="module"></script>
+  <script src="{{ 'at-bulk-grid.js' | asset_url }}?v=6" type="module"></script>
 {%- endif -%}
 
 <dialog-component
@@ -45,19 +45,26 @@
     scroll-lock
     aria-labelledby="at-popup-dialog-heading-{{ block.id }}"
   >
-    <h2
-      id="at-popup-dialog-heading-{{ block.id }}"
-      class="visually-hidden"
-    >
-      {{ block_settings.heading }}
-    </h2>
+    {%- assign at_popup_heading_id = 'at-popup-dialog-heading-' | append: block.id -%}
+    {%- unless block_settings.at_enable_bulk_grid -%}
+      <h2
+        id="{{ at_popup_heading_id }}"
+        class="visually-hidden"
+      >
+        {{ block_settings.heading }}
+      </h2>
+    {%- endunless -%}
     <div class="popup-link__inner">
+      {%- if block_settings.at_enable_bulk_grid -%}
+        {% render 'at-bulk-grid-header', heading_id: at_popup_heading_id, title: block_settings.heading %}
+      {%- endif -%}
       {%- if block_settings.at_enable_bulk_grid and settings.at_discount_progress_enabled -%}
+        {%- assign at_popup_dp_section_id = section.id | append: '-' | append: block.id -%}
         <div class="at-dp-condensed-strip--tight at-discount-progress-scheme-wrap">
           {% render 'at-discount-progress',
             context: 'bulk-modal',
             layout: 'drawer_header',
-            section_id: section.id | append: '-' | append: block.id,
+            section_id: at_popup_dp_section_id,
             non_sale_collection_url: settings.at_non_sale_collection_url
           %}
         </div>
