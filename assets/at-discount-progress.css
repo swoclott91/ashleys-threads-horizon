@@ -475,7 +475,7 @@ at-discount-progress-bar {
  */
 .at-dp__cart-label--reached:not(.at-dp__cart-label--shipping) {
   color: var(--at-dp-accent, var(--color-selected-variant-background));
-  font-weight: var(--font-weight-semibold, 600);
+  font-weight: var(--font-weight-bold, 700);
 }
 
 /* Checkmark burst is hidden unless `.add-to-cart-button[data-added='true']` — force final frame inside AT discount UI */

@@ -385,10 +385,10 @@ class AtDiscountProgressBar extends HTMLElement {
 
     /**
      * Milestone labels rendered UNDER the rail (matches restyled mockup):
-     * shipping → tier name ("Free shipping"); reached discount → "{{ label }} applied";
-     * future / current discount → short benefit label (e.g. "15%").
+     * shipping → tier name ("Free shipping"); discount tiers → short benefit label (e.g. "15%").
+     * Reached discount tiers are indicated by green + bold styling (no "applied" text) so the
+     * labels stay compact and don't overlap in tight strips.
      */
-    const appliedTpl = this.#i18n.node_applied || '{{ label }} applied';
     const labelsHtml = m
       .map((ms, i) => {
         const left = n === 1 ? 50 : (i / (n - 1)) * 100;
@@ -403,14 +403,7 @@ class AtDiscountProgressBar extends HTMLElement {
         else if (current) cls += ' at-dp__cart-label--current';
         else cls += ' at-dp__cart-label--future';
 
-        let labelText;
-        if (shipping) {
-          labelText = ms.name;
-        } else if (reached) {
-          labelText = applyLiquidPlaceholders(decodeHtmlEntities(appliedTpl), { label: ms.benefitLabel });
-        } else {
-          labelText = ms.benefitLabel;
-        }
+        const labelText = shipping ? ms.name : ms.benefitLabel;
         return `<span class="${cls}" style="--at-dp-node-left:${left}%">${textForInnerHtml(labelText)}</span>`;
       })
       .join('');
