@@ -270,7 +270,7 @@
     "at_discount_progress_empty_track": "Background of the condensed progress rail (the line behind the filled segment). Overridden when Progress track is set.",
     "at_discount_progress_accent": "Filled rail and reached milestone labels on the discount bar (cart, drawer, product, and bulk modals). Defaults to your Color Palette accent (color 5).",
     "at_discount_progress_track": "Optional color for the unfilled part of the rail. Leave blank to use the Empty progress track fill option.",
-    "at_discount_progress_pending": "Color of the \"in progress\" segment between the filled rail and the next milestone. Leave blank to auto-blend the accent and track colors.",
+    "at_discount_progress_pending": "Color of the \"in progress\" segment between the filled rail and the next milestone. Defaults to your Color Palette gold (foreground).",
     "at_bulk_grid_surface": "Background for the bulk grid table header and color column. Defaults to your Color Palette background.",
     "size_guide_type_preset": "Applies to the open-dialog control when layout is Standalone."
   },

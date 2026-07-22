@@ -160,6 +160,39 @@
   --color-foreground-rgb: 44 44 44;
 }
 
+/*
+ * Bulk modal discount strip: the status line reads as a bold heading in the design
+ * (matching the modal heading color, no green goal highlight). Scoped to the modal
+ * shells so PDP / cart strips keep their muted style. Desktop left-aligns the row.
+ */
+.at-bulk-grid-modal__inner .at-dp__cart-status,
+.at-buy-buttons__bulk-dialog-inner .at-dp__cart-status,
+.popup-link__inner:has(.at-bulk-grid) .at-dp__cart-status {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-foreground);
+}
+
+.at-bulk-grid-modal__inner .at-dp__cart-status-goal,
+.at-buy-buttons__bulk-dialog-inner .at-dp__cart-status-goal,
+.popup-link__inner:has(.at-bulk-grid) .at-dp__cart-status-goal {
+  color: inherit;
+}
+
+@media screen and (min-width: 750px) {
+  .at-bulk-grid-modal__inner .at-dp__cart-expand,
+  .at-buy-buttons__bulk-dialog-inner .at-dp__cart-expand,
+  .popup-link__inner:has(.at-bulk-grid) .at-dp__cart-expand {
+    align-items: stretch;
+    text-align: left;
+  }
+
+  .at-bulk-grid-modal__inner .at-dp__cart-status,
+  .at-buy-buttons__bulk-dialog-inner .at-dp__cart-status,
+  .popup-link__inner:has(.at-bulk-grid) .at-dp__cart-status {
+    text-align: left;
+  }
+}
+
 /* Visible modal header (title + subtitle) rendered above the discount strip */
 .at-bulk-grid__header {
   display: flex;
@@ -203,8 +236,10 @@
 
 .at-bulk-grid {
   --at-bulk-grid-gap: var(--gap-sm, 0.75rem);
-  /* Subtle neutral hairline for table + accordion separators (non-gold, low weight) */
-  --at-bulk-line: rgb(var(--color-foreground-rgb) / 0.12);
+  /* Gold hairline for table + accordion separators (palette foreground gold, light weight) */
+  --at-bulk-line: rgb(var(--at-bulk-gold-rgb, 187 152 124) / 0.5);
+  /* Slightly stronger gold for input / swatch outlines */
+  --at-bulk-line-strong: rgb(var(--at-bulk-gold-rgb, 187 152 124) / 0.65);
   display: flex;
   flex-direction: column;
   gap: var(--at-bulk-grid-gap);
@@ -379,7 +414,7 @@
   width: var(--variant-picker-swatch-width, 20px);
   height: var(--variant-picker-swatch-height, 20px);
   border-radius: var(--variant-picker-swatch-radius, 50%);
-  border: var(--style-border-width-inputs) solid rgb(var(--color-foreground-rgb) / 0.25);
+  border: var(--style-border-width-inputs) solid var(--at-bulk-line-strong);
   background: var(--swatch-background, rgb(var(--color-foreground-rgb) / var(--opacity-5)));
 }
 
@@ -399,7 +434,7 @@
   width: 4ch;
   min-width: 3rem;
   padding: var(--padding-2xs) var(--padding-xs);
-  border: var(--style-border-width-inputs) solid rgb(var(--color-foreground-rgb) / 0.25);
+  border: var(--style-border-width-inputs) solid var(--at-bulk-line-strong);
   border-radius: var(--style-border-radius-inputs);
   text-align: center;
   font-size: 16px;

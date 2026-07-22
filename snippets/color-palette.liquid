@@ -245,6 +245,9 @@
     {% if settings.at_bulk_grid_surface != blank %}
       --at-bulk-surface: {{ settings.at_bulk_grid_surface }};
     {% endif %}
+    /* Palette gold (foreground) exposed as RGB so bulk-modal grid lines stay gold even where
+       we remap --color-foreground to a neutral text color. */
+    --at-bulk-gold-rgb: {{ settings.color_palette.foreground.rgb }};
   }
 
   body {

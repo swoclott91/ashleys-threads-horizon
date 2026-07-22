@@ -1826,7 +1826,7 @@
         "id": "at_discount_progress_pending",
         "label": "t:settings.at_discount_progress_pending",
         "info": "t:info.at_discount_progress_pending",
-        "placeholder": "t:settings.default"
+        "default": "{{ settings.color_palette.foreground }}"
       },
       {
         "type": "color",
