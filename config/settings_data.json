@@ -110,6 +110,7 @@
     "at_discount_progress_login_style": "button-unstyled",
     "at_discount_progress_login_link_text_color": "{{ settings.color_palette.color6 }}",
     "empty_cart_button_link": "shopify://collections/popular",
+    "drawer_text_color": "{{ settings.color_palette.color2 }}",
     "icon_stroke": "default",
     "palette_input_background": "{{ settings.color_palette.color11 }}",
     "palette_input_text": "#2c2c2c",
