@@ -1823,6 +1823,13 @@
       },
       {
         "type": "color",
+        "id": "at_discount_progress_pending",
+        "label": "t:settings.at_discount_progress_pending",
+        "info": "t:info.at_discount_progress_pending",
+        "placeholder": "t:settings.default"
+      },
+      {
+        "type": "color",
         "id": "at_discount_progress_label",
         "label": "t:settings.at_discount_progress_label",
         "placeholder": "t:settings.default"

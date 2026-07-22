@@ -378,7 +378,6 @@ at-discount-progress-bar {
 .at-dp__cart-railwrap {
   position: relative;
   width: 100%;
-  padding-block-start: 0.35rem;
 }
 
 .at-dp__cart-line {
@@ -389,12 +388,47 @@ at-discount-progress-bar {
   background: var(--at-dp-track, rgb(var(--color-variant-text-rgb) / 0.22));
 }
 
+/* Green "unlocked" fill (continuous progress up to the current basis) */
 .at-dp__cart-line-active {
-  display: block;
+  position: absolute;
+  inset-block: 0;
+  left: 0;
   height: 100%;
-  border-radius: inherit;
   background: var(--at-dp-accent, var(--color-selected-variant-background));
   transition: width 0.35s ease;
+}
+
+/* Tan "in-progress" fill from the green end up to the next milestone */
+.at-dp__cart-line-pending {
+  position: absolute;
+  inset-block: 0;
+  height: 100%;
+  background: var(
+    --at-dp-pending,
+    color-mix(
+      in srgb,
+      var(--at-dp-accent, var(--color-selected-variant-background)) 45%,
+      var(--at-dp-track, rgb(var(--color-variant-text-rgb) / 0.22))
+    )
+  );
+  transition: left 0.35s ease, width 0.35s ease;
+}
+
+/* Faint dashed milestone ticks overlaying the track */
+.at-dp__cart-ticks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.at-dp__cart-tick {
+  position: absolute;
+  top: 50%;
+  left: var(--at-dp-node-left, 50%);
+  translate: -50% -50%;
+  width: 0;
+  height: calc(var(--at-dp-rail-height, 6px) + 6px);
+  border-left: 1px dashed rgb(var(--color-variant-text-rgb) / 0.35);
 }
 
 /*
@@ -434,9 +468,11 @@ at-discount-progress-bar {
   text-align: end;
 }
 
-/* Reached + current milestones use the accent color so progress reads at a glance. */
-.at-dp__cart-label--reached,
-.at-dp__cart-label--current {
+/*
+ * Only reached DISCOUNT tiers get the accent "applied" treatment (matches mockup: "12% applied").
+ * Shipping tiers and the next target stay neutral even when reached.
+ */
+.at-dp__cart-label--reached:not(.at-dp__cart-label--shipping) {
   color: var(--at-dp-accent, var(--color-selected-variant-background));
   font-weight: var(--font-weight-semibold);
 }
@@ -735,7 +771,8 @@ at-discount-progress-bar {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .at-dp__cart-line-active {
+  .at-dp__cart-line-active,
+  .at-dp__cart-line-pending {
     transition: none;
   }
 }

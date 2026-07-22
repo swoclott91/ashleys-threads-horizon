@@ -349,8 +349,39 @@ class AtDiscountProgressBar extends HTMLElement {
       }
     }
 
-    const fillEndIdx = nextTierIdx >= 0 ? nextTierIdx : n - 1;
-    const lineActivePct = n <= 1 ? 100 : (fillEndIdx / (n - 1)) * 100;
+    /**
+     * Two-tone rail (matches mockups):
+     * - green "active" fill = continuous progress up to the current basis (interpolated between the
+     *   previous reached milestone and the next target so it grows smoothly within a tier);
+     * - tan "pending" fill = the remainder of the current segment, from the green end up to the next
+     *   milestone position (the tier you are working toward). All reached → full green, no pending.
+     */
+    const posPct = (i) => (n <= 1 ? 100 : (i / (n - 1)) * 100);
+    let greenPct;
+    let pendingPct;
+    if (nextTierIdx < 0) {
+      greenPct = 100;
+      pendingPct = 100;
+    } else {
+      const k = nextTierIdx;
+      const prevThr = k > 0 ? m[k - 1].threshold : 0;
+      const prevPos = k > 0 ? posPct(k - 1) : 0;
+      const nextThr = m[k].threshold;
+      const nextPos = posPct(k);
+      const seg = nextThr - prevThr;
+      const frac = seg > 0 ? Math.min(1, Math.max(0, (previewBasis - prevThr) / seg)) : 0;
+      greenPct = prevPos + frac * (nextPos - prevPos);
+      pendingPct = nextPos;
+    }
+    const pendingWidth = Math.max(0, pendingPct - greenPct);
+
+    /** Faint dashed milestone ticks on the track (interior milestones only; ends are the rail caps). */
+    const ticksHtml = m
+      .map((_ms, i) => {
+        if (i === 0 || i === n - 1) return '';
+        return `<span class="at-dp__cart-tick" style="--at-dp-node-left:${posPct(i)}%"></span>`;
+      })
+      .join('');
 
     /**
      * Milestone labels rendered UNDER the rail (matches restyled mockup):
@@ -467,8 +498,10 @@ class AtDiscountProgressBar extends HTMLElement {
           <span class="at-dp__cart-status" id="${statusId}" role="status" aria-live="polite">${statusInner}</span>
           <div class="at-dp__cart-railwrap" aria-hidden="true">
             <div class="at-dp__cart-line">
-              <span class="at-dp__cart-line-active" style="width:${lineActivePct}%"></span>
+              <span class="at-dp__cart-line-active" style="width:${greenPct}%"></span>
+              <span class="at-dp__cart-line-pending" style="left:${greenPct}%;width:${pendingWidth}%"></span>
             </div>
+            <div class="at-dp__cart-ticks">${ticksHtml}</div>
           </div>
           <div class="at-dp__cart-labels" aria-hidden="true">${labelsHtml}</div>
         </button>
