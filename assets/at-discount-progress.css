@@ -98,7 +98,7 @@ at-discount-progress-bar {
   margin: 0;
   min-width: 0;
   font-size: var(--font-size--sm);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-medium, 500);
   line-height: 1.35;
   color: var(--color-input-text);
   pointer-events: none;
@@ -107,7 +107,7 @@ at-discount-progress-bar {
 .at-discount-progress__login-label {
   flex-shrink: 0;
   font-size: var(--font-size--sm);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-medium, 500);
   line-height: 1.2;
   text-decoration: underline;
   text-underline-offset: 0.15em;
@@ -365,14 +365,14 @@ at-discount-progress-bar {
   display: block;
   margin: 0;
   font-size: inherit;
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-medium, 500);
   color: rgb(var(--color-variant-text-rgb) / var(--opacity-subdued-text));
   line-height: 1.35;
 }
 
 .at-dp__cart-status-goal {
   color: var(--color-selected-variant-background);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-semibold, 600);
 }
 
 .at-dp__cart-railwrap {
@@ -452,7 +452,7 @@ at-discount-progress-bar {
   translate: -50% 0;
   max-width: 7rem;
   font-size: var(--font-size--2xs);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-medium, 500);
   line-height: 1.2;
   white-space: nowrap;
   text-align: center;
@@ -475,7 +475,7 @@ at-discount-progress-bar {
  */
 .at-dp__cart-label--reached:not(.at-dp__cart-label--shipping) {
   color: var(--at-dp-accent, var(--color-selected-variant-background));
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-semibold, 600);
 }
 
 /* Checkmark burst is hidden unless `.add-to-cart-button[data-added='true']` — force final frame inside AT discount UI */
@@ -687,7 +687,7 @@ at-discount-progress-bar {
 
 .at-dp__modal-title {
   font-size: var(--font-size--sm);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-semibold, 600);
   line-height: 1.35;
 }
 
@@ -698,7 +698,7 @@ at-discount-progress-bar {
   background: var(--color-selected-variant-background);
   color: var(--color-selected-variant-text);
   font-size: var(--font-size--3xs);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-semibold, 600);
   letter-spacing: 0.04em;
   line-height: 1.2;
   text-transform: uppercase;
@@ -707,7 +707,7 @@ at-discount-progress-bar {
 .at-dp__modal-away {
   flex-shrink: 0;
   font-size: var(--font-size--sm);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-medium, 500);
   color: var(--color-selected-variant-text);
   white-space: nowrap;
 }
@@ -763,7 +763,7 @@ at-discount-progress-bar {
 }
 
 .at-dp__dialog-qualify a {
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-medium, 500);
   color: var(--color-primary);
 }
 

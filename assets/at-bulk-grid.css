@@ -176,7 +176,7 @@
 .at-bulk-grid-modal__inner .at-dp__cart-status,
 .at-buy-buttons__bulk-dialog-inner .at-dp__cart-status,
 .popup-link__inner:has(.at-bulk-grid) .at-dp__cart-status {
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-bold, 700);
   color: var(--color-foreground);
 }
 
@@ -461,7 +461,7 @@
 .at-bulk-grid__qty-input--active {
   border-color: var(--at-dp-accent, var(--color-selected-variant-background));
   box-shadow: 0 0 0 1px var(--at-dp-accent, var(--color-selected-variant-background));
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-semibold, 600);
   color: var(--at-dp-accent, var(--color-selected-variant-background));
 }
 
@@ -534,7 +534,7 @@
 }
 
 .at-bulk-grid__summary-count {
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-semibold, 600);
 }
 
 .at-bulk-grid__summary-sep {
@@ -546,7 +546,7 @@
 }
 
 .at-bulk-grid__summary-discount {
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-medium, 500);
   color: var(--at-dp-accent, var(--color-selected-variant-background));
 }
 
@@ -809,7 +809,7 @@
 
   .at-bulk-grid__color-count {
     font-size: var(--font-size--xs);
-    font-weight: var(--font-weight-normal);
+    font-weight: var(--font-weight-normal, 400);
     color: var(--at-dp-accent, var(--color-selected-variant-background));
     white-space: nowrap;
   }
