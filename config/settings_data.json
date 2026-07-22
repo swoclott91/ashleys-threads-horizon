@@ -117,6 +117,7 @@
     "palette_input_border": "#d8cbbb",
     "input_border_width": 1,
     "inputs_border_radius": 0,
+    "popover_text_color": "{{ settings.color_palette.color2 }}",
     "popover_border_radius": 14,
     "currency_code_enabled_product_pages": false,
     "currency_code_enabled_product_cards": false,
