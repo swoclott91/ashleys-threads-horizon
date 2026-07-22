@@ -160,6 +160,14 @@
   --color-foreground-rgb: 44 44 44;
 }
 
+/* Close (X) control renders black in the bulk modals (icon uses currentColor) */
+#at-bulk-grid-quick-add-dialog .at-bulk-grid-modal__close,
+.at-buy-buttons__bulk-dialog .at-buy-buttons__bulk-close,
+.at-popup-link .popup-link__content:has(.at-bulk-grid) .popup-link__close {
+  color: #000;
+  opacity: 1;
+}
+
 /*
  * Bulk modal discount strip: the status line reads as a bold heading in the design
  * (matching the modal heading color, no green goal highlight). Scoped to the modal
@@ -209,6 +217,7 @@
   font-weight: var(--font-heading--weight);
   font-size: var(--font-size--lg);
   line-height: 1.2;
+  color: #000;
 }
 
 .at-bulk-grid__subtitle {
@@ -390,6 +399,7 @@
 .at-bulk-grid__table th {
   background: var(--at-bulk-surface, var(--color-background));
   font-weight: 600;
+  color: #000;
   box-shadow: 0 1px 0 var(--at-bulk-line);
 }
 
@@ -420,6 +430,7 @@
 
 .at-bulk-grid__color-name {
   font-size: inherit;
+  color: #000;
 }
 
 .at-bulk-grid__cell-inner {
@@ -473,7 +484,7 @@
 }
 
 .at-bulk-grid__availability--in-stock {
-  color: var(--color-instock, green);
+  color: #243e34;
 }
 
 .at-bulk-grid__availability--low {
