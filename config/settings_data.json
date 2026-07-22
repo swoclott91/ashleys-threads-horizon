@@ -106,6 +106,7 @@
     "at_discount_progress_enabled": true,
     "at_non_sale_collection_url": "shopify://collections/non-sale-items",
     "at_discount_progress_empty_track": "tinted",
+    "at_bulk_grid_surface": "#2C2C2C",
     "at_discount_progress_login_style": "button-unstyled",
     "at_discount_progress_login_link_text_color": "{{ settings.color_palette.color6 }}",
     "empty_cart_button_link": "shopify://collections/popular",
