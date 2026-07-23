@@ -52,7 +52,7 @@
     "page_width": "wide",
     "page_transition_enabled": false,
     "transition_to_main_product": true,
-    "card_hover_effect": "scale",
+    "card_hover_effect": "lift",
     "badge_position": "top-right",
     "badge_corner_radius": 0,
     "badge_sale_background_color": "#243e34",
