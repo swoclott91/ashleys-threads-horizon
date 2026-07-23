@@ -328,13 +328,14 @@ class AtDiscountProgressBar extends HTMLElement {
    *   m: Array<{ threshold: number; name: string; benefitShort: string; benefitLabel: string; kind?: string }>;
    *   n: number;
    *   previewBasis: number;
+   *   committedBasis: number;
    *   nextTierIdx: number;
    *   uid: string;
    *   nonSaleUrl: string;
    * }} p
    */
   #renderCartCondensed(p) {
-    const { m, n, previewBasis, nextTierIdx, uid, nonSaleUrl } = p;
+    const { m, n, previewBasis, committedBasis, nextTierIdx, uid, nonSaleUrl } = p;
 
     let statusInner = '';
     if (nextTierIdx < 0) {
@@ -357,23 +358,33 @@ class AtDiscountProgressBar extends HTMLElement {
      *   milestone position (the tier you are working toward). All reached → full green, no pending.
      */
     const posPct = (i) => (n <= 1 ? 100 : (i / (n - 1)) * 100);
-    let greenPct;
-    let pendingPct;
-    if (nextTierIdx < 0) {
-      greenPct = 100;
-      pendingPct = 100;
-    } else {
-      const k = nextTierIdx;
+    /** Continuous fill % for an arbitrary basis (interpolated between milestone positions). */
+    const basisToPct = (basis) => {
+      let k = -1;
+      for (let i = 0; i < n; i++) {
+        if (basis < m[i].threshold) {
+          k = i;
+          break;
+        }
+      }
+      if (k < 0) return 100; // basis is past the last milestone
       const prevThr = k > 0 ? m[k - 1].threshold : 0;
       const prevPos = k > 0 ? posPct(k - 1) : 0;
       const nextThr = m[k].threshold;
       const nextPos = posPct(k);
       const seg = nextThr - prevThr;
-      const frac = seg > 0 ? Math.min(1, Math.max(0, (previewBasis - prevThr) / seg)) : 0;
-      greenPct = prevPos + frac * (nextPos - prevPos);
-      pendingPct = nextPos;
-    }
-    const pendingWidth = Math.max(0, pendingPct - greenPct);
+      const frac = seg > 0 ? Math.min(1, Math.max(0, (basis - prevThr) / seg)) : 0;
+      return prevPos + frac * (nextPos - prevPos);
+    };
+
+    /*
+     * Green = what is actually in the cart (committed subtotal).
+     * Gold "pending" = the additional effect of items previewed but not yet added
+     * (bulk grid selection / PDP quantity), i.e. committed → projected.
+     */
+    const greenPct = basisToPct(committedBasis);
+    const pendingEndPct = basisToPct(previewBasis);
+    const pendingWidth = Math.max(0, pendingEndPct - greenPct);
 
     /** Faint dashed milestone ticks on the track (interior milestones only; ends are the rail caps). */
     const ticksHtml = m
@@ -596,6 +607,7 @@ class AtDiscountProgressBar extends HTMLElement {
         m,
         n,
         previewBasis,
+        committedBasis: subtotal,
         nextTierIdx,
         uid,
         nonSaleUrl,
