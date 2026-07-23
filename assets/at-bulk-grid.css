@@ -577,6 +577,37 @@
   position: relative;
 }
 
+/* Ring spinner on ATC while cart/add.js is in flight (same pattern as .at-bulk-grid__spinner / AT menu) */
+.at-bulk-grid__add--loading {
+  cursor: progress;
+  pointer-events: none;
+}
+
+.at-bulk-grid__add--loading .add-to-cart-text,
+.at-bulk-grid__add--loading .add-to-cart__added {
+  visibility: hidden;
+}
+
+.at-bulk-grid__add--loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  box-sizing: border-box;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid color-mix(in srgb, currentColor 25%, transparent);
+  border-block-start-color: currentColor;
+  border-radius: 50%;
+  animation: at-bulk-grid-spin 0.7s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .at-bulk-grid__add--loading::after {
+    animation-duration: 2s;
+  }
+}
+
 .at-bulk-grid__actions .add-to-cart-button .add-to-cart-icon {
   display: inline-flex;
   align-items: center;
