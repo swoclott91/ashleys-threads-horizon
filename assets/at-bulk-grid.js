@@ -6,7 +6,7 @@
 
 import { formatMoney } from '@theme/money-formatting';
 import { CartLinesUpdateEvent } from '@shopify/events';
-import { onAnimationEnd, yieldToMainThread } from '@theme/utilities';
+import { onAnimationEnd, yieldToMainThread, preloadImage } from '@theme/utilities';
 
 const BULK_GRID_SELECTORS = {
   container: '[data-at-bulk-grid]',
@@ -30,17 +30,85 @@ const CART_ICON_SELECTOR = '.header-actions__cart-icon';
 /**
  * Same success treatment as AddToCartComponent.animateAddToCart (product-form.js):
  * `data-added` drives base.css checkmark / label transitions; then reset after 800ms.
+ * Fire-and-forget — callers must not await this if they need to close the modal / open
+ * the drawer after fly-to-cart only (the 800ms hold would otherwise dominate wall time).
  * @param {HTMLButtonElement | null} addBtn
  */
-async function playBulkAddToCartButtonSuccessAnimation(addBtn) {
+function playBulkAddToCartButtonSuccessAnimation(addBtn) {
   if (!addBtn) return;
-  if (addBtn.dataset.added !== 'true') {
-    addBtn.dataset.added = 'true';
+  void (async () => {
+    if (addBtn.dataset.added !== 'true') {
+      addBtn.dataset.added = 'true';
+    }
+    await yieldToMainThread();
+    await onAnimationEnd(addBtn);
+    await new Promise((r) => setTimeout(r, 800));
+    addBtn.removeAttribute('data-added');
+  })();
+}
+
+/**
+ * Section IDs for cart-items-component morph (same pattern as product-form.js).
+ * Requesting these on cart/add.js avoids a post-add Section Rendering refetch.
+ * @returns {string[]}
+ */
+function getCartItemsSectionIds() {
+  /** @type {string[]} */
+  const ids = [];
+  for (const el of document.querySelectorAll('cart-items-component')) {
+    if (el instanceof HTMLElement && el.dataset.sectionId) {
+      ids.push(el.dataset.sectionId);
+    }
   }
-  await yieldToMainThread();
-  await onAnimationEnd(addBtn);
-  await new Promise((r) => setTimeout(r, 800));
-  addBtn.removeAttribute('data-added');
+  return ids;
+}
+
+/**
+ * Build a minimal Ajax cart object for CartLinesUpdateEvent without a cart.js round-trip.
+ * Bubble count = previous cart-icon count + quantities just added.
+ * @param {Array<{ id?: number, key?: string, quantity?: number, variant_id?: number }>} addedItems
+ * @param {number} addedQuantitySum
+ */
+function buildOptimisticCartFromAdd(addedItems, addedQuantitySum) {
+  const cartIcon = /** @type {{ currentCartCount?: number } | null} */ (document.querySelector('cart-icon'));
+  const prevCount = Number(cartIcon?.currentCartCount) || 0;
+  return {
+    token: '',
+    item_count: prevCount + addedQuantitySum,
+    total_price: 0,
+    currency: window.Shopify?.currency?.active || 'USD',
+    items: Array.isArray(addedItems) ? addedItems : [],
+    discount_codes: [],
+  };
+}
+
+/**
+ * Normalize cart/add.js JSON (array of lines, or { items, sections }, or error).
+ * @param {any} data
+ */
+function normalizeCartAddResponse(data) {
+  if (data?.status && data.status !== 200) {
+    return { error: data, items: /** @type {any[]} */ ([]), sections: undefined };
+  }
+  if (Array.isArray(data)) {
+    return { error: null, items: data, sections: undefined };
+  }
+  return {
+    error: null,
+    items: Array.isArray(data?.items) ? data.items : [],
+    sections: data?.sections,
+  };
+}
+
+/**
+ * Preload the featured image used by fly-to-cart so the animation does not hitch.
+ * @param {string} [sectionId]
+ */
+function preloadBulkFlyToCartImage(sectionId) {
+  if (!sectionId) return;
+  const config = getBulkConfig(sectionId) || bulkGridConfigCache.get(sectionId);
+  const url = config?.productFeaturedImage;
+  if (typeof url === 'string' && url) preloadImage(url);
 }
 
 /**
@@ -90,9 +158,10 @@ function setBulkAddButtonLoading(addBtn, isLoading) {
 }
 
 /**
- * POST selected variants to cart/add.js, then run success visuals.
+ * POST selected variants to cart/add.js (with cart section HTML), then run success visuals.
  * Shows button spinner for the network wait; cart drawer opens only after fly animation
  * (CartLinesUpdateEvent is dispatched from the button so cart-drawer defers past the modal).
+ * Skips a follow-up cart.js fetch — uses optimistic item_count + sections from the add response.
  * @param {HTMLElement} container
  * @param {string} sectionId
  * @param {HTMLButtonElement | null} addBtn
@@ -113,18 +182,24 @@ async function submitBulkCartAdd(container, sectionId, addBtn, getLineItems, upd
   setBulkAddButtonLoading(addBtn, true);
   const deferredEventPromise = beginBulkCartLinesUpdate(items, addBtn);
   const root = window.Shopify?.routes?.root || '/';
+  const addUrl = (typeof Theme !== 'undefined' && Theme.routes?.cart_add_url) || root + 'cart/add.js';
+  const sectionIds = getCartItemsSectionIds();
+  /** @type {{ items: Array<{ id: number, quantity: number }>, sections?: string }} */
+  const body = { items };
+  if (sectionIds.length) body.sections = sectionIds.join(',');
 
   try {
-    const addRes = await fetch(root + 'cart/add.js', {
+    const addRes = await fetch(addUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items }),
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(body),
     });
     const data = await addRes.json();
+    const { error, items: addedItems, sections } = normalizeCartAddResponse(data);
 
-    if (data.status && data.status !== 200) {
-      console.warn('at-bulk-grid: cart add response', data);
-      deferredEventPromise.reject(data);
+    if (error) {
+      console.warn('at-bulk-grid: cart add response', error);
+      deferredEventPromise.reject(error);
       setBulkAddButtonLoading(addBtn, false);
       updateTotal();
       return;
@@ -132,11 +207,11 @@ async function submitBulkCartAdd(container, sectionId, addBtn, getLineItems, upd
 
     window.dispatchEvent(new CustomEvent('at:bulk:added', { detail: { items, response: data } }));
 
-    const cartRes = await fetch(root + 'cart.js');
-    const cart = await cartRes.json();
+    const addedQuantitySum = items.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    const cart = buildOptimisticCartFromAdd(addedItems, addedQuantitySum);
 
     setBulkAddButtonLoading(addBtn, false);
-    await handleBulkAddSuccess(container, updateTotal, addBtn, sectionId, cart, deferredEventPromise);
+    await handleBulkAddSuccess(container, updateTotal, addBtn, sectionId, cart, deferredEventPromise, sections);
   } catch (err) {
     console.error('at-bulk-grid: cart add failed', err);
     deferredEventPromise.reject(err);
@@ -146,18 +221,39 @@ async function submitBulkCartAdd(container, sectionId, addBtn, getLineItems, upd
 }
 
 /**
- * On successful bulk add: same visuals as individual add — fly-to-cart (when enabled) +
- * add-to-cart button burst (always). Mirrors product-form AddToCartComponent.handleClick.
- * Cart drawer auto-open is deferred until after these animations and modal close
- * (CartLinesUpdateEvent is dispatched from the ATC button inside the modal).
+ * On successful bulk add: fly-to-cart (when enabled) + button burst (fire-and-forget).
+ * Resolves the cart event immediately so drawer morph / bubble update run during fly,
+ * then awaits fly-to-cart only before closing the modal (drawer opens on close).
  * @param {HTMLElement} container - Bulk grid container
  * @param {() => void} updateTotal - Function to refresh total display
  * @param {HTMLButtonElement | null} addBtn - Add to cart button (source for fly animation)
  * @param {string} sectionId - Section ID for config lookup
- * @param {Object} cart - Cart object from cart.js
+ * @param {Object} cart - Cart object (optimistic Ajax shape) for CartLinesUpdateEvent
  * @param {{ resolve: Function, reject: Function } | null} [deferredEventPromise]
+ * @param {Record<string, string> | undefined} [sections] - Section HTML from cart/add.js
  */
-async function handleBulkAddSuccess(container, updateTotal, addBtn, sectionId, cart, deferredEventPromise = null) {
+async function handleBulkAddSuccess(
+  container,
+  updateTotal,
+  addBtn,
+  sectionId,
+  cart,
+  deferredEventPromise = null,
+  sections = undefined
+) {
+  // Resolve first so cart-items morph + bubble update run in parallel with fly animation.
+  if (deferredEventPromise) {
+    deferredEventPromise.resolve({
+      cart: CartLinesUpdateEvent.createCartFromAjaxResponse(cart),
+      detail: {
+        source: 'at-bulk-grid',
+        sourceId: 'at-bulk-grid',
+        itemCount: cart.item_count,
+        sections,
+      },
+    });
+  }
+
   const doAnimation = container.dataset.atBulkAddToCartAnimation === 'true';
   const config = getBulkConfig(sectionId) || bulkGridConfigCache.get(sectionId);
   const productImage = config?.productFeaturedImage;
@@ -179,10 +275,9 @@ async function handleBulkAddSuccess(container, updateTotal, addBtn, sectionId, c
     }
   }
 
-  const pending = [];
-  if (addBtn) pending.push(playBulkAddToCartButtonSuccessAnimation(addBtn));
-  if (flyToCartEl) pending.push(onAnimationEnd(flyToCartEl));
-  if (pending.length) await Promise.all(pending);
+  // Button burst is visual-only; do not gate modal close / drawer open on its 800ms hold.
+  if (addBtn) playBulkAddToCartButtonSuccessAnimation(addBtn);
+  if (flyToCartEl) await onAnimationEnd(flyToCartEl);
 
   const dialogComponent = container.closest('dialog-component');
   if (dialogComponent && typeof dialogComponent.closeDialog === 'function') {
@@ -208,20 +303,6 @@ async function handleBulkAddSuccess(container, updateTotal, addBtn, sectionId, c
   const lineItemsInput = form?.querySelector(BULK_GRID_SELECTORS.lineItemsInput);
   if (lineItemsInput) lineItemsInput.value = '';
   updateTotal();
-
-  // Resolve after fly animation + dialog close so cart-drawer (listening for
-  // sourceModal `close`, or opening when the modal is already closed) opens
-  // the slideout only once success visuals have finished — not on click.
-  if (deferredEventPromise) {
-    deferredEventPromise.resolve({
-      cart: CartLinesUpdateEvent.createCartFromAjaxResponse(cart),
-      detail: {
-        source: 'at-bulk-grid',
-        sourceId: 'at-bulk-grid',
-        itemCount: cart.item_count,
-      },
-    });
-  }
 }
 
 /** Theme add-to-cart icon (icon-add-to-cart.svg) – same as add-to-cart-button secondary */
@@ -1028,10 +1109,15 @@ const deferredLoadPromises = new Map();
  * The promise is reused by renderGrid to avoid duplicate fetches.
  */
 function preloadBulkGridVariants(sectionId) {
-  if (deferredLoadPromises.has(sectionId) || bulkGridConfigCache.has(sectionId)) return;
+  if (deferredLoadPromises.has(sectionId) || bulkGridConfigCache.has(sectionId)) {
+    preloadBulkFlyToCartImage(sectionId);
+    return;
+  }
 
   const config = getBulkConfig(sectionId);
   if (!config) return;
+
+  preloadBulkFlyToCartImage(sectionId);
 
   const expected = expectedVariantCount(config);
   const needDeferred = expected > 0 && config.variants.length < expected && (config.options?.[0]?.valueIds?.length ?? 0) > 0;
@@ -1067,6 +1153,7 @@ function renderGrid(container) {
           config.variants = Array.from(byId.values());
         }
         bulkGridConfigCache.set(sectionId, config);
+        preloadBulkFlyToCartImage(sectionId);
         const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
         if (isMobile) {
           renderMobileGrid(container, config, sectionId);
@@ -1082,6 +1169,7 @@ function renderGrid(container) {
   }
 
   if (config.variants?.length) bulkGridConfigCache.set(sectionId, config);
+  preloadBulkFlyToCartImage(sectionId);
   const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
   if (isMobile) {
     renderMobileGrid(container, config, sectionId);
@@ -1186,6 +1274,8 @@ function init() {
     trigger.addEventListener('click', (e) => {
       const container = document.querySelector(BULK_GRID_SELECTORS.container);
       if (!container) return;
+      const sectionId = container.dataset?.atBulkGridSectionId;
+      if (sectionId) preloadBulkFlyToCartImage(sectionId);
       const dialogComponent = container.closest('dialog-component');
       if (dialogComponent && !trigger.closest('dialog-component')?.contains(container)) {
         e.preventDefault();
