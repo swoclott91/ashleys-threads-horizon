@@ -151,7 +151,7 @@
             "media_radius": 0,
             "extend_media": false,
             "zoom": true,
-            "video_loop": false,
+            "video_loop": true,
             "hide_variants": true,
             "padding-block-start": 0,
             "padding-block-end": 0,
@@ -366,6 +366,22 @@
                 "padding-inline-end": 0
               },
               "blocks": {
+                "discount-progress": {
+                  "type": "at-discount-progress",
+                  "settings": {
+                    "show_discount_bar": true,
+                    "style_class": "button-unstyled",
+                    "custom_button_background": "{{ settings.color_palette.foreground }}",
+                    "custom_button_text": "{{ settings.color_palette.background }}",
+                    "custom_button_border": "{{ settings.color_palette.background }}",
+                    "link_text_color": "{{ settings.color_palette.color6 }}",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
                 "buy-buttons-form": {
                   "type": "_at-buy-buttons-form",
                   "settings": {
@@ -423,33 +439,124 @@
                     "link_text_color": ""
                   },
                   "blocks": {}
-                },
-                "discount-progress": {
-                  "type": "at-discount-progress",
-                  "settings": {
-                    "show_discount_bar": true,
-                    "style_class": "button-unstyled",
-                    "custom_button_background": "{{ settings.color_palette.foreground }}",
-                    "custom_button_text": "{{ settings.color_palette.background }}",
-                    "custom_button_border": "{{ settings.color_palette.background }}",
-                    "link_text_color": "{{ settings.color_palette.color6 }}",
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
                 }
               },
               "block_order": [
+                "discount-progress",
                 "buy-buttons-form",
-                "bulk-add-to-cart",
-                "discount-progress"
+                "bulk-add-to-cart"
+              ]
+            },
+            "accordion_tAGygP": {
+              "type": "accordion",
+              "name": "t:names.accordion",
+              "settings": {
+                "icon": "caret",
+                "dividers": true,
+                "divider_color": "",
+                "type_preset": "h6",
+                "background_color": "",
+                "text_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "accordion_row_6i4aka": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Description",
+                    "open_by_default": true,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_gQ9aqb": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Our goal is for every customer to be totally satisfied with their purchase. If this isn't the case, let us know and we'll do our best to work with you to make it right.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_gQ9aqb"
+                  ]
+                },
+                "accordion_row_i7WrAw": {
+                  "type": "_accordion-row",
+                  "name": "Features",
+                  "settings": {
+                    "heading": "Features",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_6Qe9YW": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>We will work quickly to ship your order as soon as possible. Once your order has shipped, you will receive an email with further information. Delivery times vary depending on your location.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_6Qe9YW"
+                  ]
+                }
+              },
+              "block_order": [
+                "accordion_row_6i4aka",
+                "accordion_row_i7WrAw"
               ]
             },
             "text_aEtTtq": {
               "type": "text",
               "name": "Product description",
+              "disabled": true,
               "settings": {
                 "text": "{{ closest.product.description }}",
                 "width": "100%",
@@ -480,6 +587,7 @@
             "variant_picker_R3rGDr",
             "size_guide_pdp",
             "at_buy_buttons_NKcy8K",
+            "accordion_tAGygP",
             "text_aEtTtq"
           ]
         }
