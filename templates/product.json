@@ -452,7 +452,8 @@
               "settings": {
                 "icon": "caret",
                 "dividers": true,
-                "divider_color": "",
+                "divider_color": "{{ settings.color_palette.color8 }}",
+                "divider_thickness": 1,
                 "type_preset": "h6",
                 "background_color": "",
                 "text_color": "",
