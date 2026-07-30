@@ -17,6 +17,7 @@
      --summary-font-case: var(--font-{{ block_settings.type_preset }}--case);
     {% render 'spacing-style', settings: block_settings %}
     {% render 'border-override', settings: block_settings %}
+    {% if block_settings.dividers %} --accordion-divider-width: {{ block_settings.divider_thickness }}px;{% endif %}
     {% if block_settings.divider_color != blank %} --color-border: {{ block_settings.divider_color }};{% endif %}
   "
   {{ block.shopify_attributes }}
@@ -64,6 +65,17 @@
       "id": "divider_color",
       "label": "t:settings.divider_color",
       "placeholder": "t:settings.default",
+      "visible_if": "{{ block.settings.dividers }}"
+    },
+    {
+      "type": "range",
+      "id": "divider_thickness",
+      "label": "t:settings.divider_thickness",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "default": 1,
       "visible_if": "{{ block.settings.dividers }}"
     },
     {

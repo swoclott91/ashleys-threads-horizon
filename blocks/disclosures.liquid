@@ -26,7 +26,7 @@
     <disclosures-summary-fit
       class="disclosures accordion--{{ block.settings.icon }}{% if block.settings.dividers %} accordion--dividers{% endif %} spacing-style"
       data-summary-layout="stacked"
-      style="--disclosures-icon-size: calc(var(--font-{{ block.settings.disclosure_heading_preset | default: 'h5' }}--size) * 1.2); --disclosures-symbol-aspect-ratio: {{ disclosures_symbol_aspect_ratio }}; {% render 'spacing-style', settings: block.settings %}{% if block.settings.text_color != blank %} --color: {{ block.settings.text_color }}; --color-rgb: {{ block.settings.text_color.rgb }};{% endif %}{% if block.settings.divider_color != blank %} --color-border: {{ block.settings.divider_color }};{% endif %}"
+      style="--disclosures-icon-size: calc(var(--font-{{ block.settings.disclosure_heading_preset | default: 'h5' }}--size) * 1.2); --disclosures-symbol-aspect-ratio: {{ disclosures_symbol_aspect_ratio }}; {% render 'spacing-style', settings: block.settings %}{% if block.settings.text_color != blank %} --color: {{ block.settings.text_color }}; --color-rgb: {{ block.settings.text_color.rgb }};{% endif %}{% if block.settings.dividers %} --accordion-divider-width: {{ block.settings.divider_thickness }}px;{% endif %}{% if block.settings.divider_color != blank %} --color-border: {{ block.settings.divider_color }};{% endif %}"
     >
       {%- if block.settings.heading != blank -%}
         <h2 class="disclosures__heading {{ block.settings.heading_preset }}">
@@ -173,11 +173,11 @@
     }
 
     .disclosures.accordion--dividers accordion-custom:first-child .details {
-      border-block-start: var(--style-border-width) solid var(--color-border);
+      border-block-start: var(--accordion-divider-width, var(--style-border-width)) solid var(--color-border);
     }
 
     .disclosures.accordion--dividers accordion-custom:last-child .details {
-      border-block-end: var(--style-border-width) solid var(--color-border);
+      border-block-end: var(--accordion-divider-width, var(--style-border-width)) solid var(--color-border);
     }
 
     .disclosures__heading {
@@ -553,6 +553,17 @@
       "type": "color",
       "id": "divider_color",
       "label": "t:settings.divider_color",
+      "visible_if": "{{ block.settings.dividers }}"
+    },
+    {
+      "type": "range",
+      "id": "divider_thickness",
+      "label": "t:settings.divider_thickness",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "default": 1,
       "visible_if": "{{ block.settings.dividers }}"
     },
     {
