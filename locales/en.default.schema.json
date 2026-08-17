@@ -543,6 +543,12 @@
     "complementary": "Complementary",
     // CSS object-fit property: scale media to fit container
     "contain": "Contain",
+    // Icon option for combed ring-spun cotton fabric
+    "cotton_combed_ring_spun": "Combed ring-spun cotton",
+    // Icon option for open-end cotton fabric
+    "cotton_open_end": "Open-end cotton",
+    // Icon option for ring-spun cotton fabric
+    "cotton_ring_spun": "Ring-spun cotton",
     // Pagination control showing current/total slide numbers (e.g. 1/5)
     "counter": "Counter",
     "cover": "Cover",
