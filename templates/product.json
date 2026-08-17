@@ -527,8 +527,8 @@
                           "type": "icon",
                           "name": "t:names.icon",
                           "settings": {
-                            "icon": "banana",
-                            "width": 80,
+                            "icon": "cotton_open_end",
+                            "width": 64,
                             "link_collection": "",
                             "link": "",
                             "open_in_new_tab": false,
