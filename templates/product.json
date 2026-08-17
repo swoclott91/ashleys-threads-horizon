@@ -527,8 +527,8 @@
                           "type": "icon",
                           "name": "t:names.icon",
                           "settings": {
-                            "icon": "carrot",
-                            "width": 24,
+                            "icon": "cotton_open_end",
+                            "width": 80,
                             "link_collection": "",
                             "link": "",
                             "open_in_new_tab": false,
