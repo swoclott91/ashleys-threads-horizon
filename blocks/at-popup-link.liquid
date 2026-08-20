@@ -54,12 +54,7 @@
     <div class="popup-link__inner">
       {%- if block_settings.at_enable_bulk_grid and settings.at_discount_progress_enabled -%}
         <div class="at-dp-condensed-strip--tight at-discount-progress-scheme-wrap color-custom-at-discount-progress">
-          {% render 'at-discount-progress',
-            context: 'bulk-modal',
-            layout: 'drawer_header',
-            section_id: section.id | append: '-' | append: block.id,
-            non_sale_collection_url: settings.at_non_sale_collection_url
-          %}
+          {% render 'at-discount-progress', context: 'bulk-modal', layout: 'drawer_header', section_id: section.id, append: block.id, non_sale_collection_url: settings.at_non_sale_collection_url %}
         </div>
       {%- endif -%}
       {%- if block_settings.at_enable_bulk_grid -%}
@@ -301,3 +296,21 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {% render 'at-discount-progress',
+                context: 'bulk-modal',
+                layout: 'drawer_header',
+                section_id: section.id | append: '-' | append: block.id,
+                non_sale_collection_url: settings.at_non_sale_collection_url
+              %}
+  to: "{% render 'at-discount-progress', context: 'bulk-modal', layout: 'drawer_header',
+    section_id: section.id, append: block.id, non_sale_collection_url: settings.at_non_sale_collection_url
+    %}"
+  position: 2011..2198
+{% endcomment %}
