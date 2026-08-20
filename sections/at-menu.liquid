@@ -94,14 +94,7 @@
           >
             <div class="mega-menu section section--full-width-margin">
               <div class="mega-menu__grid" data-menu-grid-id="{{ submenu_id }}-grid">
-                {%- render 'mega-menu-list',
-                  parent_link: link,
-                  id: submenu_id | append: '-list',
-                  section: section,
-                  grid_columns_count: 6,
-                  grid_columns_count_tablet: 4,
-                  menu_content_type: 'text'
-                -%}
+                {%- render 'mega-menu-list', parent_link: link, id: submenu_id, append: '-list', section: section, grid_columns_count: 6, grid_columns_count_tablet: 4, menu_content_type: 'text' -%}
               </div>
             </div>
           </div>
@@ -517,3 +510,23 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'mega-menu-list',
+                      parent_link: link,
+                      id: submenu_id | append: '-list',
+                      section: section,
+                      grid_columns_count: 6,
+                      grid_columns_count_tablet: 4,
+                      menu_content_type: 'text'
+                    -%}
+  to: "{%- render 'mega-menu-list', parent_link: link, id: submenu_id, append: '-list',
+    section: section, grid_columns_count: 6, grid_columns_count_tablet: 4, menu_content_type:
+    'text' -%}"
+  position: 3592..3773
+{% endcomment %}
