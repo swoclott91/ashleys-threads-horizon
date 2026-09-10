@@ -1,0 +1,80 @@
+{%- doc -%}
+  Renders alphabet-range columns of brand text links (S&S-style).
+
+  Column ranges (stable, matches S&S directory):
+    #-Ba | Be-C | D-H | I-L | M-O | P-S | T-Z
+
+  Brands are sorted by title. Digits / non-letters land in #-Ba.
+  "Be…" and later B-names land in Be-C (so Badger/Bayside stay in #-Ba).
+
+  @param {object} brands_linklist - Linklist of brand collection links.
+  @param {string} [class_prefix] - BEM prefix (default: at-brands-dir).
+{%- enddoc -%}
+
+{%- liquid
+  assign class_prefix = class_prefix | default: 'at-brands-dir'
+  assign brand_links = brands_linklist.links | default: blank
+  if brand_links != blank
+    assign brand_links = brand_links | sort: 'title'
+  endif
+
+  assign col_labels = '#-Ba,Be-C,D-H,I-L,M-O,P-S,T-Z' | split: ','
+-%}
+
+{%- if brand_links != blank -%}
+  <div class="{{ class_prefix }}__columns" role="navigation" aria-label="Brands A to Z">
+    {%- for col_label in col_labels -%}
+      {%- assign col_index = forloop.index0 -%}
+      <div class="{{ class_prefix }}__column" data-col="{{ col_index }}">
+        <h3 class="{{ class_prefix }}__column-heading">{{- col_label -}}</h3>
+        <ul class="{{ class_prefix }}__list list-unstyled" role="list">
+          {%- for brand_link in brand_links -%}
+            {%- liquid
+              assign raw_title = brand_link.title | strip
+              assign key = raw_title | upcase
+              assign fl = key | slice: 0, 1
+              assign f2 = key | slice: 0, 2
+              assign brand_col = 6
+
+              if fl == '0' or fl == '1' or fl == '2' or fl == '3' or fl == '4' or fl == '5' or fl == '6' or fl == '7' or fl == '8' or fl == '9'
+                assign brand_col = 0
+              elsif fl == 'A'
+                assign brand_col = 0
+              elsif fl == 'B'
+                if f2 < 'BE'
+                  assign brand_col = 0
+                else
+                  assign brand_col = 1
+                endif
+              elsif fl == 'C'
+                assign brand_col = 1
+              elsif fl == 'D' or fl == 'E' or fl == 'F' or fl == 'G' or fl == 'H'
+                assign brand_col = 2
+              elsif fl == 'I' or fl == 'J' or fl == 'K' or fl == 'L'
+                assign brand_col = 3
+              elsif fl == 'M' or fl == 'N' or fl == 'O'
+                assign brand_col = 4
+              elsif fl == 'P' or fl == 'Q' or fl == 'R' or fl == 'S'
+                assign brand_col = 5
+              else
+                assign brand_col = 6
+              endif
+            -%}
+            {%- if brand_col == col_index -%}
+              <li>
+                <a
+                  href="{{ brand_link.url }}"
+                  class="{{ class_prefix }}__link"
+                  data-brand-name="{{ brand_link.title | escape }}"
+                  {% if brand_link.current %}aria-current="page"{% endif %}
+                >
+                  {{- brand_link.title -}}
+                </a>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endfor -%}
+  </div>
+{%- endif -%}

@@ -2,63 +2,57 @@
   AT Menu – Mobile Drawer (view-stack architecture)
 
   Renders inside the <header-drawer>'s .menu-drawer container.
-  Uses <at-menu-panel> custom element for multi-view navigation:
-    – main       : top-level nav items from the main menu
-    – categories : category sidebar items from at_categories_menu
-    – brands     : brand grid with search + A-Z
-    – cat-{handle}: sub-links for each category with children
+  Uses <at-menu-panel> for multi-view navigation:
+    – main   : categories (no Brands) + remaining main-menu links
+    – brands : alphabet text directory + featured logos (SSR — no image grid)
+    – cat-*  : adopted from at-menu-data on demand
 
-  Close buttons use header-drawer/close so the stock component
-  handles focus-trap teardown and details[open] reset.
-
-  @param {object}  menu_links           - Top-level links from the main nav.
-  @param {string}  panel_handle         - Handle of the panel trigger item (skipped from main view since brands replaces it).
-  @param {object}  categories_linklist  - Linklist for the categories sidebar.
-  @param {object}  brands_linklist      - Linklist for the brand grid.
-  @param {string}  brands_handle        - Handle of the brands category.
-  @param {string}  highlight_handle     - Handle of the highlighted item.
-  @param {string}  mobile_drawer_label  - Heading shown in the main view.
-
-  Architecture note (perf)
-  ------------------------
-  Renders only the LIGHT main view. The heavy brands view + every
-  per-category view live in `sections/at-menu-data.liquid` and are
-  fetched on demand by assets/at-menu.js when the user opens the drawer.
-  This keeps the initial HTML payload tiny on every page so cold-cache
-  renders never trip iOS Safari's renderer timeout — and Google's
-  product-feed crawler never hits the heavy views, ending the GMC
-  disapprovals from intermittent crawl failures.
+  @param {object}  menu_links - Top-level links from the main nav.
+  @param {string}  panel_handle - Products panel handle (inlined as categories).
+  @param {object}  categories_linklist - Categories sidebar.
+  @param {object}  brands_linklist - Full brands linklist.
+  @param {string}  brands_handle - Top-level Brands nav handle.
+  @param {object}  [featured_brands_linklist] - Featured brand logos.
+  @param {string}  highlight_handle - Highlighted item handle.
+  @param {string}  mobile_drawer_label - Main view heading.
+  @param {object}  [block_settings] - AT Menu block settings (CTAs, radius).
 {%- enddoc -%}
 
 {%- liquid
   assign drawer_heading = mobile_drawer_label | default: 'Shop'
-
-  # Detect whether brands data exists at all so we know whether to
-  # render the "Brands" entry in the main view as a navigate button
-  # (vs hiding it entirely).
+  assign brands_handle = brands_handle | default: 'brands'
   assign brand_source_exists = false
   if brands_linklist != blank and brands_linklist.links.size > 0
     assign brand_source_exists = true
-  elsif categories_linklist != blank
-    for cat_link in categories_linklist.links
-      if cat_link.handle == brands_handle and cat_link.links.size > 0
-        assign brand_source_exists = true
-        break
-      endif
-    endfor
   endif
+
+  assign brands_nav_title = 'Brands'
+  for link in menu_links
+    if link.handle == brands_handle
+      assign brands_nav_title = link.title
+      break
+    endif
+  endfor
+
+  assign img_radius = block_settings.at_brand_image_border_radius | default: 4
+  assign featured_heading = block_settings.at_featured_brands_heading | default: 'Featured Brands'
+  assign featured_links = featured_brands_linklist.links | default: blank
+  assign show_search = true
+  if block_settings.at_show_brand_search == false
+    assign show_search = false
+  endif
+
+  assign cta_1_label = block_settings.at_brands_cta_1_label | default: 'Shop All Brands'
+  assign cta_1_link = block_settings.at_brands_cta_1_link
+  assign cta_2_label = block_settings.at_brands_cta_2_label
+  assign cta_2_link = block_settings.at_brands_cta_2_link
+  assign cta_3_label = block_settings.at_brands_cta_3_label
+  assign cta_3_link = block_settings.at_brands_cta_3_link
 -%}
 
-<at-menu-panel class="at-panel">
+<at-menu-panel class="at-panel" data-brands-mode="directory">
 
-  {%- comment -%} ═══════════════════════════════════════════════════════════
-    VIEW: Main
-    Inlines the categories from at_categories_menu directly so users see
-    Brands, T-Shirts, Polos, etc. without an extra "Products" drill-down.
-    Non-panel menu items (Services, Contact, etc.) are appended below.
-  ═══════════════════════════════════════════════════════════════════════ {%- endcomment -%}
   <div class="at-panel__view" data-view="main">
-
     <div class="at-panel__header">
       <h2 class="at-panel__title">{{- drawer_heading | escape -}}</h2>
       <button
@@ -73,35 +67,33 @@
 
     <nav class="at-panel__body" aria-label="{{ drawer_heading | escape }}">
       <ul class="at-panel__list" role="list">
+        {%- if brand_source_exists -%}
+          <li class="at-panel__list-item" style="--at-panel-index: 0;">
+            <button
+              type="button"
+              class="at-panel__item"
+              on:click="/navigate"
+              data-target="brands"
+            >
+              <span class="at-panel__item-text">{{- brands_nav_title -}}</span>
+              <span class="at-panel__chevron svg-wrapper" aria-hidden="true">
+                {{- 'icon-chevron-right.svg' | inline_asset_content -}}
+              </span>
+            </button>
+          </li>
+        {%- endif -%}
 
-        {%- comment -%} ── Category items (inlined from at_categories_menu) ── {%- endcomment -%}
         {%- if categories_linklist != blank -%}
           {%- for cat_link in categories_linklist.links -%}
-            {%- liquid
-              assign is_brands = false
-              if cat_link.handle == brands_handle
-                assign is_brands = true
-              endif
-              assign is_highlight = false
-              if cat_link.handle == highlight_handle
-                assign is_highlight = true
-              endif
-            -%}
+            {%- if cat_link.handle == brands_handle -%}
+              {%- continue -%}
+            {%- endif -%}
+            {%- assign is_highlight = false -%}
+            {%- if cat_link.handle == highlight_handle -%}
+              {%- assign is_highlight = true -%}
+            {%- endif -%}
             <li class="at-panel__list-item" style="--at-panel-index: {{ forloop.index }};">
-              {%- if is_brands and brand_source_exists -%}
-                <button
-                  type="button"
-                  class="at-panel__item{% if is_highlight %} at-panel__item--highlight{% endif %}"
-                  on:click="/navigate"
-                  data-target="brands"
-                >
-                  <span class="at-panel__item-text">{{- cat_link.title -}}</span>
-                  <span class="at-panel__chevron svg-wrapper" aria-hidden="true">
-                    {{- 'icon-chevron-right.svg' | inline_asset_content -}}
-                  </span>
-                </button>
-
-              {%- elsif cat_link.links != blank -%}
+              {%- if cat_link.links != blank -%}
                 <button
                   type="button"
                   class="at-panel__item{% if is_highlight %} at-panel__item--highlight{% endif %}"
@@ -113,7 +105,6 @@
                     {{- 'icon-chevron-right.svg' | inline_asset_content -}}
                   </span>
                 </button>
-
               {%- else -%}
                 <a
                   href="{{ cat_link.url }}"
@@ -127,12 +118,11 @@
           {%- endfor -%}
         {%- endif -%}
 
-        {%- comment -%} ── Remaining main menu items (skip the panel trigger) ── {%- endcomment -%}
         {%- for link in menu_links -%}
-          {%- if link.handle == panel_handle -%}
+          {%- if link.handle == panel_handle or link.handle == brands_handle -%}
             {%- continue -%}
           {%- endif -%}
-          <li class="at-panel__list-item" style="--at-panel-index: {{ forloop.index | plus: categories_linklist.links.size }};">
+          <li class="at-panel__list-item" style="--at-panel-index: {{ forloop.index | plus: 20 }};">
             {%- if link.links != blank -%}
               <details class="at-panel__accordion">
                 <summary class="at-panel__item">
@@ -155,7 +145,6 @@
                   {%- endfor -%}
                 </ul>
               </details>
-
             {%- else -%}
               <a
                 href="{{ link.url }}"
@@ -167,10 +156,127 @@
             {%- endif -%}
           </li>
         {%- endfor -%}
-
       </ul>
     </nav>
   </div>
 
+  {%- if brand_source_exists -%}
+    <div class="at-panel__view at-panel__view--brands at-panel__view--brands-dir" data-view="brands" hidden>
+      <div class="at-panel__header">
+        <button
+          type="button"
+          class="at-panel__back"
+          aria-label="{{ 'actions.back' | t | default: 'Back' }}"
+          on:click="/back"
+        >
+          <span class="svg-wrapper">{{- 'icon-chevron-left.svg' | inline_asset_content -}}</span>
+        </button>
+        <h2 class="at-panel__title">{{- brands_nav_title | escape -}}</h2>
+        <button
+          type="button"
+          class="at-panel__close"
+          aria-label="{{ 'actions.close' | t | default: 'Close menu' }}"
+          on:click="header-drawer/close"
+        >
+          <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
+        </button>
+      </div>
+
+      {%- if cta_1_label != blank or cta_2_label != blank or cta_3_label != blank -%}
+        <div class="at-brands-dir__ctas at-brands-dir__ctas--mobile" role="group" aria-label="Brand collections">
+          {%- if cta_1_label != blank and cta_1_link != blank -%}
+            <a href="{{ cta_1_link }}" class="at-brands-dir__cta at-brands-dir__cta--primary">
+              {{- cta_1_label -}}
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          {%- endif -%}
+          {%- if cta_2_label != blank and cta_2_link != blank -%}
+            <a href="{{ cta_2_link }}" class="at-brands-dir__cta">{{- cta_2_label -}}</a>
+          {%- endif -%}
+          {%- if cta_3_label != blank and cta_3_link != blank -%}
+            <a href="{{ cta_3_link }}" class="at-brands-dir__cta">{{- cta_3_label -}}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if show_search -%}
+        <div class="at-panel__search-wrapper" role="search">
+          <span class="at-panel__search-icon svg-wrapper" aria-hidden="true">
+            {{- 'icon-search.svg' | inline_asset_content -}}
+          </span>
+          <label for="at-panel-brand-search" class="visually-hidden">Search brands</label>
+          <input
+            ref="searchInput"
+            id="at-panel-brand-search"
+            type="search"
+            class="at-panel__search"
+            placeholder="Search brands…"
+            autocomplete="off"
+            aria-label="Search brands"
+          >
+          <button
+            ref="searchClear"
+            type="button"
+            class="at-panel__search-clear"
+            aria-label="Clear search"
+            hidden
+          >
+            <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
+          </button>
+        </div>
+      {%- endif -%}
+
+      {%- if featured_links != blank -%}
+        <div class="at-brands-dir__featured at-brands-dir__featured--mobile">
+          <h3 class="at-brands-dir__featured-heading">{{- featured_heading | escape -}}</h3>
+          <ul class="at-brands-dir__featured-list list-unstyled" role="list">
+            {%- for feat_link in featured_links limit: 6 -%}
+              {%- liquid
+                assign feat_image = blank
+                if feat_link.type == 'collection_link' and feat_link.object.featured_image != blank
+                  assign feat_image = feat_link.object.featured_image
+                elsif feat_link.type == 'collection_link' and feat_link.object.image != blank
+                  assign feat_image = feat_link.object.image
+                endif
+              -%}
+              <li>
+                <a
+                  href="{{ feat_link.url }}"
+                  class="at-brands-dir__featured-card"
+                  style="--at-brand-avatar-radius: {{ img_radius }}px;"
+                >
+                  {%- if feat_image != blank -%}
+                    {{
+                      feat_image
+                      | image_url: width: 240
+                      | image_tag:
+                        alt: feat_link.title,
+                        loading: 'lazy',
+                        decoding: 'async',
+                        class: 'at-brands-dir__featured-img',
+                        widths: '120, 180, 240',
+                        sizes: '30vw'
+                    }}
+                  {%- else -%}
+                    <span class="at-brands-dir__featured-fallback" aria-hidden="true">
+                      {{- feat_link.title | slice: 0, 2 | upcase -}}
+                    </span>
+                  {%- endif -%}
+                  <span class="at-brands-dir__featured-title">{{- feat_link.title -}}</span>
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      <div class="at-panel__body at-brands-dir__scroll" id="at-panel-brands-body" ref="brandsBody">
+        {%- render 'at-menu-brands-alpha-columns',
+          brands_linklist: brands_linklist,
+          class_prefix: 'at-brands-dir'
+        -%}
+      </div>
+    </div>
+  {%- endif -%}
 
 </at-menu-panel>

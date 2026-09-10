@@ -6,13 +6,9 @@
     – mobile         : header-drawer with hamburger trigger + AT mobile drawer
     – navigation_bar : optional swipe-bar for small screens
 
-  The mega-panel is triggered by the nav item whose handle matches
-  at_panel_item_handle (default "products").  It shows:
-    • A left category sidebar from at_categories_menu
-    • When the sidebar item matching at_brands_item_handle is active:
-        a full brand grid sourced from at_brands_menu
-    • For any other sidebar category: a sub-navigation grid of that
-        category's links
+  Top-nav mega panels:
+    • Products (at_panel_item_handle): category sidebar + subnav (JIT via at-menu-data)
+    • Brands (at_brands_item_handle): standalone alphabet directory + featured rail (SSR)
 {%- endcomment -%}
 
 {%- liquid
@@ -24,39 +20,19 @@
   assign highlight_handle = block_settings.at_highlight_handle    | default: 'sale'
   assign cats_ll          = linklists[block_settings.at_categories_menu]
   assign brands_ll        = linklists[block_settings.at_brands_menu]
+  assign featured_brands_ll = linklists[block_settings.at_featured_brands_menu]
 
-  # ─── Render strategy ──────────────────────────────────────────────────────
-  # This block emits ONLY the lightweight chrome on every page render:
-  #   • Mobile: the main drawer view (top-level nav + non-panel accordions)
-  #   • Desktop: the trigger button, sidebar rail, and per-category content
-  #     headers (title + search input + count badge)
-  #
-  # The heavy content (~100-brand grid, every per-category subnav grid, all
-  # the per-category drill-down views on mobile) lives in
-  # `sections/at-menu-data.liquid`, mounted from `layout/theme.liquid`.
-  # That section renders empty on initial page loads and only emits the
-  # heavy views when assets/at-menu.js explicitly fetches it via the
-  # Section Rendering API after a real user interaction: hamburger
-  # pointerdown on mobile, nav hover on desktop.
-  #
-  # Net effects:
-  #   • Initial page render is identical in cost to a stock Horizon header
-  #     for the AT menu portion — no metaobject lookups, no image deref.
-  #     Cold-cache pages (newly-created collections, low-traffic PDPs)
-  #     stop tripping iOS Safari's renderer timeout.
-  #   • Search-engine and product-feed crawlers that never trigger
-  #     interaction never hit the heavy section, so GMC disapprovals from
-  #     intermittent crawl errors stop.
-  #   • The dedicated section is segment-agnostic (no cart/customer
-  #     state) so origin page_cache + Cloudflare cache it efficiently
-  #     across all visitors — first user in any segment warms the cache
-  #     for everyone.
+  # Products panel: chrome only; category grids still come from at-menu-data (JIT).
+  # Brands panel: full alphabet directory + featured logos are SSR'd (text-cheap).
 
-  # Find the panel trigger link in the main menu
   assign panel_link = nil
+  assign brands_nav_link = nil
   for link in menu_links
     if link.handle == panel_handle
       assign panel_link = link
+    endif
+    if link.handle == brands_handle
+      assign brands_nav_link = link
     endif
   endfor
 -%}
@@ -106,8 +82,10 @@
               categories_linklist: cats_ll,
               brands_linklist: brands_ll,
               brands_handle: brands_handle,
+              featured_brands_linklist: featured_brands_ll,
               highlight_handle: highlight_handle,
-              mobile_drawer_label: block_settings.at_mobile_drawer_label
+              mobile_drawer_label: block_settings.at_mobile_drawer_label,
+              block_settings: block_settings
             -%}
           </div>
         </details>
@@ -180,21 +158,33 @@
         >
           {%- for link in menu_links -%}
             {%- liquid
-              assign is_panel   = false
+              assign is_panel = false
+              assign is_brands_panel = false
               assign is_highlight = false
               if link.handle == panel_handle and panel_link != nil and cats_ll != blank
                 assign is_panel = true
+              endif
+              if link.handle == brands_handle and brands_nav_link != nil and brands_ll != blank
+                assign is_brands_panel = true
               endif
               if link.handle == highlight_handle
                 assign is_highlight = true
               endif
             -%}
 
-            {%- if is_panel -%}
+            {%- if is_brands_panel -%}
+              {%- comment -%} ── Brands alphabet directory (standalone) ── {%- endcomment -%}
+              {%- render 'at-menu-brands-directory',
+                panel_link: brands_nav_link,
+                brands_linklist: brands_ll,
+                featured_linklist: featured_brands_ll,
+                section: block
+              -%}
+
+            {%- elsif is_panel -%}
               {%- comment -%} ── Products mega-panel ── {%- endcomment -%}
               {%- render 'at-menu-brands-panel',
                 panel_link: panel_link,
-                brands_linklist: brands_ll,
                 categories_linklist: cats_ll,
                 brands_handle: brands_handle,
                 section: block
@@ -424,15 +414,64 @@
     {
       "type": "text",
       "id": "at_brands_item_handle",
-      "label": "Brands sidebar item handle",
-      "info": "Handle of the sidebar item that should show the brand grid (e.g. 'brands').",
+      "label": "Brands nav handle",
+      "info": "Handle of the top-level nav item that opens the Brands directory (e.g. 'brands'). Brands are no longer inside the Products panel.",
       "default": "brands"
     },
     {
       "type": "link_list",
       "id": "at_brands_menu",
       "label": "Brands source menu",
-      "info": "Menu whose links are shown as the brand grid when the Brands sidebar item is active."
+      "info": "Menu of brand collection links shown as alphabetical text columns."
+    },
+    {
+      "type": "link_list",
+      "id": "at_featured_brands_menu",
+      "label": "Featured brands menu",
+      "info": "Small menu (about 4–6 collection links) for the right-rail logo cards. Uses each collection image only."
+    },
+    {
+      "type": "text",
+      "id": "at_featured_brands_heading",
+      "label": "Featured heading",
+      "default": "Featured Brands"
+    },
+    {
+      "type": "header",
+      "content": "Brands CTAs"
+    },
+    {
+      "type": "text",
+      "id": "at_brands_cta_1_label",
+      "label": "CTA 1 label",
+      "default": "Shop All Brands"
+    },
+    {
+      "type": "url",
+      "id": "at_brands_cta_1_link",
+      "label": "CTA 1 link"
+    },
+    {
+      "type": "text",
+      "id": "at_brands_cta_2_label",
+      "label": "CTA 2 label",
+      "default": "Shop All S&S Brands"
+    },
+    {
+      "type": "url",
+      "id": "at_brands_cta_2_link",
+      "label": "CTA 2 link"
+    },
+    {
+      "type": "text",
+      "id": "at_brands_cta_3_label",
+      "label": "CTA 3 label",
+      "default": "Shop All Exclusive Brands"
+    },
+    {
+      "type": "url",
+      "id": "at_brands_cta_3_link",
+      "label": "CTA 3 link"
     },
     {
       "type": "text",
@@ -449,6 +488,7 @@
       "type": "select",
       "id": "at_brand_icon_source",
       "label": "t:settings.at_brand_icon_source",
+      "info": "Legacy setting; directory mode uses collection images only on featured cards.",
       "options": [
         { "value": "auto",                  "label": "t:options.at_brand_icon_auto" },
         { "value": "collection_image_only", "label": "t:options.at_collection_image_only" },
@@ -466,6 +506,7 @@
       "type": "range",
       "id": "at_brands_panel_columns",
       "label": "t:settings.at_brands_panel_columns",
+      "info": "Legacy grid columns; directory mode uses fixed A–Z ranges.",
       "min": 3, "max": 6, "step": 1, "default": 4
     },
     {

@@ -5,23 +5,9 @@ import { calculateHeaderGroupHeight } from '@theme/utilities';
    MenuDataFetcher
    ----------------
    Singleton that fetches `sections/at-menu-data.liquid` exactly once per
-   page load via the Shopify Section Rendering API. The section renders
-   nothing on the initial page load (intentional, see its docs); only when
-   we explicitly hit `?section_id=at-menu-data` does the server emit the
-   heavy menu views (~100-brand grid + every per-category subnav, both
-   mobile drawer views and desktop mega-panel content).
-
-   Both <at-brands-panel> (desktop) and <at-menu-panel> (mobile) subscribe
-   to the same instance — fetch happens at most once per page, and each
-   consumer clones the bits it needs into its own DOM. Subsequent
-   subscribers after resolution receive the cached document immediately
-   (via a microtask).
-
-   Trigger policy: fetch is started ONLY on real user intent — hamburger
-   pointerdown on mobile, nav pointerenter/focus on desktop. Crawlers
-   that never interact never trigger the fetch, so the heavy section
-   never burdens TTFB for Google's product-feed crawler / soft-error
-   detectors that have been tripping GMC disapprovals.
+   page load via the Shopify Section Rendering API. Used for Products
+   category subnav grids (desktop + mobile). Brands directory content is
+   SSR'd and does not use this fetcher.
    ───────────────────────────────────────────────────────────────────────────── */
 
 class MenuDataFetcher {
@@ -188,23 +174,23 @@ class AtBrandsPanel extends Component {
     this.addEventListener('input', this.#onDelegatedSearchInput);
     this.addEventListener('click', this.#onDelegatedSearchClearClick);
     this.addEventListener('pointerover', this.#onDelegatedSidebarPointerOver);
-    // Trigger menu-data fetch on first focus too (keyboard users).
-    this.addEventListener('focusin', this.#onFirstInteraction, { once: true });
 
     AtBrandsPanel.#fixHeaderGroupHeight();
 
-    // Initials avatars compute their colors client-side; rehydrate as
-    // new brand items arrive (either from at-menu-data adoption below,
-    // or from any future SRA morph that may touch the panel).
+    // Directory mode SSR's the full alphabet list + featured logos — no
+    // at-menu-data fetch. Products mode still JIT-adopts category grids.
+    if (this.dataset.mode === 'directory') {
+      this.#dataRequested = true;
+      this.#dataAdopted = true;
+      return;
+    }
+
+    this.addEventListener('focusin', this.#onFirstInteraction, { once: true });
+
     hydrateAvatarsIn(this);
     this.#avatarObserver = new MutationObserver(() => hydrateAvatarsIn(this));
     this.#avatarObserver.observe(this, { childList: true, subtree: true });
 
-    // Subscribe to the menu-data fetcher. We don't request the fetch
-    // here — that happens on first interaction (#onFirstInteraction).
-    // But if the mobile drawer already requested it (which can happen
-    // on tablets that have both pointer types), we'll get the doc as
-    // soon as it resolves and adopt the desktop views.
     MenuDataFetcher.get().subscribe((doc) => this.#adoptDesktopViews(doc));
   }
 
@@ -229,7 +215,9 @@ class AtBrandsPanel extends Component {
   }
 
   #onPointerEnter = () => {
-    this.#onFirstInteraction();
+    if (this.dataset.mode !== 'directory') {
+      this.#onFirstInteraction();
+    }
     this.open();
   };
 
@@ -719,6 +707,11 @@ class AtBrandsPanel extends Component {
    * @param {string} query - Lowercase search string.
    */
   #applyFilter(query) {
+    if (this.dataset.mode === 'directory') {
+      this.#applyDirectoryFilter(query);
+      return;
+    }
+
     const active = this.querySelector('.at-brands-panel__cat-content:not([hidden])');
     const items = /** @type {NodeListOf<HTMLElement>} */ (
       active?.querySelectorAll('.at-brands-panel__brand-item[data-brand-name]') ?? []
@@ -738,6 +731,39 @@ class AtBrandsPanel extends Component {
     }
 
     const clearBtn = active?.querySelector('.at-brands-panel__search-clear');
+    if (clearBtn instanceof HTMLElement) {
+      clearBtn.hidden = query === '';
+    }
+  }
+
+  /**
+   * Filter alphabet directory text links and hide empty columns.
+   * @param {string} query
+   */
+  #applyDirectoryFilter(query) {
+    const items = /** @type {NodeListOf<HTMLElement>} */ (
+      this.querySelectorAll('.at-brands-dir__link[data-brand-name]')
+    );
+
+    let visible = 0;
+    for (const item of items) {
+      const name = item.dataset.brandName?.toLowerCase() ?? '';
+      const show = query === '' || name.includes(query);
+      item.hidden = !show;
+      if (show) visible++;
+    }
+
+    for (const column of this.querySelectorAll('.at-brands-dir__column')) {
+      if (!(column instanceof HTMLElement)) continue;
+      const hasVisible = column.querySelector('.at-brands-dir__link:not([hidden])') !== null;
+      column.hidden = !hasVisible;
+    }
+
+    if (this.refs.countBadge) {
+      this.refs.countBadge.textContent = String(visible);
+    }
+
+    const clearBtn = this.querySelector('.at-brands-panel__search-clear');
     if (clearBtn instanceof HTMLElement) {
       clearBtn.hidden = query === '';
     }
@@ -1159,8 +1185,10 @@ class AtMenuPanel extends Component {
    * @param {string} query
    */
   #applyBrandFilter(query) {
+    const dirLinks = this.querySelectorAll('.at-brands-dir__link[data-brand-name]');
+    const legacyItems = this.querySelectorAll('.at-panel__brand-item[data-brand-name]');
     const items = /** @type {NodeListOf<HTMLElement>} */ (
-      this.querySelectorAll('.at-panel__brand-item[data-brand-name]')
+      dirLinks.length ? dirLinks : legacyItems
     );
 
     let visible = 0;
@@ -1176,6 +1204,12 @@ class AtMenuPanel extends Component {
     }
     if (this.refs.searchClear instanceof HTMLElement) {
       this.refs.searchClear.hidden = query === '';
+    }
+
+    for (const column of this.querySelectorAll('.at-brands-dir__column')) {
+      if (column instanceof HTMLElement) {
+        column.hidden = column.querySelector('.at-brands-dir__link:not([hidden])') === null;
+      }
     }
 
     for (const section of this.querySelectorAll('.at-panel__letter-section')) {

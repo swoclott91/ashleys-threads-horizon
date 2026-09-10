@@ -1,0 +1,166 @@
+{%- doc -%}
+  Standalone Brands mega-panel: CTA pills + alphabetical text columns +
+  right-rail featured brand logos (S&S-style, featured on the right for
+  consistency with the Products panel).
+
+  Content is SSR'd (text links are cheap; only featured logos load images).
+  No at-menu-data fetch is required for this panel.
+
+  @param {object} panel_link - Top-level Brands nav link (trigger label/URL).
+  @param {object} brands_linklist - Full brands linklist (text directory).
+  @param {object} [featured_linklist] - Featured brands (logos, ~4–6 items).
+  @param {object} section - Block object (settings).
+{%- enddoc -%}
+
+{%- liquid
+  assign block_settings = section.settings
+  assign show_search = block_settings.at_show_brand_search
+  assign brand_total = brands_linklist.links.size | default: 0
+  assign featured_links = featured_linklist.links | default: blank
+  assign img_radius = block_settings.at_brand_image_border_radius | default: 4
+  assign panel_id = 'at-brands-dir-' | append: panel_link.handle
+  assign search_id = 'at-brands-dir-search-' | append: panel_link.handle
+  assign featured_heading = block_settings.at_featured_brands_heading | default: 'Featured Brands'
+
+  assign cta_1_label = block_settings.at_brands_cta_1_label | default: 'Shop All Brands'
+  assign cta_1_link = block_settings.at_brands_cta_1_link | default: panel_link.url
+  assign cta_2_label = block_settings.at_brands_cta_2_label
+  assign cta_2_link = block_settings.at_brands_cta_2_link
+  assign cta_3_label = block_settings.at_brands_cta_3_label
+  assign cta_3_link = block_settings.at_brands_cta_3_link
+-%}
+
+<at-brands-panel
+  class="at-brands-panel at-brands-panel--directory"
+  data-mode="directory"
+  on:pointerenter="/open"
+>
+  <button
+    ref="trigger"
+    class="menu-list__link at-menu__nav-link"
+    aria-expanded="false"
+    aria-controls="{{ panel_id }}"
+    aria-haspopup="true"
+    on:click="/open"
+  >
+    <span class="menu-list__link-title">{{- panel_link.title -}}</span>
+    <span class="at-menu__nav-link-chevron svg-wrapper icon-caret" aria-hidden="true">
+      {{- 'icon-caret.svg' | inline_asset_content -}}
+    </span>
+  </button>
+
+  <div
+    id="{{ panel_id }}"
+    ref="panel"
+    class="at-brands-panel__dropdown at-brands-dir"
+    hidden
+  >
+    <div class="at-brands-dir__main">
+      <div class="at-brands-dir__toolbar">
+        <div class="at-brands-dir__ctas" role="group" aria-label="Brand collections">
+          {%- if cta_1_label != blank and cta_1_link != blank -%}
+            <a href="{{ cta_1_link }}" class="at-brands-dir__cta at-brands-dir__cta--primary">
+              {{- cta_1_label -}}
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          {%- endif -%}
+          {%- if cta_2_label != blank and cta_2_link != blank -%}
+            <a href="{{ cta_2_link }}" class="at-brands-dir__cta">{{- cta_2_label -}}</a>
+          {%- endif -%}
+          {%- if cta_3_label != blank and cta_3_link != blank -%}
+            <a href="{{ cta_3_link }}" class="at-brands-dir__cta">{{- cta_3_label -}}</a>
+          {%- endif -%}
+        </div>
+
+        {%- if show_search -%}
+          <div class="at-brands-panel__search-wrapper at-brands-dir__search" role="search">
+            <span class="at-brands-panel__search-icon svg-wrapper" aria-hidden="true">
+              {{- 'icon-search.svg' | inline_asset_content -}}
+            </span>
+            <label for="{{ search_id }}" class="visually-hidden">Search brands</label>
+            <input
+              ref="searchInput"
+              id="{{ search_id }}"
+              type="search"
+              class="at-brands-panel__search"
+              placeholder="Search brands…"
+              autocomplete="off"
+              aria-label="Search brands"
+            >
+            <button
+              ref="searchClear"
+              type="button"
+              class="at-brands-panel__search-clear"
+              aria-label="Clear search"
+              hidden
+            >
+              <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
+            </button>
+          </div>
+        {%- endif -%}
+
+        <span
+          ref="countBadge"
+          class="at-brands-panel__count"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {{- brand_total -}}
+        </span>
+      </div>
+
+      <div class="at-brands-dir__scroll" data-at-brands-directory>
+        {%- render 'at-menu-brands-alpha-columns',
+          brands_linklist: brands_linklist,
+          class_prefix: 'at-brands-dir'
+        -%}
+      </div>
+    </div>
+
+    {%- if featured_links != blank -%}
+      <aside class="at-brands-dir__featured" aria-label="{{ featured_heading | escape }}">
+        <h2 class="at-brands-dir__featured-heading">{{- featured_heading | escape -}}</h2>
+        <ul class="at-brands-dir__featured-list list-unstyled" role="list">
+          {%- for feat_link in featured_links limit: 6 -%}
+            {%- liquid
+              assign feat_image = blank
+              if feat_link.type == 'collection_link' and feat_link.object.featured_image != blank
+                assign feat_image = feat_link.object.featured_image
+              elsif feat_link.type == 'collection_link' and feat_link.object.image != blank
+                assign feat_image = feat_link.object.image
+              endif
+            -%}
+            <li>
+                <a
+                  href="{{ feat_link.url }}"
+                  class="at-brands-dir__featured-card"
+                  style="--at-brand-avatar-radius: {{ img_radius }}px;"
+                  aria-label="{{ feat_link.title | escape }}"
+                  {% if feat_link.current %}aria-current="page"{% endif %}
+                >
+                  {%- if feat_image != blank -%}
+                    {{
+                      feat_image
+                      | image_url: width: 320
+                      | image_tag:
+                        alt: '',
+                        loading: 'lazy',
+                        decoding: 'async',
+                        class: 'at-brands-dir__featured-img',
+                        widths: '160, 240, 320',
+                        sizes: '(min-width: 990px) 140px, 30vw'
+                    }}
+                  {%- else -%}
+                    <span class="at-brands-dir__featured-fallback" aria-hidden="true">
+                      {{- feat_link.title | slice: 0, 2 | upcase -}}
+                    </span>
+                    <span class="at-brands-dir__featured-title">{{- feat_link.title -}}</span>
+                  {%- endif -%}
+                </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </aside>
+    {%- endif -%}
+  </div>
+</at-brands-panel>
