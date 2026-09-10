@@ -222,9 +222,15 @@ export class AnchoredPopoverComponent extends Component {
   }
 }
 
-if (!customElements.get('anchored-popover-component')) {
-  customElements.define('anchored-popover-component', AnchoredPopoverComponent);
+async function registerAnchoredPopover() {
+  await Theme.popoverPolyfillReady;
+
+  if (!customElements.get('anchored-popover-component')) {
+    customElements.define('anchored-popover-component', AnchoredPopoverComponent);
+  }
 }
+
+registerAnchoredPopover();
 
 /**
  * Finds a live disclosure trigger matching a prior aria-controls value.

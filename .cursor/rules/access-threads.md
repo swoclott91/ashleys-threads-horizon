@@ -51,11 +51,26 @@ upstream  https://github.com/Shopify/horizon.git
 
 1. Fetch upstream: `git fetch upstream --tags`
 2. Check upstream version: `git log upstream/main --oneline -5`
-3. Create a backup branch: `git branch dev-backup-pre-vX.Y.Z`
-4. Merge: `git merge upstream/main --no-commit`
-5. Resolve conflicts in AT-modified core files (see below)
-6. Migrate `config/settings_data.json` color palette when crossing Horizon v4.0.0+ (see **Horizon v4 color palette**)
-7. Commit: `git commit -m "feat: merge upstream Horizon vX.Y.Z"`
+3. Sync local `main` with `origin/main` first (`git pull`)
+4. Create a backup branch: `git branch dev-backup-pre-vX.Y.Z`
+5. Merge: `git merge upstream/main --no-commit`
+6. Restore AT Cursor rules if upstream deleted `.cursor/`: `git checkout HEAD -- .cursor/rules/`
+7. Resolve conflicts in AT-modified core files (see below)
+8. Migrate `config/settings_data.json` color palette when crossing Horizon v4.0.0+ (see **Horizon v4 color palette**)
+9. Commit: `git commit -m "feat: merge upstream Horizon vX.Y.Z"`
+
+### Horizon v4.1.5 merge notes (2026-09)
+
+Learnings from merging `upstream/main` (4.1.1 → 4.1.5):
+
+- **`.cursor/` removed upstream:** Shopify deleted the entire `.cursor/` tree. Always restore `.cursor/rules/` from HEAD before committing (keeps `access-threads.md`, accessibility rules, commit-message rules, etc.).
+- **Hover CSS relocated:** Card hover effects left `assets/base.css` for `snippets/card-hover-effect-styles.liquid` (rendered from `layout/theme.liquid`). Prefer upstream `base.css` here — do not re-paste the old hover media query.
+- **`calculateHeaderGroupHeight`:** Take upstream (`offsetHeight` + transparent-header add-back). AT mega-panel positioning still uses its own `#updatePanelTop` logic.
+- **`snippets/card-gallery.liquid`:** Upstream added a single-media fast path. Re-apply the AT **carousel-off** short-circuit on the multi-media branch (skip `where`/`map`/`reject`/`concat` over all media when `product_card_carousel` is false).
+- **`sections/header.liquid`:** Keep AT `_at-menu` swap **and** upstream `has_navigation_bar`. For transparent-header `:has()` rules, prefer upstream selectors (`header-menu[aria-expanded='true']`, `.menu-list__submenu:not([inert])`) plus `&:has(.at-brands-panel[data-open])`.
+- **`config/settings_data.json`:** Keep merchant values (e.g. `button_border_radius_secondary: 0`, `pills_border_radius: 0`) — do not accept upstream default radii.
+- **`sections/footer-group.json`:** Do not nest upstream’s duplicate `email-signup` inside the text block; keep the sibling `email-signup_HafH7P` already present on this store.
+- **`templates/product.json`:** Keep AT accordion / buy-button structure over upstream’s default description text block.
 
 ### Horizon v4 color palette (v4.0.0+)
 

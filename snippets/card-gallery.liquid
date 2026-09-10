@@ -6,7 +6,6 @@
   @param [children] - Additional content rendered below the card gallery
   @param [section] - The section object the snippet is rendered in
   @param [block] - The block object the snippet is rendered in
-  @param [has_badges] - Whether additional content contains a product badge
 {%- enddoc -%}
 
 {% liquid
@@ -14,9 +13,14 @@
   assign block_settings = block.settings
   assign image_sizes = '(min-width: 750px) 50vw, 100vw'
 
+  # Check if product has badges and determine position
+  assign has_badges = false
   assign badge_position = null
-  if has_badges
-    assign badge_position = settings.badge_position
+  if product != blank
+    if product.available == false or product.compare_at_price > product.price
+      assign has_badges = true
+      assign badge_position = settings.badge_position
+    endif
   endif
 
   # if the card-gallery has a section.settings.product_card_size:
@@ -68,7 +72,7 @@
     --gallery-aspect-ratio: {{ ratio }};
   "
   data-product-id="{{ product.id }}"
-  {% if settings.show_second_image_on_hover %}
+  {% if settings.show_second_image_on_hover and product.media.size > 1 %}
     on:pointerenter="/previewImage"
     on:pointerleave="/resetImage"
   {% endif %}
@@ -79,134 +83,141 @@
   {{ block.shopify_attributes }}
 >
   {%- if product.media.size > 0 -%}
-    {% liquid
-      # AT: Branch on whether the per-card slideshow is actually enabled.
-      #
-      # The full path below walks `product.images` (one access per variant),
-      # `product.media` twice (via `reject:` and `concat:`), and `map: 'src'`
-      # over the variant-image array — five full collection passes per card,
-      # regardless of whether those slides will ever render.
-      #
-      # On cold-cache, variant-dense collection / home pages this was the
-      # dominant per-card cost on the Growth-plan complexity budget and a
-      # major contributor to the GC pressure that produced intermittent 5xx
-      # ("There was a problem loading this website") on mobile.
-      #
-      # When `settings.product_card_carousel` is OFF the slideshow is
-      # disabled-by-default by line 156 below anyway, so we only ever need
-      # the featured media (plus one extra slide when hover-swap is on).
-      # Replacing the walks with an O(1) `slice:` cuts per-card cost by an
-      # order of magnitude with zero visual change in this configuration.
-
-      if settings.product_card_carousel
-        # CAROUSEL ON — full media list with variant-image attribution for
-        # slide swaps when a swatch is selected.
-        assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src'
-        assign generic_media_size = product.media.size | minus: variant_images.size
-
-        # Sort media so product.featured_media.preview_image comes first as that is the most relevant image to display
-        # product.featured_media updates based on search context and filters applied
-        assign other_media = product.media | reject: 'src', product.featured_media
-        assign media_list_to_show = product.featured_media | concat: other_media
-
-        if product.media.size > 2 and generic_media_size > 0
-          assign show_arrows = true
-        endif
-      else
-        # CAROUSEL OFF — only the featured slide renders, plus a single alt
-        # slide when hover-swap is enabled. No variant-image attribution
-        # needed because there is no inter-slide swap on variant selection
-        # when the slideshow is disabled.
-        assign variant_images = empty
-        assign generic_media_size = 0
-        if settings.show_second_image_on_hover and product.media.size > 1
-          assign other_media = product.media | slice: 1, 1
-        else
-          assign other_media = product.media | slice: 0, 0
-        endif
-        assign media_list_to_show = product.featured_media | concat: other_media
-      endif
-
-      # Don't overfetch media if we don't need to
-      assign max_visible_slide_count = 1
-      if settings.product_card_carousel
-        assign max_visible_slide_count = 5
-      elsif settings.show_second_image_on_hover
-        assign max_visible_slide_count = 2
-      endif
-
-      capture slides
-        for media in media_list_to_show
-          assign loading = 'lazy'
-          assign sizes = 'auto, ' | append: image_sizes
-
-          assign hidden = false
-          assign attributes = ''
-          if variant_images contains media.src
-            assign attributes = 'variant-image'
-
-            if forloop.first == false
-              # hide all variant images that aren't the first one
-              assign hidden = true
-            endif
-          endif
-
-          # Performance improvement: don't render more than 5 visible images into the slideshow
-          # We'll keep the images that we need for the variant images and hover next.
-          if forloop.first
-            assign visible_slide_count = 0
-          endif
-          unless hidden
-            assign visible_slide_count = visible_slide_count | plus: 1
-          endunless
-          if hidden == false and visible_slide_count > max_visible_slide_count
-            continue
-          endif
-
-          if forloop.first and section.index == null or section.index < 5
-            assign loading = 'eager'
-            assign sizes = image_sizes
-          endif
-
-          assign class = 'product-media-container media-fit product-media-container--[media_type]' | replace: '[media_type]', media.media_type
-          if constrain_to_viewport
-            assign class = class | append: ' constrain-height'
-          endif
-
-          capture slideshow_children
-            render 'product-media', media: media, sizes: sizes, loading: loading, preview_image_only: true
-          endcapture
-
-          render 'slideshow-slide', slide_id: media.id, index: forloop.index0, hidden: hidden, class: class, attributes: attributes, children: slideshow_children, media_fit: media_fit
-        endfor
-      endcapture
-
-      assign slideshow_attributes = 'data-generic-media-size="[generic_media_size]"' | replace: '[generic_media_size]', generic_media_size
-      if settings.product_card_carousel == false
-        assign slideshow_attributes = slideshow_attributes | append: ' disabled="true"'
-      endif
-    %}
     <a
       class="contents"
       ref="cardGalleryLink"
-      href="{{ product.selected_or_first_available_variant.url }}"
+      href="{{ product.url }}"
       aria-label="{{- product.title -}}"
     >
-      {% render 'slideshow',
-        ref: 'slideshow',
-        initial_slide: 0,
-        slides: slides,
-        slide_count: media_list_to_show.size,
-        show_arrows: show_arrows,
-        attributes: slideshow_attributes
+      {% liquid
+        assign featured_media = product.featured_media
+
+        assign featured_media_loading = 'lazy'
+        assign featured_media_sizes = 'auto, ' | append: image_sizes
+        if section.index == null or section.index < 5
+          assign featured_media_loading = 'eager'
+          assign featured_media_sizes = image_sizes
+        endif
+
+        # The class differs per media only by media_type; the base template and the
+        # constrain-height suffix are the same for every slide, so build them once.
+        assign media_class = 'product-media-container media-fit product-media-container--[media_type]'
+        assign media_class_suffix = ''
+        if constrain_to_viewport
+          assign media_class_suffix = ' constrain-height'
+        endif
+
+        assign featured_media_class = media_class | replace: '[media_type]', featured_media.media_type | append: media_class_suffix
       %}
+      {%- if product.media.size == 1 -%}
+        <div
+          class="{{ featured_media_class }}"
+          style="--product-media-fit: {{ media_fit | default: 'cover' }};"
+        >
+          {% render 'product-media',
+            media: featured_media,
+            sizes: featured_media_sizes,
+            loading: featured_media_loading,
+            preview_image_only: true
+          %}
+        </div>
+      {%- else -%}
+        {% liquid
+          # AT CUSTOM: when product_card_carousel is off, skip variant-image walks
+          # (where/map/reject/concat over all media). Only featured + optional hover
+          # alt slide are needed; carousel-off disables slideshow swaps anyway.
+          if settings.product_card_carousel
+            assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src'
+            assign generic_media_size = product.media.size | minus: variant_images.size
+            assign other_media = product.media | reject: 'src', product.featured_media
+            assign media_list_to_show = product.featured_media | concat: other_media
+
+            if product.media.size > 2 and generic_media_size > 0
+              assign show_arrows = true
+            endif
+          else
+            assign variant_images = empty
+            assign generic_media_size = 0
+            if settings.show_second_image_on_hover and product.media.size > 1
+              assign other_media = product.media | slice: 1, 1
+            else
+              assign other_media = product.media | slice: 0, 0
+            endif
+            assign media_list_to_show = product.featured_media | concat: other_media
+          endif
+
+          # Don't overfetch media if we don't need to
+          assign max_visible_slide_count = 1
+          if settings.product_card_carousel
+            assign max_visible_slide_count = 5
+          elsif settings.show_second_image_on_hover
+            assign max_visible_slide_count = 2
+          endif
+
+          capture slides
+            for media in media_list_to_show
+              assign hidden = false
+              assign attributes = ''
+              if variant_images contains media.src
+                assign attributes = 'variant-image'
+
+                if forloop.first == false
+                  # hide all variant images that aren't the first one
+                  assign hidden = true
+                endif
+              endif
+
+              # Performance improvement: don't render more than 5 visible images into the slideshow
+              # We'll keep the images that we need for the variant images and hover next.
+              if forloop.first
+                assign visible_slide_count = 0
+              endif
+              unless hidden
+                assign visible_slide_count = visible_slide_count | plus: 1
+              endunless
+              if hidden == false and visible_slide_count > max_visible_slide_count
+                continue
+              endif
+
+              if forloop.first
+                assign loading = featured_media_loading
+                assign sizes = featured_media_sizes
+              else
+                assign loading = 'lazy'
+                assign sizes = 'auto, ' | append: image_sizes
+              endif
+
+              assign class = media_class | replace: '[media_type]', media.media_type | append: media_class_suffix
+
+              capture slideshow_children
+                render 'product-media', media: media, sizes: sizes, loading: loading, preview_image_only: true
+              endcapture
+
+              render 'slideshow-slide', slide_id: media.id, index: forloop.index0, hidden: hidden, class: class, attributes: attributes, children: slideshow_children, media_fit: media_fit
+            endfor
+          endcapture
+
+          assign slideshow_attributes = 'data-generic-media-size="[generic_media_size]"' | replace: '[generic_media_size]', generic_media_size
+          if settings.product_card_carousel == false
+            assign slideshow_attributes = slideshow_attributes | append: ' disabled="true"'
+          endif
+        %}
+        {% render 'slideshow',
+          ref: 'slideshow',
+          initial_slide: 0,
+          slides: slides,
+          slide_count: media_list_to_show.size,
+          show_arrows: show_arrows,
+          attributes: slideshow_attributes
+        %}
+      {%- endif -%}
     </a>
   {% elsif product != blank and product.media.size == 0 %}
     <div class="product-card-gallery__title-placeholder">
       <a
         class="contents"
         ref="cardGalleryLink"
-        href="{{ product.selected_or_first_available_variant.url }}"
+        href="{{ product.url }}"
       >
         <span class="title-text">{{- product.title -}}</span>
       </a>
@@ -230,11 +241,21 @@
   {{ children }}
 </div>
 
+{% render 'slideshow-styles' %}
+{% render 'product-media-container-styles' %}
+
 {% stylesheet %}
   .card-gallery {
+    position: relative;
     overflow: hidden;
     container-type: inline-size; /* Make card-gallery a container */
     container-name: card-gallery-container; /* Optional: name the container */
+  }
+
+  @container (max-width: 70px) {
+    .card-gallery:hover .quick-add__button {
+      display: none;
+    }
   }
 
   .card-gallery__placeholder svg {

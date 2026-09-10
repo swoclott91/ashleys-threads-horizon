@@ -13,6 +13,9 @@
   %}
 {% enddoc %}
 
+{% comment %}Include shared dialog styles for both trigger and dialog render passes.{% endcomment %}
+{% render 'dialog-styles' %}
+
 {%- liquid
   assign product = product | default: empty
   assign unique_id = unique_id | default: product.id
@@ -580,7 +583,7 @@
       width: 100%;
       height: fit-content;
       max-width: 100%;
-      max-height: 100dvh;
+      max-height: calc(100dvh - max(var(--padding-2xl), var(--safe-area-inset-top)));
       margin: auto 0 0;
       border-start-start-radius: var(--cart-disclosure-modal-border-radius);
       border-start-end-radius: var(--cart-disclosure-modal-border-radius);
@@ -591,7 +594,7 @@
     }
 
     .cart-disclosure-modal__content {
-      max-height: min(var(--modal-max-height), 100dvh);
+      padding-block-end: calc(var(--padding-2xl) + var(--safe-area-inset-bottom));
     }
   }
 {% endstylesheet %}

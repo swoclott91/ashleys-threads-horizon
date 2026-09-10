@@ -28,7 +28,10 @@
     max-width: 100%;
     max-height: none;
     height: 100dvh;
-    padding: 0;
+
+    /* Right-anchored drawer spans the full physical viewport (viewport-fit=cover); keep its
+       content clear of the status bar, right-side notch, and home indicator */
+    padding: var(--safe-area-inset-top) var(--safe-area-inset-right) var(--safe-area-inset-bottom) 0;
     border: none;
     border-left: var(--style-border-drawer);
     background-color: var(--color-background);

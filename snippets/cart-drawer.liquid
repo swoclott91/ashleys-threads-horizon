@@ -38,7 +38,7 @@
         {% render 'cart-products', force_empty: true, context: 'drawer' %}
       </div>
     </div>
-    {% endcapture %}
+  {% endcapture %}
 
   <theme-drawer
     id="cart-drawer"
@@ -84,11 +84,11 @@
             {%- if cart.empty? -%}
               {{ empty_cart_drawer_content }}
             {%- else -%}
+              {%- comment -%} AT CUSTOM: wrap content + summary so discount strip stays outside scroll-hint mask {%- endcomment -%}
               <div class="cart-drawer__main">
                 <scroll-hint
                   class="cart-drawer__content"
                   aria-label="{{ 'accessibility.cart' | t }}"
-                  style="--header-height: 60px;"
                 >
                   <scroll-hint class="cart-drawer__items">
                     {% render 'cart-products', context: 'drawer' %}
@@ -145,7 +145,6 @@
   }
 
   .cart-drawer__content {
-    height: calc(100% - var(--header-height));
     display: flex;
     flex-direction: column;
     padding: 0;

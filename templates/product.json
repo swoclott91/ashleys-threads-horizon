@@ -193,7 +193,7 @@
           "blocks": {
             "group_icgrde": {
               "type": "group",
-              "name": "Header",
+              "name": "t:names.header",
               "settings": {
                 "content_direction": "column",
                 "vertical_on_mobile": true,
@@ -683,7 +683,7 @@
             "max_width": "normal",
             "alignment": "left",
             "type_preset": "h4",
-            "font": "var(--font-primary--family)",
+            "font": "var(--font-body--family)",
             "font_size": "",
             "line_height": "normal",
             "letter_spacing": "normal",
