@@ -60,7 +60,6 @@
   assign s = section.settings
   assign cats_handle = 'at-categories'
   assign brands_item = s.at_brands_item_handle | default: 'brands'
-  assign img_radius = s.at_brand_image_border_radius | default: 4
 
   assign cats_ll = linklists[cats_handle]
 -%}
@@ -82,30 +81,12 @@
     {%- endcomment -%}
 
     {%- comment -%} ═══════════════════════════════════════════════════════
-      MOBILE per-category views
-      One per category that has children, excluding the brands item.
+      MOBILE per-category views — Products column layout (JIT)
     ═══════════════════════════════════════════════════════════════════ {%- endcomment -%}
     {%- for cat_link in cats_ll.links -%}
       {%- if cat_link.links != blank and cat_link.handle != brands_item -%}
-        {%- liquid
-          assign has_groups = false
-          for sub_link in cat_link.links
-            if sub_link.links != blank
-              assign has_groups = true
-              break
-            endif
-          endfor
-
-          assign render_images = false
-          assign cat_collection_links = cat_link.links | where: 'type', 'collection_link'
-          assign cat_catalog_links = cat_link.links | where: 'type', 'catalog_link'
-          if cat_collection_links.size > 0 or cat_catalog_links.size > 0
-            assign render_images = true
-          endif
-        -%}
         <div data-at-mount="mobile-view">
-          <div class="at-panel__view" data-view="cat-{{ cat_link.handle }}" hidden>
-
+          <div class="at-panel__view at-panel__view--products-cat" data-view="cat-{{ cat_link.handle }}" hidden>
             <div class="at-panel__header">
               <button
                 type="button"
@@ -126,74 +107,15 @@
               </button>
             </div>
 
-            <div class="at-panel__body">
-              {%- if has_groups -%}
-                {%- for group_link in cat_link.links -%}
-                  {%- if group_link.links != blank -%}
-                    <div class="at-panel__group">
-                      <h3 class="at-panel__group-title">{{- group_link.title -}}</h3>
-                      <ul class="at-panel__grid{% if render_images %} at-panel__grid--images{% endif %}" role="list">
-                        {%- for item_link in group_link.links -%}
-                          <li>
-                            <a
-                              href="{{ item_link.url }}"
-                              class="at-panel__grid-item"
-                              {% if item_link.current %}aria-current="page"{% endif %}
-                            >
-                              {%- if render_images -%}
-                                {%- render 'link-featured-image',
-                                  link: item_link,
-                                  class: 'at-panel__grid-image',
-                                  sizes: 'auto, 200px'
-                                -%}
-                              {%- endif -%}
-                              <span class="at-panel__grid-item-text">{{- item_link.title -}}</span>
-                            </a>
-                          </li>
-                        {%- endfor -%}
-                      </ul>
-                    </div>
-                  {%- else -%}
-                    <a
-                      href="{{ group_link.url }}"
-                      class="at-panel__item at-panel__item--child"
-                      {% if group_link.current %}aria-current="page"{% endif %}
-                    >
-                      <span class="at-panel__item-text">{{- group_link.title -}}</span>
-                    </a>
-                  {%- endif -%}
-                {%- endfor -%}
-
-              {%- else -%}
-                <ul class="at-panel__grid{% if render_images %} at-panel__grid--images{% endif %}" role="list">
-                  {%- for sub_link in cat_link.links -%}
-                    <li>
-                      <a
-                        href="{{ sub_link.url }}"
-                        class="at-panel__grid-item"
-                        {% if sub_link.current %}aria-current="page"{% endif %}
-                      >
-                        {%- if render_images -%}
-                          {%- render 'link-featured-image',
-                            link: sub_link,
-                            class: 'at-panel__grid-image',
-                            sizes: 'auto, 200px'
-                          -%}
-                        {%- endif -%}
-                        <span class="at-panel__grid-item-text">{{- sub_link.title -}}</span>
-                      </a>
-                    </li>
-                  {%- endfor -%}
-                </ul>
-              {%- endif -%}
-
-              {%- if cat_link.url != blank -%}
-                <div class="at-panel__view-all">
-                  <a href="{{ cat_link.url }}" class="at-panel__view-all-link">
-                    Shop all {{ cat_link.title }} →
-                  </a>
-                </div>
-              {%- endif -%}
+            <div class="at-panel__body at-products at-products--mobile">
+              {%- render 'at-menu-products-category-body',
+                cat_link: cat_link,
+                is_active: true,
+                featured_eyebrow: 'Featured Collection',
+                featured_title: 'Best Sellers',
+                featured_cta_label: 'Shop',
+                class_prefix: 'at-products'
+              -%}
             </div>
           </div>
         </div>
@@ -201,58 +123,9 @@
     {%- endfor -%}
 
     {%- comment -%}
-      Desktop brand image grid removed — Brands panel is SSR directory mode.
+      Desktop Products + Brands panels are SSR'd in the header block.
+      This section only supplies mobile category drill-downs.
     {%- endcomment -%}
-
-    {%- comment -%} ═══════════════════════════════════════════════════════
-      DESKTOP per-category subnav grids
-    ═══════════════════════════════════════════════════════════════════ {%- endcomment -%}
-    {%- for cat_link in cats_ll.links -%}
-      {%- if cat_link.handle != brands_item and cat_link.links != blank -%}
-        <div data-at-mount="desktop-cat-content" data-cat="{{ cat_link.handle }}">
-          <div class="at-brands-panel__grid-wrapper">
-            <ul class="at-brands-panel__subnav-grid list-unstyled" role="list">
-              {%- for sub_link in cat_link.links -%}
-                {%- liquid
-                  # Single dereference: previously this was accessed twice
-                  # per sub_link (once for the if-blank check, once for the
-                  # render), doubling the link.object lookups in this grid.
-                  assign sub_img = sub_link.object.featured_image
-                -%}
-                <li role="listitem">
-                  <a
-                    href="{{ sub_link.url }}"
-                    class="at-brands-panel__subnav-item"
-                    {% if sub_link.current %}aria-current="page"{% endif %}
-                  >
-                    {%- if sub_img != blank -%}
-                      <span class="at-brand-avatar at-brand-avatar--image" aria-hidden="true"
-                        style="--at-brand-avatar-radius: {{ img_radius }}px;">
-                        {{- sub_img
-                            | image_url: width: 48, height: 48, crop: 'center'
-                            | image_tag:
-                              alt: '',
-                              loading: 'lazy',
-                              fetchpriority: 'low',
-                              decoding: 'async',
-                              width: 24,
-                              height: 24 -}}
-                      </span>
-                    {%- endif -%}
-                    <span class="at-brands-panel__brand-name">{{- sub_link.title -}}</span>
-                    {%- if sub_link.links != blank -%}
-                      <span class="at-brands-panel__cat-chevron svg-wrapper" aria-hidden="true">
-                        {{- 'icon-chevron-right.svg' | inline_asset_content -}}
-                      </span>
-                    {%- endif -%}
-                  </a>
-                </li>
-              {%- endfor -%}
-            </ul>
-          </div>
-        </div>
-      {%- endif -%}
-    {%- endfor -%}
 
   </at-menu-data>
 {%- endif -%}

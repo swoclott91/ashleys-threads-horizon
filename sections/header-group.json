@@ -145,7 +145,39 @@
             "background_color_navigation_bar": "{{ settings.color_palette.background }}",
             "text_color_navigation_bar": ""
           },
-          "blocks": {}
+          "blocks": {
+            "cat-t-shirts": {
+              "type": "_at-menu-category",
+              "settings": {
+                "category_handle": "t-shirts",
+                "icon": "shirt",
+                "featured_eyebrow": "Featured Collection",
+                "featured_title": "Best Sellers",
+                "featured_cta_label": "Shop"
+              }
+            },
+            "cat-sweatshirts": {
+              "type": "_at-menu-category",
+              "settings": {
+                "category_handle": "sweatshirts-hoodies",
+                "icon": "shirt",
+                "featured_eyebrow": "Featured Collection",
+                "featured_title": "Best Sellers",
+                "featured_cta_label": "Shop"
+              }
+            },
+            "cat-tank-tops": {
+              "type": "_at-menu-category",
+              "settings": {
+                "category_handle": "tank-tops",
+                "icon": "shirt",
+                "featured_eyebrow": "Featured Collection",
+                "featured_title": "Best Sellers",
+                "featured_cta_label": "Shop"
+              }
+            }
+          },
+          "block_order": ["cat-t-shirts", "cat-sweatshirts", "cat-tank-tops"]
         }
       },
       "settings": {

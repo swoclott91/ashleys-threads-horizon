@@ -178,10 +178,15 @@ class AtBrandsPanel extends Component {
     AtBrandsPanel.#fixHeaderGroupHeight();
 
     // Directory mode SSR's the full alphabet list + featured logos — no
-    // at-menu-data fetch. Products mode still JIT-adopts category grids.
-    if (this.dataset.mode === 'directory') {
+    // at-menu-data fetch. Products mode SSRs category columns + thumbs —
+    // also skips the fetcher (category grids no longer live in at-menu-data).
+    if (this.dataset.mode === 'directory' || this.dataset.mode === 'products') {
       this.#dataRequested = true;
       this.#dataAdopted = true;
+      if (this.dataset.mode === 'products') {
+        const active = this.querySelector('.at-brands-panel__cat-content:not([hidden])');
+        if (active instanceof HTMLElement) this.#hydrateDeferredImages(active);
+      }
       return;
     }
 
@@ -215,7 +220,7 @@ class AtBrandsPanel extends Component {
   }
 
   #onPointerEnter = () => {
-    if (this.dataset.mode !== 'directory') {
+    if (this.dataset.mode !== 'directory' && this.dataset.mode !== 'products') {
       this.#onFirstInteraction();
     }
     this.open();
@@ -688,17 +693,32 @@ class AtBrandsPanel extends Component {
       btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     }
 
-    // Show matching content panel, hide others. Grid content inside each
-    // cat-content is either present (eager_loading=true on the Section
-    // Rendering API re-fetch, morphed in via data-hydration-key) or absent
-    // (eager_loading=false on initial page render). Both states are valid —
-    // no on-demand parsing here.
     for (const panel of this.querySelectorAll('.at-brands-panel__cat-content')) {
-      panel.hidden = panel.dataset.cat !== cat;
+      const show = panel.dataset.cat === cat;
+      panel.hidden = !show;
+      if (show && panel instanceof HTMLElement) {
+        this.#hydrateDeferredImages(panel);
+      }
     }
 
     const q = this.querySelector('.at-brands-panel__search')?.value.trim().toLowerCase() ?? '';
     this.#applyFilter(q);
+  }
+
+  /**
+   * Promote data-at-thumb-src placeholders to real src (once per image).
+   * @param {ParentNode} root
+   */
+  #hydrateDeferredImages(root) {
+    for (const img of root.querySelectorAll('img[data-at-thumb-src]')) {
+      if (!(img instanceof HTMLImageElement)) continue;
+      if (img.getAttribute('src')) continue;
+      const url = img.dataset.atThumbSrc;
+      if (!url) continue;
+      img.src = url;
+      img.loading = 'lazy';
+      img.removeAttribute('data-at-thumb-src');
+    }
   }
 
   // ─── Brand search ────────────────────────────────────────────────────────
@@ -993,7 +1013,17 @@ class AtMenuPanel extends Component {
     const clone = view.cloneNode(true);
     this.appendChild(clone);
     this.#adoptedViews.add(viewName);
-    if (clone instanceof HTMLElement) hydrateAvatarsIn(clone);
+    if (clone instanceof HTMLElement) {
+      hydrateAvatarsIn(clone);
+      for (const img of clone.querySelectorAll('img[data-at-thumb-src]')) {
+        if (!(img instanceof HTMLImageElement)) continue;
+        const url = img.dataset.atThumbSrc;
+        if (!url || img.getAttribute('src')) continue;
+        img.src = url;
+        img.loading = 'lazy';
+        img.removeAttribute('data-at-thumb-src');
+      }
+    }
     console.log('[at-menu mobile] view adopted:', viewName);
     return true;
   }

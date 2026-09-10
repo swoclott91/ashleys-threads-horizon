@@ -1,0 +1,232 @@
+{%- doc -%}
+  Products mega-panel category body: attribute columns + featured rail.
+
+  Linklist shape (preferred):
+    Category → Column heading → Leaf collection links
+  Flat children (no grandchildren) render as a single untitled column.
+
+  Leaf thumbs use collection.image / featured_image only (no product walk).
+  Inactive categories defer thumb `src` via data-at-thumb-src (JS hydrates).
+
+  @param {object} cat_link - Category link from at-categories.
+  @param {boolean} [is_active] - Whether this category is currently visible.
+  @param {object} [featured_image] - Image object for the right rail.
+  @param {object} [featured_collection] - Collection for Shop URL fallback.
+  @param {string} [featured_eyebrow]
+  @param {string} [featured_title]
+  @param {string} [featured_cta_label]
+  @param {string} [class_prefix] - BEM prefix (default at-products).
+{%- enddoc -%}
+
+{%- liquid
+  assign class_prefix = class_prefix | default: 'at-products'
+  assign is_active = is_active | default: false
+  assign featured_eyebrow = featured_eyebrow | default: 'Featured Collection'
+  assign featured_title = featured_title | default: 'Best Sellers'
+  assign featured_cta_label = featured_cta_label | default: 'Shop'
+  assign thumb_img_class = class_prefix | append: '__thumb-img'
+  assign featured_img_class = class_prefix | append: '__featured-img'
+
+  assign has_columns = false
+  for child in cat_link.links
+    if child.links != blank
+      assign has_columns = true
+      break
+    endif
+  endfor
+
+  assign shop_url = featured_collection.url | default: cat_link.url
+
+  if featured_image == blank and featured_collection != blank
+    if featured_collection.featured_image != blank
+      assign featured_image = featured_collection.featured_image
+    elsif featured_collection.image != blank
+      assign featured_image = featured_collection.image
+    endif
+  endif
+
+  if featured_image == blank and cat_link.type == 'collection_link'
+    if cat_link.object.featured_image != blank
+      assign featured_image = cat_link.object.featured_image
+    elsif cat_link.object.image != blank
+      assign featured_image = cat_link.object.image
+    endif
+  endif
+-%}
+
+<div class="{{ class_prefix }}__body">
+  <div class="{{ class_prefix }}__columns" role="navigation" aria-label="{{ cat_link.title | escape }}">
+    {%- if has_columns -%}
+      {%- for col_link in cat_link.links -%}
+        <div class="{{ class_prefix }}__column">
+          <h3 class="{{ class_prefix }}__column-heading">{{- col_link.title -}}</h3>
+          {%- if col_link.links != blank -%}
+            <ul class="{{ class_prefix }}__list list-unstyled" role="list">
+              {%- for leaf in col_link.links -%}
+                {%- liquid
+                  assign leaf_img = blank
+                  if leaf.type == 'collection_link'
+                    if leaf.object.featured_image != blank
+                      assign leaf_img = leaf.object.featured_image
+                    elsif leaf.object.image != blank
+                      assign leaf_img = leaf.object.image
+                    endif
+                  endif
+                -%}
+                <li>
+                  <a
+                    href="{{ leaf.url }}"
+                    class="{{ class_prefix }}__leaf"
+                    {% if leaf.current %}aria-current="page"{% endif %}
+                  >
+                    <span class="{{ class_prefix }}__thumb" aria-hidden="true">
+                      {%- if leaf_img != blank -%}
+                        {%- if is_active -%}
+                          {{
+                            leaf_img
+                            | image_url: width: 64, height: 64, crop: 'center'
+                            | image_tag:
+                              alt: '',
+                              loading: 'lazy',
+                              decoding: 'async',
+                              width: 24,
+                              height: 24,
+                              class: thumb_img_class
+                          }}
+                        {%- else -%}
+                          <img
+                            class="{{ thumb_img_class }}"
+                            data-at-thumb-src="{{ leaf_img | image_url: width: 64, height: 64, crop: 'center' }}"
+                            alt=""
+                            width="24"
+                            height="24"
+                            decoding="async"
+                          >
+                        {%- endif -%}
+                      {%- endif -%}
+                    </span>
+                    <span class="{{ class_prefix }}__leaf-label">{{- leaf.title -}}</span>
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- elsif col_link.url != blank -%}
+            <ul class="{{ class_prefix }}__list list-unstyled" role="list">
+              <li>
+                <a href="{{ col_link.url }}" class="{{ class_prefix }}__leaf">
+                  <span class="{{ class_prefix }}__leaf-label">{{- col_link.title -}}</span>
+                </a>
+              </li>
+            </ul>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    {%- elsif cat_link.links != blank -%}
+      <div class="{{ class_prefix }}__column">
+        <ul class="{{ class_prefix }}__list list-unstyled" role="list">
+          {%- for leaf in cat_link.links -%}
+            {%- liquid
+              assign leaf_img = blank
+              if leaf.type == 'collection_link'
+                if leaf.object.featured_image != blank
+                  assign leaf_img = leaf.object.featured_image
+                elsif leaf.object.image != blank
+                  assign leaf_img = leaf.object.image
+                endif
+              endif
+            -%}
+            <li>
+              <a
+                href="{{ leaf.url }}"
+                class="{{ class_prefix }}__leaf"
+                {% if leaf.current %}aria-current="page"{% endif %}
+              >
+                <span class="{{ class_prefix }}__thumb" aria-hidden="true">
+                  {%- if leaf_img != blank -%}
+                    {%- if is_active -%}
+                      {{
+                        leaf_img
+                        | image_url: width: 64, height: 64, crop: 'center'
+                        | image_tag:
+                          alt: '',
+                          loading: 'lazy',
+                          decoding: 'async',
+                          width: 24,
+                          height: 24,
+                          class: thumb_img_class
+                      }}
+                    {%- else -%}
+                      <img
+                        class="{{ thumb_img_class }}"
+                        data-at-thumb-src="{{ leaf_img | image_url: width: 64, height: 64, crop: 'center' }}"
+                        alt=""
+                        width="24"
+                        height="24"
+                        decoding="async"
+                      >
+                    {%- endif -%}
+                  {%- endif -%}
+                </span>
+                <span class="{{ class_prefix }}__leaf-label">{{- leaf.title -}}</span>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- else -%}
+      <div class="{{ class_prefix }}__empty">
+        <a href="{{ cat_link.url }}" class="button button--secondary button--small">
+          Shop {{ cat_link.title }} &rarr;
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <aside class="{{ class_prefix }}__featured" aria-label="{{ featured_eyebrow | escape }} {{ featured_title | escape }}">
+    {%- if featured_image != blank or shop_url != blank -%}
+      <a
+        href="{{ shop_url }}"
+        class="{{ class_prefix }}__featured-card"
+        {% if featured_image == blank %}aria-label="{{ featured_title | escape }}"{% endif %}
+      >
+        {%- if featured_image != blank -%}
+          {%- if is_active -%}
+            {{
+              featured_image
+              | image_url: width: 800
+              | image_tag:
+                alt: featured_title,
+                loading: 'lazy',
+                decoding: 'async',
+                class: featured_img_class,
+                widths: '400, 600, 800',
+                sizes: '(min-width: 990px) 240px, 40vw'
+            }}
+          {%- else -%}
+            <img
+              class="{{ featured_img_class }}"
+              data-at-thumb-src="{{ featured_image | image_url: width: 800 }}"
+              alt="{{ featured_title | escape }}"
+              width="400"
+              height="500"
+              decoding="async"
+            >
+          {%- endif -%}
+        {%- else -%}
+          <span class="{{ class_prefix }}__featured-placeholder" aria-hidden="true"></span>
+        {%- endif -%}
+        <div class="{{ class_prefix }}__featured-copy">
+          {%- if featured_eyebrow != blank -%}
+            <p class="{{ class_prefix }}__featured-eyebrow">{{- featured_eyebrow | escape -}}</p>
+          {%- endif -%}
+          {%- if featured_title != blank -%}
+            <p class="{{ class_prefix }}__featured-title">{{- featured_title | escape -}}</p>
+          {%- endif -%}
+        </div>
+        {%- if featured_cta_label != blank -%}
+          <span class="{{ class_prefix }}__featured-cta">{{- featured_cta_label | escape -}}</span>
+        {%- endif -%}
+      </a>
+    {%- endif -%}
+  </aside>
+</div>

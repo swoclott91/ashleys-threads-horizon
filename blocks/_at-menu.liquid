@@ -133,6 +133,11 @@
     built-in _header-menu block.
   ══════════════════════════════════════════════════════════════════ {%- endcomment -%}
   {% else %}
+    {%- comment -%} Nested category chrome blocks — desktop only (this block is rendered 3×). {%- endcomment -%}
+    <div class="at-menu-category-blocks" hidden>
+      {% content_for 'blocks' %}
+    </div>
+
     {% liquid
       render 'contrast-override', background_color: block_settings.background_color, text_color: block_settings.text_color, section_id: block.id
 
@@ -183,7 +188,7 @@
 
             {%- elsif is_panel -%}
               {%- comment -%} ── Products mega-panel ── {%- endcomment -%}
-              {%- render 'at-menu-brands-panel',
+              {%- render 'at-menu-products-panel',
                 panel_link: panel_link,
                 categories_linklist: cats_ll,
                 brands_handle: brands_handle,
@@ -409,7 +414,7 @@
       "type": "link_list",
       "id": "at_categories_menu",
       "label": "Categories sidebar menu",
-      "info": "Menu whose top-level links populate the left sidebar. Each link can have sub-links that appear in the right pane."
+      "info": "3-level menu: Category → column heading (Style, Fit…) → leaf collection links. Add AT Menu category blocks for icons + featured cards."
     },
     {
       "type": "text",
@@ -605,6 +610,11 @@
       "label": "t:settings.navigation_bar_text_color",
       "placeholder": "t:settings.default",
       "visible_if": "{{ block.settings.at_mobile_navigation_bar }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "_at-menu-category"
     }
   ]
 }
