@@ -178,7 +178,7 @@ class AtBrandsPanel extends Component {
     AtBrandsPanel.#fixHeaderGroupHeight();
 
     // Directory mode SSR's the full alphabet list + featured logos — no
-    // at-menu-data fetch. Products mode SSRs category columns + thumbs —
+    // at-menu-data fetch. Products mode SSRs category columns + featured rail —
     // also skips the fetcher (category grids no longer live in at-menu-data).
     if (this.dataset.mode === 'directory' || this.dataset.mode === 'products') {
       this.#dataRequested = true;
