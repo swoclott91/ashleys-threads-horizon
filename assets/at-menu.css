@@ -28,7 +28,7 @@
   display: none;
   align-items: center;
   height: 2.5rem;
-  gap: var(--gap-2xs);
+  gap: 0;
 
   @media screen and (min-width: 750px) {
     display: flex;
@@ -39,13 +39,14 @@
 .at-menu__nav-link {
   --at-menu-link-color: currentcolor;
 
+  position: relative;
   display: inline-flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
-  gap: var(--gap-2xs);
+  gap: 0;
   height: 100%;
-  padding-inline: var(--padding-sm);
+  padding-inline: var(--padding-xs);
   font-family: var(--menu-top-level-font-family, var(--font-heading--family));
   font-size: var(--menu-top-level-font-size, 0.875rem);
   font-weight: var(--menu-top-level-font-weight);
@@ -62,7 +63,7 @@
 /*
  * Header AT block combines `menu-list__link` with `at-menu__nav-link`.
  * Theme `_header-menu.liquid` sets `.menu-list__link { flex-direction: column }` for the
- * mega-menu hover bridge — that stacks the chevron under the title; force row for AT links.
+ * mega-menu hover bridge — force row for AT links (no caret).
  */
 .menu-list__link.at-menu__nav-link {
   flex-direction: row;
@@ -72,20 +73,27 @@
   --at-menu-link-color: var(--color-accent, currentcolor);
 }
 
-/* Chevron icon that rotates when the brands panel is open */
-.at-menu__nav-link-chevron {
+/* Active mega / dropdown: underline instead of caret */
+.at-menu__nav-link::after {
+  content: '';
+  position: absolute;
+  inset-inline: var(--padding-xs);
+  bottom: 0;
+  height: 0.125rem;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: center;
   transition: transform var(--animation-speed) var(--animation-easing);
-  flex-shrink: 0;
+  pointer-events: none;
 }
 
-.at-brands-panel[data-open] .at-menu__nav-link-chevron {
-  transform: rotate(180deg);
-}
-
-/* Standalone AT menu section: submenus use :hover / :focus-within (no data-open on host). */
-.at-menu__nav-item:hover .at-menu__nav-link-chevron,
-.at-menu__nav-item:focus-within .at-menu__nav-link-chevron {
-  transform: rotate(180deg);
+.at-brands-panel[data-open] > .at-menu__nav-link::after,
+.at-menu__nav-link[aria-expanded='true']::after,
+.at-menu__nav-item:hover > .at-menu__nav-link::after,
+.at-menu__nav-item:focus-within > .at-menu__nav-link::after,
+.menu-list__list-item:hover > .at-menu__nav-link[aria-haspopup]::after,
+.menu-list__list-item:focus-within > .at-menu__nav-link[aria-haspopup]::after {
+  transform: scaleX(1);
 }
 
 /* =============================================================================
@@ -1096,12 +1104,12 @@
 
 @media (prefers-reduced-motion: reduce) {
   .at-menu__nav-link,
+  .at-menu__nav-link::after,
   .at-brands-panel__cat-btn,
   .at-brands-panel__brand-item,
   .at-panel__item,
   .at-panel__brand-item,
-  .at-panel__alpha-btn,
-  .at-menu__nav-link-chevron {
+  .at-panel__alpha-btn {
     transition: none;
   }
 
@@ -1130,8 +1138,7 @@
 }
 
 .at-panel__chevron svg,
-.at-brands-panel__cat-chevron svg,
-.at-menu__nav-link-chevron svg {
+.at-brands-panel__cat-chevron svg {
   width: 0.875rem;
   height: 0.875rem;
 }
