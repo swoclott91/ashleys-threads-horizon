@@ -73,27 +73,30 @@
   --at-menu-link-color: var(--color-accent, currentcolor);
 }
 
-/* Active mega / dropdown: underline instead of caret */
-.at-menu__nav-link::after {
-  content: '';
-  position: absolute;
-  inset-inline: var(--padding-xs);
-  bottom: 0;
-  height: 0.125rem;
-  background-color: currentColor;
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform var(--animation-speed) var(--animation-easing);
-  pointer-events: none;
+/* Active mega / dropdown: underline (not ::after — that pseudo is the menu-list hover bridge) */
+.at-menu__nav-link .menu-list__link-title {
+  text-decoration: none;
+  text-underline-offset: 0.35em;
+  text-decoration-thickness: 0.125rem;
+  text-decoration-color: currentColor;
+  transition: text-decoration-color var(--animation-speed) var(--animation-easing);
 }
 
-.at-brands-panel[data-open] > .at-menu__nav-link::after,
-.at-menu__nav-link[aria-expanded='true']::after,
-.at-menu__nav-item:hover > .at-menu__nav-link::after,
-.at-menu__nav-item:focus-within > .at-menu__nav-link::after,
-.menu-list__list-item:hover > .at-menu__nav-link[aria-haspopup]::after,
-.menu-list__list-item:focus-within > .at-menu__nav-link[aria-haspopup]::after {
-  transform: scaleX(1);
+.at-brands-panel[data-open] > .at-menu__nav-link .menu-list__link-title,
+.at-menu__nav-link[aria-expanded='true'] .menu-list__link-title,
+.at-menu__nav-item:hover > .at-menu__nav-link,
+.at-menu__nav-item:focus-within > .at-menu__nav-link,
+.menu-list__list-item:hover > .at-menu__nav-link[aria-haspopup] .menu-list__link-title,
+.menu-list__list-item:focus-within > .at-menu__nav-link[aria-haspopup] .menu-list__link-title {
+  text-decoration: underline;
+}
+
+/* Standalone AT Menu section links (title is direct text, no .menu-list__link-title) */
+.at-menu__nav-item:hover > .at-menu__nav-link,
+.at-menu__nav-item:focus-within > .at-menu__nav-link {
+  text-decoration: underline;
+  text-underline-offset: 0.35em;
+  text-decoration-thickness: 0.125rem;
 }
 
 /* =============================================================================
@@ -1104,7 +1107,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .at-menu__nav-link,
-  .at-menu__nav-link::after,
+  .at-menu__nav-link .menu-list__link-title,
   .at-brands-panel__cat-btn,
   .at-brands-panel__brand-item,
   .at-panel__item,
