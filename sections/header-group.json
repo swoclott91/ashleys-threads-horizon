@@ -193,7 +193,7 @@
       },
       "settings": {
         "logo_position": "center",
-        "menu_position": "left",
+        "menu_position": "center",
         "menu_row": "bottom",
         "customer_account_menu": "customer-account-main-menu",
         "show_search": true,
