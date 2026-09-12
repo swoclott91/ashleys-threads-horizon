@@ -117,6 +117,7 @@
           "static": true,
           "settings": {
             "menu": "main-menu",
+            "at_products_nav_mode": "top_level",
             "at_panel_item_handle": "products",
             "at_categories_menu": "at-categories",
             "at_brands_item_handle": "brands",

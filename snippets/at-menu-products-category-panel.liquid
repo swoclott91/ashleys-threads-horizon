@@ -1,0 +1,87 @@
+{%- doc -%}
+  Single-category Products mega-panel (no left sidebar).
+
+  Used when AT Menu nav mode is `top_level`: each main-menu item whose handle
+  matches an `at-categories` category opens this panel (columns + featured rail).
+
+  Same body styling as the sidebar Products panel (`at-menu-products-category-body`).
+
+  @param {object} panel_link - Top-level nav link (trigger label + panel id).
+  @param {object} cat_link - Matching category from at-categories.
+  @param {object} section - AT Menu block (nested `_at-menu-category` chrome).
+{%- enddoc -%}
+
+{%- liquid
+  assign panel_id = 'at-products-panel-' | append: panel_link.handle
+  assign menu_block = section
+
+  assign featured_image = blank
+  assign featured_collection = blank
+  assign featured_eyebrow = 'Featured Collection'
+  assign featured_title = 'Best Sellers'
+  assign featured_cta_label = 'Shop'
+
+  if menu_block.blocks != blank
+    for chrome in menu_block.blocks
+      if chrome.type == '_at-menu-category' and chrome.settings.category_handle == cat_link.handle
+        assign featured_image = chrome.settings.featured_image
+        assign featured_collection = chrome.settings.featured_collection
+        if chrome.settings.featured_eyebrow != blank
+          assign featured_eyebrow = chrome.settings.featured_eyebrow
+        endif
+        if chrome.settings.featured_title != blank
+          assign featured_title = chrome.settings.featured_title
+        endif
+        if chrome.settings.featured_cta_label != blank
+          assign featured_cta_label = chrome.settings.featured_cta_label
+        endif
+        break
+      endif
+    endfor
+  endif
+-%}
+
+<at-brands-panel
+  class="at-brands-panel at-brands-panel--products at-brands-panel--category"
+  data-mode="products"
+  on:pointerenter="/open"
+>
+  <button
+    ref="trigger"
+    class="menu-list__link at-menu__nav-link"
+    aria-expanded="false"
+    aria-controls="{{ panel_id }}"
+    aria-haspopup="true"
+    on:click="/open"
+  >
+    <span class="menu-list__link-title">{{- panel_link.title -}}</span>
+    <span class="at-menu__nav-link-chevron svg-wrapper icon-caret" aria-hidden="true">
+      {{- 'icon-caret.svg' | inline_asset_content -}}
+    </span>
+  </button>
+
+  <div
+    id="{{ panel_id }}"
+    ref="panel"
+    class="at-brands-panel__dropdown at-products-panel at-products-panel--flat"
+    hidden
+  >
+    <div class="at-brands-panel__content at-products-panel__content at-brands-panel__content--full">
+      <div
+        class="at-brands-panel__cat-content at-products-panel__cat-content"
+        data-cat="{{ cat_link.handle }}"
+      >
+        {%- render 'at-menu-products-category-body',
+          cat_link: cat_link,
+          is_active: true,
+          featured_image: featured_image,
+          featured_collection: featured_collection,
+          featured_eyebrow: featured_eyebrow,
+          featured_title: featured_title,
+          featured_cta_label: featured_cta_label,
+          class_prefix: 'at-products'
+        -%}
+      </div>
+    </div>
+  </div>
+</at-brands-panel>

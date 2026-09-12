@@ -6,9 +6,13 @@
     – mobile         : header-drawer with hamburger trigger + AT mobile drawer
     – navigation_bar : optional swipe-bar for small screens
 
+  Products nav modes (at_products_nav_mode):
+    • sidebar   — single Products trigger + left category rail (preserved for Services+)
+    • top_level — each main-menu category is its own mega trigger (near-term)
+
   Top-nav mega panels:
-    • Products (at_panel_item_handle): category sidebar + subnav (JIT via at-menu-data)
-    • Brands (at_brands_item_handle): standalone alphabet directory + featured rail (SSR)
+    • Products / categories (from at_categories_menu)
+    • Brands (at_brands_item_handle): alphabet directory + featured rail (SSR)
 {%- endcomment -%}
 
 {%- liquid
@@ -18,11 +22,11 @@
   assign panel_handle     = block_settings.at_panel_item_handle   | default: 'products'
   assign brands_handle    = block_settings.at_brands_item_handle  | default: 'brands'
   assign highlight_handle = block_settings.at_highlight_handle    | default: 'sale'
+  assign products_nav_mode = block_settings.at_products_nav_mode  | default: 'top_level'
   assign cats_ll          = linklists[block_settings.at_categories_menu]
   assign brands_ll        = linklists[block_settings.at_brands_menu]
   assign featured_brands_ll = linklists[block_settings.at_featured_brands_menu]
 
-  # Products panel: chrome only; category grids still come from at-menu-data (JIT).
   # Brands panel: full alphabet directory + featured logos are SSR'd (text-cheap).
 
   assign panel_link = nil
@@ -79,6 +83,7 @@
             {%- render 'at-menu-mobile-drawer',
               menu_links: menu_links,
               panel_handle: panel_handle,
+              products_nav_mode: products_nav_mode,
               categories_linklist: cats_ll,
               brands_linklist: brands_ll,
               brands_handle: brands_handle,
@@ -165,15 +170,33 @@
             {%- liquid
               assign is_panel = false
               assign is_brands_panel = false
+              assign is_category_panel = false
               assign is_highlight = false
-              if link.handle == panel_handle and panel_link != nil and cats_ll != blank
-                assign is_panel = true
-              endif
+              assign matched_cat_link = nil
+
               if link.handle == brands_handle and brands_nav_link != nil and brands_ll != blank
                 assign is_brands_panel = true
               endif
+
               if link.handle == highlight_handle
                 assign is_highlight = true
+              endif
+
+              if products_nav_mode == 'sidebar'
+                if link.handle == panel_handle and panel_link != nil and cats_ll != blank
+                  assign is_panel = true
+                endif
+              elsif products_nav_mode == 'top_level' and cats_ll != blank and is_brands_panel == false
+                for cat_link in cats_ll.links
+                  if cat_link.handle == brands_handle
+                    continue
+                  endif
+                  if cat_link.handle == link.handle
+                    assign matched_cat_link = cat_link
+                    assign is_category_panel = true
+                    break
+                  endif
+                endfor
               endif
             -%}
 
@@ -187,11 +210,19 @@
               -%}
 
             {%- elsif is_panel -%}
-              {%- comment -%} ── Products mega-panel ── {%- endcomment -%}
+              {%- comment -%} ── Products mega-panel (sidebar mode) ── {%- endcomment -%}
               {%- render 'at-menu-products-panel',
                 panel_link: panel_link,
                 categories_linklist: cats_ll,
                 brands_handle: brands_handle,
+                section: block
+              -%}
+
+            {%- elsif is_category_panel -%}
+              {%- comment -%} ── Single-category mega-panel (top-level mode) ── {%- endcomment -%}
+              {%- render 'at-menu-products-category-panel',
+                panel_link: link,
+                cat_link: matched_cat_link,
                 section: block
               -%}
 
@@ -404,17 +435,34 @@
       "content": "Mega-Panel"
     },
     {
+      "type": "select",
+      "id": "at_products_nav_mode",
+      "label": "Products nav layout",
+      "info": "Top-level: each category is a main-nav mega item (no sidebar). Sidebar: single Products trigger with a left category rail (keep for later Services+).",
+      "options": [
+        {
+          "value": "top_level",
+          "label": "Top-level categories (no sidebar)"
+        },
+        {
+          "value": "sidebar",
+          "label": "Products + category sidebar"
+        }
+      ],
+      "default": "top_level"
+    },
+    {
       "type": "text",
       "id": "at_panel_item_handle",
-      "label": "Panel trigger handle",
-      "info": "Handle of the top-level nav item that opens the mega-panel (e.g. 'products' or 'shop').",
+      "label": "Products trigger handle",
+      "info": "Sidebar mode only. Handle of the top-level nav item that opens Products (e.g. 'products' or 'shop').",
       "default": "products"
     },
     {
       "type": "link_list",
       "id": "at_categories_menu",
-      "label": "Categories sidebar menu",
-      "info": "3-level menu: Category → column heading (Style, Fit…) → leaf collection links. Add AT Menu category blocks for icons + featured cards."
+      "label": "Categories menu",
+      "info": "3-level: Category → column (Style, Fit…) → leaf collections. Top-level mode: main-menu item handles must match category handles. Sidebar mode: categories appear in the left rail."
     },
     {
       "type": "text",
