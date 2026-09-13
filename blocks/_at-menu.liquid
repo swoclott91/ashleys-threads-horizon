@@ -164,7 +164,7 @@
         <nav
           class="at-menu__nav"
           aria-label="{{ 'accessibility.header_navigation_label' | t }}"
-          style="{%- render 'menu-font-styles', settings: block_settings -%}"
+          style="{%- render 'menu-font-styles', settings: block_settings -%}{%- render 'submenu-font-styles', settings: block_settings -%}"
         >
           {%- for link in menu_links -%}
             {%- liquid
@@ -605,6 +605,18 @@
         { "value": "1.125rem", "label": "18px" }
       ],
       "default": "1rem"
+    },
+    {
+      "type": "select",
+      "id": "menu_font_style",
+      "label": "t:settings.submenu_size",
+      "info": "Typography for mega-panel column headings and leaf links (matches theme header menu).",
+      "options": [
+        { "value": "regular", "label": "t:options.small" },
+        { "value": "inverse", "label": "t:options.medium" },
+        { "value": "inverse_large", "label": "t:options.large" }
+      ],
+      "default": "inverse"
     },
     {
       "type": "select",
