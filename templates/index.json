@@ -110,7 +110,7 @@
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>Premium styles at wholesale prices</p>",
+                    "text": "<p>Blank apparel for independent sellers</p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
@@ -136,7 +136,7 @@
                   "type": "text",
                   "name": "t:names.heading",
                   "settings": {
-                    "text": "<h2>GET STRAIGHT TO MAKING</h2>",
+                    "text": "<p>YOUR NEXT BESTSELLER STARTS HERE</p>",
                     "width": "100%",
                     "max_width": "narrow",
                     "alignment": "left",
@@ -162,7 +162,7 @@
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>Order the apparel you need in any quantity. No application, or minimum required.</p>",
+                    "text": "<p>Find the right blanks for your Etsy listings, custom orders, and shop restocks. No application. No minimums.</p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
