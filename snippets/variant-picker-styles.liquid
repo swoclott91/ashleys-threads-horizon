@@ -376,6 +376,21 @@
     min-height: auto;
   }
 
+  .variant-option__button-label--new-color {
+    flex-direction: column;
+    gap: 2px;
+    overflow: visible;
+  }
+
+  .new-color-swatch-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--color-foreground);
+  }
+
   .variant-option__button-label:has(:checked) {
     --variant-picker-stroke-color: var(--color-selected-variant-border);
 

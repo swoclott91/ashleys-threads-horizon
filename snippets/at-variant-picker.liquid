@@ -71,11 +71,22 @@
               {%- endif %}
             </legend>
             {%- for product_option_value in product_option.values -%}
+              {%- liquid
+                assign new_color_until = product_option_value.variant.metafields.custom.new_color_until.value
+                assign new_color_visible = false
+                if new_color_until != blank
+                  assign new_color_until_day = new_color_until | date: '%Y%m%d' | plus: 0
+                  assign today_day = 'now' | date: '%Y%m%d' | plus: 0
+                  if new_color_until_day >= today_day
+                    assign new_color_visible = true
+                  endif
+                endif
+              -%}
               {% if product_option_value.size > longest_value and option_id_attribute %}
                 {% assign longest_value = product_option_value.size %}
               {% endif %}
               <label
-                class="variant-option__button-label{% if variant_style == 'swatch' %} variant-option__button-label--has-swatch{% endif %}"
+                class="variant-option__button-label{% if variant_style == 'swatch' %} variant-option__button-label--has-swatch{% if new_color_visible %} variant-option__button-label--new-color{% endif %}{% endif %}"
               >
                 <input
                   type="radio"
@@ -114,6 +125,9 @@
                     variant_image: featured_media,
                     mode: 'unscaled'
                   %}
+                  {% if new_color_visible %}
+                    <span class="new-color-swatch-label">New</span>
+                  {% endif %}
                 {% else %}
                   {% if product_option_value.available == true %}
                     <span

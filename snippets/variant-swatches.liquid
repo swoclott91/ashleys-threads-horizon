@@ -129,6 +129,15 @@
               endcomment
 
               assign option_value_variant = product_option_value.variant
+              assign new_color_until = option_value_variant.metafields.custom.new_color_until.value
+              assign new_color_visible = false
+              if new_color_until != blank
+                assign new_color_until_day = new_color_until | date: '%Y%m%d' | plus: 0
+                assign today_day = 'now' | date: '%Y%m%d' | plus: 0
+                if new_color_until_day >= today_day
+                  assign new_color_visible = true
+                endif
+              endif
               assign featured_media = option_value_variant.featured_media
               assign child_product = nil
               assign first_available_variant = nil
@@ -177,7 +186,7 @@
             <li class="variant-option__swatch">
               <label
                 data-media-id="{{ featured_media.id }}"
-                class="variant-option__button-label variant-option__button-label--has-swatch"
+                class="variant-option__button-label variant-option__button-label--has-swatch{% if new_color_visible %} variant-option__button-label--new-color{% endif %}"
                 on:pointerenter="product-card/previewVariant/{{ featured_media.id }}"
                 on:pointerleave="product-card/resetVariant"
               >
@@ -203,6 +212,9 @@
                   swatch: product_option_value.swatch,
                   variant_image: featured_media,
                 %}
+                {% if new_color_visible %}
+                  <span class="new-color-swatch-label">New</span>
+                {% endif %}
                 {% render 'strikethrough-variant', product_option: product_option_value %}
               </label>
             </li>
