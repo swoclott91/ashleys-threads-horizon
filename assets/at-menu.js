@@ -143,6 +143,19 @@ class AtBrandsPanel extends Component {
   /** @type {ReturnType<typeof setTimeout> | null} */
   #focusOutTimer = null;
 
+  /**
+   * Ignore pointerleave briefly after open so layout thrash (header height /
+   * underlay / logo swap) does not immediately close the panel.
+   * @type {number}
+   */
+  #openedAt = 0;
+
+  /** Dwell before closing after pointer leaves the host. */
+  static #CLOSE_DELAY_MS = 220;
+
+  /** Grace window after open where leave events are ignored. */
+  static #OPEN_GRACE_MS = 120;
+
   /** @type {ResizeObserver | null} */
   #headerResizeObserver = null;
 
@@ -220,6 +233,7 @@ class AtBrandsPanel extends Component {
   }
 
   #onPointerEnter = () => {
+    this.#clearCloseTimer();
     if (this.dataset.mode !== 'directory' && this.dataset.mode !== 'products') {
       this.#onFirstInteraction();
     }
@@ -361,14 +375,22 @@ class AtBrandsPanel extends Component {
   open() {
     this.#clearCloseTimer();
     this.#clearFocusOutTimer();
+    this.#closeSiblingPanels();
 
     const { trigger, panel } = this.refs;
-    if (!panel || panel.hidden === false) return;
+    if (!panel) return;
+
+    // Already open — still refresh seam in case header layout changed.
+    if (panel.hidden === false) {
+      this.#updatePanelTop();
+      return;
+    }
 
     this.#updatePanelTop();
 
     panel.removeAttribute('hidden');
     this.dataset.open = '';
+    this.#openedAt = Date.now();
     trigger?.setAttribute('aria-expanded', 'true');
 
     this.#bindHeaderLayoutListeners();
@@ -390,6 +412,16 @@ class AtBrandsPanel extends Component {
   }
 
   /**
+   * Only one AT mega panel should be open at a time (full-bleed dropdowns stack).
+   */
+  #closeSiblingPanels() {
+    for (const other of document.querySelectorAll('at-brands-panel[data-open]')) {
+      if (other === this || !(other instanceof AtBrandsPanel)) continue;
+      other.close();
+    }
+  }
+
+  /**
    * Close the panel.
    */
   close() {
@@ -406,6 +438,7 @@ class AtBrandsPanel extends Component {
 
     panel.setAttribute('hidden', '');
     delete this.dataset.open;
+    this.#openedAt = 0;
     trigger?.setAttribute('aria-expanded', 'false');
 
     AtBrandsPanel.#fixHeaderGroupHeight();
@@ -413,13 +446,36 @@ class AtBrandsPanel extends Component {
     this.#syncDesktopLoadingOverlay();
   }
 
-  #onPointerLeave = () => {
+  /**
+   * @param {PointerEvent} event
+   */
+  #onPointerLeave = (event) => {
+    // Layout thrash right after open can briefly move the host out from under
+    // the cursor; ignore leave during the grace window.
+    if (this.#openedAt && Date.now() - this.#openedAt < AtBrandsPanel.#OPEN_GRACE_MS) {
+      return;
+    }
+
+    // Moving into a sibling mega trigger — that panel's enter will open; close us now.
+    const related = event.relatedTarget;
+    if (related instanceof Element) {
+      const sibling = related.closest('at-brands-panel');
+      if (sibling instanceof AtBrandsPanel && sibling !== this) {
+        this.#applyClose();
+        return;
+      }
+      // Still inside this host (e.g. into the fixed dropdown) — keep open.
+      if (this.contains(related)) return;
+    }
+
     this.#clearCloseTimer();
     this.#closeTimer = setTimeout(() => {
       this.#closeTimer = null;
       if (this.contains(document.activeElement)) return;
+      // Pointer may have re-entered during the delay (gap → panel).
+      if (this.matches(':hover')) return;
       this.#applyClose();
-    }, 150);
+    }, AtBrandsPanel.#CLOSE_DELAY_MS);
   };
 
   #onFocusOut = () => {

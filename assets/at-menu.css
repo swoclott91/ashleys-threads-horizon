@@ -79,10 +79,10 @@
   text-underline-offset: 0.35em;
   text-decoration-thickness: 0.125rem;
   text-decoration-color: currentColor;
-  transition: text-decoration-color var(--animation-speed) var(--animation-easing);
 }
 
-.at-brands-panel[data-open] > .at-menu__nav-link .menu-list__link-title,
+/* Host :hover covers the dwell before data-open / aria-expanded flip (and flaky open frames). */
+.at-brands-panel:is(:hover, [data-open], :focus-within) > .at-menu__nav-link .menu-list__link-title,
 .at-menu__nav-link[aria-expanded='true'] .menu-list__link-title,
 .at-menu__nav-item:hover > .at-menu__nav-link,
 .at-menu__nav-item:focus-within > .at-menu__nav-link,
@@ -108,6 +108,8 @@
  * so pointer path matches mega menus; align-self stretch matches row height like .menu-list__list-item.
  */
 .at-brands-panel {
+  --at-menu-hover-bridge: max(0.75rem, var(--header-padding, 0.5rem));
+
   position: relative;
   display: flex;
   flex-direction: column;
@@ -115,14 +117,29 @@
   align-self: stretch;
   height: 100%;
   min-height: 0;
+  /* Keep overflowing ::after bridge hittable even if a parent clips paint. */
+  overflow: visible;
 }
 
+/*
+ * In-flow hover bridge below the trigger while the dropdown is position:fixed.
+ * Floor at 0.75rem so a tiny --header-padding cannot leave a dead zone.
+ */
 .at-brands-panel::after {
   content: '';
   width: 100%;
-  height: var(--header-padding);
-  margin-bottom: calc(-1 * var(--header-padding));
+  height: var(--at-menu-hover-bridge);
+  margin-bottom: calc(-1 * var(--at-menu-hover-bridge));
   flex-shrink: 0;
+  pointer-events: auto;
+}
+
+/* Trigger fills the nav row; do not let height:100% crowd out the bridge. */
+.at-brands-panel > .at-menu__nav-link {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 100%;
+  align-self: stretch;
 }
 
 .at-brands-panel__dropdown {
