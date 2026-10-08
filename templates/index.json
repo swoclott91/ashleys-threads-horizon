@@ -2315,13 +2315,9 @@
                           "name": "t:names.at_collection_list",
                           "settings": {
                             "collection_list": [
-                              "sale",
                               "garment-dyed-blank-apparel",
-                              "best-blank-apparel-for-heat-press",
-                              "best-blank-apparel-for-etsy-shops",
-                              "best-blank-apparel-for-sports-teams",
-                              "best-blank-apparel-for-local-shops",
-                              "best-blank-apparel-for-everyday-wear-gifts"
+                              "seller-staples",
+                              "heavyweight-favorites"
                             ],
                             "layout_type": "carousel",
                             "carousel_on_mobile": true,
