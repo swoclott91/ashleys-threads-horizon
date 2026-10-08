@@ -2317,7 +2317,8 @@
                             "collection_list": [
                               "garment-dyed-blank-apparel",
                               "seller-staples",
-                              "heavyweight-favorites"
+                              "heavyweight-favorites",
+                              "volume-winners"
                             ],
                             "layout_type": "carousel",
                             "carousel_on_mobile": true,
