@@ -1682,7 +1682,7 @@
                               "type": "text",
                               "name": "t:names.heading",
                               "settings": {
-                                "text": "<h2>THOUSANDS OF STYLES. ENDLESS POSIBILITIES.</h2>",
+                                "text": "<h2>PRODUCT CATEGORIES</h2>",
                                 "width": "100%",
                                 "max_width": "normal",
                                 "alignment": "center",
@@ -2318,7 +2318,8 @@
                               "garment-dyed-blank-apparel",
                               "seller-staples",
                               "heavyweight-favorites",
-                              "volume-winners"
+                              "volume-winners",
+                              "family-matching-sets"
                             ],
                             "layout_type": "carousel",
                             "carousel_on_mobile": true,
