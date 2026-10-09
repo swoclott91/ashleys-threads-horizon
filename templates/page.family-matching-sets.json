@@ -284,7 +284,7 @@
       },
       "name": "Popular",
       "settings": {
-        "collection": "heavyweight-favorites",
+        "collection": "everyday-family-tees",
         "layout_type": "carousel",
         "carousel_on_mobile": false,
         "max_products": 6,
