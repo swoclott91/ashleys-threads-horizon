@@ -22,7 +22,7 @@
             "align_baseline": false,
             "horizontal_alignment_flex_direction_column": "flex-start",
             "vertical_alignment_flex_direction_column": "center",
-            "gap": 16,
+            "gap": 10,
             "width": "custom",
             "custom_width": 40,
             "width_mobile": "fill",
@@ -57,13 +57,12 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "text_HwCddY": {
+            "text_HtC8dd": {
               "type": "text",
-              "name": "t:names.heading",
               "settings": {
                 "text": "<p>FAMILY & MATCHING SETS</p>",
                 "width": "100%",
-                "max_width": "normal",
+                "max_width": "narrow",
                 "alignment": "left",
                 "type_preset": "rte",
                 "font": "var(--font-body--family)",
@@ -83,10 +82,36 @@
               },
               "blocks": {}
             },
-            "text_HtC8dd": {
+            "text_LLaLPA": {
+              "type": "text",
+              "name": "t:names.heading",
+              "settings": {
+                "text": "<p>Matching Blanks. More to Sell.</p>",
+                "width": "100%",
+                "max_width": "narrow",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-heading--family)",
+                "font_size": "2rem",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "uppercase",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_YUY9gU": {
               "type": "text",
               "settings": {
-                "text": "<h2>Matching Blanks.</h2><h2>More to Sell.</h2><p>Turn your next design into coordinated apparel for adults, kids, and little ones.</p>",
+                "text": "<p>Turn your next design into coordinated apparel for adults, kids, and little ones.</p>",
                 "width": "100%",
                 "max_width": "narrow",
                 "alignment": "left",
@@ -128,8 +153,9 @@
             }
           },
           "block_order": [
-            "text_HwCddY",
             "text_HtC8dd",
+            "text_LLaLPA",
+            "text_YUY9gU",
             "button_BQxBYB"
           ]
         },
