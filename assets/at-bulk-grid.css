@@ -2,10 +2,22 @@
  * AT Bulk order grid – minimal layout; reuses theme button/input/grid classes.
  */
 
-/* Desktop: wider modal when bulk grid is present so table fits without horizontal scroll */
+/* Center modal shells in the viewport, independent of the trigger's page position. */
+.at-buy-buttons__bulk-dialog:not(.at-buy-buttons__bulk-dialog--drawer),
+.at-popup-link .popup-link__content:has(.at-bulk-grid):not(.popup-link__content--drawer) {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+}
+
+/* Give size columns the available desktop width; large grids can still scroll internally. */
 @media screen and (min-width: 750px) {
-  .at-popup-link .popup-link__content:has(.at-bulk-grid) {
-    max-width: min(72rem, calc(100vw - 2rem));
+  .at-buy-buttons__bulk-dialog:not(.at-buy-buttons__bulk-dialog--drawer),
+  .at-popup-link .popup-link__content:has(.at-bulk-grid):not(.popup-link__content--drawer),
+  #at-bulk-grid-quick-add-dialog {
+    width: min(90rem, calc(100vw - 3rem));
+    max-width: min(90rem, calc(100vw - 3rem));
+    padding: clamp(1.5rem, 2.5vw, 3rem);
   }
 }
 
@@ -33,7 +45,7 @@
  * Mirrors the product-page popup-link__content + at-bulk-grid rules so that
  * sizing, scroll behaviour, and sticky footer feel identical across contexts.
  *
- * Desktop (≥750px): max-width/max-height only – table wrapper scrolls internally.
+ * Desktop (≥750px): viewport-capped width/height – table wrapper scrolls internally.
  * Mobile (<750px): viewport-based sheet height; .at-bulk-grid__body scrolls; footer stays visible.
  * ─────────────────────────────────────────────────────────────────────────── */
 
@@ -45,18 +57,18 @@
     )
   );
 
-  position: relative;
+  position: fixed;
+  inset: 0;
+  margin: auto;
   box-shadow: var(--shadow-popover);
   border: var(--style-border-popover);
   border-radius: var(--style-border-radius-popover);
   background-color: var(--color-background);
   padding: var(--padding-4xl) var(--padding-xl) var(--padding-xl);
-  /* Wide enough for the table (mirrors .at-popup-link .popup-link__content:has(.at-bulk-grid)) */
-  max-width: min(72rem, calc(100vw - 2rem));
   max-height: var(--modal-max-height);
 
   @media screen and (min-width: 750px) {
-    padding: var(--padding-5xl);
+    padding: clamp(1.5rem, 2.5vw, 3rem);
   }
 }
 
@@ -632,7 +644,7 @@
   .at-popup-link .popup-link__content:has(.at-bulk-grid)[open] {
     --at-bulk-modal-inline: max(var(--padding-md), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
 
-    position: relative;
+    position: fixed;
     max-height: var(--at-bulk-sheet-height);
     height: var(--at-bulk-sheet-height);
     width: 100%;
