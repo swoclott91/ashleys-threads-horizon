@@ -53,20 +53,20 @@
 -%}
 
 <at-menu-panel class="at-panel" data-brands-mode="directory">
+  <div class="at-panel__toolbar">
+    <button
+      type="button"
+      class="at-panel__close"
+      aria-label="{{ 'actions.close' | t | default: 'Close menu' }}"
+      on:click="header-drawer/close"
+    >
+      <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
+    </button>
+    <h2 class="at-panel__title">{{- drawer_heading | escape -}}</h2>
+  </div>
 
+  <div class="at-panel__views" ref="views">
   <div class="at-panel__view" data-view="main">
-    <div class="at-panel__header">
-      <h2 class="at-panel__title">{{- drawer_heading | escape -}}</h2>
-      <button
-        type="button"
-        class="at-panel__close"
-        aria-label="{{ 'actions.close' | t | default: 'Close menu' }}"
-        on:click="header-drawer/close"
-      >
-        <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
-      </button>
-    </div>
-
     <nav class="at-panel__body" aria-label="{{ drawer_heading | escape }}">
       <ul class="at-panel__list" role="list">
         {%- if products_nav_mode == 'top_level' -%}
@@ -290,14 +290,6 @@
           <span class="svg-wrapper">{{- 'icon-chevron-left.svg' | inline_asset_content -}}</span>
         </button>
         <h2 class="at-panel__title">{{- brands_nav_title | escape -}}</h2>
-        <button
-          type="button"
-          class="at-panel__close"
-          aria-label="{{ 'actions.close' | t | default: 'Close menu' }}"
-          on:click="header-drawer/close"
-        >
-          <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
-        </button>
       </div>
 
       {%- if cta_1_label != blank or cta_2_label != blank or cta_3_label != blank -%}
@@ -396,5 +388,5 @@
       </div>
     </div>
   {%- endif -%}
-
+  </div>
 </at-menu-panel>

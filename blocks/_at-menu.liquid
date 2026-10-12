@@ -350,15 +350,15 @@
     position: fixed;
     transform: translateX(-100%);
     visibility: hidden;
-    height: var(--drawer-height);
+    height: var(--at-menu-drawer-height, var(--drawer-height));
     width: var(--drawer-width);
     max-width: var(--drawer-max-width);
     z-index: var(--layer-menu-drawer);
     left: 0;
     top: 0;
-    padding: 0;
+    padding: 0 0 var(--safe-area-inset-bottom, 0px);
     background-color: var(--color-background);
-    overflow: auto;
+    overflow: hidden;
     display: flex;
     border-right: var(--style-border-drawer);
     box-shadow: var(--shadow-drawer);

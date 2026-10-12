@@ -597,13 +597,51 @@
    ============================================================================= */
 
 .at-panel {
+  --drawer-inline-padding: var(--page-margin, var(--drawer-padding));
+  --drawer-header-block-padding: var(--padding-sm);
+  --font-size--medium: var(--font-size--md);
+  --font-size--small: var(--font-size--sm);
+  --font-size--xsmall: var(--font-size--xs);
   position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
+  min-height: 0;
   overflow: hidden;
   background-color: var(--color-background);
+}
+
+.at-panel__toolbar {
+  position: relative;
+  flex-shrink: 0;
+  height: var(--at-menu-toolbar-height, var(--header-height, calc(var(--minimum-touch-target) + var(--padding-sm) * 2)));
+  border-block-end: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10));
+}
+
+.at-panel__toolbar .at-panel__close {
+  position: absolute;
+  left: var(--at-menu-close-left, var(--drawer-inline-padding));
+  top: var(--at-menu-close-top, var(--padding-sm));
+  width: var(--at-menu-close-width, var(--minimum-touch-target));
+  height: var(--at-menu-close-height, var(--minimum-touch-target));
+}
+
+.at-panel__toolbar .at-panel__title {
+  position: absolute;
+  inset-inline-end: var(--drawer-inline-padding);
+  left: calc(var(--at-menu-close-left, var(--drawer-inline-padding)) + var(--at-menu-close-width, var(--minimum-touch-target)) + var(--gap-sm));
+  top: var(--at-menu-close-top, var(--padding-sm));
+  height: var(--at-menu-close-height, var(--minimum-touch-target));
+  display: flex;
+  align-items: center;
+}
+
+.at-panel__views {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* ── View container ── */
@@ -680,7 +718,7 @@
 .at-panel__header {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: 0;
   padding-inline: var(--drawer-inline-padding);
   padding-block: var(--drawer-header-block-padding);
   border-block-end: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10));
@@ -713,10 +751,21 @@
   }
 }
 
+.at-panel__close .svg-wrapper,
+.at-panel__back .svg-wrapper {
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+}
+
+.at-panel__header .at-panel__back {
+  justify-content: flex-start;
+}
+
 /* ── Scrollable body ── */
 
 .at-panel__body {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
@@ -735,6 +784,7 @@
   align-items: center;
   gap: var(--gap-sm);
   width: 100%;
+  min-height: var(--minimum-touch-target);
   padding-inline: var(--drawer-inline-padding);
   padding-block: var(--padding-md);
   text-align: start;
@@ -827,13 +877,13 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  padding-inline-start: calc(var(--drawer-inline-padding) + var(--gap-sm));
+  padding-inline: var(--drawer-inline-padding);
   padding-block-end: var(--padding-sm);
 }
 
 .at-panel__sub-item {
   display: block;
-  padding-inline: var(--drawer-inline-padding);
+  padding-inline: var(--gap-sm);
   padding-block: var(--padding-sm);
   font-size: var(--font-size--small);
   color: var(--color-foreground);
@@ -1211,7 +1261,7 @@
 }
 
 .at-brands-dir__ctas--mobile {
-  padding: var(--padding-sm) var(--padding-md);
+  padding: var(--padding-sm) var(--drawer-inline-padding);
 }
 
 .at-brands-dir__cta {
@@ -1318,6 +1368,7 @@
 }
 
 .at-brands-dir__featured--mobile {
+  padding: var(--padding-sm) var(--drawer-inline-padding);
   border-inline-start: none;
   border-block-end: 1px solid rgb(var(--color-foreground-rgb) / 0.1);
   max-height: none;
@@ -1409,7 +1460,7 @@
   .at-panel__view--brands-dir .at-brands-dir__columns {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--gap-sm);
-    padding: var(--padding-sm) var(--padding-md) var(--padding-lg);
+    padding: var(--padding-sm) var(--drawer-inline-padding) var(--padding-lg);
   }
 }
 
@@ -1644,10 +1695,11 @@
 
 .at-products--mobile .at-products__columns {
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  padding: var(--padding-sm) var(--padding-md);
+  padding: var(--padding-sm) var(--drawer-inline-padding);
 }
 
 .at-products--mobile .at-products__featured {
+  padding-inline: var(--drawer-inline-padding);
   border-inline-start: none;
   border-block-start: 1px solid rgb(var(--color-foreground-rgb) / 0.1);
   order: -1;

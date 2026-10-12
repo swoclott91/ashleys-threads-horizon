@@ -97,14 +97,6 @@
                 <span class="svg-wrapper">{{- 'icon-chevron-left.svg' | inline_asset_content -}}</span>
               </button>
               <h2 class="at-panel__title">{{- cat_link.title | escape -}}</h2>
-              <button
-                type="button"
-                class="at-panel__close"
-                aria-label="{{ 'actions.close' | t | default: 'Close menu' }}"
-                on:click="header-drawer/close"
-              >
-                <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
-              </button>
             </div>
 
             <div class="at-panel__body at-products at-products--mobile">

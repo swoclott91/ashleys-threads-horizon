@@ -876,6 +876,7 @@ if (!customElements.get('at-brands-panel')) {
 
 /**
  * @typedef {object} AtMenuPanelRefs
+ * @property {HTMLElement} views - Container for the sliding navigation views.
  * @property {HTMLInputElement} [searchInput] - Brand search input.
  * @property {HTMLElement} [searchClear] - Clear search button.
  * @property {HTMLElement} [brandCount] - Brand count badge.
@@ -889,6 +890,10 @@ if (!customElements.get('at-brands-panel')) {
  * @extends {Component<AtMenuPanelRefs>}
  */
 class AtMenuPanel extends Component {
+  requiredRefs = ['views'];
+
+  #headerObserver = null;
+
   /** @type {string[]} */
   #viewStack = [];
 
@@ -978,6 +983,12 @@ class AtMenuPanel extends Component {
         summary.addEventListener('pointerdown', this.#onFirstInteraction, { once: true });
       }
       details.addEventListener('toggle', this.#onDrawerToggle);
+      this.#headerObserver = new ResizeObserver(this.#syncDrawerHeader);
+      if (this.#drawerSummary) this.#headerObserver.observe(this.#drawerSummary);
+      const headerRow = this.closest('.header__row');
+      if (headerRow) this.#headerObserver.observe(headerRow);
+      window.addEventListener('resize', this.#syncDrawerHeader);
+      this.#syncDrawerHeader();
     }
 
     // Hydrate any already-present initials avatars. Subsequent avatars
@@ -1003,6 +1014,9 @@ class AtMenuPanel extends Component {
     this.removeEventListener('click', this.#onSearchClearClick);
     this.#detailsObserver?.disconnect();
     this.#detailsObserver = null;
+    this.#headerObserver?.disconnect();
+    this.#headerObserver = null;
+    window.removeEventListener('resize', this.#syncDrawerHeader);
     if (this.#drawerSummary) {
       this.#drawerSummary.removeEventListener('pointerdown', this.#onFirstInteraction);
     }
@@ -1020,8 +1034,29 @@ class AtMenuPanel extends Component {
   #onDrawerToggle = (event) => {
     const details = event.currentTarget;
     if (details instanceof HTMLDetailsElement && details.open) {
+      this.#syncDrawerHeader();
       this.#onFirstInteraction();
     }
+  };
+
+  #syncDrawerHeader = () => {
+    const summary = this.#drawerSummary;
+    const drawer = this.closest('.menu-drawer');
+    if (!summary || !(drawer instanceof HTMLElement) || !this.#drawerDetails?.open) return;
+
+    const triggerRect = summary.getBoundingClientRect();
+    const drawerRect = drawer.getBoundingClientRect();
+    const panelRect = this.getBoundingClientRect();
+    const transform = new DOMMatrixReadOnly(getComputedStyle(drawer).transform);
+    const headerRow = summary.closest('.header__row');
+    const toolbarBottom = Math.max(triggerRect.bottom, headerRow?.getBoundingClientRect().bottom ?? triggerRect.bottom);
+
+    this.style.setProperty('--at-menu-close-left', `${triggerRect.left - panelRect.left + transform.m41}px`);
+    this.style.setProperty('--at-menu-close-top', `${Math.max(0, triggerRect.top - panelRect.top)}px`);
+    this.style.setProperty('--at-menu-close-width', `${triggerRect.width}px`);
+    this.style.setProperty('--at-menu-close-height', `${triggerRect.height}px`);
+    this.style.setProperty('--at-menu-toolbar-height', `${Math.max(0, toolbarBottom - panelRect.top)}px`);
+    drawer.style.setProperty('--at-menu-drawer-height', `max(0px, calc(100dvh - ${Math.max(0, drawerRect.top)}px))`);
   };
 
   /**
@@ -1067,7 +1102,7 @@ class AtMenuPanel extends Component {
     }
 
     const clone = view.cloneNode(true);
-    this.appendChild(clone);
+    this.refs.views.appendChild(clone);
     this.#adoptedViews.add(viewName);
     if (clone instanceof HTMLElement) {
       hydrateAvatarsIn(clone);
