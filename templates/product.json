@@ -473,187 +473,34 @@
                     "width": 20
                   },
                   "blocks": {
-                    "group_qYE8rw": {
-                      "type": "group",
-                      "name": "t:names.group",
+                    "feature_badges": {
+                      "type": "feature-badges",
                       "settings": {
-                        "content_direction": "row",
-                        "vertical_on_mobile": false,
-                        "horizontal_alignment": "flex-start",
-                        "vertical_alignment": "center",
-                        "align_baseline": false,
-                        "horizontal_alignment_flex_direction_column": "flex-start",
-                        "vertical_alignment_flex_direction_column": "center",
-                        "gap": 12,
-                        "width": "fill",
-                        "custom_width": 100,
-                        "width_mobile": "fill",
-                        "custom_width_mobile": 100,
-                        "height": "fit",
-                        "custom_height": 100,
-                        "height_mobile": "fit",
-                        "custom_height_mobile": 30,
-                        "background_media": "none",
-                        "background_color": "",
-                        "video_position": "cover",
-                        "background_image_position": "cover",
-                        "custom_mobile_media": false,
-                        "background_media_mobile": "image",
-                        "background_image_position_mobile": "cover",
-                        "video_position_mobile": "cover",
-                        "toggle_overlay": false,
-                        "overlay_color": "#00000026",
-                        "overlay_style": "solid",
-                        "gradient_direction": "to top",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_color": "",
-                        "border_radius": 0,
-                        "link": "",
-                        "open_in_new_tab": false,
-                        "placeholder": "",
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "badge_1_source": "shopify.clothing-features",
+                        "badge_1_match": "Tear-Away Label",
+                        "badge_1_label": "Tear-Away Label",
+                        "badge_1_icon": "tear_away_label",
+                        "badge_2_source": "custom.cotton_type",
+                        "badge_2_match": "Ring-Spun",
+                        "badge_2_label": "Ring-Spun",
+                        "badge_2_icon": "cotton_ring_spun",
+                        "badge_3_source": "custom.cotton_type",
+                        "badge_3_match": "Open-End",
+                        "badge_3_label": "Open-End Cotton",
+                        "badge_3_icon": "cotton_open_end",
+                        "badge_4_source": "custom.cotton_type",
+                        "badge_4_match": "Combed Ring-Spun",
+                        "badge_4_label": "Combed Ring-Spun Cotton",
+                        "badge_4_icon": "cotton_combed_ring_spun",
+                        "badge_5_source": "custom.sustainable_style",
+                        "badge_5_match": "",
+                        "badge_5_label": "Sustainable Style",
+                        "badge_5_icon": "recycle",
+                        "icon_width": 36,
+                        "gap": 8,
+                        "badge_5_content": "{{ closest.product.metafields.custom.sustainable_style | metafield_tag }}"
                       },
-                      "blocks": {
-                        "icon_mpwYDR": {
-                          "type": "icon",
-                          "name": "t:names.icon",
-                          "settings": {
-                            "icon": "cotton_open_end",
-                            "width": 36,
-                            "link_collection": "",
-                            "link": "",
-                            "open_in_new_tab": false,
-                            "icon_color": ""
-                          },
-                          "blocks": {}
-                        },
-                        "text_gCjGyn": {
-                          "type": "text",
-                          "name": "t:names.text",
-                          "settings": {
-                            "text": "<p>Open-End Cotton</p>",
-                            "width": "fit-content",
-                            "max_width": "normal",
-                            "alignment": "left",
-                            "type_preset": "rte",
-                            "font": "var(--font-body--family)",
-                            "font_size": "1rem",
-                            "line_height": "normal",
-                            "letter_spacing": "normal",
-                            "case": "none",
-                            "wrap": "pretty",
-                            "text_color": "",
-                            "background": false,
-                            "background_color": "#00000026",
-                            "corner_radius": 0,
-                            "padding-block-start": 0,
-                            "padding-block-end": 0,
-                            "padding-inline-start": 0,
-                            "padding-inline-end": 0
-                          },
-                          "blocks": {}
-                        }
-                      },
-                      "block_order": [
-                        "icon_mpwYDR",
-                        "text_gCjGyn"
-                      ]
-                    },
-                    "group_Hrc7pR": {
-                      "type": "group",
-                      "name": "t:names.group",
-                      "settings": {
-                        "content_direction": "row",
-                        "vertical_on_mobile": false,
-                        "horizontal_alignment": "flex-start",
-                        "vertical_alignment": "center",
-                        "align_baseline": false,
-                        "horizontal_alignment_flex_direction_column": "flex-start",
-                        "vertical_alignment_flex_direction_column": "center",
-                        "gap": 12,
-                        "width": "fill",
-                        "custom_width": 100,
-                        "width_mobile": "fill",
-                        "custom_width_mobile": 100,
-                        "height": "fit",
-                        "custom_height": 100,
-                        "height_mobile": "fit",
-                        "custom_height_mobile": 30,
-                        "background_media": "none",
-                        "background_color": "",
-                        "video_position": "cover",
-                        "background_image_position": "cover",
-                        "custom_mobile_media": false,
-                        "background_media_mobile": "image",
-                        "background_image_position_mobile": "cover",
-                        "video_position_mobile": "cover",
-                        "toggle_overlay": false,
-                        "overlay_color": "#00000026",
-                        "overlay_style": "solid",
-                        "gradient_direction": "to top",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_color": "",
-                        "border_radius": 0,
-                        "link": "",
-                        "open_in_new_tab": false,
-                        "placeholder": "",
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {
-                        "icon_xQ8Uej": {
-                          "type": "icon",
-                          "name": "t:names.icon",
-                          "settings": {
-                            "icon": "tear_away_label",
-                            "width": 36,
-                            "link_collection": "",
-                            "link": "",
-                            "open_in_new_tab": false,
-                            "icon_color": ""
-                          },
-                          "blocks": {}
-                        },
-                        "text_FebPcA": {
-                          "type": "text",
-                          "name": "t:names.text",
-                          "settings": {
-                            "text": "<p>Tear-away Label</p>",
-                            "width": "fit-content",
-                            "max_width": "normal",
-                            "alignment": "left",
-                            "type_preset": "rte",
-                            "font": "var(--font-body--family)",
-                            "font_size": "1rem",
-                            "line_height": "normal",
-                            "letter_spacing": "normal",
-                            "case": "none",
-                            "wrap": "pretty",
-                            "text_color": "",
-                            "background": false,
-                            "background_color": "#00000026",
-                            "corner_radius": 0,
-                            "padding-block-start": 0,
-                            "padding-block-end": 0,
-                            "padding-inline-start": 0,
-                            "padding-inline-end": 0
-                          },
-                          "blocks": {}
-                        }
-                      },
-                      "block_order": [
-                        "icon_xQ8Uej",
-                        "text_FebPcA"
-                      ]
+                      "blocks": {}
                     },
                     "text_QjLNJK": {
                       "type": "text",
@@ -682,8 +529,7 @@
                     }
                   },
                   "block_order": [
-                    "group_qYE8rw",
-                    "group_Hrc7pR",
+                    "feature_badges",
                     "text_QjLNJK"
                   ]
                 },

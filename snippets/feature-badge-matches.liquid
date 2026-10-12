@@ -1,0 +1,75 @@
+{%- doc -%}
+  Returns 'true' when a product metafield satisfies a badge condition.
+
+  @param {object} product - Product supplying the metafield
+  @param {string} metafield_path - Namespace and key separated by a dot
+  @param {string} [match_value] - Exact value; blank requires any populated value
+  @param {string} [entry_field] - Metaobject field to compare, defaults to label
+{%- enddoc -%}
+{%- liquid
+  assign path_parts = metafield_path | strip | split: '.'
+  assign matches = false
+  assign expected = match_value | strip | downcase
+  assign entry_field = entry_field | strip | default: 'label'
+
+  if product != blank and path_parts.size == 2
+    assign namespace = path_parts.first
+    assign key = path_parts.last
+    assign source = product.metafields[namespace][key]
+
+    if source != blank
+      case source.type
+        when 'list.metaobject_reference', 'metaobject_reference'
+          if source.type == 'metaobject_reference'
+            assign entry_value = source.value[entry_field].value | strip | downcase
+            assign entry_handle = source.value.system.handle | downcase
+            if source.value != blank
+              if expected == blank or entry_value == expected or entry_handle == expected
+                assign matches = true
+              endif
+            endif
+          else
+            for entry in source.value
+              if entry != blank
+                assign entry_value = entry[entry_field].value | strip | downcase
+                assign entry_handle = entry.system.handle | downcase
+                if expected == blank or entry_value == expected or entry_handle == expected
+                  assign matches = true
+                  break
+                endif
+              endif
+            endfor
+          endif
+        when 'rich_text_field'
+          assign source_text = source | metafield_text | strip | downcase
+          if source_text != blank
+            if expected == blank or source_text == expected
+              assign matches = true
+            endif
+          endif
+        else
+          if source.list?
+            for entry in source.value
+              assign entry_value = entry | strip | downcase
+              if entry_value != blank
+                if expected == blank or entry_value == expected
+                  assign matches = true
+                  break
+                endif
+              endif
+            endfor
+          else
+            assign source_text = source.value | append: '' | strip | downcase
+            if source_text != blank
+              if expected == blank or source_text == expected
+                assign matches = true
+              endif
+            endif
+          endif
+      endcase
+    endif
+  endif
+  if matches
+    echo 'true'
+  endif
+-%}

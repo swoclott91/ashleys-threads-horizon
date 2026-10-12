@@ -1,0 +1,48 @@
+{%- doc -%}
+  Renders a feature badge with the theme's popup dialog and icon.
+
+  @param {string} badge_id - Unique ID including section, block, and row
+  @param {string} label - Badge and popup title
+  @param {string} icon - Existing theme icon name
+  @param {string} [content] - Rich text, including resolved dynamic sources
+  @param {object} settings - Feature Badges block settings
+{%- enddoc -%}
+<dialog-component class="feature-badges__row">
+  <button
+    type="button"
+    on:click="/showDialog"
+    class="button button-unstyled feature-badges__trigger text-left {{ settings.type_preset }}"
+    aria-haspopup="dialog"
+    aria-controls="{{ badge_id }}"
+  >
+    {% render 'icon-or-image',
+      icon: icon,
+      image_upload: '',
+      width: settings.icon_width,
+      class_name: 'feature-badges__icon'
+    %}
+    <span>{{ label | escape }}</span>
+  </button>
+  <dialog
+    id="{{ badge_id }}"
+    ref="dialog"
+    class="popup-link__content dialog-modal feature-badges__dialog color-custom-popover{% if settings.behavior == 'drawer' %} popup-link__content--drawer dialog-drawer{% endif %}"
+    scroll-lock
+    aria-labelledby="{{ badge_id }}-heading"
+    aria-modal="true"
+  >
+    <div class="popup-link__inner">
+      <h2 id="{{ badge_id }}-heading" class="feature-badges__heading h4">{{ label | escape }}</h2>
+      <div class="rte">{{ content }}</div>
+    </div>
+    <button
+      type="button"
+      ref="closeButton"
+      on:click="/closeDialog"
+      class="button button-unstyled close-button popup-link__close"
+      aria-label="{{ 'accessibility.close_dialog' | t }}"
+    >
+      {{- 'icon-close.svg' | inline_asset_content -}}
+    </button>
+  </dialog>
+</dialog-component>

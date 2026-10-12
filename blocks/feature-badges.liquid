@@ -1,0 +1,1906 @@
+{%- liquid
+  assign product_resource = closest.product
+  if request.visual_preview_mode and product_resource == blank
+    assign product_resource = collections.all.products.first
+  endif
+-%}
+
+{%- capture badges -%}
+  {%- for index in (1..5) -%}
+    {%- liquid
+      assign prefix = 'badge_' | append: index | append: '_'
+      assign source_key = prefix | append: 'source'
+      assign custom_key = prefix | append: 'metafield'
+      assign match_key = prefix | append: 'match'
+      assign label_key = prefix | append: 'label'
+      assign icon_key = prefix | append: 'icon'
+      assign content_key = prefix | append: 'content'
+      assign metafield_path = block.settings[source_key]
+      if metafield_path == 'custom'
+        assign metafield_path = block.settings[custom_key]
+      endif
+      assign entry_field = block.settings.metaobject_field
+      if metafield_path == 'shopify.clothing-features'
+        assign entry_field = 'label'
+      endif
+      assign label = block.settings[label_key] | strip
+    -%}
+    {%- capture matches -%}
+      {%- render 'feature-badge-matches',
+        product: product_resource,
+        metafield_path: metafield_path,
+        match_value: block.settings[match_key],
+        entry_field: entry_field
+      -%}
+    {%- endcapture -%}
+    {%- if matches == 'true' and label != blank -%}
+      {%- assign badge_id = 'feature-badge-' | append: section.id | append: '-' | append: block.id | append: '-' | append: index -%}
+      {% render 'feature-badge',
+        badge_id: badge_id,
+        label: label,
+        icon: block.settings[icon_key],
+        content: block.settings[content_key],
+        settings: block.settings
+      %}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- assign badges = badges | strip -%}
+
+{%- if badges != blank or request.design_mode -%}
+  <div
+    class="feature-badges spacing-style"
+    style="--feature-badges-gap: {{ block.settings.gap }}px; --feature-badges-icon-width: {{ block.settings.icon_width }}px; {% render 'spacing-style', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    {%- if badges != blank -%}
+      {{ badges }}
+    {%- else -%}
+      <p class="feature-badges__empty paragraph">No feature badges match this product. Configure a metafield, matching value, and label for each row.</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{%- if badges != blank -%}
+  <script src="{{ 'dialog.js' | asset_url }}" type="module"></script>
+  {% render 'dialog-styles' %}
+  {% render 'popup-link-styles' %}
+{%- endif -%}
+
+{% stylesheet %}
+  .feature-badges {
+    display: grid;
+    gap: var(--feature-badges-gap);
+    width: 100%;
+  }
+
+  .feature-badges__row {
+    display: block;
+    min-width: 0;
+  }
+
+  .feature-badges__trigger {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
+    width: fit-content;
+    max-width: 100%;
+    color: inherit;
+    text-align: start;
+    white-space: normal;
+  }
+
+  .feature-badges__trigger:hover span {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .feature-badges__trigger:focus-visible {
+    outline: 0.2rem solid rgb(var(--color-foreground-rgb) / 0.5);
+    outline-offset: 0.2rem;
+  }
+
+  .feature-badges__icon {
+    flex: 0 0 var(--feature-badges-icon-width);
+    width: var(--feature-badges-icon-width);
+    height: var(--feature-badges-icon-width);
+  }
+
+  .feature-badges__heading {
+    margin-block: 0 var(--gap-md);
+  }
+
+  .feature-badges__dialog {
+    overflow-wrap: anywhere;
+  }
+
+  .feature-badges__empty {
+    margin: 0;
+    opacity: var(--opacity-subdued-text);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Feature Badges",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Up to five conditional rows. Empty metafields stay hidden. Set a matching value to require an exact text or metaobject entry match; leave it blank to show any populated value. Popup content starts empty and supports dynamic sources."
+    },
+    {
+      "type": "text",
+      "id": "metaobject_field",
+      "label": "Other metaobject label field",
+      "default": "label",
+      "info": "For other metaobject reference metafields, enter the field key to compare (such as name). Clothing Features always uses label. Entry handles can also be matched."
+    },
+    {
+      "type": "select",
+      "id": "behavior",
+      "label": "t:settings.behavior",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:options.default"
+        },
+        {
+          "value": "drawer",
+          "label": "t:options.drawer"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "type_preset",
+      "label": "t:settings.preset",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        }
+      ],
+      "default": "paragraph",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "range",
+      "id": "icon_width",
+      "label": "Icon size",
+      "min": 12,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Space between rows",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Badge 1"
+    },
+    {
+      "type": "select",
+      "id": "badge_1_source",
+      "label": "Product metafield",
+      "options": [
+        {
+          "value": "none",
+          "label": "Disabled"
+        },
+        {
+          "value": "shopify.clothing-features",
+          "label": "Clothing Features"
+        },
+        {
+          "value": "custom.cotton_type",
+          "label": "Cotton Type"
+        },
+        {
+          "value": "custom.sustainable_style",
+          "label": "Sustainable Style"
+        },
+        {
+          "value": "custom",
+          "label": "Other product metafield"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "badge_1_metafield",
+      "label": "Other metafield namespace.key",
+      "info": "For example: custom.fabric. Enter the metafield identifier, not its display name.",
+      "visible_if": "{{ block.settings.badge_1_source == 'custom' }}"
+    },
+    {
+      "type": "text",
+      "id": "badge_1_match",
+      "label": "Required value",
+      "info": "Exact match, ignoring case and outer spaces. For Clothing Features use the entry label, such as Tear-Away Label, or its handle. Leave blank to require any populated value.",
+      "visible_if": "{{ block.settings.badge_1_source != 'none' }}"
+    },
+    {
+      "type": "text",
+      "id": "badge_1_label",
+      "label": "Badge and popup title",
+      "visible_if": "{{ block.settings.badge_1_source != 'none' }}"
+    },
+    {
+      "type": "select",
+      "id": "badge_1_icon",
+      "label": "t:settings.icon",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.none"
+        },
+        {
+          "value": "apple",
+          "label": "t:options.apple"
+        },
+        {
+          "value": "arrow",
+          "label": "t:options.arrow"
+        },
+        {
+          "value": "banana",
+          "label": "t:options.banana"
+        },
+        {
+          "value": "bottle",
+          "label": "t:options.bottle"
+        },
+        {
+          "value": "box",
+          "label": "t:options.box"
+        },
+        {
+          "value": "carrot",
+          "label": "t:options.carrot"
+        },
+        {
+          "value": "chat_bubble",
+          "label": "t:options.chat_bubble"
+        },
+        {
+          "value": "check_box",
+          "label": "t:options.check_box"
+        },
+        {
+          "value": "clipboard",
+          "label": "t:options.clipboard"
+        },
+        {
+          "value": "cotton_open_end",
+          "label": "t:options.cotton_open_end"
+        },
+        {
+          "value": "cotton_ring_spun",
+          "label": "t:options.cotton_ring_spun"
+        },
+        {
+          "value": "cotton_combed_ring_spun",
+          "label": "t:options.cotton_combed_ring_spun"
+        },
+        {
+          "value": "dairy",
+          "label": "t:options.dairy"
+        },
+        {
+          "value": "dairy_free",
+          "label": "t:options.dairy_free"
+        },
+        {
+          "value": "dryer",
+          "label": "t:options.dryer"
+        },
+        {
+          "value": "eye",
+          "label": "t:options.eye"
+        },
+        {
+          "value": "fire",
+          "label": "t:options.fire"
+        },
+        {
+          "value": "gluten_free",
+          "label": "t:options.gluten_free"
+        },
+        {
+          "value": "heart",
+          "label": "t:options.heart"
+        },
+        {
+          "value": "iron",
+          "label": "t:options.iron"
+        },
+        {
+          "value": "leaf",
+          "label": "t:options.leaf"
+        },
+        {
+          "value": "leather",
+          "label": "t:options.leather"
+        },
+        {
+          "value": "lightning_bolt",
+          "label": "t:options.lightning_bolt"
+        },
+        {
+          "value": "lipstick",
+          "label": "t:options.lipstick"
+        },
+        {
+          "value": "lock",
+          "label": "t:options.lock"
+        },
+        {
+          "value": "map_pin",
+          "label": "t:options.map_pin"
+        },
+        {
+          "value": "nut_free",
+          "label": "t:options.nut_free"
+        },
+        {
+          "value": "pants",
+          "label": "t:options.pants"
+        },
+        {
+          "value": "paw_print",
+          "label": "t:options.paw_print"
+        },
+        {
+          "value": "pepper",
+          "label": "t:options.pepper"
+        },
+        {
+          "value": "perfume",
+          "label": "t:options.perfume"
+        },
+        {
+          "value": "plane",
+          "label": "t:options.plane"
+        },
+        {
+          "value": "plant",
+          "label": "t:options.plant"
+        },
+        {
+          "value": "price_tag",
+          "label": "t:options.price_tag"
+        },
+        {
+          "value": "question_mark",
+          "label": "t:options.question_mark"
+        },
+        {
+          "value": "recycle",
+          "label": "t:options.recycle"
+        },
+        {
+          "value": "return",
+          "label": "t:options.return"
+        },
+        {
+          "value": "ruler",
+          "label": "t:options.ruler"
+        },
+        {
+          "value": "serving_dish",
+          "label": "t:options.serving_dish"
+        },
+        {
+          "value": "shirt",
+          "label": "t:options.shirt"
+        },
+        {
+          "value": "shoe",
+          "label": "t:options.shoe"
+        },
+        {
+          "value": "silhouette",
+          "label": "t:options.silhouette"
+        },
+        {
+          "value": "bluesky",
+          "label": "t:options.social_bluesky"
+        },
+        {
+          "value": "facebook",
+          "label": "t:options.social_facebook"
+        },
+        {
+          "value": "instagram",
+          "label": "t:options.social_instagram"
+        },
+        {
+          "value": "linkedin",
+          "label": "t:options.social_linkedin"
+        },
+        {
+          "value": "pinterest",
+          "label": "t:options.social_pinterest"
+        },
+        {
+          "value": "snapchat",
+          "label": "t:options.social_snapchat"
+        },
+        {
+          "value": "spotify",
+          "label": "t:options.social_spotify"
+        },
+        {
+          "value": "threads",
+          "label": "t:options.social_threads"
+        },
+        {
+          "value": "tiktok",
+          "label": "t:options.social_tiktok"
+        },
+        {
+          "value": "tumblr",
+          "label": "t:options.social_tumblr"
+        },
+        {
+          "value": "twitter",
+          "label": "t:options.social_twitter"
+        },
+        {
+          "value": "vimeo",
+          "label": "t:options.social_vimeo"
+        },
+        {
+          "value": "youtube",
+          "label": "t:options.social_youtube"
+        },
+        {
+          "value": "whatsapp",
+          "label": "t:options.social_whatsapp"
+        },
+        {
+          "value": "snowflake",
+          "label": "t:options.snowflake"
+        },
+        {
+          "value": "star",
+          "label": "t:options.star"
+        },
+        {
+          "value": "stopwatch",
+          "label": "t:options.stopwatch"
+        },
+        {
+          "value": "truck",
+          "label": "t:options.truck"
+        },
+        {
+          "value": "tear_away_label",
+          "label": "t:options.tear_away_label"
+        },
+        {
+          "value": "fast_truck",
+          "label": "t:options.fast_truck"
+        },
+        {
+          "value": "washing",
+          "label": "t:options.washing"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.badge_1_source != 'none' }}"
+    },
+    {
+      "type": "richtext",
+      "id": "badge_1_content",
+      "label": "Popup content",
+      "info": "Add an explanation or connect a dynamic source, such as the Sustainable Style product metafield.",
+      "visible_if": "{{ block.settings.badge_1_source != 'none' }}"
+    },
+    {
+      "type": "header",
+      "content": "Badge 2"
+    },
+    {
+      "type": "select",
+      "id": "badge_2_source",
+      "label": "Product metafield",
+      "options": [
+        {
+          "value": "none",
+          "label": "Disabled"
+        },
+        {
+          "value": "shopify.clothing-features",
+          "label": "Clothing Features"
+        },
+        {
+          "value": "custom.cotton_type",
+          "label": "Cotton Type"
+        },
+        {
+          "value": "custom.sustainable_style",
+          "label": "Sustainable Style"
+        },
+        {
+          "value": "custom",
+          "label": "Other product metafield"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "badge_2_metafield",
+      "label": "Other metafield namespace.key",
+      "info": "For example: custom.fabric. Enter the metafield identifier, not its display name.",
+      "visible_if": "{{ block.settings.badge_2_source == 'custom' }}"
+    },
+    {
+      "type": "text",
+      "id": "badge_2_match",
+      "label": "Required value",
+      "info": "Exact match, ignoring case and outer spaces. For Clothing Features use the entry label, such as Tear-Away Label, or its handle. Leave blank to require any populated value.",
+      "visible_if": "{{ block.settings.badge_2_source != 'none' }}"
+    },
+    {
+      "type": "text",
+      "id": "badge_2_label",
+      "label": "Badge and popup title",
+      "visible_if": "{{ block.settings.badge_2_source != 'none' }}"
+    },
+    {
+      "type": "select",
+      "id": "badge_2_icon",
+      "label": "t:settings.icon",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.none"
+        },
+        {
+          "value": "apple",
+          "label": "t:options.apple"
+        },
+        {
+          "value": "arrow",
+          "label": "t:options.arrow"
+        },
+        {
+          "value": "banana",
+          "label": "t:options.banana"
+        },
+        {
+          "value": "bottle",
+          "label": "t:options.bottle"
+        },
+        {
+          "value": "box",
+          "label": "t:options.box"
+        },
+        {
+          "value": "carrot",
+          "label": "t:options.carrot"
+        },
+        {
+          "value": "chat_bubble",
+          "label": "t:options.chat_bubble"
+        },
+        {
+          "value": "check_box",
+          "label": "t:options.check_box"
+        },
+        {
+          "value": "clipboard",
+          "label": "t:options.clipboard"
+        },
+        {
+          "value": "cotton_open_end",
+          "label": "t:options.cotton_open_end"
+        },
+        {
+          "value": "cotton_ring_spun",
+          "label": "t:options.cotton_ring_spun"
+        },
+        {
+          "value": "cotton_combed_ring_spun",
+          "label": "t:options.cotton_combed_ring_spun"
+        },
+        {
+          "value": "dairy",
+          "label": "t:options.dairy"
+        },
+        {
+          "value": "dairy_free",
+          "label": "t:options.dairy_free"
+        },
+        {
+          "value": "dryer",
+          "label": "t:options.dryer"
+        },
+        {
+          "value": "eye",
+          "label": "t:options.eye"
+        },
+        {
+          "value": "fire",
+          "label": "t:options.fire"
+        },
+        {
+          "value": "gluten_free",
+          "label": "t:options.gluten_free"
+        },
+        {
+          "value": "heart",
+          "label": "t:options.heart"
+        },
+        {
+          "value": "iron",
+          "label": "t:options.iron"
+        },
+        {
+          "value": "leaf",
+          "label": "t:options.leaf"
+        },
+        {
+          "value": "leather",
+          "label": "t:options.leather"
+        },
+        {
+          "value": "lightning_bolt",
+          "label": "t:options.lightning_bolt"
+        },
+        {
+          "value": "lipstick",
+          "label": "t:options.lipstick"
+        },
+        {
+          "value": "lock",
+          "label": "t:options.lock"
+        },
+        {
+          "value": "map_pin",
+          "label": "t:options.map_pin"
+        },
+        {
+          "value": "nut_free",
+          "label": "t:options.nut_free"
+        },
+        {
+          "value": "pants",
+          "label": "t:options.pants"
+        },
+        {
+          "value": "paw_print",
+          "label": "t:options.paw_print"
+        },
+        {
+          "value": "pepper",
+          "label": "t:options.pepper"
+        },
+        {
+          "value": "perfume",
+          "label": "t:options.perfume"
+        },
+        {
+          "value": "plane",
+          "label": "t:options.plane"
+        },
+        {
+          "value": "plant",
+          "label": "t:options.plant"
+        },
+        {
+          "value": "price_tag",
+          "label": "t:options.price_tag"
+        },
+        {
+          "value": "question_mark",
+          "label": "t:options.question_mark"
+        },
+        {
+          "value": "recycle",
+          "label": "t:options.recycle"
+        },
+        {
+          "value": "return",
+          "label": "t:options.return"
+        },
+        {
+          "value": "ruler",
+          "label": "t:options.ruler"
+        },
+        {
+          "value": "serving_dish",
+          "label": "t:options.serving_dish"
+        },
+        {
+          "value": "shirt",
+          "label": "t:options.shirt"
+        },
+        {
+          "value": "shoe",
+          "label": "t:options.shoe"
+        },
+        {
+          "value": "silhouette",
+          "label": "t:options.silhouette"
+        },
+        {
+          "value": "bluesky",
+          "label": "t:options.social_bluesky"
+        },
+        {
+          "value": "facebook",
+          "label": "t:options.social_facebook"
+        },
+        {
+          "value": "instagram",
+          "label": "t:options.social_instagram"
+        },
+        {
+          "value": "linkedin",
+          "label": "t:options.social_linkedin"
+        },
+        {
+          "value": "pinterest",
+          "label": "t:options.social_pinterest"
+        },
+        {
+          "value": "snapchat",
+          "label": "t:options.social_snapchat"
+        },
+        {
+          "value": "spotify",
+          "label": "t:options.social_spotify"
+        },
+        {
+          "value": "threads",
+          "label": "t:options.social_threads"
+        },
+        {
+          "value": "tiktok",
+          "label": "t:options.social_tiktok"
+        },
+        {
+          "value": "tumblr",
+          "label": "t:options.social_tumblr"
+        },
+        {
+          "value": "twitter",
+          "label": "t:options.social_twitter"
+        },
+        {
+          "value": "vimeo",
+          "label": "t:options.social_vimeo"
+        },
+        {
+          "value": "youtube",
+          "label": "t:options.social_youtube"
+        },
+        {
+          "value": "whatsapp",
+          "label": "t:options.social_whatsapp"
+        },
+        {
+          "value": "snowflake",
+          "label": "t:options.snowflake"
+        },
+        {
+          "value": "star",
+          "label": "t:options.star"
+        },
+        {
+          "value": "stopwatch",
+          "label": "t:options.stopwatch"
+        },
+        {
+          "value": "truck",
+          "label": "t:options.truck"
+        },
+        {
+          "value": "tear_away_label",
+          "label": "t:options.tear_away_label"
+        },
+        {
+          "value": "fast_truck",
+          "label": "t:options.fast_truck"
+        },
+        {
+          "value": "washing",
+          "label": "t:options.washing"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.badge_2_source != 'none' }}"
+    },
+    {
+      "type": "richtext",
+      "id": "badge_2_content",
+      "label": "Popup content",
+      "info": "Add an explanation or connect a dynamic source, such as the Sustainable Style product metafield.",
+      "visible_if": "{{ block.settings.badge_2_source != 'none' }}"
+    },
+    {
+      "type": "header",
+      "content": "Badge 3"
+    },
+    {
+      "type": "select",
+      "id": "badge_3_source",
+      "label": "Product metafield",
+      "options": [
+        {
+          "value": "none",
+          "label": "Disabled"
+        },
+        {
+          "value": "shopify.clothing-features",
+          "label": "Clothing Features"
+        },
+        {
+          "value": "custom.cotton_type",
+          "label": "Cotton Type"
+        },
+        {
+          "value": "custom.sustainable_style",
+          "label": "Sustainable Style"
+        },
+        {
+          "value": "custom",
+          "label": "Other product metafield"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "badge_3_metafield",
+      "label": "Other metafield namespace.key",
+      "info": "For example: custom.fabric. Enter the metafield identifier, not its display name.",
+      "visible_if": "{{ block.settings.badge_3_source == 'custom' }}"
+    },
+    {
+      "type": "text",
+      "id": "badge_3_match",
+      "label": "Required value",
+      "info": "Exact match, ignoring case and outer spaces. For Clothing Features use the entry label, such as Tear-Away Label, or its handle. Leave blank to require any populated value.",
+      "visible_if": "{{ block.settings.badge_3_source != 'none' }}"
+    },
+    {
+      "type": "text",
+      "id": "badge_3_label",
+      "label": "Badge and popup title",
+      "visible_if": "{{ block.settings.badge_3_source != 'none' }}"
+    },
+    {
+      "type": "select",
+      "id": "badge_3_icon",
+      "label": "t:settings.icon",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.none"
+        },
+        {
+          "value": "apple",
+          "label": "t:options.apple"
+        },
+        {
+          "value": "arrow",
+          "label": "t:options.arrow"
+        },
+        {
+          "value": "banana",
+          "label": "t:options.banana"
+        },
+        {
+          "value": "bottle",
+          "label": "t:options.bottle"
+        },
+        {
+          "value": "box",
+          "label": "t:options.box"
+        },
+        {
+          "value": "carrot",
+          "label": "t:options.carrot"
+        },
+        {
+          "value": "chat_bubble",
+          "label": "t:options.chat_bubble"
+        },
+        {
+          "value": "check_box",
+          "label": "t:options.check_box"
+        },
+        {
+          "value": "clipboard",
+          "label": "t:options.clipboard"
+        },
+        {
+          "value": "cotton_open_end",
+          "label": "t:options.cotton_open_end"
+        },
+        {
+          "value": "cotton_ring_spun",
+          "label": "t:options.cotton_ring_spun"
+        },
+        {
+          "value": "cotton_combed_ring_spun",
+          "label": "t:options.cotton_combed_ring_spun"
+        },
+        {
+          "value": "dairy",
+          "label": "t:options.dairy"
+        },
+        {
+          "value": "dairy_free",
+          "label": "t:options.dairy_free"
+        },
+        {
+          "value": "dryer",
+          "label": "t:options.dryer"
+        },
+        {
+          "value": "eye",
+          "label": "t:options.eye"
+        },
+        {
+          "value": "fire",
+          "label": "t:options.fire"
+        },
+        {
+          "value": "gluten_free",
+          "label": "t:options.gluten_free"
+        },
+        {
+          "value": "heart",
+          "label": "t:options.heart"
+        },
+        {
+          "value": "iron",
+          "label": "t:options.iron"
+        },
+        {
+          "value": "leaf",
+          "label": "t:options.leaf"
+        },
+        {
+          "value": "leather",
+          "label": "t:options.leather"
+        },
+        {
+          "value": "lightning_bolt",
+          "label": "t:options.lightning_bolt"
+        },
+        {
+          "value": "lipstick",
+          "label": "t:options.lipstick"
+        },
+        {
+          "value": "lock",
+          "label": "t:options.lock"
+        },
+        {
+          "value": "map_pin",
+          "label": "t:options.map_pin"
+        },
+        {
+          "value": "nut_free",
+          "label": "t:options.nut_free"
+        },
+        {
+          "value": "pants",
+          "label": "t:options.pants"
+        },
+        {
+          "value": "paw_print",
+          "label": "t:options.paw_print"
+        },
+        {
+          "value": "pepper",
+          "label": "t:options.pepper"
+        },
+        {
+          "value": "perfume",
+          "label": "t:options.perfume"
+        },
+        {
+          "value": "plane",
+          "label": "t:options.plane"
+        },
+        {
+          "value": "plant",
+          "label": "t:options.plant"
+        },
+        {
+          "value": "price_tag",
+          "label": "t:options.price_tag"
+        },
+        {
+          "value": "question_mark",
+          "label": "t:options.question_mark"
+        },
+        {
+          "value": "recycle",
+          "label": "t:options.recycle"
+        },
+        {
+          "value": "return",
+          "label": "t:options.return"
+        },
+        {
+          "value": "ruler",
+          "label": "t:options.ruler"
+        },
+        {
+          "value": "serving_dish",
+          "label": "t:options.serving_dish"
+        },
+        {
+          "value": "shirt",
+          "label": "t:options.shirt"
+        },
+        {
+          "value": "shoe",
+          "label": "t:options.shoe"
+        },
+        {
+          "value": "silhouette",
+          "label": "t:options.silhouette"
+        },
+        {
+          "value": "bluesky",
+          "label": "t:options.social_bluesky"
+        },
+        {
+          "value": "facebook",
+          "label": "t:options.social_facebook"
+        },
+        {
+          "value": "instagram",
+          "label": "t:options.social_instagram"
+        },
+        {
+          "value": "linkedin",
+          "label": "t:options.social_linkedin"
+        },
+        {
+          "value": "pinterest",
+          "label": "t:options.social_pinterest"
+        },
+        {
+          "value": "snapchat",
+          "label": "t:options.social_snapchat"
+        },
+        {
+          "value": "spotify",
+          "label": "t:options.social_spotify"
+        },
+        {
+          "value": "threads",
+          "label": "t:options.social_threads"
+        },
+        {
+          "value": "tiktok",
+          "label": "t:options.social_tiktok"
+        },
+        {
+          "value": "tumblr",
+          "label": "t:options.social_tumblr"
+        },
+        {
+          "value": "twitter",
+          "label": "t:options.social_twitter"
+        },
+        {
+          "value": "vimeo",
+          "label": "t:options.social_vimeo"
+        },
+        {
+          "value": "youtube",
+          "label": "t:options.social_youtube"
+        },
+        {
+          "value": "whatsapp",
+          "label": "t:options.social_whatsapp"
+        },
+        {
+          "value": "snowflake",
+          "label": "t:options.snowflake"
+        },
+        {
+          "value": "star",
+          "label": "t:options.star"
+        },
+        {
+          "value": "stopwatch",
+          "label": "t:options.stopwatch"
+        },
+        {
+          "value": "truck",
+          "label": "t:options.truck"
+        },
+        {
+          "value": "tear_away_label",
+          "label": "t:options.tear_away_label"
+        },
+        {
+          "value": "fast_truck",
+          "label": "t:options.fast_truck"
+        },
+        {
+          "value": "washing",
+          "label": "t:options.washing"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.badge_3_source != 'none' }}"
+    },
+    {
+      "type": "richtext",
+      "id": "badge_3_content",
+      "label": "Popup content",
+      "info": "Add an explanation or connect a dynamic source, such as the Sustainable Style product metafield.",
+      "visible_if": "{{ block.settings.badge_3_source != 'none' }}"
+    },
+    {
+      "type": "header",
+      "content": "Badge 4"
+    },
+    {
+      "type": "select",
+      "id": "badge_4_source",
+      "label": "Product metafield",
+      "options": [
+        {
+          "value": "none",
+          "label": "Disabled"
+        },
+        {
+          "value": "shopify.clothing-features",
+          "label": "Clothing Features"
+        },
+        {
+          "value": "custom.cotton_type",
+          "label": "Cotton Type"
+        },
+        {
+          "value": "custom.sustainable_style",
+          "label": "Sustainable Style"
+        },
+        {
+          "value": "custom",
+          "label": "Other product metafield"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "badge_4_metafield",
+      "label": "Other metafield namespace.key",
+      "info": "For example: custom.fabric. Enter the metafield identifier, not its display name.",
+      "visible_if": "{{ block.settings.badge_4_source == 'custom' }}"
+    },
+    {
+      "type": "text",
+      "id": "badge_4_match",
+      "label": "Required value",
+      "info": "Exact match, ignoring case and outer spaces. For Clothing Features use the entry label, such as Tear-Away Label, or its handle. Leave blank to require any populated value.",
+      "visible_if": "{{ block.settings.badge_4_source != 'none' }}"
+    },
+    {
+      "type": "text",
+      "id": "badge_4_label",
+      "label": "Badge and popup title",
+      "visible_if": "{{ block.settings.badge_4_source != 'none' }}"
+    },
+    {
+      "type": "select",
+      "id": "badge_4_icon",
+      "label": "t:settings.icon",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.none"
+        },
+        {
+          "value": "apple",
+          "label": "t:options.apple"
+        },
+        {
+          "value": "arrow",
+          "label": "t:options.arrow"
+        },
+        {
+          "value": "banana",
+          "label": "t:options.banana"
+        },
+        {
+          "value": "bottle",
+          "label": "t:options.bottle"
+        },
+        {
+          "value": "box",
+          "label": "t:options.box"
+        },
+        {
+          "value": "carrot",
+          "label": "t:options.carrot"
+        },
+        {
+          "value": "chat_bubble",
+          "label": "t:options.chat_bubble"
+        },
+        {
+          "value": "check_box",
+          "label": "t:options.check_box"
+        },
+        {
+          "value": "clipboard",
+          "label": "t:options.clipboard"
+        },
+        {
+          "value": "cotton_open_end",
+          "label": "t:options.cotton_open_end"
+        },
+        {
+          "value": "cotton_ring_spun",
+          "label": "t:options.cotton_ring_spun"
+        },
+        {
+          "value": "cotton_combed_ring_spun",
+          "label": "t:options.cotton_combed_ring_spun"
+        },
+        {
+          "value": "dairy",
+          "label": "t:options.dairy"
+        },
+        {
+          "value": "dairy_free",
+          "label": "t:options.dairy_free"
+        },
+        {
+          "value": "dryer",
+          "label": "t:options.dryer"
+        },
+        {
+          "value": "eye",
+          "label": "t:options.eye"
+        },
+        {
+          "value": "fire",
+          "label": "t:options.fire"
+        },
+        {
+          "value": "gluten_free",
+          "label": "t:options.gluten_free"
+        },
+        {
+          "value": "heart",
+          "label": "t:options.heart"
+        },
+        {
+          "value": "iron",
+          "label": "t:options.iron"
+        },
+        {
+          "value": "leaf",
+          "label": "t:options.leaf"
+        },
+        {
+          "value": "leather",
+          "label": "t:options.leather"
+        },
+        {
+          "value": "lightning_bolt",
+          "label": "t:options.lightning_bolt"
+        },
+        {
+          "value": "lipstick",
+          "label": "t:options.lipstick"
+        },
+        {
+          "value": "lock",
+          "label": "t:options.lock"
+        },
+        {
+          "value": "map_pin",
+          "label": "t:options.map_pin"
+        },
+        {
+          "value": "nut_free",
+          "label": "t:options.nut_free"
+        },
+        {
+          "value": "pants",
+          "label": "t:options.pants"
+        },
+        {
+          "value": "paw_print",
+          "label": "t:options.paw_print"
+        },
+        {
+          "value": "pepper",
+          "label": "t:options.pepper"
+        },
+        {
+          "value": "perfume",
+          "label": "t:options.perfume"
+        },
+        {
+          "value": "plane",
+          "label": "t:options.plane"
+        },
+        {
+          "value": "plant",
+          "label": "t:options.plant"
+        },
+        {
+          "value": "price_tag",
+          "label": "t:options.price_tag"
+        },
+        {
+          "value": "question_mark",
+          "label": "t:options.question_mark"
+        },
+        {
+          "value": "recycle",
+          "label": "t:options.recycle"
+        },
+        {
+          "value": "return",
+          "label": "t:options.return"
+        },
+        {
+          "value": "ruler",
+          "label": "t:options.ruler"
+        },
+        {
+          "value": "serving_dish",
+          "label": "t:options.serving_dish"
+        },
+        {
+          "value": "shirt",
+          "label": "t:options.shirt"
+        },
+        {
+          "value": "shoe",
+          "label": "t:options.shoe"
+        },
+        {
+          "value": "silhouette",
+          "label": "t:options.silhouette"
+        },
+        {
+          "value": "bluesky",
+          "label": "t:options.social_bluesky"
+        },
+        {
+          "value": "facebook",
+          "label": "t:options.social_facebook"
+        },
+        {
+          "value": "instagram",
+          "label": "t:options.social_instagram"
+        },
+        {
+          "value": "linkedin",
+          "label": "t:options.social_linkedin"
+        },
+        {
+          "value": "pinterest",
+          "label": "t:options.social_pinterest"
+        },
+        {
+          "value": "snapchat",
+          "label": "t:options.social_snapchat"
+        },
+        {
+          "value": "spotify",
+          "label": "t:options.social_spotify"
+        },
+        {
+          "value": "threads",
+          "label": "t:options.social_threads"
+        },
+        {
+          "value": "tiktok",
+          "label": "t:options.social_tiktok"
+        },
+        {
+          "value": "tumblr",
+          "label": "t:options.social_tumblr"
+        },
+        {
+          "value": "twitter",
+          "label": "t:options.social_twitter"
+        },
+        {
+          "value": "vimeo",
+          "label": "t:options.social_vimeo"
+        },
+        {
+          "value": "youtube",
+          "label": "t:options.social_youtube"
+        },
+        {
+          "value": "whatsapp",
+          "label": "t:options.social_whatsapp"
+        },
+        {
+          "value": "snowflake",
+          "label": "t:options.snowflake"
+        },
+        {
+          "value": "star",
+          "label": "t:options.star"
+        },
+        {
+          "value": "stopwatch",
+          "label": "t:options.stopwatch"
+        },
+        {
+          "value": "truck",
+          "label": "t:options.truck"
+        },
+        {
+          "value": "tear_away_label",
+          "label": "t:options.tear_away_label"
+        },
+        {
+          "value": "fast_truck",
+          "label": "t:options.fast_truck"
+        },
+        {
+          "value": "washing",
+          "label": "t:options.washing"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.badge_4_source != 'none' }}"
+    },
+    {
+      "type": "richtext",
+      "id": "badge_4_content",
+      "label": "Popup content",
+      "info": "Add an explanation or connect a dynamic source, such as the Sustainable Style product metafield.",
+      "visible_if": "{{ block.settings.badge_4_source != 'none' }}"
+    },
+    {
+      "type": "header",
+      "content": "Badge 5"
+    },
+    {
+      "type": "select",
+      "id": "badge_5_source",
+      "label": "Product metafield",
+      "options": [
+        {
+          "value": "none",
+          "label": "Disabled"
+        },
+        {
+          "value": "shopify.clothing-features",
+          "label": "Clothing Features"
+        },
+        {
+          "value": "custom.cotton_type",
+          "label": "Cotton Type"
+        },
+        {
+          "value": "custom.sustainable_style",
+          "label": "Sustainable Style"
+        },
+        {
+          "value": "custom",
+          "label": "Other product metafield"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "badge_5_metafield",
+      "label": "Other metafield namespace.key",
+      "info": "For example: custom.fabric. Enter the metafield identifier, not its display name.",
+      "visible_if": "{{ block.settings.badge_5_source == 'custom' }}"
+    },
+    {
+      "type": "text",
+      "id": "badge_5_match",
+      "label": "Required value",
+      "info": "Exact match, ignoring case and outer spaces. For Clothing Features use the entry label, such as Tear-Away Label, or its handle. Leave blank to require any populated value.",
+      "visible_if": "{{ block.settings.badge_5_source != 'none' }}"
+    },
+    {
+      "type": "text",
+      "id": "badge_5_label",
+      "label": "Badge and popup title",
+      "visible_if": "{{ block.settings.badge_5_source != 'none' }}"
+    },
+    {
+      "type": "select",
+      "id": "badge_5_icon",
+      "label": "t:settings.icon",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.none"
+        },
+        {
+          "value": "apple",
+          "label": "t:options.apple"
+        },
+        {
+          "value": "arrow",
+          "label": "t:options.arrow"
+        },
+        {
+          "value": "banana",
+          "label": "t:options.banana"
+        },
+        {
+          "value": "bottle",
+          "label": "t:options.bottle"
+        },
+        {
+          "value": "box",
+          "label": "t:options.box"
+        },
+        {
+          "value": "carrot",
+          "label": "t:options.carrot"
+        },
+        {
+          "value": "chat_bubble",
+          "label": "t:options.chat_bubble"
+        },
+        {
+          "value": "check_box",
+          "label": "t:options.check_box"
+        },
+        {
+          "value": "clipboard",
+          "label": "t:options.clipboard"
+        },
+        {
+          "value": "cotton_open_end",
+          "label": "t:options.cotton_open_end"
+        },
+        {
+          "value": "cotton_ring_spun",
+          "label": "t:options.cotton_ring_spun"
+        },
+        {
+          "value": "cotton_combed_ring_spun",
+          "label": "t:options.cotton_combed_ring_spun"
+        },
+        {
+          "value": "dairy",
+          "label": "t:options.dairy"
+        },
+        {
+          "value": "dairy_free",
+          "label": "t:options.dairy_free"
+        },
+        {
+          "value": "dryer",
+          "label": "t:options.dryer"
+        },
+        {
+          "value": "eye",
+          "label": "t:options.eye"
+        },
+        {
+          "value": "fire",
+          "label": "t:options.fire"
+        },
+        {
+          "value": "gluten_free",
+          "label": "t:options.gluten_free"
+        },
+        {
+          "value": "heart",
+          "label": "t:options.heart"
+        },
+        {
+          "value": "iron",
+          "label": "t:options.iron"
+        },
+        {
+          "value": "leaf",
+          "label": "t:options.leaf"
+        },
+        {
+          "value": "leather",
+          "label": "t:options.leather"
+        },
+        {
+          "value": "lightning_bolt",
+          "label": "t:options.lightning_bolt"
+        },
+        {
+          "value": "lipstick",
+          "label": "t:options.lipstick"
+        },
+        {
+          "value": "lock",
+          "label": "t:options.lock"
+        },
+        {
+          "value": "map_pin",
+          "label": "t:options.map_pin"
+        },
+        {
+          "value": "nut_free",
+          "label": "t:options.nut_free"
+        },
+        {
+          "value": "pants",
+          "label": "t:options.pants"
+        },
+        {
+          "value": "paw_print",
+          "label": "t:options.paw_print"
+        },
+        {
+          "value": "pepper",
+          "label": "t:options.pepper"
+        },
+        {
+          "value": "perfume",
+          "label": "t:options.perfume"
+        },
+        {
+          "value": "plane",
+          "label": "t:options.plane"
+        },
+        {
+          "value": "plant",
+          "label": "t:options.plant"
+        },
+        {
+          "value": "price_tag",
+          "label": "t:options.price_tag"
+        },
+        {
+          "value": "question_mark",
+          "label": "t:options.question_mark"
+        },
+        {
+          "value": "recycle",
+          "label": "t:options.recycle"
+        },
+        {
+          "value": "return",
+          "label": "t:options.return"
+        },
+        {
+          "value": "ruler",
+          "label": "t:options.ruler"
+        },
+        {
+          "value": "serving_dish",
+          "label": "t:options.serving_dish"
+        },
+        {
+          "value": "shirt",
+          "label": "t:options.shirt"
+        },
+        {
+          "value": "shoe",
+          "label": "t:options.shoe"
+        },
+        {
+          "value": "silhouette",
+          "label": "t:options.silhouette"
+        },
+        {
+          "value": "bluesky",
+          "label": "t:options.social_bluesky"
+        },
+        {
+          "value": "facebook",
+          "label": "t:options.social_facebook"
+        },
+        {
+          "value": "instagram",
+          "label": "t:options.social_instagram"
+        },
+        {
+          "value": "linkedin",
+          "label": "t:options.social_linkedin"
+        },
+        {
+          "value": "pinterest",
+          "label": "t:options.social_pinterest"
+        },
+        {
+          "value": "snapchat",
+          "label": "t:options.social_snapchat"
+        },
+        {
+          "value": "spotify",
+          "label": "t:options.social_spotify"
+        },
+        {
+          "value": "threads",
+          "label": "t:options.social_threads"
+        },
+        {
+          "value": "tiktok",
+          "label": "t:options.social_tiktok"
+        },
+        {
+          "value": "tumblr",
+          "label": "t:options.social_tumblr"
+        },
+        {
+          "value": "twitter",
+          "label": "t:options.social_twitter"
+        },
+        {
+          "value": "vimeo",
+          "label": "t:options.social_vimeo"
+        },
+        {
+          "value": "youtube",
+          "label": "t:options.social_youtube"
+        },
+        {
+          "value": "whatsapp",
+          "label": "t:options.social_whatsapp"
+        },
+        {
+          "value": "snowflake",
+          "label": "t:options.snowflake"
+        },
+        {
+          "value": "star",
+          "label": "t:options.star"
+        },
+        {
+          "value": "stopwatch",
+          "label": "t:options.stopwatch"
+        },
+        {
+          "value": "truck",
+          "label": "t:options.truck"
+        },
+        {
+          "value": "tear_away_label",
+          "label": "t:options.tear_away_label"
+        },
+        {
+          "value": "fast_truck",
+          "label": "t:options.fast_truck"
+        },
+        {
+          "value": "washing",
+          "label": "t:options.washing"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.badge_5_source != 'none' }}"
+    },
+    {
+      "type": "richtext",
+      "id": "badge_5_content",
+      "label": "Popup content",
+      "info": "Add an explanation or connect a dynamic source, such as the Sustainable Style product metafield.",
+      "visible_if": "{{ block.settings.badge_5_source != 'none' }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Feature Badges",
+      "category": "t:categories.product",
+      "settings": {
+        "badge_1_source": "shopify.clothing-features",
+        "badge_1_match": "Tear-Away Label",
+        "badge_1_label": "Tear-Away Label",
+        "badge_1_icon": "tear_away_label",
+        "badge_2_source": "custom.cotton_type",
+        "badge_2_match": "Ring-Spun",
+        "badge_2_label": "Ring-Spun",
+        "badge_2_icon": "cotton_ring_spun",
+        "badge_3_source": "custom.cotton_type",
+        "badge_3_match": "Open-End",
+        "badge_3_label": "Open-End Cotton",
+        "badge_3_icon": "cotton_open_end",
+        "badge_4_source": "custom.cotton_type",
+        "badge_4_match": "Combed Ring-Spun",
+        "badge_4_label": "Combed Ring-Spun Cotton",
+        "badge_4_icon": "cotton_combed_ring_spun",
+        "badge_5_source": "custom.sustainable_style",
+        "badge_5_match": "",
+        "badge_5_label": "Sustainable Style",
+        "badge_5_icon": "recycle"
+      }
+    }
+  ]
+}
+{% endschema %}
