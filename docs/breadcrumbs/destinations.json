@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "store": "ashleys-threads-3.myshopify.com",
+  "definitions": [
+    { "ownerType": "PRODUCT", "namespace": "custom", "key": "breadcrumb_collection", "type": "collection_reference", "name": "Breadcrumb collection" },
+    { "ownerType": "COLLECTION", "namespace": "custom", "key": "breadcrumb_parent", "type": "collection_reference", "name": "Breadcrumb parent" },
+    { "ownerType": "COLLECTION", "namespace": "custom", "key": "breadcrumb_label", "type": "single_line_text_field", "name": "Breadcrumb label" }
+  ],
+  "destinations": [
+    { "key": "tees", "id": "gid://shopify/Collection/523280777491", "label": "T-Shirts", "parent": null, "family": "tee" },
+    { "key": "short_sleeve", "id": "gid://shopify/Collection/525843595539", "label": "Short Sleeve", "parent": "tees", "family": "tee" },
+    { "key": "long_sleeve", "id": "gid://shopify/Collection/523279794451", "label": "Long Sleeve", "parent": "tees", "family": "tee" },
+    { "key": "sweatshirts", "id": "gid://shopify/Collection/523280744723", "label": "Sweatshirts & Hoodies", "parent": null, "family": "sweatshirt" },
+    { "key": "hoodies", "id": "gid://shopify/Collection/523279499539", "label": "Hoodies", "parent": "sweatshirts", "family": "sweatshirt" },
+    { "key": "hats", "id": "gid://shopify/Collection/523279335699", "label": "Hats", "parent": null, "family": "hat" },
+    { "key": "trucker", "id": "gid://shopify/Collection/523281236243", "label": "Trucker Hats", "parent": "hats", "family": "hat" },
+    { "key": "beanies", "id": "gid://shopify/Collection/523278942483", "label": "Beanies", "parent": "hats", "family": "hat" }
+  ],
+  "rules": [
+    { "family": "tee", "fact": "sleeve", "value": "short", "destination": "short_sleeve" },
+    { "family": "tee", "fact": "sleeve", "value": "long", "destination": "long_sleeve" },
+    { "family": "sweatshirt", "fact": "construction", "value": "fleece_hoodie", "destination": "hoodies" },
+    { "family": "hat", "fact": "style", "value": "trucker", "destination": "trucker" },
+    { "family": "hat", "fact": "style", "value": "beanie", "destination": "beanies" }
+  ],
+  "exceptions": [
+    { "styleCode": "PC380H", "family": "tee", "destination": "tees", "editorialReviewRequired": true, "reason": "Merchant confirmed Activewear Tops > T-Shirts. Hooded performance tee; never classify as fleece from its hood. Use the validated tee root until an appropriate member subtype is reviewed." }
+  ],
+  "ignoredAttributes": ["wearer", "material", "weight", "finish", "color", "size", "performance", "unisex"],
+  "menuIssues": [
+    "T-Shirts > Crew points to Crewneck Sweatshirts: review the intended tee destination; do not import this edge.",
+    "T-Shirts > Fit repeats Women's: remove the duplicate after menu review.",
+    "Ring-Spun and Combed Ring-Spun point to the same collection: review intended distinct targets or consolidate labels."
+  ]
+}

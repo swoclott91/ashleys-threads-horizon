@@ -1,0 +1,352 @@
+{
+  "store": "ashleys-threads-3.myshopify.com",
+  "capturedAt": "2026-10-13T02:47:26.419Z",
+  "source": "Read-only Shopify connector audit",
+  "productDefinitions": {
+    "nodes": [
+      {
+        "id": "gid://shopify/MetafieldDefinition/226246263059",
+        "name": "Hat Profile Type",
+        "namespace": "custom",
+        "key": "hat_profile_type",
+        "type": {
+          "name": "single_line_text_field"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/226246295827",
+        "name": "Panel Count",
+        "namespace": "custom",
+        "key": "panel_count",
+        "type": {
+          "name": "number_integer"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/226246361363",
+        "name": "Label Type",
+        "namespace": "custom",
+        "key": "label_type",
+        "type": {
+          "name": "single_line_text_field"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/226246394131",
+        "name": "Logo Visibility",
+        "namespace": "custom",
+        "key": "logo_visibility",
+        "type": {
+          "name": "single_line_text_field"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/226247082259",
+        "name": "Brand",
+        "namespace": "custom",
+        "key": "brand",
+        "type": {
+          "name": "metaobject_reference"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/226247115027",
+        "name": "Brand Image",
+        "namespace": "custom",
+        "key": "brand_image",
+        "type": {
+          "name": "file_reference"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/226247246099",
+        "name": "Fabric Weight",
+        "namespace": "custom",
+        "key": "fabric_weight",
+        "type": {
+          "name": "list.metaobject_reference"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/226247278867",
+        "name": "size guide",
+        "namespace": "custom",
+        "key": "size_guide",
+        "type": {
+          "name": "json"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/226247311635",
+        "name": "size guide hash",
+        "namespace": "custom",
+        "key": "size_guide_hash",
+        "type": {
+          "name": "single_line_text_field"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/226247344403",
+        "name": "size guide source",
+        "namespace": "custom",
+        "key": "size_guide_source",
+        "type": {
+          "name": "single_line_text_field"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/226247377171",
+        "name": "size guide type",
+        "namespace": "custom",
+        "key": "size_guide_type",
+        "type": {
+          "name": "single_line_text_field"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/226247409939",
+        "name": "size range display",
+        "namespace": "custom",
+        "key": "size_range_display",
+        "type": {
+          "name": "single_line_text_field"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/226247442707",
+        "name": "link",
+        "namespace": "custom",
+        "key": "link",
+        "type": {
+          "name": "link"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/238688862483",
+        "name": "Style",
+        "namespace": "custom",
+        "key": "style",
+        "type": {
+          "name": "list.metaobject_reference"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/238688895251",
+        "name": "Profile",
+        "namespace": "custom",
+        "key": "profile",
+        "type": {
+          "name": "metaobject_reference"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/238688928019",
+        "name": "Hat Closure",
+        "namespace": "custom",
+        "key": "hat_closure",
+        "type": {
+          "name": "metaobject_reference"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/241427841299",
+        "name": "Features",
+        "namespace": "custom",
+        "key": "features",
+        "type": {
+          "name": "rich_text_field"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/241630347539",
+        "name": "Promoted Designation",
+        "namespace": "custom",
+        "key": "promoted_designation",
+        "type": {
+          "name": "list.single_line_text_field"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/246872801555",
+        "name": "Fabric Style",
+        "namespace": "custom",
+        "key": "fabric_style",
+        "type": {
+          "name": "list.single_line_text_field"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/246876832019",
+        "name": "Cotton Type",
+        "namespace": "custom",
+        "key": "cotton_type",
+        "type": {
+          "name": "single_line_text_field"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/246876864787",
+        "name": "Garment Construction",
+        "namespace": "custom",
+        "key": "garment_construction",
+        "type": {
+          "name": "single_line_text_field"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/246977626387",
+        "name": "Dye & Finish",
+        "namespace": "custom",
+        "key": "dye_finish",
+        "type": {
+          "name": "list.single_line_text_field"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/300114018579",
+        "name": "Sustainable Style",
+        "namespace": "custom",
+        "key": "sustainable_style",
+        "type": {
+          "name": "rich_text_field"
+        }
+      }
+    ],
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "eyJsYXN0X2lkIjozMDAxMTQwMTg1NzksImxhc3RfdmFsdWUiOiIzMDAxMTQwMTg1NzkifQ=="
+    }
+  },
+  "collectionDefinitions": {
+    "nodes": [
+      {
+        "id": "gid://shopify/MetafieldDefinition/226247147795",
+        "name": "Brand",
+        "namespace": "custom",
+        "key": "brand",
+        "type": {
+          "name": "metaobject_reference"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/228141728019",
+        "name": "Pretty Title",
+        "namespace": "custom",
+        "key": "pretty_title",
+        "type": {
+          "name": "single_line_text_field"
+        }
+      }
+    ],
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "eyJsYXN0X2lkIjoyMjgxNDE3MjgwMTksImxhc3RfdmFsdWUiOiIyMjgxNDE3MjgwMTkifQ=="
+    }
+  },
+  "destinations": {
+    "nodes": [
+      {
+        "id": "gid://shopify/Collection/523278942483",
+        "title": "Beanies",
+        "handle": "beanies",
+        "parent": null,
+        "label": null
+      },
+      {
+        "id": "gid://shopify/Collection/523279335699",
+        "title": "Hats",
+        "handle": "hats",
+        "parent": null,
+        "label": null
+      },
+      {
+        "id": "gid://shopify/Collection/523279499539",
+        "title": "Hoodies",
+        "handle": "hoodies",
+        "parent": null,
+        "label": null
+      },
+      {
+        "id": "gid://shopify/Collection/523279794451",
+        "title": "Long Sleeve T-Shirts",
+        "handle": "long-sleeve-t-shirts",
+        "parent": null,
+        "label": null
+      },
+      {
+        "id": "gid://shopify/Collection/523280744723",
+        "title": "Sweatshirts & Hoodies",
+        "handle": "sweatshirts-hoodies",
+        "parent": null,
+        "label": null
+      },
+      {
+        "id": "gid://shopify/Collection/523280777491",
+        "title": "T-Shirts",
+        "handle": "t-shirts",
+        "parent": null,
+        "label": null
+      },
+      {
+        "id": "gid://shopify/Collection/523281236243",
+        "title": "Trucker Hats",
+        "handle": "trucker-hats",
+        "parent": null,
+        "label": null
+      },
+      {
+        "id": "gid://shopify/Collection/525843595539",
+        "title": "Short Sleeve T-Shirts",
+        "handle": "long-sleeve-t-shirts-copy",
+        "parent": null,
+        "label": null
+      }
+    ],
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "eyJsYXN0X2lkIjo1MjU4NDM1OTU1MzksImxhc3RfdmFsdWUiOiI1MjU4NDM1OTU1MzkifQ=="
+    }
+  },
+  "publishedDestinations": [
+    {
+      "id": "gid://shopify/Collection/523278942483",
+      "title": "Beanies",
+      "handle": "beanies"
+    },
+    {
+      "id": "gid://shopify/Collection/523279335699",
+      "title": "Hats",
+      "handle": "hats"
+    },
+    {
+      "id": "gid://shopify/Collection/523279499539",
+      "title": "Hoodies",
+      "handle": "hoodies"
+    },
+    {
+      "id": "gid://shopify/Collection/523279794451",
+      "title": "Long Sleeve T-Shirts",
+      "handle": "long-sleeve-t-shirts"
+    },
+    {
+      "id": "gid://shopify/Collection/523280744723",
+      "title": "Sweatshirts & Hoodies",
+      "handle": "sweatshirts-hoodies"
+    },
+    {
+      "id": "gid://shopify/Collection/523280777491",
+      "title": "T-Shirts",
+      "handle": "t-shirts"
+    },
+    {
+      "id": "gid://shopify/Collection/523281236243",
+      "title": "Trucker Hats",
+      "handle": "trucker-hats"
+    },
+    {
+      "id": "gid://shopify/Collection/525843595539",
+      "title": "Short Sleeve T-Shirts",
+      "handle": "long-sleeve-t-shirts-copy"
+    }
+  ]
+}

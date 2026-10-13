@@ -1,0 +1,90 @@
+{
+  "store": "ashleys-threads-3.myshopify.com",
+  "capturedAt": "2026-10-13T03:29:14.412Z",
+  "collections": [
+    {
+      "id": "gid://shopify/Collection/523278942483",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523279335699",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523279499539",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523279794451",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523280744723",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523280777491",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523281236243",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/525843595539",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    }
+  ],
+  "products": [
+    {
+      "id": "gid://shopify/Product/10426119618835",
+      "styleCode": "PC380H",
+      "membershipComplete": true,
+      "collectionIds": [
+        "gid://shopify/Collection/523158814995",
+        "gid://shopify/Collection/523278713107",
+        "gid://shopify/Collection/523280318739",
+        "gid://shopify/Collection/523280482579",
+        "gid://shopify/Collection/523280777491",
+        "gid://shopify/Collection/523281432851",
+        "gid://shopify/Collection/523281465619",
+        "gid://shopify/Collection/525858570515",
+        "gid://shopify/Collection/525878755603",
+        "gid://shopify/Collection/525905428755",
+        "gid://shopify/Collection/526491091219",
+        "gid://shopify/Collection/526632452371",
+        "gid://shopify/Collection/526632780051",
+        "gid://shopify/Collection/526633304339",
+        "gid://shopify/Collection/527229190419",
+        "gid://shopify/Collection/528203415827"
+      ],
+      "breadcrumbCollectionId": null,
+      "editorialReviewed": true,
+      "evidence": {
+        "verified": true,
+        "source": "Merchant confirms Activewear Tops > T-Shirts; pc380h-category-after.json verifies native category and actual membership.",
+        "categoryId": "gid://shopify/TaxonomyCategory/aa-1-1-2-2",
+        "families": [
+          "tee"
+        ],
+        "facts": {}
+      }
+    }
+  ]
+}

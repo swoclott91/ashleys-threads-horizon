@@ -9,6 +9,7 @@
  */
 {
   "accessibility": {
+    "at_breadcrumbs": "Breadcrumbs",
     "account": "Account",
     "active_filters": "Active filters:",
     "cart": "Cart",

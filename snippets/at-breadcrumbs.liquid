@@ -1,0 +1,85 @@
+{%- doc -%}
+  Renders at most two reviewed linked ancestors, without the current page.
+  @param {product} [product] - The current PDP product
+  @param {collection} [collection] - The current collection page
+  @param {string} page_type - The request page type
+{%- enddoc -%}
+{%- liquid
+  assign destination = nil
+  assign parent = nil
+  assign destination_valid = false
+  assign parent_valid = false
+  assign current_collection_id = nil
+
+  if page_type == 'product'
+    if product.metafields.custom.breadcrumb_collection.type == 'collection_reference'
+      assign destination = product.metafields.custom.breadcrumb_collection.value
+    endif
+  elsif page_type == 'collection'
+    assign current_collection_id = collection.id
+    if collection.metafields.custom.breadcrumb_parent.type == 'collection_reference'
+      assign destination = collection.metafields.custom.breadcrumb_parent.value
+    endif
+  endif
+
+  if destination != blank and destination.id != blank
+    if destination.metafields.custom.breadcrumb_parent.type == 'collection_reference'
+      assign parent = destination.metafields.custom.breadcrumb_parent.value
+    endif
+    if destination.url != blank and destination.published_at != blank and destination.id != current_collection_id
+      assign destination_valid = true
+    endif
+  endif
+
+  if parent != blank and parent.id != blank
+    if parent.url != blank and parent.published_at != blank and parent.id != destination.id and parent.id != current_collection_id
+      assign parent_valid = true
+    endif
+  endif
+
+  if page_type == 'product'
+    assign destination_membership = product.collections | where: 'id', destination.id
+    assign parent_membership = product.collections | where: 'id', parent.id
+    if destination_membership == empty
+      assign destination_valid = false
+    endif
+    if parent_membership == empty
+      assign parent_valid = false
+    endif
+  endif
+
+  if destination_valid == false and parent_valid
+    assign destination = parent
+    assign destination_valid = true
+    assign parent_valid = false
+  endif
+
+  assign destination_label = destination.title
+  if destination.metafields.custom.breadcrumb_label.type == 'single_line_text_field'
+    assign destination_label = destination.metafields.custom.breadcrumb_label.value | strip | default: destination.title
+  endif
+  assign parent_label = parent.title
+  if parent.metafields.custom.breadcrumb_label.type == 'single_line_text_field'
+    assign parent_label = parent.metafields.custom.breadcrumb_label.value | strip | default: parent.title
+  endif
+-%}
+{%- if destination_valid and destination_label != blank -%}
+  <ol class="at-breadcrumbs__list" role="list">
+    {%- if parent_valid and parent_label != blank -%}
+      <li class="at-breadcrumbs__item at-breadcrumbs__item--ancestor">
+        <a class="at-breadcrumbs__link" href="{{ parent.url | escape }}" data-collection-id="{{ parent.id }}">
+          <span class="at-breadcrumbs__label">{{ parent_label | escape }}</span>
+        </a>
+      </li>
+    {%- endif -%}
+    <li class="at-breadcrumbs__item at-breadcrumbs__item--parent">
+      {%- if parent_valid and parent_label != blank -%}
+        <span class="at-breadcrumbs__separator" aria-hidden="true">›</span>
+      {%- endif -%}
+      <a class="at-breadcrumbs__link" href="{{ destination.url | escape }}" data-collection-id="{{ destination.id }}">
+        <span class="at-breadcrumbs__back" aria-hidden="true">‹</span>
+        <span class="at-breadcrumbs__label">{{ destination_label | escape }}</span>
+      </a>
+    </li>
+  </ol>
+{%- endif -%}

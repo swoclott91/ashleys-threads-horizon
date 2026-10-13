@@ -1,0 +1,169 @@
+{
+  "capturedAt": "2026-10-13T03:29:11.529Z",
+  "store": "ashleys-threads-3.myshopify.com",
+  "note": "Fresh read after merchant correction; no product mutation executed by this implementation.",
+  "product": {
+    "id": "gid://shopify/Product/10426119618835",
+    "title": "PC380H Performance Pullover Hooded Tee",
+    "productType": "T-Shirts",
+    "tags": [
+      "active-sale",
+      "lightweight",
+      "supplier:sanmar",
+      "T-Shirts"
+    ],
+    "status": "ACTIVE",
+    "category": {
+      "id": "gid://shopify/TaxonomyCategory/aa-1-1-2-2",
+      "name": "T-Shirts",
+      "fullName": "Apparel & Accessories > Clothing > Activewear > Activewear Tops > T-Shirts"
+    },
+    "collections": {
+      "nodes": [
+        {
+          "id": "gid://shopify/Collection/523158814995",
+          "title": "Port & Company",
+          "handle": "port-company"
+        },
+        {
+          "id": "gid://shopify/Collection/523278713107",
+          "title": "Activewear",
+          "handle": "activewear"
+        },
+        {
+          "id": "gid://shopify/Collection/523280318739",
+          "title": "Port & Company",
+          "handle": "port-and-company"
+        },
+        {
+          "id": "gid://shopify/Collection/523280482579",
+          "title": "Sale",
+          "handle": "sale"
+        },
+        {
+          "id": "gid://shopify/Collection/523280777491",
+          "title": "T-Shirts",
+          "handle": "t-shirts"
+        },
+        {
+          "id": "gid://shopify/Collection/523281432851",
+          "title": "Unisex",
+          "handle": "unisex"
+        },
+        {
+          "id": "gid://shopify/Collection/523281465619",
+          "title": "Unisex/Men's",
+          "handle": "unisex-mens"
+        },
+        {
+          "id": "gid://shopify/Collection/525858570515",
+          "title": "Performance T-Shirts",
+          "handle": "raglan-t-shirts-copy"
+        },
+        {
+          "id": "gid://shopify/Collection/525878755603",
+          "title": "Unisex T-Shirts",
+          "handle": "unisex-t-shirts"
+        },
+        {
+          "id": "gid://shopify/Collection/525905428755",
+          "title": "100% Polyester T-Shirts",
+          "handle": "100-polyester-t-shirts"
+        },
+        {
+          "id": "gid://shopify/Collection/526491091219",
+          "title": "Activewear T-Shirts",
+          "handle": "activewear-t-shirts"
+        },
+        {
+          "id": "gid://shopify/Collection/526632452371",
+          "title": "Unisex Activewear",
+          "handle": "unisex-activewear"
+        },
+        {
+          "id": "gid://shopify/Collection/526632780051",
+          "title": "100% Polyester Activewear",
+          "handle": "100-polyester-activewear"
+        },
+        {
+          "id": "gid://shopify/Collection/526633304339",
+          "title": "Moisture-Wicking Activewear",
+          "handle": "moisture-wicking-activewear"
+        },
+        {
+          "id": "gid://shopify/Collection/527229190419",
+          "title": "Fishing & Sun Activewear Apparel",
+          "handle": "fishing-sun-activewear-apparel"
+        },
+        {
+          "id": "gid://shopify/Collection/528203415827",
+          "title": "Popular",
+          "handle": "popular"
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "eyJsYXN0X2lkIjo1MjgyMDM0MTU4MjcsImxhc3RfdmFsdWUiOjUyODIwMzQxNTgyN30="
+      }
+    }
+  },
+  "tees": {
+    "id": "gid://shopify/Collection/523280777491",
+    "title": "T-Shirts",
+    "handle": "t-shirts",
+    "hasProduct": true,
+    "ruleSet": {
+      "appliedDisjunctively": true,
+      "rules": [
+        {
+          "column": "PRODUCT_CATEGORY_ID_WITH_DESCENDANTS",
+          "relation": "EQUALS",
+          "condition": "gid://shopify/TaxonomyCategory/aa-1-13-8"
+        },
+        {
+          "column": "PRODUCT_CATEGORY_ID_WITH_DESCENDANTS",
+          "relation": "EQUALS",
+          "condition": "gid://shopify/TaxonomyCategory/aa-1-7-8-8"
+        },
+        {
+          "column": "PRODUCT_CATEGORY_ID_WITH_DESCENDANTS",
+          "relation": "EQUALS",
+          "condition": "gid://shopify/TaxonomyCategory/aa-1-2-9-7"
+        },
+        {
+          "column": "PRODUCT_CATEGORY_ID_WITH_DESCENDANTS",
+          "relation": "EQUALS",
+          "condition": "gid://shopify/TaxonomyCategory/aa-1-1-2-2"
+        },
+        {
+          "column": "PRODUCT_CATEGORY_ID_WITH_DESCENDANTS",
+          "relation": "EQUALS",
+          "condition": "gid://shopify/TaxonomyCategory/ae-2-2-10-1-15"
+        }
+      ]
+    }
+  },
+  "activewear": {
+    "nodes": [
+      {
+        "id": "gid://shopify/Collection/526491091219",
+        "title": "Activewear T-Shirts",
+        "handle": "activewear-t-shirts",
+        "ruleSet": {
+          "appliedDisjunctively": false,
+          "rules": [
+            {
+              "column": "PRODUCT_CATEGORY_ID",
+              "relation": "EQUALS",
+              "condition": "gid://shopify/TaxonomyCategory/aa-1-1-2-2"
+            }
+          ]
+        }
+      }
+    ],
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "eyJsYXN0X2lkIjo1MjY0OTEwOTEyMTksImxhc3RfdmFsdWUiOiI1MjY0OTEwOTEyMTkifQ=="
+    }
+  }
+}

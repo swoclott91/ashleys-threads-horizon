@@ -1,0 +1,93 @@
+{
+  "store": "ashleys-threads-3.myshopify.com",
+  "capturedAt": "2026-10-13T03:26:18.583Z",
+  "collections": [
+    {
+      "id": "gid://shopify/Collection/523278942483",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523279335699",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523279499539",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523279794451",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523280744723",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523280777491",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523281236243",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/525843595539",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    }
+  ],
+  "products": [
+    {
+      "id": "gid://shopify/Product/10426119618835",
+      "styleCode": "PC380H",
+      "membershipComplete": true,
+      "collectionIds": [
+        "gid://shopify/Collection/523158814995",
+        "gid://shopify/Collection/523278713107",
+        "gid://shopify/Collection/523279499539",
+        "gid://shopify/Collection/523280318739",
+        "gid://shopify/Collection/523280482579",
+        "gid://shopify/Collection/523280711955",
+        "gid://shopify/Collection/523280744723",
+        "gid://shopify/Collection/523281432851",
+        "gid://shopify/Collection/523281465619",
+        "gid://shopify/Collection/526015660307",
+        "gid://shopify/Collection/526016282899",
+        "gid://shopify/Collection/526566064403",
+        "gid://shopify/Collection/526632452371",
+        "gid://shopify/Collection/526632780051",
+        "gid://shopify/Collection/526633304339",
+        "gid://shopify/Collection/527227781395",
+        "gid://shopify/Collection/527229190419",
+        "gid://shopify/Collection/528203415827"
+      ],
+      "breadcrumbCollectionId": null,
+      "editorialReviewed": false,
+      "evidence": {
+        "verified": true,
+        "source": "exception-before.json: native category Hoodies conflicts with shirt-weight hooded tee description; requires editorial review",
+        "categoryId": "gid://shopify/TaxonomyCategory/aa-1-1-7-2",
+        "families": [
+          "tee",
+          "sweatshirt"
+        ],
+        "facts": {}
+      }
+    }
+  ]
+}

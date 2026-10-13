@@ -9,6 +9,17 @@
  */
 {
   "sections": {
+    "at_breadcrumbs": {
+      "type": "at-breadcrumbs",
+      "settings": {
+        "enabled": true,
+        "section_width": "page-width",
+        "alignment": "left",
+        "mobile_display": "auto",
+        "padding-block-start": 12,
+        "padding-block-end": 8
+      }
+    },
     "section": {
       "type": "section",
       "blocks": {
@@ -301,6 +312,7 @@
     }
   },
   "order": [
+    "at_breadcrumbs",
     "section",
     "main"
   ]

@@ -1,0 +1,140 @@
+{%- if section.settings.enabled -%}
+  {%- if request.page_type == 'product' or request.page_type == 'collection' -%}
+    {%- capture trail -%}
+      {%- render 'at-breadcrumbs', product: product, collection: collection, page_type: request.page_type -%}
+    {%- endcapture -%}
+    {%- assign trail = trail | strip -%}
+    {%- if trail != blank -%}
+      <div
+        class="section section--{{ section.settings.section_width }} at-breadcrumbs-section spacing-style"
+        style="{% render 'spacing-style', settings: section.settings %}"
+      >
+        <nav
+          class="at-breadcrumbs at-breadcrumbs--{{ section.settings.alignment }}"
+          aria-label="{{ 'accessibility.at_breadcrumbs' | t | escape }}"
+          data-mobile-display="{{ section.settings.mobile_display }}"
+        >
+          {{ trail }}
+        </nav>
+      </div>
+      <script src="{{ 'at-breadcrumbs.js' | asset_url }}" type="module" fetchpriority="low"></script>
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+
+{% stylesheet %}
+  .at-breadcrumbs-section {
+    padding-block: var(--padding-block-start) var(--padding-block-end);
+  }
+
+  .at-breadcrumbs-section.section--full-width {
+    padding-inline: var(--page-margin);
+  }
+
+  .at-breadcrumbs {
+    min-width: 0;
+    font-family: var(--font-body--family);
+    font-size: var(--font-size--sm);
+    color: var(--color-foreground);
+  }
+
+  .at-breadcrumbs__list {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex-wrap: nowrap;
+  }
+
+  .at-breadcrumbs--center .at-breadcrumbs__list {
+    justify-content: center;
+  }
+
+  .at-breadcrumbs--right .at-breadcrumbs__list {
+    justify-content: flex-end;
+  }
+
+  .at-breadcrumbs__item {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-xs);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .at-breadcrumbs__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .at-breadcrumbs__back {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .at-breadcrumbs:not([data-mobile-expanded]) .at-breadcrumbs__item--ancestor {
+      display: none;
+    }
+
+    .at-breadcrumbs:not([data-mobile-expanded]) .at-breadcrumbs__separator {
+      display: none;
+    }
+
+    .at-breadcrumbs:not([data-mobile-expanded]) .at-breadcrumbs__back {
+      display: inline;
+      margin-inline-end: var(--gap-xs);
+    }
+
+    .at-breadcrumbs__item--parent {
+      min-width: 0;
+      flex-shrink: 1;
+    }
+
+    .at-breadcrumbs__link {
+      max-width: 100%;
+      min-height: 32px;
+    }
+
+    .at-breadcrumbs__label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.at_breadcrumbs",
+  "class": "at-breadcrumbs-wrapper",
+  "enabled_on": { "templates": ["product", "collection"] },
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "t:settings.at_breadcrumbs_enabled", "default": true },
+    {
+      "type": "select", "id": "section_width", "label": "t:settings.width",
+      "options": [
+        { "value": "page-width", "label": "t:options.page" },
+        { "value": "full-width", "label": "t:options.full" }
+      ],
+      "default": "page-width"
+    },
+    { "type": "text_alignment", "id": "alignment", "label": "t:settings.alignment", "default": "left" },
+    {
+      "type": "select", "id": "mobile_display", "label": "t:settings.at_breadcrumbs_mobile",
+      "options": [
+        { "value": "auto", "label": "t:options.at_breadcrumbs_auto" },
+        { "value": "parent", "label": "t:options.at_breadcrumbs_parent" }
+      ],
+      "default": "auto"
+    },
+    { "type": "range", "id": "padding-block-start", "label": "t:settings.top", "min": 0, "max": 60, "step": 4, "unit": "px", "default": 12 },
+    { "type": "range", "id": "padding-block-end", "label": "t:settings.bottom", "min": 0, "max": 60, "step": 4, "unit": "px", "default": 8 }
+  ],
+  "presets": [{ "name": "t:names.at_breadcrumbs", "category": "t:categories.collection" }]
+}
+{% endschema %}
