@@ -1,0 +1,221 @@
+{
+  "query": "mutation SeedBreadcrumbRules($r0:MetaobjectUpsertInput!,$r1:MetaobjectUpsertInput!,$r2:MetaobjectUpsertInput!,$r3:MetaobjectUpsertInput!,$r4:MetaobjectUpsertInput!,$r5:MetaobjectUpsertInput!,$r6:MetaobjectUpsertInput!,$r7:MetaobjectUpsertInput!){r0:metaobjectUpsert(handle:{type:\"at_breadcrumb_rule\",handle:\"tees\"},metaobject:$r0){metaobject{id handle type fields{key type value}}userErrors{field message}}\nr1:metaobjectUpsert(handle:{type:\"at_breadcrumb_rule\",handle:\"short_sleeve\"},metaobject:$r1){metaobject{id handle type fields{key type value}}userErrors{field message}}\nr2:metaobjectUpsert(handle:{type:\"at_breadcrumb_rule\",handle:\"long_sleeve\"},metaobject:$r2){metaobject{id handle type fields{key type value}}userErrors{field message}}\nr3:metaobjectUpsert(handle:{type:\"at_breadcrumb_rule\",handle:\"sweatshirts\"},metaobject:$r3){metaobject{id handle type fields{key type value}}userErrors{field message}}\nr4:metaobjectUpsert(handle:{type:\"at_breadcrumb_rule\",handle:\"hoodies\"},metaobject:$r4){metaobject{id handle type fields{key type value}}userErrors{field message}}\nr5:metaobjectUpsert(handle:{type:\"at_breadcrumb_rule\",handle:\"hats\"},metaobject:$r5){metaobject{id handle type fields{key type value}}userErrors{field message}}\nr6:metaobjectUpsert(handle:{type:\"at_breadcrumb_rule\",handle:\"trucker\"},metaobject:$r6){metaobject{id handle type fields{key type value}}userErrors{field message}}\nr7:metaobjectUpsert(handle:{type:\"at_breadcrumb_rule\",handle:\"beanies\"},metaobject:$r7){metaobject{id handle type fields{key type value}}userErrors{field message}}}",
+  "variables": {
+    "r0": {
+      "fields": [
+        {
+          "key": "name",
+          "value": "T-Shirts root"
+        },
+        {
+          "key": "family",
+          "value": "tee"
+        },
+        {
+          "key": "category_ids",
+          "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-7\",\"gid://shopify/TaxonomyCategory/aa-1-13-8\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-8\",\"gid://shopify/TaxonomyCategory/aa-1-1-2-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-1\"]"
+        },
+        {
+          "key": "priority",
+          "value": "0"
+        },
+        {
+          "key": "destination",
+          "value": "gid://shopify/Collection/523280777491"
+        }
+      ]
+    },
+    "r1": {
+      "fields": [
+        {
+          "key": "name",
+          "value": "Short sleeve tees"
+        },
+        {
+          "key": "family",
+          "value": "tee"
+        },
+        {
+          "key": "category_ids",
+          "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-7\",\"gid://shopify/TaxonomyCategory/aa-1-13-8\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-8\",\"gid://shopify/TaxonomyCategory/aa-1-1-2-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-1\"]"
+        },
+        {
+          "key": "priority",
+          "value": "10"
+        },
+        {
+          "key": "destination",
+          "value": "gid://shopify/Collection/525843595539"
+        },
+        {
+          "key": "attribute_namespace",
+          "value": "shopify"
+        },
+        {
+          "key": "attribute_key",
+          "value": "sleeve-length-type"
+        },
+        {
+          "key": "attribute_values",
+          "value": "[\"gid://shopify/TaxonomyValue/169\"]"
+        }
+      ]
+    },
+    "r2": {
+      "fields": [
+        {
+          "key": "name",
+          "value": "Long sleeve tees"
+        },
+        {
+          "key": "family",
+          "value": "tee"
+        },
+        {
+          "key": "category_ids",
+          "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-7\",\"gid://shopify/TaxonomyCategory/aa-1-13-8\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-8\",\"gid://shopify/TaxonomyCategory/aa-1-1-2-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-1\"]"
+        },
+        {
+          "key": "priority",
+          "value": "10"
+        },
+        {
+          "key": "destination",
+          "value": "gid://shopify/Collection/523279794451"
+        },
+        {
+          "key": "attribute_namespace",
+          "value": "shopify"
+        },
+        {
+          "key": "attribute_key",
+          "value": "sleeve-length-type"
+        },
+        {
+          "key": "attribute_values",
+          "value": "[\"gid://shopify/TaxonomyValue/17094\"]"
+        }
+      ]
+    },
+    "r3": {
+      "fields": [
+        {
+          "key": "name",
+          "value": "Sweatshirts and hoodies root"
+        },
+        {
+          "key": "family",
+          "value": "sweatshirt"
+        },
+        {
+          "key": "category_ids",
+          "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-11\",\"gid://shopify/TaxonomyCategory/aa-1-13-13\",\"gid://shopify/TaxonomyCategory/aa-1-1-7-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-2\",\"gid://shopify/TaxonomyCategory/aa-1-25-9-13\",\"gid://shopify/TaxonomyCategory/aa-1-13-14\",\"gid://shopify/TaxonomyCategory/aa-1-1-7-4\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-4\",\"gid://shopify/TaxonomyCategory/aa-1-1-7\"]"
+        },
+        {
+          "key": "priority",
+          "value": "0"
+        },
+        {
+          "key": "destination",
+          "value": "gid://shopify/Collection/523280744723"
+        }
+      ]
+    },
+    "r4": {
+      "fields": [
+        {
+          "key": "name",
+          "value": "Hoodies"
+        },
+        {
+          "key": "family",
+          "value": "sweatshirt"
+        },
+        {
+          "key": "category_ids",
+          "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-11\",\"gid://shopify/TaxonomyCategory/aa-1-13-13\",\"gid://shopify/TaxonomyCategory/aa-1-1-7-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-2\"]"
+        },
+        {
+          "key": "priority",
+          "value": "10"
+        },
+        {
+          "key": "destination",
+          "value": "gid://shopify/Collection/523279499539"
+        }
+      ]
+    },
+    "r5": {
+      "fields": [
+        {
+          "key": "name",
+          "value": "Hats root"
+        },
+        {
+          "key": "family",
+          "value": "hat"
+        },
+        {
+          "key": "category_ids",
+          "value": "[\"gid://shopify/TaxonomyCategory/aa-2-17\"]"
+        },
+        {
+          "key": "priority",
+          "value": "0"
+        },
+        {
+          "key": "destination",
+          "value": "gid://shopify/Collection/523279335699"
+        }
+      ]
+    },
+    "r6": {
+      "fields": [
+        {
+          "key": "name",
+          "value": "Trucker hats"
+        },
+        {
+          "key": "family",
+          "value": "hat"
+        },
+        {
+          "key": "category_ids",
+          "value": "[\"gid://shopify/TaxonomyCategory/aa-2-17-14\"]"
+        },
+        {
+          "key": "priority",
+          "value": "10"
+        },
+        {
+          "key": "destination",
+          "value": "gid://shopify/Collection/523281236243"
+        }
+      ]
+    },
+    "r7": {
+      "fields": [
+        {
+          "key": "name",
+          "value": "Beanies"
+        },
+        {
+          "key": "family",
+          "value": "hat"
+        },
+        {
+          "key": "category_ids",
+          "value": "[\"gid://shopify/TaxonomyCategory/aa-2-17-2\"]"
+        },
+        {
+          "key": "priority",
+          "value": "10"
+        },
+        {
+          "key": "destination",
+          "value": "gid://shopify/Collection/523278942483"
+        }
+      ]
+    }
+  }
+}

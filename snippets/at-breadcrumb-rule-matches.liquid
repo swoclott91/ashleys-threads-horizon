@@ -1,0 +1,58 @@
+{%- doc -%}
+  Matches a native category (including ancestors) and an optional existing attribute.
+  @param {product} product - The current product
+  @param {metaobject} rule - A reviewed AT breadcrumb rule
+{%- enddoc -%}
+{%- liquid
+  assign category_match = false
+  assign category_gids = product.category.ancestors | map: 'gid'
+  if product.category.gid != blank and rule.category_ids.type == 'list.single_line_text_field' and rule.category_ids.value.size <= 32
+    for gid in rule.category_ids.value limit: 32
+      if gid == product.category.gid or category_gids contains gid
+        assign category_match = true
+        break
+      endif
+    endfor
+  endif
+
+  assign attribute_match = false
+  assign attribute_key = rule.attribute_key.value
+  assign attribute_namespace = rule.attribute_namespace.value
+  if attribute_key == blank and attribute_namespace == blank
+    assign attribute_match = true
+  elsif attribute_key != blank and attribute_namespace != blank and rule.attribute_values.type == 'list.single_line_text_field' and rule.attribute_values.value.size <= 16
+    assign attribute = product.metafields[attribute_namespace][attribute_key]
+    assign accepted = rule.attribute_values.value
+    if attribute.type == 'list.metaobject_reference' and attribute.value.size <= 16
+      for entry in attribute.value limit: 16
+        assign taxonomy_value = entry.taxonomy_reference.value
+        assign entry_gid = entry.system.id | prepend: 'gid://shopify/Metaobject/'
+        if accepted contains taxonomy_value or accepted contains entry_gid
+          assign attribute_match = true
+          break
+        endif
+      endfor
+    elsif attribute.type == 'metaobject_reference'
+      assign taxonomy_value = attribute.value.taxonomy_reference.value
+      assign entry_gid = attribute.value.system.id | prepend: 'gid://shopify/Metaobject/'
+      if accepted contains taxonomy_value or accepted contains entry_gid
+        assign attribute_match = true
+      endif
+    elsif attribute.type == 'single_line_text_field'
+      if accepted contains attribute.value
+        assign attribute_match = true
+      endif
+    elsif attribute.type == 'list.single_line_text_field' and attribute.value.size <= 16
+      for value in attribute.value limit: 16
+        if accepted contains value
+          assign attribute_match = true
+          break
+        endif
+      endfor
+    endif
+  endif
+
+  if category_match and attribute_match
+    echo 'true'
+  endif
+-%}

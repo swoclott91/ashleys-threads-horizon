@@ -1,9 +1,17 @@
 {%- doc -%}
-  Renders at most two reviewed linked ancestors, without the current page.
+  Renders at most two canonical linked ancestors from shared rules or an editorial override.
   @param {product} [product] - The current PDP product
   @param {collection} [collection] - The current collection page
   @param {string} page_type - The request page type
+  @param {object} [shop] - The shop containing shared breadcrumb rules
 {%- enddoc -%}
+{%- if page_type == 'product' and shop.metafields.custom.breadcrumb_rules.type == 'list.metaobject_reference' -%}
+  {%- capture rule_destination_id -%}
+    {%- render 'at-breadcrumb-rule-destination', product: product, rules: shop.metafields.custom.breadcrumb_rules.value -%}
+  {%- endcapture -%}
+  {%- assign rule_destination_id = rule_destination_id | strip | plus: 0 -%}
+  {%- assign rule_destination = product.collections | where: 'id', rule_destination_id | first -%}
+{%- endif -%}
 {%- liquid
   assign destination = nil
   assign parent = nil
@@ -14,6 +22,12 @@
   if page_type == 'product'
     if product.metafields.custom.breadcrumb_collection.type == 'collection_reference'
       assign destination = product.metafields.custom.breadcrumb_collection.value
+      assign override_membership = product.collections | where: 'id', destination.id
+      if destination.id == blank or destination.url == blank or destination.published_at == blank or override_membership == empty
+        assign destination = rule_destination | default: destination
+      endif
+    else
+      assign destination = rule_destination
     endif
   elsif page_type == 'collection'
     assign current_collection_id = collection.id

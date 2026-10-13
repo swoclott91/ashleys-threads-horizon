@@ -1,0 +1,61 @@
+{%- doc -%}
+  Returns a visible member collection ID from at most 32 shared rules.
+  Higher priorities select subtypes. Conflicting equal priorities fall back to the root.
+  @param {product} product - The current product
+  @param {metaobject[]} rules - The shop's reviewed breadcrumb rule metaobjects
+{%- enddoc -%}
+{%- liquid
+  assign best_destination = nil
+  assign root_destination = nil
+  assign best_priority = -1
+  assign tied = false
+  assign matched_family = nil
+  assign family_conflict = false
+-%}
+{%- if rules.size <= 32 -%}
+  {%- for rule in rules limit: 32 -%}
+    {%- if rule.family.value != blank and rule.priority.type == 'number_integer' -%}
+      {%- capture matched -%}
+        {%- render 'at-breadcrumb-rule-matches', product: product, rule: rule -%}
+      {%- endcapture -%}
+      {%- if matched == 'true' -%}
+        {%- liquid
+          if matched_family == nil
+            assign matched_family = rule.family.value
+          elsif matched_family != rule.family.value
+            assign family_conflict = true
+          endif
+          assign candidate = rule.destination.value
+          assign members = product.collections | where: 'id', candidate.id
+          assign priority = rule.priority.value
+          if rule.destination.type == 'collection_reference' and priority >= 0
+            if priority == 0
+              if root_destination != nil and root_destination.id != candidate.id
+                assign family_conflict = true
+              endif
+              if candidate.id != blank and candidate.url != blank and candidate.published_at != blank and members != empty
+                assign root_destination = candidate
+              endif
+            endif
+            if priority > best_priority
+              assign best_priority = priority
+              assign best_destination = candidate
+              assign tied = false
+            elsif priority == best_priority and best_destination.id != candidate.id
+              assign tied = true
+            endif
+          endif
+        -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- liquid
+    assign best_members = product.collections | where: 'id', best_destination.id
+    if tied or best_destination.id == blank or best_destination.url == blank or best_destination.published_at == blank or best_members == empty
+      assign best_destination = root_destination
+    endif
+    unless family_conflict
+      echo best_destination.id
+    endunless
+  -%}
+{%- endif -%}

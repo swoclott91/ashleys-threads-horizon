@@ -1,82 +1,62 @@
-# AT Breadcrumbs development increment
+# AT Breadcrumbs
 
-Implemented locally on `dev`. This increment provides the canonical ancestor component and a data preparation audit. This implementation has made no store mutations or theme pushes. The component remains hidden until reviewed references are populated.
+The current implementation derives product trails from Shopify's native category and existing attributes. Products do not need an individual breadcrumb assignment. A small merchant-owned rule list maps classifications to collection references; collection parent and label metadata are retained for rendering. The first release covers T-Shirts, Sweatshirts & Hoodies, and Hats.
 
-## Frontend behavior
+## Shared rules and maintenance
 
-`sections/at-breadcrumbs.liquid` precedes the existing heading section in the default product and collection templates. The section resolves the assigned collection and its parent through `snippets/at-breadcrumbs.liquid`. It renders at most two links and excludes Home and the current page. A collection without a parent produces no markup or spacing. Labels come from `custom.breadcrumb_label`, falling back to the current collection title; URLs come directly from collection objects.
+The store metafield `custom.breadcrumb_rules` contains a `list.metaobject_reference` of eight `at_breadcrumb_rule` entries. The definition and shop field have storefront PUBLIC_READ access. Merchants and other installed apps can maintain the mapping; it is not app-owned. Edit entries under Content > Metaobjects > AT breadcrumb rule and maintain the selected list under the store's custom data. The initial configuration is versioned in `rules.json`.
 
-Product links require membership in `product.collections`, a publication date, and a nonempty collection URL. An inaccessible or non-member subtype can fall back to its accessible member parent. A missing/deleted reference with no resolvable parent hides the row. Membership order never selects a destination. Self-parent IDs are deduplicated. Parent cycles and excessive depth are rejected during data preparation.
+| Rule | Classification | Destination |
+| --- | --- | --- |
+| T-Shirts root | Reviewed native tee category IDs, including activewear, youth and maternity tees | T-Shirts |
+| Short sleeve tees | Tee category plus native sleeve-length-type taxonomy value 169 | Short Sleeve |
+| Long sleeve tees | Tee category plus native sleeve-length-type taxonomy value 17094 | Long Sleeve |
+| Sweatshirts root | Native sweatshirt and hoodie category IDs | Sweatshirts & Hoodies |
+| Hoodies | Native hoodie category IDs | Hoodies |
+| Hats root | Native Hats category or descendant | Hats |
+| Trucker hats | Native Trucker Hats category | Trucker Hats |
+| Beanies | Native Beanies category | Beanies |
 
-The optional `assets/at-breadcrumbs.js` only measures layout. Desktop displays both ancestors; mobile displays both when their measured width fits, otherwise the immediate parent with a decorative back chevron. With scripts unavailable, mobile shows the immediate parent; the server-rendered links still work. Very long immediate-parent labels receive an ellipsis instead of wrapping or shrinking the font. The section exposes enable/disable, width, alignment, vertical spacing, and automatic/immediate-parent mobile display.
+Each entry holds a name, garment family, native category GIDs, optional attribute namespace/key and accepted values, destination collection reference, and numeric priority. A priority of 0 defines the family root; the initial subtypes use 10. Rule list order and product collection order do not determine the trail. Native category ancestors are matched by GID, so localized display names do not affect classification. Attribute references match stable taxonomy value GIDs or metaobject GIDs; text designations match exactly. Material, weight, finish, wearer, color and size are not part of the canonical path.
 
-`collection.brand.json` is unchanged because no brand parent is established. `product.access-threads.json` is unchanged because its Ashley's assignment has not been audited. The PC380H sample uses the default product template, but that does not establish assignments for the rest of the catalog. Product cards, quick add, menus, variants, recommendations, and existing Product structured data are untouched. No BreadcrumbList JSON-LD is emitted.
+Changes to an existing product's native category or sleeve/style data take effect on its next page render. New products use the same rules without breadcrumb-field population. Additional families and designations can be added as reviewed rules with published destination references and collection parent metadata. Keep one root per family, at most 32 rules, at most 32 category IDs per rule, and at most 16 accepted attribute values. Run the graph audit before changing the live mapping. Initial rules do not cover tanks, polos, bags, or other families yet.
 
-## Read-only store audit
+## Resolution and safeguards
 
-`readiness-before.json` records the existing field definitions and eight destination IDs. All eight destinations were confirmed published to the Online Store on October 13, 2026 UTC. This confirms destinations, not product eligibility or purchasable assortment. The Short Sleeve collection ID is `gid://shopify/Collection/525843595539`; its copied handle remains unchanged.
+`snippets/at-breadcrumb-rule-matches.liquid` matches category and optional attribute facts. `snippets/at-breadcrumb-rule-destination.liquid` selects the highest-priority matching destination; equal-priority conflicts fall back to the valid family root. Conflicting families hide the automatic row. Missing facts never imply a subtype. Unknown categories hide the row until a rule or editorial override is reviewed.
 
-No product collection-reference definition exists in any namespace. Collections currently define `custom.brand` and `custom.pretty_title`; neither supplies the required parent relationship. The proposed `custom.breadcrumb_collection`, `custom.breadcrumb_parent`, and `custom.breadcrumb_label` definitions are absent. `destinations.json` defines their proposed contract and the initial destination graph. It also records the three menu issues from the supplied plan; those issues have not been independently re-audited or edited in this increment.
+Destination links require publication, a current URL, and actual membership in `product.collections`, which excludes Online Store-inaccessible collections. Non-member, unavailable, or deleted subtypes fall back to a valid member root. Root membership is checked separately: a valid subtype may be displayed alone when its parent is not a visible member. This intentionally exposes no fabricated links and does not correct catalog membership automatically.
 
-PC380H is present as `gid://shopify/Product/10426119618835` with a description identifying a shirt-weight polyester performance hooded tee. The initial native category was Hoodies and its memberships excluded T-Shirts, producing an ambiguity. The merchant subsequently confirmed that it belongs under Activewear Tops > T-Shirts. A fresh read already showed that correction applied: category `aa-1-1-2-2`, product type T-Shirts, memberships in T-Shirts and Activewear T-Shirts, and no hoodie/sweatshirt memberships. No product update mutation was needed. Its reviewed canonical breadcrumb destination is now the T-Shirts root, with no fabricated subtype.
+The product field `custom.breadcrumb_collection` is now an optional editorial override. A valid member reference wins over rules; an invalid reference falls back to the rules. Do not bulk-populate this field. The five assignments from the earlier pilot are migrated away after dev verification; their exact before values are preserved for rollback. PC380H automatically routes to T-Shirts from its corrected Activewear Tops > T-Shirts category. Its hood does not create a fleece route, and missing sleeve facts leave it at the root.
 
-`exception-before.json` preserves the earlier evidence; `initial-audit-input.json` and `initial-audit-report.json` preserve the original ambiguity. `pc380h-category-after.json` records the corrected live category and memberships. `reviewed-audit-input.json` and `reviewed-audit-report.json` propose the validated root assignment after merchant review. These are preparation reports, not applied breadcrumb metafields.
+The retained collection fields are `custom.breadcrumb_parent` (`collection_reference`) and `custom.breadcrumb_label` (optional `single_line_text_field`). Root parents are empty. The Short Sleeve collection remains ID `525843595539` with copied handle `long-sleeve-t-shirts-copy`; neither URLs nor classification are inferred from its handle. Current destination URLs come from collection objects. Labels fall back to current collection titles.
 
-## Data preparation and rollout order
+## Frontend
 
-1. Refresh the read-only definition, product fact, membership, and Online Store publication exports. Preserve the current metafield IDs, values, and compare digests before any write. The saved readiness file is an initial audit, not a complete product rollback export.
-2. Create or reuse the three merchant-owned definitions from `destinations.json`; use storefront-readable access. Definitions must precede values. Recheck equivalent definitions at execution time to avoid duplicates.
-3. Review representative product evidence. Normalize native category and verified facts into the audit input below. Garment subtype takes priority over wearer/material/weight/finish/performance attributes. Conflicting subtypes require review. Avoid title/handle guessing and menu column relationships.
-4. Run the audit, review every issue, and export the proposed before/after changes. The auditor writes reports only; it makes no API requests or store mutations. Populate reviewed collection parents/labels, then representative product collection references by ID. Use compare digests when writing to protect concurrent merchant edits. Read back and preserve the actual after export.
-5. Verify the current Ashley's store and unpublished theme identity immediately before a selective theme push; environment IDs alone are insufficient. Preview actual populated PDPs/PLPs, including theme-editor behavior, before extending to bulk assignments or alternate templates.
-6. Implement the separate collection return-context enhancement after the canonical component has been reviewed. Filter/sort/page preservation, infinite-scroll anchors, desktop `.page-wrapper` scrolling, browser Back, stale state, and modified/new-tab navigation remain pending. No source-context storage or card-navigation patch is included yet.
+The AT Breadcrumbs section precedes the existing heading section in default product/collection templates. It emits a labelled navigation landmark, ordered list, linked ancestors only, escaped labels, and decorative separators. It excludes Home and the current product/collection, emits at most two links, and adds no BreadcrumbList structured data. A collection with no parent has no empty row. The existing Product structured data is unchanged.
 
-Refresh references when category facts, membership, or publication change. Disabling/removing the AT Breadcrumbs section rolls back this UI. Data rollback requires the separate actual before export; removing theme code cannot restore store metafields.
+The optional layout script measures whether both links fit on mobile. If not, it shows the immediate parent with a decorative back chevron. With scripts unavailable, server-rendered links still work and mobile shows the immediate parent. Settings remain limited to enable/disable, width, alignment, spacing, and mobile display.
 
-## Audit input and commands
+`collection.brand.json` and `product.access-threads.json` are unchanged because their parent/assignment scope has not been established. Featured products, cards, quick add, recommendations, menus, variants and cart navigation are untouched. The separate source-collection return enhancement remains pending.
 
-Input format (category/fact names are normalized by the reviewer, never inferred in Liquid):
+## Validation and rollback
 
-```json
-{
-  "store": "ashleys-threads-3.myshopify.com",
-  "collections": [
-    {
-      "id": "gid://shopify/Collection/523280777491",
-      "onlineStorePublished": true,
-      "parentId": null,
-      "label": null
-    }
-  ],
-  "products": [
-    {
-      "id": "gid://shopify/Product/REPLACE_WITH_REVIEWED_ID",
-      "styleCode": "REVIEWED_STYLE",
-      "membershipComplete": true,
-      "collectionIds": ["COMPLETE_EXPORTED_COLLECTION_IDS"],
-      "breadcrumbCollectionId": null,
-      "evidence": {
-        "verified": true,
-        "source": "Dated native category and verified product fact export",
-        "categoryId": "EXPORTED_NATIVE_CATEGORY_ID",
-        "families": ["tee"],
-        "facts": { "sleeve": ["short"] }
-      }
-    }
-  ]
-}
-```
-
-Supply every configured destination in `collections`. Families supported in the first release are `tee`, `sweatshirt`, and `hat`. Facts are arrays; supported subtype values are sleeve `short`/`long`, construction `fleece_hoodie`, and style `trucker`/`beanie`. Other verified attributes do not determine the trail. Unknown families, missing evidence, inaccessible destinations, cycles, and conflicting facts are reported. A non-member subtype can produce a proposed root fallback, but the issue still blocks a clean rollout report. `ready` must be true before population; resolve issues and rerun rather than deploying only the successful subset silently.
+Run:
 
 ```powershell
-npm install --prefix .shopify-verify/breadcrumbs --no-save --package-lock=false liquidjs @shopify/theme-check-common @shopify/theme-check-node @shopify/theme-check-docs-updater
 node scripts/test-at-breadcrumbs.cjs
-node scripts/audit-at-breadcrumbs.cjs reviewed-export.json reviewed-report.json
+node scripts/test-at-breadcrumb-live-fixtures.cjs
+node scripts/audit-at-breadcrumb-rules.cjs docs/breadcrumbs/rules.json docs/breadcrumbs/rules-collections-before.json
 ```
 
-The audit exits nonzero when issues exist. To use another LiquidJS installation, set `LIQUIDJS_PATH` to its absolute package path. The ignored `.shopify-verify/` directory holds temporary dependencies, copied validator, and local preview fixtures. The bundled validator was restored by copying `shopify-liquid/scripts/validate.mjs` beside these dependencies; run it with an absolute `--theme-path` and the seven changed theme files via `--files`.
+The live-fixture test uses native category/attribute and membership exports for nine products, omits all individual breadcrumb fields, and verifies the resulting links. The graph audit rejects missing/unpublished destinations, conflicting families, malformed attribute rules, missing roots, incorrect subtype parents, cycles and depth greater than two. `scripts/audit-at-breadcrumbs.cjs` and the original pilot reports are historical assignment-preparation tools, not a requirement for maintaining ordinary products.
 
-Validation completed: Liquid rendering and section/template fixtures; preparation fixtures covering roots, subtype priority, ambiguity, missing evidence, non-membership, publication, cycles, excessive depth, and PC380H; Theme Check for all seven changed theme files; desktop and mobile local fixture review, including a narrow container fallback and script-free mobile links. These fixture checks do not replace an unpublished Shopify theme preview with live populated metadata. The collection return-flow and deployment checks are still pending.
+The Shopify Liquid validator is restored in the ignored `.shopify-verify/breadcrumbs/` directory with local dependencies. Validate the four modified Liquid files with an absolute theme path before deployment. Source is maintained on `dev`; only the unpublished `ashleys-threads-horizon/dev` theme is previewed. Verify the current theme role before each deployment, rather than trusting a saved ID. No published-theme push or category/membership/menu edits are part of this update.
 
-Shopify references: [collection-reference metafield values](https://shopify.dev/docs/api/liquid/objects/metafield) and [Online Store product collection membership](https://shopify.dev/docs/api/liquid/objects/product#product-collections).
+`rules-before.json` and `rules-collections-before.json` preserve the initial data. `rules-attribute-evidence.json` preserves stable sleeve values and native trucker classifications. `rules-seed-request.json`, `rules-data-after.json`, and `rules-readback-before-migration.json` record the actual definition, entry, shop-list writes and read-back. Migration exports record the removal of the five pilot overrides. Earlier `preview-*` exports preserve the original pilot setup.
+
+Rollback the UI by disabling/removing the section. To roll back the rule-driven resolver to the earlier version, restore its source, restore the five pilot fields from their migration before export, and remove the newly added shop rule-list field after checking for intervening edits. Keep or remove the rule entries/definitions separately after reviewing references. Collection metadata did not change during this update. Store data is shared across themes; data rollback and theme deployment are separate actions.
+
+The original menu issues remain recorded in `destinations.json` and have not been changed. The current dev theme also reports unrelated pre-existing cart/discount import errors; those modules and the deferred return-context behavior are outside this update.
+
+Shopify references: [native product category and visible collection membership](https://shopify.dev/docs/api/liquid/objects/product), [category ancestors and GIDs](https://shopify.dev/docs/api/liquid/objects/taxonomy_category), and [reference metafield values](https://shopify.dev/docs/api/liquid/objects/metafield).

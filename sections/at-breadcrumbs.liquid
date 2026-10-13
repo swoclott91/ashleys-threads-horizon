@@ -1,7 +1,7 @@
 {%- if section.settings.enabled -%}
   {%- if request.page_type == 'product' or request.page_type == 'collection' -%}
     {%- capture trail -%}
-      {%- render 'at-breadcrumbs', product: product, collection: collection, page_type: request.page_type -%}
+      {%- render 'at-breadcrumbs', product: product, collection: collection, page_type: request.page_type, shop: shop -%}
     {%- endcapture -%}
     {%- assign trail = trail | strip -%}
     {%- if trail != blank -%}

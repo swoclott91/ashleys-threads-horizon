@@ -4,6 +4,7 @@ const path = require('node:path');
 const { Liquid } = require(process.env.LIQUIDJS_PATH || '../.shopify-verify/breadcrumbs/node_modules/liquidjs');
 const { audit } = require('./audit-at-breadcrumbs.cjs');
 const mapping = require('../docs/breadcrumbs/destinations.json');
+const sharedRules = require('../docs/breadcrumbs/rules.json');
 
 const root = path.resolve(__dirname, '..');
 const engine = new Liquid({ root: path.join(root, 'snippets'), extname: '.liquid' });
@@ -27,7 +28,7 @@ const product = (destination, members = []) => ({
   id: 100, title: 'Current product', collections: members,
   metafields: { custom: { breadcrumb_collection: ref(destination) } }
 });
-const render = async (p, c, page_type = 'product') => (await engine.renderFile('at-breadcrumbs', { product: p, collection: c, page_type })).trim();
+const render = async (p, c, page_type = 'product', shop = {}) => (await engine.renderFile('at-breadcrumbs', { product: p, collection: c, page_type, shop })).trim();
 const links = html => [...html.matchAll(/href="([^"]+)"/g)].map(match => match[1]);
 const jsonc = filename => JSON.parse(fs.readFileSync(path.join(root, filename), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, ''));
 
@@ -65,6 +66,75 @@ async function main() {
   assert.match(await render(product(escaped, [escaped])), /x=(?:&quot;|&#34;)quoted(?:&quot;|&#34;)/);
   assert.equal(await render(validProduct, null, 'index'), '', 'no featured/card breadcrumb');
   assert.equal(await render(null, { id: 20, metafields: {} }, 'collection'), '', 'brand without parent has no row');
+
+  const text = value => ({ type: 'single_line_text_field', value });
+  const textList = value => ({ type: 'list.single_line_text_field', value });
+  const hoodRoot = collection(5, 'Sweatshirts & Hoodies');
+  const hoodie = collection(4, 'Hoodies', hoodRoot);
+  const hats = collection(6, 'Hats');
+  const trucker = collection(7, 'Trucker Hats', hats);
+  const beanie = collection(8, 'Beanies', hats);
+  const long = collection(11, 'Long Sleeve', tees);
+  const resources = { tees, short_sleeve: short, long_sleeve: long, sweatshirts: hoodRoot, hoodies: hoodie, hats, trucker, beanies: beanie };
+  const rules = sharedRules.rules.map(rule => ({
+    family: text(rule.family), category_ids: textList(rule.category_ids), priority: { type: 'number_integer', value: rule.priority },
+    destination: ref(resources[rule.handle]), attribute_namespace: text(rule.attribute_namespace),
+    attribute_key: text(rule.attribute_key), attribute_values: textList(rule.attribute_values || [])
+  }));
+  const shopWith = value => ({ metafields: { custom: { breadcrumb_rules: { type: 'list.metaobject_reference', value } } } });
+  const ruleShop = shopWith(rules);
+  const shortValue = { system: { id: 1001 }, taxonomy_reference: text('gid://shopify/TaxonomyValue/169'), label: text('Translated Short') };
+  const longValue = { system: { id: 1002 }, taxonomy_reference: text('gid://shopify/TaxonomyValue/17094') };
+  const autoProduct = (categoryId, members, sleeve, ancestorIds = []) => ({
+    id: 101, title: 'Automatic product', collections: members,
+    category: { gid: `gid://shopify/TaxonomyCategory/${categoryId}`, ancestors: ancestorIds.map(id => ({ gid: `gid://shopify/TaxonomyCategory/${id}` })) },
+    metafields: { shopify: { 'sleeve-length-type': { type: 'list.metaobject_reference', value: sleeve || [] } }, custom: {} }
+  });
+  const autoRender = (p, value = rules) => render(p, null, 'product', shopWith(value));
+  const automatic = autoProduct('aa-1-13-8', [tees, short, long], [shortValue]);
+  assert.deepEqual(links(await autoRender(automatic)), ['/collections/1', '/collections/2'], 'native rules need no product breadcrumb field');
+  assert.deepEqual(links(await autoRender(automatic, [...rules].reverse())), ['/collections/1', '/collections/2'], 'rule order independent');
+  assert.deepEqual(links(await autoRender({ ...automatic, collections: [long, short, tees] })), ['/collections/1', '/collections/2'], 'membership order independent');
+  assert.deepEqual(links(await autoRender(autoProduct('aa-1-13-8', [tees, long], [longValue]))), ['/collections/1', '/collections/11']);
+  assert.deepEqual(links(await autoRender(autoProduct('aa-1-1-2-2', [tees, hoodRoot, hoodie]))), ['/collections/1'], 'hooded performance tee cannot inherit fleece route');
+  assert.deepEqual(links(await autoRender(autoProduct('aa-1-13-13', [hoodRoot, hoodie]))), ['/collections/5', '/collections/4']);
+  assert.deepEqual(links(await autoRender(autoProduct('aa-2-17-14', [hats, trucker], [], ['aa-2-17']))), ['/collections/6', '/collections/7']);
+  assert.deepEqual(links(await autoRender(autoProduct('aa-2-17-2', [hats, beanie], [], ['aa-2-17']))), ['/collections/6', '/collections/8']);
+  assert.deepEqual(links(await autoRender(autoProduct('aa-1-13-8', [tees, short]))), ['/collections/1'], 'missing sleeve yields root');
+  assert.deepEqual(links(await autoRender(autoProduct('aa-1-13-8', [tees, short], [shortValue, longValue]))), ['/collections/1'], 'conflicting facts yield root even when only one subtype is a member');
+  assert.deepEqual(links(await autoRender(autoProduct('aa-1-13-8', [tees], [shortValue]))), ['/collections/1'], 'non-member subtype yields root');
+  assert.deepEqual(links(await autoRender(autoProduct('aa-1-13-8', [short], [shortValue]))), ['/collections/2'], 'non-member root omitted');
+  assert.equal(await autoRender(autoProduct('unknown', [tees, short], [shortValue])), '', 'no classification from memberships or titles');
+  assert.equal(await autoRender({ ...automatic, category: null }), '', 'no native category hides row');
+  assert.equal(await autoRender({ ...automatic, collections: [] }), '', 'no member destination hides row');
+  const missingDestinationRules = structuredClone(rules);
+  missingDestinationRules[1].destination = ref(null);
+  assert.deepEqual(links(await autoRender(automatic, missingDestinationRules)), ['/collections/1'], 'deleted rule destination falls back to root');
+  const hiddenRules = structuredClone(rules);
+  hiddenRules[1].destination.value.published_at = null;
+  assert.deepEqual(links(await autoRender(automatic, hiddenRules)), ['/collections/1'], 'unpublished rule destination falls back');
+  const editorial = structuredClone(automatic);
+  editorial.metafields.custom.breadcrumb_collection = ref(tees);
+  assert.deepEqual(links(await autoRender(editorial)), ['/collections/1'], 'valid editorial override wins');
+  editorial.metafields.custom.breadcrumb_collection = ref(collection(99, 'Invalid override'));
+  assert.deepEqual(links(await autoRender(editorial)), ['/collections/1', '/collections/2'], 'invalid override uses native rules');
+  const wrongFamilyRule = structuredClone(rules[0]);
+  wrongFamilyRule.family = text('hat');
+  assert.equal(await autoRender(automatic, [...rules, wrongFamilyRule]), '', 'ambiguous families hide row');
+  assert.equal(await autoRender(automatic, Array(33).fill(rules[0])), '', 'rule count is bounded');
+  assert.deepEqual(links(await autoRender(autoProduct('future-child', [tees, short], [shortValue], ['aa-1-13-8']))), ['/collections/1', '/collections/2'], 'native descendants inherit rules');
+  const customRules = structuredClone(rules);
+  customRules[1].attribute_namespace = text('custom');
+  customRules[1].attribute_key = text('designation');
+  customRules[1].attribute_values = textList(['gid://shopify/Metaobject/1001']);
+  const customProduct = structuredClone(automatic);
+  customProduct.metafields.custom.designation = { type: 'list.metaobject_reference', value: [shortValue] };
+  assert.deepEqual(links(await autoRender(customProduct, customRules)), ['/collections/1', '/collections/2'], 'existing custom attribute references supported');
+  customRules[1].attribute_values = textList(['Short']);
+  customProduct.metafields.custom.designation = text('Short');
+  assert.deepEqual(links(await autoRender(customProduct, customRules)), ['/collections/1', '/collections/2'], 'existing text designation supported');
+  customProduct.metafields.custom.designation = text('Not Short');
+  assert.deepEqual(links(await autoRender(customProduct, customRules)), ['/collections/1'], 'text matching is exact');
 
   const sectionSource = fs.readFileSync(path.join(root, 'sections/at-breadcrumbs.liquid'), 'utf8');
   const schema = JSON.parse(sectionSource.match(/{% schema %}([\s\S]*?){% endschema %}/)[1]);

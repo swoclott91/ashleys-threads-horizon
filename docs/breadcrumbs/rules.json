@@ -1,0 +1,121 @@
+{
+  "version": 2,
+  "store": "ashleys-threads-3.myshopify.com",
+  "type": "at_breadcrumb_rule",
+  "shopMetafield": "custom.breadcrumb_rules",
+  "rules": [
+    {
+      "handle": "tees",
+      "name": "T-Shirts root",
+      "family": "tee",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-7",
+        "gid://shopify/TaxonomyCategory/aa-1-13-8",
+        "gid://shopify/TaxonomyCategory/aa-1-7-8-8",
+        "gid://shopify/TaxonomyCategory/aa-1-1-2-2",
+        "gid://shopify/TaxonomyCategory/aa-1-7-8-4-1"
+      ],
+      "priority": 0,
+      "destination": "gid://shopify/Collection/523280777491"
+    },
+    {
+      "handle": "short_sleeve",
+      "name": "Short sleeve tees",
+      "family": "tee",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-7",
+        "gid://shopify/TaxonomyCategory/aa-1-13-8",
+        "gid://shopify/TaxonomyCategory/aa-1-7-8-8",
+        "gid://shopify/TaxonomyCategory/aa-1-1-2-2",
+        "gid://shopify/TaxonomyCategory/aa-1-7-8-4-1"
+      ],
+      "priority": 10,
+      "destination": "gid://shopify/Collection/525843595539",
+      "attribute_namespace": "shopify",
+      "attribute_key": "sleeve-length-type",
+      "attribute_values": [
+        "gid://shopify/TaxonomyValue/169"
+      ]
+    },
+    {
+      "handle": "long_sleeve",
+      "name": "Long sleeve tees",
+      "family": "tee",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-7",
+        "gid://shopify/TaxonomyCategory/aa-1-13-8",
+        "gid://shopify/TaxonomyCategory/aa-1-7-8-8",
+        "gid://shopify/TaxonomyCategory/aa-1-1-2-2",
+        "gid://shopify/TaxonomyCategory/aa-1-7-8-4-1"
+      ],
+      "priority": 10,
+      "destination": "gid://shopify/Collection/523279794451",
+      "attribute_namespace": "shopify",
+      "attribute_key": "sleeve-length-type",
+      "attribute_values": [
+        "gid://shopify/TaxonomyValue/17094"
+      ]
+    },
+    {
+      "handle": "sweatshirts",
+      "name": "Sweatshirts and hoodies root",
+      "family": "sweatshirt",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-11",
+        "gid://shopify/TaxonomyCategory/aa-1-13-13",
+        "gid://shopify/TaxonomyCategory/aa-1-1-7-2",
+        "gid://shopify/TaxonomyCategory/aa-1-7-8-4-2",
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-13",
+        "gid://shopify/TaxonomyCategory/aa-1-13-14",
+        "gid://shopify/TaxonomyCategory/aa-1-1-7-4",
+        "gid://shopify/TaxonomyCategory/aa-1-7-8-4-4",
+        "gid://shopify/TaxonomyCategory/aa-1-1-7"
+      ],
+      "priority": 0,
+      "destination": "gid://shopify/Collection/523280744723"
+    },
+    {
+      "handle": "hoodies",
+      "name": "Hoodies",
+      "family": "sweatshirt",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-11",
+        "gid://shopify/TaxonomyCategory/aa-1-13-13",
+        "gid://shopify/TaxonomyCategory/aa-1-1-7-2",
+        "gid://shopify/TaxonomyCategory/aa-1-7-8-4-2"
+      ],
+      "priority": 10,
+      "destination": "gid://shopify/Collection/523279499539"
+    },
+    {
+      "handle": "hats",
+      "name": "Hats root",
+      "family": "hat",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-2-17"
+      ],
+      "priority": 0,
+      "destination": "gid://shopify/Collection/523279335699"
+    },
+    {
+      "handle": "trucker",
+      "name": "Trucker hats",
+      "family": "hat",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-2-17-14"
+      ],
+      "priority": 10,
+      "destination": "gid://shopify/Collection/523281236243"
+    },
+    {
+      "handle": "beanies",
+      "name": "Beanies",
+      "family": "hat",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-2-17-2"
+      ],
+      "priority": 10,
+      "destination": "gid://shopify/Collection/523278942483"
+    }
+  ]
+}

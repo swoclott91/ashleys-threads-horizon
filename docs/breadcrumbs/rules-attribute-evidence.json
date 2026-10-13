@@ -1,0 +1,288 @@
+{
+  "sleeve": [
+    {
+      "id": "gid://shopify/Metaobject/210642075923",
+      "displayName": "Short",
+      "type": "shopify--sleeve-length-type",
+      "fields": [
+        {
+          "key": "label",
+          "value": "Short"
+        },
+        {
+          "key": "taxonomy_reference",
+          "value": "gid://shopify/TaxonomyValue/169"
+        }
+      ]
+    },
+    {
+      "id": "gid://shopify/Metaobject/210642043155",
+      "displayName": "Long",
+      "type": "shopify--sleeve-length-type",
+      "fields": [
+        {
+          "key": "label",
+          "value": "Long"
+        },
+        {
+          "key": "taxonomy_reference",
+          "value": "gid://shopify/TaxonomyValue/17094"
+        }
+      ]
+    }
+  ],
+  "truckers": [
+    {
+      "id": "gid://shopify/Product/10425115672851",
+      "title": "112 Trucker Cap",
+      "handle": "richardson-112-trucker-cap",
+      "category": {
+        "id": "gid://shopify/TaxonomyCategory/aa-2-17-14",
+        "name": "Trucker Hats",
+        "fullName": "Apparel & Accessories > Clothing Accessories > Hats > Trucker Hats",
+        "ancestorIds": [
+          "gid://shopify/TaxonomyCategory/aa",
+          "gid://shopify/TaxonomyCategory/aa-2",
+          "gid://shopify/TaxonomyCategory/aa-2-17"
+        ]
+      },
+      "collections": {
+        "nodes": [
+          {
+            "id": "gid://shopify/Collection/523159109907",
+            "title": "Richardson"
+          },
+          {
+            "id": "gid://shopify/Collection/523279335699",
+            "title": "Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/523280482579",
+            "title": "Sale"
+          },
+          {
+            "id": "gid://shopify/Collection/523280646419",
+            "title": "Structured Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/523281236243",
+            "title": "Trucker Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/523281432851",
+            "title": "Unisex"
+          },
+          {
+            "id": "gid://shopify/Collection/523281465619",
+            "title": "Unisex/Men's"
+          },
+          {
+            "id": "gid://shopify/Collection/525226606867",
+            "title": "Snapback Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/526322532627",
+            "title": "Unisex Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/528203415827",
+            "title": "Popular"
+          },
+          {
+            "id": "gid://shopify/Collection/528534798611",
+            "title": "Seller Staples"
+          },
+          {
+            "id": "gid://shopify/Collection/528538927379",
+            "title": "Assortment Builders"
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1Mjg1Mzg5MjczNzksImxhc3RfdmFsdWUiOjUyODUzODkyNzM3OX0="
+        }
+      },
+      "style": null
+    },
+    {
+      "id": "gid://shopify/Product/10425115771155",
+      "title": "112FP Five-Panel Trucker",
+      "handle": "richardson-112fp-five-panel-trucker",
+      "category": {
+        "id": "gid://shopify/TaxonomyCategory/aa-2-17-14",
+        "name": "Trucker Hats",
+        "fullName": "Apparel & Accessories > Clothing Accessories > Hats > Trucker Hats",
+        "ancestorIds": [
+          "gid://shopify/TaxonomyCategory/aa",
+          "gid://shopify/TaxonomyCategory/aa-2",
+          "gid://shopify/TaxonomyCategory/aa-2-17"
+        ]
+      },
+      "collections": {
+        "nodes": [
+          {
+            "id": "gid://shopify/Collection/523159109907",
+            "title": "Richardson"
+          },
+          {
+            "id": "gid://shopify/Collection/523279335699",
+            "title": "Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/523280482579",
+            "title": "Sale"
+          },
+          {
+            "id": "gid://shopify/Collection/523280646419",
+            "title": "Structured Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/523281236243",
+            "title": "Trucker Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/523281432851",
+            "title": "Unisex"
+          },
+          {
+            "id": "gid://shopify/Collection/523281465619",
+            "title": "Unisex/Men's"
+          },
+          {
+            "id": "gid://shopify/Collection/525226115347",
+            "title": "5-Panel Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/525226606867",
+            "title": "Snapback Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/526322532627",
+            "title": "Unisex Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/528534798611",
+            "title": "Seller Staples"
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1Mjg1MzQ3OTg2MTEsImxhc3RfdmFsdWUiOjUyODUzNDc5ODYxMX0="
+        }
+      },
+      "style": {
+        "type": "list.metaobject_reference",
+        "value": "[\"gid://shopify/Metaobject/222353916179\"]",
+        "references": {
+          "nodes": [
+            {
+              "id": "gid://shopify/Metaobject/222353916179",
+              "displayName": "5-Panel",
+              "type": "hat_style",
+              "fields": [
+                {
+                  "key": "style",
+                  "value": "5-Panel"
+                }
+              ]
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "eyJsYXN0X2lkIjowLCJsYXN0X3ZhbHVlIjowfQ=="
+          }
+        }
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10425116164371",
+      "title": "112PFP Printed Five-Panel Trucker",
+      "handle": "richardson-112pfp-printed-five-panel-trucker",
+      "category": {
+        "id": "gid://shopify/TaxonomyCategory/aa-2-17-14",
+        "name": "Trucker Hats",
+        "fullName": "Apparel & Accessories > Clothing Accessories > Hats > Trucker Hats",
+        "ancestorIds": [
+          "gid://shopify/TaxonomyCategory/aa",
+          "gid://shopify/TaxonomyCategory/aa-2",
+          "gid://shopify/TaxonomyCategory/aa-2-17"
+        ]
+      },
+      "collections": {
+        "nodes": [
+          {
+            "id": "gid://shopify/Collection/523159109907",
+            "title": "Richardson"
+          },
+          {
+            "id": "gid://shopify/Collection/523279335699",
+            "title": "Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/523280023827",
+            "title": "Non-Sale Items"
+          },
+          {
+            "id": "gid://shopify/Collection/523280646419",
+            "title": "Structured Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/523281236243",
+            "title": "Trucker Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/523281432851",
+            "title": "Unisex"
+          },
+          {
+            "id": "gid://shopify/Collection/523281465619",
+            "title": "Unisex/Men's"
+          },
+          {
+            "id": "gid://shopify/Collection/525226115347",
+            "title": "5-Panel Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/525226606867",
+            "title": "Snapback Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/526322532627",
+            "title": "Unisex Hats"
+          },
+          {
+            "id": "gid://shopify/Collection/528534798611",
+            "title": "Seller Staples"
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1Mjg1MzQ3OTg2MTEsImxhc3RfdmFsdWUiOjUyODUzNDc5ODYxMX0="
+        }
+      },
+      "style": {
+        "type": "list.metaobject_reference",
+        "value": "[\"gid://shopify/Metaobject/222353916179\"]",
+        "references": {
+          "nodes": [
+            {
+              "id": "gid://shopify/Metaobject/222353916179",
+              "displayName": "5-Panel",
+              "type": "hat_style",
+              "fields": [
+                {
+                  "key": "style",
+                  "value": "5-Panel"
+                }
+              ]
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "eyJsYXN0X2lkIjowLCJsYXN0X3ZhbHVlIjowfQ=="
+          }
+        }
+      }
+    }
+  ]
+}

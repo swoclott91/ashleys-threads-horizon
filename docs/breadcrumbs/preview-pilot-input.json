@@ -1,0 +1,229 @@
+{
+  "store": "ashleys-threads-3.myshopify.com",
+  "capturedAt": "2026-10-13T03:41:52.872Z",
+  "collections": [
+    {
+      "id": "gid://shopify/Collection/523280777491",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/525843595539",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523279794451",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523280744723",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523279499539",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523279335699",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523281236243",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523278942483",
+      "onlineStorePublished": true,
+      "parentId": null,
+      "label": null
+    }
+  ],
+  "products": [
+    {
+      "id": "gid://shopify/Product/10425148440851",
+      "styleCode": "5000",
+      "membershipComplete": true,
+      "collectionIds": [
+        "gid://shopify/Collection/523157438739",
+        "gid://shopify/Collection/523278450963",
+        "gid://shopify/Collection/523278516499",
+        "gid://shopify/Collection/523280482579",
+        "gid://shopify/Collection/523280777491",
+        "gid://shopify/Collection/523281432851",
+        "gid://shopify/Collection/523281465619",
+        "gid://shopify/Collection/525843595539",
+        "gid://shopify/Collection/525878755603",
+        "gid://shopify/Collection/525879378195",
+        "gid://shopify/Collection/525963002131",
+        "gid://shopify/Collection/528203415827",
+        "gid://shopify/Collection/528534798611",
+        "gid://shopify/Collection/528537452819",
+        "gid://shopify/Collection/528538927379",
+        "gid://shopify/Collection/528594862355"
+      ],
+      "breadcrumbCollectionId": null,
+      "editorialReviewed": false,
+      "evidence": {
+        "verified": true,
+        "source": "Native sleeve-length-type metaobject label Short, native T-Shirts category, and both T-Shirts / Short Sleeve membership.",
+        "categoryId": "gid://shopify/TaxonomyCategory/aa-1-13-8",
+        "families": [
+          "tee"
+        ],
+        "facts": {
+          "sleeve": [
+            "short"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10426121421075",
+      "styleCode": "PC54LS",
+      "membershipComplete": true,
+      "collectionIds": [
+        "gid://shopify/Collection/523158814995",
+        "gid://shopify/Collection/523278450963",
+        "gid://shopify/Collection/523278516499",
+        "gid://shopify/Collection/523278582035",
+        "gid://shopify/Collection/523279794451",
+        "gid://shopify/Collection/523280023827",
+        "gid://shopify/Collection/523280318739",
+        "gid://shopify/Collection/523280777491",
+        "gid://shopify/Collection/523281432851",
+        "gid://shopify/Collection/523281465619",
+        "gid://shopify/Collection/525878755603",
+        "gid://shopify/Collection/525879378195"
+      ],
+      "breadcrumbCollectionId": null,
+      "editorialReviewed": false,
+      "evidence": {
+        "verified": true,
+        "source": "Native T-Shirts category, explicit long-sleeve description, and both T-Shirts / Long Sleeve membership.",
+        "categoryId": "gid://shopify/TaxonomyCategory/aa-1-13-8",
+        "families": [
+          "tee"
+        ],
+        "facts": {
+          "sleeve": [
+            "long"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10426124534035",
+      "styleCode": "PC78H",
+      "membershipComplete": true,
+      "collectionIds": [
+        "gid://shopify/Collection/523158814995",
+        "gid://shopify/Collection/523279499539",
+        "gid://shopify/Collection/523280318739",
+        "gid://shopify/Collection/523280482579",
+        "gid://shopify/Collection/523280744723",
+        "gid://shopify/Collection/523281432851",
+        "gid://shopify/Collection/523281465619",
+        "gid://shopify/Collection/526016282899",
+        "gid://shopify/Collection/526109802771",
+        "gid://shopify/Collection/526113407251",
+        "gid://shopify/Collection/526113734931",
+        "gid://shopify/Collection/528203415827",
+        "gid://shopify/Collection/528534798611",
+        "gid://shopify/Collection/528538927379",
+        "gid://shopify/Collection/528594927891"
+      ],
+      "breadcrumbCollectionId": null,
+      "editorialReviewed": false,
+      "evidence": {
+        "verified": true,
+        "source": "Native Hoodies category, explicit cotton-poly fleece construction, and Hoodies / Sweatshirts & Hoodies membership.",
+        "categoryId": "gid://shopify/TaxonomyCategory/aa-1-13-13",
+        "families": [
+          "sweatshirt"
+        ],
+        "facts": {
+          "construction": [
+            "fleece_hoodie"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10425198379283",
+      "styleCode": "CP90",
+      "membershipComplete": true,
+      "collectionIds": [
+        "gid://shopify/Collection/523158782227",
+        "gid://shopify/Collection/523278942483",
+        "gid://shopify/Collection/523279335699",
+        "gid://shopify/Collection/523280482579",
+        "gid://shopify/Collection/523281432851",
+        "gid://shopify/Collection/523281465619",
+        "gid://shopify/Collection/526254833939",
+        "gid://shopify/Collection/526322532627"
+      ],
+      "breadcrumbCollectionId": null,
+      "editorialReviewed": false,
+      "evidence": {
+        "verified": true,
+        "source": "Native Beanies category, knit cuff description, and both Hats / Beanies membership.",
+        "categoryId": "gid://shopify/TaxonomyCategory/aa-2-17-2",
+        "families": [
+          "hat"
+        ],
+        "facts": {
+          "style": [
+            "beanie"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10426119618835",
+      "styleCode": "PC380H",
+      "membershipComplete": true,
+      "collectionIds": [
+        "gid://shopify/Collection/523158814995",
+        "gid://shopify/Collection/523278713107",
+        "gid://shopify/Collection/523280318739",
+        "gid://shopify/Collection/523280482579",
+        "gid://shopify/Collection/523280777491",
+        "gid://shopify/Collection/523281432851",
+        "gid://shopify/Collection/523281465619",
+        "gid://shopify/Collection/525858570515",
+        "gid://shopify/Collection/525878755603",
+        "gid://shopify/Collection/525905428755",
+        "gid://shopify/Collection/526491091219",
+        "gid://shopify/Collection/526632452371",
+        "gid://shopify/Collection/526632780051",
+        "gid://shopify/Collection/526633304339",
+        "gid://shopify/Collection/527229190419",
+        "gid://shopify/Collection/528203415827"
+      ],
+      "breadcrumbCollectionId": null,
+      "editorialReviewed": true,
+      "evidence": {
+        "verified": true,
+        "source": "Prior merchant editorial confirmation, corrected native Activewear Tops > T-Shirts category, and T-Shirts membership.",
+        "categoryId": "gid://shopify/TaxonomyCategory/aa-1-1-2-2",
+        "families": [
+          "tee"
+        ],
+        "facts": {}
+      }
+    }
+  ]
+}
