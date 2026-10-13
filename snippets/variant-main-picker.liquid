@@ -52,6 +52,13 @@
       data-shopify-visual-preview
     {% endif %}
   >
+    {% if product_resource.metafields.custom.color_option_order.value.ids != blank %}
+      <script src="{{ 'at-color-option-order.js' | asset_url }}" type="module"></script>
+      <at-color-option-order
+        hidden
+        data-value-ids="{{ product_resource.metafields.custom.color_option_order.value.ids | json | escape }}"
+      ></at-color-option-order>
+    {% endif %}
     <form class="variant-picker__form">
       {%- for product_option in product_resource.options_with_values -%}
         {%- liquid
