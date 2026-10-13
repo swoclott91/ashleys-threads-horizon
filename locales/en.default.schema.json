@@ -275,6 +275,7 @@
     "size_guide_type_preset": "Applies to the open-dialog control when layout is Standalone."
   },
   "names": {
+    "at_breadcrumbs": "AT Breadcrumbs",
     "column": "Column",
     "product_title": "Product title",
     "custom_liquid": "Custom Liquid",
@@ -454,6 +455,8 @@
     "comparison_slider": "Comparison slider"
   },
   "options": {
+    "at_breadcrumbs_auto": "Show both links when they fit",
+    "at_breadcrumbs_parent": "Immediate parent only",
     "above_carousel": "Above carousel",
     "accent": "Accent",
     "all": "All",
@@ -780,6 +783,8 @@
     "below_media": "Below media"
   },
   "settings": {
+    "at_breadcrumbs_enabled": "Show breadcrumbs",
+    "at_breadcrumbs_mobile": "Mobile display",
     "accordion": "Accordion",
     "account": "Account",
     "actions_display_style": "Menu style",
