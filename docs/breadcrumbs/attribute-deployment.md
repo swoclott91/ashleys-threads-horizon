@@ -8,6 +8,8 @@ YST350 now renders T-Shirts > Kids > Unisex > Short Sleeve. Each audience link a
 
 The rule audit, resolver suite, nine original live fixtures, and six new real product fixtures pass. Theme Check passes for the five theme files. Actual YST350 preview checks cover desktop placement, mobile collapse, filtered destination, and browser Back. These checks do not submit orders or alter cart contents.
 
-The same published theme identity, 187518812435, will be retained. Pristine pre-update theme backup: 190769594643. Preview: 190769135891. Roll back by disabling Narrow links by product attributes, clearing breadcrumb_facets on the reviewed roots, or reverting the component commit. Original metadata and current read-backs are exported alongside this document. Removing the optional definition is unnecessary for a UI rollback.
+Deployed to main in commit 5ed3576 through the existing authenticated Git connection. The published theme retains identity 187518812435 and MAIN role. Live read-back matches all five approved files; the theme grows from 543 to 545 files with no removals, and every other file fingerprint is unchanged. Actual main visits confirm YST350's four-step trail and CP90's Hats > Unisex > Beanies trail. See attribute-live-verification.json.
+
+Pristine pre-update theme backup: 190769594643. Preview: 190769135891. Git rollback tag: main-before-attribute-breadcrumbs-2026-10-13. Roll back by disabling Narrow links by product attributes, clearing breadcrumb_facets on the reviewed roots, or reverting the component commit. Original metadata and current read-backs are exported alongside this document. Removing the optional definition is unnecessary for a UI rollback.
 
 An empty diagnostic section remains on the unpublished preview because the connector blocks theme-file deletion as destructive. It is not tracked in Git, is not assigned to a template, and will not be deployed to main.

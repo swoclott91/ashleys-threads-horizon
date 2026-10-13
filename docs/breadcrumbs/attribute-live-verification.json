@@ -1,0 +1,38 @@
+{
+  "liveThemeId": "gid://shopify/OnlineStoreTheme/187518812435",
+  "role": "MAIN",
+  "beforeCount": 543,
+  "afterCount": 545,
+  "changedFiles": [
+    "locales/en.default.schema.json",
+    "sections/at-breadcrumbs.liquid",
+    "snippets/at-breadcrumb-facet-item.liquid",
+    "snippets/at-breadcrumb-facets.liquid",
+    "snippets/at-breadcrumbs.liquid"
+  ],
+  "removedFiles": [],
+  "featureCommit": "5ed3576",
+  "backupThemeId": "190769594643",
+  "previewThemeId": "190769135891",
+  "onlyApprovedThemeFilesChanged": true,
+  "liveBrowserChecks": {
+    "YST350": [
+      "T-Shirts",
+      "Kids",
+      "Unisex",
+      "Short Sleeve"
+    ],
+    "CP90": [
+      "Hats",
+      "Unisex",
+      "Beanies"
+    ],
+    "rowsPerProduct": 1
+  },
+  "metadataRoots": [
+    "tees",
+    "sweatshirts",
+    "hats"
+  ],
+  "updatedProductAssignments": 0
+}
