@@ -40,6 +40,7 @@ class ATColorOptionOrder extends HTMLElement {
     }
     if (!Array.isArray(ids) || !ids.every((id) => typeof id === 'string' && /^\d+$/.test(id))) return;
     const ranks = new Map(ids.map((id, index) => [id, index]));
+    const focused = document.activeElement;
     const order = (items, getId) => {
       if (!items.some((item) => ranks.has(getId(item)))) return items;
       return items.map((item, index) => ({ item, index, rank: ranks.get(getId(item)) ?? Infinity }))
@@ -58,6 +59,9 @@ class ATColorOptionOrder extends HTMLElement {
         select.append(...sorted);
         select.value = selected;
       }
+    }
+    if (focused instanceof HTMLElement && picker.contains(focused) && document.activeElement !== focused) {
+      focused.focus({ preventScroll: true });
     }
   }
 }
