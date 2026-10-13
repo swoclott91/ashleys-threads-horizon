@@ -1,0 +1,82 @@
+{
+  "capturedAt": "2026-10-13T04:11:48.222Z",
+  "products": [
+    {
+      "id": "gid://shopify/Product/10425148440851",
+      "title": "5000 Heavy Cotton 100% Cotton T-Shirt",
+      "breadcrumb": {
+        "id": "gid://shopify/Metafield/190848244580627",
+        "type": "collection_reference",
+        "value": "gid://shopify/Collection/525843595539",
+        "compareDigest": "6aa502a0856e0f49fdc59c67f6de266d92fb1dfee976d2bc23b1f71384172f35"
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10426121421075",
+      "title": "PC54LS Long Sleeve Core Cotton Tee",
+      "breadcrumb": {
+        "id": "gid://shopify/Metafield/190848244547859",
+        "type": "collection_reference",
+        "value": "gid://shopify/Collection/523279794451",
+        "compareDigest": "2576ac4fffc1ff57aa6a923fbd9cb29e6a1901032f0290285770fdb2e117c2f7"
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10426124534035",
+      "title": "PC78H Core Fleece Pullover Hooded Sweatshirt",
+      "breadcrumb": {
+        "id": "gid://shopify/Metafield/190848244515091",
+        "type": "collection_reference",
+        "value": "gid://shopify/Collection/523279499539",
+        "compareDigest": "9c727e8d5ca26df16bfaee4a36b9a8123af07f0d98217c32b6d89f5271eccc4b"
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10425198379283",
+      "title": "CP90 Knit Cap",
+      "breadcrumb": {
+        "id": "gid://shopify/Metafield/190848244482323",
+        "type": "collection_reference",
+        "value": "gid://shopify/Collection/523278942483",
+        "compareDigest": "32b231ebef8a69367c01db8a942f34d308f3ff091f0c5bb35969395946140ccd"
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10426119618835",
+      "title": "PC380H Performance Pullover Hooded Tee",
+      "breadcrumb": {
+        "id": "gid://shopify/Metafield/190848244449555",
+        "type": "collection_reference",
+        "value": "gid://shopify/Collection/523280777491",
+        "compareDigest": "e974868560b39dff44371b1c2058845e59914167bd5b4743d1902923b9cb2d8f"
+      }
+    }
+  ],
+  "removeSeededFields": [
+    {
+      "ownerId": "gid://shopify/Product/10425148440851",
+      "namespace": "custom",
+      "key": "breadcrumb_collection"
+    },
+    {
+      "ownerId": "gid://shopify/Product/10426121421075",
+      "namespace": "custom",
+      "key": "breadcrumb_collection"
+    },
+    {
+      "ownerId": "gid://shopify/Product/10426124534035",
+      "namespace": "custom",
+      "key": "breadcrumb_collection"
+    },
+    {
+      "ownerId": "gid://shopify/Product/10425198379283",
+      "namespace": "custom",
+      "key": "breadcrumb_collection"
+    },
+    {
+      "ownerId": "gid://shopify/Product/10426119618835",
+      "namespace": "custom",
+      "key": "breadcrumb_collection"
+    }
+  ]
+}
