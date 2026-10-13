@@ -34,4 +34,8 @@ The unpublished preview has exactly nine changed/added theme files relative to l
 
 ## Promotion and rollback
 
-Merge the reviewed promotion branch into main through GitHub, retaining the existing GitHub-connected live theme identity. Verify the resulting live files and storefront after Shopify synchronization. Reverting the breadcrumb feature commit or disabling the section removes the UI. The pristine backup is available for restoring the full pre-promotion theme. Do not roll back shared store data merely to remove the component.
+Completed: main was fast-forwarded through the existing authenticated Git connection to feature commit `59c71e0`. The GitHub connector returned insufficient permissions for creating a PR, and the browser was signed out, so no PR was created. The isolated `promote/at-breadcrumbs` branch and backup tag remain available for review. Shopify synchronized the existing live theme, ID `187518812435`, which retains its MAIN role.
+
+Live read-back confirms all nine breadcrumb files match the tested source. The post-deployment theme has 542 files and no removed files. Compared with the 537-file backup, only the nine breadcrumb files change content; the copied Brands and Services page templates differ only in line endings. All other file fingerprints are unchanged. An actual main-theme product visit confirms exactly one T-Shirts > Short Sleeve trail above the retained product heading/gallery. `main-deployment-verification.json` records the result.
+
+Reverting feature commit `59c71e0` or disabling the section removes the UI while retaining the preserved baseline. The pristine backup is available for restoring the full pre-promotion theme. Do not roll back shared store data merely to remove the component.
