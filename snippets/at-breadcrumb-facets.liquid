@@ -1,6 +1,6 @@
 {%- doc -%}
   Narrows a garment collection by at most two approved, unambiguous native attributes.
-  Retains the accumulated filters when the final link uses a verified subtype collection.
+  Renders the verified subtype before attributes and narrows that collection cumulatively.
   @param {product} product - The current product
   @param {collection} root - The validated garment collection
   @param {string} root_label - The root link label
@@ -17,9 +17,22 @@
   assign pending_label = root_label
   assign pending_id = root.id
   assign pending_separator = false
+  assign filter_base = root
   assign taxonomy_prefix = 'gid://shopify/TaxonomyValue/'
 -%}
 {%- if facets.size <= 2 and unique_facets.size == facets.size and root_label != blank -%}
+  {%- if destination.id != root.id -%}
+    {%- capture ancestors -%}
+      {%- render 'at-breadcrumb-facet-item', url: pending_url, label: pending_label, collection_id: pending_id, separator: pending_separator -%}
+    {%- endcapture -%}
+    {%- liquid
+      assign filter_base = destination
+      assign pending_url = destination.url
+      assign pending_label = destination_label
+      assign pending_id = destination.id
+      assign pending_separator = true
+    -%}
+  {%- endif -%}
   {%- for key in facets limit: 2 -%}
     {%- if key == 'age-group' or key == 'target-gender' -%}
       {%- liquid
@@ -48,10 +61,10 @@
           endif
           assign query_string = query_string | append: pair
           assign url_separator = '?'
-          if root.url contains '?'
+          if filter_base.url contains '?'
             assign url_separator = '&'
           endif
-          assign pending_url = root.url | append: url_separator | append: query_string
+          assign pending_url = filter_base.url | append: url_separator | append: query_string
           assign pending_label = label
           assign pending_separator = true
           assign facet_count = facet_count | plus: 1
@@ -60,21 +73,6 @@
     {%- endif -%}
   {%- endfor -%}
   {%- if facet_count > 0 -%}
-    {%- if destination.id != root.id -%}
-      {%- capture ancestors -%}
-        {{ ancestors }}
-        {%- render 'at-breadcrumb-facet-item', url: pending_url, label: pending_label, collection_id: pending_id, separator: pending_separator -%}
-      {%- endcapture -%}
-      {%- liquid
-        assign url_separator = '?'
-        if destination.url contains '?'
-          assign url_separator = '&'
-        endif
-        assign pending_url = destination.url | append: url_separator | append: query_string
-        assign pending_label = destination_label
-        assign pending_id = destination.id
-      -%}
-    {%- endif -%}
     <ol class="at-breadcrumbs__list" role="list">
       {{ ancestors }}
       {%- render 'at-breadcrumb-facet-item', url: pending_url, label: pending_label, collection_id: pending_id, separator: pending_separator, immediate: true -%}
