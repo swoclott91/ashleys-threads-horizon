@@ -1,0 +1,442 @@
+[
+  {
+    "id": "gid://shopify/Metaobject/617993666835",
+    "handle": "tees",
+    "fields": [
+      {
+        "key": "name",
+        "value": "T-Shirts root",
+        "reference": null
+      },
+      {
+        "key": "family",
+        "value": "tee",
+        "reference": null
+      },
+      {
+        "key": "category_ids",
+        "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-7\",\"gid://shopify/TaxonomyCategory/aa-1-13-8\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-8\",\"gid://shopify/TaxonomyCategory/aa-1-1-2-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-1\"]",
+        "reference": null
+      },
+      {
+        "key": "attribute_namespace",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "attribute_key",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "attribute_values",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "destination",
+        "value": "gid://shopify/Collection/523280777491",
+        "reference": {
+          "id": "gid://shopify/Collection/523280777491",
+          "title": "T-Shirts",
+          "handle": "t-shirts"
+        }
+      },
+      {
+        "key": "priority",
+        "value": "0",
+        "reference": null
+      },
+      {
+        "key": "breadcrumb_facets",
+        "value": "[\"age-group\",\"target-gender\"]",
+        "reference": null
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Metaobject/617993699603",
+    "handle": "short_sleeve",
+    "fields": [
+      {
+        "key": "name",
+        "value": "Short sleeve tees",
+        "reference": null
+      },
+      {
+        "key": "family",
+        "value": "tee",
+        "reference": null
+      },
+      {
+        "key": "category_ids",
+        "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-7\",\"gid://shopify/TaxonomyCategory/aa-1-13-8\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-8\",\"gid://shopify/TaxonomyCategory/aa-1-1-2-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-1\"]",
+        "reference": null
+      },
+      {
+        "key": "attribute_namespace",
+        "value": "shopify",
+        "reference": null
+      },
+      {
+        "key": "attribute_key",
+        "value": "sleeve-length-type",
+        "reference": null
+      },
+      {
+        "key": "attribute_values",
+        "value": "[\"gid://shopify/TaxonomyValue/169\"]",
+        "reference": null
+      },
+      {
+        "key": "destination",
+        "value": "gid://shopify/Collection/525843595539",
+        "reference": {
+          "id": "gid://shopify/Collection/525843595539",
+          "title": "Short Sleeve T-Shirts",
+          "handle": "long-sleeve-t-shirts-copy"
+        }
+      },
+      {
+        "key": "priority",
+        "value": "10",
+        "reference": null
+      },
+      {
+        "key": "breadcrumb_facets",
+        "value": null,
+        "reference": null
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Metaobject/617993732371",
+    "handle": "long_sleeve",
+    "fields": [
+      {
+        "key": "name",
+        "value": "Long sleeve tees",
+        "reference": null
+      },
+      {
+        "key": "family",
+        "value": "tee",
+        "reference": null
+      },
+      {
+        "key": "category_ids",
+        "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-7\",\"gid://shopify/TaxonomyCategory/aa-1-13-8\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-8\",\"gid://shopify/TaxonomyCategory/aa-1-1-2-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-1\"]",
+        "reference": null
+      },
+      {
+        "key": "attribute_namespace",
+        "value": "shopify",
+        "reference": null
+      },
+      {
+        "key": "attribute_key",
+        "value": "sleeve-length-type",
+        "reference": null
+      },
+      {
+        "key": "attribute_values",
+        "value": "[\"gid://shopify/TaxonomyValue/17094\"]",
+        "reference": null
+      },
+      {
+        "key": "destination",
+        "value": "gid://shopify/Collection/523279794451",
+        "reference": {
+          "id": "gid://shopify/Collection/523279794451",
+          "title": "Long Sleeve T-Shirts",
+          "handle": "long-sleeve-t-shirts"
+        }
+      },
+      {
+        "key": "priority",
+        "value": "10",
+        "reference": null
+      },
+      {
+        "key": "breadcrumb_facets",
+        "value": null,
+        "reference": null
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Metaobject/617993765139",
+    "handle": "sweatshirts",
+    "fields": [
+      {
+        "key": "name",
+        "value": "Sweatshirts and hoodies root",
+        "reference": null
+      },
+      {
+        "key": "family",
+        "value": "sweatshirt",
+        "reference": null
+      },
+      {
+        "key": "category_ids",
+        "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-11\",\"gid://shopify/TaxonomyCategory/aa-1-13-13\",\"gid://shopify/TaxonomyCategory/aa-1-1-7-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-2\",\"gid://shopify/TaxonomyCategory/aa-1-25-9-13\",\"gid://shopify/TaxonomyCategory/aa-1-13-14\",\"gid://shopify/TaxonomyCategory/aa-1-1-7-4\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-4\",\"gid://shopify/TaxonomyCategory/aa-1-1-7\"]",
+        "reference": null
+      },
+      {
+        "key": "attribute_namespace",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "attribute_key",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "attribute_values",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "destination",
+        "value": "gid://shopify/Collection/523280744723",
+        "reference": {
+          "id": "gid://shopify/Collection/523280744723",
+          "title": "Sweatshirts & Hoodies",
+          "handle": "sweatshirts-hoodies"
+        }
+      },
+      {
+        "key": "priority",
+        "value": "0",
+        "reference": null
+      },
+      {
+        "key": "breadcrumb_facets",
+        "value": "[\"age-group\",\"target-gender\"]",
+        "reference": null
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Metaobject/617993797907",
+    "handle": "hoodies",
+    "fields": [
+      {
+        "key": "name",
+        "value": "Hoodies",
+        "reference": null
+      },
+      {
+        "key": "family",
+        "value": "sweatshirt",
+        "reference": null
+      },
+      {
+        "key": "category_ids",
+        "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-11\",\"gid://shopify/TaxonomyCategory/aa-1-13-13\",\"gid://shopify/TaxonomyCategory/aa-1-1-7-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-2\"]",
+        "reference": null
+      },
+      {
+        "key": "attribute_namespace",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "attribute_key",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "attribute_values",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "destination",
+        "value": "gid://shopify/Collection/523279499539",
+        "reference": {
+          "id": "gid://shopify/Collection/523279499539",
+          "title": "Hoodies",
+          "handle": "hoodies"
+        }
+      },
+      {
+        "key": "priority",
+        "value": "10",
+        "reference": null
+      },
+      {
+        "key": "breadcrumb_facets",
+        "value": null,
+        "reference": null
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Metaobject/617993830675",
+    "handle": "hats",
+    "fields": [
+      {
+        "key": "name",
+        "value": "Hats root",
+        "reference": null
+      },
+      {
+        "key": "family",
+        "value": "hat",
+        "reference": null
+      },
+      {
+        "key": "category_ids",
+        "value": "[\"gid://shopify/TaxonomyCategory/aa-2-17\"]",
+        "reference": null
+      },
+      {
+        "key": "attribute_namespace",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "attribute_key",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "attribute_values",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "destination",
+        "value": "gid://shopify/Collection/523279335699",
+        "reference": {
+          "id": "gid://shopify/Collection/523279335699",
+          "title": "Hats",
+          "handle": "hats"
+        }
+      },
+      {
+        "key": "priority",
+        "value": "0",
+        "reference": null
+      },
+      {
+        "key": "breadcrumb_facets",
+        "value": "[\"age-group\",\"target-gender\"]",
+        "reference": null
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Metaobject/617993863443",
+    "handle": "trucker",
+    "fields": [
+      {
+        "key": "name",
+        "value": "Trucker hats",
+        "reference": null
+      },
+      {
+        "key": "family",
+        "value": "hat",
+        "reference": null
+      },
+      {
+        "key": "category_ids",
+        "value": "[\"gid://shopify/TaxonomyCategory/aa-2-17-14\"]",
+        "reference": null
+      },
+      {
+        "key": "attribute_namespace",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "attribute_key",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "attribute_values",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "destination",
+        "value": "gid://shopify/Collection/523281236243",
+        "reference": {
+          "id": "gid://shopify/Collection/523281236243",
+          "title": "Trucker Hats",
+          "handle": "trucker-hats"
+        }
+      },
+      {
+        "key": "priority",
+        "value": "10",
+        "reference": null
+      },
+      {
+        "key": "breadcrumb_facets",
+        "value": null,
+        "reference": null
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Metaobject/617993896211",
+    "handle": "beanies",
+    "fields": [
+      {
+        "key": "name",
+        "value": "Beanies",
+        "reference": null
+      },
+      {
+        "key": "family",
+        "value": "hat",
+        "reference": null
+      },
+      {
+        "key": "category_ids",
+        "value": "[\"gid://shopify/TaxonomyCategory/aa-2-17-2\"]",
+        "reference": null
+      },
+      {
+        "key": "attribute_namespace",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "attribute_key",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "attribute_values",
+        "value": null,
+        "reference": null
+      },
+      {
+        "key": "destination",
+        "value": "gid://shopify/Collection/523278942483",
+        "reference": {
+          "id": "gid://shopify/Collection/523278942483",
+          "title": "Beanies",
+          "handle": "beanies"
+        }
+      },
+      {
+        "key": "priority",
+        "value": "10",
+        "reference": null
+      },
+      {
+        "key": "breadcrumb_facets",
+        "value": null,
+        "reference": null
+      }
+    ]
+  }
+]

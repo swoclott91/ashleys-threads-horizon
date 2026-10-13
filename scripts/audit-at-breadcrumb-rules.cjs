@@ -27,6 +27,7 @@ function auditRuleGraph(config, collections) {
     const hasAttribute = Boolean(rule.attribute_namespace || rule.attribute_key || rule.attribute_values?.length);
     if (hasAttribute && (!rule.attribute_namespace || !rule.attribute_key || !Array.isArray(rule.attribute_values) || !rule.attribute_values.length || rule.attribute_values.length > 16 || rule.attribute_values.some(value => typeof value !== 'string' || !value.trim()))) issue(rule, 'Attribute namespace, key, and one to 16 exact values must be supplied together');
     if (rule.priority === 0 && hasAttribute) issue(rule, 'Root rules must not depend on subtype attributes');
+    if (rule.breadcrumb_facets && (rule.priority !== 0 || !Array.isArray(rule.breadcrumb_facets) || rule.breadcrumb_facets.length > 2 || new Set(rule.breadcrumb_facets).size !== rule.breadcrumb_facets.length || rule.breadcrumb_facets.some(key => !['age-group', 'target-gender'].includes(key)))) issue(rule, 'Only root rules can declare up to two unique approved native audience filters');
     if (!byId.get(rule.destination)?.onlineStorePublished) issue(rule, 'Destination must exist and be published to the Online Store');
   }
   for (const rule of config.rules) {
@@ -43,7 +44,7 @@ function auditRuleGraph(config, collections) {
         seen.add(current.id);
         current = byId.get(current.parentId);
       }
-      if (seen.size > 2) issue(rule, 'At most two ancestor links are supported');
+      if (seen.size > 2) issue(rule, 'At most two collection levels are supported');
     }
   }
   return { ready: issues.length === 0, issues };

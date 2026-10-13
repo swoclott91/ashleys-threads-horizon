@@ -17,9 +17,17 @@ The store metafield `custom.breadcrumb_rules` contains a `list.metaobject_refere
 | Trucker hats | Native Trucker Hats category | Trucker Hats |
 | Beanies | Native Beanies category | Beanies |
 
-Each entry holds a name, garment family, native category GIDs, optional attribute namespace/key and accepted values, destination collection reference, and numeric priority. A priority of 0 defines the family root; the initial subtypes use 10. Rule list order and product collection order do not determine the trail. Native category ancestors are matched by GID, so localized display names do not affect classification. Attribute references match stable taxonomy value GIDs or metaobject GIDs; text designations match exactly. Material, weight, finish, wearer, color and size are not part of the canonical path.
+Each entry holds a name, garment family, native category GIDs, optional attribute namespace/key and accepted values, destination collection reference, and numeric priority. A priority of 0 defines the family root; the initial subtypes use 10. Rule list order and product collection order do not determine the trail. Native category ancestors are matched by GID, so localized display names do not affect classification. Attribute references match stable taxonomy value GIDs or metaobject GIDs; text designations match exactly. Reviewed audience filters now add Age group and Target gender between the category and verified sleeve subtype. Material, weight, finish, color and size remain outside this trail.
 
 Changes to an existing product's native category or sleeve/style data take effect on its next page render. New products use the same rules without breadcrumb-field population. Additional families and designations can be added as reviewed rules with published destination references and collection parent metadata. Keep one root per family, at most 32 rules, at most 32 category IDs per rule, and at most 16 accepted attribute values. Run the graph audit before changing the live mapping. Initial rules do not cover tanks, polos, bags, or other families yet.
+
+## Progressive audience links
+
+The optional merchant-owned at_breadcrumb_rule field breadcrumb_facets is a list.single_line_text_field on root rules. The three reviewed roots (T-Shirts, Sweatshirts & Hoodies, Hats) list age-group, then target-gender. The theme reads one unambiguous native taxonomy value per approved key and preserves previous filters in each subsequent URL. The verified sleeve subtype remains the final link, with both audience filters retained. No per-product assignments, collection creation, or filter-settings changes are needed. Further category roots retain their existing trails until their filters are reviewed and enabled.
+
+Collection filter objects are not populated on a PDP. The root policy therefore records the two native filters verified in actual collection rendering. Review this short policy when Search & Discovery filter settings change; removing a key disables that step. Supported keys are age-group and target-gender, at most two distinct keys per root. Missing, multi-valued, or non-taxonomy data is skipped. Valid editorial overrides retain their explicit paths.
+
+The sleeve filter is not currently enabled on the T-Shirts root. Short/Long Sleeve links continue to require reviewed classification, visibility, and actual subtype collection membership. For example, YST350LS currently lacks verified Long Sleeve collection membership, so its trail ends at Unisex until that membership is corrected.
 
 ## Resolution and safeguards
 
@@ -33,9 +41,9 @@ The retained collection fields are `custom.breadcrumb_parent` (`collection_refer
 
 ## Frontend
 
-The AT Breadcrumbs section precedes the existing heading section in default product/collection templates. It emits a labelled navigation landmark, ordered list, linked ancestors only, escaped labels, and decorative separators. It excludes Home and the current product/collection, emits at most two links, and adds no BreadcrumbList structured data. A collection with no parent has no empty row. The existing Product structured data is unchanged.
+The AT Breadcrumbs section precedes the existing heading section in default product/collection templates. It emits a labelled navigation landmark, ordered list, linked ancestors only, escaped labels, and decorative separators. It excludes Home and the current product/collection, emits at most four links when reviewed audience filters are enabled, and adds no BreadcrumbList structured data. A collection with no parent has no empty row. The existing Product structured data is unchanged.
 
-The optional layout script measures whether both links fit on mobile. If not, it shows the immediate parent with a decorative back chevron. With scripts unavailable, server-rendered links still work and mobile shows the immediate parent. Settings remain limited to enable/disable, width, alignment, spacing, and mobile display.
+The optional layout script measures whether the full trail fits on mobile. If not, it shows the immediate parent with a decorative back chevron. With scripts unavailable, server-rendered links still work and mobile shows the immediate parent. Settings include enable/disable, audience-filter enable/disable, width, alignment, spacing, and mobile display.
 
 `collection.brand.json` and `product.access-threads.json` are unchanged because their parent/assignment scope has not been established. Featured products, cards, quick add, recommendations, menus, variants and cart navigation are untouched. The separate source-collection return enhancement remains pending.
 
@@ -46,6 +54,7 @@ Install liquidjs in an ignored verification directory or set LIQUIDJS_PATH to an
 ```powershell
 node scripts/test-at-breadcrumbs.cjs
 node scripts/test-at-breadcrumb-live-fixtures.cjs
+node scripts/test-at-breadcrumb-attributes.cjs
 node scripts/audit-at-breadcrumb-rules.cjs docs/breadcrumbs/rules.json docs/breadcrumbs/rules-collections-before.json
 ```
 

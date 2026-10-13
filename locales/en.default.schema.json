@@ -455,7 +455,7 @@
     "comparison_slider": "Comparison slider"
   },
   "options": {
-    "at_breadcrumbs_auto": "Show both links when they fit",
+    "at_breadcrumbs_auto": "Show full trail when it fits",
     "at_breadcrumbs_parent": "Immediate parent only",
     "above_carousel": "Above carousel",
     "accent": "Accent",
@@ -784,6 +784,7 @@
   },
   "settings": {
     "at_breadcrumbs_enabled": "Show breadcrumbs",
+    "at_breadcrumbs_attributes": "Narrow links by product attributes",
     "at_breadcrumbs_mobile": "Mobile display",
     "accordion": "Accordion",
     "account": "Account",

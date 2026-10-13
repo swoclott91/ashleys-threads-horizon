@@ -1,7 +1,7 @@
 {%- if section.settings.enabled -%}
   {%- if request.page_type == 'product' or request.page_type == 'collection' -%}
     {%- capture trail -%}
-      {%- render 'at-breadcrumbs', product: product, collection: collection, page_type: request.page_type, shop: shop -%}
+      {%- render 'at-breadcrumbs', product: product, collection: collection, page_type: request.page_type, shop: shop, use_attributes: section.settings.use_attributes -%}
     {%- endcapture -%}
     {%- assign trail = trail | strip -%}
     {%- if trail != blank -%}
@@ -115,6 +115,7 @@
   "enabled_on": { "templates": ["product", "collection"] },
   "settings": [
     { "type": "checkbox", "id": "enabled", "label": "t:settings.at_breadcrumbs_enabled", "default": true },
+    { "type": "checkbox", "id": "use_attributes", "label": "t:settings.at_breadcrumbs_attributes", "default": true },
     {
       "type": "select", "id": "section_width", "label": "t:settings.width",
       "options": [
