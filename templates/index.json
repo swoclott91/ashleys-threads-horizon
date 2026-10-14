@@ -863,32 +863,6 @@
                         "padding-inline-end": 0
                       },
                       "blocks": {
-                        "image_7ywFTh": {
-                          "type": "image",
-                          "name": "Champion",
-                          "settings": {
-                            "image": "shopify://shop_images/Champion_Charcoal_SVG.svg",
-                            "link": "shopify://collections/champion",
-                            "image_ratio": "adapt",
-                            "width": "fill",
-                            "custom_width": 59,
-                            "width_mobile": "custom",
-                            "custom_width_mobile": 20,
-                            "height": "fit",
-                            "border": "none",
-                            "border_width": 1,
-                            "border_opacity": 100,
-                            "border_color": "",
-                            "border_radius": 0,
-                            "padding-block-start": 0,
-                            "padding-block-end": 0,
-                            "padding-inline-start": 0,
-                            "padding-inline-end": 0,
-                            "hover_scale": true,
-                            "hover_tint_color": ""
-                          },
-                          "blocks": {}
-                        },
                         "image_z7DHNn": {
                           "type": "image",
                           "name": "Hanes",
@@ -943,7 +917,6 @@
                         }
                       },
                       "block_order": [
-                        "image_7ywFTh",
                         "image_z7DHNn",
                         "image_YAdmhL"
                       ]
@@ -952,7 +925,7 @@
                       "type": "text",
                       "name": "t:names.text",
                       "settings": {
-                        "text": "<p>View all&gt;</p>",
+                        "text": "<p><a href=\"/pages/brands\">View all &gt;</a></p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -1153,7 +1126,7 @@
                           "name": "t:names.button",
                           "settings": {
                             "label": "Shop Sale Items >",
-                            "link": "shopify://collections/all",
+                            "link": "shopify://collections/sale",
                             "open_in_new_tab": false,
                             "style_class": "button-unstyled",
                             "custom_button_background": "{{ settings.color_palette.foreground }}",
@@ -2344,7 +2317,7 @@
                               "type": "text",
                               "name": "t:names.heading",
                               "settings": {
-                                "text": "<h2>FOR EVERY PROJET & EVERY MAKER</h2>",
+                                "text": "<h2>FOR EVERY PROJECT & EVERY MAKER</h2>",
                                 "width": "100%",
                                 "max_width": "normal",
                                 "alignment": "left",

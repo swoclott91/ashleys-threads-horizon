@@ -342,6 +342,11 @@
           <ul class="at-brands-dir__featured-list list-unstyled" role="list">
             {%- for feat_link in featured_links limit: 6 -%}
               {%- liquid
+                if feat_link.type == 'collection_link'
+                  if feat_link.object == blank or feat_link.object.all_products_count == 0
+                    continue
+                  endif
+                endif
                 assign feat_image = blank
                 if feat_link.type == 'collection_link' and feat_link.object.featured_image != blank
                   assign feat_image = feat_link.object.featured_image

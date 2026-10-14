@@ -15,7 +15,10 @@
 {%- liquid
   assign block_settings = section.settings
   assign show_search = block_settings.at_show_brand_search
-  assign brand_total = brands_linklist.links.size | default: 0
+  capture brand_total
+    render 'at-menu-brand-count', brands_linklist: brands_linklist
+  endcapture
+  assign brand_total = brand_total | strip | plus: 0
   assign featured_links = featured_linklist.links | default: blank
   assign img_radius = block_settings.at_brand_image_border_radius | default: 4
   assign panel_id = 'at-brands-dir-' | append: panel_link.handle
@@ -120,7 +123,12 @@
         <ul class="at-brands-dir__featured-list list-unstyled" role="list">
           {%- for feat_link in featured_links limit: 6 -%}
             {%- liquid
-              assign feat_image = blank
+              if feat_link.type == 'collection_link'
+                  if feat_link.object == blank or feat_link.object.all_products_count == 0
+                    continue
+                  endif
+                endif
+                assign feat_image = blank
               if feat_link.type == 'collection_link' and feat_link.object.featured_image != blank
                 assign feat_image = feat_link.object.featured_image
               elsif feat_link.type == 'collection_link' and feat_link.object.image != blank

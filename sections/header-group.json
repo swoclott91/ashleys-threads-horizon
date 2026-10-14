@@ -125,7 +125,7 @@
             "at_featured_brands_menu": "featured-brands",
             "at_featured_brands_heading": "Featured Brands",
             "at_brands_cta_1_label": "Shop All Brands",
-            "at_brands_cta_1_link": "",
+            "at_brands_cta_1_link": "shopify://pages/brands",
             "at_brands_cta_2_label": "Shop All S&S Brands",
             "at_brands_cta_2_link": "",
             "at_brands_cta_3_label": "Shop All Exclusive Brands",

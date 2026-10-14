@@ -30,6 +30,11 @@
         <ul class="{{ class_prefix }}__list list-unstyled" role="list">
           {%- for brand_link in brand_links -%}
             {%- liquid
+              if brand_link.type == 'collection_link'
+                if brand_link.object == blank or brand_link.object.all_products_count == 0
+                  continue
+                endif
+              endif
               assign raw_title = brand_link.title | strip
               assign key = raw_title | upcase
               assign fl = key | slice: 0, 1
