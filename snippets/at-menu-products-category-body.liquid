@@ -35,6 +35,9 @@
   endfor
 
   assign shop_url = featured_collection.url | default: cat_link.url
+  if featured_collection == blank and featured_title == 'Best Sellers'
+    assign featured_title = cat_link.title
+  endif
 
   if featured_image == blank and featured_collection != blank
     if featured_collection.featured_image != blank
