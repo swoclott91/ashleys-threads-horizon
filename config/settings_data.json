@@ -161,7 +161,7 @@
           "agent_invert_activator_colors": true,
           "button_color": "#000000",
           "button_icon": "chat_bubble",
-          "button_text": "assistance",
+          "button_text": "chat_with_us",
           "button_horizontal_position": "bottom_right",
           "button_vertical_position": "lowest",
           "agent_inherit_fonts": true,
