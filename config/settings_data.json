@@ -144,6 +144,34 @@
     "popover_border": "none",
     "button_font_weight_secondary": "default",
     "content_for_index": [],
+    "blocks": {
+      "15683396631634586217": {
+        "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b",
+        "disabled": false,
+        "settings": {
+          "greeting_message": "",
+          "show_featured_products": true,
+          "featured_products": [
+            "comfort-colors-1717-heavyweight-ring-spun-tee",
+            "gildan-64000-softstyle-t-shirt",
+            "gildan-18000-heavy-blend-crewneck-sweatshirt"
+          ],
+          "background_color": "#ffffff",
+          "font_color": "#2c2c2c",
+          "agent_invert_activator_colors": true,
+          "button_color": "#000000",
+          "button_icon": "chat_bubble",
+          "button_text": "assistance",
+          "button_horizontal_position": "bottom_right",
+          "button_vertical_position": "lowest",
+          "agent_inherit_fonts": true,
+          "agent_font": "system_ui_n4",
+          "agent_font_size": 14,
+          "agent_activator_font_size": 16,
+          "agent_border_radius": 16
+        }
+      }
+    },
     "color_palette": {
       "background": "#FFFFFF",
       "foreground": "#bb987c",
