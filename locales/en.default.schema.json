@@ -518,6 +518,10 @@
     "cotton_open_end": "Open-end cotton",
     // Icon option for ring-spun cotton fabric
     "cotton_ring_spun": "Ring-spun cotton",
+    // Icon option for side-seam construction
+    "side-seam_construction": "Side-seam construction",
+    // Icon option for tubular construction
+    "tubular_construction": "Tubular construction",
     // Pagination control showing current/total slide numbers (e.g. 1/5)
     "counter": "Counter",
     "cover": "Cover",
