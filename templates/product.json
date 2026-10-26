@@ -553,10 +553,40 @@
                         "padding-inline-end": 0
                       },
                       "blocks": {}
+                    },
+                    "construction_badges": {
+                      "type": "feature-badges",
+                      "name": "Construction Badges",
+                      "settings": {
+                        "badge_1_source": "custom.garment_construction",
+                        "badge_1_match": "Side-Seamed",
+                        "badge_1_label": "Side-Seamed Construction",
+                        "badge_1_icon": "side-seam_construction",
+                        "badge_2_source": "custom.garment_construction",
+                        "badge_2_match": "Tubular",
+                        "badge_2_label": "Tubular Construction",
+                        "badge_2_icon": "tubular_construction",
+                        "badge_3_source": "none",
+                        "badge_4_source": "none",
+                        "badge_5_source": "none",
+                        "metaobject_field": "label",
+                        "behavior": "default",
+                        "type_preset": "paragraph",
+                        "icon_width": 36,
+                        "gap": 8,
+                        "padding-block-start": 8,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0,
+                        "badge_1_content": "<p><strong>Shape built into the construction.</strong></p><p>Side-seamed garments use separate front and back panels joined along the sides. This allows shaping through the body. The finished fit can be relaxed, classic or fitted, depending on the style.</p>",
+                        "badge_2_content": "<p><strong>A body without side seams.</strong></p><p>Tubular garments use a continuous fabric body with no side seams, generally creating a straighter silhouette with less shaping through the sides. Check the style’s fit and measurements to choose the shape you want.</p>"
+                      },
+                      "blocks": {}
                     }
                   },
                   "block_order": [
                     "feature_badges",
+                    "construction_badges",
                     "text_QjLNJK"
                   ]
                 },

@@ -16,6 +16,21 @@ The preset configures these conditions:
 
 Required values match exactly, ignoring case and outer spaces. Ring-Spun does not match Combed Ring-Spun. Update the values in the editor to match the wording stored on your products. Multiple slots can use Clothing Features to explain different entries independently.
 
+## Garment construction
+
+Garment Construction is available in every slot's Product metafield selector and reads `custom.garment_construction`. Both construction icons are included in the same icon picker as the standard Icon block.
+
+The **Construction Badges** preset configures two mutually exclusive rows:
+
+| Required value | Badge title | Icon |
+| --- | --- | --- |
+| `Side-Seamed` | Side-Seamed Construction | Side-seam construction |
+| `Tubular` | Tubular Construction | Tubular construction |
+
+The default product template includes a second Feature Badges block named Construction Badges, immediately after the existing five-slot block in the Description accordion. It contains editable explanations for both construction types. The existing cotton, tear-away and sustainability settings are retained. Each block still supports up to five rows.
+
+Only the exact matching construction row appears; empty, missing and unrecognized values show neither row. The new preset leaves popup content empty for new placements, with the same dynamic source support. In the theme editor, add **Construction Badges** to place this pair elsewhere, or select Garment Construction in any existing row and set the required value, title, icon and popup content.
+
 Clothing Features checks each referenced entry's `label` field or its `system.handle`; it does not search serialized object data. Other metaobject references use the configurable Other metaobject label field, which defaults to `label`. Text lists compare individual items. A blank required value checks for any populated value; rich text checks its readable text so an empty document does not trigger a badge.
 
 In the theme editor, open each badge's Popup content field to add the explanation or connect a compatible dynamic source. In the default product template, Sustainable Style is already connected to `custom.sustainable_style`. When adding a new Feature Badges block, connect that source using the dynamic source button. The cotton and tear-away explanation fields intentionally start empty; fill them before publishing. Clicking a matching badge always opens its dialog, even if its explanation has not been filled yet.

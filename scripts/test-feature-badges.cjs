@@ -64,8 +64,8 @@ async function main() {
   const defaults = Object.fromEntries(schema.settings.filter(setting => setting.id).map(setting => [setting.id, setting.default ?? '']));
   const settings = { ...defaults, ...schema.presets[0].settings };
   const product = { metafields: { shopify: { 'clothing-features': featureList([entry('Tear-Away Label')]) }, custom: { cotton_type: scalar('Ring-Spun'), sustainable_style: rich('Recycled materials') } } };
-  const renderBlock = (currentProduct, currentSettings = settings, designMode = false) => engine.parseAndRender(blockSource, {
-    closest: { product: currentProduct }, block: { id: 'test-block', settings: currentSettings }, section: { id: 'test-section' }, request: { design_mode: designMode }
+  const renderBlock = (currentProduct, currentSettings = settings, designMode = false, blockId = 'test-block') => engine.parseAndRender(blockSource, {
+    closest: { product: currentProduct }, block: { id: blockId, settings: currentSettings }, section: { id: 'test-section' }, request: { design_mode: designMode }
   });
   const rendered = await renderBlock(product, { ...settings, badge_2_content: '<p>A softer cotton yarn.</p>', badge_5_content: '<p>Recycled materials</p>' });
   assert.equal((rendered.match(/<dialog-component /g) || []).length, 3, 'only matching rows render');
@@ -92,9 +92,52 @@ async function main() {
     assert.deepEqual(schema.settings.find(setting => setting.id === `badge_${index}_icon`).options, iconSchema.settings.find(setting => setting.id === 'icon').options, 'same existing icon picker');
     assert.equal(schema.settings.find(setting => setting.id === `badge_${index}_content`).type, 'richtext');
     assert.ok(!schema.settings.find(setting => setting.id === `badge_${index}_content`).default, 'popup fields start empty');
+    assert.ok(schema.settings.find(setting => setting.id === `badge_${index}_source`).options.some(option => option.value === 'custom.garment_construction'), 'construction is selectable in every slot');
+  }
+  const constructionPreset = schema.presets.find(preset => preset.name === 'Construction Badges');
+  assert.ok(constructionPreset, 'construction preset is available');
+  const constructionSettings = { ...defaults, ...constructionPreset.settings };
+  const constructionCases = [
+    ['Side-Seamed', 'Side-Seamed Construction', 'Tubular Construction'],
+    ['Tubular', 'Tubular Construction', 'Side-Seamed Construction'],
+    ['  side-seamed  ', 'Side-Seamed Construction', 'Tubular Construction'],
+    ['', null],
+    [undefined, null],
+    ['Unknown', null],
+    ['Tubular with side seams', null],
+  ];
+  for (const [value, label, otherLabel] of constructionCases) {
+    const constructionProduct = { ...product, metafields: { ...product.metafields, custom: { ...product.metafields.custom, garment_construction: value === undefined ? undefined : scalar(value) } } };
+    const output = await renderBlock(constructionProduct, constructionSettings, false, 'construction-block');
+    if (!label) {
+      assert.equal(output.trim(), '', 'blank or unmatched construction hides the entire block');
+      continue;
+    }
+    assert.equal((output.match(/<dialog-component /g) || []).length, 1, 'only the matching construction renders');
+    assert.ok(output.includes(`<span>${label}</span>`), 'matching construction title');
+    assert.ok(!output.includes(`<span>${otherLabel}</span>`), 'other construction remains hidden');
+    const svg = output.match(/<svg\s+class="feature-badges__icon icon-default"[\s\S]*?<\/svg>/)?.[0];
+    assert.ok(svg && svg.includes('<path'), 'construction SVG has actual icon paths');
+    const iconName = label === 'Side-Seamed Construction' ? 'side-seam_construction' : 'tubular_construction';
+    const expectedIcon = await engine.renderFile('icon', { icon: iconName });
+    assert.ok(svg.includes(expectedIcon.trim()), 'selected construction uses its own supplied icon');
+  }
+  const rawTemplate = fs.readFileSync(path.join(root, 'templates/product.json'), 'utf8');
+  const productTemplate = JSON.parse(rawTemplate.slice(rawTemplate.indexOf('{')));
+  const descriptionRow = productTemplate.sections.main.blocks['product-details'].blocks.accordion_G8h4j4.blocks.accordion_row_r7w8aY;
+  assert.ok(descriptionRow.blocks.feature_badges, 'existing badges remain in the template');
+  assert.ok(descriptionRow.block_order.indexOf('construction_badges') < descriptionRow.block_order.indexOf('text_QjLNJK'), 'construction badges appear before the description');
+  const configuredConstruction = { ...defaults, ...descriptionRow.blocks.construction_badges.settings };
+  for (const [value, index] of [['Side-Seamed', 1], ['Tubular', 2]]) {
+    const constructionProduct = { ...product, metafields: { ...product.metafields, custom: { ...product.metafields.custom, garment_construction: scalar(value) } } };
+    const output = await renderBlock(constructionProduct, configuredConstruction, false, 'construction-block');
+    assert.ok(output.includes(configuredConstruction[`badge_${index}_content`]), 'configured popup explanation renders');
+    const combined = await renderBlock(constructionProduct) + output;
+    const combinedIds = [...combined.matchAll(/<dialog\s+id="([^"]+)"/g)].map(match => match[1]);
+    assert.equal(new Set(combinedIds).size, combinedIds.length, 'multiple badge blocks keep unique dialog IDs');
   }
   assert.ok(schema.settings.filter(setting => setting.id).length <= 40, 'settings remain within recommended limit');
-  console.log('Feature Badges: 22 matching scenarios and block rendering/schema checks passed.');
+  console.log('Feature Badges: 22 matching scenarios, 7 construction cases, configured popups and block/schema checks passed.');
   if (process.env.FEATURE_BADGES_PREVIEW) fs.writeFileSync(process.env.FEATURE_BADGES_PREVIEW, rendered);
 }
 
