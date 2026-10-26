@@ -23,6 +23,9 @@
     {%- render 'scripts' -%}
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-palette' -%}
+    {%- if request.page_type == 'product' -%}
+      {%- render 'at-pdp-styles' -%}
+    {%- endif -%}
 
     {% if request.design_mode %}
       {%- render 'theme-editor' -%}
@@ -31,7 +34,7 @@
     {{ content_for_header }}
   </head>
 
-  <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
+  <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}{% if request.page_type == 'product' %} at-pdp{% endif %}">
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
 
     {% render 'chat-drawer' %}
