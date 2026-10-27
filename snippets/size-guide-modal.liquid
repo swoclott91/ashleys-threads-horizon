@@ -149,15 +149,19 @@
       aria-modal="true"
     >
       <div class="popup-link__inner size-guide-popup__inner">
-        <h2
-          id="{{ heading_id }}"
-          class="size-guide__title h4"
-        >
-          {{ 'products.size_guide.title' | t }}
-        </h2>
-        {{ size_guide_subtitle }}
-        {{ size_guide_sections }}
-        {{ size_guide_footer_notes }}
+        <div class="size-guide-popup__header">
+          <h2
+            id="{{ heading_id }}"
+            class="size-guide__title h4"
+          >
+            {{ 'products.size_guide.title' | t }}
+          </h2>
+          {{ size_guide_subtitle }}
+        </div>
+        <div class="size-guide-popup__body">
+          {{ size_guide_sections }}
+          {{ size_guide_footer_notes }}
+        </div>
       </div>
       <button
         type="button"
