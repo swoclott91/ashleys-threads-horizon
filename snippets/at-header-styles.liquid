@@ -1,0 +1,13 @@
+{% doc %}
+  Loads the shared Ashley's Threads header and navigation hierarchy.
+{% enddoc %}
+
+{% style %}
+  #header-group {
+    --at-header-accent: {{ settings.color_palette.color5 | default: '#243e34' }};
+    --at-header-on-accent: {{ settings.palette_primary_button_text | default: '#fffdf8' }};
+    --at-header-ink: {{ settings.page_text_color | default: '#2c2c2c' }};
+    --at-header-line: {{ settings.color_palette.color3 | default: '#e7dbce' }};
+  }
+{% endstyle %}
+{{ 'at-header.css' | asset_url | stylesheet_tag }}
