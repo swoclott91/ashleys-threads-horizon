@@ -2,24 +2,6 @@
   --at-pdp-control-height: 3rem;
 }
 
-.at-pdp .announcement-bar {
-  padding-block: var(--padding-xs);
-}
-
-.at-pdp .header .header__columns {
-  --padding-block-start: var(--padding-xs);
-  --padding-block-end: var(--padding-xs);
-}
-
-.at-pdp .header-logo__image {
-  height: 3.5rem;
-  width: auto;
-}
-
-.at-pdp .at-menu__nav-link {
-  font-size: var(--font-size--sm);
-}
-
 .at-pdp .at-breadcrumbs-section {
   padding-block: 0.875rem 1.25rem;
 }
@@ -534,11 +516,6 @@
     width: min(70rem, calc(100vw - 3rem));
     max-width: min(70rem, calc(100vw - 3rem));
     max-height: 85dvh;
-  }
-
-  .at-pdp .header .header__row--bottom .header__columns {
-    --padding-block-start: var(--padding-2xs);
-    --padding-block-end: var(--padding-2xs);
   }
 
   .at-pdp .product-information__media media-gallery > slideshow-component .product-media-container {
