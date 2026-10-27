@@ -399,7 +399,8 @@
   min-height: var(--minimum-touch-target);
   font-size: var(--font-size--md);
   line-height: 1.5;
-  box-shadow: 0 0 0 1px var(--at-pdp-line);
+  border: 1px solid var(--at-pdp-line);
+  box-shadow: none;
 }
 
 .at-pdp .at-bulk-grid__search::placeholder {
@@ -407,7 +408,32 @@
 }
 
 .at-pdp .at-bulk-grid__search:is(:focus, :focus-visible) {
-  box-shadow: 0 0 0 2px var(--at-pdp-accent);
+  border-color: var(--at-pdp-accent);
+  box-shadow: inset 0 0 0 1px var(--at-pdp-accent);
+}
+
+.at-pdp .at-bulk-grid__table-wrapper {
+  border: 1px solid var(--at-bulk-line);
+  border-radius: var(--style-border-radius-inputs);
+}
+
+.at-pdp .at-bulk-grid__table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.at-pdp .at-bulk-grid__table :is(th, td) {
+  border: 0;
+  border-inline-end: 1px solid var(--at-bulk-line);
+  border-block-end: 1px solid var(--at-bulk-line);
+}
+
+.at-pdp .at-bulk-grid__table :is(th, td):last-child {
+  border-inline-end: 0;
+}
+
+.at-pdp .at-bulk-grid__table tbody tr:last-child td {
+  border-block-end: 0;
 }
 
 .at-pdp .at-bulk-grid__table thead th {
