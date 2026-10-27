@@ -12,6 +12,7 @@
     --at-pdp-on-accent: {{ settings.palette_primary_button_text | default: '#fffdf8' }};
     --at-pdp-ink: {{ settings.page_text_color | default: '#2c2c2c' }};
     --at-pdp-line: {{ settings.color_palette.color3 | default: '#e7dbce' }};
+    --at-pdp-gold: {{ settings.color_palette.foreground | default: '#bb987c' }};
   }
 {% endstyle %}
 {{ 'at-pdp.css' | asset_url | stylesheet_tag }}
