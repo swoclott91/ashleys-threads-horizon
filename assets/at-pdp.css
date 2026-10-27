@@ -53,7 +53,7 @@
 
 .at-pdp .text-block > h1 {
   font-family: var(--font-heading--family);
-  font-size: 2rem;
+  font-size: clamp(1.625rem, 2.25vw, 2rem);
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -77,6 +77,14 @@
   line-height: 1.5;
 }
 
+.at-pdp .at-pdp-price [ref='priceContainer'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.5rem;
+  row-gap: 0.25rem;
+}
+
 .at-pdp .product-details {
   --height-buy-buttons: var(--at-pdp-control-height);
 }
@@ -89,14 +97,21 @@
 }
 
 .at-pdp .product-details .variant-option legend {
-  font-size: var(--font-size--md);
-  font-weight: 500;
+  font-size: var(--font-size--sm);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.at-pdp .product-details .variant-option__swatch-value {
+  font-weight: 400;
+  color: var(--color-foreground-secondary);
 }
 
 .at-pdp .product-details .variant-option__button-label:not(.variant-option__button-label--has-swatch) {
   min-height: var(--minimum-touch-target);
   padding-block: var(--padding-xs);
-  font-size: var(--font-size--md);
+  font-size: var(--font-size--sm);
+  font-weight: 500;
 }
 
 .at-pdp .product-details .variant-option--swatches {
@@ -113,6 +128,33 @@
   --new-color-label-height: 0.825rem;
 }
 
+/* Keep the guide attached to size selection in the existing block order. */
+.at-pdp .product-details .variant-picker ~ .size-guide-popup {
+  margin-block-start: -0.75rem;
+}
+
+.at-pdp .product-details .size-guide-popup__trigger {
+  min-height: var(--minimum-touch-target);
+  font-size: var(--font-size--sm);
+  font-weight: 400;
+  line-height: 1.5;
+  text-transform: none;
+  text-underline-offset: 0.2em;
+}
+
+/* Group the two purchase actions, then give product information its own space. */
+.at-pdp .product-details .at-buy-buttons-block .product-form-buttons {
+  padding-block-end: 0.75rem;
+}
+
+.at-pdp .product-details .at-buy-buttons__bulk-popup-component {
+  margin-block-end: 0;
+}
+
+.at-pdp .product-details .at-buy-buttons-block ~ .accordion {
+  margin-block-start: 0.5rem;
+}
+
 .at-pdp .product-details .product-form-buttons .add-to-cart-button,
 .at-pdp .at-buy-buttons__bulk-trigger {
   height: auto;
@@ -120,6 +162,10 @@
   padding-block: var(--padding-sm);
   font-size: var(--font-size--md);
   line-height: 1.25;
+}
+
+.at-pdp .product-details .product-form-buttons .add-to-cart-button {
+  font-weight: 500;
 }
 
 .at-pdp .product-details .add-to-cart-button.button-secondary {
@@ -142,6 +188,33 @@
   --button-color: var(--at-pdp-on-accent);
   --button-background-color: var(--at-pdp-accent-hover);
   --button-border-color: var(--at-pdp-accent-hover);
+}
+
+/* Preserve the accordion, feature icons, links and dialogs; refine type only. */
+.at-pdp .product-details .accordion .details__header {
+  min-height: 3.25rem;
+  padding-block: 1rem;
+  font-family: var(--font-heading--family);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--at-pdp-ink);
+}
+
+.at-pdp .product-details .accordion .details-content > .text-block {
+  font-size: var(--font-size--md);
+  line-height: 1.65;
+}
+
+.at-pdp .product-details .accordion .details-content > .text-block li + li {
+  margin-block-start: 0.5rem;
+}
+
+.at-pdp .product-details .feature-badges__trigger {
+  min-height: var(--minimum-touch-target);
+  font-size: var(--font-size--sm);
+  font-weight: 500;
+  line-height: 1.5;
 }
 
 .at-pdp .at-bulk-grid {
@@ -279,6 +352,10 @@
   .at-pdp .at-pdp-price,
   .at-pdp .at-pdp-price .price {
     font-size: 1.5rem;
+  }
+
+  .at-pdp .product-details .accordion .details__header {
+    font-size: var(--font-size--md);
   }
 
   .at-pdp .product-information__media media-gallery > slideshow-component .product-media-container {
