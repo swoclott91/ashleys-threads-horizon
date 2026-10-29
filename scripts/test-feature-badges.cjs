@@ -28,7 +28,10 @@ engine.registerFilter('t', (key, ...args) => {
   return key;
 });
 const richText = node => node?.type === 'text' ? node.value : (node?.children || []).map(richText).join('');
-engine.registerFilter('metafield_text', source => richText(source.value));
+engine.registerFilter('metafield_text', source => {
+  if (source.type === 'weight') return `${Number(Number(source.value.value).toFixed(2))} ${source.value.unit}`;
+  return richText(source.value);
+});
 
 const scalar = value => ({ type: 'single_line_text_field', value });
 const entry = (label, handle = 'feature') => ({ label: scalar(label), system: { handle } });
@@ -93,6 +96,18 @@ async function main() {
     assert.ok(output.includes('<span>Ring-Spun</span>'), 'missing weight never hides the cotton type badge');
     if (expected) assert.ok(output.includes(`<span class="feature-badges__weight">${expected}</span>`), 'weight formats once with the ounce suffix');
     else assert.ok(!output.includes('feature-badges__weight') && !output.includes('feature-badges__media'), 'missing or nonpositive weight leaves no caption or empty media wrapper');
+  }
+  for (const cottonType of ['Open-End', 'Ring-Spun', 'Combed Ring-Spun']) {
+    for (const [value, unit, expected] of [[5.3, 'oz', '5.3 oz'], [6, 'oz', '6 oz'], [180, 'g', '180 g'], [0, 'oz', null], [null, 'oz', null]]) {
+      const measuredProduct = { ...product, metafields: { ...product.metafields, custom: { ...product.metafields.custom, cotton_type: scalar(cottonType), fabric_oz: { type: 'weight', value: { type: 'weight', value, unit } } } } };
+      const output = await renderBlock(measuredProduct);
+      if (expected) {
+        assert.equal((output.match(/class="feature-badges__weight"/g) || []).length, 1, 'Shopify weight measurements produce exactly one cotton caption');
+        assert.ok(output.includes(`<span class="feature-badges__weight">${expected}</span>`), 'measurement amount and stored unit render correctly');
+      } else {
+        assert.ok(!output.includes('feature-badges__weight'), 'empty or zero measurements remain hidden');
+      }
+    }
   }
   assert.equal((await renderBlock({ metafields: {} })).trim(), '', 'no storefront wrapper or scripts when no matches');
   assert.ok((await renderBlock({ metafields: {} }, settings, true)).includes('No feature badges match'), 'editor can select an empty block');

@@ -16,7 +16,7 @@ The preset configures these conditions:
 
 Required values match exactly, ignoring case and outer spaces. Ring-Spun does not match Combed Ring-Spun. Update the values in the editor to match the wording stored on your products. Multiple slots can use Clothing Features to explain different entries independently.
 
-Cotton badges automatically show a positive `custom.fabric_oz` value beneath their icon, such as **5.3 oz**. This applies to the open-end, ring-spun and combed ring-spun cotton icons. The cotton type label and popup remain in place. Missing, empty or nonpositive weights leave the icon without a caption; other icons do not receive a weight caption.
+Cotton badges automatically show a positive `custom.fabric_oz` value beneath their icon, such as **5.3 oz**. The store uses Shopify's **weight** metafield type: its nested measurement amount is checked and Shopify formats the stored amount and unit. Numeric metafields are also supported and interpreted as ounces. This applies to the open-end, ring-spun and combed ring-spun cotton icons. The cotton type label and popup remain in place. Missing, empty or nonpositive weights leave the icon without a caption; other icons do not receive a weight caption.
 
 ## Garment construction
 
