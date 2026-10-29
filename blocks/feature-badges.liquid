@@ -3,6 +3,7 @@
   if request.visual_preview_mode and product_resource == blank
     assign product_resource = collections.all.products.first
   endif
+  assign fabric_weight = product_resource.metafields.custom.fabric_oz.value | plus: 0
 -%}
 
 {%- capture badges -%}
@@ -34,11 +35,22 @@
       -%}
     {%- endcapture -%}
     {%- if matches == 'true' and label != blank -%}
-      {%- assign badge_id = 'feature-badge-' | append: section.id | append: '-' | append: block.id | append: '-' | append: index -%}
+      {%- liquid
+        assign badge_id = 'feature-badge-' | append: section.id | append: '-' | append: block.id | append: '-' | append: index
+        assign icon = block.settings[icon_key]
+        assign icon_caption = ''
+        if fabric_weight > 0
+          case icon
+            when 'cotton_open_end', 'cotton_ring_spun', 'cotton_combed_ring_spun'
+              assign icon_caption = 'products.feature_badges.fabric_weight' | t: weight: fabric_weight
+          endcase
+        endif
+      -%}
       {% render 'feature-badge',
         badge_id: badge_id,
         label: label,
-        icon: block.settings[icon_key],
+        icon: icon,
+        icon_caption: icon_caption,
         content: block.settings[content_key],
         settings: block.settings
       %}
@@ -90,7 +102,7 @@
     white-space: normal;
   }
 
-  .feature-badges__trigger:hover span {
+  .feature-badges__trigger:hover > span:last-child {
     text-decoration: underline;
     text-underline-offset: 0.2em;
   }
@@ -104,6 +116,26 @@
     flex: 0 0 var(--feature-badges-icon-width);
     width: var(--feature-badges-icon-width);
     height: var(--feature-badges-icon-width);
+  }
+
+  .feature-badges__media {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: var(--feature-badges-icon-width);
+  }
+
+  .feature-badges__media .feature-badges__icon {
+    flex: none;
+  }
+
+  .feature-badges__weight {
+    font-size: 0.7rem;
+    font-weight: 400;
+    line-height: 1.2;
+    white-space: nowrap;
   }
 
   .feature-badges__heading {

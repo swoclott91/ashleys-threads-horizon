@@ -385,6 +385,9 @@
     "blog_post_description": "An excerpt of your blog post's content"
   },
   "products": {
+    "feature_badges": {
+      "fabric_weight": "{{ weight }} oz"
+    },
     "product": {
       "add_to_cart": "Add to cart",
       "adding_to_cart": "Adding...",

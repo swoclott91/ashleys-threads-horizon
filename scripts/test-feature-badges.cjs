@@ -18,7 +18,15 @@ for (const name of ['doc', 'schema', 'stylesheet']) {
 }
 engine.registerFilter('asset_url', name => `/assets/${name}`);
 engine.registerFilter('inline_asset_content', name => fs.readFileSync(path.join(root, 'assets', name), 'utf8'));
-engine.registerFilter('t', key => key === 'accessibility.close_dialog' ? 'Close dialog' : key);
+const localeSource = fs.readFileSync(path.join(root, 'locales/en.default.json'), 'utf8');
+const locale = JSON.parse(localeSource.slice(localeSource.indexOf('{')).replace(/^\s*\/\/.*$/gm, ''));
+engine.registerFilter('t', (key, ...args) => {
+  if (key === 'accessibility.close_dialog') return 'Close dialog';
+  if (key === 'products.feature_badges.fabric_weight') {
+    return locale.products.feature_badges.fabric_weight.replace('{{ weight }}', Object.fromEntries(args).weight);
+  }
+  return key;
+});
 const richText = node => node?.type === 'text' ? node.value : (node?.children || []).map(richText).join('');
 engine.registerFilter('metafield_text', source => richText(source.value));
 
@@ -72,6 +80,20 @@ async function main() {
   assert.ok(rendered.includes('<p>A softer cotton yarn.</p>'), 'popup HTML renders');
   assert.equal((rendered.match(/class="feature-badges__icon icon-default"/g) || []).length, 3, 'matching badges render their icons');
   assert.ok(!rendered.includes('>Open-End Cotton<'), 'unmatched cotton remains hidden');
+  for (const cottonType of ['Open-End', 'Ring-Spun', 'Combed Ring-Spun']) {
+    const weightedProduct = { ...product, metafields: { ...product.metafields, custom: { ...product.metafields.custom, cotton_type: scalar(cottonType), fabric_oz: { type: 'number_decimal', value: 5.3 } } } };
+    const output = await renderBlock(weightedProduct);
+    assert.equal((output.match(/class="feature-badges__weight"/g) || []).length, 1, 'only the matching cotton icon receives weight');
+    assert.match(output, /class="feature-badges__media">[\s\S]*?<svg[\s\S]*?<\/svg>\s*<span class="feature-badges__weight">5\.3 oz<\/span>\s*<\/span>/, 'weight is beneath the cotton SVG in its media column');
+    assert.ok(output.includes(`<span>${cottonType}${cottonType === 'Ring-Spun' ? '' : ' Cotton'}</span>`), 'cotton type label remains');
+  }
+  for (const [value, expected] of [[6, '6 oz'], ['5.30', '5.3 oz'], [undefined, null], ['', null], [0, null], [-1, null]]) {
+    const weightedProduct = { ...product, metafields: { ...product.metafields, custom: { ...product.metafields.custom, fabric_oz: value === undefined ? undefined : { type: 'number_decimal', value } } } };
+    const output = await renderBlock(weightedProduct);
+    assert.ok(output.includes('<span>Ring-Spun</span>'), 'missing weight never hides the cotton type badge');
+    if (expected) assert.ok(output.includes(`<span class="feature-badges__weight">${expected}</span>`), 'weight formats once with the ounce suffix');
+    else assert.ok(!output.includes('feature-badges__weight') && !output.includes('feature-badges__media'), 'missing or nonpositive weight leaves no caption or empty media wrapper');
+  }
   assert.equal((await renderBlock({ metafields: {} })).trim(), '', 'no storefront wrapper or scripts when no matches');
   assert.ok((await renderBlock({ metafields: {} }, settings, true)).includes('No feature badges match'), 'editor can select an empty block');
   assert.ok((await renderBlock(product, { ...settings, behavior: 'drawer' })).includes('dialog-drawer'), 'drawer option');
@@ -107,8 +129,9 @@ async function main() {
     ['Tubular with side seams', null],
   ];
   for (const [value, label, otherLabel] of constructionCases) {
-    const constructionProduct = { ...product, metafields: { ...product.metafields, custom: { ...product.metafields.custom, garment_construction: value === undefined ? undefined : scalar(value) } } };
+    const constructionProduct = { ...product, metafields: { ...product.metafields, custom: { ...product.metafields.custom, garment_construction: value === undefined ? undefined : scalar(value), fabric_oz: { type: 'number_decimal', value: 5.3 } } } };
     const output = await renderBlock(constructionProduct, constructionSettings, false, 'construction-block');
+    assert.ok(!output.includes('feature-badges__weight'), 'construction icons do not receive fabric weight');
     if (!label) {
       assert.equal(output.trim(), '', 'blank or unmatched construction hides the entire block');
       continue;
@@ -137,7 +160,7 @@ async function main() {
     assert.equal(new Set(combinedIds).size, combinedIds.length, 'multiple badge blocks keep unique dialog IDs');
   }
   assert.ok(schema.settings.filter(setting => setting.id).length <= 40, 'settings remain within recommended limit');
-  console.log('Feature Badges: 22 matching scenarios, 7 construction cases, configured popups and block/schema checks passed.');
+  console.log('Feature Badges: cotton icon weights, empty weight handling, 22 matching scenarios, 7 construction cases and block/schema checks passed.');
   if (process.env.FEATURE_BADGES_PREVIEW) fs.writeFileSync(process.env.FEATURE_BADGES_PREVIEW, rendered);
 }
 

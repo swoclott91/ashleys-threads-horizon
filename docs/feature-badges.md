@@ -16,6 +16,8 @@ The preset configures these conditions:
 
 Required values match exactly, ignoring case and outer spaces. Ring-Spun does not match Combed Ring-Spun. Update the values in the editor to match the wording stored on your products. Multiple slots can use Clothing Features to explain different entries independently.
 
+Cotton badges automatically show a positive `custom.fabric_oz` value beneath their icon, such as **5.3 oz**. This applies to the open-end, ring-spun and combed ring-spun cotton icons. The cotton type label and popup remain in place. Missing, empty or nonpositive weights leave the icon without a caption; other icons do not receive a weight caption.
+
 ## Garment construction
 
 Garment Construction is available in every slot's Product metafield selector and reads `custom.garment_construction`. Both construction icons are included in the same icon picker as the standard Icon block.
