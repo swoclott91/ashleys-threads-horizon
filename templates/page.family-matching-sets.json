@@ -546,7 +546,7 @@
                   "type": "text",
                   "name": "t:names.heading",
                   "settings": {
-                    "text": "<h2>Everyday Family Tees</h2>",
+                    "text": "<h2>Soft & Premium</h2>",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "left",
@@ -572,7 +572,7 @@
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>Start with value.&nbsp;</p>",
+                    "text": "<p>Elevate the finished feel.&nbsp;</p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
@@ -599,7 +599,7 @@
                   "name": "t:names.button",
                   "settings": {
                     "label": "Shop everyday tees",
-                    "link": "shopify://collections/everyday-family-tees",
+                    "link": "shopify://collections/soft-premium",
                     "open_in_new_tab": false,
                     "style_class": "button-unstyled",
                     "custom_button_background": "{{ settings.color_palette.foreground }}",
@@ -748,7 +748,7 @@
                   "type": "text",
                   "name": "t:names.heading",
                   "settings": {
-                    "text": "<h2>Everyday Family Tees</h2>",
+                    "text": "<h2>Family Fleece</h2>",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "left",
@@ -774,7 +774,7 @@
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>Start with value.&nbsp;</p>",
+                    "text": "<p>Expand into sweatshirts.&nbsp;</p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
@@ -800,7 +800,7 @@
                   "type": "button",
                   "name": "t:names.button",
                   "settings": {
-                    "label": "Shop everyday tees",
+                    "label": "Shop family fleece",
                     "link": "shopify://collections/everyday-family-tees",
                     "open_in_new_tab": false,
                     "style_class": "button-unstyled",
