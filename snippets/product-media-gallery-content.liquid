@@ -674,13 +674,22 @@
         window.ProductModel.loadShopifyXR();
       </script>
     {%- endif -%}
+    {% render 'product-card-badge', product: selected_product %}
   </media-gallery>
 {% endif %}
 
 {% render 'product-media-container-styles' %}
 {% render 'product-media-gallery-content-styles' %}
+{% render 'product-badges-styles' %}
 
 {% stylesheet %}
+  media-gallery > .product-badges {
+    --border-radius: var(--media-radius);
+
+    z-index: var(--layer-raised);
+    pointer-events: none;
+  }
+
   .dialog-thumbnails-list-container {
     position: fixed;
     width: 100%;
