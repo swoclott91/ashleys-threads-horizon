@@ -1,7 +1,7 @@
 import { Component } from '@theme/component';
 import { morph, MORPH_OPTIONS } from '@theme/morph';
 import { OverflowList } from '@theme/overflow-list';
-import { yieldToMainThread, getViewParameterValue, ResizeNotifier } from '@theme/utilities';
+import { getViewParameterValue, ResizeNotifier } from '@theme/utilities';
 import { ProductSelectEvent } from '@shopify/events';
 
 /**
@@ -87,8 +87,12 @@ export default class VariantPicker extends Component {
       : undefined;
 
     const { optionValueId = '', variantId = '', connectedProductUrl = '' } = selectedOption.dataset;
+    const optionName = selectedOption.dataset.optionName?.toLowerCase();
+    const resolveColorFallback =
+      isOnProductPage && !loadsNewProduct && (optionName === 'color' || optionName === 'colour');
     this.fetchUpdatedSection(this.buildRequestUrl(selectedOption), {
       morphElementSelector,
+      resolveColorFallback,
       detail: { optionValueId, variantId, connectedProductUrl },
     });
 
@@ -108,9 +112,7 @@ export default class VariantPicker extends Component {
     }
 
     if (url.href !== window.location.href) {
-      yieldToMainThread().then(() => {
-        history.replaceState({}, '', url.toString());
-      });
+      history.replaceState({}, '', url.toString());
     }
   }
 
@@ -304,13 +306,15 @@ export default class VariantPicker extends Component {
    * @param {string} requestUrl - The request URL.
    * @param {object} [options] - Request options.
    * @param {string} [options.morphElementSelector] - The selector of the element to be morphed. By default, only the variant picker is morphed.
+   * @param {boolean} [options.resolveColorFallback] - Whether to resolve a missing color combination.
    * @param {{ optionValueId?: string, variantId?: string, connectedProductUrl?: string }} [options.detail] - Synchronous product select event detail.
    */
-  fetchUpdatedSection(requestUrl, { morphElementSelector, detail = {} } = {}) {
+  fetchUpdatedSection(requestUrl, { morphElementSelector, resolveColorFallback = false, detail = {} } = {}) {
     const { optionValueId = '', variantId, connectedProductUrl = '' } = detail;
     // We use this to abort the previous fetch request if it's still pending.
     this.#abortController?.abort();
     this.#abortController = new AbortController();
+    const { signal } = this.#abortController;
 
     const deferredEventPromise = ProductSelectEvent.createPromise();
     const selectedOptions = this.getAllSelectedOptions();
@@ -332,15 +336,39 @@ export default class VariantPicker extends Component {
       })
     );
 
-    fetch(requestUrl, { signal: this.#abortController.signal })
+    fetch(requestUrl, { signal })
       .then((response) => response.text())
-      .then((responseText) => {
+      .then(async (responseText) => {
+        signal.throwIfAborted();
+        const parser = new DOMParser();
+        let html = parser.parseFromString(responseText, 'text/html');
+        let variantPickerJsonScript = html.querySelector('variant-picker script[type="application/json"]');
+        const fallbackId =
+          resolveColorFallback && variantPickerJsonScript?.getAttribute('data-color-fallback-variant-id');
+
+        if (fallbackId) {
+          const fallbackUrl = new URL(requestUrl, window.location.href);
+          fallbackUrl.searchParams.delete('option_values');
+          fallbackUrl.searchParams.set('variant', fallbackId);
+          const response = await fetch(fallbackUrl, { signal });
+          const fallbackHtml = parser.parseFromString(await response.text(), 'text/html');
+          signal.throwIfAborted();
+          const fallbackScript = fallbackHtml.querySelector('variant-picker script[type="application/json"]');
+
+          if (response.ok && String(JSON.parse(fallbackScript?.textContent || 'null')?.id) === fallbackId) {
+            html = fallbackHtml;
+            variantPickerJsonScript = fallbackScript;
+            const url = new URL(window.location.href);
+            url.searchParams.delete('option_values');
+            url.searchParams.set('variant', fallbackId);
+            history.replaceState({}, '', url.toString());
+          }
+        }
+
         this.#pendingRequestUrl = undefined;
-        const html = new DOMParser().parseFromString(responseText, 'text/html');
         // Defer is only useful for the initial rendering of the page. Remove it here.
         html.querySelector('overflow-list[defer]')?.removeAttribute('defer');
 
-        const variantPickerJsonScript = html.querySelector(`variant-picker script[type="application/json"]`);
         const textContent = variantPickerJsonScript?.textContent;
 
         if (!textContent) {
@@ -467,6 +495,12 @@ export default class VariantPicker extends Component {
         return key;
       },
     });
+    for (const [fieldsetIndex, radios] of this.#radios.entries()) {
+      const checked = radios.find((radio) => radio.checked);
+      if (checked && checked.dataset.inputIndex !== String(this.#checkedIndices[fieldsetIndex]?.[0])) {
+        this.updateSelectedOption(checked);
+      }
+    }
     this.updateVariantPickerCss();
 
     return newProduct;
@@ -580,10 +614,12 @@ export default class VariantPicker extends Component {
    */
   get selectedOptionsValues() {
     /** @type HTMLElement[] */
-    const selectedOptions = Array.from(this.querySelectorAll('select option[selected], fieldset input:checked'));
+    const selectedOptions = Array.from(
+      this.querySelectorAll('select option[selected], fieldset input:checked, [data-single-option-value-id]')
+    );
 
     return selectedOptions.map((option) => {
-      const { optionValueId } = option.dataset;
+      const { optionValueId = option.dataset.singleOptionValueId } = option.dataset;
 
       if (!optionValueId) throw new Error('No option value ID found');
 
