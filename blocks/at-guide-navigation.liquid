@@ -1,0 +1,74 @@
+{% assign icons = 'price_tag,cotton_ring_spun,ruler' | split: ',' %}
+
+<nav class="at-guide-navigation" aria-label="{{ block.settings.label | escape }}" {{ block.shopify_attributes }}>
+  <ul class="list-unstyled at-guide-navigation__links">
+    {% for icon in icons %}
+      {% liquid
+        assign label_key = 'label_' | append: forloop.index
+        assign link_key = 'link_' | append: forloop.index
+        assign label = block.settings[label_key]
+        assign link = block.settings[link_key]
+      %}
+      {% if label != blank and link != blank %}
+        <li>
+          <a href="{{ link | escape }}">
+            {% render 'icon-or-image', icon: icon, width: 18, class_name: 'at-guide-navigation__icon' %}
+            <span>{{ label | escape }}</span>
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</nav>
+
+{% stylesheet %}
+  .at-guide-navigation__links {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--gap-md);
+    margin: 0;
+  }
+
+  .at-guide-navigation a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-xs);
+    min-block-size: 36px;
+    font-size: var(--font-size--sm);
+  }
+
+  .at-guide-navigation__icon {
+    flex-shrink: 0;
+  }
+
+  .at-guide-navigation a span {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .at-guide-target {
+    scroll-margin-block-start: var(--padding-sm);
+    text-wrap: balance;
+  }
+
+  body:has(#header-component[sticky='always']) .at-guide-target {
+    scroll-margin-block-start: calc(var(--header-height, 0px) + var(--padding-sm));
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Buying guide navigation",
+  "tag": null,
+  "settings": [
+    { "type": "text", "id": "label", "label": "Navigation label", "default": "Shop by priority" },
+    { "type": "text", "id": "label_1", "label": "First link label" },
+    { "type": "url", "id": "link_1", "label": "First link destination" },
+    { "type": "text", "id": "label_2", "label": "Second link label" },
+    { "type": "url", "id": "link_2", "label": "Second link destination" },
+    { "type": "text", "id": "label_3", "label": "Third link label" },
+    { "type": "url", "id": "link_3", "label": "Third link destination" }
+  ],
+  "presets": [{ "name": "Buying guide navigation" }]
+}
+{% endschema %}

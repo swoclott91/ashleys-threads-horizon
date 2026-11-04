@@ -1,0 +1,41 @@
+{%- doc -%}
+  Shows a selected catalog photo on a buying guide card with the native product badge.
+
+  @param {product} product - Product shown on the card.
+  @param {string} image_key - Alt text identifying the selected catalog image.
+  @param {string} description - Accessible description of the selected photo.
+{%- enddoc -%}
+
+{%- liquid
+  assign image = product.images | where: 'alt', image_key | first
+  assign alt = description
+  if image == blank
+    assign image = product.featured_image
+    assign alt = product.title
+  endif
+-%}
+
+{% if image != blank %}
+  <div class="at-guide-product-photo">
+    {{
+      image
+      | image_url: width: 720
+      | image_tag: widths: '180, 240, 360, 480, 720', sizes: 'auto, (max-width: 749px) 46vw, 24vw', loading: 'lazy', alt: alt
+    }}
+    {% render 'product-card-badge', product: product %}
+  </div>
+  {% render 'product-badges-styles' %}
+{% endif %}
+
+{% stylesheet %}
+  .at-guide-product-photo {
+    position: relative;
+  }
+
+  .at-guide-product-photo img {
+    display: block;
+    inline-size: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+{% endstylesheet %}

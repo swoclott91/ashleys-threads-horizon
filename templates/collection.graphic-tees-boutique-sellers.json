@@ -45,7 +45,7 @@
             "width_mobile": "fill",
             "horizontal_alignment_flex_direction_column": "flex-start",
             "vertical_alignment_flex_direction_column": "flex-start",
-            "gap": 16
+            "gap": 10
           },
           "blocks": {
             "eyebrow": {
@@ -73,7 +73,7 @@
             "description": {
               "type": "text",
               "settings": {
-                "text": "<p>Find a blank that suits your design and the selling price you’re aiming for. Start with a classic tee, choose a softer everyday feel, or give the graphic a washed finish or a boxier shape.</p>",
+                "text": "<p>Find a blank that suits your design and target selling price. Compare classic value, softer fabric, and distinctive finishes and fits.</p>",
                 "type_preset": "rte",
                 "alignment": "left",
                 "max_width": "normal"
@@ -83,8 +83,20 @@
               "type": "button",
               "settings": {
                 "label": "Shop all graphic tee blanks",
-                "link": "#ResultsList",
+                "link": "#shop-all-graphic-tee-blanks",
                 "style_class": "button"
+              }
+            },
+            "path_navigation": {
+              "type": "at-guide-navigation",
+              "settings": {
+                "label": "Shop graphic tees by priority",
+                "label_1": "Keep costs down",
+                "link_1": "#value-graphic-tees",
+                "label_2": "Shop softer tees",
+                "link_2": "#soft-everyday-graphic-tees",
+                "label_3": "Explore finishes and fits",
+                "link_3": "#distinctive-graphic-tees"
               }
             }
           },
@@ -92,6 +104,7 @@
             "eyebrow",
             "title",
             "description",
+            "path_navigation",
             "shop_all"
           ]
         },
@@ -150,13 +163,9 @@
               }
             },
             "heading": {
-              "type": "text",
+              "type": "custom-liquid",
               "settings": {
-                "text": "<h2>Keep blank costs down</h2>",
-                "type_preset": "h3",
-                "alignment": "left",
-                "max_width": "none",
-                "wrap": "balance"
+                "custom_liquid": "<h2 id=\"value-graphic-tees\" class=\"h3 at-guide-target\" tabindex=\"-1\">Keep blank costs down</h2>"
               }
             },
             "description": {
@@ -175,144 +184,189 @@
             "description"
           ]
         },
-        "picks": {
+        "selection": {
           "type": "group",
           "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "flex-start",
+            "content_direction": "column",
             "width": "fill",
-            "gap": 16,
-            "width_mobile": "fill"
+            "width_mobile": "fill",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 16
           },
           "blocks": {
-            "gildan_5000": {
-              "type": "product-card",
+            "picks": {
+              "type": "group",
               "settings": {
-                "product": "gildan-5000-heavy-cotton-100-cotton-t-shirt",
-                "product_card_gap": 8,
-                "width": "custom",
-                "custom_width": 48,
-                "width_mobile": "custom",
-                "custom_width_mobile": 47
+                "content_direction": "row",
+                "vertical_on_mobile": false,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "flex-start",
+                "width": "fill",
+                "gap": 16,
+                "width_mobile": "fill"
               },
               "blocks": {
-                "gallery": {
-                  "type": "_product-card-gallery",
+                "gildan_5000": {
+                  "type": "product-card",
                   "settings": {
-                    "image_ratio": "square"
-                  }
+                    "product": "gildan-5000-heavy-cotton-100-cotton-t-shirt",
+                    "product_card_gap": 8,
+                    "width": "custom",
+                    "custom_width": 48,
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 47
+                  },
+                  "blocks": {
+                    "gallery": {
+                      "type": "_product-card-gallery",
+                      "settings": {
+                        "image_ratio": "square"
+                      }
+                    },
+                    "title": {
+                      "type": "product-title",
+                      "settings": {
+                        "type_preset": "h5"
+                      }
+                    },
+                    "price": {
+                      "type": "price",
+                      "settings": {
+                        "type_preset": "paragraph"
+                      }
+                    },
+                    "description": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>A straight fit for everyday graphics.</p>",
+                        "type_preset": "rte",
+                        "max_width": "none"
+                      }
+                    },
+                    "vendor": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.75rem",
+                        "letter_spacing": "loose",
+                        "case": "uppercase"
+                      }
+                    },
+                    "cue": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>Classic midweight</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.875rem",
+                        "max_width": "none"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "gallery",
+                    "vendor",
+                    "title",
+                    "cue",
+                    "price",
+                    "description"
+                  ]
                 },
-                "title": {
-                  "type": "product-title",
+                "port_pc54": {
+                  "type": "product-card",
                   "settings": {
-                    "type_preset": "h5"
-                  }
-                },
-                "price": {
-                  "type": "price",
-                  "settings": {
-                    "type_preset": "paragraph"
-                  }
-                },
-                "description": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>A classic, straight fit and a midweight feel for everyday graphics.</p>",
-                    "type_preset": "rte",
-                    "alignment": "left",
-                    "max_width": "none"
-                  }
-                },
-                "vendor": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
-                    "type_preset": "custom",
-                    "font": "var(--font-body--family)",
-                    "font_size": "0.75rem",
-                    "letter_spacing": "loose",
-                    "case": "uppercase"
-                  }
+                    "product": "port-company-pc54-core-cotton-tee",
+                    "product_card_gap": 8,
+                    "width": "custom",
+                    "custom_width": 48,
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 47
+                  },
+                  "blocks": {
+                    "gallery": {
+                      "type": "_product-card-gallery",
+                      "settings": {
+                        "image_ratio": "square"
+                      }
+                    },
+                    "title": {
+                      "type": "product-title",
+                      "settings": {
+                        "type_preset": "h5"
+                      }
+                    },
+                    "price": {
+                      "type": "price",
+                      "settings": {
+                        "type_preset": "paragraph"
+                      }
+                    },
+                    "description": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>A traditional midweight tee.</p>",
+                        "type_preset": "rte",
+                        "max_width": "none"
+                      }
+                    },
+                    "vendor": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.75rem",
+                        "letter_spacing": "loose",
+                        "case": "uppercase"
+                      }
+                    },
+                    "cue": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>Extended adult sizes</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.875rem",
+                        "max_width": "none"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "gallery",
+                    "vendor",
+                    "title",
+                    "cue",
+                    "price",
+                    "description"
+                  ]
                 }
               },
               "block_order": [
-                "gallery",
-                "vendor",
-                "title",
-                "price",
-                "description"
+                "gildan_5000",
+                "port_pc54"
               ]
             },
-            "port_pc54": {
-              "type": "product-card",
+            "shop_path": {
+              "type": "button",
               "settings": {
-                "product": "port-company-pc54-core-cotton-tee",
-                "product_card_gap": 8,
-                "width": "custom",
-                "custom_width": 48,
-                "width_mobile": "custom",
-                "custom_width_mobile": 47
-              },
-              "blocks": {
-                "gallery": {
-                  "type": "_product-card-gallery",
-                  "settings": {
-                    "image_ratio": "square"
-                  }
-                },
-                "title": {
-                  "type": "product-title",
-                  "settings": {
-                    "type_preset": "h5"
-                  }
-                },
-                "price": {
-                  "type": "price",
-                  "settings": {
-                    "type_preset": "paragraph"
-                  }
-                },
-                "description": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>A traditional midweight tee worth comparing when you need extended adult sizes.</p>",
-                    "type_preset": "rte",
-                    "alignment": "left",
-                    "max_width": "none"
-                  }
-                },
-                "vendor": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
-                    "type_preset": "custom",
-                    "font": "var(--font-body--family)",
-                    "font_size": "0.75rem",
-                    "letter_spacing": "loose",
-                    "case": "uppercase"
-                  }
-                }
-              },
-              "block_order": [
-                "gallery",
-                "vendor",
-                "title",
-                "price",
-                "description"
-              ]
+                "label": "Shop all value graphic tees",
+                "link": "shopify://collections/value-graphic-tees",
+                "style_class": "button-unstyled"
+              }
             }
           },
           "block_order": [
-            "gildan_5000",
-            "port_pc54"
+            "picks",
+            "shop_path"
           ]
         }
       },
       "block_order": [
         "guide",
-        "picks"
+        "selection"
       ]
     },
     "soft_tees": {
@@ -355,13 +409,9 @@
               }
             },
             "heading": {
-              "type": "text",
+              "type": "custom-liquid",
               "settings": {
-                "text": "<h2>Start with a soft everyday tee</h2>",
-                "type_preset": "h3",
-                "alignment": "left",
-                "max_width": "none",
-                "wrap": "balance"
+                "custom_liquid": "<h2 id=\"soft-everyday-graphic-tees\" class=\"h3 at-guide-target\" tabindex=\"-1\">Start with a soft everyday tee</h2>"
               }
             },
             "description": {
@@ -372,211 +422,275 @@
                 "alignment": "left",
                 "max_width": "normal"
               }
+            },
+            "drape": {
+              "type": "button",
+              "settings": {
+                "label": "3413 tri-blend for more drape",
+                "link": "/products/bella-canvas-3413-unisex-triblend-short-sleeve-tee",
+                "style_class": "button-unstyled"
+              }
             }
           },
           "block_order": [
             "eyebrow",
             "heading",
-            "description"
+            "description",
+            "drape"
           ]
         },
-        "picks": {
+        "selection": {
           "type": "group",
           "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "flex-start",
+            "content_direction": "column",
             "width": "fill",
-            "gap": 16,
-            "width_mobile": "fill"
+            "width_mobile": "fill",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 16
           },
           "blocks": {
-            "gildan_64000": {
-              "type": "product-card",
+            "picks": {
+              "type": "group",
               "settings": {
-                "product": "gildan-64000-softstyle-t-shirt",
-                "product_card_gap": 8,
-                "width": "custom",
-                "custom_width": 31,
-                "width_mobile": "custom",
-                "custom_width_mobile": 47
+                "content_direction": "row",
+                "vertical_on_mobile": false,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "flex-start",
+                "width": "fill",
+                "gap": 16,
+                "width_mobile": "fill"
               },
               "blocks": {
-                "gallery": {
-                  "type": "_product-card-gallery",
+                "gildan_64000": {
+                  "type": "product-card",
                   "settings": {
-                    "image_ratio": "square"
-                  }
+                    "product": "gildan-64000-softstyle-t-shirt",
+                    "product_card_gap": 8,
+                    "width": "custom",
+                    "custom_width": 31,
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 47
+                  },
+                  "blocks": {
+                    "gallery": {
+                      "type": "_product-card-gallery",
+                      "settings": {
+                        "image_ratio": "square"
+                      }
+                    },
+                    "title": {
+                      "type": "product-title",
+                      "settings": {
+                        "type_preset": "h5"
+                      }
+                    },
+                    "price": {
+                      "type": "price",
+                      "settings": {
+                        "type_preset": "paragraph"
+                      }
+                    },
+                    "description": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>A lighter alternative to Heavy Cotton.</p>",
+                        "type_preset": "rte",
+                        "max_width": "none"
+                      }
+                    },
+                    "vendor": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.75rem",
+                        "letter_spacing": "loose",
+                        "case": "uppercase"
+                      }
+                    },
+                    "cue": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>Soft feel, straight fit</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.875rem",
+                        "max_width": "none"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "gallery",
+                    "vendor",
+                    "title",
+                    "cue",
+                    "price",
+                    "description"
+                  ]
                 },
-                "title": {
-                  "type": "product-title",
+                "bella_canvas_3001": {
+                  "type": "product-card",
                   "settings": {
-                    "type_preset": "h5"
-                  }
+                    "product": "bella-canvas-3001-unisex-jersey-short-sleeve-tee",
+                    "product_card_gap": 8,
+                    "width": "custom",
+                    "custom_width": 31,
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 47
+                  },
+                  "blocks": {
+                    "gallery": {
+                      "type": "_product-card-gallery",
+                      "settings": {
+                        "image_ratio": "square"
+                      }
+                    },
+                    "title": {
+                      "type": "product-title",
+                      "settings": {
+                        "type_preset": "h5"
+                      }
+                    },
+                    "price": {
+                      "type": "price",
+                      "settings": {
+                        "type_preset": "paragraph"
+                      }
+                    },
+                    "description": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>A lightweight retail tee for designs you want to carry across ages.</p>",
+                        "type_preset": "rte",
+                        "max_width": "none"
+                      }
+                    },
+                    "vendor": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.75rem",
+                        "letter_spacing": "loose",
+                        "case": "uppercase"
+                      }
+                    },
+                    "cue": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>Youth and toddler companions</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.875rem",
+                        "max_width": "none"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "gallery",
+                    "vendor",
+                    "title",
+                    "cue",
+                    "price",
+                    "description"
+                  ]
                 },
-                "price": {
-                  "type": "price",
+                "bella_canvas_3413": {
+                  "type": "product-card",
                   "settings": {
-                    "type_preset": "paragraph"
-                  }
-                },
-                "description": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>A lighter, softer alternative to Heavy Cotton with a straight everyday shape.</p>",
-                    "type_preset": "rte",
-                    "alignment": "left",
-                    "max_width": "none"
-                  }
-                },
-                "vendor": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
-                    "type_preset": "custom",
-                    "font": "var(--font-body--family)",
-                    "font_size": "0.75rem",
-                    "letter_spacing": "loose",
-                    "case": "uppercase"
-                  }
+                    "product": "bella-canvas-3413-unisex-triblend-short-sleeve-tee",
+                    "product_card_gap": 8,
+                    "width": "custom",
+                    "custom_width": 31,
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 47
+                  },
+                  "blocks": {
+                    "gallery": {
+                      "type": "_product-card-gallery",
+                      "settings": {
+                        "image_ratio": "square"
+                      }
+                    },
+                    "title": {
+                      "type": "product-title",
+                      "settings": {
+                        "type_preset": "h5"
+                      }
+                    },
+                    "price": {
+                      "type": "price",
+                      "settings": {
+                        "type_preset": "paragraph"
+                      }
+                    },
+                    "description": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>A fluid tri-blend for a softer, drapier fabric direction.</p>",
+                        "type_preset": "rte",
+                        "max_width": "none"
+                      }
+                    },
+                    "vendor": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.75rem",
+                        "letter_spacing": "loose",
+                        "case": "uppercase"
+                      }
+                    },
+                    "cue": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>Lightweight with more drape</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.875rem",
+                        "max_width": "none"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "gallery",
+                    "vendor",
+                    "title",
+                    "cue",
+                    "price",
+                    "description"
+                  ]
                 }
               },
               "block_order": [
-                "gallery",
-                "vendor",
-                "title",
-                "price",
-                "description"
+                "gildan_64000",
+                "bella_canvas_3001",
+                "bella_canvas_3413"
               ]
             },
-            "next_level_3600": {
-              "type": "product-card",
+            "shop_path": {
+              "type": "button",
               "settings": {
-                "product": "next-level-apparel-nl3600-adult-cotton-tee",
-                "product_card_gap": 8,
-                "width": "custom",
-                "custom_width": 31,
-                "width_mobile": "custom",
-                "custom_width_mobile": 47
-              },
-              "blocks": {
-                "gallery": {
-                  "type": "_product-card-gallery",
-                  "settings": {
-                    "image_ratio": "square"
-                  }
-                },
-                "title": {
-                  "type": "product-title",
-                  "settings": {
-                    "type_preset": "h5"
-                  }
-                },
-                "price": {
-                  "type": "price",
-                  "settings": {
-                    "type_preset": "paragraph"
-                  }
-                },
-                "description": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>Lightweight cotton jersey in a regular retail fit.</p>",
-                    "type_preset": "rte",
-                    "alignment": "left",
-                    "max_width": "none"
-                  }
-                },
-                "vendor": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
-                    "type_preset": "custom",
-                    "font": "var(--font-body--family)",
-                    "font_size": "0.75rem",
-                    "letter_spacing": "loose",
-                    "case": "uppercase"
-                  }
-                }
-              },
-              "block_order": [
-                "gallery",
-                "vendor",
-                "title",
-                "price",
-                "description"
-              ]
-            },
-            "bella_canvas_3001": {
-              "type": "product-card",
-              "settings": {
-                "product": "bella-canvas-3001-unisex-jersey-short-sleeve-tee",
-                "product_card_gap": 8,
-                "width": "custom",
-                "custom_width": 31,
-                "width_mobile": "custom",
-                "custom_width_mobile": 47
-              },
-              "blocks": {
-                "gallery": {
-                  "type": "_product-card-gallery",
-                  "settings": {
-                    "image_ratio": "square"
-                  }
-                },
-                "title": {
-                  "type": "product-title",
-                  "settings": {
-                    "type_preset": "h5"
-                  }
-                },
-                "price": {
-                  "type": "price",
-                  "settings": {
-                    "type_preset": "paragraph"
-                  }
-                },
-                "description": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>A lightweight retail tee with youth and toddler jersey styles to explore when you’re extending a design.</p>",
-                    "type_preset": "rte",
-                    "alignment": "left",
-                    "max_width": "none"
-                  }
-                },
-                "vendor": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
-                    "type_preset": "custom",
-                    "font": "var(--font-body--family)",
-                    "font_size": "0.75rem",
-                    "letter_spacing": "loose",
-                    "case": "uppercase"
-                  }
-                }
-              },
-              "block_order": [
-                "gallery",
-                "vendor",
-                "title",
-                "price",
-                "description"
-              ]
+                "label": "Shop all soft everyday tees",
+                "link": "shopify://collections/soft-everyday-graphic-tees",
+                "style_class": "button-unstyled"
+              }
             }
           },
           "block_order": [
-            "gildan_64000",
-            "next_level_3600",
-            "bella_canvas_3001"
+            "picks",
+            "shop_path"
           ]
         }
       },
       "block_order": [
         "guide",
-        "picks"
+        "selection"
       ]
     },
     "distinctive_tees": {
@@ -618,19 +732,15 @@
               }
             },
             "heading": {
-              "type": "text",
+              "type": "custom-liquid",
               "settings": {
-                "text": "<h2>Give the graphic a distinctive look</h2>",
-                "type_preset": "h3",
-                "alignment": "left",
-                "max_width": "none",
-                "wrap": "balance"
+                "custom_liquid": "<h2 id=\"distinctive-graphic-tees\" class=\"h3 at-guide-target\" tabindex=\"-1\">Give the graphic a distinctive look</h2>"
               }
             },
             "description": {
               "type": "text",
               "settings": {
-                "text": "<p>Choose a washed color for a lived-in look or a boxier tee when you want the shape to stand out. The finish and fit can change how the same graphic reads.</p>",
+                "text": "<p>Choose a washed color for a lived-in look, a boxy tee for more room, or a fitted micro-rib to bring the graphic closer to the body.</p>",
                 "type_preset": "rte",
                 "alignment": "left",
                 "max_width": "normal"
@@ -651,154 +761,277 @@
                 "link": "shopify://collections/heavyweight-t-shirts",
                 "style_class": "button-unstyled"
               }
+            },
+            "fitted": {
+              "type": "button",
+              "settings": {
+                "label": "1010 fitted micro-rib baby tee",
+                "link": "/products/bella-canvas-1010-women-s-micro-rib-baby-tee",
+                "style_class": "button-unstyled"
+              }
             }
           },
           "block_order": [
             "eyebrow",
             "heading",
             "description",
+            "fitted",
             "garment_dyed",
             "heavyweight"
           ]
         },
-        "picks": {
+        "selection": {
           "type": "group",
           "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "flex-start",
+            "content_direction": "column",
             "width": "fill",
-            "gap": 16,
-            "width_mobile": "fill"
+            "width_mobile": "fill",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 16
           },
           "blocks": {
-            "comfort_colors_1717": {
-              "type": "product-card",
+            "picks": {
+              "type": "group",
               "settings": {
-                "product": "comfort-colors-1717-heavyweight-ring-spun-tee",
-                "product_card_gap": 8,
-                "width": "custom",
-                "custom_width": 48,
-                "width_mobile": "custom",
-                "custom_width_mobile": 47
+                "content_direction": "row",
+                "vertical_on_mobile": false,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "flex-start",
+                "width": "fill",
+                "gap": 16,
+                "width_mobile": "fill"
               },
               "blocks": {
-                "gallery": {
-                  "type": "_product-card-gallery",
+                "bella_canvas_3010": {
+                  "type": "product-card",
                   "settings": {
-                    "image_ratio": "square"
-                  }
+                    "product": "bella-canvas-3010-unisex-6-ounce-heavyweight-tee",
+                    "product_card_gap": 8,
+                    "width": "custom",
+                    "custom_width": 31,
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 47
+                  },
+                  "blocks": {
+                    "gallery": {
+                      "type": "custom-liquid",
+                      "settings": {
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: 'BC3010_athleticheather_model_front.jpg', description: 'Front view of the BELLA+CANVAS 3010 in Athletic Heather, showing the dropped shoulders and boxy fit.' %}"
+                      }
+                    },
+                    "title": {
+                      "type": "product-title",
+                      "settings": {
+                        "type_preset": "h5"
+                      }
+                    },
+                    "price": {
+                      "type": "price",
+                      "settings": {
+                        "type_preset": "paragraph"
+                      }
+                    },
+                    "description": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>A heavyweight tee with more body than lightweight jersey.</p>",
+                        "type_preset": "rte",
+                        "max_width": "none"
+                      }
+                    },
+                    "vendor": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.75rem",
+                        "letter_spacing": "loose",
+                        "case": "uppercase"
+                      }
+                    },
+                    "cue": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>Boxy fit, dropped shoulders</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.875rem",
+                        "max_width": "none"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "gallery",
+                    "vendor",
+                    "title",
+                    "cue",
+                    "price",
+                    "description"
+                  ]
                 },
-                "title": {
-                  "type": "product-title",
+                "bella_canvas_1010": {
+                  "type": "product-card",
                   "settings": {
-                    "type_preset": "h5"
-                  }
+                    "product": "bella-canvas-1010-women-s-micro-rib-baby-tee",
+                    "product_card_gap": 8,
+                    "width": "custom",
+                    "custom_width": 31,
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 47
+                  },
+                  "blocks": {
+                    "gallery": {
+                      "type": "custom-liquid",
+                      "settings": {
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: 'BC1010_athleticheather_model_front.jpg', description: 'Front view of the BELLA+CANVAS 1010 in Athletic Heather, showing the fitted micro-rib shape.' %}"
+                      }
+                    },
+                    "title": {
+                      "type": "product-title",
+                      "settings": {
+                        "type_preset": "h5"
+                      }
+                    },
+                    "price": {
+                      "type": "price",
+                      "settings": {
+                        "type_preset": "paragraph"
+                      }
+                    },
+                    "description": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>A close-fitting women’s baby tee.</p>",
+                        "type_preset": "rte",
+                        "max_width": "none"
+                      }
+                    },
+                    "vendor": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.75rem",
+                        "letter_spacing": "loose",
+                        "case": "uppercase"
+                      }
+                    },
+                    "cue": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>Fitted stretch micro-rib</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.875rem",
+                        "max_width": "none"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "gallery",
+                    "vendor",
+                    "title",
+                    "cue",
+                    "price",
+                    "description"
+                  ]
                 },
-                "price": {
-                  "type": "price",
+                "comfort_colors_1717": {
+                  "type": "product-card",
                   "settings": {
-                    "type_preset": "paragraph"
-                  }
-                },
-                "description": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>A relaxed fit and a substantial feel. Start with the pigment-dyed colors for a washed look.</p>",
-                    "type_preset": "rte",
-                    "alignment": "left",
-                    "max_width": "none"
-                  }
-                },
-                "vendor": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
-                    "type_preset": "custom",
-                    "font": "var(--font-body--family)",
-                    "font_size": "0.75rem",
-                    "letter_spacing": "loose",
-                    "case": "uppercase"
-                  }
+                    "product": "comfort-colors-1717-heavyweight-ring-spun-tee",
+                    "product_card_gap": 8,
+                    "width": "custom",
+                    "custom_width": 31,
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 47
+                  },
+                  "blocks": {
+                    "gallery": {
+                      "type": "custom-liquid",
+                      "settings": {
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '1717_bluejean_model_front.jpg', description: 'Front view of the Comfort Colors 1717 in washed Blue Jean.' %}"
+                      }
+                    },
+                    "title": {
+                      "type": "product-title",
+                      "settings": {
+                        "type_preset": "h5"
+                      }
+                    },
+                    "price": {
+                      "type": "price",
+                      "settings": {
+                        "type_preset": "paragraph"
+                      }
+                    },
+                    "description": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Pigment-dyed Blue Jean shows the washed finish.</p>",
+                        "type_preset": "rte",
+                        "max_width": "none"
+                      }
+                    },
+                    "vendor": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.75rem",
+                        "letter_spacing": "loose",
+                        "case": "uppercase"
+                      }
+                    },
+                    "cue": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>Washed color, relaxed fit</strong></p>",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.875rem",
+                        "max_width": "none"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "gallery",
+                    "vendor",
+                    "title",
+                    "cue",
+                    "price",
+                    "description"
+                  ]
                 }
               },
               "block_order": [
-                "gallery",
-                "vendor",
-                "title",
-                "price",
-                "description"
+                "bella_canvas_3010",
+                "bella_canvas_1010",
+                "comfort_colors_1717"
               ]
             },
-            "bella_canvas_3010": {
-              "type": "product-card",
+            "shop_path": {
+              "type": "button",
               "settings": {
-                "product": "bella-canvas-3010-unisex-6-ounce-heavyweight-tee",
-                "product_card_gap": 8,
-                "width": "custom",
-                "custom_width": 48,
-                "width_mobile": "custom",
-                "custom_width_mobile": 47
-              },
-              "blocks": {
-                "gallery": {
-                  "type": "_product-card-gallery",
-                  "settings": {
-                    "image_ratio": "square"
-                  }
-                },
-                "title": {
-                  "type": "product-title",
-                  "settings": {
-                    "type_preset": "h5"
-                  }
-                },
-                "price": {
-                  "type": "price",
-                  "settings": {
-                    "type_preset": "paragraph"
-                  }
-                },
-                "description": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>A boxy shape with dropped shoulders and more body than a lightweight jersey tee.</p>",
-                    "type_preset": "rte",
-                    "alignment": "left",
-                    "max_width": "none"
-                  }
-                },
-                "vendor": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
-                    "type_preset": "custom",
-                    "font": "var(--font-body--family)",
-                    "font_size": "0.75rem",
-                    "letter_spacing": "loose",
-                    "case": "uppercase"
-                  }
-                }
-              },
-              "block_order": [
-                "gallery",
-                "vendor",
-                "title",
-                "price",
-                "description"
-              ]
+                "label": "Shop all distinctive graphic tees",
+                "link": "shopify://collections/distinctive-graphic-tees",
+                "style_class": "button-unstyled"
+              }
             }
           },
           "block_order": [
-            "comfort_colors_1717",
-            "bella_canvas_3010"
+            "picks",
+            "shop_path"
           ]
         }
       },
       "block_order": [
         "guide",
-        "picks"
+        "selection"
       ]
     },
     "companion_tees": {
@@ -872,12 +1105,9 @@
       },
       "blocks": {
         "heading": {
-          "type": "text",
+          "type": "custom-liquid",
           "settings": {
-            "text": "<h2>Shop all graphic tee blanks</h2>",
-            "type_preset": "h2",
-            "alignment": "left",
-            "max_width": "normal"
+            "custom_liquid": "<h2 id=\"shop-all-graphic-tee-blanks\" class=\"h2 at-guide-target\" tabindex=\"-1\">Shop all graphic tee blanks</h2>"
           }
         }
       },
