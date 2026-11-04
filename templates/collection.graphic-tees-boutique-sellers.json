@@ -680,10 +680,20 @@
                 "link": "shopify://collections/soft-everyday-graphic-tees",
                 "style_class": "button-unstyled"
               }
+            },
+            "tultex_comparison": {
+              "type": "text",
+              "settings": {
+                "text": "<p><a href=\"/products/tultex-202-unisex-fine-jersey-t-shirt\">Compare Tultex 202 Fine Jersey</a> for another soft everyday tee, with women’s and youth styles to explore if you want to carry the design across fits and ages.</p>",
+                "type_preset": "rte",
+                "alignment": "left",
+                "max_width": "none"
+              }
             }
           },
           "block_order": [
             "picks",
+            "tultex_comparison",
             "shop_path"
           ]
         }
@@ -1021,10 +1031,20 @@
                 "link": "shopify://collections/distinctive-graphic-tees",
                 "style_class": "button-unstyled"
               }
+            },
+            "tultex_comparison": {
+              "type": "text",
+              "settings": {
+                "text": "<p><a href=\"/products/tultex-246-unisex-fine-jersey-ringer-t-shirt\">See a retro ringer.</a> The Tultex 246 frames the graphic with contrast trim at the collar and sleeves.</p>",
+                "type_preset": "rte",
+                "alignment": "left",
+                "max_width": "none"
+              }
             }
           },
           "block_order": [
             "picks",
+            "tultex_comparison",
             "shop_path"
           ]
         }
