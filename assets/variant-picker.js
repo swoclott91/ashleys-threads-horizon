@@ -63,7 +63,7 @@ export default class VariantPicker extends Component {
   }
 
   /** @param {PointerEvent | FocusEvent} event */
-  #showSwatchPreview = (event) => {
+  #showSwatchPreview = async (event) => {
     if (!(event.target instanceof Element)) return;
     if (event instanceof PointerEvent && event.pointerType === 'touch') return;
     if (event.type === 'focusin' && !event.target.matches(':focus-visible')) return;
@@ -79,11 +79,19 @@ export default class VariantPicker extends Component {
     this.#swatchPreview = preview;
 
     const anchor = swatch.getBoundingClientRect();
-    const { offsetWidth: width, offsetHeight: height } = preview;
-    const viewportWidth = document.documentElement.clientWidth;
-    const left = Math.max(8, Math.min(anchor.left + (anchor.width - width) / 2, viewportWidth - width - 8));
+    const { width, height } = preview.getBoundingClientRect();
+    const { clientWidth, clientHeight } = document.documentElement;
+    const gap = 8;
+    const above = anchor.top - height - gap;
+    const below = anchor.bottom + gap;
+    if (above < gap && below + height > clientHeight - gap) {
+      this.#hideSwatchPreview();
+      return;
+    }
+
+    const left = Math.max(gap, Math.min(anchor.left + (anchor.width - width) / 2, clientWidth - width - gap));
     preview.style.left = `${left}px`;
-    preview.style.top = `${anchor.top >= height + 8 ? anchor.top - height : anchor.bottom}px`;
+    preview.style.top = `${above >= gap ? above : below}px`;
     window.addEventListener('scroll', this.#hideSwatchPreview, { capture: true, passive: true });
     window.addEventListener('resize', this.#hideSwatchPreview);
 
@@ -93,16 +101,11 @@ export default class VariantPicker extends Component {
     if (!swatchPreviewSrc || image.getAttribute('src') === swatchPreviewSrc) return;
 
     image.src = swatchPreviewSrc;
-    image.decode().then(
-      () => {
-        if (image.getAttribute('src') !== swatchPreviewSrc) return;
-        image.hidden = false;
-        image.parentElement?.querySelector('.at-ring-spinner')?.setAttribute('hidden', '');
-      },
-      () => {
-        if (image.getAttribute('src') === swatchPreviewSrc) image.parentElement?.setAttribute('hidden', '');
-      }
-    );
+    const decoded = await image.decode().then(() => true, () => false);
+    if (image.getAttribute('src') !== swatchPreviewSrc) return;
+
+    image.hidden = !decoded;
+    preview.querySelector('.at-ring-spinner')?.setAttribute('hidden', '');
   };
 
   /** @param {PointerEvent | FocusEvent} event */
