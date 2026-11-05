@@ -376,6 +376,49 @@
     min-height: auto;
   }
 
+  .variant-swatch-preview {
+    display: none;
+    position: fixed;
+    inset: auto;
+    width: max-content;
+    max-width: 10rem;
+    margin: 0;
+    padding: var(--padding-xs);
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-border-radius-inputs);
+    background: var(--color-background);
+    color: var(--color-foreground);
+    box-shadow: 0 4px 16px rgb(0 0 0 / 15%);
+    font-size: var(--font-size--xs);
+    line-height: 1.3;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .variant-swatch-preview:popover-open {
+    display: grid;
+    justify-items: center;
+    gap: var(--gap-xs);
+  }
+
+  .variant-swatch-preview__media {
+    display: grid;
+    place-items: center;
+    width: 9rem;
+    aspect-ratio: 1;
+  }
+
+  .variant-swatch-preview__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .variant-swatch-preview [hidden] {
+    display: none;
+  }
+
   .variant-option--swatches:has(.new-color-swatch-label) {
     --new-color-label-gap: calc(var(--focus-outline-offset) + var(--focus-outline-width) + var(--padding-3xs));
     --new-color-label-height: calc(var(--font-size--3xs) * 1.2);

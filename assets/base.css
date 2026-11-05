@@ -1827,3 +1827,27 @@ main > .shopify-section:first-child .section:not(.disable-section-top-offset) {
     margin-top: calc(var(--header-height) * var(--transparent-header-offset-boolean) * -1);
   }
 }
+.at-ring-spinner,
+.at-brands-panel__spinner {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 3px solid rgb(var(--color-foreground-rgb) / var(--opacity-20));
+  border-block-start-color: rgb(var(--color-foreground-rgb) / var(--opacity-70));
+  border-radius: 50%;
+  animation: at-panel-nav-spin 0.7s linear infinite;
+}
+
+@keyframes at-panel-nav-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .at-ring-spinner,
+  .at-brands-panel__spinner {
+    animation-duration: 2s;
+  }
+}

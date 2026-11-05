@@ -310,23 +310,6 @@
   }
 }
 
-.at-brands-panel__spinner {
-  box-sizing: border-box;
-  flex-shrink: 0;
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 3px solid rgb(var(--color-foreground-rgb) / var(--opacity-20));
-  border-block-start-color: rgb(var(--color-foreground-rgb) / var(--opacity-70));
-  border-radius: 50%;
-  animation: at-panel-nav-spin 0.7s linear infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .at-brands-panel__spinner {
-    animation-duration: 2s;
-  }
-}
-
 .at-brands-panel__heading {
   font-size: var(--font-size--xlarge);
   font-weight: 600;
@@ -846,10 +829,6 @@
   border-top-color: rgb(var(--color-foreground-rgb) / var(--opacity-70));
   border-radius: 50%;
   animation: at-panel-nav-spin 0.7s linear infinite;
-}
-
-@keyframes at-panel-nav-spin {
-  to { transform: rotate(360deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {

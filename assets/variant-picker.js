@@ -31,6 +31,9 @@ export default class VariantPicker extends Component {
 
   #resizeObserver = new ResizeNotifier(() => this.updateVariantPickerCss());
 
+  /** @type {HTMLElement | undefined} */
+  #swatchPreview;
+
   connectedCallback() {
     super.connectedCallback();
     const fieldsets = /** @type {HTMLFieldSetElement[]} */ (this.refs.fieldsets || []);
@@ -46,13 +49,76 @@ export default class VariantPicker extends Component {
     });
 
     this.addEventListener('change', this.variantChanged.bind(this));
+    this.addEventListener('pointerover', this.#showSwatchPreview);
+    this.addEventListener('pointerout', this.#hideSwatchPreviewOnExit);
+    this.addEventListener('focusin', this.#showSwatchPreview);
+    this.addEventListener('focusout', this.#hideSwatchPreviewOnExit);
     this.#resizeObserver.observe(this);
   }
 
   disconnectedCallback() {
+    this.#hideSwatchPreview();
     super.disconnectedCallback();
     this.#resizeObserver.disconnect();
   }
+
+  /** @param {PointerEvent | FocusEvent} event */
+  #showSwatchPreview = (event) => {
+    if (!(event.target instanceof Element)) return;
+    if (event instanceof PointerEvent && event.pointerType === 'touch') return;
+    if (event.type === 'focusin' && !event.target.matches(':focus-visible')) return;
+    if (!window.matchMedia('(min-width: 750px) and (any-hover: hover)').matches) return;
+
+    const swatch = event.target.closest('.variant-option__button-label--has-swatch');
+    if (!swatch || (event.relatedTarget instanceof Node && swatch.contains(event.relatedTarget))) return;
+    const preview = swatch.querySelector('.variant-swatch-preview');
+    if (!(preview instanceof HTMLElement) || !preview.showPopover) return;
+
+    this.#hideSwatchPreview();
+    preview.showPopover();
+    this.#swatchPreview = preview;
+
+    const anchor = swatch.getBoundingClientRect();
+    const { offsetWidth: width, offsetHeight: height } = preview;
+    const viewportWidth = document.documentElement.clientWidth;
+    const left = Math.max(8, Math.min(anchor.left + (anchor.width - width) / 2, viewportWidth - width - 8));
+    preview.style.left = `${left}px`;
+    preview.style.top = `${anchor.top >= height + 8 ? anchor.top - height : anchor.bottom}px`;
+    window.addEventListener('scroll', this.#hideSwatchPreview, { capture: true, passive: true });
+    window.addEventListener('resize', this.#hideSwatchPreview);
+
+    const image = preview.querySelector('img[data-swatch-preview-src]');
+    if (!(image instanceof HTMLImageElement)) return;
+    const { swatchPreviewSrc } = image.dataset;
+    if (!swatchPreviewSrc || image.getAttribute('src') === swatchPreviewSrc) return;
+
+    image.src = swatchPreviewSrc;
+    image.decode().then(
+      () => {
+        if (image.getAttribute('src') !== swatchPreviewSrc) return;
+        image.hidden = false;
+        image.parentElement?.querySelector('.at-ring-spinner')?.setAttribute('hidden', '');
+      },
+      () => {
+        if (image.getAttribute('src') === swatchPreviewSrc) image.parentElement?.setAttribute('hidden', '');
+      }
+    );
+  };
+
+  /** @param {PointerEvent | FocusEvent} event */
+  #hideSwatchPreviewOnExit = (event) => {
+    const swatch = this.#swatchPreview?.parentElement;
+    if (!(event.target instanceof Node) || !swatch?.contains(event.target)) return;
+    if (event.relatedTarget instanceof Node && swatch.contains(event.relatedTarget)) return;
+    this.#hideSwatchPreview();
+  };
+
+  #hideSwatchPreview = () => {
+    if (this.#swatchPreview?.matches(':popover-open')) this.#swatchPreview.hidePopover();
+    this.#swatchPreview = undefined;
+    window.removeEventListener('scroll', this.#hideSwatchPreview, true);
+    window.removeEventListener('resize', this.#hideSwatchPreview);
+  };
 
   /**
    * Handles the variant change event.
@@ -60,6 +126,7 @@ export default class VariantPicker extends Component {
    */
   variantChanged(event) {
     if (!(event.target instanceof HTMLElement)) return;
+    this.#hideSwatchPreview();
 
     const selectedOption =
       event.target instanceof HTMLSelectElement ? event.target.options[event.target.selectedIndex] : event.target;
@@ -385,6 +452,7 @@ export default class VariantPicker extends Component {
         }
 
         let newProduct;
+        this.#hideSwatchPreview();
 
         if (morphElementSelector === 'main') {
           this.updateMain(html);

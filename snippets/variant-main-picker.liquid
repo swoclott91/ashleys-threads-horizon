@@ -73,6 +73,12 @@
             endif
           endif
 
+          assign show_swatch_preview = false
+          if variant_style == 'swatch' and product.id == product_resource.id
+            assign show_swatch_preview = true
+            assign swatch_option_key = 'option' | append: product_option.position
+          endif
+
           if variant_style == 'buttons' and settings.variant_button_width == 'equal-width-buttons'
             assign fieldset_id = section.id | append: '-' | append: product_resource.id | append: '-' | append: product_option.name | handleize
             assign option_id_attribute = 'data-option-id="' | append: fieldset_id | append: '"'
@@ -167,6 +173,31 @@
                     variant_image: featured_media,
                     mode: 'unscaled'
                   %}
+                  {% if show_swatch_preview %}
+                    {%- liquid
+                      assign preview_media = featured_media
+                      if preview_media == blank and product_option_value.product_url == blank
+                        assign preview_media = product_resource.variants | where: swatch_option_key, product_option_value.name | map: 'featured_media' | compact | first
+                      endif
+                      assign preview_image = preview_media.preview_image
+                    -%}
+                    <span class="variant-swatch-preview" popover aria-hidden="true">
+                      {% if preview_image %}
+                        <span class="variant-swatch-preview__media">
+                          <span class="at-ring-spinner"></span>
+                          <img
+                            data-swatch-preview-src="{{ preview_image | image_url: width: 320 | escape }}"
+                            alt=""
+                            width="144"
+                            height="144"
+                            decoding="async"
+                            hidden
+                          >
+                        </span>
+                      {% endif %}
+                      <span class="variant-swatch-preview__name">{{ product_option_value.name | escape }}</span>
+                    </span>
+                  {% endif %}
                   {% if new_color_visible %}
                     <span class="new-color-swatch-label">New</span>
                   {% endif %}
