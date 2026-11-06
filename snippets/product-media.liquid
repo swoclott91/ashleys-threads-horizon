@@ -11,6 +11,8 @@
   @param {boolean} [first_3d_model] - Indicates if this is the first 3D model.
   @param {boolean} [is_main_product_media] - Indicates if this is the main product image.
   @param {string} [image_ref] - Optional ref attribute for the image element.
+  @param {string} [zoom_dialog_id] - ID of the zoom dialog to open from the model poster.
+  @param {number} [media_index] - Zero-based position of the media in the zoom dialog.
 
   @example
   {% render 'product-media', media: media, preview_image_only: false, loading: 'lazy' %}
@@ -92,9 +94,15 @@
           data-media-id="{{ media.id }}"
         >
           <button
+            type="button"
             class="button deferred-media__poster-button button-unstyled"
             ref="deferredMediaPlayButton"
-            on:click="/showDeferredMedia"
+            {% if zoom_dialog_id != blank %}
+              aria-haspopup="dialog"
+              on:click="#{{ zoom_dialog_id }}/open/{{ media_index }}"
+            {% else %}
+              on:click="/showDeferredMedia"
+            {% endif %}
           >
             {{
               media.preview_image
