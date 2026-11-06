@@ -1,0 +1,2309 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "at_breadcrumbs": {
+      "type": "at-breadcrumbs",
+      "settings": {
+        "enabled": true,
+        "use_attributes": true,
+        "section_width": "page-width",
+        "alignment": "left",
+        "mobile_display": "auto",
+        "padding-block-start": 12,
+        "padding-block-end": 8
+      }
+    },
+    "intro": {
+      "type": "section",
+      "blocks": {
+        "copy": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 10,
+            "width": "custom",
+            "custom_width": 44,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "height_mobile": "fit",
+            "custom_height_mobile": 30,
+            "background_media": "none",
+            "background_color": "",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "custom_mobile_media": false,
+            "background_media_mobile": "image",
+            "background_image_position_mobile": "cover",
+            "video_position_mobile": "cover",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_color": "",
+            "border_radius": 0,
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "eyebrow": {
+              "type": "text",
+              "settings": {
+                "text": "<p><strong>Blank apparel buying guide</strong></p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.75rem",
+                "line_height": "normal",
+                "letter_spacing": "loose",
+                "case": "uppercase",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "title": {
+              "type": "text",
+              "name": "t:names.title",
+              "settings": {
+                "text": "<h1>{{ closest.collection.title }}</h1>",
+                "width": "fit-content",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "h1",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "balance",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "description": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Find blanks for school programs, teams, clubs, and events. Start with how the group will wear them, then compare sizes, colors, and the cost of the whole order.</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "path_navigation": {
+              "type": "at-guide-navigation",
+              "settings": {
+                "label": "Shop group apparel by use",
+                "label_1": "Affordable event tees",
+                "link_1": "#event-tees",
+                "label_2": "Softer spiritwear",
+                "link_2": "#spiritwear",
+                "label_3": "Active groups",
+                "link_3": "#active-groups",
+                "label_4": "Hoodies & crews",
+                "link_4": "#hoodies-and-crews"
+              },
+              "blocks": {}
+            },
+            "shop_all": {
+              "type": "button",
+              "settings": {
+                "label": "Shop all group apparel",
+                "link": "#shop-all-group-apparel",
+                "open_in_new_tab": false,
+                "style_class": "button",
+                "custom_button_background": "{{ settings.color_palette.foreground }}",
+                "custom_button_text": "{{ settings.color_palette.background }}",
+                "custom_button_border": "{{ settings.color_palette.background }}",
+                "link_text_color": "",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "eyebrow",
+            "title",
+            "description",
+            "path_navigation",
+            "shop_all"
+          ]
+        },
+        "studio_image": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/groups-events-hero.jpg",
+            "link": "",
+            "image_ratio": "adapt",
+            "width": "custom",
+            "custom_width": 51,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_color": "",
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "hover_scale": false,
+            "hover_tint_color": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "copy",
+        "studio_image"
+      ],
+      "name": "Collection introduction",
+      "settings": {
+        "content_direction": "row",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "space-between",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 28,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "#f5f1eb",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 36,
+        "padding-block-end": 36
+      }
+    },
+    "event_tees": {
+      "type": "section",
+      "name": "Keep the group order affordable",
+      "settings": {
+        "section_width": "page-width",
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "gap": 24,
+        "padding-block-start": 36,
+        "padding-block-end": 36
+      },
+      "blocks": {
+        "guide": {
+          "type": "group",
+          "settings": {
+            "width": "fill",
+            "width_mobile": "fill",
+            "content_direction": "column",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "gap": 12
+          },
+          "blocks": {
+            "eyebrow": {
+              "type": "text",
+              "settings": {
+                "text": "<p><strong>01 / Affordable event tees</strong></p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.75rem",
+                "line_height": "normal",
+                "letter_spacing": "loose",
+                "case": "uppercase",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "heading": {
+              "type": "custom-liquid",
+              "settings": {
+                "custom_liquid": "<h2 id=\"event-tees\" class=\"h3 at-guide-target\" tabindex=\"-1\">Keep the group order affordable</h2>"
+              }
+            },
+            "description": {
+              "type": "text",
+              "settings": {
+                "text": "<p>For school programs, volunteer days, clubs, and giveaways, start with a tee that covers the size list in the color you need. Compare the cost of the whole order, including youth and extended sizes.</p>",
+                "type_preset": "rte",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            }
+          },
+          "block_order": [
+            "eyebrow",
+            "heading",
+            "description"
+          ]
+        },
+        "picks": {
+          "type": "group",
+          "settings": {
+            "width": "fill",
+            "width_mobile": "fill",
+            "content_direction": "row",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "gap": 16,
+            "vertical_on_mobile": false,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "flex-start"
+          },
+          "blocks": {
+            "gildan_5000_heavy_cotton_100_cotton_t_shirt": {
+              "type": "product-card",
+              "settings": {
+                "product": "gildan-5000-heavy-cotton-100-cotton-t-shirt",
+                "product_card_gap": 8,
+                "width": "custom",
+                "custom_width": 31,
+                "width_mobile": "custom",
+                "custom_width_mobile": 47,
+                "background_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "gallery": {
+                  "type": "_product-card-gallery",
+                  "settings": {
+                    "image_ratio": "square",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "vendor": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "title": {
+                  "type": "product-title",
+                  "settings": {
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h5",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "cue": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Classic midweight with broad color choice</strong></p>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.875rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "price": {
+                  "type": "price",
+                  "settings": {
+                    "show_sale_price_first": true,
+                    "show_installments": false,
+                    "show_tax_info": false,
+                    "type_preset": "paragraph",
+                    "width": "100%",
+                    "alignment": "left",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "text_color": "",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0,
+                    "show_minimum_price": true
+                  },
+                  "blocks": {}
+                },
+                "description": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>A straight-fit tee with more body than lightweight cotton. Start here for a traditional group tee.</p>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "companions": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Companion fits</strong></p><p><a href=\"/products/gildan-5000b-youth-heavy-cotton-100-cotton-t-shirt\">Youth 5000B</a> · <a href=\"/products/gildan-5000l-women-s-heavy-cotton-100-cotton-t-shirt\">Women’s 5000L</a></p>",
+                    "type_preset": "rte",
+                    "alignment": "left",
+                    "max_width": "normal"
+                  }
+                }
+              },
+              "block_order": [
+                "gallery",
+                "vendor",
+                "title",
+                "cue",
+                "price",
+                "description",
+                "companions"
+              ]
+            },
+            "port_company_pc54_core_cotton_tee": {
+              "type": "product-card",
+              "settings": {
+                "product": "port-company-pc54-core-cotton-tee",
+                "product_card_gap": 8,
+                "width": "custom",
+                "custom_width": 31,
+                "width_mobile": "custom",
+                "custom_width_mobile": 47,
+                "background_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "gallery": {
+                  "type": "_product-card-gallery",
+                  "settings": {
+                    "image_ratio": "square",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "vendor": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "title": {
+                  "type": "product-title",
+                  "settings": {
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h5",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "cue": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Extended sizes and companion fits</strong></p>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.875rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "price": {
+                  "type": "price",
+                  "settings": {
+                    "show_sale_price_first": true,
+                    "show_installments": false,
+                    "show_tax_info": false,
+                    "type_preset": "paragraph",
+                    "width": "100%",
+                    "alignment": "left",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "text_color": "",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0,
+                    "show_minimum_price": true
+                  },
+                  "blocks": {}
+                },
+                "description": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>A classic midweight tee in adult sizes through 6XL. Explore this family when the roster also calls for youth, women’s, or tall fits.</p>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "companions": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Companion fits</strong></p><p><a href=\"/products/port-company-pc54y-youth-core-cotton-tee\">Youth PC54Y</a> · <a href=\"/products/port-company-lpc54-women-s-core-cotton-tee\">Women’s LPC54</a> · <a href=\"/products/port-company-pc54t-tall-core-cotton-tee\">Tall PC54T</a></p>",
+                    "type_preset": "rte",
+                    "alignment": "left",
+                    "max_width": "normal"
+                  }
+                }
+              },
+              "block_order": [
+                "gallery",
+                "vendor",
+                "title",
+                "cue",
+                "price",
+                "description",
+                "companions"
+              ]
+            }
+          },
+          "block_order": [
+            "gildan_5000_heavy_cotton_100_cotton_t_shirt",
+            "port_company_pc54_core_cotton_tee"
+          ]
+        },
+        "comparisons": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Want a lighter tee?</strong> Compare <a href=\"/products/gildan-3000-light-cotton-tee\">Gildan 3000 Light Cotton</a> and <a href=\"/products/gildan-3000b-youth-light-cotton-tee\">youth 3000B</a>. Include both in the total if you’re pricing an adult and youth order.</p><p><strong>Prefer a cotton/poly blend?</strong> Compare <a href=\"/products/gildan-8000-dryblend-50-cotton-50-poly-t-shirt\">Gildan 8000 DryBlend</a> and <a href=\"/products/gildan-8000b-youth-dryblend-50-cotton-50-poly-t-shirt\">youth 8000B</a>. Check the selected color’s fabric against your decoration method.</p>",
+            "type_preset": "rte",
+            "alignment": "left",
+            "max_width": "normal"
+          }
+        },
+        "shop_path": {
+          "type": "button",
+          "settings": {
+            "label": "Shop group & event tees",
+            "link": "shopify://collections/group-event-tees",
+            "style_class": "button-unstyled"
+          }
+        }
+      },
+      "block_order": [
+        "guide",
+        "picks",
+        "comparisons",
+        "shop_path"
+      ]
+    },
+    "spiritwear": {
+      "type": "section",
+      "name": "Choose softer spiritwear",
+      "settings": {
+        "section_width": "page-width",
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "gap": 24,
+        "padding-block-start": 36,
+        "padding-block-end": 36,
+        "background_color": "#f7f6f2"
+      },
+      "blocks": {
+        "guide": {
+          "type": "group",
+          "settings": {
+            "width": "fill",
+            "width_mobile": "fill",
+            "content_direction": "column",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "gap": 12
+          },
+          "blocks": {
+            "eyebrow": {
+              "type": "text",
+              "settings": {
+                "text": "<p><strong>02 / Softer spiritwear</strong></p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.75rem",
+                "line_height": "normal",
+                "letter_spacing": "loose",
+                "case": "uppercase",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "heading": {
+              "type": "custom-liquid",
+              "settings": {
+                "custom_liquid": "<h2 id=\"spiritwear\" class=\"h3 at-guide-target\" tabindex=\"-1\">Choose softer spiritwear</h2>"
+              }
+            },
+            "description": {
+              "type": "text",
+              "settings": {
+                "text": "<p>For a school sale, club shirt, or group design people choose to buy, compare a softer tee with your basic option. See what the change adds to the finished price before setting up the sale.</p>",
+                "type_preset": "rte",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            }
+          },
+          "block_order": [
+            "eyebrow",
+            "heading",
+            "description"
+          ]
+        },
+        "picks": {
+          "type": "group",
+          "settings": {
+            "width": "fill",
+            "width_mobile": "fill",
+            "content_direction": "row",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "gap": 16,
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "flex-start"
+          },
+          "blocks": {
+            "gildan_64000_softstyle_t_shirt": {
+              "type": "product-card",
+              "settings": {
+                "product": "gildan-64000-softstyle-t-shirt",
+                "product_card_gap": 8,
+                "width": "custom",
+                "custom_width": 31,
+                "width_mobile": "custom",
+                "custom_width_mobile": 68,
+                "background_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "gallery": {
+                  "type": "_product-card-gallery",
+                  "settings": {
+                    "image_ratio": "square",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "vendor": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "title": {
+                  "type": "product-title",
+                  "settings": {
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h5",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "cue": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Soft, lightweight spiritwear</strong></p>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.875rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "price": {
+                  "type": "price",
+                  "settings": {
+                    "show_sale_price_first": true,
+                    "show_installments": false,
+                    "show_tax_info": false,
+                    "type_preset": "paragraph",
+                    "width": "100%",
+                    "alignment": "left",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "text_color": "",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0,
+                    "show_minimum_price": true
+                  },
+                  "blocks": {}
+                },
+                "description": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>A ring-spun tee for a softer feel. Start with one tee and a small color palette to make a spiritwear preorder easier to run.</p>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "companions": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Companion fits</strong></p><p><a href=\"/products/gildan-64000b-youth-softstyle-t-shirt\">Youth 64000B</a> · <a href=\"/products/gildan-64000l-softstyle-women-s-t-shirt\">Women’s 64000L</a></p>",
+                    "type_preset": "rte",
+                    "alignment": "left",
+                    "max_width": "normal"
+                  }
+                }
+              },
+              "block_order": [
+                "gallery",
+                "vendor",
+                "title",
+                "cue",
+                "price",
+                "description",
+                "companions"
+              ]
+            },
+            "layer_tip": {
+              "type": "group",
+              "settings": {
+                "width": "custom",
+                "width_mobile": "fill",
+                "content_direction": "column",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "gap": 12,
+                "custom_width": 46,
+                "background_color": "#eaf0eb",
+                "padding-block-start": 20,
+                "padding-block-end": 20,
+                "padding-inline-start": 20,
+                "padding-inline-end": 20
+              },
+              "blocks": {
+                "tip": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Optional layer</strong></p><p><a href=\"#hoodies-and-crews\">Compare a crewneck or hoodie</a>, then check which colors and sizes work across your tee and layer.</p>",
+                    "type_preset": "rte",
+                    "alignment": "left",
+                    "max_width": "normal"
+                  }
+                }
+              },
+              "block_order": [
+                "tip"
+              ]
+            }
+          },
+          "block_order": [
+            "gildan_64000_softstyle_t_shirt",
+            "layer_tip"
+          ]
+        },
+        "shop_path": {
+          "type": "button",
+          "settings": {
+            "label": "Shop softer spiritwear tees",
+            "link": "shopify://collections/soft-spiritwear-tees",
+            "style_class": "button-unstyled"
+          }
+        }
+      },
+      "block_order": [
+        "guide",
+        "picks",
+        "shop_path"
+      ]
+    },
+    "active_groups": {
+      "type": "section",
+      "name": "Outfit an active group",
+      "settings": {
+        "section_width": "page-width",
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "gap": 24,
+        "padding-block-start": 36,
+        "padding-block-end": 36
+      },
+      "blocks": {
+        "guide": {
+          "type": "group",
+          "settings": {
+            "width": "fill",
+            "width_mobile": "fill",
+            "content_direction": "column",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "gap": 12
+          },
+          "blocks": {
+            "eyebrow": {
+              "type": "text",
+              "settings": {
+                "text": "<p><strong>03 / Active groups</strong></p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.75rem",
+                "line_height": "normal",
+                "letter_spacing": "loose",
+                "case": "uppercase",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "heading": {
+              "type": "custom-liquid",
+              "settings": {
+                "custom_liquid": "<h2 id=\"active-groups\" class=\"h3 at-guide-target\" tabindex=\"-1\">Outfit an active group</h2>"
+              }
+            },
+            "description": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Start with what people will do in the garment. Compare lightweight performance tees for players, campers, and coaches. For spectators, an everyday tee may suit the order.</p>",
+                "type_preset": "rte",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            }
+          },
+          "block_order": [
+            "eyebrow",
+            "heading",
+            "description"
+          ]
+        },
+        "picks": {
+          "type": "group",
+          "settings": {
+            "width": "fill",
+            "width_mobile": "fill",
+            "content_direction": "row",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "gap": 16,
+            "vertical_on_mobile": false,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "flex-start"
+          },
+          "blocks": {
+            "port_company_pc380_performance_tee": {
+              "type": "product-card",
+              "settings": {
+                "product": "port-company-pc380-performance-tee",
+                "product_card_gap": 8,
+                "width": "custom",
+                "custom_width": 31,
+                "width_mobile": "custom",
+                "custom_width_mobile": 47,
+                "background_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "gallery": {
+                  "type": "_product-card-gallery",
+                  "settings": {
+                    "image_ratio": "square",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "vendor": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "title": {
+                  "type": "product-title",
+                  "settings": {
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h5",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "cue": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Lightweight moisture-wicking tee</strong></p>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.875rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "price": {
+                  "type": "price",
+                  "settings": {
+                    "show_sale_price_first": true,
+                    "show_installments": false,
+                    "show_tax_info": false,
+                    "type_preset": "paragraph",
+                    "width": "100%",
+                    "alignment": "left",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "text_color": "",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0,
+                    "show_minimum_price": true
+                  },
+                  "blocks": {}
+                },
+                "description": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>A lightweight polyester tee with Dry Zone moisture wicking. Compare adult, youth, and women’s options for your roster.</p>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "companions": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Companion fits</strong></p><p><a href=\"/products/port-company-pc380y-youth-performance-tee\">Youth PC380Y</a> · <a href=\"/products/port-company-lpc380-women-s-performance-tee\">Women’s LPC380</a></p>",
+                    "type_preset": "rte",
+                    "alignment": "left",
+                    "max_width": "normal"
+                  }
+                }
+              },
+              "block_order": [
+                "gallery",
+                "vendor",
+                "title",
+                "cue",
+                "price",
+                "description",
+                "companions"
+              ]
+            },
+            "sport_tek_st350_posicharge_competitor_tee": {
+              "type": "product-card",
+              "settings": {
+                "product": "sport-tek-st350-posicharge-competitor-tee",
+                "product_card_gap": 8,
+                "width": "custom",
+                "custom_width": 31,
+                "width_mobile": "custom",
+                "custom_width_mobile": 47,
+                "background_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "gallery": {
+                  "type": "_product-card-gallery",
+                  "settings": {
+                    "image_ratio": "square",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "vendor": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "title": {
+                  "type": "product-title",
+                  "settings": {
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h5",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "cue": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Broader performance fit options</strong></p>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.875rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "price": {
+                  "type": "price",
+                  "settings": {
+                    "show_sale_price_first": true,
+                    "show_installments": false,
+                    "show_tax_info": false,
+                    "type_preset": "paragraph",
+                    "width": "100%",
+                    "alignment": "left",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "text_color": "",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0,
+                    "show_minimum_price": true
+                  },
+                  "blocks": {}
+                },
+                "description": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>A lightweight polyester tee with adult sizes through 6XL and youth, women’s, and tall companion styles.</p>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "companions": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Companion fits</strong></p><p><a href=\"/products/sport-tek-yst350-youth-posicharge-competitor-tee\">Youth YST350</a> · <a href=\"/products/sport-tek-lst350-women-s-posicharge-competitor-tee\">Women’s LST350</a> · <a href=\"/products/sport-tek-tst350-tall-posicharge-competitor-tee\">Tall TST350</a></p>",
+                    "type_preset": "rte",
+                    "alignment": "left",
+                    "max_width": "normal"
+                  }
+                }
+              },
+              "block_order": [
+                "gallery",
+                "vendor",
+                "title",
+                "cue",
+                "price",
+                "description",
+                "companions"
+              ]
+            }
+          },
+          "block_order": [
+            "port_company_pc380_performance_tee",
+            "sport_tek_st350_posicharge_competitor_tee"
+          ]
+        },
+        "production": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Compare the price of the full roster across both families. The women’s, youth, and extended sizes can change the total.</p><p><strong>Adding names or numbers?</strong> Check your transfer or ink system on the exact polyester garment and color before committing to production.</p>",
+            "type_preset": "rte",
+            "alignment": "left",
+            "max_width": "normal"
+          }
+        },
+        "shop_path": {
+          "type": "button",
+          "settings": {
+            "label": "Shop active group apparel",
+            "link": "shopify://collections/active-group-apparel",
+            "style_class": "button-unstyled"
+          }
+        }
+      },
+      "block_order": [
+        "guide",
+        "picks",
+        "production",
+        "shop_path"
+      ]
+    },
+    "hoodies_and_crews": {
+      "type": "section",
+      "name": "Add hoodies & crews",
+      "settings": {
+        "section_width": "page-width",
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "gap": 24,
+        "padding-block-start": 36,
+        "padding-block-end": 36,
+        "background_color": "#f7f6f2"
+      },
+      "blocks": {
+        "guide": {
+          "type": "group",
+          "settings": {
+            "width": "fill",
+            "width_mobile": "fill",
+            "content_direction": "column",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "gap": 12
+          },
+          "blocks": {
+            "eyebrow": {
+              "type": "text",
+              "settings": {
+                "text": "<p><strong>04 / Hoodies &amp; crews</strong></p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.75rem",
+                "line_height": "normal",
+                "letter_spacing": "loose",
+                "case": "uppercase",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "heading": {
+              "type": "custom-liquid",
+              "settings": {
+                "custom_liquid": "<h2 id=\"hoodies-and-crews\" class=\"h3 at-guide-target\" tabindex=\"-1\">Add hoodies &amp; crews</h2>"
+              }
+            },
+            "description": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Add a layer for cool events or a spiritwear sale. Compare a crewneck and a hoodie, then check the colors and sizes across the pieces you plan to offer.</p>",
+                "type_preset": "rte",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            }
+          },
+          "block_order": [
+            "eyebrow",
+            "heading",
+            "description"
+          ]
+        },
+        "picks": {
+          "type": "group",
+          "settings": {
+            "width": "fill",
+            "width_mobile": "fill",
+            "content_direction": "row",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "gap": 16,
+            "vertical_on_mobile": false,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "flex-start"
+          },
+          "blocks": {
+            "gildan_18000_heavy_blend_crewneck_sweatshirt": {
+              "type": "product-card",
+              "settings": {
+                "product": "gildan-18000-heavy-blend-crewneck-sweatshirt",
+                "product_card_gap": 8,
+                "width": "custom",
+                "custom_width": 31,
+                "width_mobile": "custom",
+                "custom_width_mobile": 47,
+                "background_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "gallery": {
+                  "type": "_product-card-gallery",
+                  "settings": {
+                    "image_ratio": "square",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "vendor": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "title": {
+                  "type": "product-title",
+                  "settings": {
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h5",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "cue": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Classic crewneck layer</strong></p>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.875rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "price": {
+                  "type": "price",
+                  "settings": {
+                    "show_sale_price_first": true,
+                    "show_installments": false,
+                    "show_tax_info": false,
+                    "type_preset": "paragraph",
+                    "width": "100%",
+                    "alignment": "left",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "text_color": "",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0,
+                    "show_minimum_price": true
+                  },
+                  "blocks": {}
+                },
+                "description": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>A fleece crew with a plain front for your group design. Check the youth companion for a mixed-age order.</p>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "companions": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Companion fits</strong></p><p><a href=\"/products/gildan-18000b-youth-heavy-blend-crewneck-sweatshirt\">Youth 18000B</a></p>",
+                    "type_preset": "rte",
+                    "alignment": "left",
+                    "max_width": "normal"
+                  }
+                }
+              },
+              "block_order": [
+                "gallery",
+                "vendor",
+                "title",
+                "cue",
+                "price",
+                "description",
+                "companions"
+              ]
+            },
+            "gildan_18500_heavy_blend_hooded_sweatshirt": {
+              "type": "product-card",
+              "settings": {
+                "product": "gildan-18500-heavy-blend-hooded-sweatshirt",
+                "product_card_gap": 8,
+                "width": "custom",
+                "custom_width": 31,
+                "width_mobile": "custom",
+                "custom_width_mobile": 47,
+                "background_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "gallery": {
+                  "type": "_product-card-gallery",
+                  "settings": {
+                    "image_ratio": "square",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "vendor": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "title": {
+                  "type": "product-title",
+                  "settings": {
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h5",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "cue": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Classic pullover hoodie</strong></p>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.875rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "price": {
+                  "type": "price",
+                  "settings": {
+                    "show_sale_price_first": true,
+                    "show_installments": false,
+                    "show_tax_info": false,
+                    "type_preset": "paragraph",
+                    "width": "100%",
+                    "alignment": "left",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "text_color": "",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0,
+                    "show_minimum_price": true
+                  },
+                  "blocks": {}
+                },
+                "description": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>A fleece pullover with a pouch pocket. Compare the whole size list before pricing it as an upgrade.</p>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "companions": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Companion fits</strong></p><p><a href=\"/products/gildan-18500b-youth-heavy-blend-hooded-sweatshirt\">Youth 18500B</a></p>",
+                    "type_preset": "rte",
+                    "alignment": "left",
+                    "max_width": "normal"
+                  }
+                }
+              },
+              "block_order": [
+                "gallery",
+                "vendor",
+                "title",
+                "cue",
+                "price",
+                "description",
+                "companions"
+              ]
+            }
+          },
+          "block_order": [
+            "gildan_18000_heavy_blend_crewneck_sweatshirt",
+            "gildan_18500_heavy_blend_hooded_sweatshirt"
+          ]
+        },
+        "shop_path": {
+          "type": "button",
+          "settings": {
+            "label": "Shop group hoodies & crewnecks",
+            "link": "shopify://collections/group-hoodies-crewnecks",
+            "style_class": "button-unstyled"
+          }
+        }
+      },
+      "block_order": [
+        "guide",
+        "picks",
+        "shop_path"
+      ]
+    },
+    "quote_checklist": {
+      "type": "section",
+      "name": "Before you quote",
+      "settings": {
+        "section_width": "page-width",
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "gap": 12,
+        "padding-block-start": 36,
+        "padding-block-end": 36,
+        "background_color": "#eaf0eb"
+      },
+      "blocks": {
+        "heading": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>Before you quote the finished order</h2>",
+            "type_preset": "h3",
+            "alignment": "left",
+            "max_width": "normal"
+          }
+        },
+        "checklist": {
+          "type": "text",
+          "settings": {
+            "text": "<ul><li><strong>Size list</strong> Count each garment by style, color, and size. Include youth, women’s, tall, and extended sizes where needed.</li><li><strong>Color</strong> Check the approved shade and available quantities across the exact styles and sizes. Agree on a backup color if needed.</li><li><strong>Production</strong> Include blank cost, shipping, decoration, personalization, sorting, and packing in your estimate.</li><li><strong>Handoff</strong> Work back from the finished-garment deadline to allow time for blank delivery, approvals, and production. Set any preorder close date with those steps in mind.</li></ul>",
+            "type_preset": "rte",
+            "alignment": "left",
+            "max_width": "normal"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "checklist"
+      ]
+    },
+    "grid_heading": {
+      "type": "section",
+      "name": "Full assortment heading",
+      "settings": {
+        "section_width": "page-width",
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "gap": 24,
+        "padding-block-start": 36,
+        "padding-block-end": 12
+      },
+      "blocks": {
+        "heading": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom_liquid": "<h2 id=\"shop-all-group-apparel\" class=\"h2 at-guide-target\" tabindex=\"-1\">Shop all group apparel</h2>"
+          }
+        }
+      },
+      "block_order": [
+        "heading"
+      ]
+    },
+    "main": {
+      "type": "main-collection",
+      "blocks": {
+        "filters": {
+          "type": "filters",
+          "static": true,
+          "settings": {
+            "enable_filtering": true,
+            "filter_style": "vertical",
+            "filter_width": "centered",
+            "text_label_case": "default",
+            "show_swatch_label": true,
+            "show_filter_label": false,
+            "enable_sorting": true,
+            "enable_grid_density": true,
+            "background_color": "",
+            "text_color": "",
+            "padding-block-start": 8,
+            "padding-block-end": 8,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "facets_margin_bottom": 8,
+            "facets_margin_right": 20
+          },
+          "blocks": {}
+        },
+        "product-card": {
+          "type": "_product-card",
+          "static": true,
+          "settings": {
+            "product_card_gap": 4,
+            "background_color": "",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_color": "",
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "card-gallery": {
+              "type": "_product-card-gallery",
+              "settings": {
+                "image_ratio": "portrait",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "product_card_group_wVyTd8": {
+              "type": "_product-card-group",
+              "name": "t:names.group",
+              "settings": {
+                "content_direction": "row",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 6,
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100,
+                "height": "custom",
+                "custom_height": 6,
+                "background_media": "none",
+                "background_color": "",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "custom_mobile_media": false,
+                "background_media_mobile": "image",
+                "background_image_position_mobile": "cover",
+                "video_position_mobile": "cover",
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "link": "{{ closest.product.url }}",
+                "open_in_new_tab": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "image_LAYWBq": {
+                  "type": "image",
+                  "name": "t:names.image",
+                  "settings": {
+                    "image": "{{ closest.product.metafields.custom.brand_image.value }}",
+                    "link": "{{ closest.product.url }}",
+                    "image_ratio": "adapt",
+                    "width": "custom",
+                    "custom_width": 20,
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 25,
+                    "height": "fit",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0,
+                    "hover_scale": false,
+                    "hover_tint_color": ""
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "image_LAYWBq"
+              ]
+            },
+            "product_title_4nY4eT": {
+              "type": "product-title",
+              "name": "t:names.product_title",
+              "settings": {
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 4,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "price_EzJzMm": {
+              "type": "price",
+              "settings": {
+                "show_sale_price_first": true,
+                "show_installments": true,
+                "show_tax_info": false,
+                "type_preset": "h4",
+                "width": "100%",
+                "alignment": "left",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "text_color": "",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0,
+                "show_minimum_price": true
+              },
+              "blocks": {}
+            },
+            "swatches": {
+              "type": "swatches",
+              "name": "t:names.swatches",
+              "settings": {
+                "product_swatches_alignment": "flex-start",
+                "product_swatches_alignment_mobile": "flex-start",
+                "hide_padding": false,
+                "product_swatches_padding_top": 4,
+                "product_swatches_padding_bottom": 0,
+                "product_swatches_padding_left": 0,
+                "product_swatches_padding_right": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "card-gallery",
+            "product_card_group_wVyTd8",
+            "product_title_4nY4eT",
+            "price_EzJzMm",
+            "swatches"
+          ]
+        }
+      },
+      "settings": {
+        "layout_type": "grid",
+        "product_card_size": "medium",
+        "mobile_product_card_size": "small",
+        "enable_infinite_scroll": false,
+        "products_per_page": 12,
+        "product_grid_width": "centered",
+        "full_width_on_mobile": true,
+        "columns_gap_horizontal": 16,
+        "columns_gap_vertical": 24,
+        "padding-inline-start": 0,
+        "padding-inline-end": 0,
+        "background_color": "",
+        "padding-block-start": 0,
+        "padding-block-end": 32
+      }
+    },
+    "related": {
+      "type": "section",
+      "name": "Related buying guides",
+      "settings": {
+        "section_width": "page-width",
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "gap": 12,
+        "padding-block-start": 36,
+        "padding-block-end": 36,
+        "background_color": "#f7f6f2"
+      },
+      "blocks": {
+        "heading": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>Explore related guides</h2>",
+            "type_preset": "h3",
+            "alignment": "left",
+            "max_width": "normal"
+          }
+        },
+        "family": {
+          "type": "text",
+          "settings": {
+            "text": "<p><a href=\"/collections/family-matching-sets\">Family &amp; Matching Sets</a> for coordinating across ages.</p>",
+            "type_preset": "rte",
+            "alignment": "left",
+            "max_width": "normal"
+          }
+        },
+        "graphics": {
+          "type": "text",
+          "settings": {
+            "text": "<p><a href=\"/collections/graphic-tees-boutique-sellers\">Graphic Tees &amp; Boutique Sellers</a> for ongoing design-led sales.</p>",
+            "type_preset": "rte",
+            "alignment": "left",
+            "max_width": "normal"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "family",
+        "graphics"
+      ]
+    }
+  },
+  "order": [
+    "at_breadcrumbs",
+    "intro",
+    "event_tees",
+    "spiritwear",
+    "active_groups",
+    "hoodies_and_crews",
+    "quote_checklist",
+    "grid_heading",
+    "main",
+    "related"
+  ]
+}
