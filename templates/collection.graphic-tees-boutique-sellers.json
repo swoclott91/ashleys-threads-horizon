@@ -393,9 +393,9 @@
             "description": {
               "type": "text",
               "settings": {
-                "text": "<p>Find a tee that leaves room in your selling price for the design. Compare lightweight cotton, classic midweight tees, soft jersey, and a cotton/poly blend. Check the price in the colors and sizes you plan to sell.</p>",
+                "text": "<h6>Start with a classic tee, or choose by the feel, fit, or fabric your design needs.&nbsp;</h6>",
                 "width": "fit-content",
-                "max_width": "normal",
+                "max_width": "none",
                 "alignment": "left",
                 "type_preset": "rte",
                 "font": "var(--font-body--family)",
@@ -512,174 +512,6 @@
                 "padding-inline-end": 0
               },
               "blocks": {
-                "gildan_3000": {
-                  "type": "product-card",
-                  "settings": {
-                    "product": "gildan-3000-light-cotton-tee",
-                    "product_card_gap": 8,
-                    "width": "custom",
-                    "custom_width": 18,
-                    "width_mobile": "custom",
-                    "custom_width_mobile": 47,
-                    "background_color": "",
-                    "border": "none",
-                    "border_width": 1,
-                    "border_opacity": 100,
-                    "border_color": "",
-                    "border_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {
-                    "gallery": {
-                      "type": "_product-card-gallery",
-                      "settings": {
-                        "image_ratio": "square",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_color": "",
-                        "border_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "vendor": {
-                      "type": "text",
-                      "settings": {
-                        "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
-                        "width": "fit-content",
-                        "max_width": "normal",
-                        "alignment": "left",
-                        "type_preset": "custom",
-                        "font": "var(--font-body--family)",
-                        "font_size": "0.75rem",
-                        "line_height": "normal",
-                        "letter_spacing": "loose",
-                        "case": "uppercase",
-                        "wrap": "pretty",
-                        "text_color": "",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "title": {
-                      "type": "product-title",
-                      "settings": {
-                        "width": "fit-content",
-                        "max_width": "normal",
-                        "alignment": "left",
-                        "type_preset": "h5",
-                        "font": "var(--font-body--family)",
-                        "font_size": "1rem",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty",
-                        "text_color": "",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "cue": {
-                      "type": "text",
-                      "settings": {
-                        "text": "<p><strong>Low-cost light cotton</strong></p>",
-                        "width": "fit-content",
-                        "max_width": "none",
-                        "alignment": "left",
-                        "type_preset": "custom",
-                        "font": "var(--font-body--family)",
-                        "font_size": "0.875rem",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty",
-                        "text_color": "",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "price": {
-                      "type": "price",
-                      "settings": {
-                        "show_sale_price_first": true,
-                        "show_installments": false,
-                        "show_tax_info": false,
-                        "type_preset": "paragraph",
-                        "width": "100%",
-                        "alignment": "left",
-                        "font": "var(--font-body--family)",
-                        "font_size": "1rem",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "text_color": "",
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "description": {
-                      "type": "text",
-                      "settings": {
-                        "text": "<p>A lighter tee for everyday graphics when blank cost is the deciding factor.</p>",
-                        "width": "fit-content",
-                        "max_width": "none",
-                        "alignment": "left",
-                        "type_preset": "rte",
-                        "font": "var(--font-body--family)",
-                        "font_size": "1rem",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty",
-                        "text_color": "",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    }
-                  },
-                  "block_order": [
-                    "gallery",
-                    "vendor",
-                    "title",
-                    "cue",
-                    "price",
-                    "description"
-                  ]
-                },
                 "gildan_5000": {
                   "type": "product-card",
                   "settings": {
@@ -701,22 +533,6 @@
                     "padding-inline-end": 0
                   },
                   "blocks": {
-                    "gallery": {
-                      "type": "_product-card-gallery",
-                      "settings": {
-                        "image_ratio": "square",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_color": "",
-                        "border_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
                     "vendor": {
                       "type": "text",
                       "settings": {
@@ -742,13 +558,15 @@
                       },
                       "blocks": {}
                     },
-                    "title": {
-                      "type": "product-title",
+                    "text_yMcnh3": {
+                      "type": "text",
+                      "name": "t:names.text",
                       "settings": {
+                        "text": "<p>5000 Heavy Cotton</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
-                        "type_preset": "h5",
+                        "type_preset": "h6",
                         "font": "var(--font-body--family)",
                         "font_size": "1rem",
                         "line_height": "normal",
@@ -766,10 +584,26 @@
                       },
                       "blocks": {}
                     },
+                    "gallery": {
+                      "type": "_product-card-gallery",
+                      "settings": {
+                        "image_ratio": "adapt",
+                        "border": "none",
+                        "border_width": 1,
+                        "border_opacity": 100,
+                        "border_color": "",
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
                     "cue": {
                       "type": "text",
                       "settings": {
-                        "text": "<p><strong>Classic midweight, broad color choice</strong></p>",
+                        "text": "<p><strong>Classic midweight</strong></p>",
                         "width": "fit-content",
                         "max_width": "none",
                         "alignment": "left",
@@ -797,7 +631,7 @@
                         "show_sale_price_first": true,
                         "show_installments": false,
                         "show_tax_info": false,
-                        "type_preset": "paragraph",
+                        "type_preset": "h4",
                         "width": "100%",
                         "alignment": "left",
                         "font": "var(--font-body--family)",
@@ -805,7 +639,7 @@
                         "line_height": "normal",
                         "letter_spacing": "normal",
                         "case": "none",
-                        "text_color": "",
+                        "text_color": "{{ settings.color_palette.color5 }}",
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
@@ -816,11 +650,11 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A straight fit with more body than Light Cotton and plenty of colors to build around.</p>",
+                        "text": "<p>Straight fit&nbsp;·&nbsp;broad color choice</p>",
                         "width": "fit-content",
                         "max_width": "none",
                         "alignment": "left",
-                        "type_preset": "rte",
+                        "type_preset": "h6",
                         "font": "var(--font-body--family)",
                         "font_size": "1rem",
                         "line_height": "normal",
@@ -840,15 +674,183 @@
                     }
                   },
                   "block_order": [
-                    "gallery",
                     "vendor",
-                    "title",
+                    "text_yMcnh3",
+                    "gallery",
                     "cue",
                     "price",
                     "description"
                   ]
                 },
-                "port_pc54": {
+                "product_card_7WpirN": {
+                  "type": "product-card",
+                  "settings": {
+                    "product": "gildan-3000-light-cotton-tee",
+                    "product_card_gap": 8,
+                    "width": "custom",
+                    "custom_width": 18,
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 47,
+                    "background_color": "",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {
+                    "text_jLejyw": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
+                        "width": "fit-content",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.75rem",
+                        "line_height": "normal",
+                        "letter_spacing": "loose",
+                        "case": "uppercase",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "product_title_G6PbzQ": {
+                      "type": "product-title",
+                      "settings": {
+                        "width": "fit-content",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "h6",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "product_card_gallery_aT4YeV": {
+                      "type": "_product-card-gallery",
+                      "settings": {
+                        "image_ratio": "adapt",
+                        "border": "none",
+                        "border_width": 1,
+                        "border_opacity": 100,
+                        "border_color": "",
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "text_wXtbPC": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>Lightweight value</strong></p>",
+                        "width": "fit-content",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.875rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "price_W9JzAt": {
+                      "type": "price",
+                      "settings": {
+                        "show_sale_price_first": true,
+                        "show_installments": false,
+                        "show_tax_info": false,
+                        "type_preset": "h4",
+                        "width": "100%",
+                        "alignment": "left",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "text_color": "{{ settings.color_palette.color5 }}",
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "text_4DACYh": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Light cotton ·&nbsp;lower blank cost</p>",
+                        "width": "fit-content",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "h6",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_jLejyw",
+                    "product_title_G6PbzQ",
+                    "product_card_gallery_aT4YeV",
+                    "text_wXtbPC",
+                    "price_W9JzAt",
+                    "text_4DACYh"
+                  ]
+                },
+                "product_card_hGpk4a": {
                   "type": "product-card",
                   "settings": {
                     "product": "port-company-pc54-core-cotton-tee",
@@ -869,23 +871,7 @@
                     "padding-inline-end": 0
                   },
                   "blocks": {
-                    "gallery": {
-                      "type": "_product-card-gallery",
-                      "settings": {
-                        "image_ratio": "square",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_color": "",
-                        "border_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "vendor": {
+                    "text_AGeWUG": {
                       "type": "text",
                       "settings": {
                         "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
@@ -910,13 +896,13 @@
                       },
                       "blocks": {}
                     },
-                    "title": {
+                    "product_title_FaREJN": {
                       "type": "product-title",
                       "settings": {
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
-                        "type_preset": "h5",
+                        "type_preset": "h6",
                         "font": "var(--font-body--family)",
                         "font_size": "1rem",
                         "line_height": "normal",
@@ -934,10 +920,26 @@
                       },
                       "blocks": {}
                     },
-                    "cue": {
+                    "product_card_gallery_WmXQbW": {
+                      "type": "_product-card-gallery",
+                      "settings": {
+                        "image_ratio": "adapt",
+                        "border": "none",
+                        "border_width": 1,
+                        "border_opacity": 100,
+                        "border_color": "",
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "text_t8ieg7": {
                       "type": "text",
                       "settings": {
-                        "text": "<p><strong>Extended sizes and companion styles</strong></p>",
+                        "text": "<p><strong>Extended fits</strong></p>",
                         "width": "fit-content",
                         "max_width": "none",
                         "alignment": "left",
@@ -959,13 +961,13 @@
                       },
                       "blocks": {}
                     },
-                    "price": {
+                    "price_GkwDyC": {
                       "type": "price",
                       "settings": {
                         "show_sale_price_first": true,
                         "show_installments": false,
                         "show_tax_info": false,
-                        "type_preset": "paragraph",
+                        "type_preset": "h4",
                         "width": "100%",
                         "alignment": "left",
                         "font": "var(--font-body--family)",
@@ -973,7 +975,7 @@
                         "line_height": "normal",
                         "letter_spacing": "normal",
                         "case": "none",
-                        "text_color": "",
+                        "text_color": "{{ settings.color_palette.color5 }}",
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
@@ -981,14 +983,14 @@
                       },
                       "blocks": {}
                     },
-                    "description": {
+                    "text_Qx3UJW": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A classic midweight tee in adult sizes through 6XL, with tall, women’s, and youth styles to explore when you’re carrying one design across sizes and fits.</p>",
+                        "text": "<p>S-6XL · tall, women’s and youth styles</p>",
                         "width": "fit-content",
                         "max_width": "none",
                         "alignment": "left",
-                        "type_preset": "rte",
+                        "type_preset": "h6",
                         "font": "var(--font-body--family)",
                         "font_size": "1rem",
                         "line_height": "normal",
@@ -1008,15 +1010,15 @@
                     }
                   },
                   "block_order": [
-                    "gallery",
-                    "vendor",
-                    "title",
-                    "cue",
-                    "price",
-                    "description"
+                    "text_AGeWUG",
+                    "product_title_FaREJN",
+                    "product_card_gallery_WmXQbW",
+                    "text_t8ieg7",
+                    "price_GkwDyC",
+                    "text_Qx3UJW"
                   ]
                 },
-                "tultex_202": {
+                "product_card_9cCJ9c": {
                   "type": "product-card",
                   "settings": {
                     "product": "tultex-202-unisex-fine-jersey-t-shirt",
@@ -1037,23 +1039,7 @@
                     "padding-inline-end": 0
                   },
                   "blocks": {
-                    "gallery": {
-                      "type": "_product-card-gallery",
-                      "settings": {
-                        "image_ratio": "square",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_color": "",
-                        "border_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "vendor": {
+                    "text_CGfcXA": {
                       "type": "text",
                       "settings": {
                         "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
@@ -1078,13 +1064,13 @@
                       },
                       "blocks": {}
                     },
-                    "title": {
+                    "product_title_gUQYzV": {
                       "type": "product-title",
                       "settings": {
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
-                        "type_preset": "h5",
+                        "type_preset": "h6",
                         "font": "var(--font-body--family)",
                         "font_size": "1rem",
                         "line_height": "normal",
@@ -1102,10 +1088,26 @@
                       },
                       "blocks": {}
                     },
-                    "cue": {
+                    "product_card_gallery_8hmFwe": {
+                      "type": "_product-card-gallery",
+                      "settings": {
+                        "image_ratio": "adapt",
+                        "border": "none",
+                        "border_width": 1,
+                        "border_opacity": 100,
+                        "border_color": "",
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "text_wQeHUJ": {
                       "type": "text",
                       "settings": {
-                        "text": "<p><strong>Soft ring-spun jersey</strong></p>",
+                        "text": "<p><strong>Softer feel</strong></p>",
                         "width": "fit-content",
                         "max_width": "none",
                         "alignment": "left",
@@ -1127,13 +1129,13 @@
                       },
                       "blocks": {}
                     },
-                    "price": {
+                    "price_BHVjU6": {
                       "type": "price",
                       "settings": {
                         "show_sale_price_first": true,
                         "show_installments": false,
                         "show_tax_info": false,
-                        "type_preset": "paragraph",
+                        "type_preset": "h4",
                         "width": "100%",
                         "alignment": "left",
                         "font": "var(--font-body--family)",
@@ -1141,7 +1143,7 @@
                         "line_height": "normal",
                         "letter_spacing": "normal",
                         "case": "none",
-                        "text_color": "",
+                        "text_color": "{{ settings.color_palette.color5 }}",
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
@@ -1149,14 +1151,14 @@
                       },
                       "blocks": {}
                     },
-                    "description": {
+                    "text_emYCeR": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A lightweight tee for graphic sellers who want a softer feel and need to watch blank cost.</p>",
+                        "text": "<p>Lightweight ring-spun jersey</p>",
                         "width": "fit-content",
                         "max_width": "none",
                         "alignment": "left",
-                        "type_preset": "rte",
+                        "type_preset": "h6",
                         "font": "var(--font-body--family)",
                         "font_size": "1rem",
                         "line_height": "normal",
@@ -1176,15 +1178,15 @@
                     }
                   },
                   "block_order": [
-                    "gallery",
-                    "vendor",
-                    "title",
-                    "cue",
-                    "price",
-                    "description"
+                    "text_CGfcXA",
+                    "product_title_gUQYzV",
+                    "product_card_gallery_8hmFwe",
+                    "text_wQeHUJ",
+                    "price_BHVjU6",
+                    "text_emYCeR"
                   ]
                 },
-                "jerzees_29m": {
+                "product_card_rG7743": {
                   "type": "product-card",
                   "settings": {
                     "product": "jerzees-29m-dri-power-50-50-cotton-poly-t-shirt",
@@ -1205,23 +1207,7 @@
                     "padding-inline-end": 0
                   },
                   "blocks": {
-                    "gallery": {
-                      "type": "_product-card-gallery",
-                      "settings": {
-                        "image_ratio": "square",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_color": "",
-                        "border_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "vendor": {
+                    "text_B3WtPF": {
                       "type": "text",
                       "settings": {
                         "text": "<p><strong>{{ closest.product.vendor }}</strong></p>",
@@ -1246,13 +1232,15 @@
                       },
                       "blocks": {}
                     },
-                    "title": {
-                      "type": "product-title",
+                    "text_Ei6tWE": {
+                      "type": "text",
+                      "name": "t:names.text",
                       "settings": {
+                        "text": "<p>29M Dri-Power 50/50 Cotton/Polly</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
-                        "type_preset": "h5",
+                        "type_preset": "h6",
                         "font": "var(--font-body--family)",
                         "font_size": "1rem",
                         "line_height": "normal",
@@ -1270,10 +1258,26 @@
                       },
                       "blocks": {}
                     },
-                    "cue": {
+                    "product_card_gallery_erebMN": {
+                      "type": "_product-card-gallery",
+                      "settings": {
+                        "image_ratio": "adapt",
+                        "border": "none",
+                        "border_width": 1,
+                        "border_opacity": 100,
+                        "border_color": "",
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "text_TQycUk": {
                       "type": "text",
                       "settings": {
-                        "text": "<p><strong>Midweight cotton/poly blend</strong></p>",
+                        "text": "<p><strong>Cotton/poly blend</strong></p>",
                         "width": "fit-content",
                         "max_width": "none",
                         "alignment": "left",
@@ -1295,13 +1299,13 @@
                       },
                       "blocks": {}
                     },
-                    "price": {
+                    "price_jEXUtQ": {
                       "type": "price",
                       "settings": {
                         "show_sale_price_first": true,
                         "show_installments": false,
                         "show_tax_info": false,
-                        "type_preset": "paragraph",
+                        "type_preset": "h4",
                         "width": "100%",
                         "alignment": "left",
                         "font": "var(--font-body--family)",
@@ -1309,7 +1313,7 @@
                         "line_height": "normal",
                         "letter_spacing": "normal",
                         "case": "none",
-                        "text_color": "",
+                        "text_color": "{{ settings.color_palette.color5 }}",
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
@@ -1317,14 +1321,14 @@
                       },
                       "blocks": {}
                     },
-                    "description": {
+                    "text_nC4NnN": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A classic-fit option if you prefer a cotton/poly blend for your graphics.</p>",
+                        "text": "<p>Midweight · classic fit</p>",
                         "width": "fit-content",
                         "max_width": "none",
                         "alignment": "left",
-                        "type_preset": "rte",
+                        "type_preset": "h6",
                         "font": "var(--font-body--family)",
                         "font_size": "1rem",
                         "line_height": "normal",
@@ -1344,22 +1348,47 @@
                     }
                   },
                   "block_order": [
-                    "gallery",
-                    "vendor",
-                    "title",
-                    "cue",
-                    "price",
-                    "description"
+                    "text_B3WtPF",
+                    "text_Ei6tWE",
+                    "product_card_gallery_erebMN",
+                    "text_TQycUk",
+                    "price_jEXUtQ",
+                    "text_nC4NnN"
                   ]
                 }
               },
               "block_order": [
-                "gildan_3000",
                 "gildan_5000",
-                "port_pc54",
-                "tultex_202",
-                "jerzees_29m"
+                "product_card_7WpirN",
+                "product_card_hGpk4a",
+                "product_card_9cCJ9c",
+                "product_card_rG7743"
               ]
+            },
+            "comparisons": {
+              "type": "text",
+              "settings": {
+                "text": "<p><strong>Want a heavier classic tee?</strong> <a href=\"/products/gildan-2000-ultra-cotton-100-us-cotton-t-shirt\">Compare Gildan 2000 Ultra Cotton</a>, starting with White or Natural.</p><p><strong>Prefer Gildan Softstyle?</strong> <a href=\"/products/gildan-64000-softstyle-t-shirt\">Compare Gildan 64000 Softstyle</a> for a lighter, softer Gildan tee.</p>",
+                "width": "fit-content",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
             },
             "shop_path": {
               "type": "button",
@@ -1378,15 +1407,6 @@
                 "custom_width_mobile": 100
               },
               "blocks": {}
-            },
-            "comparisons": {
-              "type": "text",
-              "settings": {
-                "text": "<p><strong>Want a heavier classic tee?</strong> <a href=\"/products/gildan-2000-ultra-cotton-100-us-cotton-t-shirt\">Compare Gildan 2000 Ultra Cotton</a>, starting with White or Natural.</p><p><strong>Prefer Gildan Softstyle?</strong> <a href=\"/products/gildan-64000-softstyle-t-shirt\">Compare Gildan 64000 Softstyle</a> for a lighter, softer Gildan tee.</p>",
-                "type_preset": "rte",
-                "alignment": "left",
-                "max_width": "none"
-              }
             }
           },
           "block_order": [
@@ -3379,11 +3399,44 @@
               "settings": {
                 "content_direction": "row",
                 "vertical_on_mobile": true,
-                "width": "fill",
-                "width_mobile": "fill",
                 "horizontal_alignment": "flex-start",
                 "vertical_alignment": "center",
-                "gap": 20
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 20,
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "custom_height": 100,
+                "height_mobile": "fit",
+                "custom_height_mobile": 30,
+                "background_media": "none",
+                "background_color": "",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "custom_mobile_media": false,
+                "background_media_mobile": "image",
+                "background_image_position_mobile": "cover",
+                "video_position_mobile": "cover",
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "link": "",
+                "open_in_new_tab": false,
+                "placeholder": "",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
               },
               "blocks": {
                 "garment_dyed": {
@@ -3844,7 +3897,7 @@
         "section_width": "page-width",
         "horizontal_alignment": "flex-start",
         "gap": 28,
-        "background_color": "#EAF0EB",
+        "background_color": "#eaf0eb",
         "padding-block-start": 48,
         "padding-block-end": 48
       }
