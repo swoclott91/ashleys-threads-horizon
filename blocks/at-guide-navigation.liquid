@@ -98,6 +98,23 @@
     border-block-end: 1px solid rgb(35 61 49 / 0.14);
   }
 
+  /* Equal-height columns; photo + meta sit at the bottom so photos line up across columns. */
+  .section:has(.at-tier-title) .group-block-content:has(> .product-card) {
+    align-items: stretch;
+  }
+
+  .section:has(.at-tier-title) .product-card__content {
+    block-size: 100%;
+  }
+
+  .section:has(.at-tier-title) .product-card__content > :is(.card-gallery, :has(.at-guide-product-photo)) {
+    margin-block-start: auto;
+  }
+
+  .section:has(.at-tier-title) .at-tier-card__meta {
+    min-block-size: 40px;
+  }
+
   .section:has(.at-tier-title) .product-card + .product-card {
     border-inline-start: 1px solid rgb(35 61 49 / 0.12);
   }
