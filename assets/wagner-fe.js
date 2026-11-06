@@ -1,6 +1,6 @@
 import { Component } from '@theme/component';
 import { DialogComponent, DialogCloseEvent } from '@theme/dialog';
-import { CartAddEvent, ThemeEvents } from '@theme/events';
+import { CartLinesUpdateEvent, StandardEvents } from '@shopify/events';
 
 /**
  * Set window.__WAGNER_DEBUG__ = true in the console to enable verbose logging
@@ -259,7 +259,30 @@ class WagnerFeDialog extends DialogComponent {
 
       this.closeDialog();
 
-      document.dispatchEvent(new CartAddEvent({}, 'wagner-fe', { source: 'wagner-fe' }));
+      const deferred = CartLinesUpdateEvent.createPromise();
+      const lines = (result.cart_items || []).map((item) => ({
+        merchandiseId: String(item.id),
+        quantity: item.quantity,
+      }));
+      document.dispatchEvent(
+        new CartLinesUpdateEvent({
+          action: 'add',
+          context: 'product',
+          lines,
+          promise: deferred.promise,
+        })
+      );
+      try {
+        const root = window.Shopify?.routes?.root || '/';
+        const cartRes = await fetch(`${root}cart.js`);
+        const cart = cartRes.ok ? await cartRes.json() : {};
+        deferred.resolve({
+          cart: CartLinesUpdateEvent.createCartFromAjaxResponse(cart),
+          detail: { source: 'wagner-fe', sourceId: 'wagner-fe', itemCount: cart.item_count },
+        });
+      } catch (cartErr) {
+        deferred.reject(cartErr);
+      }
     } catch (err) {
       log('Error handling PRODUCT_ADDED', err);
       this.#showError('Something went wrong. Please try again.');
@@ -317,13 +340,13 @@ class WagnerFeTrigger extends Component {
     this.#currentVariantSku = this.dataset.variantSku ?? '';
 
     if (this.dataset.source === 'product_page') {
-      document.addEventListener(ThemeEvents.variantUpdate, this.#handleVariantUpdate);
+      document.addEventListener(StandardEvents.productSelect, this.#handleVariantUpdate);
     }
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    document.removeEventListener(ThemeEvents.variantUpdate, this.#handleVariantUpdate);
+    document.removeEventListener(StandardEvents.productSelect, this.#handleVariantUpdate);
   }
 
   /** Called via on:click="/handleLaunch" on the trigger button. */
@@ -341,20 +364,27 @@ class WagnerFeTrigger extends Component {
   // ── Private ─────────────────────────────────────────────────────────────
 
   #handleVariantUpdate = (event) => {
-    const { resource, data } = event.detail ?? {};
-    if (!resource) return;
+    const promise = event.promise;
+    if (!promise) return;
+    promise
+      .then((result) => {
+        const resource = result?.detail?.resource;
+        const productId = result?.detail?.productId;
+        if (!resource) return;
 
-    if (
-      this.dataset.productId &&
-      data?.productId &&
-      String(data.productId) !== String(this.dataset.productId)
-    ) {
-      return;
-    }
+        if (
+          this.dataset.productId &&
+          productId &&
+          String(productId) !== String(this.dataset.productId)
+        ) {
+          return;
+        }
 
-    this.#currentVariantId = String(resource.id ?? '');
-    this.#currentVariantSku = resource.sku ?? '';
-    log('Variant updated', this.#currentVariantId, this.#currentVariantSku);
+        this.#currentVariantId = String(resource.id ?? '');
+        this.#currentVariantSku = resource.sku ?? '';
+        log('Variant updated', this.#currentVariantId, this.#currentVariantSku);
+      })
+      .catch(() => {});
   };
 
   /** @returns {object} */

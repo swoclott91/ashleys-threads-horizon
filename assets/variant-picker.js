@@ -1,7 +1,7 @@
 import { Component } from '@theme/component';
 import { morph, MORPH_OPTIONS } from '@theme/morph';
 import { OverflowList } from '@theme/overflow-list';
-import { yieldToMainThread, getViewParameterValue, ResizeNotifier } from '@theme/utilities';
+import { getViewParameterValue, ResizeNotifier } from '@theme/utilities';
 import { ProductSelectEvent } from '@shopify/events';
 
 /**
@@ -31,6 +31,9 @@ export default class VariantPicker extends Component {
 
   #resizeObserver = new ResizeNotifier(() => this.updateVariantPickerCss());
 
+  /** @type {HTMLElement | undefined} */
+  #swatchPreview;
+
   connectedCallback() {
     super.connectedCallback();
     const fieldsets = /** @type {HTMLFieldSetElement[]} */ (this.refs.fieldsets || []);
@@ -46,13 +49,79 @@ export default class VariantPicker extends Component {
     });
 
     this.addEventListener('change', this.variantChanged.bind(this));
+    this.addEventListener('pointerover', this.#showSwatchPreview);
+    this.addEventListener('pointerout', this.#hideSwatchPreviewOnExit);
+    this.addEventListener('focusin', this.#showSwatchPreview);
+    this.addEventListener('focusout', this.#hideSwatchPreviewOnExit);
     this.#resizeObserver.observe(this);
   }
 
   disconnectedCallback() {
+    this.#hideSwatchPreview();
     super.disconnectedCallback();
     this.#resizeObserver.disconnect();
   }
+
+  /** @param {PointerEvent | FocusEvent} event */
+  #showSwatchPreview = async (event) => {
+    if (!(event.target instanceof Element)) return;
+    if (event instanceof PointerEvent && event.pointerType === 'touch') return;
+    if (event.type === 'focusin' && !event.target.matches(':focus-visible')) return;
+    if (!window.matchMedia('(min-width: 750px) and (any-hover: hover)').matches) return;
+
+    const swatch = event.target.closest('.variant-option__button-label--has-swatch');
+    if (!swatch || (event.relatedTarget instanceof Node && swatch.contains(event.relatedTarget))) return;
+    const preview = swatch.querySelector('.variant-swatch-preview');
+    if (!(preview instanceof HTMLElement) || !preview.showPopover) return;
+
+    this.#hideSwatchPreview();
+    preview.showPopover();
+    this.#swatchPreview = preview;
+
+    const anchor = swatch.getBoundingClientRect();
+    const { width, height } = preview.getBoundingClientRect();
+    const { clientWidth, clientHeight } = document.documentElement;
+    const gap = 8;
+    const above = anchor.top - height - gap;
+    const below = anchor.bottom + gap;
+    if (above < gap && below + height > clientHeight - gap) {
+      this.#hideSwatchPreview();
+      return;
+    }
+
+    const left = Math.max(gap, Math.min(anchor.left + (anchor.width - width) / 2, clientWidth - width - gap));
+    preview.style.left = `${left}px`;
+    preview.style.top = `${above >= gap ? above : below}px`;
+    window.addEventListener('scroll', this.#hideSwatchPreview, { capture: true, passive: true });
+    window.addEventListener('resize', this.#hideSwatchPreview);
+
+    const image = preview.querySelector('img[data-swatch-preview-src]');
+    if (!(image instanceof HTMLImageElement)) return;
+    const { swatchPreviewSrc } = image.dataset;
+    if (!swatchPreviewSrc || image.getAttribute('src') === swatchPreviewSrc) return;
+
+    image.src = swatchPreviewSrc;
+    const decoded = await image.decode().then(() => true, () => false);
+    if (image.getAttribute('src') !== swatchPreviewSrc) return;
+
+    image.hidden = !decoded;
+    preview.querySelector('.at-ring-spinner')?.setAttribute('hidden', '');
+  };
+
+  /** @param {PointerEvent | FocusEvent} event */
+  #hideSwatchPreviewOnExit = (event) => {
+    const swatch = this.#swatchPreview?.parentElement;
+    if (!(event.target instanceof Node) || !swatch?.contains(event.target)) return;
+    if (event.relatedTarget instanceof Node && swatch.contains(event.relatedTarget)) return;
+    this.#hideSwatchPreview();
+  };
+
+  #hideSwatchPreview = () => {
+    if (this.#swatchPreview?.matches(':popover-open')) this.#swatchPreview.hidePopover();
+    this.#swatchPreview = undefined;
+    window.removeEventListener('scroll', this.#hideSwatchPreview, true);
+    window.removeEventListener('resize', this.#hideSwatchPreview);
+  };
 
   /**
    * Handles the variant change event.
@@ -60,6 +129,7 @@ export default class VariantPicker extends Component {
    */
   variantChanged(event) {
     if (!(event.target instanceof HTMLElement)) return;
+    this.#hideSwatchPreview();
 
     const selectedOption =
       event.target instanceof HTMLSelectElement ? event.target.options[event.target.selectedIndex] : event.target;
@@ -86,12 +156,17 @@ export default class VariantPicker extends Component {
       ? 'featured-product-information'
       : undefined;
 
-    const optionValueId = selectedOption.dataset.optionValueId ?? '';
-    this.fetchUpdatedSection(this.buildRequestUrl(selectedOption), morphElementSelector, optionValueId);
+    const { optionValueId = '', variantId = '', connectedProductUrl = '' } = selectedOption.dataset;
+    const optionName = selectedOption.dataset.optionName?.toLowerCase();
+    const resolveColorFallback =
+      isOnProductPage && !loadsNewProduct && (optionName === 'color' || optionName === 'colour');
+    this.fetchUpdatedSection(this.buildRequestUrl(selectedOption), {
+      morphElementSelector,
+      resolveColorFallback,
+      detail: { optionValueId, variantId, connectedProductUrl },
+    });
 
     const url = new URL(window.location.href);
-
-    const variantId = selectedOption.dataset.variantId || null;
 
     if (isOnProductPage) {
       if (variantId) {
@@ -107,9 +182,7 @@ export default class VariantPicker extends Component {
     }
 
     if (url.href !== window.location.href) {
-      yieldToMainThread().then(() => {
-        history.replaceState({}, '', url.toString());
-      });
+      history.replaceState({}, '', url.toString());
     }
   }
 
@@ -301,13 +374,17 @@ export default class VariantPicker extends Component {
   /**
    * Fetches the updated section.
    * @param {string} requestUrl - The request URL.
-   * @param {string} [morphElementSelector] - The selector of the element to be morphed. By default, only the variant picker is morphed.
-   * @param {string} [optionValueId] - The selected option value ID for event detail.
+   * @param {object} [options] - Request options.
+   * @param {string} [options.morphElementSelector] - The selector of the element to be morphed. By default, only the variant picker is morphed.
+   * @param {boolean} [options.resolveColorFallback] - Whether to resolve a missing color combination.
+   * @param {{ optionValueId?: string, variantId?: string, connectedProductUrl?: string }} [options.detail] - Synchronous product select event detail.
    */
-  fetchUpdatedSection(requestUrl, morphElementSelector, optionValueId = '') {
+  fetchUpdatedSection(requestUrl, { morphElementSelector, resolveColorFallback = false, detail = {} } = {}) {
+    const { optionValueId = '', variantId, connectedProductUrl = '' } = detail;
     // We use this to abort the previous fetch request if it's still pending.
     this.#abortController?.abort();
     this.#abortController = new AbortController();
+    const { signal } = this.#abortController;
 
     const deferredEventPromise = ProductSelectEvent.createPromise();
     const selectedOptions = this.getAllSelectedOptions();
@@ -322,20 +399,46 @@ export default class VariantPicker extends Component {
         selectedOptions,
         detail: {
           optionValueId,
+          variantId,
+          connectedProductUrl,
         },
         promise: deferredEventPromise.promise,
       })
     );
 
-    fetch(requestUrl, { signal: this.#abortController.signal })
+    fetch(requestUrl, { signal })
       .then((response) => response.text())
-      .then((responseText) => {
+      .then(async (responseText) => {
+        signal.throwIfAborted();
+        const parser = new DOMParser();
+        let html = parser.parseFromString(responseText, 'text/html');
+        let variantPickerJsonScript = html.querySelector('variant-picker script[type="application/json"]');
+        const fallbackId =
+          resolveColorFallback && variantPickerJsonScript?.getAttribute('data-color-fallback-variant-id');
+
+        if (fallbackId) {
+          const fallbackUrl = new URL(requestUrl, window.location.href);
+          fallbackUrl.searchParams.delete('option_values');
+          fallbackUrl.searchParams.set('variant', fallbackId);
+          const response = await fetch(fallbackUrl, { signal });
+          const fallbackHtml = parser.parseFromString(await response.text(), 'text/html');
+          signal.throwIfAborted();
+          const fallbackScript = fallbackHtml.querySelector('variant-picker script[type="application/json"]');
+
+          if (response.ok && String(JSON.parse(fallbackScript?.textContent || 'null')?.id) === fallbackId) {
+            html = fallbackHtml;
+            variantPickerJsonScript = fallbackScript;
+            const url = new URL(window.location.href);
+            url.searchParams.delete('option_values');
+            url.searchParams.set('variant', fallbackId);
+            history.replaceState({}, '', url.toString());
+          }
+        }
+
         this.#pendingRequestUrl = undefined;
-        const html = new DOMParser().parseFromString(responseText, 'text/html');
         // Defer is only useful for the initial rendering of the page. Remove it here.
         html.querySelector('overflow-list[defer]')?.removeAttribute('defer');
 
-        const variantPickerJsonScript = html.querySelector(`variant-picker script[type="application/json"]`);
         const textContent = variantPickerJsonScript?.textContent;
 
         if (!textContent) {
@@ -352,6 +455,7 @@ export default class VariantPicker extends Component {
         }
 
         let newProduct;
+        this.#hideSwatchPreview();
 
         if (morphElementSelector === 'main') {
           this.updateMain(html);
@@ -462,6 +566,12 @@ export default class VariantPicker extends Component {
         return key;
       },
     });
+    for (const [fieldsetIndex, radios] of this.#radios.entries()) {
+      const checked = radios.find((radio) => radio.checked);
+      if (checked && checked.dataset.inputIndex !== String(this.#checkedIndices[fieldsetIndex]?.[0])) {
+        this.updateSelectedOption(checked);
+      }
+    }
     this.updateVariantPickerCss();
 
     return newProduct;
@@ -575,10 +685,12 @@ export default class VariantPicker extends Component {
    */
   get selectedOptionsValues() {
     /** @type HTMLElement[] */
-    const selectedOptions = Array.from(this.querySelectorAll('select option[selected], fieldset input:checked'));
+    const selectedOptions = Array.from(
+      this.querySelectorAll('select option[selected], fieldset input:checked, [data-single-option-value-id]')
+    );
 
     return selectedOptions.map((option) => {
-      const { optionValueId } = option.dataset;
+      const { optionValueId = option.dataset.singleOptionValueId } = option.dataset;
 
       if (!optionValueId) throw new Error('No option value ID found');
 

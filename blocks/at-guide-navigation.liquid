@@ -1,0 +1,160 @@
+{% assign icons = 'price_tag,cotton_ring_spun,ruler,shirt' | split: ',' %}
+
+<nav class="at-guide-navigation" aria-label="{{ block.settings.label | escape }}" {{ block.shopify_attributes }}>
+  <ul class="list-unstyled at-guide-navigation__links">
+    {% for icon in icons %}
+      {% liquid
+        assign label_key = 'label_' | append: forloop.index
+        assign link_key = 'link_' | append: forloop.index
+        assign label = block.settings[label_key]
+        assign link = block.settings[link_key]
+      %}
+      {% if label != blank and link != blank %}
+        <li>
+          <a href="{{ link | escape }}">
+            {% render 'icon-or-image', icon: icon, width: 18, class_name: 'at-guide-navigation__icon' %}
+            <span>{{ label | escape }}</span>
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</nav>
+
+{% stylesheet %}
+  .at-guide-navigation__links {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--gap-md);
+    margin: 0;
+  }
+
+  .at-guide-navigation a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-xs);
+    min-block-size: 36px;
+    font-size: var(--font-size--sm);
+  }
+
+  .at-guide-navigation__icon {
+    flex-shrink: 0;
+  }
+
+  .at-guide-navigation a span {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .at-guide-target {
+    scroll-margin-block-start: var(--padding-sm);
+    text-wrap: balance;
+  }
+
+  body:has(#header-component[sticky='always']) .at-guide-target {
+    scroll-margin-block-start: calc(var(--header-height, 0px) + var(--padding-sm));
+  }
+
+  /* Buying guide tiers: shared pieces rendered by custom-liquid blocks in the guide templates. */
+  .at-tier-title {
+    margin: 0;
+    color: #233d31;
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+    font-size: clamp(2.5rem, 1.6rem + 3.4vw, 4.75rem);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+  }
+
+  .at-tier-title--on-dark {
+    color: #fbf8f2;
+  }
+
+  .at-tier-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap-sm);
+    padding-block-start: var(--padding-2xs, 4px);
+    font-size: var(--font-size--xs, 0.8125rem);
+    line-height: 1.35;
+    color: rgb(35 61 49 / 0.72);
+  }
+
+  .at-tier-card__arrow {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    inline-size: 36px;
+    block-size: 36px;
+    border: 1px solid rgb(35 61 49 / 0.22);
+    border-radius: 50%;
+    color: #233d31;
+    background: #fff;
+    transition: background-color var(--animation-speed, 0.2s) ease, color var(--animation-speed, 0.2s) ease;
+  }
+
+  .at-tier-card__arrow svg,
+  .at-tier-next__arrow svg {
+    inline-size: 16px;
+    block-size: 16px;
+    --icon-stroke-width: 1.75px;
+  }
+
+  .product-card:hover .at-tier-card__arrow,
+  .product-card:focus-within .at-tier-card__arrow {
+    background: #233d31;
+    color: #fff;
+  }
+
+  .at-tier-next {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-md);
+    padding: 12px 20px;
+    border-radius: 8px;
+    background: rgb(35 61 49 / 0.07);
+    color: #233d31;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .at-tier-next:hover {
+    background: rgb(35 61 49 / 0.12);
+  }
+
+  .at-tier-next__label {
+    padding-inline-end: var(--gap-md);
+    border-inline-end: 1px solid rgb(35 61 49 / 0.2);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+
+  .at-tier-next__arrow {
+    display: inline-flex;
+    margin-inline-start: var(--gap-lg);
+    transform: rotate(90deg);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Buying guide navigation",
+  "tag": null,
+  "settings": [
+    { "type": "text", "id": "label", "label": "Navigation label", "default": "Shop by priority" },
+    { "type": "text", "id": "label_1", "label": "First link label" },
+    { "type": "url", "id": "link_1", "label": "First link destination" },
+    { "type": "text", "id": "label_2", "label": "Second link label" },
+    { "type": "url", "id": "link_2", "label": "Second link destination" },
+    { "type": "text", "id": "label_3", "label": "Third link label" },
+    { "type": "url", "id": "link_3", "label": "Third link destination" },
+    { "type": "text", "id": "label_4", "label": "Fourth link label" },
+    { "type": "url", "id": "link_4", "label": "Fourth link destination" }
+  ],
+  "presets": [{ "name": "Buying guide navigation" }]
+}
+{% endschema %}

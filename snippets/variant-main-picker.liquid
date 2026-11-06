@@ -52,6 +52,13 @@
       data-shopify-visual-preview
     {% endif %}
   >
+    {% if product_resource.metafields.custom.color_option_order.value.ids != blank %}
+      <script src="{{ 'at-color-option-order.js' | asset_url }}" type="module"></script>
+      <at-color-option-order
+        hidden
+        data-value-ids="{{ product_resource.metafields.custom.color_option_order.value.ids | json | escape }}"
+      ></at-color-option-order>
+    {% endif %}
     <form class="variant-picker__form">
       {%- for product_option in product_resource.options_with_values -%}
         {%- liquid
@@ -64,6 +71,12 @@
             else
               assign variant_style = 'swatch'
             endif
+          endif
+
+          assign show_swatch_preview = false
+          if variant_style == 'swatch' and product.id == product_resource.id
+            assign show_swatch_preview = true
+            assign swatch_option_key = 'option' | append: product_option.position
           endif
 
           if variant_style == 'buttons' and settings.variant_button_width == 'equal-width-buttons'
@@ -82,6 +95,7 @@
             <span
               class="variant-option__swatch-value"
               data-testid="variant-option-single-value"
+              data-single-option-value-id="{{ product_option.values.first.id }}"
             >
               {{- product_option.selected_value -}}
             </span>
@@ -100,11 +114,22 @@
               {%- endif %}
             </legend>
             {%- for product_option_value in product_option.values -%}
+              {%- liquid
+                assign new_color_until = product_option_value.variant.metafields.custom.new_color_until.value
+                assign new_color_visible = false
+                if new_color_until != blank
+                  assign new_color_until_day = new_color_until | date: '%Y%m%d' | plus: 0
+                  assign today_day = 'now' | date: '%Y%m%d' | plus: 0
+                  if new_color_until_day >= today_day
+                    assign new_color_visible = true
+                  endif
+                endif
+              -%}
               {% if product_option_value.size > longest_value and option_id_attribute %}
                 {% assign longest_value = product_option_value.size %}
               {% endif %}
               <label
-                class="variant-option__button-label{% if variant_style == 'swatch' %} variant-option__button-label--has-swatch{% endif %}"
+                class="variant-option__button-label{% if variant_style == 'swatch' %} variant-option__button-label--has-swatch{% if new_color_visible %} variant-option__button-label--new-color{% endif %}{% endif %}"
               >
                 <input
                   type="radio"
@@ -148,6 +173,34 @@
                     variant_image: featured_media,
                     mode: 'unscaled'
                   %}
+                  {% if show_swatch_preview %}
+                    {%- liquid
+                      assign preview_media = featured_media
+                      if preview_media == blank and product_option_value.product_url == blank
+                        assign preview_media = product_resource.variants | where: swatch_option_key, product_option_value.name | map: 'featured_media' | compact | first
+                      endif
+                      assign preview_image = preview_media.preview_image
+                    -%}
+                    <span class="variant-swatch-preview" popover aria-hidden="true">
+                      {% if preview_image %}
+                        <span class="variant-swatch-preview__media">
+                          <span class="at-ring-spinner"></span>
+                          <img
+                            data-swatch-preview-src="{{ preview_image | image_url: width: 320 | escape }}"
+                            alt=""
+                            width="144"
+                            height="144"
+                            decoding="async"
+                            hidden
+                          >
+                        </span>
+                      {% endif %}
+                      <span class="variant-swatch-preview__name">{{ product_option_value.name | escape }}</span>
+                    </span>
+                  {% endif %}
+                  {% if new_color_visible %}
+                    <span class="new-color-swatch-label">New</span>
+                  {% endif %}
                 {% else %}
                   {% if product_option_value.available == true %}
                     <span
@@ -237,11 +290,32 @@
         {%- endif -%}
       {%- endfor -%}
 
-      <script type="application/json">
-        {{ product_resource.selected_or_first_available_variant | json }}
+      {%- liquid
+        assign selected_variant = product_resource.selected_or_first_available_variant
+        assign color_fallback_variant = nil
+        if selected_variant == blank and product.id == product_resource.id
+          for product_option in product_resource.options_with_values
+            assign option_name = product_option.name | downcase
+            if option_name == 'color' or option_name == 'colour'
+              assign option_key = 'option' | append: product_option.position
+              assign color_variants = product_resource.variants | where: option_key, product_option.selected_value
+              assign color_fallback_variant = color_variants | find: 'available', true | default: color_variants.first
+              break
+            endif
+          endfor
+        endif
+      -%}
+      <script
+        type="application/json"
+        {% if color_fallback_variant %}
+          data-color-fallback-variant-id="{{ color_fallback_variant.id }}"
+        {% endif %}
+      >
+        {{ selected_variant | json }}
       </script>
     </form>
   </variant-picker>
 {% endunless %}
 
+{% render 'swatch-styles' %}
 {% render 'variant-picker-styles' %}

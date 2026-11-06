@@ -5,8 +5,8 @@
  */
 
 import { formatMoney } from '@theme/money-formatting';
-import { CartAddEvent } from '@theme/events';
-import { onAnimationEnd, yieldToMainThread } from '@theme/utilities';
+import { CartLinesUpdateEvent } from '@shopify/events';
+import { onAnimationEnd, yieldToMainThread, preloadImage } from '@theme/utilities';
 
 const BULK_GRID_SELECTORS = {
   container: '[data-at-bulk-grid]',
@@ -30,29 +30,230 @@ const CART_ICON_SELECTOR = '.header-actions__cart-icon';
 /**
  * Same success treatment as AddToCartComponent.animateAddToCart (product-form.js):
  * `data-added` drives base.css checkmark / label transitions; then reset after 800ms.
+ * Fire-and-forget — callers must not await this if they need to close the modal / open
+ * the drawer after fly-to-cart only (the 800ms hold would otherwise dominate wall time).
  * @param {HTMLButtonElement | null} addBtn
  */
-async function playBulkAddToCartButtonSuccessAnimation(addBtn) {
+function playBulkAddToCartButtonSuccessAnimation(addBtn) {
   if (!addBtn) return;
-  if (addBtn.dataset.added !== 'true') {
-    addBtn.dataset.added = 'true';
-  }
-  await yieldToMainThread();
-  await onAnimationEnd(addBtn);
-  await new Promise((r) => setTimeout(r, 800));
-  addBtn.removeAttribute('data-added');
+  void (async () => {
+    if (addBtn.dataset.added !== 'true') {
+      addBtn.dataset.added = 'true';
+    }
+    await yieldToMainThread();
+    await onAnimationEnd(addBtn);
+    await new Promise((r) => setTimeout(r, 800));
+    addBtn.removeAttribute('data-added');
+  })();
 }
 
 /**
- * On successful bulk add: same visuals as individual add — fly-to-cart (when enabled) +
- * add-to-cart button burst (always). Mirrors product-form AddToCartComponent.handleClick.
+ * Section IDs for cart-items-component morph (same pattern as product-form.js).
+ * Requesting these on cart/add.js avoids a post-add Section Rendering refetch.
+ * @returns {string[]}
+ */
+function getCartItemsSectionIds() {
+  /** @type {string[]} */
+  const ids = [];
+  for (const el of document.querySelectorAll('cart-items-component')) {
+    if (el instanceof HTMLElement && el.dataset.sectionId) {
+      ids.push(el.dataset.sectionId);
+    }
+  }
+  return ids;
+}
+
+/**
+ * Build a minimal Ajax cart object for CartLinesUpdateEvent without a cart.js round-trip.
+ * Bubble count = previous cart-icon count + quantities just added.
+ * @param {Array<{ id?: number, key?: string, quantity?: number, variant_id?: number }>} addedItems
+ * @param {number} addedQuantitySum
+ */
+function buildOptimisticCartFromAdd(addedItems, addedQuantitySum) {
+  const cartIcon = /** @type {{ currentCartCount?: number } | null} */ (document.querySelector('cart-icon'));
+  const prevCount = Number(cartIcon?.currentCartCount) || 0;
+  return {
+    token: '',
+    item_count: prevCount + addedQuantitySum,
+    total_price: 0,
+    currency: window.Shopify?.currency?.active || 'USD',
+    items: Array.isArray(addedItems) ? addedItems : [],
+    discount_codes: [],
+  };
+}
+
+/**
+ * Normalize cart/add.js JSON (array of lines, or { items, sections }, or error).
+ * @param {any} data
+ */
+function normalizeCartAddResponse(data) {
+  if (data?.status && data.status !== 200) {
+    return { error: data, items: /** @type {any[]} */ ([]), sections: undefined };
+  }
+  if (Array.isArray(data)) {
+    return { error: null, items: data, sections: undefined };
+  }
+  return {
+    error: null,
+    items: Array.isArray(data?.items) ? data.items : [],
+    sections: data?.sections,
+  };
+}
+
+/**
+ * Preload the featured image used by fly-to-cart so the animation does not hitch.
+ * @param {string} [sectionId]
+ */
+function preloadBulkFlyToCartImage(sectionId) {
+  if (!sectionId) return;
+  const config = getBulkConfig(sectionId) || bulkGridConfigCache.get(sectionId);
+  const url = config?.productFeaturedImage;
+  if (typeof url === 'string' && url) preloadImage(url);
+}
+
+/**
+ * Dispatch Horizon v4 cart lines-update (replaces removed ThemeEvents CartAddEvent).
+ * Dispatch from an Element inside the bulk modal (the ATC button) so cart-drawer
+ * can detect `dialog:modal` via event.target and defer auto-open until close —
+ * matching product-form.js (which dispatches from the form element).
+ * @param {Array<{ id: number, quantity: number }>} items
+ * @param {Element | null} [dispatchTarget] - Prefer the add button inside the open modal
+ * @returns {{ promise: Promise<{ cart: object, detail?: object }>, resolve: Function, reject: Function }}
+ */
+function beginBulkCartLinesUpdate(items, dispatchTarget = null) {
+  const deferred = CartLinesUpdateEvent.createPromise();
+  const target = dispatchTarget instanceof Element ? dispatchTarget : document;
+  target.dispatchEvent(
+    new CartLinesUpdateEvent({
+      action: 'add',
+      context: 'product',
+      lines: items.map((item) => ({
+        merchandiseId: String(item.id),
+        quantity: item.quantity,
+      })),
+      promise: deferred.promise,
+    })
+  );
+  return deferred;
+}
+
+/**
+ * Show/hide the theme ring spinner on the bulk ATC button while cart/add is in flight.
+ * Caller should re-run updateTotal() after clearing loading so disabled state matches selection.
+ * @param {HTMLButtonElement | null} addBtn
+ * @param {boolean} isLoading
+ */
+function setBulkAddButtonLoading(addBtn, isLoading) {
+  if (!addBtn) return;
+
+  if (isLoading) {
+    addBtn.classList.add('at-bulk-grid__add--loading');
+    addBtn.setAttribute('aria-busy', 'true');
+    addBtn.disabled = true;
+    return;
+  }
+
+  addBtn.classList.remove('at-bulk-grid__add--loading');
+  addBtn.removeAttribute('aria-busy');
+}
+
+/**
+ * POST selected variants to cart/add.js (with cart section HTML), then run success visuals.
+ * Shows button spinner for the network wait; cart drawer opens only after fly animation
+ * (CartLinesUpdateEvent is dispatched from the button so cart-drawer defers past the modal).
+ * Skips a follow-up cart.js fetch — uses optimistic item_count + sections from the add response.
+ * @param {HTMLElement} container
+ * @param {string} sectionId
+ * @param {HTMLButtonElement | null} addBtn
+ * @param {() => Array<{ id: number, quantity: number }>} getLineItems
+ * @param {() => void} updateTotal
+ */
+async function submitBulkCartAdd(container, sectionId, addBtn, getLineItems, updateTotal) {
+  if (addBtn?.classList.contains('at-bulk-grid__add--loading')) return;
+
+  const items = getLineItems();
+  if (items.length === 0) return;
+
+  const section = document.getElementById(`shopify-section-${sectionId}`);
+  const form = section?.querySelector('[data-at-bulk-form]');
+  const lineItemsInput = form?.querySelector(BULK_GRID_SELECTORS.lineItemsInput);
+  if (lineItemsInput) lineItemsInput.value = JSON.stringify(items);
+
+  setBulkAddButtonLoading(addBtn, true);
+  const deferredEventPromise = beginBulkCartLinesUpdate(items, addBtn);
+  const root = window.Shopify?.routes?.root || '/';
+  const addUrl = (typeof Theme !== 'undefined' && Theme.routes?.cart_add_url) || root + 'cart/add.js';
+  const sectionIds = getCartItemsSectionIds();
+  /** @type {{ items: Array<{ id: number, quantity: number }>, sections?: string }} */
+  const body = { items };
+  if (sectionIds.length) body.sections = sectionIds.join(',');
+
+  try {
+    const addRes = await fetch(addUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await addRes.json();
+    const { error, items: addedItems, sections } = normalizeCartAddResponse(data);
+
+    if (error) {
+      console.warn('at-bulk-grid: cart add response', error);
+      deferredEventPromise.reject(error);
+      setBulkAddButtonLoading(addBtn, false);
+      updateTotal();
+      return;
+    }
+
+    window.dispatchEvent(new CustomEvent('at:bulk:added', { detail: { items, response: data } }));
+
+    const addedQuantitySum = items.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    const cart = buildOptimisticCartFromAdd(addedItems, addedQuantitySum);
+
+    setBulkAddButtonLoading(addBtn, false);
+    await handleBulkAddSuccess(container, updateTotal, addBtn, sectionId, cart, deferredEventPromise, sections);
+  } catch (err) {
+    console.error('at-bulk-grid: cart add failed', err);
+    deferredEventPromise.reject(err);
+    setBulkAddButtonLoading(addBtn, false);
+    updateTotal();
+  }
+}
+
+/**
+ * On successful bulk add: fly-to-cart (when enabled) + button burst (fire-and-forget).
+ * Resolves the cart event immediately so drawer morph / bubble update run during fly,
+ * then awaits fly-to-cart only before closing the modal (drawer opens on close).
  * @param {HTMLElement} container - Bulk grid container
  * @param {() => void} updateTotal - Function to refresh total display
  * @param {HTMLButtonElement | null} addBtn - Add to cart button (source for fly animation)
  * @param {string} sectionId - Section ID for config lookup
- * @param {Object} cart - Cart object from cart.js
+ * @param {Object} cart - Cart object (optimistic Ajax shape) for CartLinesUpdateEvent
+ * @param {{ resolve: Function, reject: Function } | null} [deferredEventPromise]
+ * @param {Record<string, string> | undefined} [sections] - Section HTML from cart/add.js
  */
-async function handleBulkAddSuccess(container, updateTotal, addBtn, sectionId, cart) {
+async function handleBulkAddSuccess(
+  container,
+  updateTotal,
+  addBtn,
+  sectionId,
+  cart,
+  deferredEventPromise = null,
+  sections = undefined
+) {
+  // Resolve first so cart-items morph + bubble update run in parallel with fly animation.
+  if (deferredEventPromise) {
+    deferredEventPromise.resolve({
+      cart: CartLinesUpdateEvent.createCartFromAjaxResponse(cart),
+      detail: {
+        source: 'at-bulk-grid',
+        sourceId: 'at-bulk-grid',
+        itemCount: cart.item_count,
+        sections,
+      },
+    });
+  }
+
   const doAnimation = container.dataset.atBulkAddToCartAnimation === 'true';
   const config = getBulkConfig(sectionId) || bulkGridConfigCache.get(sectionId);
   const productImage = config?.productFeaturedImage;
@@ -74,10 +275,9 @@ async function handleBulkAddSuccess(container, updateTotal, addBtn, sectionId, c
     }
   }
 
-  const pending = [];
-  if (addBtn) pending.push(playBulkAddToCartButtonSuccessAnimation(addBtn));
-  if (flyToCartEl) pending.push(onAnimationEnd(flyToCartEl));
-  if (pending.length) await Promise.all(pending);
+  // Button burst is visual-only; do not gate modal close / drawer open on its 800ms hold.
+  if (addBtn) playBulkAddToCartButtonSuccessAnimation(addBtn);
+  if (flyToCartEl) await onAnimationEnd(flyToCartEl);
 
   const dialogComponent = container.closest('dialog-component');
   if (dialogComponent && typeof dialogComponent.closeDialog === 'function') {
@@ -103,13 +303,6 @@ async function handleBulkAddSuccess(container, updateTotal, addBtn, sectionId, c
   const lineItemsInput = form?.querySelector(BULK_GRID_SELECTORS.lineItemsInput);
   if (lineItemsInput) lineItemsInput.value = '';
   updateTotal();
-
-  document.dispatchEvent(new CartAddEvent(cart, 'at-bulk-grid', { source: 'at-bulk-grid' }));
-
-  const cartDrawer = document.querySelector('cart-drawer-component');
-  if (cartDrawer && typeof cartDrawer.open === 'function') {
-    cartDrawer.open();
-  }
 }
 
 /** Theme add-to-cart icon (icon-add-to-cart.svg) – same as add-to-cart-button secondary */
@@ -130,6 +323,25 @@ const BULK_ADD_TO_CART_BUTTON_MARKUP =
   '<span class="svg-wrapper add-to-cart__added-icon">' +
   CHECKMARK_BURST_SVG +
   '</span></span>';
+
+/**
+ * Enriched footer: item count • subtotal • projected discount %, plus the primary CTA.
+ * Values populated by updateBulkSummary(); button starts disabled until a quantity is entered.
+ * Shared by the desktop table and mobile accordion renderers.
+ */
+const BULK_GRID_ACTIONS_MARKUP =
+  '<div class="at-bulk-grid__actions">' +
+  '<div class="at-bulk-grid__summary" data-at-bulk-summary>' +
+  '<span class="at-bulk-grid__summary-count" data-at-bulk-count>0 items</span>' +
+  '<span class="at-bulk-grid__summary-sep at-bulk-grid__summary-sep--count" aria-hidden="true">•</span>' +
+  '<span class="at-bulk-grid__summary-subtotal" data-at-bulk-subtotal></span>' +
+  '<span class="at-bulk-grid__summary-sep at-bulk-grid__summary-sep--discount" aria-hidden="true" data-at-bulk-discount-sep hidden>•</span>' +
+  '<span class="at-bulk-grid__summary-discount" data-at-bulk-discount hidden></span>' +
+  '</div>' +
+  '<button type="button" class="button add-to-cart-button button-primary at-bulk-grid__add" data-at-bulk-add-to-cart disabled>' +
+  BULK_ADD_TO_CART_BUTTON_MARKUP +
+  '</button>' +
+  '</div>';
 
 /** Theme accordion caret – same as icon-caret.svg (mobile bulk grid expand/collapse) */
 const ICON_CARET_SVG =
@@ -377,6 +589,127 @@ function formatVariantPriceHtml(variant, config) {
 }
 
 /**
+ * Format a minor-unit (cents) amount using the bulk grid config's money format.
+ * @param {number} cents
+ * @param {{ moneyFormat?: string, currency?: string }} config
+ * @returns {string}
+ */
+function formatBulkMoney(cents, config) {
+  let format = config?.moneyFormat?.trim() || '';
+  const currency = (config?.currency || 'USD').toString().toUpperCase();
+  if (!format) format = currency === 'USD' ? '${{amount}}' : '{{amount}} ' + currency;
+  return formatMoney(cents, format, currency);
+}
+
+/**
+ * The discount progress bar shares the modal shell with the grid; use it as the source of
+ * truth for cart subtotal + milestone thresholds so the footer discount matches the strip.
+ * @param {HTMLElement} container
+ * @returns {HTMLElement | null}
+ */
+function findBulkDiscountBar(container) {
+  const host = container.closest(
+    '.at-bulk-grid-modal__inner, .at-buy-buttons__bulk-dialog-inner, .popup-link__inner'
+  );
+  return host?.querySelector('at-discount-progress-bar') || null;
+}
+
+/**
+ * Highest reached (non-shipping) discount percentage for a projected subtotal (cents).
+ * @param {number} projectedCents
+ * @param {HTMLElement} container
+ * @returns {number | null} percent, or null when no discount bar / milestones present
+ */
+function bulkDiscountPercent(projectedCents, container) {
+  const bar = findBulkDiscountBar(container);
+  if (!bar) return null;
+  let milestones = [];
+  try {
+    milestones = JSON.parse(bar.dataset.milestones || '[]');
+  } catch {
+    return null;
+  }
+  if (!Array.isArray(milestones) || milestones.length === 0) return null;
+  let pct = 0;
+  milestones.forEach((m) => {
+    if (!m || m.kind === 'shipping') return;
+    if (projectedCents >= Number(m.threshold)) {
+      const n = parseInt(String(m.benefitLabel).replace(/[^0-9]/g, ''), 10);
+      if (!Number.isNaN(n)) pct = Math.max(pct, n);
+    }
+  });
+  return pct;
+}
+
+/**
+ * Refresh the enriched footer summary (item count, subtotal, projected discount %) + CTA label,
+ * plus per-color item counts (mobile) and active/selected states for quantity fields > 0.
+ * Shared by the desktop table and mobile accordion renderers.
+ * @param {HTMLElement} container
+ * @param {{ moneyFormat?: string, currency?: string }} config
+ * @returns {{ count: number, subtotalCents: number }}
+ */
+function updateBulkSummary(container, config) {
+  let count = 0;
+  let subtotalCents = 0;
+
+  container.querySelectorAll('[data-at-bulk-qty]').forEach((input) => {
+    if (!(input instanceof HTMLInputElement)) return;
+    const q = parseInt(input.value, 10) || 0;
+    input.classList.toggle('at-bulk-grid__qty-input--active', q > 0);
+    if (q <= 0) return;
+    count += q;
+    const price = parseInt(input.getAttribute('data-at-bulk-variant-price') || '0', 10) || 0;
+    subtotalCents += q * price;
+  });
+
+  // Per-color item counts + selected-row tint (mobile accordions; no-ops on desktop).
+  container.querySelectorAll('[data-at-bulk-color-row]').forEach((row) => {
+    let rowCount = 0;
+    row.querySelectorAll('[data-at-bulk-qty]').forEach((input) => {
+      rowCount += parseInt(input.value, 10) || 0;
+    });
+    const badge = row.querySelector('[data-at-bulk-color-count]');
+    if (badge) badge.textContent = rowCount > 0 ? (rowCount === 1 ? '1 item' : rowCount + ' items') : '';
+    row.classList.toggle('at-bulk-grid__mobile-accordion--has-items', rowCount > 0);
+    row.querySelectorAll('.at-bulk-grid__mobile-size-row').forEach((sizeRow) => {
+      const input = sizeRow.querySelector('[data-at-bulk-qty]');
+      const q = input ? parseInt(input.value, 10) || 0 : 0;
+      sizeRow.classList.toggle('at-bulk-grid__mobile-size-row--selected', q > 0);
+    });
+  });
+
+  const countEl = container.querySelector('[data-at-bulk-count]');
+  const subtotalEl = container.querySelector('[data-at-bulk-subtotal]');
+  const discountEl = container.querySelector('[data-at-bulk-discount]');
+  const discountSep = container.querySelector('[data-at-bulk-discount-sep]');
+  const addBtn = container.querySelector('[data-at-bulk-add-to-cart]');
+
+  if (countEl) countEl.textContent = count === 1 ? '1 item' : count + ' items';
+  if (subtotalEl) subtotalEl.textContent = formatBulkMoney(subtotalCents, config);
+
+  const bar = findBulkDiscountBar(container);
+  const cartSubtotal = bar ? Number(bar.dataset.subtotal) || 0 : 0;
+  const pct = bulkDiscountPercent(cartSubtotal + subtotalCents, container);
+  if (discountEl instanceof HTMLElement && discountSep instanceof HTMLElement) {
+    const show = typeof pct === 'number' && pct > 0;
+    discountEl.textContent = show ? pct + '% off' : '';
+    discountEl.hidden = !show;
+    discountSep.hidden = !show;
+  }
+
+  if (addBtn instanceof HTMLButtonElement) {
+    const labelEl = addBtn.querySelector('.add-to-cart-text__content');
+    if (labelEl) {
+      labelEl.textContent = count > 0 ? (count === 1 ? 'Add 1 item' : 'Add ' + count + ' items') : 'Add to cart';
+    }
+    addBtn.disabled = count === 0;
+  }
+
+  return { count, subtotalCents };
+}
+
+/**
  * @param {HTMLElement} container
  * @param {ReturnType<getBulkConfig>} config
  * @param {string} sectionId
@@ -494,29 +827,18 @@ function renderDesktopGrid(container, config, sectionId) {
 
   html += '</tbody></table></div>';
   html += '</div>';
-  html +=
-    '<div class="at-bulk-grid__actions">' +
-    '<span class="at-bulk-grid__total" data-at-bulk-total>Total: 0</span>' +
-    '<button type="button" class="button add-to-cart-button button-primary" data-at-bulk-add-to-cart>' +
-    BULK_ADD_TO_CART_BUTTON_MARKUP +
-    '</button>' +
-    '</div>';
+  html += BULK_GRID_ACTIONS_MARKUP;
 
   container.innerHTML = html;
   container.dataset.atBulkGridSectionId = sectionId;
 
   const searchEl = container.querySelector(BULK_GRID_SELECTORS.search);
-  const totalEl = container.querySelector('[data-at-bulk-total]');
   const addBtn = container.querySelector('[data-at-bulk-add-to-cart]');
 
   const updateTotal = () => {
-    const inputs = container.querySelectorAll('[data-at-bulk-qty]');
-    let sum = 0;
-    inputs.forEach((input) => {
-      sum += parseInt(input.value, 10) || 0;
-    });
-    if (totalEl) totalEl.textContent = 'Total: ' + sum;
+    updateBulkSummary(container, config);
   };
+  updateTotal();
 
   const getLineItems = () => {
     const items = [];
@@ -547,33 +869,7 @@ function renderDesktopGrid(container, config, sectionId) {
   }
 
   const submitBulkItems = () => {
-    const items = getLineItems();
-    if (items.length === 0) return;
-    const section = document.getElementById(`shopify-section-${sectionId}`);
-    const form = section?.querySelector('[data-at-bulk-form]');
-    const lineItemsInput = form?.querySelector(BULK_GRID_SELECTORS.lineItemsInput);
-    if (lineItemsInput) lineItemsInput.value = JSON.stringify(items);
-
-    const root = window.Shopify?.routes?.root || '/';
-    fetch(root + 'cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status && data.status !== 200) {
-          console.warn('at-bulk-grid: cart add response', data);
-        }
-        window.dispatchEvent(new CustomEvent('at:bulk:added', { detail: { items, response: data } }));
-        fetch(root + 'cart.js')
-          .then((r) => r.json())
-          .then(async (cart) => {
-            await handleBulkAddSuccess(container, updateTotal, addBtn, sectionId, cart);
-          })
-          .catch(() => {});
-      })
-      .catch((err) => console.error('at-bulk-grid: cart add failed', err));
+    submitBulkCartAdd(container, sectionId, addBtn, getLineItems, updateTotal);
   };
 
   if (addBtn) addBtn.addEventListener('click', submitBulkItems);
@@ -662,7 +958,7 @@ function renderMobileGrid(container, config, sectionId) {
     if (swatchStyle) {
       html += '<span class="at-bulk-grid__swatch swatch" style="' + swatchStyle + '" aria-hidden="true"></span>';
     }
-    html += '<span class="at-bulk-grid__color-name">' + escapeHtml(color) + '</span> <span class="svg-wrapper icon-caret icon-animated at-bulk-grid__accordion-icon" aria-hidden="true" data-at-bulk-accordion-icon>' + ICON_CARET_SVG + '</span>';
+    html += '<span class="at-bulk-grid__color-name">' + escapeHtml(color) + '</span> <span class="at-bulk-grid__color-count" data-at-bulk-color-count aria-hidden="true"></span> <span class="svg-wrapper icon-caret icon-animated at-bulk-grid__accordion-icon" aria-hidden="true" data-at-bulk-accordion-icon>' + ICON_CARET_SVG + '</span>';
     html += '</button>';
     html += '<div class="at-bulk-grid__mobile-accordion-content" hidden>';
     sizeValues.forEach((size) => {
@@ -717,13 +1013,7 @@ function renderMobileGrid(container, config, sectionId) {
 
   html += '</div>';
   html += '</div>';
-  html +=
-    '<div class="at-bulk-grid__actions">' +
-    '<span class="at-bulk-grid__total" data-at-bulk-total>Total: 0</span>' +
-    '<button type="button" class="button add-to-cart-button button-primary" data-at-bulk-add-to-cart>' +
-    BULK_ADD_TO_CART_BUTTON_MARKUP +
-    '</button>' +
-    '</div>';
+  html += BULK_GRID_ACTIONS_MARKUP;
 
   if (container._atBulkMobileAbortController) {
     container._atBulkMobileAbortController.abort();
@@ -734,14 +1024,8 @@ function renderMobileGrid(container, config, sectionId) {
   container.innerHTML = html;
   container.dataset.atBulkGridSectionId = sectionId;
 
-  const totalEl = container.querySelector('[data-at-bulk-total]');
   const updateTotal = () => {
-    const inputs = container.querySelectorAll('[data-at-bulk-qty]');
-    let sum = 0;
-    inputs.forEach((input) => {
-      sum += parseInt(input.value, 10) || 0;
-    });
-    if (totalEl) totalEl.textContent = 'Total: ' + sum;
+    updateBulkSummary(container, config);
   };
 
   container.addEventListener('input', (e) => {
@@ -804,38 +1088,12 @@ function renderMobileGrid(container, config, sectionId) {
     return items;
   };
 
-  const submitBulkItemsMobile = () => {
-    const items = getLineItemsMobile();
-    if (items.length === 0) return;
-    const section = document.getElementById(`shopify-section-${sectionId}`);
-    const form = section?.querySelector('[data-at-bulk-form]');
-    const lineItemsInput = form?.querySelector(BULK_GRID_SELECTORS.lineItemsInput);
-    if (lineItemsInput) lineItemsInput.value = JSON.stringify(items);
-
-    const root = window.Shopify?.routes?.root || '/';
-    fetch(root + 'cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status && data.status !== 200) {
-          console.warn('at-bulk-grid: cart add response', data);
-        }
-        window.dispatchEvent(new CustomEvent('at:bulk:added', { detail: { items, response: data } }));
-        fetch(root + 'cart.js')
-          .then((r) => r.json())
-          .then(async (cart) => {
-            await handleBulkAddSuccess(container, updateTotal, addBtnMobile, sectionId, cart);
-          })
-          .catch(() => {});
-      })
-      .catch((err) => console.error('at-bulk-grid: cart add failed', err));
-  };
-
   const addBtnMobile = container.querySelector('[data-at-bulk-add-to-cart]');
-  if (addBtnMobile) addBtnMobile.addEventListener('click', submitBulkItemsMobile);
+  if (addBtnMobile) {
+    addBtnMobile.addEventListener('click', () => {
+      submitBulkCartAdd(container, sectionId, addBtnMobile, getLineItemsMobile, updateTotal);
+    });
+  }
 
   updateTotal();
 }
@@ -851,10 +1109,15 @@ const deferredLoadPromises = new Map();
  * The promise is reused by renderGrid to avoid duplicate fetches.
  */
 function preloadBulkGridVariants(sectionId) {
-  if (deferredLoadPromises.has(sectionId) || bulkGridConfigCache.has(sectionId)) return;
+  if (deferredLoadPromises.has(sectionId) || bulkGridConfigCache.has(sectionId)) {
+    preloadBulkFlyToCartImage(sectionId);
+    return;
+  }
 
   const config = getBulkConfig(sectionId);
   if (!config) return;
+
+  preloadBulkFlyToCartImage(sectionId);
 
   const expected = expectedVariantCount(config);
   const needDeferred = expected > 0 && config.variants.length < expected && (config.options?.[0]?.valueIds?.length ?? 0) > 0;
@@ -890,6 +1153,7 @@ function renderGrid(container) {
           config.variants = Array.from(byId.values());
         }
         bulkGridConfigCache.set(sectionId, config);
+        preloadBulkFlyToCartImage(sectionId);
         const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
         if (isMobile) {
           renderMobileGrid(container, config, sectionId);
@@ -905,6 +1169,7 @@ function renderGrid(container) {
   }
 
   if (config.variants?.length) bulkGridConfigCache.set(sectionId, config);
+  preloadBulkFlyToCartImage(sectionId);
   const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
   if (isMobile) {
     renderMobileGrid(container, config, sectionId);
@@ -1009,6 +1274,8 @@ function init() {
     trigger.addEventListener('click', (e) => {
       const container = document.querySelector(BULK_GRID_SELECTORS.container);
       if (!container) return;
+      const sectionId = container.dataset?.atBulkGridSectionId;
+      if (sectionId) preloadBulkFlyToCartImage(sectionId);
       const dialogComponent = container.closest('dialog-component');
       if (dialogComponent && !trigger.closest('dialog-component')?.contains(container)) {
         e.preventDefault();

@@ -5,23 +5,9 @@ import { calculateHeaderGroupHeight } from '@theme/utilities';
    MenuDataFetcher
    ----------------
    Singleton that fetches `sections/at-menu-data.liquid` exactly once per
-   page load via the Shopify Section Rendering API. The section renders
-   nothing on the initial page load (intentional, see its docs); only when
-   we explicitly hit `?section_id=at-menu-data` does the server emit the
-   heavy menu views (~100-brand grid + every per-category subnav, both
-   mobile drawer views and desktop mega-panel content).
-
-   Both <at-brands-panel> (desktop) and <at-menu-panel> (mobile) subscribe
-   to the same instance — fetch happens at most once per page, and each
-   consumer clones the bits it needs into its own DOM. Subsequent
-   subscribers after resolution receive the cached document immediately
-   (via a microtask).
-
-   Trigger policy: fetch is started ONLY on real user intent — hamburger
-   pointerdown on mobile, nav pointerenter/focus on desktop. Crawlers
-   that never interact never trigger the fetch, so the heavy section
-   never burdens TTFB for Google's product-feed crawler / soft-error
-   detectors that have been tripping GMC disapprovals.
+   page load via the Shopify Section Rendering API. Used for Products
+   category subnav grids (desktop + mobile). Brands directory content is
+   SSR'd and does not use this fetcher.
    ───────────────────────────────────────────────────────────────────────────── */
 
 class MenuDataFetcher {
@@ -157,6 +143,19 @@ class AtBrandsPanel extends Component {
   /** @type {ReturnType<typeof setTimeout> | null} */
   #focusOutTimer = null;
 
+  /**
+   * Ignore pointerleave briefly after open so layout thrash (header height /
+   * underlay / logo swap) does not immediately close the panel.
+   * @type {number}
+   */
+  #openedAt = 0;
+
+  /** Dwell before closing after pointer leaves the host. */
+  static #CLOSE_DELAY_MS = 220;
+
+  /** Grace window after open where leave events are ignored. */
+  static #OPEN_GRACE_MS = 120;
+
   /** @type {ResizeObserver | null} */
   #headerResizeObserver = null;
 
@@ -188,23 +187,28 @@ class AtBrandsPanel extends Component {
     this.addEventListener('input', this.#onDelegatedSearchInput);
     this.addEventListener('click', this.#onDelegatedSearchClearClick);
     this.addEventListener('pointerover', this.#onDelegatedSidebarPointerOver);
-    // Trigger menu-data fetch on first focus too (keyboard users).
-    this.addEventListener('focusin', this.#onFirstInteraction, { once: true });
 
     AtBrandsPanel.#fixHeaderGroupHeight();
 
-    // Initials avatars compute their colors client-side; rehydrate as
-    // new brand items arrive (either from at-menu-data adoption below,
-    // or from any future SRA morph that may touch the panel).
+    // Directory mode SSR's the full alphabet list + featured logos — no
+    // at-menu-data fetch. Products mode SSRs category columns + featured rail —
+    // also skips the fetcher (category grids no longer live in at-menu-data).
+    if (this.dataset.mode === 'directory' || this.dataset.mode === 'products') {
+      this.#dataRequested = true;
+      this.#dataAdopted = true;
+      if (this.dataset.mode === 'products') {
+        const active = this.querySelector('.at-brands-panel__cat-content:not([hidden])');
+        if (active instanceof HTMLElement) this.#hydrateDeferredImages(active);
+      }
+      return;
+    }
+
+    this.addEventListener('focusin', this.#onFirstInteraction, { once: true });
+
     hydrateAvatarsIn(this);
     this.#avatarObserver = new MutationObserver(() => hydrateAvatarsIn(this));
     this.#avatarObserver.observe(this, { childList: true, subtree: true });
 
-    // Subscribe to the menu-data fetcher. We don't request the fetch
-    // here — that happens on first interaction (#onFirstInteraction).
-    // But if the mobile drawer already requested it (which can happen
-    // on tablets that have both pointer types), we'll get the doc as
-    // soon as it resolves and adopt the desktop views.
     MenuDataFetcher.get().subscribe((doc) => this.#adoptDesktopViews(doc));
   }
 
@@ -229,7 +233,10 @@ class AtBrandsPanel extends Component {
   }
 
   #onPointerEnter = () => {
-    this.#onFirstInteraction();
+    this.#clearCloseTimer();
+    if (this.dataset.mode !== 'directory' && this.dataset.mode !== 'products') {
+      this.#onFirstInteraction();
+    }
     this.open();
   };
 
@@ -368,14 +375,22 @@ class AtBrandsPanel extends Component {
   open() {
     this.#clearCloseTimer();
     this.#clearFocusOutTimer();
+    this.#closeSiblingPanels();
 
     const { trigger, panel } = this.refs;
-    if (!panel || panel.hidden === false) return;
+    if (!panel) return;
+
+    // Already open — still refresh seam in case header layout changed.
+    if (panel.hidden === false) {
+      this.#updatePanelTop();
+      return;
+    }
 
     this.#updatePanelTop();
 
     panel.removeAttribute('hidden');
     this.dataset.open = '';
+    this.#openedAt = Date.now();
     trigger?.setAttribute('aria-expanded', 'true');
 
     this.#bindHeaderLayoutListeners();
@@ -397,6 +412,16 @@ class AtBrandsPanel extends Component {
   }
 
   /**
+   * Only one AT mega panel should be open at a time (full-bleed dropdowns stack).
+   */
+  #closeSiblingPanels() {
+    for (const other of document.querySelectorAll('at-brands-panel[data-open]')) {
+      if (other === this || !(other instanceof AtBrandsPanel)) continue;
+      other.close();
+    }
+  }
+
+  /**
    * Close the panel.
    */
   close() {
@@ -413,6 +438,7 @@ class AtBrandsPanel extends Component {
 
     panel.setAttribute('hidden', '');
     delete this.dataset.open;
+    this.#openedAt = 0;
     trigger?.setAttribute('aria-expanded', 'false');
 
     AtBrandsPanel.#fixHeaderGroupHeight();
@@ -420,13 +446,36 @@ class AtBrandsPanel extends Component {
     this.#syncDesktopLoadingOverlay();
   }
 
-  #onPointerLeave = () => {
+  /**
+   * @param {PointerEvent} event
+   */
+  #onPointerLeave = (event) => {
+    // Layout thrash right after open can briefly move the host out from under
+    // the cursor; ignore leave during the grace window.
+    if (this.#openedAt && Date.now() - this.#openedAt < AtBrandsPanel.#OPEN_GRACE_MS) {
+      return;
+    }
+
+    // Moving into a sibling mega trigger — that panel's enter will open; close us now.
+    const related = event.relatedTarget;
+    if (related instanceof Element) {
+      const sibling = related.closest('at-brands-panel');
+      if (sibling instanceof AtBrandsPanel && sibling !== this) {
+        this.#applyClose();
+        return;
+      }
+      // Still inside this host (e.g. into the fixed dropdown) — keep open.
+      if (this.contains(related)) return;
+    }
+
     this.#clearCloseTimer();
     this.#closeTimer = setTimeout(() => {
       this.#closeTimer = null;
       if (this.contains(document.activeElement)) return;
+      // Pointer may have re-entered during the delay (gap → panel).
+      if (this.matches(':hover')) return;
       this.#applyClose();
-    }, 150);
+    }, AtBrandsPanel.#CLOSE_DELAY_MS);
   };
 
   #onFocusOut = () => {
@@ -700,17 +749,32 @@ class AtBrandsPanel extends Component {
       btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     }
 
-    // Show matching content panel, hide others. Grid content inside each
-    // cat-content is either present (eager_loading=true on the Section
-    // Rendering API re-fetch, morphed in via data-hydration-key) or absent
-    // (eager_loading=false on initial page render). Both states are valid —
-    // no on-demand parsing here.
     for (const panel of this.querySelectorAll('.at-brands-panel__cat-content')) {
-      panel.hidden = panel.dataset.cat !== cat;
+      const show = panel.dataset.cat === cat;
+      panel.hidden = !show;
+      if (show && panel instanceof HTMLElement) {
+        this.#hydrateDeferredImages(panel);
+      }
     }
 
     const q = this.querySelector('.at-brands-panel__search')?.value.trim().toLowerCase() ?? '';
     this.#applyFilter(q);
+  }
+
+  /**
+   * Promote data-at-thumb-src placeholders to real src (once per image).
+   * @param {ParentNode} root
+   */
+  #hydrateDeferredImages(root) {
+    for (const img of root.querySelectorAll('img[data-at-thumb-src]')) {
+      if (!(img instanceof HTMLImageElement)) continue;
+      if (img.getAttribute('src')) continue;
+      const url = img.dataset.atThumbSrc;
+      if (!url) continue;
+      img.src = url;
+      img.loading = 'lazy';
+      img.removeAttribute('data-at-thumb-src');
+    }
   }
 
   // ─── Brand search ────────────────────────────────────────────────────────
@@ -719,6 +783,11 @@ class AtBrandsPanel extends Component {
    * @param {string} query - Lowercase search string.
    */
   #applyFilter(query) {
+    if (this.dataset.mode === 'directory') {
+      this.#applyDirectoryFilter(query);
+      return;
+    }
+
     const active = this.querySelector('.at-brands-panel__cat-content:not([hidden])');
     const items = /** @type {NodeListOf<HTMLElement>} */ (
       active?.querySelectorAll('.at-brands-panel__brand-item[data-brand-name]') ?? []
@@ -738,6 +807,39 @@ class AtBrandsPanel extends Component {
     }
 
     const clearBtn = active?.querySelector('.at-brands-panel__search-clear');
+    if (clearBtn instanceof HTMLElement) {
+      clearBtn.hidden = query === '';
+    }
+  }
+
+  /**
+   * Filter alphabet directory text links and hide empty columns.
+   * @param {string} query
+   */
+  #applyDirectoryFilter(query) {
+    const items = /** @type {NodeListOf<HTMLElement>} */ (
+      this.querySelectorAll('.at-brands-dir__link[data-brand-name]')
+    );
+
+    let visible = 0;
+    for (const item of items) {
+      const name = item.dataset.brandName?.toLowerCase() ?? '';
+      const show = query === '' || name.includes(query);
+      item.hidden = !show;
+      if (show) visible++;
+    }
+
+    for (const column of this.querySelectorAll('.at-brands-dir__column')) {
+      if (!(column instanceof HTMLElement)) continue;
+      const hasVisible = column.querySelector('.at-brands-dir__link:not([hidden])') !== null;
+      column.hidden = !hasVisible;
+    }
+
+    if (this.refs.countBadge) {
+      this.refs.countBadge.textContent = String(visible);
+    }
+
+    const clearBtn = this.querySelector('.at-brands-panel__search-clear');
     if (clearBtn instanceof HTMLElement) {
       clearBtn.hidden = query === '';
     }
@@ -774,6 +876,7 @@ if (!customElements.get('at-brands-panel')) {
 
 /**
  * @typedef {object} AtMenuPanelRefs
+ * @property {HTMLElement} views - Container for the sliding navigation views.
  * @property {HTMLInputElement} [searchInput] - Brand search input.
  * @property {HTMLElement} [searchClear] - Clear search button.
  * @property {HTMLElement} [brandCount] - Brand count badge.
@@ -787,6 +890,10 @@ if (!customElements.get('at-brands-panel')) {
  * @extends {Component<AtMenuPanelRefs>}
  */
 class AtMenuPanel extends Component {
+  requiredRefs = ['views'];
+
+  #headerObserver = null;
+
   /** @type {string[]} */
   #viewStack = [];
 
@@ -876,6 +983,12 @@ class AtMenuPanel extends Component {
         summary.addEventListener('pointerdown', this.#onFirstInteraction, { once: true });
       }
       details.addEventListener('toggle', this.#onDrawerToggle);
+      this.#headerObserver = new ResizeObserver(this.#syncDrawerHeader);
+      if (this.#drawerSummary) this.#headerObserver.observe(this.#drawerSummary);
+      const headerRow = this.closest('.header__row');
+      if (headerRow) this.#headerObserver.observe(headerRow);
+      window.addEventListener('resize', this.#syncDrawerHeader);
+      this.#syncDrawerHeader();
     }
 
     // Hydrate any already-present initials avatars. Subsequent avatars
@@ -901,6 +1014,9 @@ class AtMenuPanel extends Component {
     this.removeEventListener('click', this.#onSearchClearClick);
     this.#detailsObserver?.disconnect();
     this.#detailsObserver = null;
+    this.#headerObserver?.disconnect();
+    this.#headerObserver = null;
+    window.removeEventListener('resize', this.#syncDrawerHeader);
     if (this.#drawerSummary) {
       this.#drawerSummary.removeEventListener('pointerdown', this.#onFirstInteraction);
     }
@@ -918,8 +1034,29 @@ class AtMenuPanel extends Component {
   #onDrawerToggle = (event) => {
     const details = event.currentTarget;
     if (details instanceof HTMLDetailsElement && details.open) {
+      this.#syncDrawerHeader();
       this.#onFirstInteraction();
     }
+  };
+
+  #syncDrawerHeader = () => {
+    const summary = this.#drawerSummary;
+    const drawer = this.closest('.menu-drawer');
+    if (!summary || !(drawer instanceof HTMLElement) || !this.#drawerDetails?.open) return;
+
+    const triggerRect = summary.getBoundingClientRect();
+    const drawerRect = drawer.getBoundingClientRect();
+    const panelRect = this.getBoundingClientRect();
+    const transform = new DOMMatrixReadOnly(getComputedStyle(drawer).transform);
+    const headerRow = summary.closest('.header__row');
+    const toolbarBottom = Math.max(triggerRect.bottom, headerRow?.getBoundingClientRect().bottom ?? triggerRect.bottom);
+
+    this.style.setProperty('--at-menu-close-left', `${triggerRect.left - panelRect.left + transform.m41}px`);
+    this.style.setProperty('--at-menu-close-top', `${Math.max(0, triggerRect.top - panelRect.top)}px`);
+    this.style.setProperty('--at-menu-close-width', `${triggerRect.width}px`);
+    this.style.setProperty('--at-menu-close-height', `${triggerRect.height}px`);
+    this.style.setProperty('--at-menu-toolbar-height', `${Math.max(0, toolbarBottom - panelRect.top)}px`);
+    drawer.style.setProperty('--at-menu-drawer-height', `max(0px, calc(100dvh - ${Math.max(0, drawerRect.top)}px))`);
   };
 
   /**
@@ -965,9 +1102,19 @@ class AtMenuPanel extends Component {
     }
 
     const clone = view.cloneNode(true);
-    this.appendChild(clone);
+    this.refs.views.appendChild(clone);
     this.#adoptedViews.add(viewName);
-    if (clone instanceof HTMLElement) hydrateAvatarsIn(clone);
+    if (clone instanceof HTMLElement) {
+      hydrateAvatarsIn(clone);
+      for (const img of clone.querySelectorAll('img[data-at-thumb-src]')) {
+        if (!(img instanceof HTMLImageElement)) continue;
+        const url = img.dataset.atThumbSrc;
+        if (!url || img.getAttribute('src')) continue;
+        img.src = url;
+        img.loading = 'lazy';
+        img.removeAttribute('data-at-thumb-src');
+      }
+    }
     console.log('[at-menu mobile] view adopted:', viewName);
     return true;
   }
@@ -1159,8 +1306,10 @@ class AtMenuPanel extends Component {
    * @param {string} query
    */
   #applyBrandFilter(query) {
+    const dirLinks = this.querySelectorAll('.at-brands-dir__link[data-brand-name]');
+    const legacyItems = this.querySelectorAll('.at-panel__brand-item[data-brand-name]');
     const items = /** @type {NodeListOf<HTMLElement>} */ (
-      this.querySelectorAll('.at-panel__brand-item[data-brand-name]')
+      dirLinks.length ? dirLinks : legacyItems
     );
 
     let visible = 0;
@@ -1176,6 +1325,12 @@ class AtMenuPanel extends Component {
     }
     if (this.refs.searchClear instanceof HTMLElement) {
       this.refs.searchClear.hidden = query === '';
+    }
+
+    for (const column of this.querySelectorAll('.at-brands-dir__column')) {
+      if (column instanceof HTMLElement) {
+        column.hidden = column.querySelector('.at-brands-dir__link:not([hidden])') === null;
+      }
     }
 
     for (const section of this.querySelectorAll('.at-panel__letter-section')) {

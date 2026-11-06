@@ -19,6 +19,7 @@
   %}
 {% enddoc %}
 {%- if block_settings.zoom -%}
+  {%- assign zoom_dialog_id = 'zoom-dialog-' | append: block_id -%}
   <script
     src="{{ 'zoom-dialog.js' | asset_url }}"
     type="module"
@@ -27,7 +28,6 @@
 {%- liquid
   assign selected_product = closest.product
   assign selected_variant_media = selected_product.selected_or_first_available_variant.featured_media
-  assign first_3d_model = selected_product.media | where: 'media_type', 'model' | first
 
   if block_settings.hide_variants
     assign variant_images = selected_product.images | where: 'attached_to_variant?', true | map: 'src'
@@ -79,6 +79,12 @@
     endif
   endif
 
+  # Carousel arrows are always visible, so they don't animate in on hover
+  assign animate_arrows = true
+  if media_presentation == 'carousel'
+    assign animate_arrows = false
+  endif
+
   if slideshow_controls_style == 'thumbnails'
     assign pagination_position = block_settings.thumbnail_position
   else
@@ -126,6 +132,9 @@
     endif
   endif
   # /AT CUSTOM
+  assign product_models = selected_product.media | where: 'media_type', 'model'
+  assign gallery_models = sorted_media | where: 'media_type', 'model' | default: product_models
+
   assign has_image_drop = false
   for media in sorted_media
     if media.media_type == 'image' or media.media_type == blank
@@ -198,6 +207,11 @@
     src="{{ 'drag-zoom-wrapper.js' | asset_url }}"
     type="module"
   ></script>
+{%- endif -%}
+
+{%- if block_settings.constrain_to_viewport -%}
+  {% # `.constrain-height` consumes `--header-height` at first paint (product-media-container-styles.liquid) %}
+  {% render 'measure-header-heights', only_on_desktop: true %}
 {%- endif -%}
 
 {% style %}
@@ -385,10 +399,22 @@
           {% if block_settings.aspect_ratio != 'adapt' and block_settings.constrain_to_viewport %}
             <div
               class="product-media-constraint-wrapper">
-              {%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first -%}
+              {%- render 'product-media',
+                media: media,
+                sizes: media_sizes,
+                is_main_product_media: forloop.first,
+                zoom_dialog_id: zoom_dialog_id,
+                media_index: forloop.index0
+              -%}
             </div>
           {% else %}
-            {%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first -%}
+            {%- render 'product-media',
+              media: media,
+              sizes: media_sizes,
+              is_main_product_media: forloop.first,
+              zoom_dialog_id: zoom_dialog_id,
+              media_index: forloop.index0
+            -%}
           {% endif %}
         {% endcapture %}
         {% capture class %}
@@ -409,10 +435,11 @@
             --media-preview-ratio: {{ slide_ratio }};
           {% endcapture %}
         {% endif %}
-        {% if block_settings.zoom and media.media_type == 'model' %}
-          {%- capture attributes -%}"{% if settings.transition_to_main_product and forloop.first %} data-view-transition-type="product-image-transition"{% endif %}{% endcapture -%}
-        {% elsif block_settings.zoom %}
-          {%- capture attributes -%}on:click="#zoom-dialog-{{ block_id }}/open/{{ forloop.index0 }}"{% if settings.transition_to_main_product and forloop.first %} data-view-transition-type="product-image-transition"{% endif %}{% endcapture -%}
+        {% if block_settings.zoom %}
+          {%- capture attributes -%}
+            {% unless media.media_type == 'model' %}on:click="#{{ zoom_dialog_id }}/open/{{ forloop.index0 }}"{% endunless %}
+            {% if settings.transition_to_main_product and forloop.first %} data-view-transition-type="product-image-transition"{% endif %}
+          {%- endcapture -%}
         {% endif %}
 
         {% render 'slideshow-slide',
@@ -469,6 +496,7 @@
       slide_count: sorted_media.size,
       slideshow_arrows: slideshow_arrows,
       arrows_position: icons_position,
+      animate_arrows: animate_arrows,
       controls: controls
     %}
 
@@ -509,10 +537,22 @@
             -%}
             {% if block_settings.aspect_ratio != 'adapt' and block_settings.constrain_to_viewport %}
               <div class="product-media-constraint-wrapper">
-                {%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first -%}
+                {%- render 'product-media',
+                  media: media,
+                  sizes: media_sizes,
+                  is_main_product_media: forloop.first,
+                  zoom_dialog_id: zoom_dialog_id,
+                  media_index: forloop.index0
+                -%}
               </div>
             {% else %}
-              {%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first -%}
+              {%- render 'product-media',
+                media: media,
+                sizes: media_sizes,
+                is_main_product_media: forloop.first,
+                zoom_dialog_id: zoom_dialog_id,
+                media_index: forloop.index0
+              -%}
             {% endif %}
           </li>
         {% endfor %}
@@ -522,7 +562,7 @@
     {%- if block_settings.zoom -%}
       <zoom-dialog
         ref="zoomDialogComponent"
-        id="zoom-dialog-{{ block_id }}"
+        id="{{ zoom_dialog_id }}"
       >
         <dialog
           class="dialog-zoomed-gallery__dialog"
@@ -623,7 +663,10 @@
       </zoom-dialog>
     {%- endif -%}
 
-    {%- if first_3d_model -%}
+    {%- if gallery_models != blank -%}
+      <script type="application/json" id="ProductModelJSON-{{ selected_product.id }}">
+        {{ gallery_models | json }}
+      </script>
       <link
         id="ModelViewerStyle"
         rel="stylesheet"
@@ -662,18 +705,33 @@
         window.ProductModel.loadShopifyXR();
       </script>
     {%- endif -%}
+    {% render 'product-card-badge', product: selected_product %}
   </media-gallery>
 {% endif %}
 
+{% render 'product-media-container-styles' %}
 {% render 'product-media-gallery-content-styles' %}
+{% render 'product-badges-styles' %}
 
 {% stylesheet %}
+  media-gallery > .product-badges {
+    --border-radius: var(--media-radius);
+
+    z-index: var(--layer-raised);
+    pointer-events: none;
+  }
+
   .dialog-thumbnails-list-container {
     position: fixed;
     width: 100%;
     bottom: 0;
     display: flex;
     z-index: var(--layer-raised);
+
+    /* Container touches the physical viewport edges (viewport-fit=cover); keep the
+       thumbnails clear of the home indicator and side notch */
+    padding-block-end: var(--safe-area-inset-bottom);
+    padding-inline: var(--safe-area-inset-left) var(--safe-area-inset-right);
   }
 
   .dialog-thumbnails-list {
@@ -702,7 +760,9 @@
       position: fixed;
       flex-direction: column;
       inset: 50% var(--margin-lg) auto auto;
-      right: 0;
+
+      /* Keep the right-anchored thumbnail rail clear of the right-side notch (viewport-fit=cover) */
+      right: var(--safe-area-inset-right);
       max-height: calc(100vh - 200px);
       overflow-y: auto;
       animation: thumbnailsSlideInTop var(--spring-d220-b0-duration) var(--spring-d220-b0-easing) forwards;

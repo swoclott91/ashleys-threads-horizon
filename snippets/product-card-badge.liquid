@@ -1,11 +1,11 @@
 {%- doc -%}
-  Resolves and renders the highest-priority product card badge.
+  Resolves and renders the highest-priority badge for a product card or media gallery.
 
   @param {object} product - Product resource used to determine badge eligibility.
 {%- enddoc -%}
 
 {%- liquid
-  assign badge_label = blank
+  assign badge_label = ''
   assign badge_class = 'color-custom-badge-sale'
 
   if product != blank
@@ -49,7 +49,17 @@
 -%}
 
 {%- if badge_label != blank -%}
-  <div class="product-badges__badge product-badges__badge--rectangle {{ badge_class }}">
-    {{ badge_label | escape }}
+  <div
+    class="product-badges product-badges--{{ settings.badge_position }}"
+    style="
+      --badge-border-radius: {{ settings.badge_corner_radius }}px;
+      --badge-font-family: var(--font-{{ settings.badge_font_family }}--family);
+      --badge-font-weight: var(--font-{{ settings.badge_font_family }}--weight);
+      --badge-text-transform: {{ settings.badge_text_transform }};
+    "
+  >
+    <div class="product-badges__badge product-badges__badge--rectangle {{ badge_class }}">
+      {{ badge_label | escape }}
+    </div>
   </div>
 {%- endif -%}

@@ -142,10 +142,24 @@ if (!customElements.get('deferred-media')) {
 /**
  * A product model
  */
-class ProductModel extends DeferredMedia {
+export class ProductModel extends DeferredMedia {
   #abortController = new AbortController();
 
+  connectedCallback() {
+    super.connectedCallback();
+
+    const quickLookLink = this.nextElementSibling;
+    if (quickLookLink instanceof HTMLAnchorElement && quickLookLink.relList.supports('ar')) {
+      quickLookLink.hidden = false;
+    }
+  }
+
   loadContent() {
+    if (this.hasAttribute('data-media-loaded')) {
+      this.playMedia();
+      return;
+    }
+
     super.loadContent();
 
     Shopify.loadFeatures([

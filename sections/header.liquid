@@ -109,6 +109,11 @@
   endif
   # /AT CUSTOM
 
+  assign has_navigation_bar = false
+  if navigation_bar contains 'data-navigation-bar-enabled'
+    assign has_navigation_bar = true
+  endif
+
   capture actions
     render 'header-actions', customer_account_menu: section.settings.customer_account_menu, display_style: section.settings.actions_display_style, section: section
   endcapture
@@ -176,7 +181,7 @@
     assign bottom_row_blocks = bottom_row_blocks | append: 'menu,'
   endif
 
-  if section.settings.search_style != 'none'
+  if section.settings.show_search
     if section.settings.search_row == 'bottom'
       assign bottom_row_blocks = bottom_row_blocks | append: 'search,'
     endif
@@ -189,6 +194,11 @@
   endif
 
   assign bottom_row_blocks = bottom_row_blocks | split: ',' | compact
+
+  assign has_second_row = false
+  if bottom_row_blocks.size > 0
+    assign has_second_row = true
+  endif
 
   if section.settings.section_height == 'compact'
     assign header_height_class = ' header--compact'
@@ -212,11 +222,15 @@
   assign top_transparent = false
   assign bottom_transparent = false
 
-  if section.settings.background_color_top.alpha != 1
+  # Only explicit colors make a row transparent
+  assign top_row_color = section.settings.background_color_top
+  assign bottom_row_color = section.settings.background_color_bottom
+
+  if top_row_color != blank and top_row_color.alpha != 1
     assign top_transparent = true
   endif
 
-  if section.settings.background_color_bottom.alpha != 1
+  if bottom_row_color != blank and bottom_row_color.alpha != 1 and has_second_row
     assign bottom_transparent = true
   endif
 
@@ -355,6 +369,9 @@
   {% if background_transparent_color_value %}
     data-transparent-background="{{ background_transparent_color_value }}"
   {% endif %}
+  {% if has_second_row == false %}
+    data-header-rows="single"
+  {% endif %}
   style="
     --color-background-top-row: rgba({{ section.settings.background_color_top.rgba | default: settings.page_background_color.rgba }});
     --color-background-bottom-row: rgba({{ section.settings.background_color_bottom.rgba | default: settings.page_background_color.rgba }});
@@ -470,7 +487,7 @@
     {% endif %}
   {% endfor %}
 
-  {% if navigation_bar != blank %}
+  {% if has_navigation_bar %}
     <div class="header__row header__navigation-bar-row">
       {{ navigation_bar }}
     </div>
@@ -548,7 +565,7 @@
     z-index: var(--layer-overlay);
 
     &[transparent='not-sticky'][data-sticky-state='active'],
-    &:has(.menu-list__link:not([aria-haspopup]):hover) {
+    &:has(.menu-list__list-item > .menu-list__link:not([aria-haspopup]):hover) {
       --header-logo-display: unset;
       --header-logo-inverse-display: unset;
       --color-foreground: inherit;
@@ -561,7 +578,8 @@
     }
 
     /** For transparent header, apply transparent text color to rows when menu is not hovered */
-    &:not([data-sticky-state='active']):not(:has(.menu-list__link:is(:hover, [aria-expanded='true']))) .header__row {
+    &:not([data-sticky-state='active']):not(:has(.menu-list__link:hover)):not(:has(header-menu[aria-expanded='true']))
+      .header__row {
       --color-foreground: var(--color-transparent-text);
       --color-foreground-rgb: var(--color-transparent-text-rgb);
       --color-border: var(--color-transparent-text);
@@ -572,8 +590,8 @@
 
     /* Swap the cart bubble in transparent state only when using the default
        style. Custom bubble colors apply unchanged across header states. */
-    &[data-bubble-style='default']:not([data-sticky-state='active']):not(
-        :has(.menu-list__link:is(:hover, [aria-expanded='true']))
+    &[data-bubble-style='default']:not([data-sticky-state='active']):not(:has(.menu-list__link:hover)):not(
+        :has(header-menu[aria-expanded='true'])
       )
       .header__row {
       --cart-bubble-background: var(--color-transparent-text, var(--cart-bubble-background-fallback));
@@ -582,8 +600,8 @@
 
     /* Multiple selectors for performance: each simple :has() check is faster than one complex selector with multiple conditions */
     &:has(.mega-menu__list:hover),
-    &:has(.menu-list__link:is(:hover, [aria-expanded='true'])),
-    &:has(.menu-list__list-item[slot='overflow'] .menu-list__link:is(:hover, [aria-expanded='true'])),
+    &:has(.menu-list__link:hover),
+    &:has(header-menu[aria-expanded='true']),
     /* AT CUSTOM: fixed mega panel can sit below the nav row; pointer crosses hero gap so :hover leaves #header-component while menu is still open */
     &:has(.at-brands-panel[data-open]) {
       --header-logo-display: unset;
@@ -748,6 +766,17 @@
     }
   }
 
+  [data-header-rows='single'] .header__underlay-closed {
+    background: var(--color-background-top-row);
+  }
+
+  [data-header-rows='single'] .header__underlay-open {
+    background: linear-gradient(
+      var(--color-background-top-row) 0 var(--top-row-height),
+      var(--color-submenu) var(--top-row-height) 100%
+    );
+  }
+
   /* End Underlays ================ */
 
   .header__row {
@@ -761,8 +790,8 @@
     background-color: transparent !important;
 
     &:has(.mega-menu__list:hover),
-    &:has(.menu-list__link[aria-haspopup]:is(:hover, [aria-expanded='true'])),
-    &:has(.menu-list__list-item[slot='overflow'] .menu-list__link:is(:hover, [aria-expanded='true'])),
+    &:has(.menu-list__submenu:not([inert])),
+    /* AT CUSTOM: keep top row elevated while AT brands panel is open */
     &:has(.at-brands-panel[data-open]) {
       /* Only elevate the row when the submenu is open to avoid overlapping other elevated content */
       z-index: var(--layer-heightened);
@@ -885,7 +914,10 @@
       column-gap: 0;
       align-items: center;
       padding-block: 0;
-      padding-inline: 0 var(--padding-3xs);
+
+      /* Match the page gutter so edge icons visually align with in-flow content.
+         --page-margin already includes the larger safe-area inset at this breakpoint. */
+      padding-inline: var(--page-margin);
 
       .header-logo {
         grid-area: center;
@@ -903,8 +935,14 @@
         grid-area: leftB;
       }
 
+      .header__icon--menu {
+        justify-content: flex-start;
+        padding-inline: 0;
+      }
+
       header-actions {
         grid-area: rightB;
+        justify-content: flex-end;
       }
     }
   }
@@ -920,7 +958,10 @@
     column-gap: 0;
     align-items: center;
     padding-block: 0;
-    padding-inline: 0 var(--padding-3xs);
+
+    /* Match the page gutter so edge icons visually align with in-flow content.
+       --page-margin already includes the larger safe-area inset at this breakpoint. */
+    padding-inline: var(--page-margin);
 
     .header-logo {
       grid-area: center;
@@ -938,8 +979,15 @@
       grid-area: leftB;
     }
 
+    /* Pin glyphs to the content edge of the 44px bookend; keep the full tap target */
+    .header__icon--menu {
+      justify-content: flex-start;
+      padding-inline: 0;
+    }
+
     header-actions {
       grid-area: rightB;
+      justify-content: flex-end;
     }
   }
 
@@ -1021,6 +1069,23 @@
     }
   }
 
+  /* Transparent header layout. Keep this in sync with snippets/section.liquid's first-section height compensation. */
+  body:has(#header-component[transparent]) .content-for-layout > .shopify-section:first-child {
+    margin-top: calc(var(--header-group-height) * -1);
+  }
+
+  body:has(#header-component[transparent]) #header-group > .header-section {
+    z-index: var(--layer-menu-drawer);
+  }
+
+  /* All other header group content should be beneath the floating header, but above
+  the rest of the page content. Keep a class at the end of this selector: a `*` there
+  gives the browser nothing to filter on, and it then recalculates the styles of every
+  element below. */
+  body:has(#header-component[transparent]) #header-group > .shopify-section:not(.header-section) {
+    z-index: calc(var(--layer-menu-drawer) - 1);
+  }
+
   /* When the header is transparent, add a margin to a potential header-section below it */
   .header-section:has(.header[transparent]) + .shopify-section {
     margin-top: var(--header-height);
@@ -1088,6 +1153,7 @@
     box-shadow: none;
     background-color: transparent;
     border-color: transparent;
+    border-radius: 0;
   }
 
   dropdown-localization-component .localization-form__list {
@@ -1185,7 +1251,7 @@
     visibility: visible;
   }
 
-  .dropdown-localization .language-selector:where(:not(.top-shadow)) {
+  .dropdown-localization .language-selector:where(:not(.language-selector--top-shadow)) {
     font-weight: var(--menu-top-level-font-weight);
   }
 

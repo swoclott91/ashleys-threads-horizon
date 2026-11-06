@@ -5,7 +5,10 @@
   @param {product} product_resource - The product to render
   @param {boolean} [show_unit_price] - Whether to show the unit price
   @param {boolean} [show_sale_price_first] - Whether to show the sale price first
+  @param {boolean} [show_minimum_price] - Whether to show the product's starting price on cards
 {%- enddoc -%}
+
+{% render 'price-styles' %}
 
 {%- liquid
   assign show_unit_price = show_unit_price | default: false
@@ -48,6 +51,11 @@
     endif
   endif
 
+  assign show_starting_price = false
+  if is_product_card and show_minimum_price and product_resource != blank
+    assign show_starting_price = true
+  endif
+
   # Determine if currency code should be shown
   assign use_currency = false
   if product.handle == product_resource.handle
@@ -73,60 +81,47 @@
 -%}
 
 <div ref="priceContainer">
-  {% if has_volume_pricing %}
+  {% if show_starting_price %}
+    <span class="price-item__group price">{{ 'content.price_from' | t: price: price_min }}</span>
+  {% elsif has_volume_pricing %}
     {% comment %} Volume pricing display {% endcomment %}
     {% if show_compare_price %}
-      <span class="price-item__group">
+      <span class="price-item__group compare-at-price">
         <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
-        <span class="compare-at-price">{{- compare_at_price -}}</span>
+        {{- compare_at_price -}}
       </span>
     {% endif %}
-    <span class="price-item__group">
+    <span class="price-item__group price">
       <span class="visually-hidden">{{ 'content.price_range' | t }}&nbsp;</span>
-      <span class="price">{{ price_min }} - {{ price_max }}</span>
+      {{ price_min }} - {{ price_max }}
     </span>
   {% else %}
-    {% comment %} Standard pricing display {% endcomment %}
-    <div
-      class="
-        price__regular
-        {% if show_compare_price %}
-          price__hidden
-        {% endif %}
-      "
-    >
-      <span class="price">{{ price | default: '&nbsp;' }}</span>
-    </div>
-    <div
-      class="
-        price__sale
-        {% unless show_compare_price %}
-          price__hidden
-        {% endunless %}
-      "
-    >
+    {% comment %} Standard pricing display: render only the active branch (regular or sale) {% endcomment %}
+    {% if show_compare_price %}
       {% if show_sale_price_first %}
-        <span class="price-item__group">
+        <span class="price-item__group price">
           <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>
-          <span class="price-item--sale price">{{ price | default: '&nbsp;' }}</span>
+          {{ price | default: '&nbsp;' }}
         </span>
-        <span class="price-item__group">
+        <span class="price-item__group price-item--regular compare-at-price">
           <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
-          <span class="price-item--regular compare-at-price">{{- compare_at_price -}}</span>
+          {{- compare_at_price -}}
         </span>
       {% else %}
-        <span class="price-item__group">
+        <span class="price-item__group price-item--regular compare-at-price">
           <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
-          <span class="price-item--regular compare-at-price">{{- compare_at_price -}}</span>
+          {{- compare_at_price -}}
         </span>
-        <span class="price-item__group">
+        <span class="price-item__group price">
           <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>
-          <span class="price-item--sale price">{{ price | default: '&nbsp;' }}</span>
+          {{ price | default: '&nbsp;' }}
         </span>
       {% endif %}
-    </div>
+    {% else %}
+      <span class="price">{{ price | default: '&nbsp;' }}</span>
+    {% endif %}
   {% endif %}
-  {%- if selected_variant.unit_price and show_unit_price %}
+  {%- if selected_variant.unit_price and show_unit_price and show_starting_price == false %}
     {%- liquid
       if use_currency
         assign unit_price = selected_variant.unit_price | money_with_currency
@@ -137,7 +132,7 @@
     {% render 'unit-price', price: unit_price, measurement: selected_variant.unit_price_measurement %}
   {%- endif -%}
 </div>
-{%- if has_volume_pricing -%}
+{%- if has_volume_pricing and show_starting_price == false -%}
   <small
     ref="volumePricingNote"
     class="volume-pricing-note"

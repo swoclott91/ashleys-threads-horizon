@@ -9,6 +9,7 @@
  */
 {
   "accessibility": {
+    "at_breadcrumbs": "Breadcrumbs",
     "account": "Account",
     "active_filters": "Active filters:",
     "cart": "Cart",
@@ -18,6 +19,7 @@
     "country_results_count": "{{ count }} results",
     "product_details": "Product details",
     "show_product_details": "Show product details for {{ product_name }}",
+    "show_submenu": "Show {{ title }} submenu",
     "decrease_quantity": "Decrease quantity",
     "discount": "Apply a discount code",
     "discount_menu": "Discount Codes",
@@ -78,6 +80,7 @@
     "apply": "Apply",
     "back": "Back",
     "back_to": "Back to {{ title }}",
+    "back_to_main_menu": "Back to main menu",
     "choose": "Choose",
     // Button to reset current selection or input
     "clear": "Clear",
@@ -124,7 +127,7 @@
   },
   "at_discount_progress": {
     "get_member_discounts": "Get member discounts",
-    "log_in_prompt": "Log in to qualify for additional discounts",
+    "log_in_prompt": "Log in to see discounts.",
     "log_in": "Log in",
     "tier_unlocked": "{{ tier }}",
     "achievement_none": "10% Member Discount",
@@ -145,7 +148,8 @@
     "modal_spend_for": "Spend {{ amount }} to reach {{ name }}",
     "modal_at": "at {{ amount }}",
     "modal_away": "{{ amount }} away",
-    "modal_footer_note": "Discounts apply to eligible items only. Shipping discount applies to standard shipping."
+    "modal_footer_note": "Discounts apply to eligible items only. Shipping discount applies to standard shipping.",
+    "node_applied": "{{ label }} applied"
   },
   "blocks": {
     "contact_form": {
@@ -381,6 +385,9 @@
     "blog_post_description": "An excerpt of your blog post's content"
   },
   "products": {
+    "feature_badges": {
+      "fabric_weight": "{{ weight }} oz"
+    },
     "product": {
       "add_to_cart": "Add to cart",
       "adding_to_cart": "Adding...",

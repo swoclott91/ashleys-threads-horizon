@@ -1,0 +1,17 @@
+{% doc %}
+  Loads Ashley's Threads cart drawer hierarchy and palette styles on every drawer surface.
+
+  @example
+  {% render 'at-cart-drawer-styles' %}
+{% enddoc %}
+
+{% style %}
+  #cart-drawer {
+    --at-cart-accent: {{ settings.color_palette.color5 | default: '#243e34' }};
+    --at-cart-accent-hover: {{ settings.color_palette.color7 | default: '#354c3f' }};
+    --at-cart-on-accent: {{ settings.palette_primary_button_text | default: '#fffdf8' }};
+    --at-cart-ink: {{ settings.page_text_color | default: '#2c2c2c' }};
+    --at-cart-line: {{ settings.color_palette.color3 | default: '#e7dbce' }};
+  }
+{% endstyle %}
+{{ 'at-cart-drawer.css' | asset_url | stylesheet_tag }}

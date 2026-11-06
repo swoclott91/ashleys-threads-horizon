@@ -43,6 +43,7 @@
   class="
     collection-card
     border-style
+    {% if block_settings.drop_shadow %}collection-card--drop-shadow{% endif %}
     {% if block_settings.placement == 'on_image' %}collection-card--image-bg{% endif %}
     {% if section.settings.layout_type == 'bento' %}collection-card--image-height-fixed{% endif %}
     {% if section.settings.layout_type == 'editorial' %}collection-card--flexible-aspect-ratio{% endif %}
@@ -56,7 +57,6 @@
     {% render 'border-override', settings: block_settings %}
     --horizontal-alignment: {{ block_settings.horizontal_alignment }};
     --vertical-alignment: {{ block_settings.vertical_alignment }};
-    --background-overlay-color: {{ block_settings.overlay_color }};
     --gap: {{ block_settings.collection_card_gap }}px;
   "
   {{- block.shopify_attributes -}}
@@ -85,6 +85,10 @@
     position: relative;
     height: 100%;
     flex: 1 1 var(--card-width-small);
+  }
+
+  .collection-card--drop-shadow {
+    box-shadow: 0 4px 16px rgb(var(--color-foreground-rgb) / 0.12);
   }
 
   .collection-card > svg {

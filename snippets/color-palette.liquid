@@ -208,6 +208,7 @@
     --color-selected-variant-background: rgb({{ settings.palette_selected_variant_background.rgba }});
     --color-selected-variant-border: rgb({{ settings.palette_selected_variant_border.rgba }});
     --color-selected-variant-text: rgb({{ settings.palette_selected_variant_text.rgba }});
+    --color-selected-variant-text-rgb: {{ settings.palette_selected_variant_text.rgb }};
     --color-selected-variant-hover-background: {{ effective_selected_variant_hover_background }};
     --color-selected-variant-hover-text: rgb({{ effective_selected_variant_hover_text.rgba }});
     --color-selected-variant-hover-border: {{ effective_selected_variant_hover_border }};
@@ -228,6 +229,26 @@
       --shadow-blur: 20px;
       --shadow-popover: 0px 4px 20px rgb(var(--color-popover-shadow-rgb) / var(--opacity-15));
     {% endif %}
+
+    /* Access Threads discount bar + bulk grid colors (Cart theme settings, tied to Color Palette) */
+    {% if settings.at_discount_progress_accent != blank %}
+      --at-dp-accent: {{ settings.at_discount_progress_accent }};
+    {% endif %}
+        {% if settings.at_discount_progress_track != blank %}
+          --at-dp-track: {{ settings.at_discount_progress_track }};
+        {% endif %}
+        {% if settings.at_discount_progress_pending != blank %}
+          --at-dp-pending: {{ settings.at_discount_progress_pending }};
+        {% endif %}
+    {% if settings.at_discount_progress_label != blank %}
+      --at-dp-label: {{ settings.at_discount_progress_label }};
+    {% endif %}
+    {% if settings.at_bulk_grid_surface != blank %}
+      --at-bulk-surface: {{ settings.at_bulk_grid_surface }};
+    {% endif %}
+    /* Palette gold (foreground) exposed as RGB so bulk-modal grid lines stay gold even where
+       we remap --color-foreground to a neutral text color. */
+    --at-bulk-gold-rgb: {{ settings.color_palette.foreground.rgb }};
   }
 
   body {
