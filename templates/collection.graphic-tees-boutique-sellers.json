@@ -248,19 +248,20 @@
     "value_tees": {
       "type": "section",
       "blocks": {
-        "guide": {
+        "group_LLEE9p": {
           "type": "group",
+          "name": "Heading Group",
           "settings": {
-            "content_direction": "column",
+            "content_direction": "row",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
             "vertical_alignment": "center",
             "align_baseline": false,
             "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
             "gap": 12,
             "width": "fill",
-            "custom_width": 28,
+            "custom_width": 100,
             "width_mobile": "fill",
             "custom_width_mobile": 100,
             "height": "fit",
@@ -293,20 +294,19 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "group_Dkx8U6": {
+            "group_kepQtV": {
               "type": "group",
-              "name": "t:names.group",
               "settings": {
-                "content_direction": "row",
-                "vertical_on_mobile": false,
+                "content_direction": "column",
+                "vertical_on_mobile": true,
                 "horizontal_alignment": "flex-start",
                 "vertical_alignment": "center",
                 "align_baseline": false,
                 "horizontal_alignment_flex_direction_column": "flex-start",
-                "vertical_alignment_flex_direction_column": "center",
+                "vertical_alignment_flex_direction_column": "flex-start",
                 "gap": 12,
                 "width": "fill",
-                "custom_width": 100,
+                "custom_width": 28,
                 "width_mobile": "fill",
                 "custom_width_mobile": 100,
                 "height": "fit",
@@ -339,32 +339,116 @@
                 "padding-inline-end": 0
               },
               "blocks": {
-                "icon_fbwCfU": {
-                  "type": "icon",
-                  "name": "t:names.icon",
+                "group_Dkx8U6": {
+                  "type": "group",
+                  "name": "t:names.group",
                   "settings": {
-                    "icon": "price_tag",
-                    "width": 24,
-                    "link_collection": "",
+                    "content_direction": "row",
+                    "vertical_on_mobile": false,
+                    "horizontal_alignment": "flex-start",
+                    "vertical_alignment": "center",
+                    "align_baseline": false,
+                    "horizontal_alignment_flex_direction_column": "flex-start",
+                    "vertical_alignment_flex_direction_column": "center",
+                    "gap": 12,
+                    "width": "fill",
+                    "custom_width": 100,
+                    "width_mobile": "fill",
+                    "custom_width_mobile": 100,
+                    "height": "fit",
+                    "custom_height": 100,
+                    "height_mobile": "fit",
+                    "custom_height_mobile": 30,
+                    "background_media": "none",
+                    "background_color": "",
+                    "video_position": "cover",
+                    "background_image_position": "cover",
+                    "custom_mobile_media": false,
+                    "background_media_mobile": "image",
+                    "background_image_position_mobile": "cover",
+                    "video_position_mobile": "cover",
+                    "toggle_overlay": false,
+                    "overlay_color": "#00000026",
+                    "overlay_style": "solid",
+                    "gradient_direction": "to top",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
                     "link": "",
                     "open_in_new_tab": false,
-                    "icon_color": ""
+                    "placeholder": "",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {
+                    "icon_fbwCfU": {
+                      "type": "icon",
+                      "name": "t:names.icon",
+                      "settings": {
+                        "icon": "price_tag",
+                        "width": 24,
+                        "link_collection": "",
+                        "link": "",
+                        "open_in_new_tab": false,
+                        "icon_color": ""
+                      },
+                      "blocks": {}
+                    },
+                    "text_MQMF3G": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><strong>01 / Classic value</strong></p>",
+                        "width": "fit-content",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.75rem",
+                        "line_height": "normal",
+                        "letter_spacing": "loose",
+                        "case": "uppercase",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "icon_fbwCfU",
+                    "text_MQMF3G"
+                  ]
+                },
+                "heading": {
+                  "type": "custom-liquid",
+                  "settings": {
+                    "custom_liquid": "<h2 id=\"value-graphic-tees\" class=\"h3 at-guide-target\" tabindex=\"-1\">Keep blank costs down</h2>"
                   },
                   "blocks": {}
                 },
-                "text_MQMF3G": {
+                "description": {
                   "type": "text",
                   "settings": {
-                    "text": "<p><strong>01 / Classic value</strong></p>",
+                    "text": "<h6>Start with a classic tee, or choose by the feel, fit, or fabric your design needs.&nbsp;</h6>",
                     "width": "fit-content",
-                    "max_width": "normal",
+                    "max_width": "none",
                     "alignment": "left",
-                    "type_preset": "custom",
+                    "type_preset": "rte",
                     "font": "var(--font-body--family)",
-                    "font_size": "0.75rem",
+                    "font_size": "1rem",
                     "line_height": "normal",
-                    "letter_spacing": "loose",
-                    "case": "uppercase",
+                    "letter_spacing": "normal",
+                    "case": "none",
                     "wrap": "pretty",
                     "text_color": "",
                     "background": false,
@@ -379,47 +463,33 @@
                 }
               },
               "block_order": [
-                "icon_fbwCfU",
-                "text_MQMF3G"
+                "group_Dkx8U6",
+                "heading",
+                "description"
               ]
             },
-            "heading": {
-              "type": "custom-liquid",
+            "button_49nApy": {
+              "type": "button",
               "settings": {
-                "custom_liquid": "<h2 id=\"value-graphic-tees\" class=\"h3 at-guide-target\" tabindex=\"-1\">Keep blank costs down</h2>"
-              },
-              "blocks": {}
-            },
-            "description": {
-              "type": "text",
-              "settings": {
-                "text": "<h6>Start with a classic tee, or choose by the feel, fit, or fabric your design needs.&nbsp;</h6>",
+                "label": "Shop all value graphic tees",
+                "link": "shopify://collections/value-graphic-tees",
+                "open_in_new_tab": false,
+                "style_class": "button-unstyled",
+                "custom_button_background": "{{ settings.color_palette.foreground }}",
+                "custom_button_text": "{{ settings.color_palette.background }}",
+                "custom_button_border": "{{ settings.color_palette.background }}",
+                "link_text_color": "",
                 "width": "fit-content",
-                "max_width": "none",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
               },
               "blocks": {}
             }
           },
           "block_order": [
-            "group_Dkx8U6",
-            "heading",
-            "description"
+            "group_kepQtV",
+            "button_49nApy"
           ]
         },
         "selection": {
@@ -1389,35 +1459,16 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
-            },
-            "shop_path": {
-              "type": "button",
-              "settings": {
-                "label": "Shop all value graphic tees",
-                "link": "shopify://collections/value-graphic-tees",
-                "open_in_new_tab": false,
-                "style_class": "button-unstyled",
-                "custom_button_background": "{{ settings.color_palette.foreground }}",
-                "custom_button_text": "{{ settings.color_palette.background }}",
-                "custom_button_border": "{{ settings.color_palette.background }}",
-                "link_text_color": "",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
             }
           },
           "block_order": [
             "picks",
-            "comparisons",
-            "shop_path"
+            "comparisons"
           ]
         }
       },
       "block_order": [
-        "guide",
+        "group_LLEE9p",
         "selection"
       ],
       "name": "Classic tees",
