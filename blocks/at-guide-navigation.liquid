@@ -70,6 +70,51 @@
     color: #fbf8f2;
   }
 
+  .section:has(.at-tier-title) .compare-at-price {
+    font-family: var(--font-body--family);
+    font-size: 0.6em;
+    font-weight: 400;
+  }
+
+  .section:has(.at-tier-title) .product-card .card-gallery,
+  .section:has(.at-tier-title) .at-guide-product-photo {
+    overflow: hidden;
+    border-radius: 6px;
+    background: #ebebea;
+  }
+
+  .section:has(.at-tier-title) .product-card :is(.card-gallery, .at-guide-product-photo) img {
+    mix-blend-mode: multiply;
+  }
+
+  .section:has(.at-tier-title) .product-card .product-badges {
+    display: none;
+  }
+
+  .section:has(.at-tier-title) .button-custom {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    padding: 14px 22px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .section:has(.at-tier-title) .button-custom::after {
+    content: '\2192';
+    font-size: 1.15em;
+  }
+
+  .at-tier-card__meta > span:first-child {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
   .at-tier-card__meta {
     display: flex;
     align-items: center;
