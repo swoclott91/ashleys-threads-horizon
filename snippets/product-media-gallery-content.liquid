@@ -27,7 +27,6 @@
 {%- liquid
   assign selected_product = closest.product
   assign selected_variant_media = selected_product.selected_or_first_available_variant.featured_media
-  assign first_3d_model = selected_product.media | where: 'media_type', 'model' | first
 
   if block_settings.hide_variants
     assign variant_images = selected_product.images | where: 'attached_to_variant?', true | map: 'src'
@@ -132,6 +131,9 @@
     endif
   endif
   # /AT CUSTOM
+  assign product_models = selected_product.media | where: 'media_type', 'model'
+  assign gallery_models = sorted_media | where: 'media_type', 'model' | default: product_models
+
   assign has_image_drop = false
   for media in sorted_media
     if media.media_type == 'image' or media.media_type == blank
@@ -635,7 +637,10 @@
       </zoom-dialog>
     {%- endif -%}
 
-    {%- if first_3d_model -%}
+    {%- if gallery_models != blank -%}
+      <script type="application/json" id="ProductModelJSON-{{ selected_product.id }}">
+        {{ gallery_models | json }}
+      </script>
       <link
         id="ModelViewerStyle"
         rel="stylesheet"
