@@ -14,16 +14,25 @@
 
 {%- liquid
   assign poster_image = poster | default: media.preview_image
-  assign mp4_sources = media.sources | where: 'format', 'mp4' | sort: 'height'
+  assign mp4_sources = media.sources | where: 'format', 'mp4'
 
-  # Cards are small: use the smallest MP4 that is at least 540px tall, else the largest available.
-  assign mp4_source = mp4_sources | last
+  # Cards are small: use the smallest MP4 that is at least 480px tall, else the largest available.
+  # (Shopify lists sources in no fixed order, so pick by comparing heights.)
+  assign mp4_source = nil
+  assign largest_source = nil
   for source in mp4_sources
-    if source.height >= 540
-      assign mp4_source = source
-      break
+    if largest_source == nil or source.height > largest_source.height
+      assign largest_source = source
+    endif
+    if source.height >= 480
+      if mp4_source == nil or source.height < mp4_source.height
+        assign mp4_source = source
+      endif
     endif
   endfor
+  if mp4_source == nil
+    assign mp4_source = largest_source
+  endif
 -%}
 
 {%- if media.media_type == 'video' and mp4_source != blank -%}
