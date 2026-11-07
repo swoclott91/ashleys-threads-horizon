@@ -156,35 +156,6 @@
     display: none;
   }
 
-  .product-media-container--model:has(.button-quick-look:not([hidden])) {
-    position: relative;
-  }
-
-  .button-quick-look {
-    position: absolute;
-    top: max(var(--margin-lg), var(--safe-area-inset-top, 0px));
-    left: max(var(--margin-lg), var(--safe-area-inset-left, 0px));
-    z-index: var(--layer-raised);
-    display: inline-flex;
-    align-items: center;
-    gap: var(--gap-sm);
-  }
-
-  .button-quick-look img {
-    width: var(--icon-size-sm);
-    height: var(--icon-size-sm);
-    object-fit: contain;
-  }
-
-  .button-quick-look::after {
-    content: attr(aria-label);
-  }
-
-  .button-quick-look[hidden],
-  .button-quick-look:not([hidden]) + .button-shopify-xr {
-    display: none;
-  }
-
   product-model .deferred-media__poster-icon {
     position: absolute;
     top: 50%;
