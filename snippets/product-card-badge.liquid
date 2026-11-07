@@ -65,7 +65,12 @@
     "
   >
     <div class="product-badges__badge product-badges__badge--rectangle {{ badge_class }}">
-      {{ badge_label | escape }}
+      {%- if badge_class == 'product-badges__badge--featured' -%}
+        <span class="product-badges__monogram">{{ 'at-monogram.svg' | inline_asset_content }}</span>
+        <span>{{ badge_label | escape }}</span>
+      {%- else -%}
+        {{ badge_label | escape }}
+      {%- endif -%}
     </div>
   </div>
 {%- endif -%}
