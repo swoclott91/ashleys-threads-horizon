@@ -264,6 +264,51 @@
     margin-inline-start: var(--gap-lg);
     transform: rotate(90deg);
   }
+
+  /* Hero top picks: compact product cards rendered with custom-liquid thumb + name. */
+  .product-card:has(.at-top-pick__thumb) .product-card__content {
+    block-size: 100%;
+    border: 1px solid rgb(35 61 49 / 0.1);
+    transition: box-shadow var(--animation-speed, 0.2s) ease, border-color var(--animation-speed, 0.2s) ease;
+  }
+
+  .product-card:has(.at-top-pick__thumb):hover .product-card__content {
+    border-color: rgb(35 61 49 / 0.25);
+    box-shadow: 0 10px 24px -16px rgb(35 61 49 / 0.45);
+  }
+
+  .at-top-pick__thumb {
+    flex-shrink: 0;
+    inline-size: 72px;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #ebebea;
+  }
+
+  .at-top-pick__thumb img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    mix-blend-mode: multiply;
+  }
+
+  .at-top-pick__name {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 0.875rem;
+    line-height: 1.3;
+    color: rgb(35 61 49 / 0.8);
+  }
+
+  .product-card:has(.at-top-pick__thumb) .compare-at-price {
+    font-size: 0.8em;
+    font-weight: 400;
+  }
 {% endstylesheet %}
 
 {% schema %}
