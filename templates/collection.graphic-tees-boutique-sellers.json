@@ -199,7 +199,9 @@
                     "label_2": "Shop softer tees",
                     "link_2": "#soft-everyday-graphic-tees",
                     "label_3": "Explore finishes and fits",
-                    "link_3": "#distinctive-graphic-tees"
+                    "link_3": "#distinctive-graphic-tees",
+                    "label_4": "",
+                    "link_4": ""
                   },
                   "blocks": {}
                 },
@@ -414,8 +416,6 @@
                         "custom_width_mobile": 100,
                         "height": "fit",
                         "custom_height": 100,
-                        "height_mobile": "fit",
-                        "custom_height_mobile": 30,
                         "background_media": "none",
                         "background_color": "",
                         "video_position": "cover",
@@ -465,8 +465,6 @@
                             "custom_width_mobile": 100,
                             "height": "fit",
                             "custom_height": 100,
-                            "height_mobile": "fit",
-                            "custom_height_mobile": 30,
                             "background_media": "none",
                             "background_color": "",
                             "video_position": "cover",
@@ -495,7 +493,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>01 &middot; Everyday classic</strong></p>",
+                                "text": "<p><strong>01 · Classic Value</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -602,8 +600,6 @@
                         "custom_width_mobile": 100,
                         "height": "fit",
                         "custom_height": 100,
-                        "height_mobile": "fit",
-                        "custom_height_mobile": 30,
                         "background_media": "none",
                         "background_color": "",
                         "video_position": "cover",
@@ -653,8 +649,6 @@
                             "custom_width_mobile": 100,
                             "height": "fit",
                             "custom_height": 100,
-                            "height_mobile": "fit",
-                            "custom_height_mobile": 30,
                             "background_media": "none",
                             "background_color": "",
                             "video_position": "cover",
@@ -683,7 +677,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>02 &middot; Everyday wear</strong></p>",
+                                "text": "<p><strong>02 · Everyday soft</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -790,8 +784,6 @@
                         "custom_width_mobile": 100,
                         "height": "fit",
                         "custom_height": 100,
-                        "height_mobile": "fit",
-                        "custom_height_mobile": 30,
                         "background_media": "none",
                         "background_color": "",
                         "video_position": "cover",
@@ -841,8 +833,6 @@
                             "custom_width_mobile": 100,
                             "height": "fit",
                             "custom_height": 100,
-                            "height_mobile": "fit",
-                            "custom_height_mobile": 30,
                             "background_media": "none",
                             "background_color": "",
                             "video_position": "cover",
@@ -978,8 +968,6 @@
                         "custom_width_mobile": 100,
                         "height": "fit",
                         "custom_height": 100,
-                        "height_mobile": "fit",
-                        "custom_height_mobile": 30,
                         "background_media": "none",
                         "background_color": "",
                         "video_position": "cover",
@@ -1029,8 +1017,6 @@
                             "custom_width_mobile": 100,
                             "height": "fit",
                             "custom_height": 100,
-                            "height_mobile": "fit",
-                            "custom_height_mobile": 30,
                             "background_media": "none",
                             "background_color": "",
                             "video_position": "cover",
@@ -1179,34 +1165,6 @@
     },
     "value_tees": {
       "type": "section",
-      "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "flex-start",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "flex-start",
-        "gap": 0,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "background_color": "#f5f1eb",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_color": "",
-        "border_radius": 0,
-        "padding-block-start": 56,
-        "padding-block-end": 40
-      },
       "blocks": {
         "guide": {
           "type": "group",
@@ -2267,10 +2225,7 @@
         "selection",
         "footer"
       ],
-      "name": "Classic tees"
-    },
-    "soft_tees": {
-      "type": "section",
+      "name": "Classic tees",
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -2284,7 +2239,7 @@
         "section_height": "",
         "section_height_custom": 50,
         "background_media": "none",
-        "background_color": "#e6ece6",
+        "background_color": "#f5f1eb",
         "video_position": "cover",
         "background_image_position": "cover",
         "toggle_overlay": false,
@@ -2298,7 +2253,10 @@
         "border_radius": 0,
         "padding-block-start": 56,
         "padding-block-end": 40
-      },
+      }
+    },
+    "soft_tees": {
+      "type": "section",
       "blocks": {
         "guide": {
           "type": "group",
@@ -2524,7 +2482,7 @@
                 "link": "shopify://collections/soft-everyday-graphic-tees",
                 "open_in_new_tab": false,
                 "style_class": "button-custom",
-                "custom_button_background": "#00000000",
+                "custom_button_background": "rgba(0,0,0,0)",
                 "custom_button_text": "#233d31",
                 "custom_button_border": "#233d31",
                 "link_text_color": "",
@@ -3233,10 +3191,7 @@
         "selection",
         "footer"
       ],
-      "name": "Soft everyday tees"
-    },
-    "distinctive_tees": {
-      "type": "section",
+      "name": "Soft everyday tees",
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -3250,7 +3205,7 @@
         "section_height": "",
         "section_height_custom": 50,
         "background_media": "none",
-        "background_color": "#f5f1eb",
+        "background_color": "#e6ece6",
         "video_position": "cover",
         "background_image_position": "cover",
         "toggle_overlay": false,
@@ -3264,7 +3219,10 @@
         "border_radius": 0,
         "padding-block-start": 56,
         "padding-block-end": 40
-      },
+      }
+    },
+    "distinctive_tees": {
+      "type": "section",
       "blocks": {
         "guide": {
           "type": "group",
@@ -4172,10 +4130,7 @@
         "selection",
         "footer"
       ],
-      "name": "Distinctive tees"
-    },
-    "companion_tees": {
-      "type": "section",
+      "name": "Distinctive tees",
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -4189,7 +4144,7 @@
         "section_height": "",
         "section_height_custom": 50,
         "background_media": "none",
-        "background_color": "#e6ece6",
+        "background_color": "#f5f1eb",
         "video_position": "cover",
         "background_image_position": "cover",
         "toggle_overlay": false,
@@ -4203,7 +4158,10 @@
         "border_radius": 0,
         "padding-block-start": 56,
         "padding-block-end": 40
-      },
+      }
+    },
+    "companion_tees": {
+      "type": "section",
       "blocks": {
         "guide": {
           "type": "group",
@@ -4429,7 +4387,7 @@
                 "link": "shopify://collections/family-matching-sets",
                 "open_in_new_tab": false,
                 "style_class": "button-custom",
-                "custom_button_background": "#00000000",
+                "custom_button_background": "rgba(0,0,0,0)",
                 "custom_button_text": "#233d31",
                 "custom_button_border": "#233d31",
                 "link_text_color": "",
@@ -5138,252 +5096,34 @@
         "selection",
         "footer"
       ],
-      "name": "Companion styles"
-    },
-    "product_list_mMU9xJ": {
-      "type": "product-list",
-      "blocks": {
-        "static-header": {
-          "type": "_product-list-content",
-          "name": "t:names.header",
-          "disabled": true,
-          "static": true,
-          "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "flex-end",
-            "align_baseline": true,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "background_media": "none",
-            "background_color": "",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "custom_mobile_media": false,
-            "background_media_mobile": "image",
-            "background_image_position_mobile": "cover",
-            "video_position_mobile": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_color": "",
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_list_text_EFnw8U": {
-              "type": "_product-list-text",
-              "name": "t:names.collection_title",
-              "settings": {
-                "text": "<h2>{{ closest.collection.title }}</h2>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h3",
-                "font": "var(--font-body--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_list_button_9WWKmi": {
-              "type": "_product-list-button",
-              "name": "t:names.product_list_button",
-              "settings": {
-                "label": "View all",
-                "open_in_new_tab": false,
-                "style_class": "button-unstyled",
-                "custom_button_background": "{{ settings.color_palette.foreground }}",
-                "custom_button_text": "{{ settings.color_palette.background }}",
-                "custom_button_border": "{{ settings.color_palette.background }}",
-                "link_text_color": "",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_list_text_EFnw8U",
-            "product_list_button_9WWKmi"
-          ]
-        },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
-          "settings": {
-            "product_card_gap": 4,
-            "background_color": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_color": "",
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery_G8K97i": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_color": "",
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "image_NXJGqT": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "{{ closest.product.metafields.custom.brand_image.value }}",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "custom",
-                "custom_width": 20,
-                "width_mobile": "custom",
-                "custom_width_mobile": 20,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_color": "",
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0,
-                "hover_scale": false,
-                "hover_tint_color": ""
-              },
-              "blocks": {}
-            },
-            "product_title_GYXVqx": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "narrow",
-                "alignment": "left",
-                "type_preset": "paragraph",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "swatches_WUkQaH": {
-              "type": "swatches",
-              "name": "t:names.swatches",
-              "settings": {
-                "product_swatches_alignment": "flex-start",
-                "product_swatches_alignment_mobile": "flex-start",
-                "hide_padding": false,
-                "product_swatches_padding_top": 4,
-                "product_swatches_padding_bottom": 0,
-                "product_swatches_padding_left": 0,
-                "product_swatches_padding_right": 0
-              },
-              "blocks": {}
-            },
-            "price_VnhUpx": {
-              "type": "price",
-              "name": "t:names.product_price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "text_color": "",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery_G8K97i",
-            "image_NXJGqT",
-            "product_title_GYXVqx",
-            "swatches_WUkQaH",
-            "price_VnhUpx"
-          ]
-        }
-      },
-      "name": "t:names.products_carousel",
+      "name": "Companion styles",
       "settings": {
-        "collection": "family-matching-sets",
-        "layout_type": "carousel",
-        "carousel_on_mobile": false,
-        "max_products": 6,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 8,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "circle",
-        "section_width": "page-width",
+        "content_direction": "column",
+        "vertical_on_mobile": true,
         "horizontal_alignment": "flex-start",
-        "gap": 28,
-        "background_color": "#eaf0eb",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "vertical_alignment": "flex-start",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "flex-start",
+        "gap": 0,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "#e6ece6",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 56,
+        "padding-block-end": 40
       }
     },
     "grid_heading": {
@@ -5659,7 +5399,6 @@
     "soft_tees",
     "distinctive_tees",
     "companion_tees",
-    "product_list_mMU9xJ",
     "grid_heading",
     "main"
   ]
