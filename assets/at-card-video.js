@@ -1,9 +1,20 @@
 /**
  * <at-card-video>: plays a muted product-card clip only while it is on screen.
- * Stays on the poster image when the visitor prefers reduced motion or has data saver on.
+ * - Loads nothing until the clip first scrolls into view.
+ * - Uses Shopify's adaptive HLS stream where the browser plays it natively (iPhone, iPad, Safari),
+ *   otherwise the MP4.
+ * - Stays on the poster image when the visitor prefers reduced motion or has data saver on.
  */
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const saveData = Boolean(navigator.connection && navigator.connection.saveData);
+
+/** Native HLS (no MediaSource library needed): every iOS/iPadOS browser and desktop Safari. */
+function prefersNativeHls(video) {
+  const ua = navigator.userAgent;
+  const isIOS = /iP(hone|ad|od)/.test(ua) || (ua.includes('Macintosh') && navigator.maxTouchPoints > 1);
+  const isDesktopSafari = /Safari/.test(ua) && !/Chrome|Chromium|Edg|OPR|Firefox/.test(ua);
+  return (isIOS || isDesktopSafari) && video.canPlayType('application/vnd.apple.mpegurl') !== '';
+}
 
 const observer =
   'IntersectionObserver' in window
@@ -11,8 +22,8 @@ const observer =
         (entries) => {
           for (const entry of entries) {
             const element = /** @type {AtCardVideo} */ (entry.target);
-            if (entry.isIntersecting) element.play();
-            else element.pause();
+            element.inView = entry.isIntersecting;
+            element.update();
           }
         },
         { threshold: 0.4 }
@@ -20,44 +31,52 @@ const observer =
     : null;
 
 class AtCardVideo extends HTMLElement {
+  inView = false;
+
   connectedCallback() {
     this.video = this.querySelector('video');
     if (!this.video || saveData) return;
 
     this.video.muted = true;
-    this.onMotionChange = () => (reducedMotion.matches || document.hidden ? this.pause() : this.syncWithViewport());
-    reducedMotion.addEventListener('change', this.onMotionChange);
-    document.addEventListener('visibilitychange', this.onMotionChange);
+    this.update = this.update.bind(this);
+    reducedMotion.addEventListener('change', this.update);
+    document.addEventListener('visibilitychange', this.update);
 
-    if (observer) observer.observe(this);
-    else this.play();
+    if (observer) {
+      observer.observe(this);
+    } else {
+      this.inView = true;
+      this.update();
+    }
   }
 
   disconnectedCallback() {
     if (observer) observer.unobserve(this);
-    if (this.onMotionChange) {
-      reducedMotion.removeEventListener('change', this.onMotionChange);
-      document.removeEventListener('visibilitychange', this.onMotionChange);
-    }
+    reducedMotion.removeEventListener('change', this.update);
+    document.removeEventListener('visibilitychange', this.update);
   }
 
-  syncWithViewport() {
-    if (!this.video) return;
-    const rect = this.getBoundingClientRect();
-    const visible = rect.bottom > 0 && rect.top < window.innerHeight;
-    if (visible) this.play();
-  }
-
-  play() {
+  /** Play while visible; pause otherwise. */
+  update() {
     const video = this.video;
-    if (!video || reducedMotion.matches || document.hidden) return;
-    if (video.preload !== 'auto') video.preload = 'auto';
+    if (!video) return;
+
+    if (!this.inView || reducedMotion.matches || document.hidden) {
+      if (!video.paused) video.pause();
+      return;
+    }
+
+    if (!video.currentSrc && !video.getAttribute('src')) {
+      const hls = video.dataset.srcHls;
+      const mp4 = video.dataset.srcMp4;
+      const src = hls && prefersNativeHls(video) ? hls : mp4 || hls;
+      if (!src) return;
+      video.preload = 'auto';
+      video.src = src;
+    }
+
     const attempt = video.play();
     if (attempt) attempt.catch(() => {});
-  }
-
-  pause() {
-    if (this.video && !this.video.paused) this.video.pause();
   }
 }
 
