@@ -229,6 +229,36 @@
     color: rgb(35 61 49 / 0.72);
   }
 
+  /* Companion fits: youth / women's / tall links grouped under a card's description. */
+  .at-tier-card__companions {
+    margin: 0;
+    font-size: var(--font-size--xs, 0.8125rem);
+    line-height: 1.6;
+    color: rgb(35 61 49 / 0.72);
+  }
+
+  .at-tier-card__companions > span {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #233d31;
+  }
+
+  .at-tier-card__companions a {
+    position: relative;
+    color: #233d31;
+    text-decoration: underline;
+    text-decoration-color: rgb(35 61 49 / 0.35);
+    text-underline-offset: 0.2em;
+    white-space: nowrap;
+  }
+
+  .at-tier-card__companions a:hover {
+    text-decoration-color: currentColor;
+  }
+
   .at-tier-card__arrow {
     display: grid;
     flex-shrink: 0;
