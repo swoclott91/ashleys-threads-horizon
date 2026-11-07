@@ -1593,6 +1593,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -1602,8 +1603,7 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0,
-                        "featured_badge_label": "Ashley’s Choice"
+                        "padding-inline-end": 0
                       },
                       "blocks": {}
                     },
@@ -1719,6 +1719,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -1844,6 +1845,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -1853,8 +1855,7 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0,
-                        "featured_badge_label": "Ashley’s Choice"
+                        "padding-inline-end": 0
                       },
                       "blocks": {}
                     },
@@ -1970,6 +1971,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -2095,6 +2097,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -2591,131 +2594,6 @@
                 "padding-inline-end": 0
               },
               "blocks": {
-                "gildan_64000": {
-                  "type": "product-card",
-                  "settings": {
-                    "product": "gildan-64000-softstyle-t-shirt",
-                    "product_card_gap": 12,
-                    "width": "custom",
-                    "custom_width": 25,
-                    "width_mobile": "custom",
-                    "custom_width_mobile": 78,
-                    "background_color": "",
-                    "border": "none",
-                    "border_width": 1,
-                    "border_opacity": 100,
-                    "border_color": "",
-                    "border_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 20,
-                    "padding-inline-end": 20
-                  },
-                  "blocks": {
-                    "heading": {
-                      "type": "text",
-                      "settings": {
-                        "text": "<p>Soft, straight fit</p>",
-                        "width": "fit-content",
-                        "max_width": "normal",
-                        "alignment": "left",
-                        "type_preset": "h4",
-                        "font": "var(--font-body--family)",
-                        "font_size": "1rem",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "balance",
-                        "text_color": "#233d31",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "description": {
-                      "type": "text",
-                      "settings": {
-                        "text": "<p>A lighter, softer step from Gildan Heavy Cotton.</p>",
-                        "width": "fit-content",
-                        "max_width": "narrow",
-                        "alignment": "left",
-                        "type_preset": "custom",
-                        "font": "var(--font-body--family)",
-                        "font_size": "1rem",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty",
-                        "text_color": "#4d544f",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "price": {
-                      "type": "price",
-                      "settings": {
-                        "show_sale_price_first": true,
-                        "show_installments": false,
-                        "show_tax_info": false,
-                        "type_preset": "custom",
-                        "width": "100%",
-                        "alignment": "left",
-                        "font": "var(--font-heading--family)",
-                        "font_size": "1.5rem",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "text_color": "#233d31",
-                        "padding-block-start": 4,
-                        "padding-block-end": 8,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "gallery": {
-                      "type": "_product-card-gallery",
-                      "settings": {
-                        "image_ratio": "square",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_color": "",
-                        "border_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "meta": {
-                      "type": "custom-liquid",
-                      "settings": {
-                        "custom_liquid": "<div class=\"at-tier-card__meta\"><span>{{ closest.product.vendor }} &middot; {{ closest.product.title | remove_first: closest.product.vendor | strip }}</span><span class=\"at-tier-card__arrow\" aria-hidden=\"true\">{{ 'icon-arrow.svg' | inline_asset_content }}</span></div>"
-                      },
-                      "blocks": {}
-                    }
-                  },
-                  "block_order": [
-                    "heading",
-                    "description",
-                    "price",
-                    "gallery",
-                    "meta"
-                  ]
-                },
                 "bella_canvas_3001": {
                   "type": "product-card",
                   "settings": {
@@ -2812,6 +2690,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -2821,8 +2700,133 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0,
-                        "featured_badge_label": "Ashley’s Choice"
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "meta": {
+                      "type": "custom-liquid",
+                      "settings": {
+                        "custom_liquid": "<div class=\"at-tier-card__meta\"><span>{{ closest.product.vendor }} &middot; {{ closest.product.title | remove_first: closest.product.vendor | strip }}</span><span class=\"at-tier-card__arrow\" aria-hidden=\"true\">{{ 'icon-arrow.svg' | inline_asset_content }}</span></div>"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "heading",
+                    "description",
+                    "price",
+                    "gallery",
+                    "meta"
+                  ]
+                },
+                "gildan_64000": {
+                  "type": "product-card",
+                  "settings": {
+                    "product": "gildan-64000-softstyle-t-shirt",
+                    "product_card_gap": 12,
+                    "width": "custom",
+                    "custom_width": 25,
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 78,
+                    "background_color": "",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 20,
+                    "padding-inline-end": 20
+                  },
+                  "blocks": {
+                    "heading": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Soft, straight fit</p>",
+                        "width": "fit-content",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "h4",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "balance",
+                        "text_color": "#233d31",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "description": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>A lighter, softer step from Gildan Heavy Cotton.</p>",
+                        "width": "fit-content",
+                        "max_width": "narrow",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "#4d544f",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "price": {
+                      "type": "price",
+                      "settings": {
+                        "show_sale_price_first": true,
+                        "show_installments": false,
+                        "show_tax_info": false,
+                        "type_preset": "custom",
+                        "width": "100%",
+                        "alignment": "left",
+                        "font": "var(--font-heading--family)",
+                        "font_size": "1.5rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "text_color": "#233d31",
+                        "padding-block-start": 4,
+                        "padding-block-end": 8,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "gallery": {
+                      "type": "_product-card-gallery",
+                      "settings": {
+                        "featured_badge_label": "",
+                        "image_ratio": "square",
+                        "border": "none",
+                        "border_width": 1,
+                        "border_opacity": 100,
+                        "border_color": "",
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
                       },
                       "blocks": {}
                     },
@@ -2938,6 +2942,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -3063,6 +3068,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -3094,8 +3100,8 @@
                 }
               },
               "block_order": [
-                "gildan_64000",
                 "bella_canvas_3001",
+                "gildan_64000",
                 "bella_canvas_3413",
                 "tultex_202"
               ]
@@ -3558,6 +3564,122 @@
                 "padding-inline-end": 0
               },
               "blocks": {
+                "comfort_colors_1717": {
+                  "type": "product-card",
+                  "settings": {
+                    "product": "comfort-colors-1717-heavyweight-ring-spun-tee",
+                    "product_card_gap": 12,
+                    "width": "custom",
+                    "custom_width": 25,
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 78,
+                    "background_color": "",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 20,
+                    "padding-inline-end": 20
+                  },
+                  "blocks": {
+                    "heading": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Washed color</p>",
+                        "width": "fit-content",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "h4",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "balance",
+                        "text_color": "#233d31",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "description": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Pigment-dyed for a lived-in, relaxed look.</p>",
+                        "width": "fit-content",
+                        "max_width": "narrow",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "#4d544f",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "price": {
+                      "type": "price",
+                      "settings": {
+                        "show_sale_price_first": true,
+                        "show_installments": false,
+                        "show_tax_info": false,
+                        "type_preset": "custom",
+                        "width": "100%",
+                        "alignment": "left",
+                        "font": "var(--font-heading--family)",
+                        "font_size": "1.5rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "text_color": "#233d31",
+                        "padding-block-start": 4,
+                        "padding-block-end": 8,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "gallery": {
+                      "type": "custom-liquid",
+                      "settings": {
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '1717_bluejean_model_front.jpg', description: 'Front view of the Comfort Colors 1717 in washed Blue Jean.', badge_label: \"Ashley’s Choice\" %}"
+                      },
+                      "blocks": {}
+                    },
+                    "meta": {
+                      "type": "custom-liquid",
+                      "settings": {
+                        "custom_liquid": "<div class=\"at-tier-card__meta\"><span>{{ closest.product.vendor }} &middot; {{ closest.product.title | remove_first: closest.product.vendor | strip }}</span><span class=\"at-tier-card__arrow\" aria-hidden=\"true\">{{ 'icon-arrow.svg' | inline_asset_content }}</span></div>"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "heading",
+                    "description",
+                    "price",
+                    "gallery",
+                    "meta"
+                  ]
+                },
                 "bella_canvas_3010": {
                   "type": "product-card",
                   "settings": {
@@ -3790,122 +3912,6 @@
                     "meta"
                   ]
                 },
-                "comfort_colors_1717": {
-                  "type": "product-card",
-                  "settings": {
-                    "product": "comfort-colors-1717-heavyweight-ring-spun-tee",
-                    "product_card_gap": 12,
-                    "width": "custom",
-                    "custom_width": 25,
-                    "width_mobile": "custom",
-                    "custom_width_mobile": 78,
-                    "background_color": "",
-                    "border": "none",
-                    "border_width": 1,
-                    "border_opacity": 100,
-                    "border_color": "",
-                    "border_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 20,
-                    "padding-inline-end": 20
-                  },
-                  "blocks": {
-                    "heading": {
-                      "type": "text",
-                      "settings": {
-                        "text": "<p>Washed color</p>",
-                        "width": "fit-content",
-                        "max_width": "normal",
-                        "alignment": "left",
-                        "type_preset": "h4",
-                        "font": "var(--font-body--family)",
-                        "font_size": "1rem",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "balance",
-                        "text_color": "#233d31",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "description": {
-                      "type": "text",
-                      "settings": {
-                        "text": "<p>Pigment-dyed for a lived-in, relaxed look.</p>",
-                        "width": "fit-content",
-                        "max_width": "narrow",
-                        "alignment": "left",
-                        "type_preset": "custom",
-                        "font": "var(--font-body--family)",
-                        "font_size": "1rem",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty",
-                        "text_color": "#4d544f",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "price": {
-                      "type": "price",
-                      "settings": {
-                        "show_sale_price_first": true,
-                        "show_installments": false,
-                        "show_tax_info": false,
-                        "type_preset": "custom",
-                        "width": "100%",
-                        "alignment": "left",
-                        "font": "var(--font-heading--family)",
-                        "font_size": "1.5rem",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "text_color": "#233d31",
-                        "padding-block-start": 4,
-                        "padding-block-end": 8,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "gallery": {
-                      "type": "custom-liquid",
-                      "settings": {
-                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '1717_bluejean_model_front.jpg', description: 'Front view of the Comfort Colors 1717 in washed Blue Jean.', badge_label: \"Ashley’s Choice\" %}"
-                      },
-                      "blocks": {}
-                    },
-                    "meta": {
-                      "type": "custom-liquid",
-                      "settings": {
-                        "custom_liquid": "<div class=\"at-tier-card__meta\"><span>{{ closest.product.vendor }} &middot; {{ closest.product.title | remove_first: closest.product.vendor | strip }}</span><span class=\"at-tier-card__arrow\" aria-hidden=\"true\">{{ 'icon-arrow.svg' | inline_asset_content }}</span></div>"
-                      },
-                      "blocks": {}
-                    }
-                  },
-                  "block_order": [
-                    "heading",
-                    "description",
-                    "price",
-                    "gallery",
-                    "meta"
-                  ]
-                },
                 "tultex_246": {
                   "type": "product-card",
                   "settings": {
@@ -4002,6 +4008,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -4033,9 +4040,9 @@
                 }
               },
               "block_order": [
+                "comfort_colors_1717",
                 "bella_canvas_3010",
                 "bella_canvas_1010",
-                "comfort_colors_1717",
                 "tultex_246"
               ]
             }
@@ -4593,6 +4600,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -4602,8 +4610,7 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0,
-                        "featured_badge_label": "Ashley’s Choice"
+                        "padding-inline-end": 0
                       },
                       "blocks": {}
                     },
@@ -4719,6 +4726,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -4844,6 +4852,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -4969,6 +4978,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -5220,6 +5230,7 @@
             "card-gallery": {
               "type": "_product-card-gallery",
               "settings": {
+                "featured_badge_label": "",
                 "image_ratio": "portrait",
                 "border": "none",
                 "border_width": 1,
