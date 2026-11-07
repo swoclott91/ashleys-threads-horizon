@@ -155,6 +155,14 @@
       flex-shrink: 0;
       scroll-snap-align: start;
     }
+
+    /* Recommendation labels are guidance: show them in full instead of the theme's 3-line title clamp. */
+    .section:has(.at-tier-title) .product-card .text-block:is(h4, .h4) {
+      display: block;
+      overflow: visible;
+      -webkit-line-clamp: unset;
+      font-size: 1.25rem;
+    }
   }
 
   .section:has(.at-tier-title) .at-guide-product-photo img {
@@ -229,6 +237,36 @@
     color: rgb(35 61 49 / 0.72);
   }
 
+  /* Companion fits: youth / women's / tall links grouped under a card's description. */
+  .at-tier-card__companions {
+    margin: 0;
+    font-size: var(--font-size--xs, 0.8125rem);
+    line-height: 1.6;
+    color: rgb(35 61 49 / 0.72);
+  }
+
+  .at-tier-card__companions > span {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #233d31;
+  }
+
+  .at-tier-card__companions a {
+    position: relative;
+    color: #233d31;
+    text-decoration: underline;
+    text-decoration-color: rgb(35 61 49 / 0.35);
+    text-underline-offset: 0.2em;
+    white-space: nowrap;
+  }
+
+  .at-tier-card__companions a:hover {
+    text-decoration-color: currentColor;
+  }
+
   .at-tier-card__arrow {
     display: grid;
     flex-shrink: 0;
@@ -267,6 +305,75 @@
     white-space: nowrap;
   }
 
+  .group-block-content > :only-child:has(> .at-tier-next) {
+    margin-inline-start: auto;
+  }
+
+  /* Tier note: guidance that fills the panel beside a short (1–2 card) selection. */
+  .at-tier-note {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    block-size: 100%;
+    padding: 4px 28px 8px;
+    border-inline-start: 1px solid rgb(35 61 49 / 0.12);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: #4d544f;
+  }
+
+  .at-tier-note p {
+    margin: 0;
+  }
+
+  .at-tier-note .at-tier-note__eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #233d31;
+  }
+
+  .at-tier-note .at-tier-note__title {
+    max-inline-size: 18ch;
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+    font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.125rem);
+    line-height: 1.1;
+    color: #233d31;
+  }
+
+  .at-tier-note > p:not([class]) {
+    max-inline-size: 46ch;
+  }
+
+  .at-tier-note__link {
+    align-self: flex-start;
+    margin-block-start: 6px;
+    color: #233d31;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .section:has(.at-tier-title) .group-block-content:has(> .product-card) > :has(> .at-tier-note) {
+    flex: 1 1 0;
+    align-self: stretch;
+  }
+
+  @media screen and (max-width: 749px) {
+    .section:has(.at-tier-title) .group-block-content:has(> .product-card) > :has(> .at-tier-note) {
+      flex: 0 0 78%;
+      scroll-snap-align: start;
+    }
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 1099px) {
+    .section:has(.at-tier-title) .group-block-content:has(> .product-card) > :has(> .at-tier-note) {
+      flex: 0 0 min(48%, 380px);
+      scroll-snap-align: start;
+    }
+  }
+
   .at-tier-next:hover {
     background: rgb(35 61 49 / 0.12);
   }
@@ -285,6 +392,102 @@
     display: inline-flex;
     margin-inline-start: var(--gap-lg);
     transform: rotate(90deg);
+  }
+
+  /* Pre-quote checklist: compact numbered row above the full grid. */
+  .at-checklist {
+    display: grid;
+    gap: 24px;
+  }
+
+  .at-checklist__eyebrow {
+    margin: 0 0 6px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #233d31;
+  }
+
+  .at-checklist__title {
+    margin: 0;
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+    font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.75rem);
+    font-weight: 400;
+    line-height: 1.08;
+    color: #233d31;
+    scroll-margin-block-start: var(--padding-sm);
+  }
+
+  .at-checklist__items {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: at-checklist;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 12px 32px -18px rgb(35 61 49 / 0.35);
+  }
+
+  .at-checklist__items li {
+    counter-increment: at-checklist;
+    padding: 22px 24px 24px;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: #4d544f;
+  }
+
+  .at-checklist__items li + li {
+    border-inline-start: 1px solid rgb(35 61 49 / 0.12);
+  }
+
+  .at-checklist__items strong {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-block-end: 6px;
+    font-size: 1rem;
+    color: #233d31;
+  }
+
+  .at-checklist__items strong::before {
+    content: counter(at-checklist, decimal-leading-zero);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: rgb(35 61 49 / 0.55);
+  }
+
+  .at-checklist__items p {
+    margin: 0;
+  }
+
+  @media screen and (max-width: 989px) {
+    .at-checklist__items {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .at-checklist__items li:nth-child(3) {
+      border-inline-start: 0;
+    }
+
+    .at-checklist__items li:nth-child(n + 3) {
+      border-block-start: 1px solid rgb(35 61 49 / 0.12);
+    }
+  }
+
+  @media screen and (max-width: 559px) {
+    .at-checklist__items {
+      grid-template-columns: 1fr;
+    }
+
+    .at-checklist__items li + li {
+      border-inline-start: 0;
+      border-block-start: 1px solid rgb(35 61 49 / 0.12);
+    }
   }
 
   /* Hero top picks: compact product cards rendered with custom-liquid thumb + name. */
