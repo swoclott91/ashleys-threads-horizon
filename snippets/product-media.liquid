@@ -90,6 +90,10 @@
   {% unless preview_image_only %}
     {%- case media.media_type -%}
       {% when 'model' %}
+        {% liquid
+          assign usdz_source = media.sources | where: 'format', 'usdz' | first
+          assign ar_label = 'actions.view_in_your_space' | t
+        %}
         <product-model
           data-media-id="{{ media.id }}"
         >
@@ -134,6 +138,17 @@
             {{ media | model_viewer_tag }}
           </template>
         </product-model>
+        {% if usdz_source.url != blank %}
+          <a
+            class="button button-secondary button-quick-look"
+            href="{{ usdz_source.url | escape }}"
+            rel="ar"
+            aria-label="{{ ar_label | escape }}"
+            hidden
+          >
+            {{ media.preview_image | image_url: width: 64 | image_tag: alt: '', loading: 'lazy' }}
+          </a>
+        {% endif %}
         <button
           class="button button-secondary button-shopify-xr"
           type="button"
@@ -152,7 +167,7 @@
           >
             {% render 'icon', icon: '3d-model' %}
           </svg>
-          {{ 'actions.view_in_your_space' | t }}
+          {{ ar_label }}
         </button>
 
         {%- if first_3d_model -%}

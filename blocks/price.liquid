@@ -54,7 +54,8 @@
   {% render 'price',
     show_unit_price: true,
     product_resource: product_resource,
-    show_sale_price_first: block_settings.show_sale_price_first
+    show_sale_price_first: block_settings.show_sale_price_first,
+    show_minimum_price: block_settings.show_minimum_price
   %}
 
   {% if block_settings.show_tax_info %}
@@ -108,6 +109,12 @@
       "id": "show_sale_price_first",
       "label": "t:settings.show_sale_price_first",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_minimum_price",
+      "label": "Show starting price on cards",
+      "default": false
     },
     {
       "type": "checkbox",
