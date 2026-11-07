@@ -4175,32 +4175,19 @@
         "content_direction": "column",
         "horizontal_alignment_flex_direction_column": "flex-start",
         "gap": 12,
-        "padding-block-start": 36,
-        "padding-block-end": 36,
-        "background_color": "#eaf0eb"
+        "padding-block-start": 48,
+        "padding-block-end": 48,
+        "background_color": "#f5f1eb"
       },
       "blocks": {
-        "heading": {
-          "type": "text",
-          "settings": {
-            "text": "<h2>Before you quote the finished order</h2>",
-            "type_preset": "h3",
-            "alignment": "left",
-            "max_width": "normal"
-          }
-        },
         "checklist": {
-          "type": "text",
+          "type": "custom-liquid",
           "settings": {
-            "text": "<ul><li><strong>Size list</strong> Count each garment by style, color, and size. Include youth, women’s, tall, and extended sizes where needed.</li><li><strong>Color</strong> Check the approved shade and available quantities across the exact styles and sizes. Agree on a backup color if needed.</li><li><strong>Production</strong> Include blank cost, shipping, decoration, personalization, sorting, and packing in your estimate.</li><li><strong>Handoff</strong> Work back from the finished-garment deadline to allow time for blank delivery, approvals, and production. Set any preorder close date with those steps in mind.</li></ul>",
-            "type_preset": "rte",
-            "alignment": "left",
-            "max_width": "normal"
+            "custom_liquid": "<div class=\"at-checklist\"><div class=\"at-checklist__intro\"><p class=\"at-checklist__eyebrow\">For your quote</p><h2 id=\"quote-checklist\" class=\"at-checklist__title\">Before you quote the finished order</h2></div><ol class=\"at-checklist__items\"><li><strong>Size list</strong><p>Count each garment by style, color, and size. Include youth, women&rsquo;s, tall, and extended sizes where needed.</p></li><li><strong>Color</strong><p>Check the approved shade and available quantities across the exact styles and sizes. Agree on a backup color if needed.</p></li><li><strong>Production</strong><p>Include blank cost, shipping, decoration, personalization, sorting, and packing in your estimate.</p></li><li><strong>Handoff</strong><p>Work back from the finished-garment deadline to allow time for blank delivery, approvals, and production. Set any preorder close date with those steps in mind.</p></li></ol></div>"
           }
         }
       },
       "block_order": [
-        "heading",
         "checklist"
       ]
     },
