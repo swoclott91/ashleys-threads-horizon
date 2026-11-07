@@ -36,6 +36,7 @@
 -%}
 
 {%- if media.media_type == 'video' and mp4_source != blank -%}
+  <!-- at-card-video debug: {% for s in mp4_sources %}{{ s.height }}/{{ s.height | plus: 0 }}/{% if s.height >= 480 %}y{% else %}n{% endif %} {% endfor %} picked {{ mp4_source.height }} -->
   <at-card-video class="at-card-video {{ class }}">
     <video
       class="at-card-video__video"
