@@ -3660,7 +3660,7 @@
                     "gallery": {
                       "type": "custom-liquid",
                       "settings": {
-                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '1717_bluejean_model_front.jpg', description: 'Front view of the Comfort Colors 1717 in washed Blue Jean.', badge_label: \"Ashley’s Choice\" %}"
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '1717_bluejean_model_front.jpg', description: 'Front view of the Comfort Colors 1717 in washed Blue Jean.', badge_label: \"Ashley’s Choice\", play_video: true %}"
                       },
                       "blocks": {}
                     },
