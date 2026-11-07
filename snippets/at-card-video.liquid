@@ -14,29 +14,14 @@
 
 {%- liquid
   assign poster_image = poster | default: media.preview_image
-  assign mp4_sources = media.sources | where: 'format', 'mp4'
-
-  # Cards are small: use the smallest MP4 that is at least 480px tall, else the largest available.
-  # (Shopify lists sources in no fixed order, so pick by comparing heights.)
-  assign mp4_source = nil
-  assign largest_source = nil
-  for source in mp4_sources
-    if largest_source == nil or source.height > largest_source.height
-      assign largest_source = source
-    endif
-    if source.height >= 480
-      if mp4_source == nil or source.height < mp4_source.height
-        assign mp4_source = source
-      endif
-    endif
-  endfor
-  if mp4_source == nil
-    assign mp4_source = largest_source
-  endif
+  # Liquid exposes the full-size MP4 plus Shopify's adaptive HLS stream. at-card-video.js plays the
+  # HLS stream where the browser supports it natively (iPhone, iPad, Safari), so phones get a size
+  # that suits the screen and connection; other browsers get the MP4.
+  assign mp4_source = media.sources | where: 'format', 'mp4' | first
+  assign hls_source = media.sources | where: 'format', 'm3u8' | first
 -%}
 
-{%- if media.media_type == 'video' and mp4_source != blank -%}
-  <!-- at-card-video debug: {% for s in mp4_sources %}{{ s.height }}/{{ s.height | plus: 0 }}/{% if s.height >= 480 %}y{% else %}n{% endif %} {% endfor %} picked {{ mp4_source.height }} -->
+{%- if media.media_type == 'video' and mp4_source != blank or media.media_type == 'video' and hls_source != blank -%}
   <at-card-video class="at-card-video {{ class }}">
     <video
       class="at-card-video__video"
@@ -45,12 +30,13 @@
       playsinline
       disablepictureinpicture
       preload="none"
+      {% if mp4_source != blank %}data-src-mp4="{{ mp4_source.url }}"{% endif %}
+      {% if hls_source != blank %}data-src-hls="{{ hls_source.url }}"{% endif %}
       aria-label="{{ alt | default: media.alt | escape }}"
       {% if poster_image != blank %}
         poster="{{ poster_image | image_url: width: 720 }}"
       {% endif %}
     >
-      <source src="{{ mp4_source.url }}" type="{{ mp4_source.mime_type }}">
     </video>
   </at-card-video>
   <script src="{{ 'at-card-video.js' | asset_url }}" type="module" fetchpriority="low"></script>
