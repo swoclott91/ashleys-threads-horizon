@@ -129,6 +129,20 @@
     text-decoration: none;
   }
 
+  @media screen and (min-width: 750px) and (max-width: 1099px) {
+    .section:has(.at-tier-title) .group-block-content:has(> .product-card) {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .section:has(.at-tier-title) .product-card {
+      flex: 0 0 min(36%, 300px);
+      scroll-snap-align: start;
+    }
+  }
+
   @media screen and (max-width: 749px) {
     .section:has(.at-tier-title) .group-block-content:has(> .product-card) {
       flex-wrap: nowrap;
