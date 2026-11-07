@@ -1,0 +1,60 @@
+{%- doc -%}
+  Renders a product video as a muted, looping, inline clip for product cards.
+  Playback is handled by at-card-video.js: the clip only loads and plays while it is on screen,
+  and stays on its poster when the visitor prefers reduced motion or has data saver on.
+
+  @param {object} media - A product media item whose media_type is 'video'.
+  @param {object} [poster] - Image to show before playback; defaults to the video's own preview image.
+  @param {string} [alt] - Accessible description of the clip.
+  @param {string} [class] - Extra class for the wrapper.
+
+  @example
+  {% render 'at-card-video', media: product.featured_media, poster: image, alt: product.title %}
+{%- enddoc -%}
+
+{%- liquid
+  assign poster_image = poster | default: media.preview_image
+  # Liquid exposes the full-size MP4 plus Shopify's adaptive HLS stream. at-card-video.js plays the
+  # HLS stream where the browser supports it natively (iPhone, iPad, Safari), so phones get a size
+  # that suits the screen and connection; other browsers get the MP4.
+  assign mp4_source = media.sources | where: 'format', 'mp4' | first
+  assign hls_source = media.sources | where: 'format', 'm3u8' | first
+-%}
+
+{%- if media.media_type == 'video' and mp4_source != blank or media.media_type == 'video' and hls_source != blank -%}
+  <at-card-video class="at-card-video {{ class }}">
+    <video
+      class="at-card-video__video"
+      muted
+      loop
+      playsinline
+      disablepictureinpicture
+      preload="none"
+      {% if mp4_source != blank %}data-src-mp4="{{ mp4_source.url }}"{% endif %}
+      {% if hls_source != blank %}data-src-hls="{{ hls_source.url }}"{% endif %}
+      aria-label="{{ alt | default: media.alt | escape }}"
+      {% if poster_image != blank %}
+        poster="{{ poster_image | image_url: width: 720 }}"
+      {% endif %}
+    >
+    </video>
+  </at-card-video>
+  <script src="{{ 'at-card-video.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{%- endif -%}
+
+{% stylesheet %}
+  .at-card-video {
+    display: block;
+    position: relative;
+    inline-size: 100%;
+  }
+
+  .at-card-video__video {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    aspect-ratio: var(--at-card-video-ratio, 4 / 5);
+    object-fit: cover;
+    pointer-events: none;
+  }
+{% endstylesheet %}

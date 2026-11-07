@@ -5,6 +5,7 @@
   @param {string} image_key - Alt text identifying the selected catalog image.
   @param {string} description - Accessible description of the selected photo.
   @param {string} [badge_label] - Featured badge shown over the photo, such as "Ashley’s Choice".
+  @param {boolean} [play_video] - When the product's first media is a video, play it as a muted loop (the selected photo becomes its poster).
 {%- enddoc -%}
 
 {%- liquid
@@ -18,11 +19,15 @@
 
 {% if image != blank %}
   <div class="at-guide-product-photo">
-    {{
-      image
-      | image_url: width: 720
-      | image_tag: widths: '180, 240, 360, 480, 720', sizes: 'auto, (max-width: 749px) 46vw, 24vw', loading: 'lazy', alt: alt
-    }}
+    {%- if play_video and product.featured_media.media_type == 'video' -%}
+      {% render 'at-card-video', media: product.featured_media, poster: image, alt: alt %}
+    {%- else -%}
+      {{
+        image
+        | image_url: width: 720
+        | image_tag: widths: '180, 240, 360, 480, 720', sizes: 'auto, (max-width: 749px) 46vw, 24vw', loading: 'lazy', alt: alt
+      }}
+    {%- endif -%}
     {% render 'product-card-badge', product: product, featured_label: badge_label %}
   </div>
   {% render 'product-badges-styles' %}
@@ -38,5 +43,9 @@
     inline-size: 100%;
     aspect-ratio: 4 / 5;
     object-fit: cover;
+  }
+
+  .at-guide-product-photo .at-card-video {
+    --at-card-video-ratio: 4 / 5;
   }
 {% endstylesheet %}
