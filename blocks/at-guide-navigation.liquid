@@ -161,6 +161,14 @@
     aspect-ratio: 1;
   }
 
+  .section:has(.at-tier-title) .at-card-video {
+    --at-card-video-ratio: 1;
+  }
+
+  .section:has(.at-tier-title) .at-card-video__video {
+    mix-blend-mode: multiply;
+  }
+
   .section:has(.at-tier-title) .compare-at-price {
     font-family: var(--font-body--family);
     font-size: 0.6em;

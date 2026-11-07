@@ -15,7 +15,6 @@
 {%- liquid
   assign poster_image = poster | default: media.preview_image
   assign mp4_sources = media.sources | where: 'format', 'mp4' | sort: 'height'
-  assign hls_source = media.sources | where: 'format', 'm3u8' | first
 
   # Cards are small: use the smallest MP4 that is at least 540px tall, else the largest available.
   assign mp4_source = mp4_sources | last
@@ -41,9 +40,6 @@
         poster="{{ poster_image | image_url: width: 720 }}"
       {% endif %}
     >
-      {%- if hls_source != blank -%}
-        <source src="{{ hls_source.url }}" type="{{ hls_source.mime_type }}">
-      {%- endif -%}
       <source src="{{ mp4_source.url }}" type="{{ mp4_source.mime_type }}">
     </video>
   </at-card-video>
