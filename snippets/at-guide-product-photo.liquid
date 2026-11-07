@@ -4,6 +4,7 @@
   @param {product} product - Product shown on the card.
   @param {string} image_key - Alt text identifying the selected catalog image.
   @param {string} description - Accessible description of the selected photo.
+  @param {string} [badge_label] - Featured badge shown over the photo, such as "Ashley’s Choice".
 {%- enddoc -%}
 
 {%- liquid
@@ -22,7 +23,7 @@
       | image_url: width: 720
       | image_tag: widths: '180, 240, 360, 480, 720', sizes: 'auto, (max-width: 749px) 46vw, 24vw', loading: 'lazy', alt: alt
     }}
-    {% render 'product-card-badge', product: product %}
+    {% render 'product-card-badge', product: product, featured_label: badge_label %}
   </div>
   {% render 'product-badges-styles' %}
 {% endif %}

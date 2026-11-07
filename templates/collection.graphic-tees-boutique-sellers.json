@@ -1602,7 +1602,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "featured_badge_label": "Ashley’s Choice"
                       },
                       "blocks": {}
                     },
@@ -1852,7 +1853,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "featured_badge_label": "Ashley’s Choice"
                       },
                       "blocks": {}
                     },
@@ -2819,7 +2821,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "featured_badge_label": "Ashley’s Choice"
                       },
                       "blocks": {}
                     },
@@ -3883,7 +3886,7 @@
                     "gallery": {
                       "type": "custom-liquid",
                       "settings": {
-                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '1717_bluejean_model_front.jpg', description: 'Front view of the Comfort Colors 1717 in washed Blue Jean.' %}"
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '1717_bluejean_model_front.jpg', description: 'Front view of the Comfort Colors 1717 in washed Blue Jean.', badge_label: \"Ashley’s Choice\" %}"
                       },
                       "blocks": {}
                     },
@@ -4599,7 +4602,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "featured_badge_label": "Ashley’s Choice"
                       },
                       "blocks": {}
                     },

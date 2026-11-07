@@ -1,7 +1,7 @@
 {% assign product = closest.product %}
 
 {%- capture product_badge -%}
-  {%- render 'product-card-badge', product: product -%}
+  {%- render 'product-card-badge', product: product, featured_label: block.settings.featured_badge_label -%}
 {%- endcapture -%}
 
 {% capture children %}
@@ -35,6 +35,12 @@
     {
       "type": "paragraph",
       "content": "t:content.resource_reference_product_media"
+    },
+    {
+      "type": "text",
+      "id": "featured_badge_label",
+      "label": "Featured badge",
+      "info": "Shown over the media in place of the Sale badge, for example Ashley’s Choice. Sold out still takes priority."
     },
     {
       "type": "select",
