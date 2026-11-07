@@ -25,7 +25,7 @@ class AtCardVideo extends HTMLElement {
     if (!this.video || saveData) return;
 
     this.video.muted = true;
-    this.onMotionChange = () => (reducedMotion.matches ? this.pause() : this.syncWithViewport());
+    this.onMotionChange = () => (reducedMotion.matches || document.hidden ? this.pause() : this.syncWithViewport());
     reducedMotion.addEventListener('change', this.onMotionChange);
     document.addEventListener('visibilitychange', this.onMotionChange);
 

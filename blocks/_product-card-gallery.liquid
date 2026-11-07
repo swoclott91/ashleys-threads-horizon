@@ -13,7 +13,36 @@
   {% endunless %}
 {% endcapture %}
 
-{% render 'card-gallery', children: children, product_badge: product_badge %}
+{%- liquid
+  assign play_video = false
+  if block.settings.play_first_video and product.featured_media.media_type == 'video'
+    assign play_video = true
+    case block.settings.image_ratio
+      when 'square'
+        assign video_ratio = '1'
+      when 'landscape'
+        assign video_ratio = '16 / 9'
+      when 'portrait'
+        assign video_ratio = '4 / 5'
+      else
+        assign video_ratio = product.featured_media.aspect_ratio | default: '0.8'
+    endcase
+  endif
+-%}
+
+{%- if play_video -%}
+  {% # Muted looping clip in place of the image gallery; the card's own link overlay keeps it clickable. %}
+  <div
+    class="card-gallery at-card-gallery--video spacing-style border-style{% if product_badge != blank %} card-gallery--badge-{{ settings.badge_position }}{% endif %}"
+    style="--at-card-video-ratio: {{ video_ratio }}; {% render 'spacing-style', settings: block.settings %} {% render 'border-override', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    {% render 'at-card-video', media: product.featured_media, alt: product.title %}
+    {{ children }}
+  </div>
+{%- else -%}
+  {% render 'card-gallery', children: children, product_badge: product_badge %}
+{%- endif -%}
 
 {% # Title for the zoomed out grid view %}
 <h3 class="product-grid-view-zoom-out--details">
@@ -35,6 +64,13 @@
     {
       "type": "paragraph",
       "content": "t:content.resource_reference_product_media"
+    },
+    {
+      "type": "checkbox",
+      "id": "play_first_video",
+      "label": "Play first video",
+      "info": "When the product's first media is a video, show it as a muted loop that plays while on screen. Use on a few hand-picked cards, not whole grids.",
+      "default": false
     },
     {
       "type": "text",
