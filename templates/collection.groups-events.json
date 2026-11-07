@@ -1503,7 +1503,7 @@
                     "product": "gildan-5000-heavy-cotton-100-cotton-t-shirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -1637,7 +1637,7 @@
                     "product": "gildan-3000-light-cotton-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -1770,7 +1770,7 @@
                     "product": "port-company-pc54-core-cotton-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -1903,7 +1903,7 @@
                     "product": "gildan-8000-dryblend-50-cotton-50-poly-t-shirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -2502,7 +2502,7 @@
                     "product": "gildan-64000-softstyle-t-shirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -2629,10 +2629,18 @@
                     "gallery",
                     "meta"
                   ]
+                },
+                "note": {
+                  "type": "custom-liquid",
+                  "settings": {
+                    "custom_liquid": "<aside class=\"at-tier-note\"><p class=\"at-tier-note__eyebrow\">Optional layer</p><p class=\"at-tier-note__title\">Pair the tee with a crewneck or hoodie</p><p>Compare a crewneck or hoodie, then check which colors and sizes work across your tee and layer.</p><a class=\"at-tier-note__link\" href=\"#hoodies-and-crews\">Compare hoodies &amp; crews <span aria-hidden=\"true\">&rarr;</span></a></aside>"
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": [
-                "gildan_64000"
+                "gildan_64000",
+                "note"
               ]
             }
           },
@@ -2685,31 +2693,6 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "comparisons": {
-              "type": "text",
-              "settings": {
-                "text": "<p><strong>Optional layer.</strong> <a href=\"#hoodies-and-crews\"><strong>Compare a crewneck or hoodie &rarr;</strong></a> Then check which colors and sizes work across your tee and layer.</p>",
-                "width": "fit-content",
-                "max_width": "none",
-                "alignment": "left",
-                "type_preset": "custom",
-                "font": "var(--font-body--family)",
-                "font_size": "0.875rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "#4d544f",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
             "next": {
               "type": "custom-liquid",
               "settings": {
@@ -2719,7 +2702,6 @@
             }
           },
           "block_order": [
-            "comparisons",
             "next"
           ]
         }
@@ -3099,7 +3081,7 @@
                     "product": "port-company-pc380-performance-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3233,7 +3215,7 @@
                     "product": "sport-tek-st350-posicharge-competitor-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3359,11 +3341,19 @@
                     "gallery",
                     "meta"
                   ]
+                },
+                "note": {
+                  "type": "custom-liquid",
+                  "settings": {
+                    "custom_liquid": "<aside class=\"at-tier-note\"><p class=\"at-tier-note__eyebrow\">Price the full roster</p><p class=\"at-tier-note__title\">Adding names or numbers?</p><p>Check your transfer or ink system on the exact polyester garment and color before committing to production.</p><p>Compare the price of the full roster across both families. The women&rsquo;s, youth, and extended sizes can change the total.</p></aside>"
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": [
                 "port_pc380",
-                "sport_tek_st350"
+                "sport_tek_st350",
+                "note"
               ]
             }
           },
@@ -3416,31 +3406,6 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "comparisons": {
-              "type": "text",
-              "settings": {
-                "text": "<p>Compare the price of the full roster across both families. The women&rsquo;s, youth, and extended sizes can change the total.</p><p><strong>Adding names or numbers?</strong> Check your transfer or ink system on the exact polyester garment and color before committing to production.</p>",
-                "width": "fit-content",
-                "max_width": "none",
-                "alignment": "left",
-                "type_preset": "custom",
-                "font": "var(--font-body--family)",
-                "font_size": "0.875rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "#4d544f",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
             "next": {
               "type": "custom-liquid",
               "settings": {
@@ -3450,7 +3415,6 @@
             }
           },
           "block_order": [
-            "comparisons",
             "next"
           ]
         }
@@ -3830,7 +3794,7 @@
                     "product": "gildan-18000-heavy-blend-crewneck-sweatshirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3964,7 +3928,7 @@
                     "product": "gildan-18500-heavy-blend-hooded-sweatshirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -4090,11 +4054,19 @@
                     "gallery",
                     "meta"
                   ]
+                },
+                "note": {
+                  "type": "custom-liquid",
+                  "settings": {
+                    "custom_liquid": "<aside class=\"at-tier-note\"><p class=\"at-tier-note__eyebrow\">Pairing a layer with a tee?</p><p class=\"at-tier-note__title\">Match colors and sizes across pieces</p><p>Check that the colors and size list work across both styles before you quote the set.</p><a class=\"at-tier-note__link\" href=\"#spiritwear\">Compare a softer tee <span aria-hidden=\"true\">&rarr;</span></a></aside>"
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": [
                 "gildan_18000",
-                "gildan_18500"
+                "gildan_18500",
+                "note"
               ]
             }
           },
@@ -4147,31 +4119,6 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "comparisons": {
-              "type": "text",
-              "settings": {
-                "text": "<p><strong>Pairing a layer with a tee?</strong> Check that the colors and size list work across both styles.</p>",
-                "width": "fit-content",
-                "max_width": "none",
-                "alignment": "left",
-                "type_preset": "custom",
-                "font": "var(--font-body--family)",
-                "font_size": "0.875rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "#4d544f",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
             "next": {
               "type": "custom-liquid",
               "settings": {
@@ -4181,7 +4128,6 @@
             }
           },
           "block_order": [
-            "comparisons",
             "next"
           ]
         }

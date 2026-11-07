@@ -297,6 +297,75 @@
     white-space: nowrap;
   }
 
+  .at-tier-next:only-child {
+    margin-inline-start: auto;
+  }
+
+  /* Tier note: guidance that fills the panel beside a short (1–2 card) selection. */
+  .at-tier-note {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    block-size: 100%;
+    padding: 4px 28px 8px;
+    border-inline-start: 1px solid rgb(35 61 49 / 0.12);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: #4d544f;
+  }
+
+  .at-tier-note p {
+    margin: 0;
+  }
+
+  .at-tier-note .at-tier-note__eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #233d31;
+  }
+
+  .at-tier-note .at-tier-note__title {
+    max-inline-size: 18ch;
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+    font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.125rem);
+    line-height: 1.1;
+    color: #233d31;
+  }
+
+  .at-tier-note > p:not([class]) {
+    max-inline-size: 46ch;
+  }
+
+  .at-tier-note__link {
+    align-self: flex-start;
+    margin-block-start: 6px;
+    color: #233d31;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .section:has(.at-tier-title) .group-block-content:has(> .product-card) > :has(> .at-tier-note) {
+    flex: 1 1 0;
+    align-self: stretch;
+  }
+
+  @media screen and (max-width: 749px) {
+    .section:has(.at-tier-title) .group-block-content:has(> .product-card) > :has(> .at-tier-note) {
+      flex: 0 0 78%;
+      scroll-snap-align: start;
+    }
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 1099px) {
+    .section:has(.at-tier-title) .group-block-content:has(> .product-card) > :has(> .at-tier-note) {
+      flex: 0 0 min(48%, 380px);
+      scroll-snap-align: start;
+    }
+  }
+
   .at-tier-next:hover {
     background: rgb(35 61 49 / 0.12);
   }
