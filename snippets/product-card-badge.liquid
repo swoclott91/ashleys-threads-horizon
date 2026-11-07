@@ -2,6 +2,7 @@
   Resolves and renders the highest-priority badge for a product card or media gallery.
 
   @param {object} product - Product resource used to determine badge eligibility.
+  @param {string} [featured_label] - Editor-chosen badge, such as "Ashley’s Choice". Shown ahead of the sale and tag badges; sold out still wins.
 {%- enddoc -%}
 
 {%- liquid
@@ -9,9 +10,14 @@
   assign badge_class = 'color-custom-badge-sale'
 
   if product != blank
+    assign featured_label = featured_label | strip
+
     if product.available == false
       assign badge_label = 'content.product_badge_sold_out' | t
       assign badge_class = 'color-custom-badge-sold-out'
+    elsif featured_label != blank
+      assign badge_label = featured_label
+      assign badge_class = 'product-badges__badge--featured'
     elsif product.compare_at_price > product.price
       assign badge_label = 'content.product_badge_sale' | t
       assign badge_class = 'color-custom-badge-sale'
