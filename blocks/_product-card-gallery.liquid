@@ -41,7 +41,13 @@
     {{ children }}
   </div>
 {%- else -%}
-  {% render 'card-gallery', children: children, product_badge: product_badge %}
+  {%- liquid
+    assign lead_media = null
+    if block.settings.show_variant_image
+      assign lead_media = product.selected_or_first_available_variant.featured_media
+    endif
+  -%}
+  {% render 'card-gallery', children: children, product_badge: product_badge, featured_media_override: lead_media %}
 {%- endif -%}
 
 {% # Title for the zoomed out grid view %}
@@ -70,6 +76,13 @@
       "id": "play_first_video",
       "label": "Play first video",
       "info": "When the product's first media is a video, show it as a muted loop that plays while on screen. Use on a few hand-picked cards, not whole grids.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_variant_image",
+      "label": "Show selected variant's image",
+      "info": "Lead with the image of the variant whose price the card shows, instead of the product's main image.",
       "default": false
     },
     {

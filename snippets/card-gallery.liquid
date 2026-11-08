@@ -5,6 +5,7 @@
 
   @param [children] - Additional content rendered below the card gallery
   @param {string} [product_badge] - Rendered badge used to reserve space in the card gallery
+  @param {object} [featured_media_override] - Media to lead with instead of the product's featured media (e.g. the selected variant's image, so it matches the displayed price)
   @param [section] - The section object the snippet is rendered in
   @param [block] - The block object the snippet is rendered in
 {%- enddoc -%}
@@ -91,7 +92,7 @@
       aria-label="{{- product.title -}}"
     >
       {% liquid
-        assign featured_media = product.featured_media
+        assign featured_media = featured_media_override | default: product.featured_media
 
         assign featured_media_loading = 'lazy'
         assign featured_media_sizes = 'auto, ' | append: image_sizes
@@ -130,8 +131,8 @@
           if settings.product_card_carousel
             assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src'
             assign generic_media_size = product.media.size | minus: variant_images.size
-            assign other_media = product.media | reject: 'src', product.featured_media
-            assign media_list_to_show = product.featured_media | concat: other_media
+            assign other_media = product.media | reject: 'src', featured_media
+            assign media_list_to_show = featured_media | concat: other_media
 
             if product.media.size > 2 and generic_media_size > 0
               assign show_arrows = true
@@ -144,7 +145,7 @@
             else
               assign other_media = product.media | slice: 0, 0
             endif
-            assign media_list_to_show = product.featured_media | concat: other_media
+            assign media_list_to_show = featured_media | concat: other_media
           endif
 
           # Don't overfetch media if we don't need to
