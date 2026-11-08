@@ -1748,7 +1748,7 @@
             "comparisons": {
               "type": "text",
               "settings": {
-                "text": "<p><strong>Prefer a heavier tee?</strong> Compare the 7.5 oz <a href=\"/products/shaka-wear-shmhss-unisex-max-heavyweight-t-shirt\">Shaka Wear SHMHSS</a>, with a relaxed fit and substantial collar. Check the neck label if you plan to add your own branding.</p><p><strong>Add a washed layer</strong> with the <a href=\"/products/comfort-colors-1566-ring-spun-crewneck-sweatshirt\">Comfort Colors 1566 crewneck</a>. Compare the exact shades if you want to offer the tee and crew together.</p>",
+                "text": "<p>Prefer a heavier tee? The 7.5 oz Shaka Wear SHMHSS has a relaxed fit and substantial collar. Check the neck label if you plan to add your own branding. <a href=\"/products/shaka-wear-shmhss-unisex-max-heavyweight-t-shirt\"><strong>Compare Shaka Wear SHMHSS &rarr;</strong></a></p><p>Adding a washed layer? Compare the exact shades if you want to offer the tee and crew together. <a href=\"/products/comfort-colors-1566-ring-spun-crewneck-sweatshirt\"><strong>Comfort Colors 1566 crewneck &rarr;</strong></a></p>",
                 "width": "fit-content",
                 "max_width": "none",
                 "alignment": "left",

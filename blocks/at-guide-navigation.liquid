@@ -499,6 +499,19 @@
     color: #233d31;
   }
 
+  .at-checklist__note a,
+  .at-tier-note > p:not([class]) a {
+    color: #233d31;
+    text-decoration: underline;
+    text-decoration-color: rgb(35 61 49 / 0.35);
+    text-underline-offset: 0.2em;
+  }
+
+  .at-checklist__note a:hover,
+  .at-tier-note > p:not([class]) a:hover {
+    text-decoration-color: currentColor;
+  }
+
   /* Optional one-line context under a grid heading. */
   .at-grid-intro {
     max-width: 62ch;
