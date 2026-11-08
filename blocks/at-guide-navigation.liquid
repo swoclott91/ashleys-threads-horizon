@@ -237,6 +237,28 @@
     color: rgb(35 61 49 / 0.72);
   }
 
+  /* Optional wearer coverage line ("Sizes for · Adult · Youth ...") above a card's companion links. */
+  .at-tier-card__coverage {
+    margin: 0;
+    font-size: var(--font-size--xs, 0.8125rem);
+    line-height: 1.6;
+    color: #233d31;
+  }
+
+  .at-tier-card__coverage > span,
+  .at-tier-card__companions > span {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #233d31;
+  }
+
+  .at-tier-card__coverage + .at-tier-card__companions {
+    margin-block-start: 8px;
+  }
+
   /* Companion fits: youth / women's / tall links grouped under a card's description. */
   .at-tier-card__companions {
     margin: 0;
@@ -463,6 +485,27 @@
 
   .at-checklist__items p {
     margin: 0;
+  }
+
+  .at-checklist__note {
+    max-width: 62ch;
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: #4d544f;
+  }
+
+  .at-checklist__note strong {
+    color: #233d31;
+  }
+
+  /* Optional one-line context under a grid heading. */
+  .at-grid-intro {
+    max-width: 62ch;
+    margin: 8px 0 0;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: #4d544f;
   }
 
   @media screen and (max-width: 989px) {
