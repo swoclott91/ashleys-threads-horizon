@@ -654,7 +654,7 @@
                         "thumb": {
                           "type": "custom-liquid",
                           "settings": {
-                            "custom_liquid": "<div class=\"at-top-pick__thumb\">{{ closest.product.featured_image | image_url: width: 240 | image_tag: widths: '120, 180, 240', sizes: '96px', loading: 'lazy', alt: '' }}<span class=\"at-choice-seal\" title=\"Ashley’s Choice\">{{ 'at-monogram.svg' | inline_asset_content }}<span class=\"visually-hidden\">Ashley’s Choice</span></span></div>"
+                            "custom_liquid": "<div class=\"at-top-pick__thumb\">{{ closest.product.selected_or_first_available_variant.featured_image | default: closest.product.featured_image | image_url: width: 240 | image_tag: widths: '120, 180, 240', sizes: '96px', loading: 'lazy', alt: '' }}<span class=\"at-choice-seal\" title=\"Ashley’s Choice\">{{ 'at-monogram.svg' | inline_asset_content }}<span class=\"visually-hidden\">Ashley’s Choice</span></span></div>"
                           },
                           "blocks": {}
                         },
@@ -2283,7 +2283,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_variant_image": true
                       },
                       "blocks": {}
                     },
