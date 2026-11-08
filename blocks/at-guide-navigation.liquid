@@ -1,4 +1,4 @@
-{% assign icons = 'price_tag,cotton_ring_spun,ruler,shirt' | split: ',' %}
+{% assign icons = 'price_tag,cotton_ring_spun,ruler,shirt,pants,map_pin' | split: ',' %}
 
 <nav class="at-guide-navigation" aria-label="{{ block.settings.label | escape }}" {{ block.shopify_attributes }}>
   <ul class="list-unstyled at-guide-navigation__links">
@@ -632,7 +632,11 @@
     { "type": "text", "id": "label_3", "label": "Third link label" },
     { "type": "url", "id": "link_3", "label": "Third link destination" },
     { "type": "text", "id": "label_4", "label": "Fourth link label" },
-    { "type": "url", "id": "link_4", "label": "Fourth link destination" }
+    { "type": "url", "id": "link_4", "label": "Fourth link destination" },
+    { "type": "text", "id": "label_5", "label": "Fifth link label" },
+    { "type": "url", "id": "link_5", "label": "Fifth link destination" },
+    { "type": "text", "id": "label_6", "label": "Sixth link label" },
+    { "type": "url", "id": "link_6", "label": "Sixth link destination" }
   ],
   "presets": [{ "name": "Buying guide navigation" }]
 }
