@@ -151,15 +151,20 @@
       <span class="at-home__hero-sub">{{ hero_sub }}</span>
     </a>
 
+    {%- liquid
+      # Welcome code minimum from wagner.ship_code (Wagner default $40), shown as "$40+".
+      assign welcome_min_cents = ship.min_subtotal | default: '40' | times: 100 | round
+      assign welcome_min = welcome_min_cents | money_without_trailing_zeros
+    -%}
     {%- capture strip -%}
       {%- if modules contains 'shipping_code' and ship_ok -%}
         <span>
           {%- if at_preview and ship == blank and at_visitor == 'pro' -%}
             Free shipment ready this month · code in your account
           {%- elsif at_preview and ship == blank -%}
-            Your first order ships free · code saved to your account
+            Free shipping on your first order of {{ welcome_min }}+ · code saved to your account
           {%- elsif ship.kind == 'welcome' -%}
-            Your first order ships free · code <code>{{ ship.code }}</code>
+            Free shipping on your first order of {{ welcome_min }}+ · code <code>{{ ship.code }}</code>
           {%- else -%}
             Free shipment ready: <code>{{ ship.code }}</code>
           {%- endif -%}
