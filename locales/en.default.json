@@ -144,6 +144,7 @@
     },
     "bar": {
       "guest_lead": "Members pay less",
+      "guest_member_price": "Member price ",
       "member_next_rate": "Pro adds {{ rate }} Threads Cash and a free shipment every month",
       "member_next": "Pro adds Threads Cash and a free shipment every month",
       "pro_earning_rate": "Earning {{ rate }} Threads Cash",

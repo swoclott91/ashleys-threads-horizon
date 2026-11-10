@@ -9,6 +9,10 @@
   `wagner.terms_status`). No member, Pro or wholesale number is ever shown to guests.
 
   @param {string} uid - Unique id suffix (block id).
+
+  Brands without MAP: when product `wagner.map_protected` is false and the selected variant has
+  `wagner.member_price`, guests see "Member price $X · Join free" instead (assets/at-member.js keeps
+  it in step with the selected variant).
 {%- enddoc -%}
 {%- liquid
   capture at_tier
@@ -84,6 +88,20 @@
   endif
   assign at_bulk_from_money = at_bulk_from | money_without_trailing_zeros
 
+  comment
+    Brand without MAP: product `wagner.map_protected` is explicitly false. Then the bar may show the
+    selected variant's `wagner.member_price`. Missing = MAP-protected = "Members pay less", no number.
+  endcomment
+  assign at_show_member_number = false
+  assign at_member_price_text = ''
+  if at_tier == 'guest' and product.metafields.wagner.map_protected.value == false
+    assign at_show_member_number = true
+    assign at_mp = product.selected_or_first_available_variant.metafields.wagner.member_price.value
+    if at_mp != blank
+      assign at_member_price_text = at_mp | money
+    endif
+  endif
+
   assign at_join_url = settings.at_membership_page_url | default: '/pages/membership'
   assign at_wholesale_url = settings.at_wholesale_page_url | default: '/pages/wholesale'
   assign at_dialog_id = 'AtPricingModal-' | append: uid
@@ -112,7 +130,13 @@
         <span class="svg-wrapper at-mbar__icon" aria-hidden="true">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9.25"/><circle cx="12" cy="10" r="3"/><path d="M6.5 18.5c1.4-2.2 3.3-3.3 5.5-3.3s4.1 1.1 5.5 3.3"/></svg>
         </span>
-        <span class="at-mbar__lead">{{ 'at_member.bar.guest_lead' | t }}</span>
+        <span class="at-mbar__lead"{% if at_member_price_text != blank %} hidden{% endif %} data-at-member-lead>{{ 'at_member.bar.guest_lead' | t }}</span>
+        {%- if at_show_member_number -%}
+          <span class="at-mbar__lead at-mbar__lead--price"{% if at_member_price_text == blank %} hidden{% endif %} data-at-member-price-lead>
+            {{- 'at_member.bar.guest_member_price' | t -}}
+            <strong data-at-member-price>{{ at_member_price_text }}</strong>
+          </span>
+        {%- endif -%}
       </button>
       <a class="at-mbar__link" href="{{ at_join_url }}">{{ 'at_member.join_free' | t }}</a>
       {%- unless customer -%}
