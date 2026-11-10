@@ -92,8 +92,10 @@
         assign ship_ok = true
       endif
     endif
-    if at_preview and ship == blank and at_visitor != 'wholesale'
-      assign ship_ok = true
+    if at_preview and ship == blank
+      if at_visitor == 'member-new' or at_visitor == 'pro'
+        assign ship_ok = true
+      endif
     endif
   -%}
 
@@ -152,7 +154,9 @@
     {%- capture strip -%}
       {%- if modules contains 'shipping_code' and ship_ok -%}
         <span>
-          {%- if at_preview and ship == blank -%}
+          {%- if at_preview and ship == blank and at_visitor == 'pro' -%}
+            Free shipment ready this month · code in your account
+          {%- elsif at_preview and ship == blank -%}
             Your first order ships free · code saved to your account
           {%- elsif ship.kind == 'welcome' -%}
             Your first order ships free · code <code>{{ ship.code }}</code>
