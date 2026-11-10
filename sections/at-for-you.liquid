@@ -127,6 +127,11 @@
       {%- liquid
         assign would = ytd.pro_would_save | default: '0' | times: 1
         assign total = ytd.total | default: '0' | times: 1
+        if at_preview and ytd == blank
+          # Contract §5 example figures, editor preview only.
+          assign would = 140
+          assign total = 612
+        endif
         assign show_pro = false
         if at_visitor == 'member' or at_visitor == 'member-new'
           if segment != 'personal' or would > 79
@@ -141,7 +146,11 @@
           <p class="at-foryou__pro-kicker">Your last 12 months</p>
           {%- if at_visitor == 'pro' -%}
             <h2 class="at-foryou__pro-title" id="at-pro-title">This year with Pro: {{ total | times: 100 | round | money }} saved.</h2>
-            <p>{{ ytd.threads_cash | default: '0' | times: 100 | round | money }} in Threads Cash and {{ ytd.free_shipments | default: 0 }} free shipments so far.</p>
+            {%- if ytd != blank -%}
+              <p>{{ ytd.threads_cash | default: '0' | times: 100 | round | money }} in Threads Cash and {{ ytd.free_shipments | default: 0 }} free shipments so far.</p>
+            {%- else -%}
+              <p>Pro prices, 2% Threads Cash and a free shipment every month.</p>
+            {%- endif -%}
           {%- elsif would > 0 -%}
             <h2 class="at-foryou__pro-title" id="at-pro-title">Pro would have saved you {{ would | times: 100 | round | money }} on the same orders.</h2>
             <p>You've saved {{ total | times: 100 | round | money }} as a Member this year. Pro also adds 2% back and a free shipment every month.</p>

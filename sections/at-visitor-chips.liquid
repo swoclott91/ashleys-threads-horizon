@@ -31,7 +31,14 @@
         assign chips = chips | append: handle.title | append: '|' | append: handle.url | append: '|;'
       endfor
       if chips == blank
-        assign chips = 'Shop all|/collections/all|;'
+        assign defaults = 't-shirts,sweatshirts,hoodies,polos,hats' | split: ','
+        for handle in defaults
+          assign c = collections[handle]
+          if c.id != blank
+            assign chips = chips | append: c.title | append: '|' | append: c.url | append: '|;'
+          endif
+        endfor
+        assign chips = chips | append: 'Brands|/pages/brands|;'
       endif
     when 'member-new'
       if guide != blank
