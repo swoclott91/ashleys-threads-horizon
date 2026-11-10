@@ -2345,7 +2345,7 @@
                               "settings": {
                                 "placement": "below_image",
                                 "horizontal_alignment": "flex-start",
-                                "vertical_alignment": "flex-start",
+                                "vertical_alignment": "center",
                                 "collection_card_gap": 8,
                                 "background_color": "{{ settings.color_palette.color3 }}",
                                 "border": "none",
