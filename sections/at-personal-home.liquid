@@ -71,7 +71,10 @@
     if modules == blank or at_preview
       case at_visitor
         when 'member-new'
-          assign modules = 'start_with_these,shipping_code,member_deals,certificate_status,segment_picks,new_in_guide' | split: ','
+          assign modules = 'start_with_these,shipping_code,member_deals,segment_picks,new_in_guide' | split: ','
+          if segment == 'groups-events' or segment == 'business-merch'
+            assign modules = 'start_with_these,shipping_code,member_deals,certificate_status,segment_picks,new_in_guide' | split: ','
+          endif
         when 'member'
           assign modules = 'buy_again,member_deals,shipping_code,threads_cash,segment_picks,restock_alerts,pro_savings' | split: ','
         when 'pro'
@@ -124,9 +127,15 @@
           else
             assign hero_kicker = 'Welcome, member'
           endif
-          assign hero_title = 'Start with these, picked for what you make'
-          assign hero_sub = 'Member prices on every one.'
-          assign hero_url = for_you_url | append: '#start'
+          if list_start != blank
+            assign hero_title = 'Start with these, picked for what you make'
+            assign hero_sub = 'Member prices on every one.'
+            assign hero_url = for_you_url | append: '#start'
+          else
+            assign hero_title = 'Tell us what you’re making'
+            assign hero_sub = 'Two quick questions, then your picks show up here at member prices.'
+            assign hero_url = for_you_url | append: '#answers'
+          endif
         else
           assign hero_kicker = 'Welcome back'
           assign hero_title = 'This month’s Member Deals'
@@ -243,6 +252,20 @@
           </a>
       {%- endcase -%}
     {%- endfor -%}
+
+    {%- liquid
+      assign any_products = false
+      if list_start != blank or list_reorder != blank or list_make != blank or list_deals != blank
+        assign any_products = true
+      endif
+      assign fallback = section.settings.fallback_collection
+      if fallback == blank
+        assign fallback = collections['all']
+      endif
+    -%}
+    {%- unless any_products -%}
+      {% render 'at-product-row', id: 'at-popular', title: 'Popular right now', note: 'At your member prices', products: fallback.products, link_url: fallback.url %}
+    {%- endunless -%}
   </div>
   </div>
 {%- endif -%}
@@ -315,6 +338,12 @@
         { "value": "customers", "label": "Signed-in customers" }
       ],
       "default": "customers"
+    },
+    {
+      "type": "collection",
+      "id": "fallback_collection",
+      "label": "Fallback products",
+      "info": "Shown while Wagner hasn't written any For you lists for the customer. Defaults to all products."
     },
     {
       "type": "url",
