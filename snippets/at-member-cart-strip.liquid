@@ -1,0 +1,133 @@
+{%- doc -%}
+  Member pricing cart strip for signed-in tiers (rendered by `at-discount-progress`, never for guests).
+  Member and Pro: free-shipping progress + Threads Cash earned on this cart. Pro also sees this
+  month's shipping code. Wholesale: Net terms. Reads contract metafields only.
+
+  @param {string} tier - member | pro | wholesale
+  @param {object} [tier_thresholds] - shop.metafields.wagner.tier_thresholds.value
+  @param {boolean} [sample] - Theme editor "Preview tier as" is on: use placeholder values where metafields are blank.
+  @param {string} context - cart | bulk-modal
+  @param {string} uid - Unique id suffix
+  @param {number} subtotal - cart.items_subtotal_price (cents)
+  @param {string} [product_id] - Product id (product context)
+  @param {number} [product_price] - Variant price in cents (product context)
+  @param {string} [empty_track] - Empty track style
+{%- enddoc -%}
+{%- liquid
+  assign tt = tier_thresholds
+  assign tier_cfg = tt[tier]
+
+  assign fs = tier_cfg.free_shipping
+  assign rate = tier_cfg.reward_rate
+  if sample and tt == blank
+    case tier
+      when 'member'
+        assign fs = '60.00'
+        assign rate = '0.01'
+      when 'pro'
+        assign fs = '50.00'
+        assign rate = '0.02'
+    endcase
+  endif
+
+  assign fs_cents = 0
+  if fs != blank
+    assign fs_cents = fs | times: 100 | round
+  endif
+  assign rate_num = 0
+  if rate != blank
+    assign rate_num = rate | times: 1.0
+  endif
+
+  assign ship = customer.metafields.wagner.ship_code.value
+  assign today = 'now' | date: '%Y-%m-%d'
+  assign ship_valid = false
+  if ship.status == 'issued' and ship.code != blank
+    assign ship_valid = true
+    if ship.valid_from != blank and ship.valid_from > today
+      assign ship_valid = false
+    endif
+    if ship.valid_until != blank and ship.valid_until < today
+      assign ship_valid = false
+    endif
+  endif
+  assign ship_code = ship.code
+  if sample and tier == 'pro' and ship == blank
+    assign ship_valid = true
+    assign ship_code = 'PRO-NOV-SAMPLE'
+  endif
+
+  assign ship_code_safe = ship_code | escape
+
+  assign terms = customer.current_location.metafields.wagner.terms_status.value
+  assign terms_code = terms.terms | default: tt.wholesale.terms
+  if sample and terms_code == blank
+    assign terms_code = 'NET_30'
+  endif
+  assign terms_label = ''
+  assign terms_days = ''
+  if terms_code != blank
+    assign terms_label = terms_code | replace: '_', ' ' | capitalize
+    assign terms_days = terms_code | remove: 'NET_' | remove: 'net_'
+  endif
+  assign terms_status = terms.status | default: 'good'
+-%}
+{{ 'at-member.css' | asset_url | stylesheet_tag }}
+
+{%- if tier == 'wholesale' -%}
+  <div class="at-mstrip at-mstrip--wholesale" data-testid="at-member-cart-strip" data-at-tier="wholesale">
+    <p class="at-mstrip__kicker">{{ 'at_member.tiers.wholesale' | t }}</p>
+    <div class="at-mstrip__card">
+      <p class="at-mstrip__card-title">
+        {%- if terms_label != blank -%}{{ terms_label }}{%- else -%}{{ 'at_member.cart.terms_fallback' | t }}{%- endif -%}
+      </p>
+      <p class="at-mstrip__card-text">
+        {%- case terms_status -%}
+          {%- when 'pending' -%}
+            {{ 'at_member.cart.terms_pending' | t }}
+          {%- when 'overdue' or 'hold' -%}
+            {{ 'at_member.cart.terms_hold' | t }}
+          {%- else -%}
+            {%- if terms_days != blank -%}
+              {{ 'at_member.cart.terms_good' | t: days: terms_days }}
+            {%- else -%}
+              {{ 'at_member.cart.terms_good_generic' | t }}
+            {%- endif -%}
+        {%- endcase -%}
+      </p>
+    </div>
+  </div>
+{%- else -%}
+  {%- capture strip_i18n -%}
+  {"away":{{ 'at_member.cart.away_from_free_shipping' | t | json }},"unlocked":{{ 'at_member.cart.free_shipping_unlocked' | t | json }},"earns":{{ 'at_member.cart.earns_threads_cash' | t | json }}}
+  {%- endcapture -%}
+  <div class="at-mstrip at-mstrip--{{ tier }}" data-testid="at-member-cart-strip" data-at-tier="{{ tier }}">
+    {%- assign tier_key = 'at_member.tiers.' | append: tier -%}
+    <p class="at-mstrip__kicker">{{ tier_key | t }}</p>
+    <at-discount-progress-bar
+      class="at-discount-progress at-dp-empty-track--{{ empty_track | default: 'tinted' }}"
+      data-skip-subtree-update
+      data-mode="tier"
+      data-tier="{{ tier }}"
+      data-context="{{ context | escape }}"
+      data-section-uid="{{ uid | escape }}"
+      data-subtotal="{{ subtotal }}"
+      data-free-shipping="{{ fs_cents }}"
+      data-reward-rate="{{ rate_num }}"
+      data-money-format="{{ shop.money_format | escape }}"
+      data-currency="{{ shop.currency | escape }}"
+      data-product-id="{{ product_id }}"
+      data-variant-price="{{ product_price | default: 0 }}"
+      data-i18n="{{ strip_i18n | strip_newlines | escape }}"
+      data-testid="at-member-progress"
+    ></at-discount-progress-bar>
+    {%- if tier == 'pro' and ship_valid -%}
+      <div class="at-mstrip__card">
+        <p class="at-mstrip__card-title">{{ 'at_member.cart.free_shipment_title' | t }}</p>
+        <p class="at-mstrip__card-text">
+          {{ 'at_member.cart.free_shipment_text_html' | t: code: ship_code_safe }}
+        </p>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

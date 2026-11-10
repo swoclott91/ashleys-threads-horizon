@@ -1,0 +1,336 @@
+/* AT member pricing: price bar, pricing modal, tier label, header ring + menu, cart strip. */
+:root {
+  --at-tier-member: #1d4ed8;
+  --at-tier-pro: #b45309;
+  --at-tier-wholesale: #334155;
+  --at-tier-saved: #15803d;
+  --at-mbar-bg: #f7f7f5;
+  --at-mbar-border: #d6d6d2;
+  --at-muted: #52524e;
+}
+
+/* ---------- Tier price label (inside snippets/price.liquid) ---------- */
+.at-price-tier-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin-inline-start: 0.5rem;
+  white-space: nowrap;
+}
+.at-price-tier-label--member { color: var(--at-tier-member); }
+.at-price-tier-label--pro { color: var(--at-tier-pro); }
+.at-price-tier-label--wholesale { color: var(--at-tier-wholesale); }
+
+/* ---------- One-line bar under the price ---------- */
+.at-mbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  margin-block-start: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--at-mbar-border);
+  background: var(--at-mbar-bg);
+  color: #2b2b2b;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+.at-mbar__open {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 2.75rem;
+  margin: -0.625rem 0;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.at-mbar__open--full {
+  flex: 1 1 auto;
+}
+.at-mbar__icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.at-mbar__lead {
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.at-mbar__text {
+  flex: 1 1 auto;
+}
+.at-mbar__cta,
+.at-mbar__link {
+  color: #2b4a3f;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  min-height: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+}
+.at-mbar--guest .at-mbar__link {
+  text-transform: uppercase;
+}
+.at-mbar__dot {
+  color: #6b6b66;
+}
+.at-mbar--member { border-color: color-mix(in srgb, var(--at-tier-member) 30%, var(--at-mbar-border)); }
+.at-mbar--pro { border-color: color-mix(in srgb, var(--at-tier-pro) 30%, var(--at-mbar-border)); }
+.at-mbar--wholesale { border-color: color-mix(in srgb, var(--at-tier-wholesale) 30%, var(--at-mbar-border)); }
+
+.at-chip {
+  display: inline-block;
+  padding: 0.1875rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  color: #fff;
+}
+.at-chip--pro { background: var(--at-tier-pro); }
+
+/* The bar and modal render inside <product-price>, whose heading preset (e.g. h3) and the PDP
+   price styles size every direct child. Pin the bar/modal typography so it reads as body text. */
+.at-mbar,
+.at-pmodal {
+  font-family: var(--font-body--family) !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+.at-pmodal { font-size: 0.9375rem !important; }
+/* Theme dialog resets zero the vertical margin; keep the modal centred. */
+.at-pmodal { margin: auto !important; }
+.at-mbar__cta { white-space: nowrap; }
+.at-pmodal .at-pmodal__title { font-family: var(--font-heading--family); font-size: 1.5rem; font-weight: 700; line-height: 1.2; }
+
+/* ---------- Pricing modal ---------- */
+.at-pmodal {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  height: fit-content;
+  width: min(35rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  padding: 0;
+  border: none;
+  background: #ededeb;
+  color: #2b2b2b;
+  overflow: auto;
+}
+.at-pmodal::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+.at-pmodal__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+  padding: 1.5rem 1.5rem 1.75rem;
+}
+.at-pmodal__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+.at-pmodal__title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+.at-pmodal__lede {
+  margin: 0.25rem 0 0;
+  color: var(--at-muted);
+  font-size: 0.9375rem;
+}
+.at-pmodal__close {
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: none;
+  position: static;
+}
+.at-pmodal__ladder {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.at-pmodal__row {
+  display: flex;
+  gap: 0.875rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--at-mbar-border);
+}
+.at-pmodal__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  flex: 1;
+  min-width: 0;
+}
+.at-pmodal__row-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.at-pmodal__name { font-weight: 700; }
+.at-pmodal__yours { font-size: 0.8125rem; font-weight: 700; color: var(--at-tier-member); }
+.at-pmodal__row--current .at-pmodal__name { text-decoration: none; }
+.at-pmodal__fee { font-size: 0.875rem; font-weight: 600; }
+.at-pmodal__desc { margin: 0; font-size: 0.875rem; line-height: 1.5; }
+.at-pmodal__cta { align-self: flex-start; margin-top: 0.25rem; }
+.at-pmodal__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.at-pmodal__foot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--at-muted);
+}
+.at-pmodal__foot p { margin: 0; }
+.at-pmodal__foot a { font-weight: 600; color: #2b4a3f; }
+
+.at-ring {
+  width: 2.5rem;
+  height: 2.5rem;
+  box-sizing: border-box;
+  flex: none;
+  border-radius: 50%;
+  border: 1px solid #a3a39e;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--at-muted);
+  background: #fff;
+}
+.at-ring--member { border: 3px solid var(--at-tier-member); color: var(--at-tier-member); }
+.at-ring--pro { border: 1px solid var(--at-tier-pro); color: var(--at-tier-pro); font-size: 0.6875rem; }
+.at-pmodal__row--current .at-ring--pro { border-width: 3px; }
+.at-ring--wholesale { border: 3px solid var(--at-tier-wholesale); color: var(--at-tier-wholesale); }
+
+/* ---------- Header ring (on the stock shopify-account button) + membership chip menu ---------- */
+.at-acct-ring--member { --at-acct-ring: var(--at-tier-member); }
+.at-acct-ring--pro { --at-acct-ring: var(--at-tier-pro); }
+.at-acct-ring--wholesale { --at-acct-ring: var(--at-tier-wholesale); }
+.at-acct-ring shopify-account {
+  display: inline-flex;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px var(--at-acct-ring);
+}
+.at-acct {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.at-acct__trigger {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: inherit;
+  cursor: pointer;
+  anchor-name: --at-acct;
+}
+.at-chip--member { background: var(--at-tier-member); }
+.at-chip--wholesale { background: var(--at-tier-wholesale); }
+.at-acct__chip { padding: 0.1875rem 0.4375rem; font-size: 0.625rem; text-transform: uppercase; }
+
+.at-acct__menu {
+  position: fixed;
+  inset: auto;
+  position-anchor: --at-acct;
+  top: anchor(bottom);
+  right: anchor(right);
+  margin: 0.5rem 0 0;
+  width: min(20rem, calc(100vw - 2rem));
+  padding: 1.125rem;
+  border: 1px solid var(--at-mbar-border);
+  border-radius: 6px;
+  background: #fff;
+  color: #2b2b2b;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.08);
+  font-size: 0.875rem;
+}
+@supports not (top: anchor(bottom)) {
+  .at-acct__menu {
+    top: 4.5rem;
+    right: 1rem;
+  }
+}
+.at-acct__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.at-acct__tier { font-weight: 700; font-size: 1rem; }
+.at-acct__renews { font-size: 0.8125rem; color: var(--at-muted); }
+.at-acct__name { margin: 0.125rem 0 0; color: var(--at-muted); }
+.at-acct__facts { margin: 0.625rem 0 0; display: flex; flex-direction: column; gap: 0.5rem; }
+.at-acct__fact { display: flex; justify-content: space-between; gap: 0.75rem; }
+.at-acct__fact dt, .at-acct__fact dd { margin: 0; }
+.at-acct__code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 600; }
+.at-acct__saved { color: var(--at-tier-saved); }
+.at-acct__rule { border: 0; border-top: 1px solid #e4e4e0; margin: 0.75rem 0 0.25rem; }
+.at-acct__links { list-style: none; margin: 0; padding: 0; }
+.at-acct__links a {
+  display: flex;
+  align-items: center;
+  min-height: 2.25rem;
+  color: #2b4a3f;
+}
+
+/* ---------- Cart strip (member / pro / wholesale) ---------- */
+.at-mstrip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  color: var(--color-foreground, #2b2b2b);
+}
+.at-mstrip__kicker {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--at-mstrip-accent);
+}
+.at-mstrip--member { --at-mstrip-accent: var(--at-tier-member); }
+.at-mstrip--pro { --at-mstrip-accent: var(--at-tier-pro); }
+.at-mstrip--wholesale { --at-mstrip-accent: var(--at-tier-wholesale); }
+.at-mstrip at-discount-progress-bar { display: block; }
+.at-mstrip__progress { display: flex; flex-direction: column; gap: 0.5rem; }
+.at-mstrip__status { margin: 0; font-size: 0.875rem; text-align: center; }
+.at-mstrip__track {
+  height: 4px;
+  background: rgb(127 127 127 / 0.3);
+  overflow: hidden;
+}
+.at-mstrip__fill {
+  display: block;
+  height: 100%;
+  background: var(--at-mstrip-accent);
+  transition: width 0.3s ease;
+}
+.at-mstrip__earn { margin: 0; font-size: 0.75rem; opacity: 0.8; }
+.at-mstrip__card {
+  padding: 0.75rem 0.875rem;
+  border: 1px solid rgb(127 127 127 / 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.at-mstrip__card-title { margin: 0; font-size: 0.875rem; font-weight: 700; }
+.at-mstrip__card-text { margin: 0; font-size: 0.8125rem; line-height: 1.5; }
+.at-mstrip__card-text code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 600; }
+
+/* Guest cart line under the bulk bar */
+.at-dp-member-prompt {
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  text-align: center;
+}
+.at-dp-member-prompt a { color: inherit; text-decoration: underline; }

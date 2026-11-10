@@ -63,6 +63,19 @@
   {% endif %}
   {{- block.shopify_attributes -}}
 >
+  {%- liquid
+    capture at_tier
+      render 'at-member-tier'
+    endcapture
+    assign at_tier = at_tier | strip
+  -%}
+  {%- comment -%}
+    AT member pricing: signed-in tiers keep the stock shopify-account (merchant menu, B2B company and
+    location switching); the tier adds a ring on it and a membership chip + menu beside it.
+  {%- endcomment -%}
+  {% if at_tier != 'guest' %}
+    {% render 'at-member-account-menu', tier: at_tier, display_style: display_style %}
+  {% endif %}
   {% if shop.customer_accounts_enabled %}
     {% liquid
       assign account_actions_style = ''
@@ -83,7 +96,7 @@
       endif
     %}
     <div
-      class="account-button header-actions__action{% if display_style == 'text' %} account-button--text{% endif %} color-custom-popover"
+      class="account-button header-actions__action{% if display_style == 'text' %} account-button--text{% endif %} color-custom-popover{% if at_tier != 'guest' %} at-acct-ring at-acct-ring--{{ at_tier }}{% endif %}"
     >
       <shopify-account
         menu="{{ customer_account_menu }}"
