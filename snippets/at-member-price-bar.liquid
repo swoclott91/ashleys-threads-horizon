@@ -1,0 +1,291 @@
+{%- doc -%}
+  Member pricing: the one-line bar directly under the product price, plus the "Your pricing" modal it opens.
+  Replaces the "Log in to qualify for additional discounts" bar above Add to cart. For signed-in tiers
+  it also replaces the "Bulk savings" sheet on the product page.
+
+  The theme never computes tier prices: Shopify B2B catalogs set them, and the price block shows
+  `variant.price` with the guest price as compare-at. This bar only shows tier facts from
+  contract metafields (`shop.wagner.tier_thresholds`, customer `wagner.*`, company location
+  `wagner.terms_status`). No member, Pro or wholesale number is ever shown to guests.
+
+  @param {string} uid - Unique id suffix (block id).
+{%- enddoc -%}
+{%- liquid
+  capture at_tier
+    render 'at-member-tier'
+  endcapture
+  assign at_tier = at_tier | strip
+  assign at_sample = false
+  if request.design_mode and settings.at_member_preview_tier != 'off' and settings.at_member_preview_tier != blank
+    assign at_sample = true
+  endif
+
+  assign at_tt = shop.metafields.wagner.tier_thresholds.value
+  assign at_ship = customer.metafields.wagner.ship_code.value
+  assign at_terms = customer.current_location.metafields.wagner.terms_status.value
+
+  assign at_member_rate = at_tt.member.reward_rate
+  assign at_pro_rate = at_tt.pro.reward_rate
+  assign at_pro_fee = at_tt.pro.fee
+  assign at_member_fs = at_tt.member.free_shipping
+  assign at_terms_code = at_terms.terms | default: at_tt.wholesale.terms
+  assign at_terms_status = at_terms.status
+  if at_sample and at_tt == blank
+    assign at_member_rate = '0.01'
+    assign at_pro_rate = '0.02'
+    assign at_pro_fee = '79.00'
+    assign at_member_fs = '60.00'
+    assign at_terms_code = 'NET_30'
+  endif
+
+  assign at_ship_valid = false
+  assign at_today = 'now' | date: '%Y-%m-%d'
+  if at_ship.status == 'issued' and at_ship.code != blank
+    assign at_ship_valid = true
+    if at_ship.valid_from != blank and at_ship.valid_from > at_today
+      assign at_ship_valid = false
+    endif
+    if at_ship.valid_until != blank and at_ship.valid_until < at_today
+      assign at_ship_valid = false
+    endif
+  endif
+  if at_sample and at_tier == 'pro' and at_ship == blank
+    assign at_ship_valid = true
+  endif
+
+  assign at_member_rate_pct = ''
+  if at_member_rate != blank
+    assign at_member_rate_pct = at_member_rate | times: 100 | round: 1 | append: '' | remove: '.0' | append: '%'
+  endif
+  assign at_pro_rate_pct = ''
+  if at_pro_rate != blank
+    assign at_pro_rate_pct = at_pro_rate | times: 100 | round: 1 | append: '' | remove: '.0' | append: '%'
+  endif
+  assign at_pro_fee_money = ''
+  if at_pro_fee != blank
+    assign at_pro_fee_money = at_pro_fee | times: 100 | money_without_trailing_zeros
+  endif
+  assign at_member_fs_money = ''
+  if at_member_fs != blank
+    assign at_member_fs_money = at_member_fs | times: 100 | money_without_trailing_zeros
+  endif
+  assign at_terms_label = ''
+  if at_terms_code != blank
+    assign at_terms_label = at_terms_code | replace: '_', ' ' | capitalize
+  endif
+
+  comment
+    Guest bulk entry point: first guest milestone (Shopify discount), else today's $150.
+  endcomment
+  assign at_bulk_from = 15000
+  assign at_guest_first = at_tt.guest.milestones.first.threshold
+  if at_guest_first != blank
+    assign at_bulk_from = at_guest_first | times: 100 | round
+  endif
+  assign at_bulk_from_money = at_bulk_from | money_without_trailing_zeros
+
+  assign at_join_url = settings.at_membership_page_url | default: '/pages/membership'
+  assign at_wholesale_url = settings.at_wholesale_page_url | default: '/pages/wholesale'
+  assign at_dialog_id = 'AtPricingModal-' | append: uid
+  assign at_title_id = 'AtPricingModalTitle-' | append: uid
+-%}
+{{ 'at-member.css' | asset_url | stylesheet_tag }}
+<script
+  src="{{ 'at-member.js' | asset_url }}"
+  type="module"
+></script>
+
+<div
+  class="at-mbar at-mbar--{{ at_tier }}"
+  data-testid="at-member-price-bar"
+  data-at-tier="{{ at_tier }}"
+>
+  {%- case at_tier -%}
+    {%- when 'guest' -%}
+      <button
+        type="button"
+        class="at-mbar__open button-unstyled"
+        data-at-pricing-open="{{ at_dialog_id }}"
+        aria-haspopup="dialog"
+        aria-controls="{{ at_dialog_id }}"
+      >
+        <span class="svg-wrapper at-mbar__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9.25"/><circle cx="12" cy="10" r="3"/><path d="M6.5 18.5c1.4-2.2 3.3-3.3 5.5-3.3s4.1 1.1 5.5 3.3"/></svg>
+        </span>
+        <span class="at-mbar__lead">{{ 'at_member.bar.guest_lead' | t }}</span>
+      </button>
+      <a class="at-mbar__link" href="{{ at_join_url }}">{{ 'at_member.join_free' | t }}</a>
+      {%- unless customer -%}
+        <span class="at-mbar__dot" aria-hidden="true">·</span>
+        <a class="at-mbar__link" href="{{ routes.account_login_url }}">{{ 'at_member.log_in' | t }}</a>
+      {%- endunless -%}
+    {%- when 'member' -%}
+      <button
+        type="button"
+        class="at-mbar__open at-mbar__open--full button-unstyled"
+        data-at-pricing-open="{{ at_dialog_id }}"
+        aria-haspopup="dialog"
+        aria-controls="{{ at_dialog_id }}"
+      >
+        <span class="at-chip at-chip--pro">{{ 'at_member.tiers.pro_chip' | t }}</span>
+        <span class="at-mbar__text">
+          {%- if at_pro_rate_pct != blank -%}
+            {{ 'at_member.bar.member_next_rate' | t: rate: at_pro_rate_pct }}
+          {%- else -%}
+            {{ 'at_member.bar.member_next' | t }}
+          {%- endif -%}
+        </span>
+        <span class="at-mbar__cta">{{ 'at_member.see_pro' | t }}</span>
+      </button>
+    {%- when 'pro' -%}
+      <button
+        type="button"
+        class="at-mbar__open at-mbar__open--full button-unstyled"
+        data-at-pricing-open="{{ at_dialog_id }}"
+        aria-haspopup="dialog"
+        aria-controls="{{ at_dialog_id }}"
+      >
+        <span class="at-mbar__text">
+          {%- if at_pro_rate_pct != blank -%}
+            {{ 'at_member.bar.pro_earning_rate' | t: rate: at_pro_rate_pct }}
+          {%- else -%}
+            {{ 'at_member.bar.pro_earning' | t }}
+          {%- endif -%}
+          {%- if at_ship_valid %} · {{ 'at_member.bar.pro_free_shipment' | t }}{% endif -%}
+        </span>
+      </button>
+    {%- when 'wholesale' -%}
+      <button
+        type="button"
+        class="at-mbar__open at-mbar__open--full button-unstyled"
+        data-at-pricing-open="{{ at_dialog_id }}"
+        aria-haspopup="dialog"
+        aria-controls="{{ at_dialog_id }}"
+      >
+        <span class="at-mbar__text">
+          {%- if at_terms_label != blank -%}
+            {{ 'at_member.bar.wholesale_terms' | t: terms: at_terms_label }}
+          {%- else -%}
+            {{ 'at_member.tiers.wholesale' | t }}
+          {%- endif -%}
+          {%- if at_terms_status == 'hold' or at_terms_status == 'overdue' %} · {{ 'at_member.terms.on_hold' | t }}{% elsif at_terms_status == 'pending' %} · {{ 'at_member.terms.pending' | t }}{% endif -%}
+        </span>
+      </button>
+  {%- endcase -%}
+</div>
+
+<dialog
+  id="{{ at_dialog_id }}"
+  class="at-pmodal color-custom-popover"
+  aria-labelledby="{{ at_title_id }}"
+  data-at-pricing-dialog
+>
+  <div class="at-pmodal__panel">
+    <div class="at-pmodal__head">
+      <div>
+        <h2 id="{{ at_title_id }}" class="at-pmodal__title">
+          {%- if at_tier == 'guest' -%}{{ 'at_member.modal.title_guest' | t }}{%- else -%}{{ 'at_member.modal.title' | t }}{%- endif -%}
+        </h2>
+        {%- assign at_lede_key = 'at_member.modal.lede_' | append: at_tier -%}
+        <p class="at-pmodal__lede">{{ at_lede_key | t }}</p>
+      </div>
+      <button
+        type="button"
+        class="button button-unstyled close-button at-pmodal__close"
+        data-at-pricing-close
+        aria-label="{{ 'accessibility.close_dialog' | t }}"
+      >
+        {{- 'icon-close.svg' | inline_asset_content -}}
+      </button>
+    </div>
+
+    <ul class="at-pmodal__ladder" role="list">
+      <li class="at-pmodal__row{% if at_tier == 'guest' %} at-pmodal__row--current{% endif %}">
+        <span class="at-ring at-ring--guest" aria-hidden="true">G</span>
+        <div class="at-pmodal__body">
+          <div class="at-pmodal__row-head">
+            <span class="at-pmodal__name">{{ 'at_member.tiers.guest' | t }}</span>
+            {%- if at_tier == 'guest' -%}<span class="at-pmodal__yours">{{ 'at_member.modal.your_level' | t }}</span>{%- endif -%}
+          </div>
+          <p class="at-pmodal__desc">{{ 'at_member.modal.guest_desc' | t: amount: at_bulk_from_money }}</p>
+        </div>
+      </li>
+
+      <li class="at-pmodal__row{% if at_tier == 'member' %} at-pmodal__row--current{% endif %}">
+        <span class="at-ring at-ring--member" aria-hidden="true">
+          {%- if at_tier == 'member' -%}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12.5l4.5 4.5L19 7"/></svg>
+          {%- else -%}M{%- endif -%}
+        </span>
+        <div class="at-pmodal__body">
+          <div class="at-pmodal__row-head">
+            <span class="at-pmodal__name">{{ 'at_member.tiers.member' | t }}</span>
+            {%- if at_tier == 'member' -%}
+              <span class="at-pmodal__yours">{{ 'at_member.modal.your_level' | t }}</span>
+            {%- else -%}
+              <span class="at-pmodal__fee">{{ 'at_member.modal.free' | t }}</span>
+            {%- endif -%}
+          </div>
+          <p class="at-pmodal__desc">
+            {{- 'at_member.modal.member_desc' | t -}}
+            {%- if at_member_rate_pct != blank %} · {{ 'at_member.modal.threads_cash_rate' | t: rate: at_member_rate_pct }}{% endif -%}
+            {%- if at_member_fs_money != blank %} · {{ 'at_member.modal.free_shipping_over' | t: amount: at_member_fs_money }}{% endif -%}
+          </p>
+        </div>
+      </li>
+
+      <li class="at-pmodal__row{% if at_tier == 'pro' %} at-pmodal__row--current{% endif %}">
+        <span class="at-ring at-ring--pro" aria-hidden="true">PRO</span>
+        <div class="at-pmodal__body">
+          <div class="at-pmodal__row-head">
+            <span class="at-pmodal__name">{{ 'at_member.tiers.pro' | t }}</span>
+            {%- if at_tier == 'pro' -%}
+              <span class="at-pmodal__yours">{{ 'at_member.modal.your_level' | t }}</span>
+            {%- elsif at_pro_fee_money != blank -%}
+              <span class="at-pmodal__fee">{{ 'at_member.modal.per_year' | t: amount: at_pro_fee_money }}</span>
+            {%- endif -%}
+          </div>
+          <p class="at-pmodal__desc">
+            {{- 'at_member.modal.pro_desc' | t -}}
+            {%- if at_pro_rate_pct != blank %} · {{ 'at_member.modal.threads_cash_rate' | t: rate: at_pro_rate_pct }}{% endif %} · {{ 'at_member.modal.pro_shipment' | t -}}
+          </p>
+          {%- if at_tier == 'member' -%}
+            <a class="button at-pmodal__cta" href="{{ at_join_url }}">{{ 'at_member.get_pro' | t }}</a>
+          {%- endif -%}
+        </div>
+      </li>
+
+      {%- if at_tier == 'wholesale' -%}
+        <li class="at-pmodal__row at-pmodal__row--current">
+          <span class="at-ring at-ring--wholesale" aria-hidden="true">W</span>
+          <div class="at-pmodal__body">
+            <div class="at-pmodal__row-head">
+              <span class="at-pmodal__name">{{ 'at_member.tiers.wholesale' | t }}</span>
+              <span class="at-pmodal__yours">{{ 'at_member.modal.your_level' | t }}</span>
+            </div>
+            <p class="at-pmodal__desc">
+              {{- 'at_member.modal.wholesale_desc' | t -}}
+              {%- if at_terms_label != blank %} · {{ at_terms_label }}{% endif -%}
+            </p>
+          </div>
+        </li>
+      {%- endif -%}
+    </ul>
+
+    {%- if at_tier == 'guest' -%}
+      <div class="at-pmodal__actions">
+        <a class="button" href="{{ at_join_url }}">{{ 'at_member.join_free' | t }}</a>
+        {%- unless customer -%}
+          <a class="button button-secondary" href="{{ routes.account_login_url }}">{{ 'at_member.log_in' | t }}</a>
+        {%- endunless -%}
+      </div>
+    {%- endif -%}
+
+    <div class="at-pmodal__foot">
+      <p>{{ 'at_member.modal.footer_note' | t }}</p>
+      {%- unless at_tier == 'wholesale' -%}
+        <a href="{{ at_wholesale_url }}">{{ 'at_member.modal.wholesale_link' | t }}</a>
+      {%- endunless -%}
+    </div>
+  </div>
+</dialog>

@@ -23,28 +23,37 @@
     assign price = 1999
   endif
 
-  # Check if variant has volume pricing
-  assign has_volume_pricing = null
+  # AT member pricing: always the selected (displayed) variant's price. No "From" / min-max
+  # ranges on cards or product pages: a range or XS anchor would read as "From $x" (design §13).
+  # Volume pricing (B2B quantity breaks) keeps only the "Volume pricing available" note.
+  assign has_volume_pricing = false
+  assign show_volume_note = false
   assign price_min = null
   assign price_max = null
 
-  # For product cards (collection/search pages), calculate min/max across all variants
-  # For product pages, only use the selected variant's pricing
   assign is_product_card = false
   if template.name != 'product'
     assign is_product_card = true
   endif
 
   if is_product_card
-    assign price_min = product_resource.price_min
-    assign price_max = product_resource.price_max
-    assign has_volume_pricing = product_resource.quantity_price_breaks_configured? | default: false
-  else
-    # Product page: only use selected variant's pricing
-    if selected_variant.quantity_price_breaks.size > 0
-      assign has_volume_pricing = true
-      assign price_min = selected_variant.quantity_price_breaks.last.price
-      assign price_max = selected_variant.price
+    if product_resource.quantity_price_breaks_configured?
+      assign show_volume_note = true
+    endif
+  elsif selected_variant.quantity_price_breaks.size > 0
+    assign show_volume_note = true
+  endif
+
+  # Product page, signed-in tier: label the B2B catalog price (compare-at = guest price).
+  assign at_tier_label = ''
+  if show_compare_price and is_product_card == false and product.handle == product_resource.handle
+    capture at_tier
+      render 'at-member-tier'
+    endcapture
+    assign at_tier = at_tier | strip
+    if at_tier != 'guest'
+      assign at_tier_label_key = 'at_member.price_label.' | append: at_tier
+      assign at_tier_label = at_tier_label_key | t
     endif
   endif
 
@@ -124,6 +133,9 @@
           <span class="price-item--sale price">{{ price | default: '&nbsp;' }}</span>
         </span>
       {% endif %}
+      {%- if at_tier_label != blank -%}
+        <span class="at-price-tier-label at-price-tier-label--{{ at_tier }}">{{ at_tier_label }}</span>
+      {%- endif -%}
     </div>
   {% endif %}
   {%- if selected_variant.unit_price and show_unit_price %}
@@ -137,7 +149,7 @@
     {% render 'unit-price', price: unit_price, measurement: selected_variant.unit_price_measurement %}
   {%- endif -%}
 </div>
-{%- if has_volume_pricing -%}
+{%- if show_volume_note -%}
   <small
     ref="volumePricingNote"
     class="volume-pricing-note"

@@ -6,8 +6,17 @@
   @param {number} [product_price] - Selected variant price in cents (product context).
   @param {object} [product] - Product for data-product-id (product context).
   @param {string} [non_sale_collection_url] - Link for qualifying items in info panel.
-  @param {string} [customer_account_menu] - Menu handle for shopify-account (default matches header: customer-account-main-menu).
-  @param {string} [layout] - 'drawer_header' for inline “Get member discounts” + Log in (cart drawer header, bulk modals when logged out); default is the card prompt.
+  @param {string} [customer_account_menu] - Unused since member pricing (kept so existing callers stay valid).
+  @param {string} [layout] - Unused since member pricing (was the logged-out drawer prompt; guests now get the bulk bar).
+
+  AT member pricing (design §13 "Cart strip"), by tier from `at-member-tier`:
+  - guest (logged out, or signed in without a tier): the SMART bulk bar. Milestones come from
+    `shop.metafields.wagner.tier_thresholds.guest.milestones` (amounts are strings in shop currency),
+    falling back to the hard-coded list below.
+  - member / pro: free-shipping progress (`tier_thresholds.<tier>.free_shipping`) and Threads Cash earned
+    (`reward_rate`); Pro also sees this month's shipping code (`customer.wagner.ship_code`).
+  - wholesale: Net terms (`company_location.wagner.terms_status`, else `tier_thresholds.wholesale.terms`).
+  On the product page, signed-in tiers get nothing here: the price bar and pricing modal replace "Bulk savings".
 {%- enddoc -%}
 {% render 'contrast-override',
   background_color: '#2c2c2c',
@@ -16,8 +25,6 @@
   preset: 'ui'
 %}
 {%- liquid
-  assign dp_customer_account_menu = customer_account_menu | default: 'customer-account-main-menu'
-  assign dp_layout = layout | default: ''
   assign dp_context = context | default: 'cart'
   assign dp_section = section_id | default: 'global'
   assign dp_uid = dp_section | append: '-' | append: dp_context | handleize
@@ -29,119 +36,48 @@
   if product != blank
     assign dp_product_id = product.id
   endif
-  assign milestones_json = '[{"threshold":15000,"name":"12% Bulk Discount","benefitShort":"off non-sale items","benefitLabel":"12%"},{"threshold":20000,"name":"Free shipping","benefitShort":"Free shipping","benefitLabel":"Free ship","kind":"shipping"},{"threshold":30000,"name":"15% Bulk Discount","benefitShort":"off non-sale items","benefitLabel":"15%"},{"threshold":75000,"name":"18% Bulk Discount","benefitShort":"off non-sale items","benefitLabel":"18%"},{"threshold":150000,"name":"20% Bulk Discount","benefitShort":"off non-sale items","benefitLabel":"20%"},{"threshold":300000,"name":"25% Bulk Discount","benefitShort":"off non-sale items","benefitLabel":"25%"}]'
+  capture at_tier
+    render 'at-member-tier'
+  endcapture
+  assign at_tier = at_tier | strip
+  assign at_sample = false
+  if request.design_mode and settings.at_member_preview_tier != 'off' and settings.at_member_preview_tier != blank
+    assign at_sample = true
+  endif
+  assign at_tt = shop.metafields.wagner.tier_thresholds.value
+
+  assign default_milestones_json = '[{"threshold":15000,"name":"12% Bulk Discount","benefitShort":"off non-sale items","benefitLabel":"12%"},{"threshold":20000,"name":"Free shipping","benefitShort":"Free shipping","benefitLabel":"Free ship","kind":"shipping"},{"threshold":30000,"name":"15% Bulk Discount","benefitShort":"off non-sale items","benefitLabel":"15%"},{"threshold":75000,"name":"18% Bulk Discount","benefitShort":"off non-sale items","benefitLabel":"18%"},{"threshold":150000,"name":"20% Bulk Discount","benefitShort":"off non-sale items","benefitLabel":"20%"},{"threshold":300000,"name":"25% Bulk Discount","benefitShort":"off non-sale items","benefitLabel":"25%"}]'
+  assign milestones_json = default_milestones_json
+  assign at_guest_ms = at_tt.guest.milestones
+  if at_guest_ms != blank and at_guest_ms.size > 0
+    assign milestones_json = ''
+  endif
 -%}
+{%- if milestones_json == '' -%}
+  {%- capture milestones_json -%}
+    [
+    {%- for ms in at_guest_ms -%}
+      {%- assign ms_threshold = ms.threshold | times: 100 | round -%}
+      {%- assign ms_name = ms.name | default: '' -%}
+      {%- assign ms_short = ms.benefitShort | default: ms.benefit_short | default: ms_name -%}
+      {%- assign ms_label = ms.benefitLabel | default: ms.benefit_label | default: ms_name -%}
+      {"threshold":{{ ms_threshold }},"name":{{ ms_name | json }},"benefitShort":{{ ms_short | json }},"benefitLabel":{{ ms_label | json }}{% if ms.kind != blank %},"kind":{{ ms.kind | json }}{% endif %}}
+      {%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+    ]
+  {%- endcapture -%}
+{%- endif -%}
 {%- capture dp_i18n -%}
 {"close_dialog":{{ 'accessibility.close_dialog' | t | json }},"log_in_prompt":{{ 'at_discount_progress.log_in_prompt' | t | json }},"log_in":{{ 'at_discount_progress.log_in' | t | json }},"tier_unlocked":{{ 'at_discount_progress.tier_unlocked' | t | json }},"achievement_none":{{ 'at_discount_progress.achievement_none' | t | json }},"add_more_for":{{ 'at_discount_progress.add_more_for' | t | json }},"cart_condensed_status":{{ 'at_discount_progress.cart_condensed_status' | t | json }},"max_tier_reached":{{ 'at_discount_progress.max_tier_reached' | t | json }},"non_sale_disclaimer":{{ 'at_discount_progress.non_sale_disclaimer' | t | json }},"browse_qualifying":{{ 'at_discount_progress.browse_qualifying' | t | json }},"info_open":{{ 'at_discount_progress.info_open' | t | json }},"info_close":{{ 'at_discount_progress.info_close' | t | json }},"preview_helper":{{ 'at_discount_progress.preview_helper' | t | json }},"bulk_savings_title":{{ 'at_discount_progress.bulk_savings_title' | t | json }},"bulk_savings_subtitle":{{ 'at_discount_progress.bulk_savings_subtitle' | t | json }},"expand_savings_aria":{{ 'at_discount_progress.expand_savings_aria' | t | json }},"modal_got_it":{{ 'at_discount_progress.modal_got_it' | t | json }},"unlocked_badge":{{ 'at_discount_progress.unlocked_badge' | t | json }},"modal_unlocked_at":{{ 'at_discount_progress.modal_unlocked_at' | t | json }},"modal_spend_for":{{ 'at_discount_progress.modal_spend_for' | t | json }},"modal_at":{{ 'at_discount_progress.modal_at' | t | json }},"modal_away":{{ 'at_discount_progress.modal_away' | t | json }},"modal_footer_note":{{ 'at_discount_progress.modal_footer_note' | t | json }}}
 {%- endcapture -%}
 {{ 'at-discount-progress.css' | asset_url | stylesheet_tag }}
+{{ 'at-member.css' | asset_url | stylesheet_tag }}
 <script
   src="{{ 'at-discount-progress.js' | asset_url }}"
   type="module"
 ></script>
 
-{%- unless customer -%}
-  {%- if dp_layout == 'drawer_header' -%}
-    <div
-      class="at-discount-progress at-discount-progress--logged-out at-discount-progress--drawer-header"
-      data-testid="at-discount-progress-logged-out"
-    >
-      <span class="at-discount-progress__label">
-        {{- 'at_discount_progress.get_member_discounts' | t -}}
-      </span>
-      {% if shop.customer_accounts_enabled %}
-        <div class="at-discount-progress__account">
-          <shopify-account menu="{{ dp_customer_account_menu }}">
-            <button
-              type="button"
-              slot="signed-out-avatar"
-              class="at-discount-progress__login-trigger button button-secondary"
-            >
-              {{- 'at_discount_progress.log_in' | t -}}
-            </button>
-          </shopify-account>
-        </div>
-      {% else %}
-        <a
-          href="{{ routes.account_login_url }}"
-          class="button button-secondary at-discount-progress__login at-discount-progress__login--legacy"
-        >
-          {{- 'at_discount_progress.log_in' | t -}}
-        </a>
-      {% endif %}
-    </div>
-  {%- else -%}
-  <div
-    class="at-discount-progress at-discount-progress--logged-out spacing-style"
-    data-testid="at-discount-progress-logged-out"
-  >
-    <p class="at-discount-progress__prompt">
-      {{ 'at_discount_progress.log_in_prompt' | t }}
-    </p>
-    {% if shop.customer_accounts_enabled %}
-      <div class="at-discount-progress__account">
-        <shopify-account menu="{{ dp_customer_account_menu }}">
-          <span
-            slot="signed-out-avatar"
-            class="at-discount-progress__account-trigger button"
-          >
-            <span
-              class="svg-wrapper account-button__icon"
-              aria-hidden="true"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="15"
-                height="17"
-                viewBox="0 0 15 17"
-                fill="none"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linejoin="round"
-                  stroke-width="var(--icon-stroke-width)"
-                  d="M10.375 3.813a3.063 3.063 0 1 1-6.125 0 3.063 3.063 0 0 1 6.125 0ZM7.313 9.5c-3.667 0-6.24 2.691-6.563 6.125h13.125C13.552 12.191 10.979 9.5 7.312 9.5Z"
-                />
-              </svg>
-            </span>
-            <span class="at-discount-progress__login-label">
-              {{- 'at_discount_progress.log_in' | t -}}
-            </span>
-          </span>
-        </shopify-account>
-      </div>
-    {% else %}
-      <a
-        href="{{ routes.account_login_url }}"
-        class="button at-discount-progress__login at-discount-progress__login--legacy"
-      >
-        <span
-          class="svg-wrapper account-button__icon"
-          aria-hidden="true"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="15"
-            height="17"
-            viewBox="0 0 15 17"
-            fill="none"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linejoin="round"
-              stroke-width="var(--icon-stroke-width)"
-              d="M10.375 3.813a3.063 3.063 0 1 1-6.125 0 3.063 3.063 0 0 1 6.125 0ZM7.313 9.5c-3.667 0-6.24 2.691-6.563 6.125h13.125C13.552 12.191 10.979 9.5 7.312 9.5Z"
-            />
-          </svg>
-        </span>
-        <span class="at-discount-progress__login-label">
-          {{- 'at_discount_progress.log_in' | t -}}
-        </span>
-      </a>
-    {% endif %}
-  </div>
-  {%- endif -%}
-{%- else -%}
+{%- if at_tier == 'guest' -%}
   {%- if settings.at_discount_progress_enabled -%}
     <template id="at-dp-truck-{{ dp_uid }}">
       <span class="svg-wrapper at-dp__icon at-dp__icon--truck" aria-hidden="true">
@@ -188,4 +124,26 @@
     data-i18n="{{ dp_i18n | strip_newlines | escape }}"
     data-testid="at-discount-progress-bar"
   ></at-discount-progress-bar>
-{%- endunless -%}
+  {%- if customer == blank and dp_context == 'cart' -%}
+    <p class="at-dp-member-prompt" data-testid="at-discount-progress-member-prompt">
+      {{ 'at_member.cart.guest_prompt' | t }}
+      <a href="{{ settings.at_membership_page_url | default: '/pages/membership' }}">{{ 'at_member.join_free' | t }}</a>
+      <span aria-hidden="true">·</span>
+      <a href="{{ routes.account_login_url }}">{{ 'at_member.log_in' | t }}</a>
+    </p>
+  {%- endif -%}
+{%- elsif dp_context == 'product' -%}
+  {%- comment -%} Signed-in tiers: the price bar + pricing modal replace "Bulk savings" on the product page. {%- endcomment -%}
+{%- else -%}
+  {%- render 'at-member-cart-strip',
+    tier: at_tier,
+    tier_thresholds: at_tt,
+    sample: at_sample,
+    context: dp_context,
+    uid: dp_uid,
+    subtotal: dp_subtotal,
+    product_id: dp_product_id,
+    product_price: dp_product_price,
+    empty_track: dp_empty_track
+  -%}
+{%- endif -%}
