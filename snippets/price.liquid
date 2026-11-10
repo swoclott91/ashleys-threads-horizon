@@ -26,10 +26,7 @@
   # AT member pricing: always the selected (displayed) variant's price. No "From" / min-max
   # ranges on cards or product pages: a range or XS anchor would read as "From $x" (design §13).
   # Volume pricing (B2B quantity breaks) keeps only the "Volume pricing available" note.
-  assign has_volume_pricing = false
   assign show_volume_note = false
-  assign price_min = null
-  assign price_max = null
 
   assign is_product_card = false
   if template.name != 'product'
@@ -44,7 +41,9 @@
     assign show_volume_note = true
   endif
 
-  # Product page, signed-in tier: label the B2B catalog price (compare-at = guest price).
+  # Product page, signed-in tier: label the price only when it really comes from a tier catalog,
+  # i.e. the customer is buying for a B2B company location (catalog compare-at = guest price).
+  # A plain sale (compare-at > price) for anyone else is never labelled a member price.
   # Product page, guest on a brand without MAP (`product.wagner.map_protected` explicitly false):
   # expose the variant's `wagner.member_price` for the bar under the price (assets/at-member.js
   # copies it on variant change). Missing metafields = MAP-protected = no number.
@@ -62,7 +61,7 @@
         assign at_guest_member_price = at_mp | money
       endif
     endif
-    if at_tier != 'guest' and show_compare_price
+    if at_tier != 'guest' and show_compare_price and customer.b2b? and customer.current_location != blank
       assign at_tier_label_key = 'at_member.price_label.' | append: at_tier
       assign at_tier_label = at_tier_label_key | t
     endif
@@ -82,73 +81,55 @@
   if use_currency
     assign price = price | money_with_currency
     assign compare_at_price = compare_at_price | money_with_currency
-    assign price_min = price_min | money_with_currency
-    assign price_max = price_max | money_with_currency
   else
     assign price = price | money
     assign compare_at_price = compare_at_price | money
-    assign price_min = price_min | money
-    assign price_max = price_max | money
   endif
 -%}
 
 <div ref="priceContainer">
-  {% if has_volume_pricing %}
-    {% comment %} Volume pricing display {% endcomment %}
-    {% if show_compare_price %}
+  {% comment %} Standard pricing display {% endcomment %}
+  <div
+    class="
+      price__regular
+      {% if show_compare_price %}
+        price__hidden
+      {% endif %}
+    "
+  >
+    <span class="price">{{ price | default: '&nbsp;' }}</span>
+  </div>
+  <div
+    class="
+      price__sale
+      {% unless show_compare_price %}
+        price__hidden
+      {% endunless %}
+    "
+  >
+    {% if show_sale_price_first %}
+      <span class="price-item__group">
+        <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>
+        <span class="price-item--sale price">{{ price | default: '&nbsp;' }}</span>
+      </span>
       <span class="price-item__group">
         <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
-        <span class="compare-at-price">{{- compare_at_price -}}</span>
+        <span class="price-item--regular compare-at-price">{{- compare_at_price -}}</span>
+      </span>
+    {% else %}
+      <span class="price-item__group">
+        <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
+        <span class="price-item--regular compare-at-price">{{- compare_at_price -}}</span>
+      </span>
+      <span class="price-item__group">
+        <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>
+        <span class="price-item--sale price">{{ price | default: '&nbsp;' }}</span>
       </span>
     {% endif %}
-    <span class="price-item__group">
-      <span class="visually-hidden">{{ 'content.price_range' | t }}&nbsp;</span>
-      <span class="price">{{ price_min }} - {{ price_max }}</span>
-    </span>
-  {% else %}
-    {% comment %} Standard pricing display {% endcomment %}
-    <div
-      class="
-        price__regular
-        {% if show_compare_price %}
-          price__hidden
-        {% endif %}
-      "
-    >
-      <span class="price">{{ price | default: '&nbsp;' }}</span>
-    </div>
-    <div
-      class="
-        price__sale
-        {% unless show_compare_price %}
-          price__hidden
-        {% endunless %}
-      "
-    >
-      {% if show_sale_price_first %}
-        <span class="price-item__group">
-          <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>
-          <span class="price-item--sale price">{{ price | default: '&nbsp;' }}</span>
-        </span>
-        <span class="price-item__group">
-          <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
-          <span class="price-item--regular compare-at-price">{{- compare_at_price -}}</span>
-        </span>
-      {% else %}
-        <span class="price-item__group">
-          <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
-          <span class="price-item--regular compare-at-price">{{- compare_at_price -}}</span>
-        </span>
-        <span class="price-item__group">
-          <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>
-          <span class="price-item--sale price">{{ price | default: '&nbsp;' }}</span>
-        </span>
-      {% endif %}
-      {%- if at_tier_label != blank -%}
-        <span class="at-price-tier-label at-price-tier-label--{{ at_tier }}">{{ at_tier_label }}</span>
-      {%- endif -%}
-    </div>
-  {% endif %}
+    {%- if at_tier_label != blank -%}
+      <span class="at-price-tier-label at-price-tier-label--{{ at_tier }}">{{ at_tier_label }}</span>
+    {%- endif -%}
+  </div>
   {%- if at_guest_member_price != null -%}
     <span hidden data-at-member-price-src="{{ at_guest_member_price | escape }}"></span>
   {%- endif -%}

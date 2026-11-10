@@ -211,7 +211,15 @@
 .at-pmodal__row--current .at-ring--pro { border-width: 3px; }
 .at-ring--wholesale { border: 3px solid var(--at-tier-wholesale); color: var(--at-tier-wholesale); }
 
-/* ---------- Header ring + menu ---------- */
+/* ---------- Header ring (on the stock shopify-account button) + membership chip menu ---------- */
+.at-acct-ring--member { --at-acct-ring: var(--at-tier-member); }
+.at-acct-ring--pro { --at-acct-ring: var(--at-tier-pro); }
+.at-acct-ring--wholesale { --at-acct-ring: var(--at-tier-wholesale); }
+.at-acct-ring shopify-account {
+  display: inline-flex;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px var(--at-acct-ring);
+}
 .at-acct {
   position: relative;
   display: inline-flex;
@@ -220,27 +228,14 @@
 .at-acct__trigger {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
   min-height: 2.75rem;
   color: inherit;
   cursor: pointer;
   anchor-name: --at-acct;
 }
-.at-acct__ring {
-  width: 2rem;
-  height: 2rem;
-  box-sizing: border-box;
-  border-radius: 50%;
-  border: 3px solid var(--at-acct-ring, currentColor);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.at-acct__ring svg { width: 0.8125rem; height: 0.9375rem; }
-.at-acct--member { --at-acct-ring: var(--at-tier-member); }
-.at-acct--pro { --at-acct-ring: var(--at-tier-pro); }
-.at-acct--wholesale { --at-acct-ring: var(--at-tier-wholesale); }
-.at-acct__chip { padding: 0.125rem 0.375rem; font-size: 0.625rem; }
+.at-chip--member { background: var(--at-tier-member); }
+.at-chip--wholesale { background: var(--at-tier-wholesale); }
+.at-acct__chip { padding: 0.1875rem 0.4375rem; font-size: 0.625rem; text-transform: uppercase; }
 
 .at-acct__menu {
   position: fixed;

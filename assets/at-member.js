@@ -50,9 +50,10 @@ if (!window.__atMemberPricingBound) {
  */
 function syncMemberPrice(productPrice) {
   const bar = productPrice.querySelector('.at-mbar--guest');
+  if (!bar) return;
+  // No source (e.g. a combined listing switched to a MAP product): fall back to the no-number copy.
   const src = productPrice.querySelector('[data-at-member-price-src]');
-  if (!bar || !src) return;
-  const value = src.getAttribute('data-at-member-price-src') || '';
+  const value = (src && src.getAttribute('data-at-member-price-src')) || '';
   const lead = bar.querySelector('[data-at-member-lead]');
   const priceLead = bar.querySelector('[data-at-member-price-lead]');
   const priceEl = bar.querySelector('[data-at-member-price]');

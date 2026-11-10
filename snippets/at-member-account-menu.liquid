@@ -1,12 +1,13 @@
 {%- doc -%}
-  Header profile icon for signed-in member tiers: a ring per tier (Pro also gets a chip) and a menu
-  with the tier, renewal date, Threads Cash, this month's shipping code, savings this year and links.
-  Guests and signed-in customers without a tier keep the stock `shopify-account` button.
+  Header membership chip for signed-in member tiers, rendered beside the stock `shopify-account`
+  button (which keeps the merchant's account menu and B2B company / location switching and gets a
+  tier ring via `.at-acct-ring--<tier>`). The chip opens a menu with the tier, renewal date,
+  Threads Cash, this month's shipping code, savings this year and a My membership link.
   Reads contract metafields only: customer `wagner.pro_expires`, `wagner.threads_cash`,
   `wagner.ship_code`, `wagner.savings_ytd`; company location `wagner.terms_status`.
 
   @param {string} tier - member | pro | wholesale
-  @param {string} [display_style] - 'icon' | 'text' (header setting)
+  @param {string} [display_style] - 'icon' | 'text' (header setting; unused, kept for callers)
 {%- enddoc -%}
 {%- liquid
   assign sample = false
@@ -58,6 +59,7 @@
 
   assign tier_name_key = 'at_member.menu.tier_' | append: tier
   assign tier_name = tier_name_key | t
+  assign tier_chip_key = 'at_member.tiers.' | append: tier
   assign renew_date = ''
   if pro_expires != blank
     assign renew_date = pro_expires | date: '%b %Y'
@@ -66,24 +68,16 @@
   assign customer_name = customer.first_name | default: customer.name
 -%}
 {{ 'at-member.css' | asset_url | stylesheet_tag }}
-<div class="account-button header-actions__action at-acct at-acct--{{ tier }}" data-testid="at-member-account" data-at-tier="{{ tier }}">
+<div class="header-actions__action at-acct at-acct--{{ tier }}" data-testid="at-member-account" data-at-tier="{{ tier }}">
   <button
     type="button"
     class="at-acct__trigger button-unstyled"
     popovertarget="AtMemberAccountMenu"
     aria-label="{{ 'at_member.menu.open' | t: tier: tier_name }}"
   >
-    <span class="at-acct__ring" aria-hidden="true">
-      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="17" viewBox="0 0 15 17" fill="none">
-        <path stroke="currentColor" stroke-linejoin="round" stroke-width="var(--icon-stroke-width)" d="M10.375 3.813a3.063 3.063 0 1 1-6.125 0 3.063 3.063 0 0 1 6.125 0ZM7.313 9.5c-3.667 0-6.24 2.691-6.563 6.125h13.125C13.552 12.191 10.979 9.5 7.312 9.5Z"/>
-      </svg>
+    <span class="at-chip at-chip--{{ tier }} at-acct__chip">
+      {%- if tier == 'pro' -%}{{ 'at_member.tiers.pro_chip' | t }}{%- else -%}{{ tier_chip_key | t }}{%- endif -%}
     </span>
-    {%- if tier == 'pro' -%}
-      <span class="at-chip at-chip--pro at-acct__chip" aria-hidden="true">{{ 'at_member.tiers.pro_chip' | t }}</span>
-    {%- endif -%}
-    {%- if display_style == 'text' -%}
-      <span class="account-button__text header-actions__text-style mobile:hidden">{{ 'content.account_title' | t }}</span>
-    {%- endif -%}
   </button>
 
   <div id="AtMemberAccountMenu" class="at-acct__menu color-custom-popover" popover>
@@ -121,10 +115,6 @@
     <hr class="at-acct__rule">
     <ul class="at-acct__links" role="list">
       <li><a href="{{ my_membership_url }}">{{ 'at_member.menu.my_membership' | t }}</a></li>
-      <li><a href="{{ routes.account_url }}">{{ 'at_member.menu.orders_profile' | t }}</a></li>
-      {%- if customer -%}
-        <li><a href="{{ routes.account_logout_url }}">{{ 'at_member.menu.log_out' | t }}</a></li>
-      {%- endif -%}
     </ul>
   </div>
 </div>
