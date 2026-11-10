@@ -45,13 +45,24 @@
   endif
 
   # Product page, signed-in tier: label the B2B catalog price (compare-at = guest price).
+  # Product page, guest on a brand without MAP (`product.wagner.map_protected` explicitly false):
+  # expose the variant's `wagner.member_price` for the bar under the price (assets/at-member.js
+  # copies it on variant change). Missing metafields = MAP-protected = no number.
   assign at_tier_label = ''
-  if show_compare_price and is_product_card == false and product.handle == product_resource.handle
+  assign at_guest_member_price = null
+  if is_product_card == false and product.handle == product_resource.handle
     capture at_tier
       render 'at-member-tier'
     endcapture
     assign at_tier = at_tier | strip
-    if at_tier != 'guest'
+    if at_tier == 'guest' and product_resource.metafields.wagner.map_protected.value == false
+      assign at_guest_member_price = ''
+      assign at_mp = selected_variant.metafields.wagner.member_price.value
+      if at_mp != blank
+        assign at_guest_member_price = at_mp | money
+      endif
+    endif
+    if at_tier != 'guest' and show_compare_price
       assign at_tier_label_key = 'at_member.price_label.' | append: at_tier
       assign at_tier_label = at_tier_label_key | t
     endif
@@ -138,6 +149,9 @@
       {%- endif -%}
     </div>
   {% endif %}
+  {%- if at_guest_member_price != null -%}
+    <span hidden data-at-member-price-src="{{ at_guest_member_price | escape }}"></span>
+  {%- endif -%}
   {%- if selected_variant.unit_price and show_unit_price %}
     {%- liquid
       if use_currency

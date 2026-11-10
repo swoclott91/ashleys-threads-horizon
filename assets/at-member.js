@@ -41,3 +41,39 @@ if (!window.__atMemberPricingBound) {
     }
   });
 }
+
+/**
+ * Brands without MAP: keep the guest bar's member price in step with the selected variant.
+ * `snippets/price.liquid` puts the variant's `wagner.member_price` in a hidden
+ * `[data-at-member-price-src]` inside the price container, which product-price swaps on variant
+ * change. Empty value → back to "Members pay less" with no number.
+ */
+function syncMemberPrice(productPrice) {
+  const bar = productPrice.querySelector('.at-mbar--guest');
+  const src = productPrice.querySelector('[data-at-member-price-src]');
+  if (!bar || !src) return;
+  const value = src.getAttribute('data-at-member-price-src') || '';
+  const lead = bar.querySelector('[data-at-member-lead]');
+  const priceLead = bar.querySelector('[data-at-member-price-lead]');
+  const priceEl = bar.querySelector('[data-at-member-price]');
+  if (!(lead instanceof HTMLElement) || !(priceLead instanceof HTMLElement) || !priceEl) return;
+  // Only write on change: writing textContent is itself a mutation this observer sees.
+  if (priceEl.textContent !== value) priceEl.textContent = value;
+  if (priceLead.hidden !== (value === '')) priceLead.hidden = value === '';
+  if (lead.hidden !== (value !== '')) lead.hidden = value !== '';
+}
+
+function watchProductPrices() {
+  document.querySelectorAll('product-price').forEach((el) => {
+    if (!(el instanceof HTMLElement) || el.dataset.atMemberWatched) return;
+    if (!el.querySelector('.at-mbar--guest [data-at-member-price-lead]')) return;
+    el.dataset.atMemberWatched = 'true';
+    new MutationObserver(() => syncMemberPrice(el)).observe(el, { childList: true, subtree: true });
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', watchProductPrices, { once: true });
+} else {
+  watchProductPrices();
+}
