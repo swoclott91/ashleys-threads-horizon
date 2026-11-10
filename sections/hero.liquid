@@ -1,3 +1,5 @@
+{%- capture at_section_visible -%}{% render 'at-section-visible', visibility: section.settings.at_visibility %}{%- endcapture -%}
+{%- if at_section_visible contains 'true' -%}
 {% liquid
   assign media_count = 0
   assign media_count_mobile = 0
@@ -749,6 +751,7 @@
     }
   }
 {% endstylesheet %}
+{%- endif -%}
 
 {% schema %}
 {
@@ -785,6 +788,18 @@
     "groups": ["header"]
   },
   "settings": [
+    {
+      "type": "select",
+      "id": "at_visibility",
+      "label": "Show to",
+      "info": "Home split: guest sections render only for signed-out visitors; the Personal home section only for signed-in customers.",
+      "options": [
+        { "value": "all", "label": "Everyone" },
+        { "value": "guests", "label": "Guests (signed out)" },
+        { "value": "customers", "label": "Signed-in customers" }
+      ],
+      "default": "all"
+    },
     {
       "type": "header",
       "content": "t:content.media_1"

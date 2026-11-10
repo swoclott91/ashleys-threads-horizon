@@ -1,0 +1,187 @@
+{%- comment -%}
+  "What are you making?" tiles for guests (design §15). Each tile opens its guide collection.
+  Guest personalization is client-side only (Liquid can't read local storage):
+  - picking a tile saves the answer in localStorage `at_guest_hint` ({q1, url, title, at});
+  - on the next visit the tiles show "Pick up where you left off" and mark that tile;
+  - when the Shopify Forms popup opens, the matching Q1 radio is preselected (best effort:
+    the Forms markup isn't ours, so this looks for an input whose value is the `use:*` value).
+  The server-rendered page is the same for every guest, so it stands on its own for search.
+{%- endcomment -%}
+{%- capture at_section_visible -%}{% render 'at-section-visible', visibility: section.settings.at_visibility %}{%- endcapture -%}
+{%- if at_section_visible contains 'true' -%}
+  {%- liquid
+    assign decorator_url = section.settings.decorator_url | default: '/collections/all'
+  -%}
+  <div class="section section--page-width">
+<div class="at-tiles" data-at-tiles>
+    <div class="at-tiles__head">
+      <h2 class="at-tiles__title h3">{{ section.settings.heading }}</h2>
+      <p class="at-tiles__resume" data-at-resume hidden>
+        Pick up where you left off: <a href="#" data-at-resume-link></a>
+      </p>
+    </div>
+    {%- liquid
+      assign tiles = "use:decorator|Clients' designs|Custom orders for businesses, teams, events|" | append: decorator_url
+      assign tiles = tiles | append: ';use:graphic-tees|My own designs|Graphic tees for Etsy, markets, boutiques|/collections/graphic-tees-boutique-sellers'
+      assign tiles = tiles | append: ';use:apparel-brand|My own label|Building an apparel brand or collection|/collections/building-your-apparel-brand'
+      assign tiles = tiles | append: ';use:groups-events|My group, team or event|Schools, clubs, reunions, fundraisers|/collections/groups-events'
+      assign tiles = tiles | append: ';use:business-merch|My company|Staff shirts, uniforms, company events|/collections/business-merch'
+      assign tiles = tiles | append: ';use:personal|Me and my family|Matching sets, crafting, wearing blank|/collections/family-matching-sets'
+      assign tiles = tiles | split: ';'
+    -%}
+    <div class="at-tiles__groups">
+      {%- for tile in tiles -%}
+        {%- assign t = tile | split: '|' -%}
+        {%- if forloop.index == 1 -%}<p class="at-tiles__group">I sell or print</p><ul class="at-tiles__grid" role="list">{%- endif -%}
+        {%- if forloop.index == 4 -%}</ul><p class="at-tiles__group">I'm buying for</p><ul class="at-tiles__grid" role="list">{%- endif -%}
+        <li>
+          <a class="at-tiles__tile" href="{{ t[3] }}" data-at-q1="{{ t[0] }}" data-at-title="{{ t[1] | escape }}">
+            <span class="at-tiles__label">{{ t[1] }}</span>
+            <span class="at-tiles__help">{{ t[2] }}</span>
+          </a>
+        </li>
+        {%- if forloop.last -%}</ul>{%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+  </div>
+
+  <script>
+    (() => {
+      const KEY = 'at_guest_hint';
+      const root = document.currentScript.previousElementSibling?.querySelector('[data-at-tiles]');
+      if (!root) return;
+      const read = () => { try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { return null; } };
+      const write = (v) => { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} };
+
+      root.addEventListener('click', (event) => {
+        const tile = event.target.closest('[data-at-q1]');
+        if (!tile) return;
+        write({ q1: tile.dataset.atQ1, url: tile.getAttribute('href'), title: tile.dataset.atTitle, at: Date.now() });
+      });
+
+      const hint = read();
+      if (!hint || !hint.q1) return;
+      const tile = root.querySelector(`[data-at-q1="${CSS.escape(hint.q1)}"]`);
+      if (tile) {
+        tile.setAttribute('aria-current', 'true');
+        const resume = root.querySelector('[data-at-resume]');
+        const link = root.querySelector('[data-at-resume-link]');
+        link.textContent = hint.title || tile.dataset.atTitle;
+        link.href = hint.url || tile.getAttribute('href');
+        resume.hidden = false;
+      }
+
+      // Preselect Q1 in the Shopify Forms popup when it appears (best effort, 30 s).
+      const find = (node) => {
+        const input = node.querySelector && node.querySelector(`input[type="radio"][value="${CSS.escape(hint.q1)}"]`);
+        if (input) return input;
+        for (const el of node.querySelectorAll ? node.querySelectorAll('*') : []) {
+          if (el.shadowRoot) { const hit = find(el.shadowRoot); if (hit) return hit; }
+        }
+        return null;
+      };
+      const tryPreselect = () => {
+        const input = find(document);
+        if (input && !input.checked && !input.dataset.atTouched) {
+          input.click();
+          input.dataset.atTouched = '1';
+          return true;
+        }
+        return Boolean(input);
+      };
+      if (tryPreselect()) return;
+      const observer = new MutationObserver(() => { if (tryPreselect()) observer.disconnect(); });
+      observer.observe(document.body, { childList: true, subtree: true });
+      setTimeout(() => observer.disconnect(), 30000);
+    })();
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .at-tiles {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-block: 28px;
+  }
+  .at-tiles__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+  .at-tiles__title, .at-tiles__resume { margin: 0; }
+  .at-tiles__resume { font-size: 0.95rem; }
+  .at-tiles__resume a { font-weight: 700; }
+  .at-tiles__group {
+    margin: 10px 0 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgb(var(--color-foreground-rgb) / 0.72);
+  }
+  .at-tiles__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  @media screen and (min-width: 750px) {
+    .at-tiles__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  .at-tiles__tile {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-height: 64px;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
+    background: rgb(var(--color-foreground-rgb) / 0.03);
+    color: inherit;
+    text-decoration: none;
+  }
+  .at-tiles__tile:hover, .at-tiles__tile[aria-current='true'] {
+    border-color: #2b4a3f;
+    background: #e9efec;
+    color: #1a2e27;
+  }
+  .at-tiles__label { font-weight: 700; }
+  .at-tiles__help { font-size: 0.85rem; color: rgb(var(--color-foreground-rgb) / 0.72); }
+  .at-tiles__tile:hover .at-tiles__help, .at-tiles__tile[aria-current='true'] .at-tiles__help { color: #3f3f3b; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "What are you making?",
+  "tag": "section",
+  "class": "at-make-tiles-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "at_visibility",
+      "label": "Show to",
+      "options": [
+        { "value": "all", "label": "Everyone" },
+        { "value": "guests", "label": "Guests (signed out)" },
+        { "value": "customers", "label": "Signed-in customers" }
+      ],
+      "default": "guests"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What are you making?"
+    },
+    {
+      "type": "url",
+      "id": "decorator_url",
+      "label": "Clients' designs link",
+      "info": "No single guide for decorators; defaults to all products."
+    }
+  ],
+  "presets": [{ "name": "What are you making?" }]
+}
+{% endschema %}
