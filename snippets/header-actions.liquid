@@ -63,7 +63,16 @@
   {% endif %}
   {{- block.shopify_attributes -}}
 >
-  {% if shop.customer_accounts_enabled %}
+  {%- liquid
+    capture at_tier
+      render 'at-member-tier'
+    endcapture
+    assign at_tier = at_tier | strip
+  -%}
+  {% if at_tier != 'guest' %}
+    {%- comment -%} AT member pricing: tier ring + membership menu (guests keep shopify-account below). {%- endcomment -%}
+    {% render 'at-member-account-menu', tier: at_tier, display_style: display_style %}
+  {% elsif shop.customer_accounts_enabled %}
     {% liquid
       assign account_actions_style = ''
       if display_style == 'text' and section

@@ -1,0 +1,130 @@
+{%- doc -%}
+  Header profile icon for signed-in member tiers: a ring per tier (Pro also gets a chip) and a menu
+  with the tier, renewal date, Threads Cash, this month's shipping code, savings this year and links.
+  Guests and signed-in customers without a tier keep the stock `shopify-account` button.
+  Reads contract metafields only: customer `wagner.pro_expires`, `wagner.threads_cash`,
+  `wagner.ship_code`, `wagner.savings_ytd`; company location `wagner.terms_status`.
+
+  @param {string} tier - member | pro | wholesale
+  @param {string} [display_style] - 'icon' | 'text' (header setting)
+{%- enddoc -%}
+{%- liquid
+  assign sample = false
+  if request.design_mode and settings.at_member_preview_tier != 'off' and settings.at_member_preview_tier != blank
+    assign sample = true
+  endif
+
+  assign pro_expires = customer.metafields.wagner.pro_expires.value
+  assign cash = customer.metafields.wagner.threads_cash.value
+  assign ship = customer.metafields.wagner.ship_code.value
+  assign savings = customer.metafields.wagner.savings_ytd.value
+  assign terms = customer.current_location.metafields.wagner.terms_status.value
+
+  assign cash_balance = cash.balance
+  assign savings_total = savings.total
+  assign ship_code = ''
+  assign today = 'now' | date: '%Y-%m-%d'
+  if ship.status == 'issued' and ship.code != blank
+    assign ship_code = ship.code
+    if ship.valid_from != blank and ship.valid_from > today
+      assign ship_code = ''
+    endif
+    if ship.valid_until != blank and ship.valid_until < today
+      assign ship_code = ''
+    endif
+  endif
+  assign terms_label = ''
+  if terms.terms != blank
+    assign terms_label = terms.terms | replace: '_', ' ' | capitalize
+  endif
+
+  if sample
+    if cash == blank and tier != 'wholesale'
+      assign cash_balance = '12.40'
+    endif
+    if savings == blank
+      assign savings_total = '612.00'
+    endif
+    if ship == blank and tier == 'pro'
+      assign ship_code = 'PRO-NOV-SAMPLE'
+    endif
+    if pro_expires == blank and tier == 'pro'
+      assign pro_expires = 'now' | date: '%s' | plus: 31536000
+    endif
+    if terms_label == blank and tier == 'wholesale'
+      assign terms_label = 'Net 30'
+    endif
+  endif
+
+  assign tier_name_key = 'at_member.menu.tier_' | append: tier
+  assign tier_name = tier_name_key | t
+  assign renew_date = ''
+  if pro_expires != blank
+    assign renew_date = pro_expires | date: '%b %Y'
+  endif
+  assign my_membership_url = settings.at_my_membership_page_url | default: '/pages/my-membership'
+  assign customer_name = customer.first_name | default: customer.name
+-%}
+{{ 'at-member.css' | asset_url | stylesheet_tag }}
+<div class="account-button header-actions__action at-acct at-acct--{{ tier }}" data-testid="at-member-account" data-at-tier="{{ tier }}">
+  <button
+    type="button"
+    class="at-acct__trigger button-unstyled"
+    popovertarget="AtMemberAccountMenu"
+    aria-label="{{ 'at_member.menu.open' | t: tier: tier_name }}"
+  >
+    <span class="at-acct__ring" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="17" viewBox="0 0 15 17" fill="none">
+        <path stroke="currentColor" stroke-linejoin="round" stroke-width="var(--icon-stroke-width)" d="M10.375 3.813a3.063 3.063 0 1 1-6.125 0 3.063 3.063 0 0 1 6.125 0ZM7.313 9.5c-3.667 0-6.24 2.691-6.563 6.125h13.125C13.552 12.191 10.979 9.5 7.312 9.5Z"/>
+      </svg>
+    </span>
+    {%- if tier == 'pro' -%}
+      <span class="at-chip at-chip--pro at-acct__chip" aria-hidden="true">{{ 'at_member.tiers.pro_chip' | t }}</span>
+    {%- endif -%}
+    {%- if display_style == 'text' -%}
+      <span class="account-button__text header-actions__text-style mobile:hidden">{{ 'content.account_title' | t }}</span>
+    {%- endif -%}
+  </button>
+
+  <div id="AtMemberAccountMenu" class="at-acct__menu color-custom-popover" popover>
+    <div class="at-acct__head">
+      <span class="at-acct__tier">{{ tier_name }}</span>
+      {%- if tier == 'pro' and pro_expires != blank -%}
+        <span class="at-acct__renews">{{ 'at_member.menu.renews' | t: date: renew_date }}</span>
+      {%- elsif tier == 'wholesale' and terms_label != blank -%}
+        <span class="at-acct__renews">{{ terms_label }}</span>
+      {%- endif -%}
+    </div>
+    {%- if customer_name != blank -%}
+      <p class="at-acct__name">{{ customer_name }}</p>
+    {%- endif -%}
+    <dl class="at-acct__facts">
+      {%- if cash_balance != blank -%}
+        <div class="at-acct__fact">
+          <dt>{{ 'at_member.menu.threads_cash' | t }}</dt>
+          <dd><strong>{{ cash_balance | times: 100 | money }}</strong></dd>
+        </div>
+      {%- endif -%}
+      {%- if ship_code != blank -%}
+        <div class="at-acct__fact">
+          <dt>{{ 'at_member.menu.free_shipment' | t }}</dt>
+          <dd><code class="at-acct__code">{{ ship_code }}</code></dd>
+        </div>
+      {%- endif -%}
+      {%- if savings_total != blank -%}
+        <div class="at-acct__fact">
+          <dt>{{ 'at_member.menu.saved_this_year' | t }}</dt>
+          <dd><strong class="at-acct__saved">{{ savings_total | times: 100 | money_without_trailing_zeros }}</strong></dd>
+        </div>
+      {%- endif -%}
+    </dl>
+    <hr class="at-acct__rule">
+    <ul class="at-acct__links" role="list">
+      <li><a href="{{ my_membership_url }}">{{ 'at_member.menu.my_membership' | t }}</a></li>
+      <li><a href="{{ routes.account_url }}">{{ 'at_member.menu.orders_profile' | t }}</a></li>
+      {%- if customer -%}
+        <li><a href="{{ routes.account_logout_url }}">{{ 'at_member.menu.log_out' | t }}</a></li>
+      {%- endif -%}
+    </ul>
+  </div>
+</div>

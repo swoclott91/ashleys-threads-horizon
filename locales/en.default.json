@@ -125,6 +125,83 @@
     "view_store_information": "View store information",
     "sort": "Sort"
   },
+  "at_member": {
+    "join_free": "Join free",
+    "log_in": "Log in",
+    "see_pro": "See Pro",
+    "get_pro": "Get Pro",
+    "tiers": {
+      "guest": "Guest",
+      "member": "Member",
+      "pro": "Pro",
+      "wholesale": "Wholesale",
+      "pro_chip": "PRO"
+    },
+    "price_label": {
+      "member": "Member price",
+      "pro": "Pro price",
+      "wholesale": "Wholesale price"
+    },
+    "bar": {
+      "guest_lead": "Members pay less",
+      "member_next_rate": "Pro adds {{ rate }} Threads Cash and a free shipment every month",
+      "member_next": "Pro adds Threads Cash and a free shipment every month",
+      "pro_earning_rate": "Earning {{ rate }} Threads Cash",
+      "pro_earning": "Earning Threads Cash",
+      "pro_free_shipment": "free shipment available this month",
+      "wholesale_terms": "{{ terms }} terms"
+    },
+    "terms": {
+      "on_hold": "account on hold",
+      "pending": "terms pending approval"
+    },
+    "modal": {
+      "title": "Your pricing",
+      "title_guest": "Member pricing",
+      "lede_guest": "Members pay less on most items. Joining is free.",
+      "lede_member": "You're a Member. Here's what each level gets you.",
+      "lede_pro": "You're a Pro member. Here's what each level gets you.",
+      "lede_wholesale": "You buy at wholesale prices.",
+      "your_level": "Your level",
+      "free": "Free",
+      "per_year": "{{ amount }}/yr",
+      "guest_desc": "List prices, bulk discounts from {{ amount }}",
+      "member_desc": "Member prices on everything · Member Deals",
+      "pro_desc": "Pro prices, below member prices",
+      "pro_shipment": "1 free shipment every month",
+      "wholesale_desc": "Wholesale prices for approved businesses",
+      "threads_cash_rate": "{{ rate }} Threads Cash",
+      "free_shipping_over": "free shipping over {{ amount }}",
+      "footer_note": "Member checkout takes card, Apple Pay or PayPal. Bulk discounts for guests don't stack with member prices.",
+      "wholesale_link": "Buying for a business at volume? Apply for wholesale"
+    },
+    "menu": {
+      "open": "Account menu, {{ tier }}",
+      "tier_member": "Member",
+      "tier_pro": "Pro member",
+      "tier_wholesale": "Wholesale",
+      "renews": "renews {{ date }}",
+      "threads_cash": "Threads Cash",
+      "free_shipment": "Free shipment",
+      "saved_this_year": "Saved this year",
+      "my_membership": "My membership",
+      "orders_profile": "Orders and profile",
+      "log_out": "Log out"
+    },
+    "cart": {
+      "guest_prompt": "Members pay less on most items.",
+      "away_from_free_shipping": "{{ amount }} away from free shipping",
+      "free_shipping_unlocked": "Free shipping unlocked",
+      "earns_threads_cash": "Earns {{ amount }} Threads Cash",
+      "free_shipment_title": "Free shipment available",
+      "free_shipment_text_html": "Code <code>{{ code }}</code> applies at checkout.",
+      "terms_fallback": "Net terms",
+      "terms_good": "Nothing due today. Invoice due {{ days }} days after the order.",
+      "terms_good_generic": "Nothing due today. You'll get an invoice after the order.",
+      "terms_pending": "Your terms are pending approval. Pay by card for now.",
+      "terms_hold": "Your terms are on hold. Contact us before ordering on terms."
+    }
+  },
   "at_discount_progress": {
     "get_member_discounts": "Get member discounts",
     "log_in_prompt": "Log in to see discounts.",

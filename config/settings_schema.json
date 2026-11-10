@@ -1902,7 +1902,6 @@
         "placeholder": "t:settings.default",
         "visible_if": "{{ settings.at_discount_progress_login_style == 'button-unstyled' }}"
       },
-
       {
         "type": "url",
         "id": "empty_cart_button_link",
@@ -2183,6 +2182,57 @@
         "id": "currency_code_enabled_cart_total",
         "label": "t:settings.cart_total",
         "default": true
+      },
+      {
+        "type": "header",
+        "content": "t:content.at_member_pricing_heading"
+      },
+      {
+        "type": "select",
+        "id": "at_member_preview_tier",
+        "label": "t:settings.at_member_preview_tier",
+        "info": "t:info.at_member_preview_tier",
+        "options": [
+          {
+            "value": "off",
+            "label": "t:options.at_member_preview_off"
+          },
+          {
+            "value": "guest",
+            "label": "t:options.at_member_preview_guest"
+          },
+          {
+            "value": "member",
+            "label": "t:options.at_member_preview_member"
+          },
+          {
+            "value": "pro",
+            "label": "t:options.at_member_preview_pro"
+          },
+          {
+            "value": "wholesale",
+            "label": "t:options.at_member_preview_wholesale"
+          }
+        ],
+        "default": "off"
+      },
+      {
+        "type": "text",
+        "id": "at_membership_page_url",
+        "label": "t:settings.at_membership_page_url",
+        "default": "/pages/membership"
+      },
+      {
+        "type": "text",
+        "id": "at_my_membership_page_url",
+        "label": "t:settings.at_my_membership_page_url",
+        "default": "/pages/my-membership"
+      },
+      {
+        "type": "text",
+        "id": "at_wholesale_page_url",
+        "label": "t:settings.at_wholesale_page_url",
+        "default": "/pages/wholesale"
       }
     ]
   },

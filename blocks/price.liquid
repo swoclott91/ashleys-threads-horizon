@@ -57,6 +57,10 @@
     show_sale_price_first: block_settings.show_sale_price_first
   %}
 
+  {%- if block_settings.at_show_member_bar and template.name == 'product' and product_resource != blank and product_resource.id == product.id -%}
+    {% render 'at-member-price-bar', uid: block.id %}
+  {%- endif -%}
+
   {% if block_settings.show_tax_info %}
     <div class="tax-note">
       {%- if cart.duties_included and cart.taxes_included -%}
@@ -107,6 +111,13 @@
       "type": "checkbox",
       "id": "show_sale_price_first",
       "label": "t:settings.show_sale_price_first",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "at_show_member_bar",
+      "label": "t:settings.at_show_member_bar",
+      "info": "t:info.at_show_member_bar",
       "default": true
     },
     {

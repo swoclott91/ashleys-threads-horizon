@@ -33,6 +33,7 @@
     "text": "Text"
   },
   "content": {
+    "at_member_pricing_heading": "Member pricing",
     "visible_if_collection_has_more_products": "Visible if collection has more products than shown",
     "advanced": "Advanced",
     "appearance": "Appearance",
@@ -232,6 +233,8 @@
     "work_quickly_to_ship": "<p>We will work quickly to ship your order as soon as possible. Once your order has shipped, you will receive an email with further information. Delivery times vary depending on your location.</p>"
   },
   "info": {
+    "at_show_member_bar": "Product page only. Guests see \"Members pay less\" with no number; signed-in tiers see their next level. Tapping it opens the pricing modal.",
+    "at_member_preview_tier": "Only applies inside the theme editor, using sample values where Wagner metafields are blank. Shoppers always see their own tier.",
     "actions_display_style": "Icons are always used on mobile",
     "applies_on_image_only": "Applies to images only",
     "aspect_ratio_adjusted": "Adjusted in some layouts",
@@ -455,6 +458,11 @@
     "comparison_slider": "Comparison slider"
   },
   "options": {
+    "at_member_preview_off": "Off (real visitor)",
+    "at_member_preview_guest": "Guest",
+    "at_member_preview_member": "Member",
+    "at_member_preview_pro": "Pro",
+    "at_member_preview_wholesale": "Wholesale",
     "at_breadcrumbs_auto": "Show full trail when it fits",
     "at_breadcrumbs_parent": "Immediate parent only",
     "above_carousel": "Above carousel",
@@ -787,6 +795,11 @@
     "below_media": "Below media"
   },
   "settings": {
+    "at_show_member_bar": "Show member pricing bar under the price",
+    "at_member_preview_tier": "Preview tier as (theme editor only)",
+    "at_membership_page_url": "Membership page path",
+    "at_my_membership_page_url": "My membership page path",
+    "at_wholesale_page_url": "Wholesale application page path",
     "at_breadcrumbs_enabled": "Show breadcrumbs",
     "at_breadcrumbs_attributes": "Narrow links by product attributes",
     "at_breadcrumbs_mobile": "Mobile display",
