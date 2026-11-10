@@ -1,0 +1,347 @@
+{%- comment -%}
+  Personal home (membership design §15, workstream 2B). One section for signed-in customers;
+  guest sections are set to "Show to: Guests". Modules render in the order Wagner writes to
+  customer `wagner.home_modules`; each module's products come from `wagner.for_you_*`
+  (contract §5). Unknown keys are skipped. If Wagner hasn't written a plan yet, a default
+  order per visitor is used, so the page never comes up empty. Nothing here calls Wagner.
+{%- endcomment -%}
+{%- capture at_visitor -%}{% render 'at-visitor' %}{%- endcapture -%}
+{%- assign at_visitor = at_visitor | strip -%}
+{%- if at_visitor != 'guest' -%}
+  {%- liquid
+    assign at_preview = false
+    if request.design_mode and settings.at_preview_visitor != 'off'
+      assign at_preview = true
+    endif
+    assign at_sample = settings.at_preview_collection.products
+
+    assign mf = customer.metafields.wagner
+    assign list_start = mf.for_you_start.value
+    assign list_reorder = mf.for_you_reorder.value
+    assign list_make = mf.for_you_make.value
+    assign list_method = mf.for_you_method.value
+    assign list_deals = mf.for_you_deals.value
+    assign segment = mf.segment.value | default: ''
+    assign ship = mf.ship_code.value
+    assign cash = mf.threads_cash.value
+    assign ytd = mf.savings_ytd.value
+    assign progress = mf.wholesale_progress.value
+    assign terms = customer.current_location.metafields.wagner.terms_status.value
+
+    if at_preview
+      if segment == blank
+        assign segment = section.settings.preview_segment
+      endif
+      if list_start == blank
+        assign list_start = at_sample
+      endif
+      if list_reorder == blank and at_visitor != 'member-new'
+        assign list_reorder = at_sample
+      endif
+      if list_make == blank
+        assign list_make = at_sample
+      endif
+      if list_deals == blank
+        assign list_deals = at_sample
+      endif
+    endif
+
+    capture guide_handle
+      render 'at-guide', segment: segment
+    endcapture
+    assign guide_handle = guide_handle | strip
+    assign guide = null
+    if guide_handle != blank
+      assign guide = collections[guide_handle]
+    endif
+    if list_start == blank and guide != blank
+      assign list_start = guide.products
+    endif
+    if list_deals == blank and settings.at_member_deals_collection != blank
+      assign list_deals = settings.at_member_deals_collection.products
+    endif
+    if list_make == blank
+      assign list_make = list_method
+    endif
+
+    assign for_you_url = settings.at_for_you_page.url | default: '/pages/for-you'
+    assign reorder_url = for_you_url | append: '#reorder'
+
+    assign modules = mf.home_modules.value
+    if modules == blank or at_preview
+      case at_visitor
+        when 'member-new'
+          assign modules = 'start_with_these,shipping_code,member_deals,certificate_status,segment_picks,new_in_guide' | split: ','
+        when 'member'
+          assign modules = 'buy_again,member_deals,shipping_code,threads_cash,segment_picks,restock_alerts,pro_savings' | split: ','
+        when 'pro'
+          assign modules = 'buy_again,member_deals,shipping_code,threads_cash,segment_picks,restock_alerts,wholesale_progress' | split: ','
+        when 'wholesale'
+          assign modules = 'reorder_kit,quick_order,terms_status,new_in_guide,certificate_status' | split: ','
+      endcase
+    endif
+
+    # Shipping code in date and issued (same rule as the account extension).
+    assign ship_ok = false
+    if ship != blank and ship.status == 'issued' and ship.code != blank
+      assign today = 'now' | date: '%Y-%m-%d'
+      if ship.valid_from <= today and ship.valid_until >= today
+        assign ship_ok = true
+      endif
+    endif
+    if at_preview and ship == blank and at_visitor != 'wholesale'
+      assign ship_ok = true
+    endif
+  -%}
+
+  <div class="section section--page-width">
+<div class="at-home" data-visitor="{{ at_visitor }}">
+    {%- comment -%} First screen: hero + one strip line. {%- endcomment -%}
+    {%- liquid
+      assign first = modules | first
+      assign hero_kicker = ''
+      assign hero_title = ''
+      assign hero_sub = ''
+      assign hero_url = for_you_url
+      case first
+        when 'buy_again', 'reorder_kit'
+          assign p0 = list_reorder | first
+          if first == 'reorder_kit'
+            assign hero_kicker = 'Reorder your kit'
+          else
+            assign hero_kicker = 'Buy again'
+          endif
+          if p0 != blank
+            assign hero_title = 'Your usual: ' | append: p0.title
+          else
+            assign hero_title = 'Your usual blanks, one tap away'
+          endif
+          assign hero_sub = 'Same styles and sizes as last time, at your prices.'
+          assign hero_url = for_you_url | append: '#reorder'
+        when 'start_with_these'
+          if guide != blank
+            assign hero_kicker = guide.title
+          else
+            assign hero_kicker = 'Welcome, member'
+          endif
+          assign hero_title = 'Start with these, picked for what you make'
+          assign hero_sub = 'Member prices on every one.'
+          assign hero_url = for_you_url | append: '#start'
+        else
+          assign hero_kicker = 'Welcome back'
+          assign hero_title = 'This month’s Member Deals'
+          assign hero_sub = 'Picked for how you print.'
+          assign hero_url = for_you_url | append: '#deals'
+      endcase
+    -%}
+    <a class="at-home__hero at-home__hero--{{ at_visitor }}" href="{{ hero_url }}">
+      <span class="at-home__kicker">{{ hero_kicker }}</span>
+      <span class="at-home__hero-title">{{ hero_title }}</span>
+      <span class="at-home__hero-sub">{{ hero_sub }}</span>
+    </a>
+
+    {%- capture strip -%}
+      {%- if modules contains 'shipping_code' and ship_ok -%}
+        <span>
+          {%- if at_preview and ship == blank -%}
+            Your first order ships free · code saved to your account
+          {%- elsif ship.kind == 'welcome' -%}
+            Your first order ships free · code <code>{{ ship.code }}</code>
+          {%- else -%}
+            Free shipment ready: <code>{{ ship.code }}</code>
+          {%- endif -%}
+        </span>
+      {%- endif -%}
+      {%- if modules contains 'threads_cash' and cash.balance != blank -%}
+        <span>Threads Cash {{ cash.balance | times: 100 | round | money }}</span>
+      {%- endif -%}
+      {%- if modules contains 'terms_status' -%}
+        {%- if terms != blank -%}
+          <span>{{ terms.terms | replace: '_', ' ' | capitalize }} · {{ terms.open_balance | times: 100 | round | money }} open
+            {%- if terms.next_due.on != blank %} · next due {{ terms.next_due.on | date: '%b %-d' }}{% endif -%}
+          </span>
+        {%- elsif at_preview -%}
+          <span>Net 30 · invoices in your account</span>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endcapture -%}
+    {%- if strip != blank -%}
+      <p class="at-home__strip">{{ strip }}</p>
+    {%- endif -%}
+
+    {%- for key in modules -%}
+      {%- case key -%}
+        {%- when 'buy_again' -%}
+          {% render 'at-product-row', id: 'at-buy-again', title: 'Buy again', note: 'From your past orders', products: list_reorder, link_url: reorder_url, link_label: 'Add same sizes' %}
+        {%- when 'reorder_kit' -%}
+          {% render 'at-product-row', id: 'at-reorder-kit', title: 'Reorder kit', note: 'Your usual items', products: list_reorder, link_url: section.settings.quick_order_url, link_label: 'Quick order' %}
+        {%- when 'start_with_these' -%}
+          {% render 'at-product-row', id: 'at-start', title: 'Start with these', note: guide.title, products: list_start, link_url: guide.url %}
+        {%- when 'member_deals' -%}
+          {% render 'at-product-row', id: 'at-deals', title: 'Member Deals for you', note: 'Filtered to blanks that suit how you decorate', products: list_deals, link_url: settings.at_member_deals_collection.url %}
+        {%- when 'segment_picks' -%}
+          {% render 'at-product-row', id: 'at-picks', title: 'Picked for what you make', products: list_make, link_url: for_you_url %}
+        {%- when 'new_in_guide' -%}
+          {%- if guide != blank -%}
+            {% render 'at-product-row', id: 'at-guide', title: guide.title, note: 'From the guide', products: guide.products, link_url: guide.url %}
+          {%- endif -%}
+        {%- when 'restock_alerts' -%}
+          {%- liquid
+            assign out_count = 0
+            for p in list_reorder
+              unless p.available
+                assign out_count = out_count | plus: 1
+              endunless
+            endfor
+          -%}
+          {%- if out_count > 0 -%}
+            <section class="at-card" aria-labelledby="at-restock-title">
+              <h2 class="at-card__title h5" id="at-restock-title">Restock alerts</h2>
+              <ul class="at-card__list" role="list">
+                {%- for p in list_reorder -%}
+                  {%- unless p.available -%}<li><a href="{{ p.url }}">{{ p.title }}</a>: out of stock right now</li>{%- endunless -%}
+                {%- endfor -%}
+              </ul>
+            </section>
+          {%- endif -%}
+        {%- when 'pro_savings' -%}
+          {%- if at_visitor == 'member' or at_visitor == 'member-new' -%}
+            {%- assign would = ytd.pro_would_save | default: '0' | times: 1 -%}
+            {%- if would > 0 or at_preview -%}
+              <a class="at-card at-card--pro" href="{{ for_you_url }}#pro">
+                <span class="at-card__title h5">
+                  {%- if would > 0 -%}Pro would have saved you {{ would | times: 100 | round | money }} this year{%- else -%}See what Pro would save you{%- endif -%}
+                </span>
+                <span>2% Threads Cash and a free shipment every month · $79/yr</span>
+              </a>
+            {%- endif -%}
+          {%- endif -%}
+        {%- when 'wholesale_progress' -%}
+          {%- if progress != blank -%}
+            <section class="at-card" aria-labelledby="at-wholesale-title">
+              <h2 class="at-card__title h5" id="at-wholesale-title">Wholesale</h2>
+              {%- if progress.status == 'applied' -%}
+                <p>Your application is under review.</p>
+              {%- elsif progress.eligible -%}
+                <p>You qualify for Wholesale pricing and Net terms. Your invitation is on its way.</p>
+              {%- else -%}
+                <p>{{ progress.spend_12m | times: 100 | round | money }} of {{ progress.threshold | times: 100 | round | money }} in the last 12 months.</p>
+              {%- endif -%}
+            </section>
+          {%- endif -%}
+        {%- when 'quick_order' -%}
+          <a class="at-card" href="{{ section.settings.quick_order_url | default: '/account' }}">
+            <span class="at-card__title h5">Quick order list</span>
+            <span>Type styles and quantities, add everything at once.</span>
+          </a>
+        {%- when 'certificate_status' -%}
+          <a class="at-card" href="{{ section.settings.certificate_url | default: '/account' }}">
+            <span class="at-card__title h5">
+              {%- if at_visitor == 'wholesale' -%}Tax certificate{%- else -%}Buying for a school or nonprofit?{%- endif -%}
+            </span>
+            <span>Add your tax-exempt certificate once, and we'll apply it to every order after review.</span>
+          </a>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .at-home {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-block: 20px 40px;
+  }
+  .at-home__hero {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 22px;
+    border-radius: 14px;
+    background: #2b4a3f;
+    color: #fff;
+    text-decoration: none;
+  }
+  .at-home__hero--member-new { background: #1d4ed8; }
+  .at-home__hero--pro { background: #2b2b2b; }
+  .at-home__hero--wholesale { background: #334155; }
+  .at-home__hero:hover { color: #fff; filter: brightness(1.06); }
+  .at-home__kicker { font-size: 0.875rem; opacity: 0.9; }
+  .at-home__hero-title { font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1.12; font-weight: 700; }
+  .at-home__hero-sub { font-size: 0.9rem; opacity: 0.9; }
+  .at-home__strip {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    padding: 12px 14px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
+    border-radius: 10px;
+    font-size: 0.9rem;
+  }
+  .at-home__strip code { font-weight: 700; }
+  .at-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 18px;
+    border-radius: 12px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
+    color: inherit;
+    text-decoration: none;
+  }
+  .at-card p, .at-card__title { margin: 0; }
+  .at-card--pro { border: 2px solid #b45309; background: #fff7ed; color: #2b2b2b; }
+  .at-card__list { margin: 0; padding-inline-start: 18px; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Personal home",
+  "tag": "section",
+  "class": "at-personal-home-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Signed-in customers only. Modules and products come from Wagner (customer metafields wagner.home_modules and wagner.for_you_*)."
+    },
+    {
+      "type": "select",
+      "id": "at_visibility",
+      "label": "Show to",
+      "options": [
+        { "value": "customers", "label": "Signed-in customers" }
+      ],
+      "default": "customers"
+    },
+    {
+      "type": "url",
+      "id": "quick_order_url",
+      "label": "Quick order list link"
+    },
+    {
+      "type": "url",
+      "id": "certificate_url",
+      "label": "Tax certificate link"
+    },
+    {
+      "type": "select",
+      "id": "preview_segment",
+      "label": "Preview segment",
+      "info": "Theme editor only, with Preview visitor as.",
+      "options": [
+        { "value": "decorator", "label": "Clients' designs" },
+        { "value": "graphic-tees", "label": "My own designs" },
+        { "value": "apparel-brand", "label": "My own label" },
+        { "value": "groups-events", "label": "My group, team or event" },
+        { "value": "business-merch", "label": "My company" },
+        { "value": "personal", "label": "Me and my family" }
+      ],
+      "default": "graphic-tees"
+    }
+  ],
+  "presets": [{ "name": "Personal home" }]
+}
+{% endschema %}

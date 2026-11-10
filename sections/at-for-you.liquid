@@ -1,0 +1,371 @@
+{%- comment -%}
+  For you page (membership design §15, workstream 2B). A theme page so it uses the real
+  product card with each customer's tier price.
+  - Pro savings card: customer `wagner.savings_ytd` (written by 2C).
+  - Question prompt / Edit answers: Q2, then Q3, until answered (current values from
+    `wagner.onboarding_q2|q3`). Posts to the app proxy `POST /apps/wagner/answers`
+    (contract §7); Wagner saves, then rewrites the lists below.
+  - Lists: `wagner.for_you_start|reorder|method|make|deals` (product references).
+{%- endcomment -%}
+{%- capture at_visitor -%}{% render 'at-visitor' %}{%- endcapture -%}
+{%- liquid
+  assign at_visitor = at_visitor | strip
+  assign at_preview = false
+  if request.design_mode and settings.at_preview_visitor != 'off'
+    assign at_preview = true
+  endif
+  assign at_sample = settings.at_preview_collection.products
+  assign mf = customer.metafields.wagner
+  assign q1 = mf.onboarding_q1.value | default: ''
+  assign q2 = mf.onboarding_q2.value | default: ''
+  assign q3 = mf.onboarding_q3.value
+  assign ytd = mf.savings_ytd.value
+  assign segment = mf.segment.value | default: ''
+  if at_preview and q1 == blank
+    assign q1 = 'use:decorator'
+    assign segment = 'decorator'
+  endif
+
+  assign list_start = mf.for_you_start.value
+  assign list_reorder = mf.for_you_reorder.value
+  assign list_method = mf.for_you_method.value
+  assign list_make = mf.for_you_make.value
+  assign list_deals = mf.for_you_deals.value
+  if at_preview
+    if list_reorder == blank and at_visitor != 'member-new'
+      assign list_reorder = at_sample
+    endif
+    if list_start == blank and at_visitor == 'member-new'
+      assign list_start = at_sample
+    endif
+    if list_make == blank
+      assign list_make = at_sample
+    endif
+    if list_deals == blank
+      assign list_deals = at_sample
+    endif
+  endif
+  capture guide_handle
+    render 'at-guide', segment: segment
+  endcapture
+  assign guide_handle = guide_handle | strip
+  if list_start == blank and at_visitor == 'member-new' and guide_handle != blank
+    assign list_start = collections[guide_handle].products
+  endif
+
+  case q1
+    when 'use:decorator'
+      assign q1_label = "Clients' designs"
+    when 'use:graphic-tees'
+      assign q1_label = 'My own designs'
+    when 'use:apparel-brand'
+      assign q1_label = 'My own label'
+    when 'use:groups-events'
+      assign q1_label = 'My group, team or event'
+    when 'use:business-merch'
+      assign q1_label = 'My company'
+    when 'use:personal'
+      assign q1_label = 'Me and my family'
+    else
+      assign q1_label = ''
+  endcase
+
+  assign q2_values = 'lowest_price,premium_feel,trend_styles,in_stock,matching_families' | split: ','
+  assign q2_labels = 'Lowest workable price|Premium feel|Trend styles (heavyweight, boxy, washed)|Always in stock|Matching colors across adult, youth, infant' | split: '|'
+  assign q3_values = 'screen-print,plastisol-transfer,dtg,dtf,sublimation,embroidery,htv,none' | split: ','
+  assign q3_labels = 'Screen printing|Plastisol transfers|DTG|DTF|Sublimation|Embroidery|Heat transfer vinyl|None, I wear them blank' | split: '|'
+  assign q2_label = ''
+  for v in q2_values
+    if v == q2
+      assign q2_label = q2_labels[forloop.index0]
+    endif
+  endfor
+  assign method_names = ''
+  for v in q3_values
+    if q3 contains v and v != 'none'
+      assign method_names = method_names | append: q3_labels[forloop.index0] | append: '|'
+    endif
+  endfor
+  assign method_names = method_names | split: '|' | join: ' and '
+
+  assign answered = false
+  if q2 != blank and q3 != blank
+    assign answered = true
+  endif
+  assign membership_url = settings.at_membership_url | default: '/pages/membership'
+  case at_visitor
+    when 'pro'
+      assign tier_label = 'Pro'
+    when 'wholesale'
+      assign tier_label = 'Wholesale'
+    else
+      assign tier_label = 'Member'
+  endcase
+-%}
+
+<div class="section section--page-width">
+<div class="at-foryou" data-visitor="{{ at_visitor }}">
+  {%- if at_visitor == 'guest' -%}
+    <div class="at-foryou__signin">
+      <h1 class="h2">For you</h1>
+      <p>Sign in to see picks for what you make, at your member prices. Membership is free.</p>
+      <p><a class="button" href="{{ routes.account_login_url }}">Sign in</a></p>
+    </div>
+  {%- else -%}
+    <header class="at-foryou__head">
+      <p class="at-foryou__kicker at-foryou__kicker--{{ at_visitor }}">{{ tier_label }}</p>
+      <h1 class="at-foryou__title h1">For you</h1>
+      <ul class="at-foryou__chips" role="list" data-at-answer-chips>
+        {%- if q1_label != blank -%}<li>{{ q1_label }}</li>{%- endif -%}
+        {%- if q2_label != blank -%}<li>{{ q2_label }}</li>{%- endif -%}
+        {%- if method_names != blank -%}<li>{{ method_names }}</li>{%- endif -%}
+        {%- if answered -%}<li><a href="#answers" data-at-edit-answers>Edit answers</a></li>{%- endif -%}
+      </ul>
+    </header>
+
+    <div class="at-foryou__top">
+      {%- liquid
+        assign would = ytd.pro_would_save | default: '0' | times: 1
+        assign total = ytd.total | default: '0' | times: 1
+        assign show_pro = false
+        if at_visitor == 'member' or at_visitor == 'member-new'
+          if segment != 'personal' or would > 79
+            assign show_pro = true
+          endif
+        elsif at_visitor == 'pro'
+          assign show_pro = true
+        endif
+      -%}
+      {%- if show_pro -%}
+        <section class="at-foryou__pro" id="pro" aria-labelledby="at-pro-title">
+          <p class="at-foryou__pro-kicker">Your last 12 months</p>
+          {%- if at_visitor == 'pro' -%}
+            <h2 class="at-foryou__pro-title" id="at-pro-title">This year with Pro: {{ total | times: 100 | round | money }} saved.</h2>
+            <p>{{ ytd.threads_cash | default: '0' | times: 100 | round | money }} in Threads Cash and {{ ytd.free_shipments | default: 0 }} free shipments so far.</p>
+          {%- elsif would > 0 -%}
+            <h2 class="at-foryou__pro-title" id="at-pro-title">Pro would have saved you {{ would | times: 100 | round | money }} on the same orders.</h2>
+            <p>You've saved {{ total | times: 100 | round | money }} as a Member this year. Pro also adds 2% back and a free shipment every month.</p>
+            <a class="at-foryou__pro-cta" href="{{ membership_url }}">Get Pro · $79/yr</a>
+          {%- else -%}
+            <h2 class="at-foryou__pro-title" id="at-pro-title">Order often? Pro pays for itself.</h2>
+            <p>Lower prices than Member, 2% back in Threads Cash and a free shipment every month. We'll show your own numbers here after your first orders.</p>
+            <a class="at-foryou__pro-cta" href="{{ membership_url }}">See Pro · $79/yr</a>
+          {%- endif -%}
+        </section>
+      {%- endif -%}
+
+      <form class="at-foryou__form" id="answers" data-at-answers action="/apps/wagner/answers" method="post"{% if answered %} data-collapsed{% endif %}>
+        {%- if answered -%}
+          <p class="at-foryou__form-done">Your picks use your answers. <button type="button" class="link" data-at-open>Edit answers</button></p>
+        {%- endif -%}
+        <div class="at-foryou__fields"{% if answered %} hidden{% endif %} data-at-fields>
+          {%- if answered -%}
+            <label class="at-foryou__field">
+              <span class="at-foryou__legend">What are you making?</span>
+              <select name="q1">
+                {%- assign q1_values = 'use:decorator,use:graphic-tees,use:apparel-brand,use:groups-events,use:business-merch,use:personal' | split: ',' -%}
+                {%- assign q1_labels = "Clients' designs|My own designs|My own label|My group, team or event|My company|Me and my family" | split: '|' -%}
+                {%- for v in q1_values -%}
+                  <option value="{{ v }}"{% if v == q1 %} selected{% endif %}>{{ q1_labels[forloop.index0] }}</option>
+                {%- endfor -%}
+              </select>
+            </label>
+          {%- endif -%}
+                      <fieldset class="at-foryou__fieldset">
+              <legend class="at-foryou__legend">What matters most in a blank?</legend>
+              {%- for v in q2_values -%}
+                <label class="at-foryou__option"><input type="radio" name="q2" value="{{ v }}"{% if v == q2 %} checked{% endif %}> {{ q2_labels[forloop.index0] }}</label>
+              {%- endfor -%}
+            </fieldset>
+                      <fieldset class="at-foryou__fieldset">
+              <legend class="at-foryou__legend">Sharpen your picks: how do you decorate?</legend>
+              <div class="at-foryou__grid">
+                {%- for v in q3_values -%}
+                  <label class="at-foryou__option"><input type="checkbox" name="q3" value="{{ v }}"{% if q3 contains v %} checked{% endif %}> {{ q3_labels[forloop.index0] }}</label>
+                {%- endfor -%}
+              </div>
+            </fieldset>
+          <div class="at-foryou__actions">
+            <button type="submit" class="button">Save</button>
+            <p class="at-foryou__status" role="status" aria-live="polite" data-at-status></p>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    {%- assign method_title = 'Picked for how you decorate' -%}
+    {%- if method_names != blank -%}{%- assign method_title = 'Picked for ' | append: method_names -%}{%- endif -%}
+    {% render 'at-product-row', id: 'start', title: 'Start with these', note: 'From your guide, at member prices', products: list_start, limit: 12 %}
+    {% render 'at-product-row', id: 'reorder', title: 'Reorder your staples', note: 'From your past orders', products: list_reorder, limit: 12 %}
+    {% render 'at-product-row', id: 'method', title: method_title, note: 'Fabrics that suit your methods', products: list_method, limit: 12 %}
+    {% render 'at-product-row', id: 'make', title: 'Picked for what you make', products: list_make, limit: 12 %}
+    {% render 'at-product-row', id: 'deals', title: 'This month’s Member Deals', note: 'Filtered to blanks that work with how you decorate', products: list_deals, limit: 12 %}
+  {%- endif -%}
+</div>
+</div>
+
+<script>
+  (() => {
+    const form = document.querySelector('[data-at-answers]');
+    if (!form) return;
+    const status = form.querySelector('[data-at-status]');
+    const fields = form.querySelector('[data-at-fields]');
+    const open = () => { fields.hidden = false; const first = fields.querySelector('select, input'); if (first) first.focus(); };
+    form.querySelector('[data-at-open]')?.addEventListener('click', open);
+    document.querySelector('[data-at-edit-answers]')?.addEventListener('click', () => open());
+
+    // "None" can't be combined with a method (contract §7).
+    form.addEventListener('change', (event) => {
+      const box = event.target;
+      if (box.name !== 'q3' || !box.checked) return;
+      form.querySelectorAll('input[name="q3"]').forEach((other) => {
+        if (other !== box && (box.value === 'none' || other.value === 'none')) other.checked = false;
+      });
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const body = {};
+      const q1 = form.querySelector('[name="q1"]');
+      if (q1) body.q1 = q1.value;
+      const q2 = form.querySelector('[name="q2"]:checked');
+      if (q2) body.q2 = q2.value;
+      if (form.querySelector('[name="q3"]')) {
+        body.q3 = [...form.querySelectorAll('[name="q3"]:checked')].map((box) => box.value);
+      }
+      if (!Object.keys(body).length || (!q2 && !body.q3?.length && !q1)) {
+        status.textContent = 'Pick an answer first.';
+        return;
+      }
+      status.textContent = 'Saving…';
+      try {
+        const response = await fetch(form.getAttribute('action'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify(body),
+        });
+        const messages = {
+          403: 'Sign in again to save your answers.',
+          404: 'Saving answers isn’t switched on yet.',
+          429: 'That was a lot of saves. Try again in a minute.',
+        };
+        if (response.ok) {
+          status.textContent = 'Saved. Your picks refresh in a minute; reload to see them.';
+          return;
+        }
+        if (response.status === 400) {
+          const data = await response.json().catch(() => ({}));
+          status.textContent = Object.values(data.fields || {}).join(' ') || 'Check your answers.';
+          return;
+        }
+        status.textContent = messages[response.status] || 'Couldn’t save right now. Try again later.';
+      } catch (error) {
+        status.textContent = 'Couldn’t save right now. Try again later.';
+      }
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .at-foryou {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    padding-block: 36px 64px;
+  }
+  .at-foryou__signin { display: flex; flex-direction: column; gap: 12px; max-width: 36rem; }
+  .at-foryou__signin > * { margin: 0; }
+  .at-foryou__head { display: flex; flex-direction: column; gap: 10px; }
+  .at-foryou__kicker {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #1d4ed8;
+  }
+  .at-foryou__kicker--pro { color: #b45309; }
+  .at-foryou__kicker--wholesale { color: #334155; }
+  .at-foryou__title { margin: 0; }
+  .at-foryou__chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .at-foryou__chips li {
+    padding: 6px 12px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.18);
+    font-size: 0.875rem;
+  }
+  .at-foryou__chips li:has(a) { border: none; padding-inline: 4px; }
+  .at-foryou__chips a { font-weight: 700; }
+  .at-foryou__top {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 20px;
+    align-items: start;
+  }
+  .at-foryou__pro {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px;
+    background: #fff7ed;
+    border: 2px solid #b45309;
+    color: #2b2b2b;
+  }
+  .at-foryou__pro > * { margin: 0; }
+  .at-foryou__pro-kicker {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9a3d07;
+  }
+  .at-foryou__pro-title { font-size: clamp(1.35rem, 2.6vw, 1.9rem); line-height: 1.15; }
+  .at-foryou__pro-cta {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 22px;
+    background: #b45309;
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .at-foryou__pro-cta:hover { color: #fff; filter: brightness(1.08); }
+  .at-foryou__form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
+  }
+  .at-foryou__form-done { margin: 0; }
+  .at-foryou__form-done .link { font-weight: 700; text-decoration: underline; background: none; border: 0; padding: 0; cursor: pointer; color: inherit; font: inherit; }
+  .at-foryou__fields { display: flex; flex-direction: column; gap: 16px; }
+  .at-foryou__fields[hidden] { display: none; }
+  .at-foryou__fieldset { margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 4px; }
+  .at-foryou__legend { font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; }
+  .at-foryou__field { display: flex; flex-direction: column; gap: 6px; }
+  .at-foryou__field select { min-height: 44px; padding: 0 10px; }
+  .at-foryou__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 0 16px; }
+  .at-foryou__option { display: flex; align-items: center; gap: 10px; min-height: 40px; }
+  .at-foryou__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .at-foryou__status { margin: 0; font-size: 0.9rem; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "For you",
+  "tag": "section",
+  "class": "at-for-you-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Picks come from Wagner (customer metafields wagner.for_you_*). Answers save through the private app's proxy at /apps/wagner/answers."
+    }
+  ],
+  "presets": [{ "name": "For you" }]
+}
+{% endschema %}

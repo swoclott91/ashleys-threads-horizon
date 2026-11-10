@@ -1429,7 +1429,8 @@
         "border_color": "",
         "border_radius": 0,
         "padding-block-start": 10,
-        "padding-block-end": 10
+        "padding-block-end": 10,
+        "at_visibility": "guests"
       }
     },
     "section_QVRHnM": {
@@ -2554,7 +2555,8 @@
         "border_color": "",
         "border_radius": 0,
         "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-end": 0,
+        "at_visibility": "guests"
       }
     },
     "hero_jVaWmY": {
@@ -2667,7 +2669,8 @@
         "blurred_reflection": true,
         "reflection_opacity": 36,
         "padding-block-start": 100,
-        "padding-block-end": 72
+        "padding-block-end": 72,
+        "at_visibility": "guests"
       }
     },
     "collection_list_YNhPde": {
@@ -2898,7 +2901,8 @@
         "gap": 12,
         "background_color": "",
         "padding-block-start": 48,
-        "padding-block-end": 48
+        "padding-block-end": 48,
+        "at_visibility": "guests"
       }
     },
     "product_list_fa6P9H": {
@@ -3146,12 +3150,40 @@
         "gap": 28,
         "background_color": "{{ settings.color_palette.color11 }}",
         "padding-block-start": 48,
-        "padding-block-end": 48
+        "padding-block-end": 48,
+        "at_visibility": "guests"
+      }
+    },
+    "at_visitor_chips": {
+      "type": "at-visitor-chips",
+      "settings": {
+        "guest_collections": [],
+        "quick_order_url": ""
+      }
+    },
+    "at_personal_home": {
+      "type": "at-personal-home",
+      "settings": {
+        "at_visibility": "customers",
+        "quick_order_url": "",
+        "certificate_url": "",
+        "preview_segment": "graphic-tees"
+      }
+    },
+    "at_make_tiles": {
+      "type": "at-make-tiles",
+      "settings": {
+        "at_visibility": "guests",
+        "heading": "What are you making?",
+        "decorator_url": ""
       }
     }
   },
   "order": [
+    "at_visitor_chips",
+    "at_personal_home",
     "section_YrFnRz",
+    "at_make_tiles",
     "section_QVRHnM",
     "hero_jVaWmY",
     "collection_list_YNhPde",

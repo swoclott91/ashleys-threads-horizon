@@ -1,0 +1,30 @@
+{%- doc -%}
+  Outputs `true` when a section set to "Show to" `visibility` should render for this visitor.
+  Home split (design §15): guest sections render only when `customer` is blank; the Personal
+  home section renders only for signed-in customers. Respects the editor-only preview visitor.
+
+  @param {string} visibility - all | guests | customers
+{%- enddoc -%}
+{%- liquid
+  assign at_vis = visibility | default: 'all'
+  assign at_signed_in = false
+  if customer
+    assign at_signed_in = true
+  endif
+  if request.design_mode
+    assign at_preview = settings.at_preview_visitor | default: 'off'
+    if at_preview == 'guest'
+      assign at_signed_in = false
+    elsif at_preview != 'off'
+      assign at_signed_in = true
+    endif
+  endif
+
+  assign at_ok = true
+  if at_vis == 'guests' and at_signed_in
+    assign at_ok = false
+  elsif at_vis == 'customers' and at_signed_in == false
+    assign at_ok = false
+  endif
+  echo at_ok
+-%}
