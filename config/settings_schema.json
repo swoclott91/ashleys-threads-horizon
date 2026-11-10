@@ -2368,38 +2368,18 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "Home split, What are you making tiles and the For you page (membership 2B). Personal content comes from Wagner-written customer metafields (wagner.home_modules, wagner.for_you_*)."
-      },
-      {
-        "type": "select",
-        "id": "at_preview_visitor",
-        "label": "Preview visitor as",
-        "info": "Theme editor only. Shoppers never see this. Uses sample products where metafields are blank.",
-        "options": [
-          { "value": "off", "label": "Off (real visitor)" },
-          { "value": "guest", "label": "Guest" },
-          { "value": "member-new", "label": "Member, new (no orders)" },
-          { "value": "member", "label": "Member, active" },
-          { "value": "pro", "label": "Pro, active" },
-          { "value": "wholesale", "label": "Wholesale" }
-        ],
-        "default": "off"
+        "content": "Home split, What are you making tiles and the For you page (membership 2B). Personal content comes from Wagner-written customer metafields (wagner.home_modules, wagner.for_you_*). The preview tier and the Membership page link are 1C's settings (Cart › Member pricing)."
       },
       {
         "type": "collection",
         "id": "at_preview_collection",
         "label": "Preview sample products",
-        "info": "Theme editor only: fills empty For you lists while previewing a visitor."
+        "info": "Theme editor only: fills empty For you lists while a tier is set in Cart › Member pricing › Preview tier as (1C)."
       },
       {
         "type": "page",
         "id": "at_for_you_page",
         "label": "For you page"
-      },
-      {
-        "type": "url",
-        "id": "at_membership_url",
-        "label": "Membership page (Get Pro)"
       },
       {
         "type": "collection",

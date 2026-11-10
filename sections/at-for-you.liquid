@@ -10,8 +10,9 @@
 {%- capture at_visitor -%}{% render 'at-visitor' %}{%- endcapture -%}
 {%- liquid
   assign at_visitor = at_visitor | strip
+  # Editor-only samples while 1C's "Preview tier as" is set.
   assign at_preview = false
-  if request.design_mode and settings.at_preview_visitor != 'off'
+  if request.design_mode and settings.at_member_preview_tier != blank and settings.at_member_preview_tier != 'off'
     assign at_preview = true
   endif
   assign at_sample = settings.at_preview_collection.products
@@ -92,7 +93,24 @@
   if q2 != blank and q3 != blank
     assign answered = true
   endif
-  assign membership_url = settings.at_membership_url | default: '/pages/membership'
+  assign membership_url = settings.at_membership_page_url | default: '/pages/membership'
+  # Pro fee and Threads Cash rate from shop `wagner.tier_thresholds` (contract §5).
+  assign at_tt = shop.metafields.wagner.tier_thresholds.value
+  assign pro_fee = at_tt.pro.fee
+  assign pro_rate = at_tt.pro.reward_rate
+  if at_preview and at_tt == blank
+    assign pro_fee = '79.00'
+    assign pro_rate = '0.02'
+  endif
+  assign pro_fee_num = pro_fee | default: '0' | times: 1.0
+  assign pro_fee_money = ''
+  if pro_fee != blank
+    assign pro_fee_money = pro_fee | times: 100 | money_without_trailing_zeros
+  endif
+  assign pro_cash = 'Threads Cash'
+  if pro_rate != blank
+    assign pro_cash = pro_rate | times: 100 | round: 1 | append: '' | remove: '.0' | append: '% Threads Cash'
+  endif
   case at_visitor
     when 'pro'
       assign tier_label = 'Pro'
@@ -108,8 +126,13 @@
   {%- if at_visitor == 'guest' -%}
     <div class="at-foryou__signin">
       <h1 class="h2">For you</h1>
-      <p>Sign in to see picks for what you make, at your member prices. Membership is free.</p>
-      <p><a class="button" href="{{ routes.account_login_url }}">Sign in</a></p>
+      {%- if customer -%}
+        <p>Join as a Member to see picks for what you make, at member prices. Membership is free.</p>
+        <p><a class="button" href="{{ membership_url }}">Become a Member</a></p>
+      {%- else -%}
+        <p>Sign in to see picks for what you make, at your member prices. Membership is free.</p>
+        <p><a class="button" href="{{ routes.account_login_url }}">Sign in</a></p>
+      {%- endif -%}
     </div>
   {%- else -%}
     <header class="at-foryou__head">
@@ -134,7 +157,8 @@
         endif
         assign show_pro = false
         if at_visitor == 'member' or at_visitor == 'member-new'
-          if segment != 'personal' or would > 79
+          # Not pitched to "Me and my family" unless the saving beats the fee.
+          if segment != 'personal' or pro_fee_num > 0 and would > pro_fee_num
             assign show_pro = true
           endif
         elsif at_visitor == 'pro'
@@ -149,16 +173,16 @@
             {%- if ytd != blank -%}
               <p>{{ ytd.threads_cash | default: '0' | times: 100 | round | money }} in Threads Cash and {{ ytd.free_shipments | default: 0 }} free shipments so far.</p>
             {%- else -%}
-              <p>Pro prices, 2% Threads Cash and a free shipment every month.</p>
+              <p>Pro prices, {{ pro_cash }} and a free shipment every month.</p>
             {%- endif -%}
           {%- elsif would > 0 -%}
             <h2 class="at-foryou__pro-title" id="at-pro-title">Pro would have saved you {{ would | times: 100 | round | money }} on the same orders.</h2>
-            <p>You've saved {{ total | times: 100 | round | money }} as a Member this year. Pro also adds 2% back and a free shipment every month.</p>
-            <a class="at-foryou__pro-cta" href="{{ membership_url }}">Get Pro · $79/yr</a>
+            <p>You've saved {{ total | times: 100 | round | money }} as a Member this year. Pro also adds {{ pro_cash }} and a free shipment every month.</p>
+            <a class="at-foryou__pro-cta" href="{{ membership_url }}">Get Pro{% if pro_fee_money != blank %} · {{ pro_fee_money }}/yr{% endif %}</a>
           {%- else -%}
             <h2 class="at-foryou__pro-title" id="at-pro-title">Order often? Pro pays for itself.</h2>
-            <p>Lower prices than Member, 2% back in Threads Cash and a free shipment every month. We'll show your own numbers here after your first orders.</p>
-            <a class="at-foryou__pro-cta" href="{{ membership_url }}">See Pro · $79/yr</a>
+            <p>Lower prices than Member, {{ pro_cash }} and a free shipment every month. We'll show your own numbers here after your first orders.</p>
+            <a class="at-foryou__pro-cta" href="{{ membership_url }}">See Pro{% if pro_fee_money != blank %} · {{ pro_fee_money }}/yr{% endif %}</a>
           {%- endif -%}
         </section>
       {%- endif -%}
@@ -172,6 +196,7 @@
             <label class="at-foryou__field">
               <span class="at-foryou__legend">What are you making?</span>
               <select name="q1">
+                <option value=""{% if q1 == blank %} selected{% endif %}>Choose one</option>
                 {%- assign q1_values = 'use:decorator,use:graphic-tees,use:apparel-brand,use:groups-events,use:business-merch,use:personal' | split: ',' -%}
                 {%- assign q1_labels = "Clients' designs|My own designs|My own label|My group, team or event|My company|Me and my family" | split: '|' -%}
                 {%- for v in q1_values -%}
@@ -236,7 +261,7 @@
       event.preventDefault();
       const body = {};
       const q1 = form.querySelector('[name="q1"]');
-      if (q1) body.q1 = q1.value;
+      if (q1 && q1.value) body.q1 = q1.value;
       const q2 = form.querySelector('[name="q2"]:checked');
       if (q2) body.q2 = q2.value;
       if (form.querySelector('[name="q3"]')) {

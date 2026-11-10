@@ -110,11 +110,11 @@
       "type": "select",
       "id": "at_visibility",
       "label": "Show to",
-      "info": "Home split: guest sections render only for signed-out visitors; the Personal home section only for signed-in customers.",
+      "info": "Home split: guest sections render for visitors who aren't members (signed out, or signed in without a member tier); the Personal home section only for members.",
       "options": [
         { "value": "all", "label": "Everyone" },
-        { "value": "guests", "label": "Guests (signed out)" },
-        { "value": "customers", "label": "Signed-in customers" }
+        { "value": "guests", "label": "Guests (not members)" },
+        { "value": "customers", "label": "Members (Member, Pro, Wholesale)" }
       ],
       "default": "all"
     },

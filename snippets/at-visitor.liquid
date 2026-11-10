@@ -3,56 +3,31 @@
   guest | member-new | member | pro | wholesale
   Capture it: {% capture at_visitor %}{% render 'at-visitor' %}{% endcapture %}{% assign at_visitor = at_visitor | strip %}
 
-  Tier (same order as 1C's at-member-tier, membership contract §4–5):
-  1. B2B customers buying for a company location named after its tier: that tier.
-  2. Otherwise customer `wagner.tier` (absent = member for a signed-in customer, because
-     every signed-in customer is shown the member home; prices still come from the catalog).
-  Lifecycle: customer `wagner.lifecycle` (`new` when absent and the customer has no orders).
-  A Member or Pro customer in lifecycle `new` is `member-new`.
-
-  Theme editor only: Theme settings › Personal home › "Preview visitor as" overrides
-  everything (request.design_mode), so each visitor can be checked without signing in.
+  Tier: 1C's `at-member-tier` (B2B location name, then customer `wagner.tier`; absent = guest,
+  so a signed-in customer who isn't a member is a guest, contract §4–5). Its editor-only
+  "Preview tier as" setting (Theme settings › Cart › Member pricing) previews tiers here too.
+  Lifecycle: customer `wagner.lifecycle`; when absent, `new` for a customer with no orders.
+  A Member or Pro customer in lifecycle `new` is `member-new`. A tier previewed in the
+  editor with no customer signed in is shown as an active member.
 {%- enddoc -%}
+{%- capture at_v -%}{% render 'at-member-tier' %}{%- endcapture -%}
 {%- liquid
-  assign at_v = 'guest'
-
-  if customer
-    assign at_tier = customer.metafields.wagner.tier.value | default: 'member' | downcase | strip
-    if customer.b2b? and customer.current_location
-      assign at_loc_words = customer.current_location.name | downcase | replace: '-', ' ' | replace: '_', ' ' | split: ' '
-      if at_loc_words contains 'wholesale'
-        assign at_tier = 'wholesale'
-      elsif at_loc_words contains 'pro'
-        assign at_tier = 'pro'
-      elsif at_loc_words contains 'member'
-        assign at_tier = 'member'
+  assign at_v = at_v | strip
+  if at_v == 'member' or at_v == 'pro'
+    assign at_life = ''
+    if customer
+      assign at_life = customer.metafields.wagner.lifecycle.value | default: ''
+      if at_life == blank
+        if customer.orders_count > 0
+          assign at_life = 'active'
+        else
+          assign at_life = 'new'
+        endif
       endif
     endif
-    unless at_tier == 'pro' or at_tier == 'wholesale'
-      assign at_tier = 'member'
-    endunless
-
-    assign at_life = customer.metafields.wagner.lifecycle.value | default: ''
-    if at_life == blank
-      if customer.orders_count > 0
-        assign at_life = 'active'
-      else
-        assign at_life = 'new'
-      endif
-    endif
-
-    assign at_v = at_tier
-    if at_tier != 'wholesale' and at_life == 'new'
+    if at_life == 'new'
       assign at_v = 'member-new'
     endif
   endif
-
-  if request.design_mode
-    assign at_preview = settings.at_preview_visitor | default: 'off'
-    if at_preview != 'off'
-      assign at_v = at_preview
-    endif
-  endif
-
   echo at_v
 -%}
