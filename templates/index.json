@@ -2288,10 +2288,11 @@
                           "name": "t:names.at_collection_list",
                           "settings": {
                             "collection_list": [
-                              "garment-dyed-blank-apparel",
-                              "seller-staples",
-                              "heavyweight-favorites",
-                              "family-matching-sets"
+                              "family-matching-sets",
+                              "groups-events",
+                              "graphic-tees-boutique-sellers",
+                              "building-your-apparel-brand",
+                              "business-merch"
                             ],
                             "layout_type": "carousel",
                             "carousel_on_mobile": true,
@@ -2344,7 +2345,7 @@
                               "settings": {
                                 "placement": "below_image",
                                 "horizontal_alignment": "flex-start",
-                                "vertical_alignment": "flex-start",
+                                "vertical_alignment": "center",
                                 "collection_card_gap": 8,
                                 "background_color": "{{ settings.color_palette.color3 }}",
                                 "border": "none",
@@ -3013,6 +3014,9 @@
               "type": "_product-card-gallery",
               "name": "t:names.product_card_media",
               "settings": {
+                "play_first_video": false,
+                "show_variant_image": false,
+                "featured_badge_label": "",
                 "image_ratio": "adapt",
                 "border": "none",
                 "border_width": 1,

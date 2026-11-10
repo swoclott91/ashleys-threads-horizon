@@ -201,7 +201,11 @@
                     "label_3": "Add a piece",
                     "link_3": "#add-a-piece",
                     "label_4": "Plan the first run",
-                    "link_4": "#first-run"
+                    "link_4": "#first-run",
+                    "label_5": "",
+                    "link_5": "",
+                    "label_6": "",
+                    "link_6": ""
                   },
                   "blocks": {}
                 },
@@ -235,12 +239,12 @@
             "studio_image": {
               "type": "image",
               "settings": {
-                "image": "shopify://shop_images/graphic-tees-print-studio.jpg",
+                "image": "shopify://shop_images/TShirtSelling_TheLocalSpot_204341.jpg",
                 "link": "",
-                "image_ratio": "adapt",
+                "image_ratio": "square",
                 "width": "custom",
                 "custom_width": 51,
-                "width_mobile": "fill",
+                "width_mobile": "fit-content",
                 "custom_width_mobile": 100,
                 "height": "fit",
                 "border": "none",
@@ -1593,6 +1597,8 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "play_first_video": false,
+                        "show_variant_image": false,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -1719,6 +1725,9 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "play_first_video": false,
+                        "show_variant_image": false,
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -1844,6 +1853,9 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "play_first_video": false,
+                        "show_variant_image": false,
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -1969,6 +1981,9 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "play_first_video": false,
+                        "show_variant_image": false,
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -2094,6 +2109,9 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "play_first_video": false,
+                        "show_variant_image": false,
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -2279,7 +2297,7 @@
             "height_mobile": "fit",
             "custom_height_mobile": 30,
             "background_media": "none",
-            "background_color": "",
+            "background_color": "#EAF0EB",
             "video_position": "cover",
             "background_image_position": "cover",
             "custom_mobile_media": false,
@@ -2661,6 +2679,13 @@
                       },
                       "blocks": {}
                     },
+                    "companions": {
+                      "type": "custom-liquid",
+                      "settings": {
+                        "custom_liquid": "<p class=\"at-tier-card__companions\"><span>Matching piece</span> <a href=\"/products/gildan-18000-heavy-blend-crewneck-sweatshirt\">18000 crew</a></p>"
+                      },
+                      "blocks": {}
+                    },
                     "price": {
                       "type": "price",
                       "settings": {
@@ -2686,6 +2711,8 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "play_first_video": false,
+                        "show_variant_image": false,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -2704,13 +2731,6 @@
                       "type": "custom-liquid",
                       "settings": {
                         "custom_liquid": "<div class=\"at-tier-card__meta\"><span>{{ closest.product.vendor }} &middot; {{ closest.product.title | remove_first: closest.product.vendor | strip }}</span><span class=\"at-tier-card__arrow\" aria-hidden=\"true\">{{ 'icon-arrow.svg' | inline_asset_content }}</span></div>"
-                      },
-                      "blocks": {}
-                    },
-                    "companions": {
-                      "type": "custom-liquid",
-                      "settings": {
-                        "custom_liquid": "<p class=\"at-tier-card__companions\"><span>Matching piece</span> <a href=\"/products/gildan-18000-heavy-blend-crewneck-sweatshirt\">18000 crew</a></p>"
                       },
                       "blocks": {}
                     }
@@ -2795,6 +2815,13 @@
                       },
                       "blocks": {}
                     },
+                    "companions": {
+                      "type": "custom-liquid",
+                      "settings": {
+                        "custom_liquid": "<p class=\"at-tier-card__companions\"><span>Matching piece</span> <a href=\"/products/gildan-sf000-softstyle-crewneck-sweatshirt\">SF000 crew</a></p>"
+                      },
+                      "blocks": {}
+                    },
                     "price": {
                       "type": "price",
                       "settings": {
@@ -2820,6 +2847,9 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "play_first_video": false,
+                        "show_variant_image": false,
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -2837,13 +2867,6 @@
                       "type": "custom-liquid",
                       "settings": {
                         "custom_liquid": "<div class=\"at-tier-card__meta\"><span>{{ closest.product.vendor }} &middot; {{ closest.product.title | remove_first: closest.product.vendor | strip }}</span><span class=\"at-tier-card__arrow\" aria-hidden=\"true\">{{ 'icon-arrow.svg' | inline_asset_content }}</span></div>"
-                      },
-                      "blocks": {}
-                    },
-                    "companions": {
-                      "type": "custom-liquid",
-                      "settings": {
-                        "custom_liquid": "<p class=\"at-tier-card__companions\"><span>Matching piece</span> <a href=\"/products/gildan-sf000-softstyle-crewneck-sweatshirt\">SF000 crew</a></p>"
                       },
                       "blocks": {}
                     }
@@ -2928,6 +2951,13 @@
                       },
                       "blocks": {}
                     },
+                    "companions": {
+                      "type": "custom-liquid",
+                      "settings": {
+                        "custom_liquid": "<p class=\"at-tier-card__companions\"><span>Matching piece</span> <a href=\"/products/bella-canvas-3901-unisex-sponge-fleece-raglan-sweatshirt\">3901 raglan crew</a></p>"
+                      },
+                      "blocks": {}
+                    },
                     "price": {
                       "type": "price",
                       "settings": {
@@ -2953,6 +2983,9 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "play_first_video": false,
+                        "show_variant_image": false,
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -2970,13 +3003,6 @@
                       "type": "custom-liquid",
                       "settings": {
                         "custom_liquid": "<div class=\"at-tier-card__meta\"><span>{{ closest.product.vendor }} &middot; {{ closest.product.title | remove_first: closest.product.vendor | strip }}</span><span class=\"at-tier-card__arrow\" aria-hidden=\"true\">{{ 'icon-arrow.svg' | inline_asset_content }}</span></div>"
-                      },
-                      "blocks": {}
-                    },
-                    "companions": {
-                      "type": "custom-liquid",
-                      "settings": {
-                        "custom_liquid": "<p class=\"at-tier-card__companions\"><span>Matching piece</span> <a href=\"/products/bella-canvas-3901-unisex-sponge-fleece-raglan-sweatshirt\">3901 raglan crew</a></p>"
                       },
                       "blocks": {}
                     }
@@ -3061,6 +3087,13 @@
                       },
                       "blocks": {}
                     },
+                    "companions": {
+                      "type": "custom-liquid",
+                      "settings": {
+                        "custom_liquid": "<p class=\"at-tier-card__companions\"><span>Matching piece</span> <a href=\"/products/comfort-colors-1466-lightweight-crewneck-sweatshirt\">1466 lighter 6.4 oz crew</a></p>"
+                      },
+                      "blocks": {}
+                    },
                     "price": {
                       "type": "price",
                       "settings": {
@@ -3086,6 +3119,9 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "play_first_video": false,
+                        "show_variant_image": false,
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -3103,13 +3139,6 @@
                       "type": "custom-liquid",
                       "settings": {
                         "custom_liquid": "<div class=\"at-tier-card__meta\"><span>{{ closest.product.vendor }} &middot; {{ closest.product.title | remove_first: closest.product.vendor | strip }}</span><span class=\"at-tier-card__arrow\" aria-hidden=\"true\">{{ 'icon-arrow.svg' | inline_asset_content }}</span></div>"
-                      },
-                      "blocks": {}
-                    },
-                    "companions": {
-                      "type": "custom-liquid",
-                      "settings": {
-                        "custom_liquid": "<p class=\"at-tier-card__companions\"><span>Matching piece</span> <a href=\"/products/comfort-colors-1466-lightweight-crewneck-sweatshirt\">1466 lighter 6.4 oz crew</a></p>"
                       },
                       "blocks": {}
                     }
@@ -3194,6 +3223,13 @@
                       },
                       "blocks": {}
                     },
+                    "companions": {
+                      "type": "custom-liquid",
+                      "settings": {
+                        "custom_liquid": "<p class=\"at-tier-card__companions\"><span>Matching piece</span> <a href=\"/products/independent-trading-co-ss3000-unisex-midweight-crewneck-sweatshirt\">SS3000 crew</a></p>"
+                      },
+                      "blocks": {}
+                    },
                     "price": {
                       "type": "price",
                       "settings": {
@@ -3219,6 +3255,9 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "play_first_video": false,
+                        "show_variant_image": false,
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -3236,13 +3275,6 @@
                       "type": "custom-liquid",
                       "settings": {
                         "custom_liquid": "<div class=\"at-tier-card__meta\"><span>{{ closest.product.vendor }} &middot; {{ closest.product.title | remove_first: closest.product.vendor | strip }}</span><span class=\"at-tier-card__arrow\" aria-hidden=\"true\">{{ 'icon-arrow.svg' | inline_asset_content }}</span></div>"
-                      },
-                      "blocks": {}
-                    },
-                    "companions": {
-                      "type": "custom-liquid",
-                      "settings": {
-                        "custom_liquid": "<p class=\"at-tier-card__companions\"><span>Matching piece</span> <a href=\"/products/independent-trading-co-ss3000-unisex-midweight-crewneck-sweatshirt\">SS3000 crew</a></p>"
                       },
                       "blocks": {}
                     }
@@ -3372,9 +3404,10 @@
         "section_width": "page-width",
         "section_height": "",
         "section_height_custom": 50,
-        "background_media": "none",
+        "background_media": "image",
         "background_color": "#e6ece6",
         "video_position": "cover",
+        "background_image": "shopify://shop_images/resorts_1817_Flat_2.jpg",
         "background_image_position": "cover",
         "toggle_overlay": false,
         "overlay_color": "#00000026",
@@ -3819,6 +3852,8 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "play_first_video": false,
+                        "show_variant_image": false,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -3945,6 +3980,9 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "play_first_video": false,
+                        "show_variant_image": false,
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -4070,6 +4108,9 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "play_first_video": false,
+                        "show_variant_image": false,
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -4195,6 +4236,9 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "play_first_video": false,
+                        "show_variant_image": false,
+                        "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -4358,27 +4402,47 @@
     },
     "first_run": {
       "type": "section",
-      "name": "Before you quote",
-      "settings": {
-        "section_width": "page-width",
-        "content_direction": "column",
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "gap": 12,
-        "padding-block-start": 48,
-        "padding-block-end": 48,
-        "background_color": "#f5f1eb"
-      },
       "blocks": {
         "checklist": {
           "type": "custom-liquid",
           "settings": {
             "custom_liquid": "<div class=\"at-checklist\"><div class=\"at-checklist__intro\"><p class=\"at-checklist__eyebrow\">04 / Before you order</p><h2 id=\"first-run\" class=\"at-checklist__title\">Plan the first run</h2></div><ol class=\"at-checklist__items\"><li><strong>Garment samples</strong><p>Order the tee and any layer in your colors. Check the fit, feel and shade before you commit.</p></li><li><strong>Palette and size offer</strong><p>Choose 2 or 3 colors that come in every size you plan to sell, including any women&rsquo;s or youth fits.</p></li><li><strong>Complete unit cost</strong><p>Add decoration, freight, packaging and selling costs to the blank price to check your selling price works.</p></li><li><strong>Opening quantity and restock</strong><p>Shelf stock needs a restock plan and a backup color. A preorder or limited release needs a close or launch date.</p></li></ol><p class=\"at-checklist__note\"><strong>Outfitting staff instead?</strong> Explore <a href=\"/collections/groups-events\">Groups &amp; Events</a> for a committed list of people, sizes and a handoff date.</p></div>"
-          }
+          },
+          "blocks": {}
         }
       },
       "block_order": [
         "checklist"
-      ]
+      ],
+      "name": "Before you quote",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "#f5f1eb",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
     },
     "grid_heading": {
       "type": "section",
@@ -4470,6 +4534,8 @@
             "card-gallery": {
               "type": "_product-card-gallery",
               "settings": {
+                "play_first_video": false,
+                "show_variant_image": false,
                 "featured_badge_label": "",
                 "image_ratio": "portrait",
                 "border": "none",
@@ -4648,52 +4714,106 @@
     },
     "related": {
       "type": "section",
-      "name": "Related buying guides",
-      "settings": {
-        "section_width": "page-width",
-        "content_direction": "column",
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "gap": 12,
-        "padding-block-start": 36,
-        "padding-block-end": 36,
-        "background_color": "#f7f6f2"
-      },
       "blocks": {
         "heading": {
           "type": "text",
           "settings": {
             "text": "<h2>Explore related guides</h2>",
-            "type_preset": "h3",
+            "width": "fit-content",
+            "max_width": "normal",
             "alignment": "left",
-            "max_width": "normal"
-          }
+            "type_preset": "h3",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         },
         "brand": {
           "type": "text",
           "settings": {
             "text": "<p><a href=\"/collections/building-your-apparel-brand\">Building Your Apparel Brand</a> for developing a broader garment identity.</p>",
-            "type_preset": "rte",
+            "width": "fit-content",
+            "max_width": "normal",
             "alignment": "left",
-            "max_width": "normal"
-          }
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         },
         "groups": {
           "type": "text",
           "settings": {
             "text": "<p><a href=\"/collections/groups-events\">Groups &amp; Events</a> for staff outfits and committed rosters.</p>",
-            "type_preset": "rte",
+            "width": "fit-content",
+            "max_width": "normal",
             "alignment": "left",
-            "max_width": "normal"
-          }
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         },
         "family": {
           "type": "text",
           "settings": {
             "text": "<p><a href=\"/collections/family-matching-sets\">Family &amp; Matching Sets</a> for coordinated groups of wearers.</p>",
-            "type_preset": "rte",
+            "width": "fit-content",
+            "max_width": "normal",
             "alignment": "left",
-            "max_width": "normal"
-          }
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -4701,7 +4821,36 @@
         "brand",
         "groups",
         "family"
-      ]
+      ],
+      "name": "Related buying guides",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "#f7f6f2",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 36,
+        "padding-block-end": 36
+      }
     }
   },
   "order": [
