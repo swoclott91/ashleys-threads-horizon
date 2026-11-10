@@ -1,0 +1,21 @@
+{%- doc -%}
+  Outputs `true` when a `wagner.ship_code` value (contract §5) can be used today: status
+  `issued`, a code, and today inside `valid_from`..`valid_until`. A blank bound is open
+  (same rule as 1C's cart strip and price bar, which can switch to this snippet in phase 3).
+
+  @param {object} ship - customer.metafields.wagner.ship_code.value
+{%- enddoc -%}
+{%- liquid
+  assign at_ok = false
+  if ship != blank and ship.status == 'issued' and ship.code != blank
+    assign at_ok = true
+    assign at_today = 'now' | date: '%Y-%m-%d'
+    if ship.valid_from != blank and ship.valid_from > at_today
+      assign at_ok = false
+    endif
+    if ship.valid_until != blank and ship.valid_until < at_today
+      assign at_ok = false
+    endif
+  endif
+  echo at_ok
+-%}

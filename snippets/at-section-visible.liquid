@@ -1,29 +1,24 @@
 {%- doc -%}
   Outputs `true` when a section set to "Show to" `visibility` should render for this visitor.
-  Home split (design §15): guest sections render only when `customer` is blank; the Personal
-  home section renders only for signed-in customers. Respects the editor-only preview visitor.
+  Home split (design §15): "guests" sections render for visitors who aren't members (signed
+  out, or signed in without a member tier); the Personal home section ("customers") renders
+  for Member, Pro and Wholesale. The tier comes from 1C's `at-member-tier`, so the editor's
+  "Preview tier as" setting applies here too.
 
   @param {string} visibility - all | guests | customers
 {%- enddoc -%}
+{%- capture at_tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
 {%- liquid
   assign at_vis = visibility | default: 'all'
-  assign at_signed_in = false
-  if customer
-    assign at_signed_in = true
-  endif
-  if request.design_mode
-    assign at_preview = settings.at_preview_visitor | default: 'off'
-    if at_preview == 'guest'
-      assign at_signed_in = false
-    elsif at_preview != 'off'
-      assign at_signed_in = true
-    endif
+  assign at_member = true
+  if at_tier contains 'guest'
+    assign at_member = false
   endif
 
   assign at_ok = true
-  if at_vis == 'guests' and at_signed_in
+  if at_vis == 'guests' and at_member
     assign at_ok = false
-  elsif at_vis == 'customers' and at_signed_in == false
+  elsif at_vis == 'customers' and at_member == false
     assign at_ok = false
   endif
   echo at_ok

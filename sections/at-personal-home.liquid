@@ -9,8 +9,9 @@
 {%- assign at_visitor = at_visitor | strip -%}
 {%- if at_visitor != 'guest' -%}
   {%- liquid
+    # Editor-only samples while 1C's "Preview tier as" is set.
     assign at_preview = false
-    if request.design_mode and settings.at_preview_visitor != 'off'
+    if request.design_mode and settings.at_member_preview_tier != blank and settings.at_member_preview_tier != 'off'
       assign at_preview = true
     endif
     assign at_sample = settings.at_preview_collection.products
@@ -27,6 +28,22 @@
     assign ytd = mf.savings_ytd.value
     assign progress = mf.wholesale_progress.value
     assign terms = customer.current_location.metafields.wagner.terms_status.value
+    # Pro fee and Threads Cash rate from shop `wagner.tier_thresholds` (contract §5).
+    assign at_tt = shop.metafields.wagner.tier_thresholds.value
+    assign pro_fee = at_tt.pro.fee
+    assign pro_rate = at_tt.pro.reward_rate
+    if at_preview and at_tt == blank
+      assign pro_fee = '79.00'
+      assign pro_rate = '0.02'
+    endif
+    assign pro_fee_money = ''
+    if pro_fee != blank
+      assign pro_fee_money = pro_fee | times: 100 | money_without_trailing_zeros
+    endif
+    assign pro_cash = 'Threads Cash'
+    if pro_rate != blank
+      assign pro_cash = pro_rate | times: 100 | round: 1 | append: '' | remove: '.0' | append: '% Threads Cash'
+    endif
 
     if at_preview
       if segment == blank
@@ -84,13 +101,15 @@
       endcase
     endif
 
-    # Shipping code in date and issued (same rule as the account extension).
-    assign ship_ok = false
-    if ship != blank and ship.status == 'issued' and ship.code != blank
-      assign today = 'now' | date: '%Y-%m-%d'
-      if ship.valid_from <= today and ship.valid_until >= today
-        assign ship_ok = true
-      endif
+    # Shipping code in date and issued; a blank bound is open (at-ship-code-valid).
+    capture ship_ok
+      render 'at-ship-code-valid', ship: ship
+    endcapture
+    assign ship_ok = ship_ok | strip
+    if ship_ok == 'true'
+      assign ship_ok = true
+    else
+      assign ship_ok = false
     endif
     if at_preview and ship == blank
       if at_visitor == 'member-new' or at_visitor == 'pro'
@@ -230,7 +249,7 @@
                 <span class="at-card__title h5">
                   {%- if would > 0 -%}Pro would have saved you {{ would | times: 100 | round | money }} this year{%- else -%}See what Pro would save you{%- endif -%}
                 </span>
-                <span>2% Threads Cash and a free shipment every month · $79/yr</span>
+                <span>{{ pro_cash }} and a free shipment every month{% if pro_fee_money != blank %} · {{ pro_fee_money }}/yr{% endif %}</span>
               </a>
             {%- endif -%}
           {%- endif -%}
