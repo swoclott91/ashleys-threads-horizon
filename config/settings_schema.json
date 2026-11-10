@@ -2412,5 +2412,31 @@
         "default": "equal-width-buttons"
       }
     ]
+  },
+  {
+    "name": "Personal home",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Home split, What are you making tiles and the For you page (membership 2B). Personal content comes from Wagner-written customer metafields (wagner.home_modules, wagner.for_you_*). The preview tier and the Membership page link are 1C's settings (Cart › Member pricing)."
+      },
+      {
+        "type": "collection",
+        "id": "at_preview_collection",
+        "label": "Preview sample products",
+        "info": "Theme editor only: fills empty For you lists while a tier is set in Cart › Member pricing › Preview tier as (1C)."
+      },
+      {
+        "type": "page",
+        "id": "at_for_you_page",
+        "label": "For you page"
+      },
+      {
+        "type": "collection",
+        "id": "at_member_deals_collection",
+        "label": "Member Deals collection",
+        "info": "Fallback when wagner.for_you_deals is empty."
+      }
+    ]
   }
 ]

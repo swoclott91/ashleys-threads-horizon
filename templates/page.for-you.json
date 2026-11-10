@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "for_you": {
+      "type": "at-for-you",
+      "settings": {}
+    }
+  },
+  "order": [
+    "for_you"
+  ]
+}

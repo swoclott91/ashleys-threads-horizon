@@ -1,0 +1,143 @@
+{%- comment -%}
+  Category chips that change by visitor (design §15): guests get categories; new members their
+  guide and Member Deals; active members and Pro Buy again, Member Deals and a chip for how they
+  decorate; Wholesale Quick order and Invoices. A chip whose collection doesn't exist is skipped.
+{%- endcomment -%}
+{%- capture at_visitor -%}{% render 'at-visitor' %}{%- endcapture -%}
+{%- liquid
+  assign at_visitor = at_visitor | strip
+  assign for_you_url = settings.at_for_you_page.url | default: '/pages/for-you'
+  assign deals = settings.at_member_deals_collection
+  assign segment = customer.metafields.wagner.segment.value | default: ''
+  if request.design_mode and segment == blank
+    assign segment = 'graphic-tees'
+  endif
+  capture guide_handle
+    render 'at-guide', segment: segment
+  endcapture
+  assign guide_handle = guide_handle | strip
+  assign guide = null
+  if guide_handle != blank
+    assign guide = collections[guide_handle]
+  endif
+  assign quick_order_url = section.settings.quick_order_url | default: '/account'
+  assign methods = customer.metafields.wagner.onboarding_q3.value
+
+  # Each chip: label|url|kind (kind "lead" = this visitor's main chip)
+  assign chips = ''
+  case at_visitor
+    when 'guest'
+      for handle in section.settings.guest_collections
+        assign chips = chips | append: handle.title | append: '|' | append: handle.url | append: '|;'
+      endfor
+      if chips == blank
+        assign defaults = 't-shirts,sweatshirts,hoodies,polos,hats' | split: ','
+        for handle in defaults
+          assign c = collections[handle]
+          if c.id != blank
+            assign chips = chips | append: c.title | append: '|' | append: c.url | append: '|;'
+          endif
+        endfor
+        assign chips = chips | append: 'Brands|/pages/brands|;'
+      endif
+    when 'member-new'
+      if guide != blank
+        assign chips = chips | append: guide.title | append: '|' | append: guide.url | append: '|lead;'
+      endif
+      if deals != blank
+        assign chips = chips | append: 'Member Deals|' | append: deals.url | append: '|;'
+      endif
+      assign chips = chips | append: 'For you|' | append: for_you_url | append: '|;'
+    when 'wholesale'
+      assign chips = chips | append: 'Quick order|' | append: quick_order_url | append: '|lead;'
+      assign chips = chips | append: 'Invoices|/account|;'
+      if guide != blank
+        assign chips = chips | append: guide.title | append: '|' | append: guide.url | append: '|;'
+      endif
+      assign chips = chips | append: 'For you|' | append: for_you_url | append: '|;'
+    else
+      assign chips = chips | append: 'Buy again|' | append: for_you_url | append: '#reorder|lead;'
+      if deals != blank
+        assign chips = chips | append: 'Member Deals|' | append: deals.url | append: '|;'
+      endif
+      if methods contains 'dtf'
+        assign chips = chips | append: 'DTF-friendly|' | append: for_you_url | append: '#method|;'
+      elsif methods contains 'sublimation'
+        assign chips = chips | append: 'For sublimation|' | append: for_you_url | append: '#method|;'
+      elsif methods contains 'embroidery'
+        assign chips = chips | append: 'For embroidery|' | append: for_you_url | append: '#method|;'
+      elsif methods contains 'dtg'
+        assign chips = chips | append: 'DTG-ready|' | append: for_you_url | append: '#method|;'
+      endif
+      if guide != blank
+        assign chips = chips | append: guide.title | append: '|' | append: guide.url | append: '|;'
+      endif
+      assign chips = chips | append: 'For you|' | append: for_you_url | append: '|;'
+  endcase
+  assign chips = chips | split: ';'
+-%}
+<div class="section section--page-width">
+<nav class="at-chips" aria-label="Shop by" data-visitor="{{ at_visitor }}">
+  <ul class="at-chips__list" role="list">
+    {%- for chip in chips -%}
+      {%- assign c = chip | split: '|' -%}
+      {%- if c[0] != blank and c[1] != blank -%}
+        <li><a class="at-chips__chip{% if c[2] == 'lead' %} at-chips__chip--lead{% endif %}" href="{{ c[1] }}">{{ c[0] }}</a></li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+</nav>
+</div>
+
+{% stylesheet %}
+  .at-chips { padding-block: 10px; }
+  .at-chips__list {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 2px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .at-chips__chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 0 14px;
+    border-radius: 18px;
+    background: #3d5f52;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 700;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .at-chips__chip:hover { color: #fff; filter: brightness(1.1); }
+  [data-visitor='member-new'] .at-chips__chip--lead { background: #1d4ed8; }
+  [data-visitor='member'] .at-chips__chip--lead { background: #1d4ed8; }
+  [data-visitor='pro'] .at-chips__chip--lead { background: #b45309; }
+  [data-visitor='wholesale'] .at-chips__chip--lead { background: #334155; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Chips by visitor",
+  "tag": "section",
+  "class": "at-visitor-chips-section",
+  "settings": [
+    {
+      "type": "collection_list",
+      "id": "guest_collections",
+      "label": "Guest chips",
+      "limit": 8
+    },
+    {
+      "type": "url",
+      "id": "quick_order_url",
+      "label": "Wholesale quick order link"
+    }
+  ],
+  "presets": [{ "name": "Chips by visitor" }]
+}
+{% endschema %}

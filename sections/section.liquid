@@ -1,4 +1,6 @@
 {%- comment -%} AT: section sync marker — ensures GitHub uploads this file before template JSON {%- endcomment -%}
+{%- capture at_section_visible -%}{% render 'at-section-visible', visibility: section.settings.at_visibility %}{%- endcapture -%}
+{%- if at_section_visible contains 'true' -%}
 {% capture children %}
   {% content_for 'blocks' %}
 {% endcapture %}
@@ -9,6 +11,7 @@
   section_id: section.id,
   background_color: section.settings.background_color
 %}
+{%- endif -%}
 
 {% schema %}
 {
@@ -29,6 +32,18 @@
     "groups": ["header"]
   },
   "settings": [
+    {
+      "type": "select",
+      "id": "at_visibility",
+      "label": "Show to",
+      "info": "Home split: guest sections render for visitors who aren't members (signed out, or signed in without a member tier); the Personal home section only for members.",
+      "options": [
+        { "value": "all", "label": "Everyone" },
+        { "value": "guests", "label": "Guests (not members)" },
+        { "value": "customers", "label": "Members (Member, Pro, Wholesale)" }
+      ],
+      "default": "all"
+    },
     {
       "type": "header",
       "content": "t:content.layout"
