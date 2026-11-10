@@ -89,8 +89,29 @@
 }
 .at-chip--pro { background: var(--at-tier-pro); }
 
+/* The bar and modal render inside <product-price>, whose heading preset (e.g. h3) and the PDP
+   price styles size every direct child. Pin the bar/modal typography so it reads as body text. */
+.at-mbar,
+.at-pmodal {
+  font-family: var(--font-body--family) !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+.at-pmodal { font-size: 0.9375rem !important; }
+/* Theme dialog resets zero the vertical margin; keep the modal centred. */
+.at-pmodal { margin: auto !important; }
+.at-mbar__cta { white-space: nowrap; }
+.at-pmodal .at-pmodal__title { font-family: var(--font-heading--family); font-size: 1.5rem; font-weight: 700; line-height: 1.2; }
+
 /* ---------- Pricing modal ---------- */
 .at-pmodal {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  height: fit-content;
   width: min(35rem, calc(100vw - 2rem));
   max-height: calc(100dvh - 2rem);
   padding: 0;
