@@ -76,6 +76,8 @@
   {% if at_tier != 'guest' %}
     {% render 'at-member-account-menu', tier: at_tier, display_style: display_style %}
   {% endif %}
+  {%- comment -%} Free-shipping code (welcome / Pro monthly): added to the cart once it qualifies. {%- endcomment -%}
+  {% render 'at-ship-code-autoapply' %}
   {% if shop.customer_accounts_enabled %}
     {% liquid
       assign account_actions_style = ''
