@@ -20,20 +20,22 @@
       {%- endcapture -%}
       {%- if matched == 'true' -%}
         {%- liquid
-          if matched_family == nil
-            assign matched_family = rule.family.value
-          elsif matched_family != rule.family.value
-            assign family_conflict = true
-          endif
           assign candidate = rule.destination.value
           assign members = product.collections | where: 'id', candidate.id
           assign priority = rule.priority.value
+          if candidate.id != blank and candidate.url != blank and candidate.published_at != blank and members != empty
+            if matched_family == nil
+              assign matched_family = rule.family.value
+            elsif matched_family != rule.family.value
+              assign family_conflict = true
+            endif
+          endif
           if rule.destination.type == 'collection_reference' and priority >= 0
             if priority == 0
-              if root_destination != nil and root_destination.id != candidate.id
-                assign family_conflict = true
-              endif
               if candidate.id != blank and candidate.url != blank and candidate.published_at != blank and members != empty
+                if root_destination != nil and root_destination.id != candidate.id
+                  assign family_conflict = true
+                endif
                 assign root_destination = candidate
               endif
             endif

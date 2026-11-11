@@ -1,0 +1,400 @@
+{
+  "version": 1,
+  "store": "ashleys-threads-3.myshopify.com",
+  "reviewedAt": "2026-10-14",
+  "roots": {
+    "tee": {
+      "handle": "t-shirts",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-13-8",
+        "gid://shopify/TaxonomyCategory/aa-1-7-8-8",
+        "gid://shopify/TaxonomyCategory/aa-1-2-9-7",
+        "gid://shopify/TaxonomyCategory/aa-1-1-2-2",
+        "gid://shopify/TaxonomyCategory/ae-2-2-10-1-15",
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-7",
+        "gid://shopify/TaxonomyCategory/aa-1-13-7-1"
+      ],
+      "extra_predicate": {
+        "category": "gid://shopify/TaxonomyCategory/aa-1-13-7-1",
+        "product_type": "T-Shirts"
+      },
+      "facets": [
+        "age-group",
+        "target-gender"
+      ],
+      "destination": "gid://shopify/Collection/523280777491",
+      "rule_handle": "tees",
+      "title": "T-Shirts"
+    },
+    "sweatshirt": {
+      "handle": "sweatshirts-hoodies",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-13-14",
+        "gid://shopify/TaxonomyCategory/aa-1-2-9-13",
+        "gid://shopify/TaxonomyCategory/aa-1-1-7",
+        "gid://shopify/TaxonomyCategory/aa-1-13-13",
+        "gid://shopify/TaxonomyCategory/aa-1-1-7",
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-11",
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-13"
+      ],
+      "exclude_category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-1-7-5"
+      ],
+      "facets": [
+        "age-group",
+        "target-gender"
+      ],
+      "destination": "gid://shopify/Collection/523280744723",
+      "rule_handle": "sweatshirts",
+      "title": "Sweatshirts & Hoodies"
+    },
+    "hat": {
+      "handle": "hats",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-2-17",
+        "gid://shopify/TaxonomyCategory/ae-2-2-10-1-6",
+        "gid://shopify/TaxonomyCategory/aa-2-33-3"
+      ],
+      "facets": [
+        "age-group",
+        "target-gender"
+      ],
+      "destination": "gid://shopify/Collection/523279335699",
+      "rule_handle": "hats",
+      "title": "Hats"
+    },
+    "polo": {
+      "handle": "polos",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-13-6",
+        "gid://shopify/TaxonomyCategory/aa-1-2-9-5",
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-5"
+      ],
+      "facets": [
+        "age-group",
+        "target-gender"
+      ],
+      "destination": "gid://shopify/Collection/523280253203",
+      "rule_handle": "polos",
+      "title": "Polos"
+    },
+    "tank": {
+      "handle": "tank-tops",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-13-9",
+        "gid://shopify/TaxonomyCategory/aa-1-1-2-3"
+      ],
+      "facets": [
+        "age-group",
+        "target-gender"
+      ],
+      "destination": "gid://shopify/Collection/523280875795",
+      "rule_handle": "tanks",
+      "title": "Tank Tops"
+    },
+    "outerwear": {
+      "handle": "outerwear-1",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-10",
+        "gid://shopify/TaxonomyCategory/aa-1-25-4",
+        "gid://shopify/TaxonomyCategory/aa-1-1-8",
+        "gid://shopify/TaxonomyCategory/aa-1-1-7-5"
+      ],
+      "facets": [
+        "age-group",
+        "target-gender"
+      ],
+      "destination": "gid://shopify/Collection/523280089363",
+      "rule_handle": "outerwear",
+      "title": "Outerwear"
+    },
+    "bag": {
+      "handle": "bags",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/lb",
+        "gid://shopify/TaxonomyCategory/aa-5-4",
+        "gid://shopify/TaxonomyCategory/vp-1-7-6"
+      ],
+      "facets": [],
+      "destination": "gid://shopify/Collection/523278876947",
+      "rule_handle": "bags",
+      "title": "Bags"
+    },
+    "sweater": {
+      "handle": "sweaters-cardigans",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-12",
+        "gid://shopify/TaxonomyCategory/aa-1-13-12",
+        "gid://shopify/TaxonomyCategory/aa-1-24-5-2",
+        "gid://shopify/TaxonomyCategory/aa-1-13-3",
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-3",
+        "gid://shopify/TaxonomyCategory/aa-1-7-8-3"
+      ],
+      "facets": [
+        "age-group",
+        "target-gender"
+      ],
+      "destination": "gid://shopify/Collection/526015562003",
+      "rule_handle": "knitwear",
+      "title": "Sweaters & Cardigans"
+    },
+    "shirt": {
+      "handle": "shirts",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-13-7",
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-6"
+      ],
+      "exclude_collection": "t-shirts",
+      "facets": [
+        "age-group",
+        "target-gender"
+      ],
+      "destination": "gid://shopify/Collection/528883876115",
+      "rule_handle": "shirts",
+      "title": "Shirts"
+    }
+  },
+  "merchandising": {
+    "activewear": {
+      "native_category": "gid://shopify/TaxonomyCategory/aa-1-1",
+      "collection_refs": [
+        "gid://shopify/Collection/526491091219",
+        "gid://shopify/Collection/526566064403",
+        "gid://shopify/Collection/526566654227",
+        "gid://shopify/Collection/526566621459",
+        "gid://shopify/Collection/526583136531",
+        "gid://shopify/Collection/526584283411",
+        "gid://shopify/Collection/523280613651",
+        "gid://shopify/Collection/523278778643",
+        "gid://shopify/Collection/526603354387",
+        "gid://shopify/Collection/523279565075",
+        "gid://shopify/Collection/523279630611",
+        "gid://shopify/Collection/523280974099",
+        "gid://shopify/Collection/523278745875",
+        "gid://shopify/Collection/526603780371"
+      ],
+      "canonical": false
+    }
+  },
+  "labels": {
+    "long-sleeve-polos": "Long Sleeve",
+    "mock-neck-shirts": "Mock Neck"
+  },
+  "subtypes": [
+    {
+      "handle": "short_sleeve",
+      "name": "Short sleeve tees",
+      "family": "tee",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-13-8",
+        "gid://shopify/TaxonomyCategory/aa-1-7-8-8",
+        "gid://shopify/TaxonomyCategory/aa-1-2-9-7",
+        "gid://shopify/TaxonomyCategory/aa-1-1-2-2",
+        "gid://shopify/TaxonomyCategory/ae-2-2-10-1-15",
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-7",
+        "gid://shopify/TaxonomyCategory/aa-1-13-7-1"
+      ],
+      "priority": 10,
+      "destination": "gid://shopify/Collection/525843595539",
+      "attribute_namespace": "shopify",
+      "attribute_key": "sleeve-length-type",
+      "attribute_values": [
+        "gid://shopify/TaxonomyValue/169"
+      ]
+    },
+    {
+      "handle": "long_sleeve",
+      "name": "Long sleeve tees",
+      "family": "tee",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-13-8",
+        "gid://shopify/TaxonomyCategory/aa-1-7-8-8",
+        "gid://shopify/TaxonomyCategory/aa-1-2-9-7",
+        "gid://shopify/TaxonomyCategory/aa-1-1-2-2",
+        "gid://shopify/TaxonomyCategory/ae-2-2-10-1-15",
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-7",
+        "gid://shopify/TaxonomyCategory/aa-1-13-7-1"
+      ],
+      "priority": 10,
+      "destination": "gid://shopify/Collection/523279794451",
+      "attribute_namespace": "shopify",
+      "attribute_key": "sleeve-length-type",
+      "attribute_values": [
+        "gid://shopify/TaxonomyValue/17094"
+      ]
+    },
+    {
+      "handle": "hoodies",
+      "name": "Hoodies",
+      "family": "sweatshirt",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-11",
+        "gid://shopify/TaxonomyCategory/aa-1-13-13",
+        "gid://shopify/TaxonomyCategory/aa-1-1-7-2",
+        "gid://shopify/TaxonomyCategory/aa-1-7-8-4-2"
+      ],
+      "priority": 10,
+      "destination": "gid://shopify/Collection/523279499539"
+    },
+    {
+      "handle": "trucker",
+      "name": "Trucker hats",
+      "family": "hat",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-2-17-14"
+      ],
+      "priority": 10,
+      "destination": "gid://shopify/Collection/523281236243"
+    },
+    {
+      "handle": "beanies",
+      "name": "Beanies",
+      "family": "hat",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-2-17-2"
+      ],
+      "priority": 10,
+      "destination": "gid://shopify/Collection/523278942483"
+    },
+    {
+      "handle": "baseball_caps",
+      "name": "Baseball Caps",
+      "family": "hat",
+      "destination": "gid://shopify/Collection/523278909715",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-2-17-1"
+      ],
+      "priority": 10
+    },
+    {
+      "handle": "bucket_hats",
+      "name": "Bucket Hats",
+      "family": "hat",
+      "destination": "gid://shopify/Collection/523279040787",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-2-17-5"
+      ],
+      "priority": 10
+    },
+    {
+      "handle": "visors",
+      "name": "Visors",
+      "family": "hat",
+      "destination": "gid://shopify/Collection/523281662227",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-2-17-15"
+      ],
+      "priority": 10
+    },
+    {
+      "handle": "vests",
+      "name": "Vests",
+      "family": "outerwear",
+      "destination": "gid://shopify/Collection/523281629459",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-10-6",
+        "gid://shopify/TaxonomyCategory/aa-1-1-8-1"
+      ],
+      "priority": 10
+    },
+    {
+      "handle": "track_jackets",
+      "name": "Track Jackets",
+      "family": "outerwear",
+      "destination": "gid://shopify/Collection/523281072403",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-1-7-5",
+        "gid://shopify/TaxonomyCategory/aa-1-10-2-12",
+        "gid://shopify/TaxonomyCategory/aa-1-25-4-17-12"
+      ],
+      "priority": 10
+    },
+    {
+      "handle": "sweaters",
+      "name": "Sweaters",
+      "family": "sweater",
+      "destination": "gid://shopify/Collection/526015529235",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-12",
+        "gid://shopify/TaxonomyCategory/aa-1-13-12",
+        "gid://shopify/TaxonomyCategory/aa-1-24-5-2"
+      ],
+      "priority": 10
+    },
+    {
+      "handle": "cardigans",
+      "name": "Cardigans",
+      "family": "sweater",
+      "destination": "gid://shopify/Collection/526015627539",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-13-3",
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-3",
+        "gid://shopify/TaxonomyCategory/aa-1-7-8-3"
+      ],
+      "priority": 10
+    },
+    {
+      "handle": "backpacks",
+      "name": "Backpacks",
+      "family": "bag",
+      "destination": "gid://shopify/Collection/523278844179",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/lb-1"
+      ],
+      "priority": 10
+    },
+    {
+      "handle": "tote_bags",
+      "name": "Tote Bags",
+      "family": "bag",
+      "destination": "gid://shopify/Collection/526740193555",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/lb-13"
+      ],
+      "priority": 10
+    },
+    {
+      "handle": "briefcases",
+      "name": "Briefcases",
+      "family": "bag",
+      "destination": "gid://shopify/Collection/526766932243",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/lb-2"
+      ],
+      "priority": 10
+    },
+    {
+      "handle": "long_sleeve_polos",
+      "name": "Long Sleeve Polos",
+      "family": "polo",
+      "destination": "gid://shopify/Collection/523279761683",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-13-6",
+        "gid://shopify/TaxonomyCategory/aa-1-2-9-5",
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-5"
+      ],
+      "priority": 10,
+      "attribute_namespace": "shopify",
+      "attribute_key": "sleeve-length-type",
+      "attribute_values": [
+        "gid://shopify/TaxonomyValue/17094"
+      ]
+    },
+    {
+      "handle": "mock_neck_shirts",
+      "name": "Mock Neck Shirts",
+      "family": "shirt",
+      "destination": "gid://shopify/Collection/525904216339",
+      "category_ids": [
+        "gid://shopify/TaxonomyCategory/aa-1-13-7",
+        "gid://shopify/TaxonomyCategory/aa-1-25-9-6"
+      ],
+      "priority": 10,
+      "attribute_namespace": "shopify",
+      "attribute_key": "neckline",
+      "attribute_values": [
+        "gid://shopify/TaxonomyValue/6712"
+      ]
+    }
+  ]
+}

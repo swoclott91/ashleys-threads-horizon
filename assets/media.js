@@ -142,10 +142,15 @@ if (!customElements.get('deferred-media')) {
 /**
  * A product model
  */
-class ProductModel extends DeferredMedia {
+export class ProductModel extends DeferredMedia {
   #abortController = new AbortController();
 
   loadContent() {
+    if (this.hasAttribute('data-media-loaded')) {
+      this.playMedia();
+      return;
+    }
+
     super.loadContent();
 
     Shopify.loadFeatures([

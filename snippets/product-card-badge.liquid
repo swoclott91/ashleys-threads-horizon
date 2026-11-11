@@ -1,17 +1,23 @@
 {%- doc -%}
-  Resolves and renders the highest-priority product card badge.
+  Resolves and renders the highest-priority badge for a product card or media gallery.
 
   @param {object} product - Product resource used to determine badge eligibility.
+  @param {string} [featured_label] - Editor-chosen badge, such as "Ashley’s Choice". Shown ahead of the sale and tag badges; sold out still wins.
 {%- enddoc -%}
 
 {%- liquid
-  assign badge_label = blank
+  assign badge_label = ''
   assign badge_class = 'color-custom-badge-sale'
 
   if product != blank
+    assign featured_label = featured_label | strip
+
     if product.available == false
       assign badge_label = 'content.product_badge_sold_out' | t
       assign badge_class = 'color-custom-badge-sold-out'
+    elsif featured_label != blank
+      assign badge_label = featured_label
+      assign badge_class = 'product-badges__badge--featured'
     elsif product.compare_at_price > product.price
       assign badge_label = 'content.product_badge_sale' | t
       assign badge_class = 'color-custom-badge-sale'
@@ -49,7 +55,22 @@
 -%}
 
 {%- if badge_label != blank -%}
-  <div class="product-badges__badge product-badges__badge--rectangle {{ badge_class }}">
-    {{ badge_label | escape }}
+  <div
+    class="product-badges product-badges--{{ settings.badge_position }}"
+    style="
+      --badge-border-radius: {{ settings.badge_corner_radius }}px;
+      --badge-font-family: var(--font-{{ settings.badge_font_family }}--family);
+      --badge-font-weight: var(--font-{{ settings.badge_font_family }}--weight);
+      --badge-text-transform: {{ settings.badge_text_transform }};
+    "
+  >
+    <div class="product-badges__badge product-badges__badge--rectangle {{ badge_class }}">
+      {%- if badge_class == 'product-badges__badge--featured' -%}
+        <span class="product-badges__monogram">{{ 'at-monogram.svg' | inline_asset_content }}</span>
+        <span>{{ badge_label | escape }}</span>
+      {%- else -%}
+        {{ badge_label | escape }}
+      {%- endif -%}
+    </div>
   </div>
 {%- endif -%}

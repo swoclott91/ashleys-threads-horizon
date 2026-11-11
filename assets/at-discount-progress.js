@@ -1,8 +1,5 @@
-import {
-  ThemeEvents,
-  VariantUpdateEvent,
-  QuantitySelectorUpdateEvent,
-} from '@theme/events';
+import { QuantitySelectorUpdateEvent, ThemeEvents } from '@theme/events';
+import { StandardEvents } from '@shopify/events';
 import { formatMoney } from '@theme/money-formatting';
 import { isClickedOutside } from '@theme/utilities';
 
@@ -151,9 +148,9 @@ class AtDiscountProgressBar extends HTMLElement {
   }
 
   #bindEvents() {
-    document.addEventListener(ThemeEvents.cartUpdate, this.#onCartOrDiscount);
-    document.addEventListener(ThemeEvents.discountUpdate, this.#onCartOrDiscount);
-    document.addEventListener(ThemeEvents.variantUpdate, this.#onVariantUpdate);
+    document.addEventListener(StandardEvents.cartLinesUpdate, this.#onCartOrDiscount);
+    document.addEventListener(StandardEvents.cartDiscountUpdate, this.#onCartOrDiscount);
+    document.addEventListener(StandardEvents.productSelect, this.#onVariantUpdate);
     document.addEventListener(ThemeEvents.quantitySelectorUpdate, this.#onQuantityUpdate);
 
     if (this.dataset.context === 'bulk-modal') {
@@ -172,9 +169,9 @@ class AtDiscountProgressBar extends HTMLElement {
   }
 
   #unbindEvents() {
-    document.removeEventListener(ThemeEvents.cartUpdate, this.#onCartOrDiscount);
-    document.removeEventListener(ThemeEvents.discountUpdate, this.#onCartOrDiscount);
-    document.removeEventListener(ThemeEvents.variantUpdate, this.#onVariantUpdate);
+    document.removeEventListener(StandardEvents.cartLinesUpdate, this.#onCartOrDiscount);
+    document.removeEventListener(StandardEvents.cartDiscountUpdate, this.#onCartOrDiscount);
+    document.removeEventListener(StandardEvents.productSelect, this.#onVariantUpdate);
     document.removeEventListener(ThemeEvents.quantitySelectorUpdate, this.#onQuantityUpdate);
     document.removeEventListener('pointerdown', this.#onDocPointerDown, true);
     if (this.#bulkGrid) {
@@ -188,7 +185,18 @@ class AtDiscountProgressBar extends HTMLElement {
 
   /** @param {Event} e */
   #onCartOrDiscount = (e) => {
-    void this.#applyCartResource(/** @type {{ detail?: { resource?: Record<string, unknown> } }} */ (e).detail?.resource);
+    const promise = /** @type {{ promise?: Promise<unknown> }} */ (e).promise;
+    if (promise) {
+      promise
+        .then(() => {
+          void this.#applyCartResource(undefined);
+        })
+        .catch(() => {
+          void this.#applyCartResource(undefined);
+        });
+      return;
+    }
+    void this.#applyCartResource(undefined);
   };
 
   /** @param {Record<string, unknown> | undefined} resource */
@@ -212,14 +220,20 @@ class AtDiscountProgressBar extends HTMLElement {
 
   /** @param {Event} e */
   #onVariantUpdate = (e) => {
-    if (!(e instanceof VariantUpdateEvent)) return;
-    const productId = e.detail?.data?.productId;
-    if (productId != null && String(productId) !== String(this.dataset.productId)) return;
-    const price = e.detail?.resource?.price;
-    if (typeof price === 'number') {
-      this.dataset.variantPrice = String(price);
-      this.render();
-    }
+    const promise = /** @type {{ promise?: Promise<{ detail?: { productId?: string, resource?: { price?: number } } }> }} */ (e)
+      .promise;
+    if (!promise) return;
+    promise
+      .then((result) => {
+        const productId = result?.detail?.productId;
+        if (productId != null && String(productId) !== String(this.dataset.productId)) return;
+        const price = result?.detail?.resource?.price;
+        if (typeof price === 'number') {
+          this.dataset.variantPrice = String(price);
+          this.render();
+        }
+      })
+      .catch(() => {});
   };
 
   /** @param {Event} e */
@@ -316,13 +330,14 @@ class AtDiscountProgressBar extends HTMLElement {
    *   m: Array<{ threshold: number; name: string; benefitShort: string; benefitLabel: string; kind?: string }>;
    *   n: number;
    *   previewBasis: number;
+   *   committedBasis: number;
    *   nextTierIdx: number;
    *   uid: string;
    *   nonSaleUrl: string;
    * }} p
    */
   #renderCartCondensed(p) {
-    const { m, n, previewBasis, nextTierIdx, uid, nonSaleUrl } = p;
+    const { m, n, previewBasis, committedBasis, nextTierIdx, uid, nonSaleUrl } = p;
 
     let statusInner = '';
     if (nextTierIdx < 0) {
@@ -337,33 +352,72 @@ class AtDiscountProgressBar extends HTMLElement {
       }
     }
 
-    const fillEndIdx = nextTierIdx >= 0 ? nextTierIdx : n - 1;
-    const lineActivePct = n <= 1 ? 100 : (fillEndIdx / (n - 1)) * 100;
+    /**
+     * Two-tone rail (matches mockups):
+     * - green "active" fill = continuous progress up to the current basis (interpolated between the
+     *   previous reached milestone and the next target so it grows smoothly within a tier);
+     * - tan "pending" fill = the remainder of the current segment, from the green end up to the next
+     *   milestone position (the tier you are working toward). All reached → full green, no pending.
+     */
+    const posPct = (i) => (n <= 1 ? 100 : (i / (n - 1)) * 100);
+    /** Continuous fill % for an arbitrary basis (interpolated between milestone positions). */
+    const basisToPct = (basis) => {
+      let k = -1;
+      for (let i = 0; i < n; i++) {
+        if (basis < m[i].threshold) {
+          k = i;
+          break;
+        }
+      }
+      if (k < 0) return 100; // basis is past the last milestone
+      const prevThr = k > 0 ? m[k - 1].threshold : 0;
+      const prevPos = k > 0 ? posPct(k - 1) : 0;
+      const nextThr = m[k].threshold;
+      const nextPos = posPct(k);
+      const seg = nextThr - prevThr;
+      const frac = seg > 0 ? Math.min(1, Math.max(0, (basis - prevThr) / seg)) : 0;
+      return prevPos + frac * (nextPos - prevPos);
+    };
 
-    const nodesHtml = m
+    /*
+     * Green = what is actually in the cart (committed subtotal).
+     * Gold "pending" = the additional effect of items previewed but not yet added
+     * (bulk grid selection / PDP quantity), i.e. committed → projected.
+     */
+    const greenPct = basisToPct(committedBasis);
+    const pendingEndPct = basisToPct(previewBasis);
+    const pendingWidth = Math.max(0, pendingEndPct - greenPct);
+
+    /** Faint dashed milestone ticks on the track (interior milestones only; ends are the rail caps). */
+    const ticksHtml = m
+      .map((_ms, i) => {
+        if (i === 0 || i === n - 1) return '';
+        return `<span class="at-dp__cart-tick" style="--at-dp-node-left:${posPct(i)}%"></span>`;
+      })
+      .join('');
+
+    /**
+     * Milestone labels rendered UNDER the rail (matches restyled mockup):
+     * shipping → tier name ("Free shipping"); discount tiers → short benefit label (e.g. "15%").
+     * Reached discount tiers are indicated by green + bold styling (no "applied" text) so the
+     * labels stay compact and don't overlap in tight strips.
+     */
+    const labelsHtml = m
       .map((ms, i) => {
         const left = n === 1 ? 50 : (i / (n - 1)) * 100;
         const reached = previewBasis >= ms.threshold;
         const current = nextTierIdx === i;
         const shipping = ms.kind === 'shipping';
-        let cls = 'at-dp__cart-node';
-        if (shipping) cls += ' at-dp__cart-node--shipping';
-        if (reached) cls += ' at-dp__cart-node--reached';
-        else if (current) cls += ' at-dp__cart-node--current';
-        else cls += ' at-dp__cart-node--future';
+        let cls = 'at-dp__cart-label';
+        if (i === 0) cls += ' at-dp__cart-label--first';
+        if (i === n - 1) cls += ' at-dp__cart-label--last';
+        if (shipping) cls += ' at-dp__cart-label--shipping';
+        if (reached) cls += ' at-dp__cart-label--reached';
+        else if (current) cls += ' at-dp__cart-label--current';
+        else cls += ' at-dp__cart-label--future';
 
-        /** Original spec: shipping → truck; unlocked discount → short label (e.g. 12%) on solid fill; future/current → labels. */
-        let inner = '';
-        if (shipping) {
-          inner = '<span class="at-dp__cart-node-mount" data-at-dp-mount="truck"></span>';
-        } else if (reached) {
-          inner = `<span class="at-dp__cart-node-text">${textForInnerHtml(ms.benefitLabel)}</span>`;
-        } else if (current) {
-          inner = `<span class="at-dp__cart-node-text">${textForInnerHtml(ms.benefitLabel)}</span>`;
-        } else {
-          inner = `<span class="at-dp__cart-node-text">${textForInnerHtml(ms.benefitLabel)}</span>`;
-        }
-        return `<div class="${cls}" style="--at-dp-node-left:${left}%"><span class="at-dp__cart-node-hit">${inner}</span></div>`;
+        const labelText = shipping ? ms.name : ms.benefitLabel;
+        return `<span class="${cls}" style="--at-dp-node-left:${left}%">${textForInnerHtml(labelText)}</span>`;
       })
       .join('');
 
@@ -450,10 +504,12 @@ class AtDiscountProgressBar extends HTMLElement {
           <span class="at-dp__cart-status" id="${statusId}" role="status" aria-live="polite">${statusInner}</span>
           <div class="at-dp__cart-railwrap" aria-hidden="true">
             <div class="at-dp__cart-line">
-              <span class="at-dp__cart-line-active" style="width:${lineActivePct}%"></span>
+              <span class="at-dp__cart-line-active" style="width:${greenPct}%"></span>
+              <span class="at-dp__cart-line-pending" style="left:${greenPct}%;width:${pendingWidth}%"></span>
             </div>
-            <div class="at-dp__cart-nodes">${nodesHtml}</div>
+            <div class="at-dp__cart-ticks">${ticksHtml}</div>
           </div>
+          <div class="at-dp__cart-labels" aria-hidden="true">${labelsHtml}</div>
         </button>
         <dialog id="${dialogId}" class="at-dp__dialog dialog-modal">
           <div class="at-dp__dialog-panel">
@@ -602,6 +658,7 @@ class AtDiscountProgressBar extends HTMLElement {
         m,
         n,
         previewBasis,
+        committedBasis: subtotal,
         nextTierIdx,
         uid,
         nonSaleUrl,

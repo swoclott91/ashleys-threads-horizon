@@ -1,0 +1,76 @@
+{%- doc -%}
+  AT Menu category chrome — matched to an `at-categories` link by handle.
+
+  Provides icon + featured card settings for the Products mega panel.
+  Rendered output is unused; the parent reads `block.blocks` settings.
+
+  @example
+  Added as a nested block under Header → AT Menu.
+{%- enddoc -%}
+
+<div
+  class="at-menu-category-chrome"
+  hidden
+  {{ block.shopify_attributes }}
+  data-cat-handle="{{ block.settings.category_handle | escape }}"
+></div>
+
+{% schema %}
+{
+  "name": "AT Menu category",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "category_handle",
+      "label": "Category handle",
+      "info": "Must match the category link handle in the categories menu (e.g. t-shirts)."
+    },
+    {
+      "type": "text",
+      "id": "icon",
+      "label": "Icon name",
+      "info": "Name from snippets/icon.liquid (e.g. shirt). Missing icons show an empty slot.",
+      "default": "shirt"
+    },
+    {
+      "type": "header",
+      "content": "Featured card"
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Featured collection"
+    },
+    {
+      "type": "image_picker",
+      "id": "featured_image",
+      "label": "Featured image",
+      "info": "Preferred. Falls back to the featured collection image."
+    },
+    {
+      "type": "text",
+      "id": "featured_eyebrow",
+      "label": "Eyebrow",
+      "default": "Featured Collection"
+    },
+    {
+      "type": "text",
+      "id": "featured_title",
+      "label": "Title",
+      "default": "Best Sellers"
+    },
+    {
+      "type": "text",
+      "id": "featured_cta_label",
+      "label": "Button label",
+      "default": "Shop"
+    }
+  ],
+  "presets": [
+    {
+      "name": "AT Menu category"
+    }
+  ]
+}
+{% endschema %}

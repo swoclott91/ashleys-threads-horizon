@@ -1,6 +1,9 @@
 {%- doc -%}
   Intended for use in a block similar to the button block.
 
+  Link style (`button-unstyled`) renders as a theme text link: underlined label
+  and a trailing arrow. A label that already ends in ">" or "→" keeps a single arrow.
+
   @param {string} link - link to render
   @param {object} [block] - The block
 
@@ -8,7 +11,27 @@
   {% render 'button', link: '/collections/all' %}
 {%- enddoc -%}
 
-{% assign block_settings = block.settings %}
+{% liquid
+  assign block_settings = block.settings
+  assign button_label = block_settings.label | default: '' | strip
+  assign is_link_style = false
+
+  if block_settings.style_class == 'button-unstyled'
+    assign is_link_style = true
+    assign label_suffix = button_label | slice: -1, 1
+
+    if label_suffix == '>' or label_suffix == '→'
+      assign label_length = button_label | size | minus: 1
+      assign button_label = button_label | slice: 0, label_length | strip
+      assign label_suffix = button_label | slice: -1, 1
+
+      if label_suffix == '-'
+        assign label_length = button_label | size | minus: 1
+        assign button_label = button_label | slice: 0, label_length | strip
+      endif
+    endif
+  endif
+%}
 {% render 'button-custom-styles', block_settings: block_settings, block_id: block.id %}
 
 <a
@@ -22,6 +45,7 @@
     size-style
     {{ block_settings.style_class }}
     {{ block_settings.style_class }}--{{ block.id }}
+    {% if is_link_style %}button-link{% endif %}
   "
   style="{% render 'size-style', settings: block_settings %}"
   {%- if block_settings.open_in_new_tab -%}
@@ -30,5 +54,50 @@
   {%- endif -%}
   {{ block.shopify_attributes }}
 >
-  {{ block_settings.label }}
+  {%- if is_link_style -%}
+    <span class="button-link__label">{{ button_label }}</span>
+    <span class="button-link__icon svg-wrapper" aria-hidden="true">
+      {{- 'icon-arrow.svg' | inline_asset_content -}}
+    </span>
+  {%- else -%}
+    {{ button_label }}
+  {%- endif -%}
 </a>
+
+{% stylesheet %}
+  /* Link style matches paragraph links: underlined label, trailing theme arrow.
+     Scoped to the button snippet so icon-only .button-unstyled controls stay plain. */
+  .button-unstyled.button-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--gap-2xs);
+    overflow: visible;
+    text-decoration: none;
+    text-transform: none;
+    cursor: pointer;
+  }
+
+  .button-link__label {
+    text-decoration-line: underline;
+    text-decoration-color: currentcolor;
+    text-decoration-thickness: 0.075em;
+    text-underline-offset: 0.15em;
+  }
+
+  .button-unstyled.button-link:hover .button-link__label,
+  .button-unstyled.button-link:focus-visible .button-link__label {
+    text-decoration-color: currentcolor;
+  }
+
+  .button-link__icon {
+    --icon-size-sm: 1em;
+    flex-shrink: 0;
+  }
+
+  @media (forced-colors: active) {
+    .button-unstyled.button-link:focus-visible {
+      outline: var(--focus-outline-width) solid transparent;
+    }
+  }
+{% endstylesheet %}

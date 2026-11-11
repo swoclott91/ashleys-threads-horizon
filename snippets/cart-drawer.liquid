@@ -9,6 +9,7 @@
 -%}
 
 {%- if settings.cart_type == 'drawer' and template.name != 'cart' -%}
+  {% render 'at-cart-drawer-styles' %}
   {% if render_wrapper %}
     <div
       id="shopify-section-cart-drawer-section"
@@ -38,7 +39,7 @@
         {% render 'cart-products', force_empty: true, context: 'drawer' %}
       </div>
     </div>
-    {% endcapture %}
+  {% endcapture %}
 
   <theme-drawer
     id="cart-drawer"
@@ -85,15 +86,15 @@
               {{ empty_cart_drawer_content }}
             {%- else -%}
               <div class="cart-drawer__main">
-                <scroll-hint
+                <div
                   class="cart-drawer__content"
+                  role="region"
                   aria-label="{{ 'accessibility.cart' | t }}"
-                  style="--header-height: 60px;"
                 >
-                  <scroll-hint class="cart-drawer__items">
+                  <div class="cart-drawer__items">
                     {% render 'cart-products', context: 'drawer' %}
-                  </scroll-hint>
-                </scroll-hint>
+                  </div>
+                </div>
 
                 <div class="cart-drawer__summary">
                   {% render 'cart-summary', section_id: 'cart-drawer-section', skip_discount_strip: true %}
@@ -145,7 +146,6 @@
   }
 
   .cart-drawer__content {
-    height: calc(100% - var(--header-height));
     display: flex;
     flex-direction: column;
     padding: 0;
@@ -320,6 +320,8 @@
     align-self: center;
     position: relative;
     z-index: 2;
+    /* Override theme-drawer__close-button margin — strip already fills space via flex. */
+    margin-inline-start: 0;
   }
 
   .cart-drawer__at-dp-strip .at-discount-progress {

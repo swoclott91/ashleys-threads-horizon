@@ -1,0 +1,1151 @@
+{
+  "nodes": [
+    {
+      "id": "gid://shopify/Product/10426151076115",
+      "title": "YST350 Youth PosiCharge Competitor Tee",
+      "handle": "sport-tek-yst350-youth-posicharge-competitor-tee",
+      "category": {
+        "id": "gid://shopify/TaxonomyCategory/aa-1-1-2-2",
+        "fullName": "Apparel & Accessories > Clothing > Activewear > Activewear Tops > T-Shirts",
+        "ancestorIds": [
+          "gid://shopify/TaxonomyCategory/aa",
+          "gid://shopify/TaxonomyCategory/aa-1",
+          "gid://shopify/TaxonomyCategory/aa-1-1",
+          "gid://shopify/TaxonomyCategory/aa-1-1-2"
+        ]
+      },
+      "facts": {
+        "nodes": [
+          {
+            "namespace": "shopify",
+            "key": "shopify.target-gender",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/210642469139\"]",
+            "references": {
+              "nodes": [
+                {
+                  "id": "gid://shopify/Metaobject/210642469139",
+                  "type": "shopify--target-gender",
+                  "fields": [
+                    {
+                      "key": "label",
+                      "value": "Unisex"
+                    },
+                    {
+                      "key": "taxonomy_reference",
+                      "value": "gid://shopify/TaxonomyValue/20"
+                    }
+                  ]
+                }
+              ],
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": "eyJsYXN0X2lkIjowLCJsYXN0X3ZhbHVlIjowfQ=="
+              }
+            }
+          },
+          {
+            "namespace": "shopify",
+            "key": "shopify.age-group",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/210642239763\"]",
+            "references": {
+              "nodes": [
+                {
+                  "id": "gid://shopify/Metaobject/210642239763",
+                  "type": "shopify--age-group",
+                  "fields": [
+                    {
+                      "key": "label",
+                      "value": "Kids"
+                    },
+                    {
+                      "key": "taxonomy_reference",
+                      "value": "gid://shopify/TaxonomyValue/1515"
+                    }
+                  ]
+                }
+              ],
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": "eyJsYXN0X2lkIjowLCJsYXN0X3ZhbHVlIjowfQ=="
+              }
+            }
+          },
+          {
+            "namespace": "shopify",
+            "key": "shopify.sleeve-length-type",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/210642075923\"]",
+            "references": {
+              "nodes": [
+                {
+                  "id": "gid://shopify/Metaobject/210642075923",
+                  "type": "shopify--sleeve-length-type",
+                  "fields": [
+                    {
+                      "key": "label",
+                      "value": "Short"
+                    },
+                    {
+                      "key": "taxonomy_reference",
+                      "value": "gid://shopify/TaxonomyValue/169"
+                    }
+                  ]
+                }
+              ],
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": "eyJsYXN0X2lkIjowLCJsYXN0X3ZhbHVlIjowfQ=="
+              }
+            }
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjoxOTA4NzE5NzkyOTQ5OTUsImxhc3RfdmFsdWUiOjJ9"
+        }
+      },
+      "collections": {
+        "nodes": [
+          {
+            "id": "gid://shopify/Collection/523159339283",
+            "title": "Sport-Tek",
+            "handle": "sport-tek"
+          },
+          {
+            "id": "gid://shopify/Collection/523278713107",
+            "title": "Activewear",
+            "handle": "activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/523280482579",
+            "title": "Sale",
+            "handle": "sale"
+          },
+          {
+            "id": "gid://shopify/Collection/523280777491",
+            "title": "T-Shirts",
+            "handle": "t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/523281432851",
+            "title": "Unisex",
+            "handle": "unisex"
+          },
+          {
+            "id": "gid://shopify/Collection/523281465619",
+            "title": "Unisex/Men's",
+            "handle": "unisex-mens"
+          },
+          {
+            "id": "gid://shopify/Collection/523281858835",
+            "title": "Youth & Kids",
+            "handle": "youth-apparel"
+          },
+          {
+            "id": "gid://shopify/Collection/525843595539",
+            "title": "Short Sleeve T-Shirts",
+            "handle": "long-sleeve-t-shirts-copy"
+          },
+          {
+            "id": "gid://shopify/Collection/525858570515",
+            "title": "Performance T-Shirts",
+            "handle": "raglan-t-shirts-copy"
+          },
+          {
+            "id": "gid://shopify/Collection/525878755603",
+            "title": "Unisex T-Shirts",
+            "handle": "unisex-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/525905428755",
+            "title": "100% Polyester T-Shirts",
+            "handle": "100-polyester-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/525973553427",
+            "title": "Interlock T-Shirts",
+            "handle": "interlock-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/526491091219",
+            "title": "Activewear T-Shirts",
+            "handle": "activewear-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/526632452371",
+            "title": "Unisex Activewear",
+            "handle": "unisex-activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/526632780051",
+            "title": "100% Polyester Activewear",
+            "handle": "100-polyester-activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/526633304339",
+            "title": "Moisture-Wicking Activewear",
+            "handle": "moisture-wicking-activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/526633435411",
+            "title": "Running Apparel",
+            "handle": "running-apparel"
+          },
+          {
+            "id": "gid://shopify/Collection/528203415827",
+            "title": "Popular",
+            "handle": "popular"
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1MjgyMDM0MTU4MjcsImxhc3RfdmFsdWUiOjUyODIwMzQxNTgyN30="
+        }
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10426151043347",
+      "title": "YST350LS Youth Long Sleeve PosiCharge Competitor Tee",
+      "handle": "sport-tek-yst350ls-youth-long-sleeve-posicharge-competitor-tee",
+      "category": {
+        "id": "gid://shopify/TaxonomyCategory/aa-1-1-2-2",
+        "fullName": "Apparel & Accessories > Clothing > Activewear > Activewear Tops > T-Shirts",
+        "ancestorIds": [
+          "gid://shopify/TaxonomyCategory/aa",
+          "gid://shopify/TaxonomyCategory/aa-1",
+          "gid://shopify/TaxonomyCategory/aa-1-1",
+          "gid://shopify/TaxonomyCategory/aa-1-1-2"
+        ]
+      },
+      "facts": {
+        "nodes": [
+          {
+            "namespace": "shopify",
+            "key": "shopify.target-gender",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/210642469139\"]",
+            "references": {
+              "nodes": [
+                {
+                  "id": "gid://shopify/Metaobject/210642469139",
+                  "type": "shopify--target-gender",
+                  "fields": [
+                    {
+                      "key": "label",
+                      "value": "Unisex"
+                    },
+                    {
+                      "key": "taxonomy_reference",
+                      "value": "gid://shopify/TaxonomyValue/20"
+                    }
+                  ]
+                }
+              ],
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": "eyJsYXN0X2lkIjowLCJsYXN0X3ZhbHVlIjowfQ=="
+              }
+            }
+          },
+          {
+            "namespace": "shopify",
+            "key": "shopify.age-group",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/210642239763\"]",
+            "references": {
+              "nodes": [
+                {
+                  "id": "gid://shopify/Metaobject/210642239763",
+                  "type": "shopify--age-group",
+                  "fields": [
+                    {
+                      "key": "label",
+                      "value": "Kids"
+                    },
+                    {
+                      "key": "taxonomy_reference",
+                      "value": "gid://shopify/TaxonomyValue/1515"
+                    }
+                  ]
+                }
+              ],
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": "eyJsYXN0X2lkIjowLCJsYXN0X3ZhbHVlIjowfQ=="
+              }
+            }
+          },
+          {
+            "namespace": "shopify",
+            "key": "shopify.sleeve-length-type",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/210642043155\"]",
+            "references": {
+              "nodes": [
+                {
+                  "id": "gid://shopify/Metaobject/210642043155",
+                  "type": "shopify--sleeve-length-type",
+                  "fields": [
+                    {
+                      "key": "label",
+                      "value": "Long"
+                    },
+                    {
+                      "key": "taxonomy_reference",
+                      "value": "gid://shopify/TaxonomyValue/17094"
+                    }
+                  ]
+                }
+              ],
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": "eyJsYXN0X2lkIjowLCJsYXN0X3ZhbHVlIjowfQ=="
+              }
+            }
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1MjI5MDk2NDc1MDYxMSwibGFzdF92YWx1ZSI6Mn0="
+        }
+      },
+      "collections": {
+        "nodes": [
+          {
+            "id": "gid://shopify/Collection/523159339283",
+            "title": "Sport-Tek",
+            "handle": "sport-tek"
+          },
+          {
+            "id": "gid://shopify/Collection/523278713107",
+            "title": "Activewear",
+            "handle": "activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/523280023827",
+            "title": "Non-Sale Items",
+            "handle": "non-sale-items"
+          },
+          {
+            "id": "gid://shopify/Collection/523280777491",
+            "title": "T-Shirts",
+            "handle": "t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/523281432851",
+            "title": "Unisex",
+            "handle": "unisex"
+          },
+          {
+            "id": "gid://shopify/Collection/523281465619",
+            "title": "Unisex/Men's",
+            "handle": "unisex-mens"
+          },
+          {
+            "id": "gid://shopify/Collection/523281858835",
+            "title": "Youth & Kids",
+            "handle": "youth-apparel"
+          },
+          {
+            "id": "gid://shopify/Collection/525858570515",
+            "title": "Performance T-Shirts",
+            "handle": "raglan-t-shirts-copy"
+          },
+          {
+            "id": "gid://shopify/Collection/525878755603",
+            "title": "Unisex T-Shirts",
+            "handle": "unisex-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/525905428755",
+            "title": "100% Polyester T-Shirts",
+            "handle": "100-polyester-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/525973553427",
+            "title": "Interlock T-Shirts",
+            "handle": "interlock-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/526491091219",
+            "title": "Activewear T-Shirts",
+            "handle": "activewear-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/526632452371",
+            "title": "Unisex Activewear",
+            "handle": "unisex-activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/526632780051",
+            "title": "100% Polyester Activewear",
+            "handle": "100-polyester-activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/526633304339",
+            "title": "Moisture-Wicking Activewear",
+            "handle": "moisture-wicking-activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/526633435411",
+            "title": "Running Apparel",
+            "handle": "running-apparel"
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1MjY2MzM0MzU0MTEsImxhc3RfdmFsdWUiOjUyNjYzMzQzNTQxMX0="
+        }
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10425148440851",
+      "title": "5000 Heavy Cotton 100% Cotton T-Shirt",
+      "handle": "gildan-5000-heavy-cotton-100-cotton-t-shirt",
+      "category": {
+        "id": "gid://shopify/TaxonomyCategory/aa-1-13-8",
+        "fullName": "Apparel & Accessories > Clothing > Clothing Tops > T-Shirts",
+        "ancestorIds": [
+          "gid://shopify/TaxonomyCategory/aa",
+          "gid://shopify/TaxonomyCategory/aa-1",
+          "gid://shopify/TaxonomyCategory/aa-1-13"
+        ]
+      },
+      "facts": {
+        "nodes": [
+          {
+            "namespace": "shopify",
+            "key": "shopify.target-gender",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/210642469139\"]",
+            "references": {
+              "nodes": [
+                {
+                  "id": "gid://shopify/Metaobject/210642469139",
+                  "type": "shopify--target-gender",
+                  "fields": [
+                    {
+                      "key": "label",
+                      "value": "Unisex"
+                    },
+                    {
+                      "key": "taxonomy_reference",
+                      "value": "gid://shopify/TaxonomyValue/20"
+                    }
+                  ]
+                }
+              ],
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": "eyJsYXN0X2lkIjowLCJsYXN0X3ZhbHVlIjowfQ=="
+              }
+            }
+          },
+          {
+            "namespace": "shopify",
+            "key": "shopify.age-group",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/210642141459\"]",
+            "references": {
+              "nodes": [
+                {
+                  "id": "gid://shopify/Metaobject/210642141459",
+                  "type": "shopify--age-group",
+                  "fields": [
+                    {
+                      "key": "label",
+                      "value": "Adults"
+                    },
+                    {
+                      "key": "taxonomy_reference",
+                      "value": "gid://shopify/TaxonomyValue/2403"
+                    }
+                  ]
+                }
+              ],
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": "eyJsYXN0X2lkIjowLCJsYXN0X3ZhbHVlIjowfQ=="
+              }
+            }
+          },
+          {
+            "namespace": "shopify",
+            "key": "shopify.sleeve-length-type",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/210642075923\"]",
+            "references": {
+              "nodes": [
+                {
+                  "id": "gid://shopify/Metaobject/210642075923",
+                  "type": "shopify--sleeve-length-type",
+                  "fields": [
+                    {
+                      "key": "label",
+                      "value": "Short"
+                    },
+                    {
+                      "key": "taxonomy_reference",
+                      "value": "gid://shopify/TaxonomyValue/169"
+                    }
+                  ]
+                }
+              ],
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": "eyJsYXN0X2lkIjowLCJsYXN0X3ZhbHVlIjowfQ=="
+              }
+            }
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1MDc3MTg5MzE5MDkzMSwibGFzdF92YWx1ZSI6Mn0="
+        }
+      },
+      "collections": {
+        "nodes": [
+          {
+            "id": "gid://shopify/Collection/523157438739",
+            "title": "Gildan",
+            "handle": "gildan"
+          },
+          {
+            "id": "gid://shopify/Collection/523278450963",
+            "title": "100% Cotton",
+            "handle": "100-cotton"
+          },
+          {
+            "id": "gid://shopify/Collection/523278516499",
+            "title": "100% Cotton T-Shirts",
+            "handle": "100-cotton-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/523280482579",
+            "title": "Sale",
+            "handle": "sale"
+          },
+          {
+            "id": "gid://shopify/Collection/523280777491",
+            "title": "T-Shirts",
+            "handle": "t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/523281432851",
+            "title": "Unisex",
+            "handle": "unisex"
+          },
+          {
+            "id": "gid://shopify/Collection/523281465619",
+            "title": "Unisex/Men's",
+            "handle": "unisex-mens"
+          },
+          {
+            "id": "gid://shopify/Collection/525843595539",
+            "title": "Short Sleeve T-Shirts",
+            "handle": "long-sleeve-t-shirts-copy"
+          },
+          {
+            "id": "gid://shopify/Collection/525878755603",
+            "title": "Unisex T-Shirts",
+            "handle": "unisex-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/525879378195",
+            "title": "Crew Neck T-Shirts",
+            "handle": "crew-neck-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/525963002131",
+            "title": "Open-End Cotton T-Shirts",
+            "handle": "open-end-cotton-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/528203415827",
+            "title": "Popular",
+            "handle": "popular"
+          },
+          {
+            "id": "gid://shopify/Collection/528534798611",
+            "title": "Seller Staples",
+            "handle": "seller-staples"
+          },
+          {
+            "id": "gid://shopify/Collection/528537452819",
+            "title": "Volume Winners",
+            "handle": "volume-winners"
+          },
+          {
+            "id": "gid://shopify/Collection/528538927379",
+            "title": "Assortment Builders",
+            "handle": "assortment-builders"
+          },
+          {
+            "id": "gid://shopify/Collection/528594862355",
+            "title": "Everyday Family Tees",
+            "handle": "everyday-family-tees"
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1Mjg1OTQ4NjIzNTUsImxhc3RfdmFsdWUiOjUyODU5NDg2MjM1NX0="
+        }
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10426119618835",
+      "title": "PC380H Performance Pullover Hooded Tee",
+      "handle": "port-company-pc380h-performance-pullover-hooded-tee",
+      "category": {
+        "id": "gid://shopify/TaxonomyCategory/aa-1-1-2-2",
+        "fullName": "Apparel & Accessories > Clothing > Activewear > Activewear Tops > T-Shirts",
+        "ancestorIds": [
+          "gid://shopify/TaxonomyCategory/aa",
+          "gid://shopify/TaxonomyCategory/aa-1",
+          "gid://shopify/TaxonomyCategory/aa-1-1",
+          "gid://shopify/TaxonomyCategory/aa-1-1-2"
+        ]
+      },
+      "facts": {
+        "nodes": [
+          {
+            "namespace": "shopify",
+            "key": "shopify.target-gender",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/210642469139\"]",
+            "references": {
+              "nodes": [
+                {
+                  "id": "gid://shopify/Metaobject/210642469139",
+                  "type": "shopify--target-gender",
+                  "fields": [
+                    {
+                      "key": "label",
+                      "value": "Unisex"
+                    },
+                    {
+                      "key": "taxonomy_reference",
+                      "value": "gid://shopify/TaxonomyValue/20"
+                    }
+                  ]
+                }
+              ],
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": "eyJsYXN0X2lkIjowLCJsYXN0X3ZhbHVlIjowfQ=="
+              }
+            }
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1MDc5NTQ4NTEzNTEyMywibGFzdF92YWx1ZSI6MH0="
+        }
+      },
+      "collections": {
+        "nodes": [
+          {
+            "id": "gid://shopify/Collection/523158814995",
+            "title": "Port & Company",
+            "handle": "port-company"
+          },
+          {
+            "id": "gid://shopify/Collection/523278713107",
+            "title": "Activewear",
+            "handle": "activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/523280318739",
+            "title": "Port & Company",
+            "handle": "port-and-company"
+          },
+          {
+            "id": "gid://shopify/Collection/523280482579",
+            "title": "Sale",
+            "handle": "sale"
+          },
+          {
+            "id": "gid://shopify/Collection/523280777491",
+            "title": "T-Shirts",
+            "handle": "t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/523281432851",
+            "title": "Unisex",
+            "handle": "unisex"
+          },
+          {
+            "id": "gid://shopify/Collection/523281465619",
+            "title": "Unisex/Men's",
+            "handle": "unisex-mens"
+          },
+          {
+            "id": "gid://shopify/Collection/525858570515",
+            "title": "Performance T-Shirts",
+            "handle": "raglan-t-shirts-copy"
+          },
+          {
+            "id": "gid://shopify/Collection/525878755603",
+            "title": "Unisex T-Shirts",
+            "handle": "unisex-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/525905428755",
+            "title": "100% Polyester T-Shirts",
+            "handle": "100-polyester-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/526491091219",
+            "title": "Activewear T-Shirts",
+            "handle": "activewear-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/526632452371",
+            "title": "Unisex Activewear",
+            "handle": "unisex-activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/526632780051",
+            "title": "100% Polyester Activewear",
+            "handle": "100-polyester-activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/526633304339",
+            "title": "Moisture-Wicking Activewear",
+            "handle": "moisture-wicking-activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/527229190419",
+            "title": "Fishing & Sun Activewear Apparel",
+            "handle": "fishing-sun-activewear-apparel"
+          },
+          {
+            "id": "gid://shopify/Collection/528203415827",
+            "title": "Popular",
+            "handle": "popular"
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1MjgyMDM0MTU4MjcsImxhc3RfdmFsdWUiOjUyODIwMzQxNTgyN30="
+        }
+      }
+    }
+  ],
+  "shop": {
+    "id": "gid://shopify/Shop/99395469587",
+    "rules": {
+      "value": "[\"gid://shopify/Metaobject/617993666835\",\"gid://shopify/Metaobject/617993699603\",\"gid://shopify/Metaobject/617993732371\",\"gid://shopify/Metaobject/617993765139\",\"gid://shopify/Metaobject/617993797907\",\"gid://shopify/Metaobject/617993830675\",\"gid://shopify/Metaobject/617993863443\",\"gid://shopify/Metaobject/617993896211\"]",
+      "references": {
+        "nodes": [
+          {
+            "id": "gid://shopify/Metaobject/617993666835",
+            "handle": "tees",
+            "fields": [
+              {
+                "key": "name",
+                "value": "T-Shirts root",
+                "reference": null
+              },
+              {
+                "key": "family",
+                "value": "tee",
+                "reference": null
+              },
+              {
+                "key": "category_ids",
+                "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-7\",\"gid://shopify/TaxonomyCategory/aa-1-13-8\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-8\",\"gid://shopify/TaxonomyCategory/aa-1-1-2-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-1\"]",
+                "reference": null
+              },
+              {
+                "key": "attribute_namespace",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "attribute_key",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "attribute_values",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "destination",
+                "value": "gid://shopify/Collection/523280777491",
+                "reference": {
+                  "id": "gid://shopify/Collection/523280777491",
+                  "title": "T-Shirts",
+                  "handle": "t-shirts"
+                }
+              },
+              {
+                "key": "priority",
+                "value": "0",
+                "reference": null
+              }
+            ]
+          },
+          {
+            "id": "gid://shopify/Metaobject/617993699603",
+            "handle": "short_sleeve",
+            "fields": [
+              {
+                "key": "name",
+                "value": "Short sleeve tees",
+                "reference": null
+              },
+              {
+                "key": "family",
+                "value": "tee",
+                "reference": null
+              },
+              {
+                "key": "category_ids",
+                "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-7\",\"gid://shopify/TaxonomyCategory/aa-1-13-8\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-8\",\"gid://shopify/TaxonomyCategory/aa-1-1-2-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-1\"]",
+                "reference": null
+              },
+              {
+                "key": "attribute_namespace",
+                "value": "shopify",
+                "reference": null
+              },
+              {
+                "key": "attribute_key",
+                "value": "sleeve-length-type",
+                "reference": null
+              },
+              {
+                "key": "attribute_values",
+                "value": "[\"gid://shopify/TaxonomyValue/169\"]",
+                "reference": null
+              },
+              {
+                "key": "destination",
+                "value": "gid://shopify/Collection/525843595539",
+                "reference": {
+                  "id": "gid://shopify/Collection/525843595539",
+                  "title": "Short Sleeve T-Shirts",
+                  "handle": "long-sleeve-t-shirts-copy"
+                }
+              },
+              {
+                "key": "priority",
+                "value": "10",
+                "reference": null
+              }
+            ]
+          },
+          {
+            "id": "gid://shopify/Metaobject/617993732371",
+            "handle": "long_sleeve",
+            "fields": [
+              {
+                "key": "name",
+                "value": "Long sleeve tees",
+                "reference": null
+              },
+              {
+                "key": "family",
+                "value": "tee",
+                "reference": null
+              },
+              {
+                "key": "category_ids",
+                "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-7\",\"gid://shopify/TaxonomyCategory/aa-1-13-8\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-8\",\"gid://shopify/TaxonomyCategory/aa-1-1-2-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-1\"]",
+                "reference": null
+              },
+              {
+                "key": "attribute_namespace",
+                "value": "shopify",
+                "reference": null
+              },
+              {
+                "key": "attribute_key",
+                "value": "sleeve-length-type",
+                "reference": null
+              },
+              {
+                "key": "attribute_values",
+                "value": "[\"gid://shopify/TaxonomyValue/17094\"]",
+                "reference": null
+              },
+              {
+                "key": "destination",
+                "value": "gid://shopify/Collection/523279794451",
+                "reference": {
+                  "id": "gid://shopify/Collection/523279794451",
+                  "title": "Long Sleeve T-Shirts",
+                  "handle": "long-sleeve-t-shirts"
+                }
+              },
+              {
+                "key": "priority",
+                "value": "10",
+                "reference": null
+              }
+            ]
+          },
+          {
+            "id": "gid://shopify/Metaobject/617993765139",
+            "handle": "sweatshirts",
+            "fields": [
+              {
+                "key": "name",
+                "value": "Sweatshirts and hoodies root",
+                "reference": null
+              },
+              {
+                "key": "family",
+                "value": "sweatshirt",
+                "reference": null
+              },
+              {
+                "key": "category_ids",
+                "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-11\",\"gid://shopify/TaxonomyCategory/aa-1-13-13\",\"gid://shopify/TaxonomyCategory/aa-1-1-7-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-2\",\"gid://shopify/TaxonomyCategory/aa-1-25-9-13\",\"gid://shopify/TaxonomyCategory/aa-1-13-14\",\"gid://shopify/TaxonomyCategory/aa-1-1-7-4\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-4\",\"gid://shopify/TaxonomyCategory/aa-1-1-7\"]",
+                "reference": null
+              },
+              {
+                "key": "attribute_namespace",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "attribute_key",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "attribute_values",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "destination",
+                "value": "gid://shopify/Collection/523280744723",
+                "reference": {
+                  "id": "gid://shopify/Collection/523280744723",
+                  "title": "Sweatshirts & Hoodies",
+                  "handle": "sweatshirts-hoodies"
+                }
+              },
+              {
+                "key": "priority",
+                "value": "0",
+                "reference": null
+              }
+            ]
+          },
+          {
+            "id": "gid://shopify/Metaobject/617993797907",
+            "handle": "hoodies",
+            "fields": [
+              {
+                "key": "name",
+                "value": "Hoodies",
+                "reference": null
+              },
+              {
+                "key": "family",
+                "value": "sweatshirt",
+                "reference": null
+              },
+              {
+                "key": "category_ids",
+                "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-11\",\"gid://shopify/TaxonomyCategory/aa-1-13-13\",\"gid://shopify/TaxonomyCategory/aa-1-1-7-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-2\"]",
+                "reference": null
+              },
+              {
+                "key": "attribute_namespace",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "attribute_key",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "attribute_values",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "destination",
+                "value": "gid://shopify/Collection/523279499539",
+                "reference": {
+                  "id": "gid://shopify/Collection/523279499539",
+                  "title": "Hoodies",
+                  "handle": "hoodies"
+                }
+              },
+              {
+                "key": "priority",
+                "value": "10",
+                "reference": null
+              }
+            ]
+          },
+          {
+            "id": "gid://shopify/Metaobject/617993830675",
+            "handle": "hats",
+            "fields": [
+              {
+                "key": "name",
+                "value": "Hats root",
+                "reference": null
+              },
+              {
+                "key": "family",
+                "value": "hat",
+                "reference": null
+              },
+              {
+                "key": "category_ids",
+                "value": "[\"gid://shopify/TaxonomyCategory/aa-2-17\"]",
+                "reference": null
+              },
+              {
+                "key": "attribute_namespace",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "attribute_key",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "attribute_values",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "destination",
+                "value": "gid://shopify/Collection/523279335699",
+                "reference": {
+                  "id": "gid://shopify/Collection/523279335699",
+                  "title": "Hats",
+                  "handle": "hats"
+                }
+              },
+              {
+                "key": "priority",
+                "value": "0",
+                "reference": null
+              }
+            ]
+          },
+          {
+            "id": "gid://shopify/Metaobject/617993863443",
+            "handle": "trucker",
+            "fields": [
+              {
+                "key": "name",
+                "value": "Trucker hats",
+                "reference": null
+              },
+              {
+                "key": "family",
+                "value": "hat",
+                "reference": null
+              },
+              {
+                "key": "category_ids",
+                "value": "[\"gid://shopify/TaxonomyCategory/aa-2-17-14\"]",
+                "reference": null
+              },
+              {
+                "key": "attribute_namespace",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "attribute_key",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "attribute_values",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "destination",
+                "value": "gid://shopify/Collection/523281236243",
+                "reference": {
+                  "id": "gid://shopify/Collection/523281236243",
+                  "title": "Trucker Hats",
+                  "handle": "trucker-hats"
+                }
+              },
+              {
+                "key": "priority",
+                "value": "10",
+                "reference": null
+              }
+            ]
+          },
+          {
+            "id": "gid://shopify/Metaobject/617993896211",
+            "handle": "beanies",
+            "fields": [
+              {
+                "key": "name",
+                "value": "Beanies",
+                "reference": null
+              },
+              {
+                "key": "family",
+                "value": "hat",
+                "reference": null
+              },
+              {
+                "key": "category_ids",
+                "value": "[\"gid://shopify/TaxonomyCategory/aa-2-17-2\"]",
+                "reference": null
+              },
+              {
+                "key": "attribute_namespace",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "attribute_key",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "attribute_values",
+                "value": null,
+                "reference": null
+              },
+              {
+                "key": "destination",
+                "value": "gid://shopify/Collection/523278942483",
+                "reference": {
+                  "id": "gid://shopify/Collection/523278942483",
+                  "title": "Beanies",
+                  "handle": "beanies"
+                }
+              },
+              {
+                "key": "priority",
+                "value": "10",
+                "reference": null
+              }
+            ]
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo3LCJsYXN0X3ZhbHVlIjo3fQ=="
+        }
+      }
+    }
+  }
+}

@@ -48,4 +48,31 @@
     padding-block: var(--badge-rectangle-padding-block);
     padding-inline: var(--badge-rectangle-padding-inline);
   }
+
+  /* Editor-chosen featured badge (e.g. Ashley's Choice): a stitched woven label with the monogram. */
+  .product-badges__badge--featured {
+    gap: 0.5em;
+    padding-block: 0.4em;
+    padding-inline: 0.55em 0.8em;
+    border-radius: 4px;
+    outline: 1px dashed rgb(239 227 200 / 0.85);
+    outline-offset: -4px;
+    color: #f5f1eb;
+    background: #233d31;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
+  }
+
+  .product-badges__monogram {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: #efe3c8;
+  }
+
+  .product-badges__monogram svg {
+    block-size: 1.55em;
+    inline-size: auto;
+  }
 {% endstylesheet %}
