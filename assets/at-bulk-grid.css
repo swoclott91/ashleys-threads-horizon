@@ -2,10 +2,22 @@
  * AT Bulk order grid – minimal layout; reuses theme button/input/grid classes.
  */
 
-/* Desktop: wider modal when bulk grid is present so table fits without horizontal scroll */
+/* Center modal shells in the viewport, independent of the trigger's page position. */
+.at-buy-buttons__bulk-dialog:not(.at-buy-buttons__bulk-dialog--drawer),
+.at-popup-link .popup-link__content:has(.at-bulk-grid):not(.popup-link__content--drawer) {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+}
+
+/* Give size columns the available desktop width; large grids can still scroll internally. */
 @media screen and (min-width: 750px) {
-  .at-popup-link .popup-link__content:has(.at-bulk-grid) {
-    max-width: min(72rem, calc(100vw - 2rem));
+  .at-buy-buttons__bulk-dialog:not(.at-buy-buttons__bulk-dialog--drawer),
+  .at-popup-link .popup-link__content:has(.at-bulk-grid):not(.popup-link__content--drawer),
+  #at-bulk-grid-quick-add-dialog {
+    width: min(90rem, calc(100vw - 3rem));
+    max-width: min(90rem, calc(100vw - 3rem));
+    padding: clamp(1.5rem, 2.5vw, 3rem);
   }
 }
 
@@ -33,7 +45,7 @@
  * Mirrors the product-page popup-link__content + at-bulk-grid rules so that
  * sizing, scroll behaviour, and sticky footer feel identical across contexts.
  *
- * Desktop (≥750px): max-width/max-height only – table wrapper scrolls internally.
+ * Desktop (≥750px): viewport-capped width/height – table wrapper scrolls internally.
  * Mobile (<750px): viewport-based sheet height; .at-bulk-grid__body scrolls; footer stays visible.
  * ─────────────────────────────────────────────────────────────────────────── */
 
@@ -45,18 +57,18 @@
     )
   );
 
-  position: relative;
+  position: fixed;
+  inset: 0;
+  margin: auto;
   box-shadow: var(--shadow-popover);
   border: var(--style-border-popover);
   border-radius: var(--style-border-radius-popover);
   background-color: var(--color-background);
   padding: var(--padding-4xl) var(--padding-xl) var(--padding-xl);
-  /* Wide enough for the table (mirrors .at-popup-link .popup-link__content:has(.at-bulk-grid)) */
-  max-width: min(72rem, calc(100vw - 2rem));
   max-height: var(--modal-max-height);
 
   @media screen and (min-width: 750px) {
-    padding: var(--padding-5xl);
+    padding: clamp(1.5rem, 2.5vw, 3rem);
   }
 }
 
@@ -145,8 +157,110 @@
   animation: none;
 }
 
+/*
+ * This theme's Color Palette uses a gold foreground (#bb987c), so any text that
+ * inherits --color-foreground (headings, color names, prices, discount status,
+ * subtitle, table borders) renders gold. Remap the foreground inside the bulk
+ * modal shells to the store's neutral text color (#2c2c2c) so regular text is
+ * non-gold and matches the reference design. The discount accent (#243e34) and
+ * availability colors are set separately and are unaffected.
+ */
+.at-bulk-grid-modal__inner,
+.at-buy-buttons__bulk-dialog-inner,
+.popup-link__inner:has(.at-bulk-grid) {
+  --color-foreground: #2c2c2c;
+  --color-foreground-rgb: 44 44 44;
+}
+
+/* Close (X) control renders black in the bulk modals (icon uses currentColor) */
+#at-bulk-grid-quick-add-dialog .at-bulk-grid-modal__close,
+.at-buy-buttons__bulk-dialog .at-buy-buttons__bulk-close,
+.at-popup-link .popup-link__content:has(.at-bulk-grid) .popup-link__close {
+  color: #000;
+  opacity: 1;
+}
+
+/*
+ * Bulk modal discount strip: the status line reads as a bold heading in the design
+ * (matching the modal heading color, no green goal highlight). Scoped to the modal
+ * shells so PDP / cart strips keep their muted style. Desktop left-aligns the row.
+ */
+.at-bulk-grid-modal__inner .at-dp__cart-status,
+.at-buy-buttons__bulk-dialog-inner .at-dp__cart-status,
+.popup-link__inner:has(.at-bulk-grid) .at-dp__cart-status {
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--color-foreground);
+}
+
+.at-bulk-grid-modal__inner .at-dp__cart-status-goal,
+.at-buy-buttons__bulk-dialog-inner .at-dp__cart-status-goal,
+.popup-link__inner:has(.at-bulk-grid) .at-dp__cart-status-goal {
+  color: inherit;
+}
+
+@media screen and (min-width: 750px) {
+  .at-bulk-grid-modal__inner .at-dp__cart-expand,
+  .at-buy-buttons__bulk-dialog-inner .at-dp__cart-expand,
+  .popup-link__inner:has(.at-bulk-grid) .at-dp__cart-expand {
+    align-items: stretch;
+    text-align: left;
+  }
+
+  .at-bulk-grid-modal__inner .at-dp__cart-status,
+  .at-buy-buttons__bulk-dialog-inner .at-dp__cart-status,
+  .popup-link__inner:has(.at-bulk-grid) .at-dp__cart-status {
+    text-align: left;
+  }
+}
+
+/* Visible modal header (title + subtitle) rendered above the discount strip */
+.at-bulk-grid__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-3xs, 0.25rem);
+  margin-block-end: var(--gap-md);
+  /* Leave room for the top-right close button */
+  padding-inline-end: var(--minimum-touch-target);
+}
+
+.at-bulk-grid__title {
+  margin: 0;
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  font-size: var(--font-size--lg);
+  line-height: 1.2;
+  color: #000;
+}
+
+.at-bulk-grid__subtitle {
+  margin: 0;
+  font-size: var(--font-size--sm);
+  line-height: 1.4;
+  color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+}
+
+@media screen and (min-width: 750px) {
+  .at-bulk-grid__title {
+    font-size: var(--font-size--xl);
+  }
+}
+
+/* Mobile: centered header; close stays top-right so pad both sides to keep the title centered */
+@media screen and (max-width: 749px) {
+  .at-bulk-grid__header {
+    align-items: center;
+    text-align: center;
+    padding-inline: var(--minimum-touch-target);
+    margin-block-end: var(--gap-sm);
+  }
+}
+
 .at-bulk-grid {
   --at-bulk-grid-gap: var(--gap-sm, 0.75rem);
+  /* Gold hairline for table + accordion separators (palette foreground gold, light weight) */
+  --at-bulk-line: rgb(var(--at-bulk-gold-rgb, 187 152 124) / 0.5);
+  /* Slightly stronger gold for input / swatch outlines */
+  --at-bulk-line-strong: rgb(var(--at-bulk-gold-rgb, 187 152 124) / 0.65);
   display: flex;
   flex-direction: column;
   gap: var(--at-bulk-grid-gap);
@@ -288,21 +402,29 @@
 .at-bulk-grid__table th,
 .at-bulk-grid__table td {
   padding: var(--padding-xs) var(--padding-sm);
-  border: 1px solid var(--color-border);
+  /* Light hairline grid lines (was 1px --color-border, which is gold in this palette) */
+  border: 1px solid var(--at-bulk-line);
   text-align: center;
   vertical-align: middle;
 }
 
 .at-bulk-grid__table th {
-  background: var(--color-background);
+  background: var(--at-bulk-surface, var(--color-background));
   font-weight: 600;
-  box-shadow: 0 1px 0 var(--color-border);
+  color: #000;
+  /*
+   * Sticky header: collapsed cell borders aren't repainted while the thead is
+   * pinned, so the top/bottom lines vanish on scroll. Draw them with box-shadow
+   * (inset top + outset bottom) so they stay put with the sticky element.
+   */
+  box-shadow: inset 0 1px 0 var(--at-bulk-line), 0 1px 0 var(--at-bulk-line);
 }
 
 .at-bulk-grid__table td.at-bulk-grid__color-cell {
   text-align: left;
   white-space: nowrap;
   vertical-align: middle;
+  background: var(--at-bulk-surface, var(--color-background));
 }
 
 .at-bulk-grid__color-cell-inner {
@@ -319,12 +441,13 @@
   width: var(--variant-picker-swatch-width, 20px);
   height: var(--variant-picker-swatch-height, 20px);
   border-radius: var(--variant-picker-swatch-radius, 50%);
-  border: var(--style-border-width-inputs) solid var(--color-border);
+  border: var(--style-border-width-inputs) solid var(--at-bulk-line-strong);
   background: var(--swatch-background, rgb(var(--color-foreground-rgb) / var(--opacity-5)));
 }
 
 .at-bulk-grid__color-name {
   font-size: inherit;
+  color: #000;
 }
 
 .at-bulk-grid__cell-inner {
@@ -339,10 +462,19 @@
   width: 4ch;
   min-width: 3rem;
   padding: var(--padding-2xs) var(--padding-xs);
-  border: var(--style-border-width-inputs) solid var(--color-border);
+  border: var(--style-border-width-inputs) solid var(--at-bulk-line-strong);
   border-radius: var(--style-border-radius-inputs);
   text-align: center;
   font-size: 16px;
+  transition: border-color var(--animation-speed) ease;
+}
+
+/* Accent the quantity field once it has a value (desktop table + mobile stepper) */
+.at-bulk-grid__qty-input--active {
+  border-color: var(--at-dp-accent, var(--color-selected-variant-background));
+  box-shadow: 0 0 0 1px var(--at-dp-accent, var(--color-selected-variant-background));
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--at-dp-accent, var(--color-selected-variant-background));
 }
 
 .at-bulk-grid__price {
@@ -353,7 +485,7 @@
 
 .at-bulk-grid__price .compare-at-price {
   text-decoration: line-through;
-  color: var(--color-foreground-secondary);
+  color: rgb(var(--color-foreground-rgb) / 0.55);
   margin-inline-end: 0.25em;
 }
 
@@ -369,7 +501,7 @@
 }
 
 .at-bulk-grid__availability--in-stock {
-  color: var(--color-instock, green);
+  color: #243e34;
 }
 
 .at-bulk-grid__availability--low {
@@ -398,14 +530,53 @@
     padding-block-start: var(--gap-md);
     padding-block-end: var(--padding-xs);
     background: var(--color-background);
-    box-shadow: 0 -1px 0 var(--color-border);
+    box-shadow: 0 -1px 0 var(--at-bulk-line);
   }
 }
 
-.at-bulk-grid__total {
-  font-weight: 600;
+/* Footer summary: item count • subtotal • projected discount % */
+.at-bulk-grid__summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem;
   flex: 1 1 auto;
   min-width: 0;
+  font-size: var(--font-size--sm);
+}
+
+.at-bulk-grid__summary-count {
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+.at-bulk-grid__summary-sep {
+  color: rgb(var(--color-foreground-rgb) / var(--opacity-30));
+}
+
+.at-bulk-grid__summary-subtotal {
+  color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+}
+
+.at-bulk-grid__summary-discount {
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--at-dp-accent, var(--color-selected-variant-background));
+}
+
+.at-bulk-grid__summary-discount[hidden],
+.at-bulk-grid__summary-sep[hidden] {
+  display: none;
+}
+
+/* Mobile: stack the count above the subtotal / discount line */
+@media screen and (max-width: 749px) {
+  .at-bulk-grid__summary-count {
+    flex: 1 0 100%;
+    font-size: var(--font-size--md);
+  }
+
+  .at-bulk-grid__summary-sep--count {
+    display: none;
+  }
 }
 
 /* Match theme buy buttons: same height, no quantity selector in this row */
@@ -416,6 +587,37 @@
 
 .at-bulk-grid__actions .add-to-cart-button {
   position: relative;
+}
+
+/* Ring spinner on ATC while cart/add.js is in flight (same pattern as .at-bulk-grid__spinner / AT menu) */
+.at-bulk-grid__add--loading {
+  cursor: progress;
+  pointer-events: none;
+}
+
+.at-bulk-grid__add--loading .add-to-cart-text,
+.at-bulk-grid__add--loading .add-to-cart__added {
+  visibility: hidden;
+}
+
+.at-bulk-grid__add--loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  box-sizing: border-box;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid color-mix(in srgb, currentColor 25%, transparent);
+  border-block-start-color: currentColor;
+  border-radius: 50%;
+  animation: at-bulk-grid-spin 0.7s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .at-bulk-grid__add--loading::after {
+    animation-duration: 2s;
+  }
 }
 
 .at-bulk-grid__actions .add-to-cart-button .add-to-cart-icon {
@@ -442,7 +644,7 @@
   .at-popup-link .popup-link__content:has(.at-bulk-grid)[open] {
     --at-bulk-modal-inline: max(var(--padding-md), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
 
-    position: relative;
+    position: fixed;
     max-height: var(--at-bulk-sheet-height);
     height: var(--at-bulk-sheet-height);
     width: 100%;
@@ -494,7 +696,7 @@
     padding-block-start: var(--gap-md);
     padding-block-end: 0;
     background: var(--color-background);
-    box-shadow: 0 -1px 0 var(--color-border);
+    box-shadow: 0 -1px 0 var(--at-bulk-line);
   }
 
   .at-bulk-grid__search {
@@ -571,7 +773,7 @@
   }
 
   .at-bulk-grid__mobile-accordion {
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--at-bulk-line);
     border-radius: var(--style-border-radius-inputs);
     overflow: hidden;
   }
@@ -628,11 +830,40 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--padding-xs) 0;
-    border-bottom: 1px solid var(--color-border);
+    padding: var(--padding-xs) var(--padding-2xs);
+    border-radius: var(--style-border-radius-inputs);
+    border-bottom: 1px solid var(--at-bulk-line);
+    transition: background-color var(--animation-speed) ease;
   }
 
   .at-bulk-grid__mobile-size-row:last-child {
     border-bottom: none;
+  }
+
+  /* Selected size rows (qty > 0) get a subtle accent tint */
+  .at-bulk-grid__mobile-size-row--selected {
+    background: color-mix(in srgb, var(--at-dp-accent, var(--color-selected-variant-background)) 8%, transparent);
+  }
+
+  /* Per-color item count on the accordion header */
+  .at-bulk-grid__color-count:empty {
+    display: none;
+  }
+
+  .at-bulk-grid__color-count {
+    font-size: var(--font-size--xs);
+    font-weight: var(--font-weight-normal, 400);
+    color: var(--at-dp-accent, var(--color-selected-variant-background));
+    white-space: nowrap;
+  }
+
+  /* Accordion with selections: emphasize the header surface with the bulk surface color */
+  .at-bulk-grid__mobile-accordion--has-items .at-bulk-grid__mobile-accordion-header {
+    background: var(--at-bulk-surface, rgb(var(--color-foreground-rgb) / var(--opacity-5)));
+  }
+
+  /* Add-to-cart button spans full width under the summary on mobile */
+  .at-bulk-grid__actions .at-bulk-grid__add {
+    flex: 1 0 100%;
   }
 }

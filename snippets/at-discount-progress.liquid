@@ -6,8 +6,14 @@
   @param {number} [product_price] - Selected variant price in cents (product context).
   @param {object} [product] - Product for data-product-id (product context).
   @param {string} [non_sale_collection_url] - Link for qualifying items in info panel.
-  @param {string} [customer_account_menu] - Unused since member pricing (kept so existing callers stay valid).
-  @param {string} [layout] - Unused since member pricing (was the logged-out drawer prompt; guests now get the bulk bar).
+  @param {string} [customer_account_menu] - Menu handle for shopify-account (default matches header: customer-account-main-menu).
+  @param {string} [layout] - 'drawer_header' for cart drawer / bulk modal strips (same banner row as PDP/cart; tighter prompt type). Default is the PDP/cart logged-out banner.
+  @param {string} [login_style_class] - Button style class for the logged-out Log in control (defaults to theme setting).
+  @param {string} [login_style_id] - Scope id for custom / link button CSS (defaults to theme-dp-login).
+  @param {object} [login_custom_button_background] - Custom background when style is button-custom.
+  @param {object} [login_custom_button_text] - Custom text when style is button-custom.
+  @param {object} [login_custom_button_border] - Custom border when style is button-custom.
+  @param {object} [login_link_text_color] - Link color when style is button-unstyled.
 
   AT member pricing (design §13 "Cart strip"), by tier from `at-member-tier`:
   - guest (logged out, or signed in without a tier): the SMART bulk bar. Milestones come from
@@ -18,13 +24,9 @@
   - wholesale: Net terms (`company_location.wagner.terms_status`, else `tier_thresholds.wholesale.terms`).
   On the product page, signed-in tiers get nothing here: the price bar and pricing modal replace "Bulk savings".
 {%- enddoc -%}
-{% render 'contrast-override',
-  background_color: '#2c2c2c',
-  text_color: '#f7f2ea',
-  section_id: 'at-discount-progress',
-  preset: 'ui'
-%}
 {%- liquid
+  assign dp_customer_account_menu = customer_account_menu | default: 'customer-account-main-menu'
+  assign dp_layout = layout | default: ''
   assign dp_context = context | default: 'cart'
   assign dp_section = section_id | default: 'global'
   assign dp_uid = dp_section | append: '-' | append: dp_context | handleize
@@ -36,6 +38,15 @@
   if product != blank
     assign dp_product_id = product.id
   endif
+  assign dp_login_style = login_style_class | default: settings.at_discount_progress_login_style | default: 'button-secondary'
+  assign dp_login_style_id = login_style_id | default: 'theme-dp-login'
+  assign dp_login_class = 'button ' | append: dp_login_style | append: ' ' | append: dp_login_style | append: '--' | append: dp_login_style_id
+  assign dp_login_link_class = 'at-discount-progress__login-link ' | append: dp_login_class
+  assign dp_login_legacy_class = dp_login_class
+  assign dp_login_custom_bg = login_custom_button_background | default: settings.at_discount_progress_login_custom_background
+  assign dp_login_custom_text = login_custom_button_text | default: settings.at_discount_progress_login_custom_text
+  assign dp_login_custom_border = login_custom_button_border | default: settings.at_discount_progress_login_custom_border
+  assign dp_login_link_color = login_link_text_color | default: settings.at_discount_progress_login_link_text_color
   capture at_tier
     render 'at-member-tier'
   endcapture
@@ -67,8 +78,18 @@
     ]
   {%- endcapture -%}
 {%- endif -%}
+{%- unless customer -%}
+  {% render 'at-apply-button-styles',
+    style_class: dp_login_style,
+    style_id: dp_login_style_id,
+    custom_button_background: dp_login_custom_bg,
+    custom_button_text: dp_login_custom_text,
+    custom_button_border: dp_login_custom_border,
+    link_text_color: dp_login_link_color
+  %}
+{%- endunless -%}
 {%- capture dp_i18n -%}
-{"close_dialog":{{ 'accessibility.close_dialog' | t | json }},"log_in_prompt":{{ 'at_discount_progress.log_in_prompt' | t | json }},"log_in":{{ 'at_discount_progress.log_in' | t | json }},"tier_unlocked":{{ 'at_discount_progress.tier_unlocked' | t | json }},"achievement_none":{{ 'at_discount_progress.achievement_none' | t | json }},"add_more_for":{{ 'at_discount_progress.add_more_for' | t | json }},"cart_condensed_status":{{ 'at_discount_progress.cart_condensed_status' | t | json }},"max_tier_reached":{{ 'at_discount_progress.max_tier_reached' | t | json }},"non_sale_disclaimer":{{ 'at_discount_progress.non_sale_disclaimer' | t | json }},"browse_qualifying":{{ 'at_discount_progress.browse_qualifying' | t | json }},"info_open":{{ 'at_discount_progress.info_open' | t | json }},"info_close":{{ 'at_discount_progress.info_close' | t | json }},"preview_helper":{{ 'at_discount_progress.preview_helper' | t | json }},"bulk_savings_title":{{ 'at_discount_progress.bulk_savings_title' | t | json }},"bulk_savings_subtitle":{{ 'at_discount_progress.bulk_savings_subtitle' | t | json }},"expand_savings_aria":{{ 'at_discount_progress.expand_savings_aria' | t | json }},"modal_got_it":{{ 'at_discount_progress.modal_got_it' | t | json }},"unlocked_badge":{{ 'at_discount_progress.unlocked_badge' | t | json }},"modal_unlocked_at":{{ 'at_discount_progress.modal_unlocked_at' | t | json }},"modal_spend_for":{{ 'at_discount_progress.modal_spend_for' | t | json }},"modal_at":{{ 'at_discount_progress.modal_at' | t | json }},"modal_away":{{ 'at_discount_progress.modal_away' | t | json }},"modal_footer_note":{{ 'at_discount_progress.modal_footer_note' | t | json }}}
+{"close_dialog":{{ 'accessibility.close_dialog' | t | json }},"log_in_prompt":{{ 'at_discount_progress.log_in_prompt' | t | json }},"log_in":{{ 'at_discount_progress.log_in' | t | json }},"tier_unlocked":{{ 'at_discount_progress.tier_unlocked' | t | json }},"achievement_none":{{ 'at_discount_progress.achievement_none' | t | json }},"add_more_for":{{ 'at_discount_progress.add_more_for' | t | json }},"cart_condensed_status":{{ 'at_discount_progress.cart_condensed_status' | t | json }},"max_tier_reached":{{ 'at_discount_progress.max_tier_reached' | t | json }},"non_sale_disclaimer":{{ 'at_discount_progress.non_sale_disclaimer' | t | json }},"browse_qualifying":{{ 'at_discount_progress.browse_qualifying' | t | json }},"info_open":{{ 'at_discount_progress.info_open' | t | json }},"info_close":{{ 'at_discount_progress.info_close' | t | json }},"preview_helper":{{ 'at_discount_progress.preview_helper' | t | json }},"bulk_savings_title":{{ 'at_discount_progress.bulk_savings_title' | t | json }},"bulk_savings_subtitle":{{ 'at_discount_progress.bulk_savings_subtitle' | t | json }},"expand_savings_aria":{{ 'at_discount_progress.expand_savings_aria' | t | json }},"modal_got_it":{{ 'at_discount_progress.modal_got_it' | t | json }},"unlocked_badge":{{ 'at_discount_progress.unlocked_badge' | t | json }},"modal_unlocked_at":{{ 'at_discount_progress.modal_unlocked_at' | t | json }},"modal_spend_for":{{ 'at_discount_progress.modal_spend_for' | t | json }},"modal_at":{{ 'at_discount_progress.modal_at' | t | json }},"modal_away":{{ 'at_discount_progress.modal_away' | t | json }},"modal_footer_note":{{ 'at_discount_progress.modal_footer_note' | t | json }},"node_applied":{{ 'at_discount_progress.node_applied' | t | json }}}
 {%- endcapture -%}
 {{ 'at-discount-progress.css' | asset_url | stylesheet_tag }}
 {{ 'at-member.css' | asset_url | stylesheet_tag }}

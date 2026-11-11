@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "store": "ashleys-threads-3.myshopify.com",
   "type": "at_breadcrumb_rule",
   "shopMetafield": "custom.breadcrumb_rules",
@@ -8,6 +8,10 @@
       "handle": "tees",
       "name": "T-Shirts root",
       "family": "tee",
+      "breadcrumb_facets": [
+        "age-group",
+        "target-gender"
+      ],
       "category_ids": [
         "gid://shopify/TaxonomyCategory/aa-1-25-9-7",
         "gid://shopify/TaxonomyCategory/aa-1-13-8",
@@ -72,7 +76,11 @@
         "gid://shopify/TaxonomyCategory/aa-1-1-7"
       ],
       "priority": 0,
-      "destination": "gid://shopify/Collection/523280744723"
+      "destination": "gid://shopify/Collection/523280744723",
+      "breadcrumb_facets": [
+        "age-group",
+        "target-gender"
+      ]
     },
     {
       "handle": "hoodies",
@@ -95,7 +103,11 @@
         "gid://shopify/TaxonomyCategory/aa-2-17"
       ],
       "priority": 0,
-      "destination": "gid://shopify/Collection/523279335699"
+      "destination": "gid://shopify/Collection/523279335699",
+      "breadcrumb_facets": [
+        "age-group",
+        "target-gender"
+      ]
     },
     {
       "handle": "trucker",

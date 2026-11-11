@@ -18,8 +18,10 @@
   {{- settings.custom_height }}%;
 {%- elsif settings.height == 'fill' -%}
   --size-style-height: 100%;
+{%- elsif settings.height == 'fit' -%}
+  --size-style-height: auto;
 {%- else -%}
-  --size-style-height: {{ settings.height }};
+  --size-style-height: auto;
 {%- endif -%}
 
 {% if settings.width_mobile == 'custom' %}
@@ -37,5 +39,7 @@
 {%- elsif settings.height_mobile == 'fill' -%}
   --size-style-height-mobile: 100%;
 {%- elsif settings.height_mobile == 'fit' -%}
+  --size-style-height-mobile: auto;
+{%- else -%}
   --size-style-height-mobile: auto;
 {%- endif -%}

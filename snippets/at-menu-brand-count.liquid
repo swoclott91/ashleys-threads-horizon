@@ -1,0 +1,17 @@
+{%- doc -%}
+  Counts brand links whose collections have Online Store products, independent
+  of filters on the page currently being viewed.
+  @param {object} brands_linklist - Merchant-owned brand navigation menu.
+{%- enddoc -%}
+{%- liquid
+  assign visible_count = 0
+  for brand_link in brands_linklist.links
+    if brand_link.type == 'collection_link'
+      if brand_link.object == blank or brand_link.object.all_products_count == 0
+        continue
+      endif
+    endif
+    assign visible_count = visible_count | plus: 1
+  endfor
+  echo visible_count
+-%}

@@ -1,0 +1,75 @@
+{%- liquid
+  assign brands_menu = linklists[section.settings.brands_menu]
+  capture visible_count
+    render 'at-menu-brand-count', brands_linklist: brands_menu
+  endcapture
+  assign visible_count = visible_count | strip | plus: 0
+-%}
+<div class="section-background"></div>
+<div class="section section--page-width at-brand-directory">
+  <div class="section-content-wrapper">
+    <h1>{{ page.title | escape }}</h1>
+    <div class="rte">{{ section.settings.introduction }}</div>
+    {%- if visible_count > 0 -%}
+      {%- render 'at-menu-brands-alpha-columns', brands_linklist: brands_menu -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .at-brand-directory .section-content-wrapper {
+    padding-block: var(--padding-xl);
+  }
+  .at-brand-directory h1 {
+    margin-block: 0 var(--margin-md);
+  }
+  .at-brand-directory .at-brands-dir__columns {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: var(--gap-xl);
+    margin-block-start: var(--margin-xl);
+  }
+  .at-brand-directory .at-brands-dir__column-heading {
+    border-block-end: 1px solid var(--color-border);
+    padding-block-end: var(--padding-sm);
+    margin-block: 0 var(--margin-md);
+  }
+  .at-brand-directory .at-brands-dir__list {
+    display: grid;
+    gap: var(--gap-sm);
+  }
+  .at-brand-directory .at-brands-dir__link {
+    display: inline-block;
+    color: var(--color-foreground);
+    padding-block: var(--padding-xs);
+    text-underline-offset: 0.2em;
+    overflow-wrap: anywhere;
+  }
+  .at-brand-directory .at-brands-dir__link:hover {
+    text-decoration: underline;
+  }
+  @media screen and (max-width: 989px) {
+    .at-brand-directory .at-brands-dir__columns {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media screen and (max-width: 749px) {
+    .at-brand-directory .at-brands-dir__columns {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--gap-lg);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "AT Brand Directory",
+  "class": "section-wrapper",
+  "enabled_on": { "templates": ["page"] },
+  "settings": [
+    { "type": "link_list", "id": "brands_menu", "label": "Brand menu" },
+    { "type": "richtext", "id": "introduction", "label": "Introduction", "default": "<p>Browse blank apparel by brand. Choose a brand to compare styles and product details.</p>" }
+  ],
+  "presets": [{ "name": "AT Brand Directory" }]
+}
+{% endschema %}

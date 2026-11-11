@@ -1,0 +1,76 @@
+{% doc %}
+  Outputs scoped CSS for primary / secondary / link / custom button styles when
+  settings come from theme settings or explicit params (not a block.settings object).
+
+  @param {string} style_class - button | button-secondary | button-unstyled | button-custom
+  @param {string} style_id - Unique id used to scope CSS classes
+  @param {object} [custom_button_background] - Custom background color
+  @param {object} [custom_button_text] - Custom text color
+  @param {object} [custom_button_border] - Custom border color
+  @param {object} [link_text_color] - Link text color when style is button-unstyled
+
+  @example
+  {% render 'at-apply-button-styles',
+    style_class: settings.at_discount_progress_login_style,
+    style_id: 'theme-dp-login',
+    custom_button_background: settings.at_discount_progress_login_custom_background
+  %}
+{% enddoc %}
+
+{% liquid
+  assign style_class = style_class | default: 'button-secondary'
+  assign style_id = style_id | default: 'at-btn'
+%}
+
+{% if style_class == 'button-unstyled' and link_text_color != blank %}
+  {% style %}
+    .button-unstyled--{{ style_id }} {
+      color: rgb({{ link_text_color.rgba }});
+    }
+
+    .button-unstyled--{{ style_id }}:hover {
+      color: rgb({{ link_text_color.rgb }} / var(--opacity-70));
+    }
+  {% endstyle %}
+{% endif %}
+
+{% if style_class == 'button-custom' %}
+  {%- assign effective_background_color = custom_button_background
+    | default: settings.palette_primary_button_background
+  -%}
+  {%- assign effective_text_color = custom_button_text
+    | default: settings.palette_primary_button_text
+  -%}
+  {%- assign effective_border_color = custom_button_border
+    | default: settings.palette_primary_button_border
+  -%}
+  {%- if effective_background_color.alpha == 0 -%}
+    {%- assign effective_focus_outline_color = effective_text_color -%}
+  {%- else -%}
+    {%- assign effective_focus_outline_color = effective_background_color -%}
+  {%- endif -%}
+  {%- capture hover_resolved -%}
+    {% render 'resolve-custom-hover',
+      base_bg: effective_background_color,
+      base_text: effective_text_color,
+      base_border: effective_border_color
+    %}
+  {%- endcapture -%}
+  {%- assign hover_parts = hover_resolved | strip | split: '||' -%}
+  {%- assign effective_hover_bg = hover_parts[0] -%}
+  {%- assign effective_hover_text = hover_parts[1] -%}
+  {%- assign effective_hover_border = hover_parts[2] -%}
+  {% style %}
+    .button-custom--{{ style_id }} {
+      --button-background-color: rgb({{ effective_background_color.rgba }});
+      --button-color: rgb({{ effective_text_color.rgba }});
+      --button-border-color: rgb({{ effective_border_color.rgba }});
+      --button-focus-outline-color: rgb({{ effective_focus_outline_color.rgb }});
+    }
+    .button-custom--{{ style_id }}:hover {
+      --button-background-color: {{ effective_hover_bg }};
+      --button-color: {{ effective_hover_text }};
+      --button-border-color: {{ effective_hover_border }};
+    }
+  {% endstyle %}
+{% endif %}

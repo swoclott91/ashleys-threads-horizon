@@ -6,13 +6,13 @@
     – mobile         : header-drawer with hamburger trigger + AT mobile drawer
     – navigation_bar : optional swipe-bar for small screens
 
-  The mega-panel is triggered by the nav item whose handle matches
-  at_panel_item_handle (default "products").  It shows:
-    • A left category sidebar from at_categories_menu
-    • When the sidebar item matching at_brands_item_handle is active:
-        a full brand grid sourced from at_brands_menu
-    • For any other sidebar category: a sub-navigation grid of that
-        category's links
+  Products nav modes (at_products_nav_mode):
+    • sidebar   — single Products trigger + left category rail (preserved for Services+)
+    • top_level — each main-menu category is its own mega trigger (near-term)
+
+  Top-nav mega panels:
+    • Products / categories (from at_categories_menu)
+    • Brands (at_brands_item_handle): alphabet directory + featured rail (SSR)
 {%- endcomment -%}
 
 {%- liquid
@@ -22,41 +22,21 @@
   assign panel_handle     = block_settings.at_panel_item_handle   | default: 'products'
   assign brands_handle    = block_settings.at_brands_item_handle  | default: 'brands'
   assign highlight_handle = block_settings.at_highlight_handle    | default: 'sale'
+  assign products_nav_mode = block_settings.at_products_nav_mode  | default: 'top_level'
   assign cats_ll          = linklists[block_settings.at_categories_menu]
   assign brands_ll        = linklists[block_settings.at_brands_menu]
+  assign featured_brands_ll = linklists[block_settings.at_featured_brands_menu]
 
-  # ─── Render strategy ──────────────────────────────────────────────────────
-  # This block emits ONLY the lightweight chrome on every page render:
-  #   • Mobile: the main drawer view (top-level nav + non-panel accordions)
-  #   • Desktop: the trigger button, sidebar rail, and per-category content
-  #     headers (title + search input + count badge)
-  #
-  # The heavy content (~100-brand grid, every per-category subnav grid, all
-  # the per-category drill-down views on mobile) lives in
-  # `sections/at-menu-data.liquid`, mounted from `layout/theme.liquid`.
-  # That section renders empty on initial page loads and only emits the
-  # heavy views when assets/at-menu.js explicitly fetches it via the
-  # Section Rendering API after a real user interaction: hamburger
-  # pointerdown on mobile, nav hover on desktop.
-  #
-  # Net effects:
-  #   • Initial page render is identical in cost to a stock Horizon header
-  #     for the AT menu portion — no metaobject lookups, no image deref.
-  #     Cold-cache pages (newly-created collections, low-traffic PDPs)
-  #     stop tripping iOS Safari's renderer timeout.
-  #   • Search-engine and product-feed crawlers that never trigger
-  #     interaction never hit the heavy section, so GMC disapprovals from
-  #     intermittent crawl errors stop.
-  #   • The dedicated section is segment-agnostic (no cart/customer
-  #     state) so origin page_cache + Cloudflare cache it efficiently
-  #     across all visitors — first user in any segment warms the cache
-  #     for everyone.
+  # Brands panel: full alphabet directory + featured logos are SSR'd (text-cheap).
 
-  # Find the panel trigger link in the main menu
   assign panel_link = nil
+  assign brands_nav_link = nil
   for link in menu_links
     if link.handle == panel_handle
       assign panel_link = link
+    endif
+    if link.handle == brands_handle
+      assign brands_nav_link = link
     endif
   endfor
 -%}
@@ -103,11 +83,14 @@
             {%- render 'at-menu-mobile-drawer',
               menu_links: menu_links,
               panel_handle: panel_handle,
+              products_nav_mode: products_nav_mode,
               categories_linklist: cats_ll,
               brands_linklist: brands_ll,
               brands_handle: brands_handle,
+              featured_brands_linklist: featured_brands_ll,
               highlight_handle: highlight_handle,
-              mobile_drawer_label: block_settings.at_mobile_drawer_label
+              mobile_drawer_label: block_settings.at_mobile_drawer_label,
+              block_settings: block_settings
             -%}
           </div>
         </details>
@@ -155,6 +138,11 @@
     built-in _header-menu block.
   ══════════════════════════════════════════════════════════════════ {%- endcomment -%}
   {% else %}
+    {%- comment -%} Nested category chrome blocks — desktop only (this block is rendered 3×). {%- endcomment -%}
+    <div class="at-menu-category-blocks" hidden>
+      {% content_for 'blocks' %}
+    </div>
+
     {% liquid
       render 'contrast-override', background_color: block_settings.background_color, text_color: block_settings.text_color, section_id: block.id
 
@@ -176,27 +164,65 @@
         <nav
           class="at-menu__nav"
           aria-label="{{ 'accessibility.header_navigation_label' | t }}"
-          style="{%- render 'menu-font-styles', settings: block_settings -%}"
+          style="{%- render 'menu-font-styles', settings: block_settings -%}{%- render 'submenu-font-styles', settings: block_settings -%}"
         >
           {%- for link in menu_links -%}
             {%- liquid
-              assign is_panel   = false
+              assign is_panel = false
+              assign is_brands_panel = false
+              assign is_category_panel = false
               assign is_highlight = false
-              if link.handle == panel_handle and panel_link != nil and cats_ll != blank
-                assign is_panel = true
+              assign matched_cat_link = nil
+
+              if link.handle == brands_handle and brands_nav_link != nil and brands_ll != blank
+                assign is_brands_panel = true
               endif
+
               if link.handle == highlight_handle
                 assign is_highlight = true
               endif
+
+              if products_nav_mode == 'sidebar'
+                if link.handle == panel_handle and panel_link != nil and cats_ll != blank
+                  assign is_panel = true
+                endif
+              elsif products_nav_mode == 'top_level' and cats_ll != blank and is_brands_panel == false
+                for cat_link in cats_ll.links
+                  if cat_link.handle == brands_handle
+                    continue
+                  endif
+                  if cat_link.handle == link.handle
+                    assign matched_cat_link = cat_link
+                    assign is_category_panel = true
+                    break
+                  endif
+                endfor
+              endif
             -%}
 
-            {%- if is_panel -%}
-              {%- comment -%} ── Products mega-panel ── {%- endcomment -%}
-              {%- render 'at-menu-brands-panel',
-                panel_link: panel_link,
+            {%- if is_brands_panel -%}
+              {%- comment -%} ── Brands alphabet directory (standalone) ── {%- endcomment -%}
+              {%- render 'at-menu-brands-directory',
+                panel_link: brands_nav_link,
                 brands_linklist: brands_ll,
+                featured_linklist: featured_brands_ll,
+                section: block
+              -%}
+
+            {%- elsif is_panel -%}
+              {%- comment -%} ── Products mega-panel (sidebar mode) ── {%- endcomment -%}
+              {%- render 'at-menu-products-panel',
+                panel_link: panel_link,
                 categories_linklist: cats_ll,
                 brands_handle: brands_handle,
+                section: block
+              -%}
+
+            {%- elsif is_category_panel -%}
+              {%- comment -%} ── Single-category mega-panel (top-level mode) ── {%- endcomment -%}
+              {%- render 'at-menu-products-category-panel',
+                panel_link: link,
+                cat_link: matched_cat_link,
                 section: block
               -%}
 
@@ -324,15 +350,15 @@
     position: fixed;
     transform: translateX(-100%);
     visibility: hidden;
-    height: var(--drawer-height);
+    height: var(--at-menu-drawer-height, var(--drawer-height));
     width: var(--drawer-width);
     max-width: var(--drawer-max-width);
     z-index: var(--layer-menu-drawer);
     left: 0;
     top: 0;
-    padding: 0;
+    padding: 0 0 var(--safe-area-inset-bottom, 0px);
     background-color: var(--color-background);
-    overflow: auto;
+    overflow: hidden;
     display: flex;
     border-right: var(--style-border-drawer);
     box-shadow: var(--shadow-drawer);
@@ -409,30 +435,96 @@
       "content": "Mega-Panel"
     },
     {
+      "type": "select",
+      "id": "at_products_nav_mode",
+      "label": "Products nav layout",
+      "info": "Top-level: each category is a main-nav mega item (no sidebar). Sidebar: single Products trigger with a left category rail (keep for later Services+).",
+      "options": [
+        {
+          "value": "top_level",
+          "label": "Top-level categories (no sidebar)"
+        },
+        {
+          "value": "sidebar",
+          "label": "Products + category sidebar"
+        }
+      ],
+      "default": "top_level"
+    },
+    {
       "type": "text",
       "id": "at_panel_item_handle",
-      "label": "Panel trigger handle",
-      "info": "Handle of the top-level nav item that opens the mega-panel (e.g. 'products' or 'shop').",
+      "label": "Products trigger handle",
+      "info": "Sidebar mode only. Handle of the top-level nav item that opens Products (e.g. 'products' or 'shop').",
       "default": "products"
     },
     {
       "type": "link_list",
       "id": "at_categories_menu",
-      "label": "Categories sidebar menu",
-      "info": "Menu whose top-level links populate the left sidebar. Each link can have sub-links that appear in the right pane."
+      "label": "Categories menu",
+      "info": "3-level: Category → column (Style, Fit…) → leaf collections. Top-level mode: main-menu item handles must match category handles. Sidebar mode: categories appear in the left rail."
     },
     {
       "type": "text",
       "id": "at_brands_item_handle",
-      "label": "Brands sidebar item handle",
-      "info": "Handle of the sidebar item that should show the brand grid (e.g. 'brands').",
+      "label": "Brands nav handle",
+      "info": "Handle of the top-level nav item that opens the Brands directory (e.g. 'brands'). Brands are no longer inside the Products panel.",
       "default": "brands"
     },
     {
       "type": "link_list",
       "id": "at_brands_menu",
       "label": "Brands source menu",
-      "info": "Menu whose links are shown as the brand grid when the Brands sidebar item is active."
+      "info": "Menu of brand collection links shown as alphabetical text columns."
+    },
+    {
+      "type": "link_list",
+      "id": "at_featured_brands_menu",
+      "label": "Featured brands menu",
+      "info": "Small menu (about 4–6 collection links) for the right-rail logo cards. Uses each collection image only."
+    },
+    {
+      "type": "text",
+      "id": "at_featured_brands_heading",
+      "label": "Featured heading",
+      "default": "Featured Brands"
+    },
+    {
+      "type": "header",
+      "content": "Brands CTAs"
+    },
+    {
+      "type": "text",
+      "id": "at_brands_cta_1_label",
+      "label": "CTA 1 label",
+      "default": "Shop All Brands"
+    },
+    {
+      "type": "url",
+      "id": "at_brands_cta_1_link",
+      "label": "CTA 1 link"
+    },
+    {
+      "type": "text",
+      "id": "at_brands_cta_2_label",
+      "label": "CTA 2 label",
+      "default": "Shop All S&S Brands"
+    },
+    {
+      "type": "url",
+      "id": "at_brands_cta_2_link",
+      "label": "CTA 2 link"
+    },
+    {
+      "type": "text",
+      "id": "at_brands_cta_3_label",
+      "label": "CTA 3 label",
+      "default": "Shop All Exclusive Brands"
+    },
+    {
+      "type": "url",
+      "id": "at_brands_cta_3_link",
+      "label": "CTA 3 link"
     },
     {
       "type": "text",
@@ -449,6 +541,7 @@
       "type": "select",
       "id": "at_brand_icon_source",
       "label": "t:settings.at_brand_icon_source",
+      "info": "Legacy setting; directory mode uses collection images only on featured cards.",
       "options": [
         { "value": "auto",                  "label": "t:options.at_brand_icon_auto" },
         { "value": "collection_image_only", "label": "t:options.at_collection_image_only" },
@@ -466,6 +559,7 @@
       "type": "range",
       "id": "at_brands_panel_columns",
       "label": "t:settings.at_brands_panel_columns",
+      "info": "Legacy grid columns; directory mode uses fixed A–Z ranges.",
       "min": 3, "max": 6, "step": 1, "default": 4
     },
     {
@@ -511,6 +605,18 @@
         { "value": "1.125rem", "label": "18px" }
       ],
       "default": "1rem"
+    },
+    {
+      "type": "select",
+      "id": "menu_font_style",
+      "label": "t:settings.submenu_size",
+      "info": "Typography for mega-panel column headings and leaf links (matches theme header menu).",
+      "options": [
+        { "value": "regular", "label": "t:options.small" },
+        { "value": "inverse", "label": "t:options.medium" },
+        { "value": "inverse_large", "label": "t:options.large" }
+      ],
+      "default": "inverse"
     },
     {
       "type": "select",
@@ -564,6 +670,11 @@
       "label": "t:settings.navigation_bar_text_color",
       "placeholder": "t:settings.default",
       "visible_if": "{{ block.settings.at_mobile_navigation_bar }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "_at-menu-category"
     }
   ]
 }

@@ -1,9 +1,10 @@
 {%- doc -%}
-  Renders at most two canonical linked ancestors from shared rules or an editorial override.
+  Renders canonical linked ancestors, optionally narrowed by reviewed product attributes.
   @param {product} [product] - The current PDP product
   @param {collection} [collection] - The current collection page
   @param {string} page_type - The request page type
   @param {object} [shop] - The shop containing shared breadcrumb rules
+  @param {boolean} [use_attributes] - Enable the root rule's reviewed attribute filters
 {%- enddoc -%}
 {%- if page_type == 'product' and shop.metafields.custom.breadcrumb_rules.type == 'list.metaobject_reference' -%}
   {%- capture rule_destination_id -%}
@@ -18,6 +19,7 @@
   assign destination_valid = false
   assign parent_valid = false
   assign current_collection_id = nil
+  assign editorial_override_valid = false
 
   if page_type == 'product'
     if product.metafields.custom.breadcrumb_collection.type == 'collection_reference'
@@ -25,6 +27,8 @@
       assign override_membership = product.collections | where: 'id', destination.id
       if destination.id == blank or destination.url == blank or destination.published_at == blank or override_membership == empty
         assign destination = rule_destination | default: destination
+      else
+        assign editorial_override_valid = true
       endif
     else
       assign destination = rule_destination
@@ -77,7 +81,28 @@
     assign parent_label = parent.metafields.custom.breadcrumb_label.value | strip | default: parent.title
   endif
 -%}
-{%- if destination_valid and destination_label != blank -%}
+{%- capture attribute_trail -%}
+  {%- if use_attributes and page_type == 'product' and destination_valid and editorial_override_valid == false -%}
+    {%- assign attribute_root = destination -%}
+    {%- assign attribute_root_label = destination_label -%}
+    {%- if parent_valid -%}
+      {%- assign attribute_root = parent -%}
+      {%- assign attribute_root_label = parent_label -%}
+    {%- endif -%}
+    {%- if shop.metafields.custom.breadcrumb_rules.value.size <= 32 -%}
+      {%- for rule in shop.metafields.custom.breadcrumb_rules.value limit: 32 -%}
+        {%- if rule.priority.value == 0 and rule.destination.value.id == attribute_root.id and rule.breadcrumb_facets.type == 'list.single_line_text_field' -%}
+          {%- render 'at-breadcrumb-facets', product: product, root: attribute_root, root_label: attribute_root_label, destination: destination, destination_label: destination_label, facets: rule.breadcrumb_facets.value -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- assign attribute_trail = attribute_trail | strip -%}
+{%- if attribute_trail != blank -%}
+  {{ attribute_trail }}
+{%- elsif destination_valid and destination_label != blank -%}
   <ol class="at-breadcrumbs__list" role="list">
     {%- if parent_valid and parent_label != blank -%}
       <li class="at-breadcrumbs__item at-breadcrumbs__item--ancestor">

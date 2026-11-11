@@ -1,0 +1,38 @@
+{
+  "liveTheme": "ashleys-threads-horizon/main",
+  "id": "gid://shopify/OnlineStoreTheme/187518812435",
+  "role": "MAIN",
+  "beforeFiles": 537,
+  "afterFiles": 542,
+  "changedFiles": [
+    "assets/at-breadcrumbs.js",
+    "locales/en.default.json",
+    "locales/en.default.schema.json",
+    "sections/at-breadcrumbs.liquid",
+    "snippets/at-breadcrumb-rule-destination.liquid",
+    "snippets/at-breadcrumb-rule-matches.liquid",
+    "snippets/at-breadcrumbs.liquid",
+    "templates/collection.json",
+    "templates/page.brands.json",
+    "templates/page.services.json",
+    "templates/product.json"
+  ],
+  "removedFiles": [],
+  "onlyBreadcrumbsChanged": true,
+  "backupThemeId": "190753505555",
+  "mainCommit": "59c71e0f2c75552f0d6f57d641249be614667f1e",
+  "formatOnlyFiles": [
+    "templates/page.brands.json",
+    "templates/page.services.json"
+  ],
+  "liveBrowserVerification": {
+    "product": "gildan-5000-heavy-cotton-100-cotton-t-shirt",
+    "trail": [
+      "T-Shirts",
+      "Short Sleeve"
+    ],
+    "rows": 1,
+    "placement": "before existing heading",
+    "screenshot": ".shopify-verify/breadcrumbs/main-live.jpg"
+  }
+}

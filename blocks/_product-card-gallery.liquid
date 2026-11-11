@@ -1,46 +1,65 @@
 {% assign product = closest.product %}
 
+{%- capture product_badge -%}
+  {%- render 'product-card-badge', product: product, featured_label: block.settings.featured_badge_label -%}
+{%- endcapture -%}
+
 {% capture children %}
   {% unless product == blank %}
-    <div
-      class="product-badges product-badges--{{ settings.badge_position }}"
-      style="
-        --badge-border-radius: {{ settings.badge_corner_radius }}px;
-        --badge-font-family: var(--font-{{ settings.badge_font_family }}--family); --badge-font-weight: var(--font-{{ settings.badge_font_family }}--weight); --badge-text-transform: {{ settings.badge_text_transform }};
-      "
-    >
-      {%- if product.available == false or product.compare_at_price > product.price -%}
-        <div
-          class="
-            product-badges__badge product-badges__badge--rectangle
-            {% if product.available == false %} color-custom-badge-sold-out{% elsif product.compare_at_price > product.price %} color-custom-badge-sale{% endif %}
-          "
-        >
-          {%- if product.available == false -%}
-            {{ 'content.product_badge_sold_out' | t }}
-          {%- elsif product.compare_at_price > product.price -%}
-            {{ 'content.product_badge_sale' | t }}
-          {%- endif -%}
-        </div>
-      {%- endif -%}
-    </div>
-    {%  if settings.quick_add or settings.mobile_quick_add %}
+    {{ product_badge }}
+    {% if product.available and settings.quick_add or settings.mobile_quick_add %}
       {% render 'quick-add', product: product, section_id: section.id %}
     {% endif %}
   {% endunless %}
 {% endcapture %}
 
-{% render 'card-gallery', children: children %}
+{%- liquid
+  assign play_video = false
+  if block.settings.play_first_video and product.featured_media.media_type == 'video'
+    assign play_video = true
+    case block.settings.image_ratio
+      when 'square'
+        assign video_ratio = '1'
+      when 'landscape'
+        assign video_ratio = '16 / 9'
+      when 'portrait'
+        assign video_ratio = '4 / 5'
+      else
+        assign video_ratio = product.featured_media.aspect_ratio | default: '0.8'
+    endcase
+  endif
+-%}
 
-{% # Title and price for the zoomed out grid view %}
-<div class="product-grid-view-zoom-out--details">
-  {% if product == blank %}
-    <h3 class="h4">{{ 'content.product_card_placeholder' | t }}</h3>
-  {% else %}
-    <h3 class="h4">{{ product.title }}</h3>
-  {% endif %}
-</div>
+{%- if play_video -%}
+  {% # Muted looping clip in place of the image gallery; the card's own link overlay keeps it clickable. %}
+  <div
+    class="card-gallery at-card-gallery--video spacing-style border-style{% if product_badge != blank %} card-gallery--badge-{{ settings.badge_position }}{% endif %}"
+    style="--at-card-video-ratio: {{ video_ratio }}; {% render 'spacing-style', settings: block.settings %} {% render 'border-override', settings: block.settings %}"
+    {{ block.shopify_attributes }}
+  >
+    {% render 'at-card-video', media: product.featured_media, alt: product.title %}
+    {{ children }}
+  </div>
+{%- else -%}
+  {%- liquid
+    assign lead_media = null
+    if block.settings.show_variant_image
+      assign lead_media = product.selected_or_first_available_variant.featured_media
+    endif
+  -%}
+  {% render 'card-gallery', children: children, product_badge: product_badge, featured_media_override: lead_media %}
+{%- endif -%}
 
+{% # Title for the zoomed out grid view %}
+<h3 class="product-grid-view-zoom-out--details">
+  {%- if product == blank -%}
+    {{- 'content.product_card_placeholder' | t -}}
+  {%- else -%}
+    {{- product.title -}}
+  {%- endif -%}
+</h3>
+
+{% render 'product-card-gallery-zoom-details-styles' %}
 {% render 'product-badges-styles' %}
 
 {% schema %}
@@ -51,6 +70,26 @@
     {
       "type": "paragraph",
       "content": "t:content.resource_reference_product_media"
+    },
+    {
+      "type": "checkbox",
+      "id": "play_first_video",
+      "label": "Play first video",
+      "info": "When the product's first media is a video, show it as a muted loop that plays while on screen. Use on a few hand-picked cards, not whole grids.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_variant_image",
+      "label": "Show selected variant's image",
+      "info": "Lead with the image of the variant whose price the card shows, instead of the product's main image.",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "featured_badge_label",
+      "label": "Featured badge",
+      "info": "Shown over the media in place of the Sale badge, for example Ashley’s Choice. Sold out still takes priority."
     },
     {
       "type": "select",

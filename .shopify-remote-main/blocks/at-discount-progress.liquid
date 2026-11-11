@@ -1,0 +1,91 @@
+{%- doc -%}
+  Access Threads: discount tier progress for product pages (nested under AT Buy buttons).
+  Same condensed strip + “Bulk savings” sheet as cart / drawer / bulk (`at-dp-condensed-strip--tight`).
+
+  Color: fixed Access Threads palette via `color-custom-at-discount-progress` (see `snippets/at-discount-progress.liquid`).
+
+  Parent `blocks/at-buy-buttons.liquid` renders this via `content_for` with static id `discount-progress`.
+{%- enddoc -%}
+{% liquid
+  assign bs = block.settings
+  assign product = closest.product
+  assign variant = product.selected_or_first_available_variant
+%}
+{% if product != blank and bs.show_discount_bar and settings.at_discount_progress_enabled %}
+  <div
+    class="at-discount-progress-block at-dp-condensed-strip--tight at-discount-progress-scheme-wrap color-custom-at-discount-progress spacing-style"
+    style="{% render 'spacing-style', settings: bs %}"
+    {{ block.shopify_attributes }}
+  >
+    {% render 'at-discount-progress',
+      context: 'product',
+      section_id: section.id,
+      product: product,
+      product_price: variant.price,
+      non_sale_collection_url: settings.at_non_sale_collection_url
+    %}
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:names.at_discount_progress",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:content.at_discount_progress_theme_scheme_note"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_discount_bar",
+      "label": "t:settings.at_discount_progress_show",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}

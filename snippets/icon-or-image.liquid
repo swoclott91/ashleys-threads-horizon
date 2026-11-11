@@ -9,6 +9,12 @@
 {%- enddoc -%}
 
 {%- if icon != 'none' and image_upload == blank -%}
+  {%- liquid
+    assign icon_viewbox = '0 0 20 20'
+    if icon == 'fast_truck'
+      assign icon_viewbox = '0 0 45 35'
+    endif
+  -%}
   <svg
     class="{{ class_name | append: ' icon-default' | strip }}"
     aria-hidden="true"
@@ -16,7 +22,7 @@
     xmlns="http://www.w3.org/2000/svg"
     width="{{ width }}"
     height="{{ width }}"
-    viewBox="0 0 20 20"
+    viewBox="{{ icon_viewbox }}"
     {% if attributes %}
       {{ attributes }}
     {% endif %}

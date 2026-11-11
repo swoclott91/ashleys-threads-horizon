@@ -11,6 +11,8 @@
   @param {boolean} [first_3d_model] - Indicates if this is the first 3D model.
   @param {boolean} [is_main_product_media] - Indicates if this is the main product image.
   @param {string} [image_ref] - Optional ref attribute for the image element.
+  @param {string} [zoom_dialog_id] - ID of the zoom dialog to open from the model poster.
+  @param {number} [media_index] - Zero-based position of the media in the zoom dialog.
 
   @example
   {% render 'product-media', media: media, preview_image_only: false, loading: 'lazy' %}
@@ -92,9 +94,15 @@
           data-media-id="{{ media.id }}"
         >
           <button
+            type="button"
             class="button deferred-media__poster-button button-unstyled"
             ref="deferredMediaPlayButton"
-            on:click="/showDeferredMedia"
+            {% if zoom_dialog_id != blank %}
+              aria-haspopup="dialog"
+              on:click="#{{ zoom_dialog_id }}/open/{{ media_index }}"
+            {% else %}
+              on:click="/showDeferredMedia"
+            {% endif %}
           >
             {{
               media.preview_image
@@ -169,77 +177,4 @@
   {% endif %}
 </div>
 
-{% stylesheet %}
-  .product-media {
-    aspect-ratio: var(--gallery-aspect-ratio, var(--ratio));
-    min-height: 0;
-    min-width: 0;
-  }
-
-  .product-media__image {
-    object-position: var(--focal-point, center center);
-  }
-
-  /*** Media border-radius feature ****/
-  @media screen and (min-width: 750px) {
-    .media-gallery--carousel slideshow-container,
-    .media-gallery--grid .product-media > * {
-      border-radius: var(--media-radius, 0);
-      overflow: hidden;
-    }
-
-    /* When the CAROUSEL is on the LEFT side */
-    .product-information:not(.product-information--media-right)
-      .media-gallery--carousel.media-gallery--extend
-      slideshow-container {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-
-    /* When the CAROUSEL is on the RIGHT side */
-    .product-information.product-information--media-right
-      .media-gallery--carousel.media-gallery--extend
-      slideshow-container {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    /* When the GRID is on the LEFT side */
-    .product-information:not(.product-information--media-right) {
-      /* One column */
-      .media-gallery--grid.media-gallery--extend:not(.media-gallery--two-column) .product-media > *,
-      /* Two column, small first image */
-      .media-gallery--grid.media-gallery--extend.media-gallery--two-column:not(.media-gallery--large-first-image)
-        .product-media-container:nth-of-type(odd)
-        .product-media
-        > *,
-      /* Two column, large first image */
-      .media-gallery--grid.media-gallery--extend.media-gallery--two-column.media-gallery--large-first-image
-        .product-media-container:is(:first-of-type, :nth-of-type(even))
-        .product-media
-        > * {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-      }
-    }
-
-    /* When the GRID is on the RIGHT side */
-    .product-information.product-information--media-right {
-      /* One column */
-      .media-gallery--grid.media-gallery--extend:not(.media-gallery--two-column) .product-media > *,
-      /* Two column, small first image */
-      .media-gallery--grid.media-gallery--extend.media-gallery--two-column:not(.media-gallery--large-first-image)
-        .product-media-container:nth-of-type(even)
-        .product-media
-        > *,
-      /* Two column, large first image */
-      .media-gallery--grid.media-gallery--extend.media-gallery--two-column.media-gallery--large-first-image
-        .product-media-container:is(:first-of-type, :nth-of-type(odd))
-        .product-media
-        > * {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-      }
-    }
-  }
-{% endstylesheet %}
+{% render 'deferred-media-product-model-styles' %}

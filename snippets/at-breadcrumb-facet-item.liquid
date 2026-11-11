@@ -1,0 +1,15 @@
+{%- doc -%}
+  Renders one linked collection/filter breadcrumb.
+  @param {string} url - The reviewed same-collection or subtype URL
+  @param {string} label - The link label
+  @param {number} collection_id - The destination collection ID
+  @param {boolean} [immediate] - Mark the last ancestor for mobile display
+  @param {boolean} [separator] - Show a decorative separator before this link
+{%- enddoc -%}
+<li class="at-breadcrumbs__item at-breadcrumbs__item--{% if immediate %}parent{% else %}ancestor{% endif %}">
+  {%- if separator -%}<span class="at-breadcrumbs__separator" aria-hidden="true">›</span>{%- endif -%}
+  <a class="at-breadcrumbs__link" href="{{ url | escape }}" data-collection-id="{{ collection_id }}">
+    {%- if immediate -%}<span class="at-breadcrumbs__back" aria-hidden="true">‹</span>{%- endif -%}
+    <span class="at-breadcrumbs__label">{{ label | escape }}</span>
+  </a>
+</li>

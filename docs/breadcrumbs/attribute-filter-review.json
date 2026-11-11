@@ -1,0 +1,62 @@
+{
+  "root": 523280777491,
+  "filters": [
+    {
+      "label": "Target gender",
+      "param": "filter.v.t.shopify.target-gender",
+      "values": [
+        {
+          "label": "Unisex",
+          "value": "gid://shopify/TaxonomyValue/20"
+        },
+        {
+          "label": "Women",
+          "value": "gid://shopify/TaxonomyValue/18"
+        },
+        {
+          "label": "Men",
+          "value": "gid://shopify/TaxonomyValue/19"
+        }
+      ]
+    },
+    {
+      "label": "Age group",
+      "param": "filter.v.t.shopify.age-group",
+      "values": [
+        {
+          "label": "Adults",
+          "value": "gid://shopify/TaxonomyValue/2403"
+        },
+        {
+          "label": "Kids",
+          "value": "gid://shopify/TaxonomyValue/1515"
+        },
+        {
+          "label": "Teens",
+          "value": "gid://shopify/TaxonomyValue/2404"
+        },
+        {
+          "label": "Toddlers",
+          "value": "gid://shopify/TaxonomyValue/10090"
+        }
+      ]
+    }
+  ],
+  "sleeveFilterEnabled": false,
+  "additionalRoots": [
+    {
+      "collection": 523280744723,
+      "parameters": [
+        "filter.v.t.shopify.target-gender",
+        "filter.v.t.shopify.age-group"
+      ]
+    },
+    {
+      "collection": 523279335699,
+      "parameters": [
+        "filter.v.t.shopify.target-gender",
+        "filter.v.t.shopify.age-group"
+      ]
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+{% render 'text-block-styles' %}
+
 {%- liquid
   assign block_settings = block.settings
   assign product_resource = closest.product
@@ -35,7 +37,7 @@
 %}
 
 <product-price
-  class="text-block {{ text_block_classes }} text-{{ block_settings.alignment }} {{ block_settings.type_preset | default: 'paragraph' }} spacing-style"
+  class="text-block {{ text_block_classes }} text-{{ block_settings.alignment }} {{ block_settings.type_preset | default: 'paragraph' }} spacing-style{% if request.page_type == 'product' and product_resource.id == product.id %} at-pdp-price{% endif %}"
   data-block-id="{{ block.id }}"
   data-product-id="{{ product_resource.id }}"
   style="
@@ -89,6 +91,8 @@
     </div>
   {%- endif -%}
 </product-price>
+
+{% render 'payment-terms-styles' %}
 
 {% schema %}
 {

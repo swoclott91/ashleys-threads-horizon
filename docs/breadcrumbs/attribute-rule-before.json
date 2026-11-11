@@ -1,0 +1,71 @@
+{
+  "node": {
+    "id": "gid://shopify/MetaobjectDefinition/25396085011",
+    "type": "at_breadcrumb_rule",
+    "fieldDefinitions": [
+      {
+        "key": "name"
+      },
+      {
+        "key": "family"
+      },
+      {
+        "key": "category_ids"
+      },
+      {
+        "key": "attribute_namespace"
+      },
+      {
+        "key": "attribute_key"
+      },
+      {
+        "key": "attribute_values"
+      },
+      {
+        "key": "destination"
+      },
+      {
+        "key": "priority"
+      }
+    ]
+  },
+  "nodeRule": {
+    "id": "gid://shopify/Metaobject/617993666835",
+    "handle": "tees",
+    "type": "at_breadcrumb_rule",
+    "fields": [
+      {
+        "key": "name",
+        "value": "T-Shirts root"
+      },
+      {
+        "key": "family",
+        "value": "tee"
+      },
+      {
+        "key": "category_ids",
+        "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-7\",\"gid://shopify/TaxonomyCategory/aa-1-13-8\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-8\",\"gid://shopify/TaxonomyCategory/aa-1-1-2-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-1\"]"
+      },
+      {
+        "key": "attribute_namespace",
+        "value": null
+      },
+      {
+        "key": "attribute_key",
+        "value": null
+      },
+      {
+        "key": "attribute_values",
+        "value": null
+      },
+      {
+        "key": "destination",
+        "value": "gid://shopify/Collection/523280777491"
+      },
+      {
+        "key": "priority",
+        "value": "0"
+      }
+    ]
+  }
+}

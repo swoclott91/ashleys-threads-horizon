@@ -46,21 +46,30 @@ export class ZoomDialog extends Component {
     event.preventDefault();
 
     const { dialog, media, thumbnails } = this.refs;
-    const targetImage = media[index];
+    const targetMedia = media[index];
     const targetThumbnail = thumbnails.children[index];
+    const targetModel = /** @type {import('./media').ProductModel | null | undefined} */ (
+      targetMedia?.querySelector('product-model')
+    );
 
     const open = () => {
       dialog.showModal();
 
-      for (const target of [targetThumbnail, targetImage]) {
+      for (const target of [targetThumbnail, targetMedia]) {
         target?.scrollIntoView({ behavior: 'instant' });
+      }
+
+      if (targetModel) {
+        customElements.whenDefined('product-model').then(() => {
+          if (dialog.open && targetModel.isConnected) targetModel.showDeferredMedia();
+        });
       }
     };
 
     /** @type {HTMLElement | null} */
     const sourceImage = event.target instanceof Element ? event.target.closest('li,slideshow-slide') : null;
 
-    if (!supportsViewTransitions() || isLowPowerDevice() || !sourceImage || !targetImage) return open();
+    if (!supportsViewTransitions() || isLowPowerDevice() || !sourceImage || !targetMedia) return open();
 
     const itemTransitionName = `gallery-item-open`;
     sourceImage.style.setProperty('view-transition-name', itemTransitionName);
@@ -73,11 +82,11 @@ export class ZoomDialog extends Component {
     await startViewTransition(() => {
       open();
       sourceImage.style.removeProperty('view-transition-name');
-      targetImage.style.setProperty('view-transition-name', itemTransitionName);
+      targetMedia.style.setProperty('view-transition-name', itemTransitionName);
     });
 
     document.documentElement.style.removeProperty('--gallery-media-focal-point');
-    targetImage.style.removeProperty('view-transition-name');
+    targetMedia.style.removeProperty('view-transition-name');
 
     this.selectThumbnail(index, { behavior: 'instant' });
   }
