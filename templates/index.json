@@ -3168,7 +3168,7 @@
             "forms_inline_nEQhKA": {
               "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
               "settings": {
-                "form_id": "shopify-forms-1248303",
+                "form_id": "1248303",
                 "text_color": "#202020",
                 "button_background_color": "#202020",
                 "button_label_color": "#FFFFFF",
