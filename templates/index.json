@@ -3148,6 +3148,147 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "1794413459b537fccb": {
+      "type": "_blocks",
+      "blocks": {
+        "popup_link_GHtDHA": {
+          "type": "popup-link",
+          "name": "t:names.popup_link",
+          "settings": {
+            "behavior": "default",
+            "heading": "Learn more",
+            "type_preset": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "forms_inline_nEQhKA": {
+              "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+              "settings": {
+                "form_id": "shopify-forms-1248303",
+                "text_color": "#202020",
+                "button_background_color": "#202020",
+                "button_label_color": "#FFFFFF",
+                "links_color": "#1878B9",
+                "errors_color": "#E02229",
+                "text_alignment": "center",
+                "form_alignment": "center",
+                "padding_top": 0,
+                "padding_bottom": 24,
+                "padding_right": 0,
+                "padding_left": 0
+              }
+            },
+            "text_pzReXD": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>What is the return policy?</h2>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 16,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_yCezCM": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Our goal is for every customer to be totally satisfied with their purchase. If this isn't the case, let us know and we'll do our best to work with you to make it right.</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "forms_inline_nEQhKA",
+            "text_pzReXD",
+            "text_yCezCM"
+          ]
+        },
+        "forms_inline_c3eTrK": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+          "settings": {
+            "form_id": "shopify-forms-1248303",
+            "text_color": "#202020",
+            "button_background_color": "#202020",
+            "button_label_color": "#FFFFFF",
+            "links_color": "#1878B9",
+            "errors_color": "#E02229",
+            "text_alignment": "center",
+            "form_alignment": "center",
+            "padding_top": 0,
+            "padding_bottom": 24,
+            "padding_right": 0,
+            "padding_left": 0
+          }
+        }
+      },
+      "block_order": [
+        "popup_link_GHtDHA",
+        "forms_inline_c3eTrK"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
@@ -3155,6 +3296,7 @@
     "section_QVRHnM",
     "hero_jVaWmY",
     "collection_list_YNhPde",
-    "product_list_fa6P9H"
+    "product_list_fa6P9H",
+    "1794413459b537fccb"
   ]
 }
