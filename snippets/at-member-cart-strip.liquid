@@ -1,7 +1,8 @@
 {%- doc -%}
   Member pricing cart strip for signed-in tiers (rendered by `at-discount-progress`, never for guests).
-  Member and Pro: free-shipping progress + Threads Cash earned on this cart. Pro also sees this
-  month's shipping code. Wholesale: Net terms. Reads contract metafields only.
+  Member and Pro: free-shipping progress + Threads Cash earned on this cart. Member and Pro with a usable
+  `wagner.ship_code` (welcome or monthly) also see the code: "add $X to use it" below its
+  `min_subtotal`, then whether it's on the cart (assets/at-ship-code.js adds it). Wholesale: Net terms. Reads contract metafields only.
 
   @param {string} tier - member | pro | wholesale
   @param {object} [tier_thresholds] - shop.metafields.wagner.tier_thresholds.value
@@ -40,24 +41,36 @@
   endif
 
   assign ship = customer.metafields.wagner.ship_code.value
-  assign today = 'now' | date: '%Y-%m-%d'
+  capture ship_ok
+    render 'at-ship-code-valid', ship: ship
+  endcapture
   assign ship_valid = false
-  if ship.status == 'issued' and ship.code != blank
+  if ship_ok contains 'true'
     assign ship_valid = true
-    if ship.valid_from != blank and ship.valid_from > today
-      assign ship_valid = false
-    endif
-    if ship.valid_until != blank and ship.valid_until < today
-      assign ship_valid = false
-    endif
   endif
   assign ship_code = ship.code
-  if sample and tier == 'pro' and ship == blank
-    assign ship_valid = true
-    assign ship_code = 'PRO-NOV-SAMPLE'
+  assign ship_min = ship.min_subtotal
+  assign ship_cap = ship.max_amount
+  if sample and ship == blank
+    case tier
+      when 'pro'
+        assign ship_valid = true
+        assign ship_code = 'PRO-NOV-SAMPLE'
+      when 'member'
+        assign ship_valid = true
+        assign ship_code = 'WELCOME-SHIP-SAMPLE'
+        assign ship_min = '40.00'
+        assign ship_cap = '15.00'
+    endcase
   endif
-
-  assign ship_code_safe = ship_code | escape
+  assign ship_min_cents = 0
+  if ship_min != blank
+    assign ship_min_cents = ship_min | times: 100 | round
+  endif
+  assign ship_cap_cents = 0
+  if ship_cap != blank
+    assign ship_cap_cents = ship_cap | times: 100 | round
+  endif
 
   assign terms = customer.current_location.metafields.wagner.terms_status.value
   assign terms_code = terms.terms | default: tt.wholesale.terms
@@ -99,7 +112,7 @@
   </div>
 {%- else -%}
   {%- capture strip_i18n -%}
-  {"away":{{ 'at_member.cart.away_from_free_shipping' | t | json }},"unlocked":{{ 'at_member.cart.free_shipping_unlocked' | t | json }},"earns":{{ 'at_member.cart.earns_threads_cash' | t | json }}}
+  {"away":{{ 'at_member.cart.away_from_free_shipping' | t | json }},"unlocked":{{ 'at_member.cart.free_shipping_unlocked' | t | json }},"earns":{{ 'at_member.cart.earns_threads_cash' | t | json }},"shipTitle":{{ 'at_member.cart.free_shipment_title' | t | json }},"shipAdd":{{ 'at_member.cart.ship_code_add' | t | json }},"shipOn":{{ 'at_member.cart.ship_code_on_cart' | t | json }},"shipUse":{{ 'at_member.cart.ship_code_use' | t | json }},"shipCap":{{ 'at_member.cart.ship_code_cap' | t | json }}}
   {%- endcapture -%}
   <div class="at-mstrip at-mstrip--{{ tier }}" data-testid="at-member-cart-strip" data-at-tier="{{ tier }}">
     {%- assign tier_key = 'at_member.tiers.' | append: tier -%}
@@ -114,6 +127,11 @@
       data-subtotal="{{ subtotal }}"
       data-free-shipping="{{ fs_cents }}"
       data-reward-rate="{{ rate_num }}"
+      {%- if ship_valid %}
+        data-ship-code="{{ ship_code | escape }}"
+        data-ship-min="{{ ship_min_cents }}"
+        data-ship-cap="{{ ship_cap_cents }}"
+      {%- endif %}
       data-money-format="{{ shop.money_format | escape }}"
       data-currency="{{ shop.currency | escape }}"
       data-product-id="{{ product_id }}"
@@ -121,13 +139,5 @@
       data-i18n="{{ strip_i18n | strip_newlines | escape }}"
       data-testid="at-member-progress"
     ></at-discount-progress-bar>
-    {%- if tier == 'pro' and ship_valid -%}
-      <div class="at-mstrip__card">
-        <p class="at-mstrip__card-title">{{ 'at_member.cart.free_shipment_title' | t }}</p>
-        <p class="at-mstrip__card-text">
-          {{ 'at_member.cart.free_shipment_text_html' | t: code: ship_code_safe }}
-        </p>
-      </div>
-    {%- endif -%}
   </div>
 {%- endif -%}
