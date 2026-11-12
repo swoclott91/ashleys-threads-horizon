@@ -10,25 +10,21 @@
 {%- endcomment -%}
 {%- if product != blank -%}
   {%- assign opts = product.options_with_values -%}
-  {%- assign selected_name_1 = '' -%}
-  {%- for val in opts[0].values -%}
-    {%- if val.selected -%}
-      {%- assign selected_name_1 = val.name -%}
-      {%- break -%}
-    {%- endif -%}
-  {%- endfor -%}
-  <script type="application/json" data-at-bulk-variants>
+  {%- assign varying_option = opts[1] | default: opts[0] -%}
+  {%- capture escaped_lt -%}\u003c{%- endcapture -%}
+  {%- capture payload -%}
     {"variants":[
       {%- assign first_v = true -%}
-      {%- for option_value in opts[1].values -%}
+      {%- for option_value in varying_option.values -%}
         {%- assign v = option_value.variant -%}
         {%- if v -%}
           {%- unless first_v -%},{%- endunless -%}{%- assign first_v = false -%}
-          {"id":{{ v.id }},"a":{{ v.available }},"q":{{ v.inventory_quantity | default: 0 }},"p":{{ v.inventory_policy | json }},"o1":{{ selected_name_1 | json }},"o2":{{ option_value.name | json }}{% if opts.size >= 3 %},"o3":{{ v.option3 | json }}{% endif %},"pr":{{ v.price }},"cp":{{ v.compare_at_price | default: 0 }}}
+          {"id":{{ v.id }},"a":{{ v.available }},"q":{{ v.inventory_quantity | default: 0 }},"p":{{ v.inventory_policy | json }},"o1":{{ v.option1 | json }},"o2":{{ v.option2 | json }}{% if opts.size >= 3 %},"o3":{{ v.option3 | json }}{% endif %},"pr":{{ v.price }},"cp":{{ v.compare_at_price | default: 0 }}}
         {%- endif -%}
       {%- endfor -%}
     ]}
-  </script>
+  {%- endcapture -%}
+  <script type="application/json" data-at-bulk-variants>{{ payload | replace: '<', escaped_lt }}</script>
 {%- endif -%}
 {% schema %}
 {

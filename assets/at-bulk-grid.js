@@ -7,6 +7,7 @@
 import { formatMoney } from '@theme/money-formatting';
 import { CartLinesUpdateEvent } from '@shopify/events';
 import { onAnimationEnd, yieldToMainThread, preloadImage } from '@theme/utilities';
+import { fetchBulkVariantBatch, postBulkCartItems } from '@theme/at-bulk-transport';
 
 const BULK_GRID_SELECTORS = {
   container: '[data-at-bulk-grid]',
@@ -26,6 +27,7 @@ const QUICK_ADD_CLOSE_BTN_ID = 'at-bulk-grid-quick-add-close';
 const QUICK_ADD_SECTION_KEY = '__at_quick_add__';
 
 const CART_ICON_SELECTOR = '.header-actions__cart-icon';
+const pendingCartAdds = new WeakSet();
 
 /**
  * Same success treatment as AddToCartComponent.animateAddToCart (product-form.js):
@@ -66,7 +68,7 @@ function getCartItemsSectionIds() {
 /**
  * Build a minimal Ajax cart object for CartLinesUpdateEvent without a cart.js round-trip.
  * Bubble count = previous cart-icon count + quantities just added.
- * @param {Array<{ id?: number, key?: string, quantity?: number, variant_id?: number }>} addedItems
+ * @param {Array<{ id: string, key?: string, quantity: number, variant_id: string }>} addedItems
  * @param {number} addedQuantitySum
  */
 function buildOptimisticCartFromAdd(addedItems, addedQuantitySum) {
@@ -79,24 +81,6 @@ function buildOptimisticCartFromAdd(addedItems, addedQuantitySum) {
     currency: window.Shopify?.currency?.active || 'USD',
     items: Array.isArray(addedItems) ? addedItems : [],
     discount_codes: [],
-  };
-}
-
-/**
- * Normalize cart/add.js JSON (array of lines, or { items, sections }, or error).
- * @param {any} data
- */
-function normalizeCartAddResponse(data) {
-  if (data?.status && data.status !== 200) {
-    return { error: data, items: /** @type {any[]} */ ([]), sections: undefined };
-  }
-  if (Array.isArray(data)) {
-    return { error: null, items: data, sections: undefined };
-  }
-  return {
-    error: null,
-    items: Array.isArray(data?.items) ? data.items : [],
-    sections: data?.sections,
   };
 }
 
@@ -116,7 +100,7 @@ function preloadBulkFlyToCartImage(sectionId) {
  * Dispatch from an Element inside the bulk modal (the ATC button) so cart-drawer
  * can detect `dialog:modal` via event.target and defer auto-open until close —
  * matching product-form.js (which dispatches from the form element).
- * @param {Array<{ id: number, quantity: number }>} items
+ * @param {Array<{ id: string, quantity: number }>} items
  * @param {Element | null} [dispatchTarget] - Prefer the add button inside the open modal
  * @returns {{ promise: Promise<{ cart: object, detail?: object }>, resolve: Function, reject: Function }}
  */
@@ -165,13 +149,17 @@ function setBulkAddButtonLoading(addBtn, isLoading) {
  * @param {HTMLElement} container
  * @param {string} sectionId
  * @param {HTMLButtonElement | null} addBtn
- * @param {() => Array<{ id: number, quantity: number }>} getLineItems
  * @param {() => void} updateTotal
  */
-async function submitBulkCartAdd(container, sectionId, addBtn, getLineItems, updateTotal) {
-  if (addBtn?.classList.contains('at-bulk-grid__add--loading')) return;
+async function submitBulkCartAdd(container, sectionId, addBtn, updateTotal) {
+  if (pendingCartAdds.has(container)) return;
 
-  const items = getLineItems();
+  const items = [];
+  for (const input of container.querySelectorAll('[data-at-bulk-qty]')) {
+    if (!input.reportValidity()) return;
+    const quantity = readBulkQuantity(input);
+    if (quantity > 0 && input.dataset.variantId) items.push({ id: input.dataset.variantId, quantity });
+  }
   if (items.length === 0) return;
 
   const section = document.getElementById(`shopify-section-${sectionId}`);
@@ -179,31 +167,17 @@ async function submitBulkCartAdd(container, sectionId, addBtn, getLineItems, upd
   const lineItemsInput = form?.querySelector(BULK_GRID_SELECTORS.lineItemsInput);
   if (lineItemsInput) lineItemsInput.value = JSON.stringify(items);
 
+  pendingCartAdds.add(container);
+  const hadFocus = document.activeElement === addBtn;
   setBulkAddButtonLoading(addBtn, true);
+  const errorMessage = container.querySelector('[data-at-bulk-cart-error]');
+  if (errorMessage) errorMessage.textContent = '';
   const deferredEventPromise = beginBulkCartLinesUpdate(items, addBtn);
-  const root = window.Shopify?.routes?.root || '/';
-  const addUrl = (typeof Theme !== 'undefined' && Theme.routes?.cart_add_url) || root + 'cart/add.js';
   const sectionIds = getCartItemsSectionIds();
-  /** @type {{ items: Array<{ id: number, quantity: number }>, sections?: string }} */
-  const body = { items };
-  if (sectionIds.length) body.sections = sectionIds.join(',');
 
   try {
-    const addRes = await fetch(addUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(body),
-    });
-    const data = await addRes.json();
-    const { error, items: addedItems, sections } = normalizeCartAddResponse(data);
-
-    if (error) {
-      console.warn('at-bulk-grid: cart add response', error);
-      deferredEventPromise.reject(error);
-      setBulkAddButtonLoading(addBtn, false);
-      updateTotal();
-      return;
-    }
+    const { ok, error, items: addedItems, sections, data } = await postBulkCartItems(items, { sectionIds });
+    if (!ok) throw error;
 
     window.dispatchEvent(new CustomEvent('at:bulk:added', { detail: { items, response: data } }));
 
@@ -215,8 +189,14 @@ async function submitBulkCartAdd(container, sectionId, addBtn, getLineItems, upd
   } catch (err) {
     console.error('at-bulk-grid: cart add failed', err);
     deferredEventPromise.reject(err);
+    if (errorMessage) errorMessage.textContent = typeof err?.description === 'string'
+      ? err.description
+      : Theme.translations.bulk_cart_error;
+  } finally {
+    pendingCartAdds.delete(container);
     setBulkAddButtonLoading(addBtn, false);
     updateTotal();
+    if (hadFocus && errorMessage?.textContent && container.closest('dialog[open]')) addBtn?.focus();
   }
 }
 
@@ -241,9 +221,8 @@ async function handleBulkAddSuccess(
   deferredEventPromise = null,
   sections = undefined
 ) {
-  // Resolve first so cart-items morph + bubble update run in parallel with fly animation.
-  if (deferredEventPromise) {
-    deferredEventPromise.resolve({
+  const resolveCartEvent = () => {
+    deferredEventPromise?.resolve({
       cart: CartLinesUpdateEvent.createCartFromAjaxResponse(cart),
       detail: {
         source: 'at-bulk-grid',
@@ -252,7 +231,12 @@ async function handleBulkAddSuccess(
         sections,
       },
     });
-  }
+  };
+  const nativeDialog = container.closest('dialog');
+  const isNestedQuickAdd = nativeDialog?.id === QUICK_ADD_BULK_DIALOG_ID;
+  // The quick-add parent can still be animating closed when the nested dialog closes.
+  // Settle the cart event after both dialogs close so the drawer can capture focus.
+  if (!isNestedQuickAdd) resolveCartEvent();
 
   const doAnimation = container.dataset.atBulkAddToCartAnimation === 'true';
   const config = getBulkConfig(sectionId) || bulkGridConfigCache.get(sectionId);
@@ -284,14 +268,13 @@ async function handleBulkAddSuccess(
     dialogComponent.closeDialog();
   } else {
     // Quick-add context: close bulk grid native <dialog>
-    const nativeDialog = container.closest('dialog');
     if (nativeDialog && typeof nativeDialog.close === 'function') {
       nativeDialog.close();
     }
     // Also close the quick-add modal so the cart drawer isn't obscured
     const quickAddDialog = document.getElementById('quick-add-dialog');
     if (quickAddDialog && typeof quickAddDialog.closeDialog === 'function') {
-      quickAddDialog.closeDialog();
+      await quickAddDialog.closeDialog();
     }
   }
 
@@ -303,6 +286,7 @@ async function handleBulkAddSuccess(
   const lineItemsInput = form?.querySelector(BULK_GRID_SELECTORS.lineItemsInput);
   if (lineItemsInput) lineItemsInput.value = '';
   updateTotal();
+  if (isNestedQuickAdd) resolveCartEvent();
 }
 
 /** Theme add-to-cart icon (icon-add-to-cart.svg) – same as add-to-cart-button secondary */
@@ -331,6 +315,7 @@ const BULK_ADD_TO_CART_BUTTON_MARKUP =
  */
 const BULK_GRID_ACTIONS_MARKUP =
   '<div class="at-bulk-grid__actions">' +
+  '<span role="alert" class="at-bulk-grid__cart-error" data-at-bulk-cart-error></span>' +
   '<div class="at-bulk-grid__summary" data-at-bulk-summary>' +
   '<span class="at-bulk-grid__summary-count" data-at-bulk-count>0 items</span>' +
   '<span class="at-bulk-grid__summary-sep at-bulk-grid__summary-sep--count" aria-hidden="true">•</span>' +
@@ -414,6 +399,11 @@ function normalizeBulkConfig(config) {
       if (v.pr !== undefined) v.price = v.pr;
       if (v.cp !== undefined) v.compare_at_price = v.cp;
     }
+    const variant = config.variants[i];
+    if (typeof variant.id === 'number' && !Number.isSafeInteger(variant.id)) throw new Error('Invalid bulk variant ID');
+    variant.id = String(variant.id);
+    if (!/^[1-9]\d*$/.test(variant.id)) throw new Error('Invalid bulk variant ID');
+    variant.optionValues = [variant.option1, variant.option2, variant.option3].filter((value) => value != null);
   });
   return config;
 }
@@ -457,31 +447,32 @@ function runWithConcurrency(tasks, limit) {
 }
 
 const DEFERRED_FETCH_CONCURRENCY = 10;
-const BULK_DATA_SECTION = 'at-bulk-grid-data';
 
 /**
- * Determine which first-option value IDs still need fetching by checking
- * which ones already have complete variant coverage in the initial data.
- * This avoids redundant requests for option values fully represented in the first 250 variants.
+ * Keep the legacy first-option batches. With three options, fix both outer
+ * values and let Shopify iterate the middle option in that selection.
  */
-function filterNeededValueIds(config, allValueIds) {
-  const optionValues = config.options[0]?.values || [];
-  const secondOptionValues = config.options[1]?.values || [];
-  if (secondOptionValues.length === 0) return allValueIds;
-
-  const norm = (s) => (s == null ? '' : String(s).trim());
-  const pairsPresent = new Set();
-  (config.variants || []).forEach((v) => {
-    const o1 = norm(v.option1);
-    const o2 = norm(v.option2);
-    if (o1 && o2) pairsPresent.add(o1 + '|' + o2);
-  });
-
-  return allValueIds.filter((id, index) => {
-    const name = norm(optionValues[index]);
-    if (!name) return true;
-    return secondOptionValues.some((sv) => !pairsPresent.has(name + '|' + norm(sv)));
-  });
+function getDeferredSelections(config) {
+  const [first, second, third] = config.options;
+  const present = new Set(config.variants.map((variant) => JSON.stringify(variant.optionValues)));
+  const selections = [];
+  const anchor = second?.valueIds?.[0];
+  for (const [index, firstId] of first.valueIds.entries()) {
+    const firstValue = first.values[index];
+    if (anchor && third?.valueIds?.length) {
+      for (const [thirdIndex, thirdId] of third.valueIds.entries()) {
+        const thirdValue = third.values[thirdIndex];
+        if (second.values.some((value) => !present.has(JSON.stringify([firstValue, value, thirdValue])))) {
+          selections.push({ ids: [firstId, anchor, thirdId], firstValue, thirdValue });
+        }
+      }
+    } else if ((second?.values || [null]).some((value) => !present.has(
+      JSON.stringify(second ? [firstValue, value] : [firstValue])
+    ))) {
+      selections.push({ ids: [firstId], firstValue });
+    }
+  }
+  return selections;
 }
 
 /**
@@ -489,61 +480,29 @@ function filterNeededValueIds(config, allValueIds) {
  * Uses a lightweight data-only section (at-bulk-grid-data) to minimize response size (~1-5KB vs ~50-200KB for full page).
  * See https://shopify.dev/docs/storefronts/themes/product-merchandising/variants/support-high-variant-products
  */
-function fetchDeferredVariants(config) {
-  const allValueIds = config?.options?.[0]?.valueIds;
-  if (!allValueIds?.length) return Promise.resolve([]);
-
-  const productPath = config.productUrl
-    ? new URL(config.productUrl, window.location.origin).pathname
-    : window.location.pathname;
+async function fetchDeferredVariants(config) {
+  const productPath = config.productUrl || window.location.pathname;
   const debug = window.atBulkGridDebugVerbose === true;
-  const byId = new Map();
-
-  (config.variants || []).forEach((v) => {
-    if (v && v.id != null) byId.set(v.id, v);
+  const byId = new Map(config.variants.map((variant) => [variant.id, variant]));
+  let failed = false;
+  const selections = getDeferredSelections(config);
+  const tasks = selections.map(({ ids, firstValue, thirdValue }) => async () => {
+    try {
+      const batch = await fetchBulkVariantBatch(productPath, ids);
+      const { variants } = normalizeBulkConfig({ variants: batch });
+      for (const variant of variants) {
+        if (variant.option1 !== firstValue || (thirdValue !== undefined && variant.option3 !== thirdValue)) continue;
+        byId.set(variant.id, variant);
+      }
+    } catch (error) {
+      failed = true;
+      console.warn('at-bulk-grid: deferred fetch failed for option_values=' + ids.join(','), error);
+    }
   });
 
-  const valueIds = filterNeededValueIds(config, allValueIds);
-  if (valueIds.length === 0) {
-    if (debug) console.log('at-bulk-grid: all variants already present, no deferred fetch needed');
-    return Promise.resolve(Array.from(byId.values()));
-  }
-
-  const tasks = valueIds.map((valueId) => () => {
-    const url = `${productPath}?sections=${BULK_DATA_SECTION}&option_values=${encodeURIComponent(valueId)}`;
-    return fetch(url)
-      .then((res) => {
-        if (!res.ok) {
-          if (debug) console.warn('at-bulk-grid: fetch status', res.status, url);
-          return null;
-        }
-        return res.json();
-      })
-      .then((json) => {
-        if (!json?.[BULK_DATA_SECTION]) {
-          if (debug) console.warn('at-bulk-grid: no section data for option_values=' + valueId);
-          return;
-        }
-        const doc = new DOMParser().parseFromString(json[BULK_DATA_SECTION], 'text/html');
-        const script = doc.querySelector('script[data-at-bulk-variants]');
-        if (!script?.textContent) {
-          if (debug) console.warn('at-bulk-grid: no variant script for option_values=' + valueId);
-          return;
-        }
-        const parsed = JSON.parse(script.textContent.trim());
-        normalizeBulkConfig(parsed);
-        (parsed.variants || []).forEach((v) => {
-          if (v && v.id != null) byId.set(v.id, v);
-        });
-      })
-      .catch((err) => console.warn('at-bulk-grid: deferred fetch failed for option_values=' + valueId, err));
-  });
-
-  return runWithConcurrency(tasks, DEFERRED_FETCH_CONCURRENCY).then(() => {
-    const list = Array.from(byId.values());
-    if (debug) console.log('at-bulk-grid: deferred load complete,', list.length, 'variants from', valueIds.length, 'requests (skipped', allValueIds.length - valueIds.length, 'already-loaded)');
-    return list;
-  });
+  await runWithConcurrency(tasks, DEFERRED_FETCH_CONCURRENCY);
+  if (debug) console.log('at-bulk-grid: loaded', byId.size, 'variants from', selections.length, 'requests');
+  return { variants: Array.from(byId.values()), failed };
 }
 
 /**
@@ -641,6 +600,11 @@ function bulkDiscountPercent(projectedCents, container) {
   return pct;
 }
 
+function readBulkQuantity(input) {
+  const value = Number(input.value);
+  return input.validity.valid && Number.isSafeInteger(value) ? value : 0;
+}
+
 /**
  * Refresh the enriched footer summary (item count, subtotal, projected discount %) + CTA label,
  * plus per-color item counts (mobile) and active/selected states for quantity fields > 0.
@@ -655,7 +619,7 @@ function updateBulkSummary(container, config) {
 
   container.querySelectorAll('[data-at-bulk-qty]').forEach((input) => {
     if (!(input instanceof HTMLInputElement)) return;
-    const q = parseInt(input.value, 10) || 0;
+    const q = readBulkQuantity(input);
     input.classList.toggle('at-bulk-grid__qty-input--active', q > 0);
     if (q <= 0) return;
     count += q;
@@ -667,14 +631,14 @@ function updateBulkSummary(container, config) {
   container.querySelectorAll('[data-at-bulk-color-row]').forEach((row) => {
     let rowCount = 0;
     row.querySelectorAll('[data-at-bulk-qty]').forEach((input) => {
-      rowCount += parseInt(input.value, 10) || 0;
+      rowCount += readBulkQuantity(input);
     });
     const badge = row.querySelector('[data-at-bulk-color-count]');
     if (badge) badge.textContent = rowCount > 0 ? (rowCount === 1 ? '1 item' : rowCount + ' items') : '';
     row.classList.toggle('at-bulk-grid__mobile-accordion--has-items', rowCount > 0);
     row.querySelectorAll('.at-bulk-grid__mobile-size-row').forEach((sizeRow) => {
       const input = sizeRow.querySelector('[data-at-bulk-qty]');
-      const q = input ? parseInt(input.value, 10) || 0 : 0;
+      const q = input ? readBulkQuantity(input) : 0;
       sizeRow.classList.toggle('at-bulk-grid__mobile-size-row--selected', q > 0);
     });
   });
@@ -703,10 +667,57 @@ function updateBulkSummary(container, config) {
     if (labelEl) {
       labelEl.textContent = count > 0 ? (count === 1 ? 'Add 1 item' : 'Add ' + count + ' items') : 'Add to cart';
     }
-    addBtn.disabled = count === 0;
+    addBtn.disabled = count === 0 || addBtn.classList.contains('at-bulk-grid__add--loading');
   }
 
   return { count, subtotalCents };
+}
+
+function indexBulkVariants(variants) {
+  const byId = new Map(variants.map((variant) => [variant.id, variant]));
+  const idsByTuple = new Map();
+  for (const variant of byId.values()) idsByTuple.set(JSON.stringify(variant.optionValues), variant.id);
+  return { byId, idsByTuple };
+}
+
+function getGridOptions(config) {
+  const { options, variants } = config;
+  const colorIndex = options.findIndex(({ name }) => /^colou?r$/i.test(name.trim()));
+  const rowIndex = Math.max(0, colorIndex);
+  const sizeIndex = options.findIndex(({ name }) => /^size$/i.test(name.trim()));
+  const colIndex = sizeIndex >= 0 && sizeIndex !== rowIndex ? sizeIndex : options.findIndex((_, i) => i !== rowIndex);
+  const groupIndex = options.findIndex((_, i) => i !== rowIndex && i !== colIndex);
+  const rowOption = options[rowIndex];
+  const groupOption = options[groupIndex];
+  const { byId, idsByTuple } = indexBulkVariants(variants);
+  const rowsByGroup = new Map();
+  for (const { optionValues } of byId.values()) {
+    const group = optionValues[groupIndex];
+    if (!rowsByGroup.has(group)) rowsByGroup.set(group, new Set());
+    rowsByGroup.get(group).add(optionValues[rowIndex]);
+  }
+
+  return {
+    optionRowName: rowOption.name,
+    optionColName: options[colIndex]?.name || 'Quantity',
+    sizeValues: options[colIndex]?.values || [''],
+    groups: (groupOption?.values || [undefined]).filter((value) => rowsByGroup.has(value)).map((value) => ({
+      value,
+      label: groupOption ? `${groupOption.name}: ${value}` : '',
+      colors: groupOption ? rowOption.values.filter((color) => rowsByGroup.get(value).has(color)) : rowOption.values,
+    })),
+    getVariant(color, size, group) {
+      const tuple = [];
+      tuple[rowIndex] = color;
+      if (colIndex >= 0) tuple[colIndex] = size;
+      if (groupIndex >= 0) tuple[groupIndex] = group;
+      return byId.get(idsByTuple.get(JSON.stringify(tuple)));
+    },
+    getSwatchStyle(color) {
+      const background = rowOption.valueDetails?.find((detail) => detail?.name === color)?.swatchBackground;
+      return background ? escapeAttr('background:' + background + ';') : '';
+    },
+  };
 }
 
 /**
@@ -720,112 +731,75 @@ function renderDesktopGrid(container, config, sectionId) {
     return;
   }
 
-  const optionRow = config.options[0];
-  const optionCol = config.options[1] || config.options[0];
-  const colorValues = optionRow.values || [];
-  const colorDetails = optionRow.valueDetails || [];
-  const sizeValues = optionCol.values || [];
-  const optionRowName = optionRow.name;
-  const optionColName = optionCol.name;
-
-  const getSwatchStyle = (colorName) => {
-    const detail = colorDetails.find((d) => d && d.name === colorName);
-    if (!detail || !detail.swatchBackground) return '';
-    return 'background:' + String(detail.swatchBackground).replace(/"/g, "'") + ';';
-  };
-
-  /** Normalize option value for matching (trim, avoid null) */
-  const norm = (s) => (s == null ? '' : String(s).trim());
-  /** Pre-build map so every variant is findable by (valA|valB) or (valB|valA) – no position/order dependency */
-  const variantByOptionPair = new Map();
-  config.variants.forEach((v) => {
-    const a = norm(v.option1);
-    const b = norm(v.option2);
-    const c = norm(v.option3);
-    if (a && b) {
-      variantByOptionPair.set(a + '|' + b, v);
-      variantByOptionPair.set(b + '|' + a, v);
-    }
-    if (a && c) {
-      variantByOptionPair.set(a + '|' + c, v);
-      variantByOptionPair.set(c + '|' + a, v);
-    }
-    if (b && c) {
-      variantByOptionPair.set(b + '|' + c, v);
-      variantByOptionPair.set(c + '|' + b, v);
-    }
-  });
-  const getVariant = (rowVal, colVal) => {
-    const r = norm(rowVal);
-    const c = norm(colVal);
-    return variantByOptionPair.get(r + '|' + c) || variantByOptionPair.get(c + '|' + r);
-  };
+  const { optionRowName, optionColName, sizeValues, groups, getVariant, getSwatchStyle } = getGridOptions(config);
 
   let html = '';
   html += '<div class="at-bulk-grid__body">';
   html += '<div class="at-bulk-grid__search-wrap">';
-  html += `<input type="search" class="at-bulk-grid__search" placeholder="Search ${optionRowName}..." data-at-bulk-search aria-label="Search ${optionRowName}">`;
+  html += `<input type="search" class="at-bulk-grid__search" placeholder="Search ${escapeAttr(optionRowName)}..." data-at-bulk-search aria-label="Search ${escapeAttr(optionRowName)}">`;
   html += '</div>';
   html += '<div class="at-bulk-grid__table-wrapper">';
-  html += '<table class="at-bulk-grid__table">';
-  html += '<thead><tr><th>' + optionRowName + '</th>';
-  sizeValues.forEach((s) => {
-    html += '<th>' + s + '</th>';
-  });
-  html += '</tr></thead><tbody>';
-
-  colorValues.forEach((color) => {
-    const swatchStyle = getSwatchStyle(color);
-    html += '<tr data-at-bulk-color-row data-at-bulk-color-value="' + escapeAttr(color) + '">';
-    html += '<td class="at-bulk-grid__color-cell"><div class="at-bulk-grid__color-cell-inner">';
-    if (swatchStyle) {
-      html += '<span class="at-bulk-grid__swatch swatch" style="' + swatchStyle + '" aria-hidden="true"></span>';
-    }
-    html += '<span class="at-bulk-grid__color-name">' + escapeHtml(color) + '</span></div></td>';
+  for (const { value, label, colors } of groups) {
+    html += '<table class="at-bulk-grid__table">';
+    if (label) html += '<caption>' + escapeHtml(label) + '</caption>';
+    html += '<thead><tr><th>' + escapeHtml(optionRowName) + '</th>';
     sizeValues.forEach((size) => {
-      const v = getVariant(color, size);
-      if (!v) {
-        html += '<td>—</td>';
-        return;
-      }
-      const band = availabilityBand(
-        v.inventory_quantity,
-        v.available,
-        v.inventory_quantity,
-        v.inventory_policy || ''
-      );
-      const bandClass =
-        band === 'Out'
-          ? 'at-bulk-grid__availability--out'
-          : band === '1000+' || band === 'In stock'
-            ? 'at-bulk-grid__availability--in-stock'
-            : 'at-bulk-grid__availability--low';
-      const priceHtml = formatVariantPriceHtml(v, config);
-      html +=
-        '<td data-at-bulk-cell data-variant-id="' +
-        v.id +
-        '">' +
-        '<div class="at-bulk-grid__cell-inner">' +
-        '<input type="number" class="at-bulk-grid__qty-input" min="0" value="0" data-at-bulk-qty data-at-bulk-variant-price="' +
-        v.price +
-        '" data-variant-id="' +
-        v.id +
-        '" aria-label="Quantity ' +
-        escapeAttr(color) +
-        ' ' +
-        escapeAttr(size) +
-        '">' +
-        priceHtml +
-        '<span class="at-bulk-grid__availability ' +
-        bandClass +
-        '">' +
-        band +
-        '</span></div></td>';
+      html += '<th>' + escapeHtml(size || optionColName) + '</th>';
     });
-    html += '</tr>';
-  });
+    html += '</tr></thead><tbody>';
 
-  html += '</tbody></table></div>';
+    colors.forEach((color) => {
+      const swatchStyle = getSwatchStyle(color);
+      html += '<tr data-at-bulk-color-row data-at-bulk-color-value="' + escapeAttr(color) + '">';
+      html += '<td class="at-bulk-grid__color-cell"><div class="at-bulk-grid__color-cell-inner">';
+      if (swatchStyle) {
+        html += '<span class="at-bulk-grid__swatch swatch" style="' + swatchStyle + '" aria-hidden="true"></span>';
+      }
+      html += '<span class="at-bulk-grid__color-name">' + escapeHtml(color) + '</span></div></td>';
+      sizeValues.forEach((size) => {
+        const v = getVariant(color, size, value);
+        if (!v) {
+          html += '<td>—</td>';
+          return;
+        }
+        const band = availabilityBand(
+          v.inventory_quantity,
+          v.available,
+          v.inventory_quantity,
+          v.inventory_policy || ''
+        );
+        const bandClass =
+          band === 'Out'
+            ? 'at-bulk-grid__availability--out'
+            : band === '1000+' || band === 'In stock'
+              ? 'at-bulk-grid__availability--in-stock'
+              : 'at-bulk-grid__availability--low';
+        const priceHtml = formatVariantPriceHtml(v, config);
+        html +=
+          '<td data-at-bulk-cell data-variant-id="' +
+          v.id +
+          '">' +
+          '<div class="at-bulk-grid__cell-inner">' +
+          '<input type="number" class="at-bulk-grid__qty-input" min="0" value="0" data-at-bulk-qty data-at-bulk-variant-price="' +
+          v.price +
+          '" data-variant-id="' +
+          v.id +
+          '" aria-label="Quantity ' +
+          escapeAttr([color, size, label].filter(Boolean).join(' ')) +
+          '">' +
+          priceHtml +
+          '<span class="at-bulk-grid__availability ' +
+          bandClass +
+          '">' +
+          band +
+          '</span></div></td>';
+      });
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+  }
+  html += '</div>';
   html += '</div>';
   html += BULK_GRID_ACTIONS_MARKUP;
 
@@ -840,21 +814,10 @@ function renderDesktopGrid(container, config, sectionId) {
   };
   updateTotal();
 
-  const getLineItems = () => {
-    const items = [];
-    container.querySelectorAll('[data-at-bulk-qty]').forEach((input) => {
-      const qty = parseInt(input.value, 10) || 0;
-      if (qty > 0 && input.dataset.variantId) {
-        items.push({ id: parseInt(input.dataset.variantId, 10), quantity: qty });
-      }
-    });
-    return items;
-  };
-
-  container.addEventListener('input', (e) => {
+  container.querySelector('.at-bulk-grid__body').addEventListener('input', (e) => {
     if (e.target.matches('[data-at-bulk-qty]')) updateTotal();
   });
-  container.addEventListener('change', (e) => {
+  container.querySelector('.at-bulk-grid__body').addEventListener('change', (e) => {
     if (e.target.matches('[data-at-bulk-qty]')) updateTotal();
   });
 
@@ -869,7 +832,7 @@ function renderDesktopGrid(container, config, sectionId) {
   }
 
   const submitBulkItems = () => {
-    submitBulkCartAdd(container, sectionId, addBtn, getLineItems, updateTotal);
+    submitBulkCartAdd(container, sectionId, addBtn, updateTotal);
   };
 
   if (addBtn) addBtn.addEventListener('click', submitBulkItems);
@@ -902,44 +865,7 @@ function renderMobileGrid(container, config, sectionId) {
     return;
   }
 
-  const optionRow = config.options[0];
-  const optionCol = config.options[1] || config.options[0];
-  const colorValues = optionRow.values || [];
-  const colorDetails = optionRow.valueDetails || [];
-  const sizeValues = optionCol.values || [];
-  const optionRowName = optionRow.name;
-  const optionColName = optionCol.name;
-
-  const getSwatchStyle = (colorName) => {
-    const detail = colorDetails.find((d) => d && d.name === colorName);
-    if (!detail || !detail.swatchBackground) return '';
-    return 'background:' + String(detail.swatchBackground).replace(/"/g, "'") + ';';
-  };
-
-  const normMobile = (s) => (s == null ? '' : String(s).trim());
-  const variantByOptionPairMobile = new Map();
-  config.variants.forEach((v) => {
-    const a = normMobile(v.option1);
-    const b = normMobile(v.option2);
-    const c = normMobile(v.option3);
-    if (a && b) {
-      variantByOptionPairMobile.set(a + '|' + b, v);
-      variantByOptionPairMobile.set(b + '|' + a, v);
-    }
-    if (a && c) {
-      variantByOptionPairMobile.set(a + '|' + c, v);
-      variantByOptionPairMobile.set(c + '|' + a, v);
-    }
-    if (b && c) {
-      variantByOptionPairMobile.set(b + '|' + c, v);
-      variantByOptionPairMobile.set(c + '|' + b, v);
-    }
-  });
-  const getVariantMobile = (rowVal, colVal) => {
-    const r = normMobile(rowVal);
-    const c = normMobile(colVal);
-    return variantByOptionPairMobile.get(r + '|' + c) || variantByOptionPairMobile.get(c + '|' + r);
-  };
+  const { optionRowName, sizeValues, groups, getVariant, getSwatchStyle } = getGridOptions(config);
 
   let html = '';
   html += '<div class="at-bulk-grid__body">';
@@ -951,91 +877,89 @@ function renderMobileGrid(container, config, sectionId) {
     '">';
   html += '<div class="at-bulk-grid__mobile-accordions">';
 
-  colorValues.forEach((color) => {
-    const swatchStyle = getSwatchStyle(color);
-    html += '<div class="at-bulk-grid__mobile-accordion" data-at-bulk-color-row data-at-bulk-color-value="' + escapeAttr(color) + '">';
-    html += '<button type="button" class="at-bulk-grid__mobile-accordion-header" data-at-bulk-accordion-toggle aria-expanded="false">';
-    if (swatchStyle) {
-      html += '<span class="at-bulk-grid__swatch swatch" style="' + swatchStyle + '" aria-hidden="true"></span>';
-    }
-    html += '<span class="at-bulk-grid__color-name">' + escapeHtml(color) + '</span> <span class="at-bulk-grid__color-count" data-at-bulk-color-count aria-hidden="true"></span> <span class="svg-wrapper icon-caret icon-animated at-bulk-grid__accordion-icon" aria-hidden="true" data-at-bulk-accordion-icon>' + ICON_CARET_SVG + '</span>';
-    html += '</button>';
-    html += '<div class="at-bulk-grid__mobile-accordion-content" hidden>';
-    sizeValues.forEach((size) => {
-      const v = getVariantMobile(color, size);
-      if (!v) return;
-      const band = availabilityBand(
-        v.inventory_quantity,
-        v.available,
-        v.inventory_quantity,
-        v.inventory_policy || ''
-      );
-      const bandClass =
-        band === 'Out'
-          ? 'at-bulk-grid__availability--out'
-          : band === '1000+' || band === 'In stock'
-            ? 'at-bulk-grid__availability--in-stock'
-            : 'at-bulk-grid__availability--low';
-      const priceHtmlMobile = formatVariantPriceHtml(v, config);
-      html +=
-        '<div class="at-bulk-grid__mobile-size-row">' +
-        '<span>' +
-        escapeHtml(size) +
-        ' ' +
-        priceHtmlMobile +
-        ' <span class="at-bulk-grid__availability ' +
-        bandClass +
-        '">' +
-        band +
-        '</span></span>' +
-        '<div class="quantity-selector-wrapper at-bulk-grid__qty-selector-wrapper">' +
-        '<div class="quantity-selector at-bulk-grid__qty-selector">' +
-        '<button type="button" class="button quantity-minus button-unstyled" aria-label="Decrease quantity" data-at-bulk-qty-minus>' +
-        '<span class="visually-hidden">Decrease quantity</span><span class="svg-wrapper icon-plus">' +
-        ICON_MINUS_SVG +
-        '</span></button>' +
-        '<input type="number" class="at-bulk-grid__qty-input" min="0" value="0" data-at-bulk-qty data-at-bulk-variant-price="' +
-        v.price +
-        '" data-variant-id="' +
-        v.id +
-        '" aria-label="Quantity ' +
-        escapeAttr(size) +
-        '">' +
-        '<button type="button" class="button quantity-plus button-unstyled" aria-label="Increase quantity" data-at-bulk-qty-plus>' +
-        '<span class="visually-hidden">Increase quantity</span><span class="svg-wrapper icon-plus">' +
-        ICON_PLUS_SVG +
-        '</span></button>' +
-        '</div></div>' +
-        '</div>';
+  for (const { value, label, colors } of groups) {
+    if (label) html += '<h3>' + escapeHtml(label) + '</h3>';
+    colors.forEach((color) => {
+      const swatchStyle = getSwatchStyle(color);
+      html += '<div class="at-bulk-grid__mobile-accordion" data-at-bulk-color-row data-at-bulk-color-value="' + escapeAttr(color) + '">';
+      html += '<button type="button" class="at-bulk-grid__mobile-accordion-header" data-at-bulk-accordion-toggle aria-expanded="false">';
+      if (swatchStyle) {
+        html += '<span class="at-bulk-grid__swatch swatch" style="' + swatchStyle + '" aria-hidden="true"></span>';
+      }
+      html += '<span class="at-bulk-grid__color-name">' + escapeHtml(color) + '</span> <span class="at-bulk-grid__color-count" data-at-bulk-color-count aria-hidden="true"></span> <span class="svg-wrapper icon-caret icon-animated at-bulk-grid__accordion-icon" aria-hidden="true" data-at-bulk-accordion-icon>' + ICON_CARET_SVG + '</span>';
+      html += '</button>';
+      html += '<div class="at-bulk-grid__mobile-accordion-content" hidden>';
+      sizeValues.forEach((size) => {
+        const v = getVariant(color, size, value);
+        if (!v) return;
+        const band = availabilityBand(
+          v.inventory_quantity,
+          v.available,
+          v.inventory_quantity,
+          v.inventory_policy || ''
+        );
+        const bandClass =
+          band === 'Out'
+            ? 'at-bulk-grid__availability--out'
+            : band === '1000+' || band === 'In stock'
+              ? 'at-bulk-grid__availability--in-stock'
+              : 'at-bulk-grid__availability--low';
+        const priceHtmlMobile = formatVariantPriceHtml(v, config);
+        html +=
+          '<div class="at-bulk-grid__mobile-size-row">' +
+          '<span>' +
+          escapeHtml(size) +
+          ' ' +
+          priceHtmlMobile +
+          ' <span class="at-bulk-grid__availability ' +
+          bandClass +
+          '">' +
+          band +
+          '</span></span>' +
+          '<div class="quantity-selector-wrapper at-bulk-grid__qty-selector-wrapper">' +
+          '<div class="quantity-selector at-bulk-grid__qty-selector">' +
+          '<button type="button" class="button quantity-minus button-unstyled" aria-label="Decrease quantity" data-at-bulk-qty-minus>' +
+          '<span class="visually-hidden">Decrease quantity</span><span class="svg-wrapper icon-plus">' +
+          ICON_MINUS_SVG +
+          '</span></button>' +
+          '<input type="number" class="at-bulk-grid__qty-input" min="0" value="0" data-at-bulk-qty data-at-bulk-variant-price="' +
+          v.price +
+          '" data-variant-id="' +
+          v.id +
+          '" aria-label="Quantity ' +
+          escapeAttr([color, size, label].filter(Boolean).join(' ')) +
+          '">' +
+          '<button type="button" class="button quantity-plus button-unstyled" aria-label="Increase quantity" data-at-bulk-qty-plus>' +
+          '<span class="visually-hidden">Increase quantity</span><span class="svg-wrapper icon-plus">' +
+          ICON_PLUS_SVG +
+          '</span></button>' +
+          '</div></div>' +
+          '</div>';
+      });
+      html += '</div></div>';
     });
-    html += '</div></div>';
-  });
+  }
 
   html += '</div>';
   html += '</div>';
   html += BULK_GRID_ACTIONS_MARKUP;
 
-  if (container._atBulkMobileAbortController) {
-    container._atBulkMobileAbortController.abort();
-  }
-  container._atBulkMobileAbortController = new AbortController();
-  const mobileSignal = container._atBulkMobileAbortController.signal;
-
   container.innerHTML = html;
   container.dataset.atBulkGridSectionId = sectionId;
+  const body = container.querySelector('.at-bulk-grid__body');
 
   const updateTotal = () => {
     updateBulkSummary(container, config);
   };
 
-  container.addEventListener('input', (e) => {
+  body.addEventListener('input', (e) => {
     if (e.target.matches('[data-at-bulk-qty]')) updateTotal();
-  }, { signal: mobileSignal });
-  container.addEventListener('change', (e) => {
+  });
+  body.addEventListener('change', (e) => {
     if (e.target.matches('[data-at-bulk-qty]')) updateTotal();
-  }, { signal: mobileSignal });
+  });
 
-  container.addEventListener('click', (e) => {
+  body.addEventListener('click', (e) => {
     const minusBtn = e.target.closest('[data-at-bulk-qty-minus]');
     const plusBtn = e.target.closest('[data-at-bulk-qty-plus]');
     const wrapper = minusBtn?.closest('.at-bulk-grid__qty-selector-wrapper') || plusBtn?.closest('.at-bulk-grid__qty-selector-wrapper');
@@ -1044,17 +968,17 @@ function renderMobileGrid(container, config, sectionId) {
     if (minusBtn) {
       e.preventDefault();
       e.stopPropagation();
-      const val = Math.max(0, (parseInt(input.value, 10) || 0) - 1);
+      const val = Math.max(0, readBulkQuantity(input) - 1);
       input.value = String(val);
       updateTotal();
     } else if (plusBtn) {
       e.preventDefault();
       e.stopPropagation();
-      const val = (parseInt(input.value, 10) || 0) + 1;
+      const val = readBulkQuantity(input) + 1;
       input.value = String(val);
       updateTotal();
     }
-  }, { signal: mobileSignal });
+  });
 
   container.querySelectorAll('[data-at-bulk-accordion-toggle]').forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -1077,21 +1001,10 @@ function renderMobileGrid(container, config, sectionId) {
     });
   }
 
-  const getLineItemsMobile = () => {
-    const items = [];
-    container.querySelectorAll('[data-at-bulk-qty]').forEach((input) => {
-      const qty = parseInt(input.value, 10) || 0;
-      if (qty > 0 && input.dataset.variantId) {
-        items.push({ id: parseInt(input.dataset.variantId, 10), quantity: qty });
-      }
-    });
-    return items;
-  };
-
   const addBtnMobile = container.querySelector('[data-at-bulk-add-to-cart]');
   if (addBtnMobile) {
     addBtnMobile.addEventListener('click', () => {
-      submitBulkCartAdd(container, sectionId, addBtnMobile, getLineItemsMobile, updateTotal);
+      submitBulkCartAdd(container, sectionId, addBtnMobile, updateTotal);
     });
   }
 
@@ -1103,78 +1016,80 @@ const bulkGridConfigCache = new Map();
 
 /** Cache for in-flight deferred variant load promises (from hover/focus preload). */
 const deferredLoadPromises = new Map();
+const pendingGridRenders = new WeakMap();
+
+function needsDeferredVariants(config) {
+  return !config.deferredLoaded && config.variants.length < expectedVariantCount(config)
+    && config.options[0]?.valueIds?.length > 0;
+}
+
+function getDeferredGridConfig(sectionId, config) {
+  const pending = deferredLoadPromises.get(sectionId);
+  if (pending?.productId === config.productId && pending?.productUrl === config.productUrl) return pending.promise;
+
+  const promise = fetchDeferredVariants(config).then(({ variants, failed }) => {
+    const loaded = { ...config, variants, deferredLoaded: !failed, deferredFailed: failed };
+    if (!failed && sectionId !== QUICK_ADD_SECTION_KEY
+      && deferredLoadPromises.get(sectionId)?.promise === promise) {
+      bulkGridConfigCache.set(sectionId, loaded);
+    }
+    return loaded;
+  }).finally(() => {
+    if (deferredLoadPromises.get(sectionId)?.promise === promise) deferredLoadPromises.delete(sectionId);
+  });
+  deferredLoadPromises.set(sectionId, { productId: config.productId, productUrl: config.productUrl, promise });
+  return promise;
+}
 
 /**
  * Start loading deferred variants before the modal opens (called on hover/focus of trigger).
  * The promise is reused by renderGrid to avoid duplicate fetches.
  */
 function preloadBulkGridVariants(sectionId) {
-  if (deferredLoadPromises.has(sectionId) || bulkGridConfigCache.has(sectionId)) {
-    preloadBulkFlyToCartImage(sectionId);
-    return;
-  }
-
-  const config = getBulkConfig(sectionId);
+  const config = bulkGridConfigCache.get(sectionId) || getBulkConfig(sectionId);
   if (!config) return;
 
   preloadBulkFlyToCartImage(sectionId);
-
-  const expected = expectedVariantCount(config);
-  const needDeferred = expected > 0 && config.variants.length < expected && (config.options?.[0]?.valueIds?.length ?? 0) > 0;
-  if (!needDeferred) return;
-
-  deferredLoadPromises.set(sectionId, fetchDeferredVariants(config));
+  if (needsDeferredVariants(config)) {
+    getDeferredGridConfig(sectionId, config).catch((error) => console.warn('at-bulk-grid: preload failed', error));
+  }
 }
 
-function renderGrid(container) {
+async function renderGrid(container) {
+  if (pendingCartAdds.has(container)) return;
   const sectionId = container.dataset.atBulkGridSectionId;
   if (!sectionId) return;
 
   let config = bulkGridConfigCache.get(sectionId) || getBulkConfig(sectionId);
   if (!config) return;
 
-  const expected = expectedVariantCount(config);
-  const needDeferred = expected > 0 && config.variants.length < expected && (config.options?.[0]?.valueIds?.length ?? 0) > 0;
-
-  if (needDeferred) {
-    bulkGridConfigCache.delete(sectionId);
+  if (needsDeferredVariants(config)) {
+    const promise = getDeferredGridConfig(sectionId, config);
+    if (pendingGridRenders.get(container) === promise) return;
+    pendingGridRenders.set(container, promise);
     container.innerHTML = getBulkGridLoadingHtml(container);
-    const fetchPromise = deferredLoadPromises.get(sectionId) || fetchDeferredVariants(config);
-    deferredLoadPromises.delete(sectionId);
-    fetchPromise
-      .then((variants) => {
-        config = bulkGridConfigCache.get(sectionId) || getBulkConfig(sectionId);
-        if (!config) return;
-        if (variants.length >= expected) {
-          config.variants = variants;
-        } else {
-          const byId = new Map((config.variants || []).map((v) => [v.id, v]));
-          variants.forEach((v) => byId.set(v.id, v));
-          config.variants = Array.from(byId.values());
-        }
-        bulkGridConfigCache.set(sectionId, config);
-        preloadBulkFlyToCartImage(sectionId);
-        const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
-        if (isMobile) {
-          renderMobileGrid(container, config, sectionId);
-        } else {
-          renderDesktopGrid(container, config, sectionId);
-        }
-      })
-      .catch((err) => {
-        console.error('at-bulk-grid: deferred load failed', err);
-        container.innerHTML = '<p class="at-bulk-grid__empty">Unable to load all variants. Try again later.</p>';
-      });
-    return;
+    try {
+      config = await promise;
+      if (pendingGridRenders.get(container) !== promise) return;
+    } catch (error) {
+      if (pendingGridRenders.get(container) !== promise) return;
+      console.error('at-bulk-grid: deferred load failed', error);
+      config = { ...config, deferredFailed: true };
+    }
   }
+  pendingGridRenders.delete(container);
 
-  if (config.variants?.length) bulkGridConfigCache.set(sectionId, config);
+  if (!config.deferredFailed && config.variants.length) bulkGridConfigCache.set(sectionId, config);
   preloadBulkFlyToCartImage(sectionId);
   const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
   if (isMobile) {
     renderMobileGrid(container, config, sectionId);
   } else {
     renderDesktopGrid(container, config, sectionId);
+  }
+  if (config.deferredFailed) {
+    container.insertAdjacentHTML('afterbegin',
+      '<p role="status" class="at-bulk-grid__empty">Some variants could not load. Reopen bulk order to try again.</p>');
   }
 }
 
@@ -1295,7 +1210,7 @@ function init() {
     }
   });
 
-  window.addEventListener('resize', () => {
+  window.matchMedia(`(width < ${MOBILE_BREAKPOINT}px)`).addEventListener('change', () => {
     document.querySelectorAll(BULK_GRID_SELECTORS.container).forEach((container) => {
       if (container.dataset.atBulkGridSectionId && container.closest('dialog')?.open) {
         renderGrid(container);
@@ -1359,31 +1274,8 @@ window.atBulkGridDebug = function (searchOptionValue) {
       norm(v.option3).toLowerCase().includes(searchLower)
   );
 
-  const variantByOptionPair = new Map();
-  config.variants.forEach((v) => {
-    const a = norm(v.option1);
-    const b = norm(v.option2);
-    const c = norm(v.option3);
-    if (a && b) {
-      variantByOptionPair.set(a + '|' + b, v);
-      variantByOptionPair.set(b + '|' + a, v);
-    }
-    if (a && c) {
-      variantByOptionPair.set(a + '|' + c, v);
-      variantByOptionPair.set(c + '|' + a, v);
-    }
-    if (b && c) {
-      variantByOptionPair.set(b + '|' + c, v);
-      variantByOptionPair.set(c + '|' + b, v);
-    }
-  });
-
-  const mapKeysSample = Array.from(variantByOptionPair.keys()).slice(0, 20);
-  const lookupTurfGreenS =
-    variantByOptionPair.get('Turf Green|S') ||
-    variantByOptionPair.get('S|Turf Green') ||
-    variantByOptionPair.get(norm('Turf Green') + '|' + norm('S')) ||
-    variantByOptionPair.get(norm('S') + '|' + norm('Turf Green'));
+  const { idsByTuple } = indexBulkVariants(config.variants);
+  const mapKeysSample = Array.from(idsByTuple.keys()).slice(0, 20);
 
   const firstVariants = config.variants.slice(0, 2).map((v) => ({
     id: v.id,
@@ -1407,9 +1299,8 @@ window.atBulkGridDebug = function (searchOptionValue) {
     options: config.options?.map((o) => ({ name: o.name, position: o.position, valueCount: (o.values || []).length })),
     variantsMatchingSearch: variantsMatching.length,
     variantsMatchingSample: variantsMatching.slice(0, 3).map((v) => ({ id: v.id, option1: v.option1, option2: v.option2 })),
-    mapSize: variantByOptionPair.size,
+    mapSize: idsByTuple.size,
     mapKeysSample,
-    lookupTurfGreenS: lookupTurfGreenS ? { id: lookupTurfGreenS.id, option1: lookupTurfGreenS.option1, option2: lookupTurfGreenS.option2 } : null,
     firstVariants,
     lastVariants,
     configRawLength: scriptEl?.textContent?.length ?? null,
