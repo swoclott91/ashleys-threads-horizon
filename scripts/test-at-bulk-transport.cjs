@@ -110,6 +110,23 @@ test('preserves legacy variant batches and rejects malformed section responses',
   await assert.rejects(fetchBulkVariantBatch('/products/shirt', [230]), /Invalid bulk variant batch/);
 });
 
+test('renders both sections in the active draft theme', async () => {
+  const { fetchBulkVariant, fetchBulkVariantBatch } = await transport;
+  window.Shopify.theme = { id: 5, role: 'unpublished' };
+  mockSection(legacySection, 'data-at-bulk-variants', { variants: [] });
+  await fetchBulkVariantBatch('/products/shirt', [230]);
+  assert.equal(requests[0].url.searchParams.get('preview_theme_id'), '5');
+
+  mockSection(targetedSection, 'data-at-bulk-variant', { productId, currency, variant });
+  await fetchBulkVariant('/products/shirt', { variantId });
+  assert.equal(requests[1].url.searchParams.get('preview_theme_id'), '5');
+
+  window.Shopify.theme.role = 'main';
+  mockSection(legacySection, 'data-at-bulk-variants', { variants: [] });
+  await fetchBulkVariantBatch('/products/shirt', [230]);
+  assert.equal(requests[2].url.searchParams.has('preview_theme_id'), false);
+});
+
 test('posts normalized cart inputs and exposes status, lines and bundled sections', async () => {
   const { postBulkCartItems } = await transport;
   global.Theme = { routes: { cart_add_url: '/fr-ca/custom-cart/add.js' } };

@@ -5,13 +5,17 @@ async function requestBulkSection(productUrl, sectionId, selector, selection, si
   if (url.origin !== window.location.origin) throw new TypeError('Expected a storefront product URL');
   const root = window.Shopify?.routes?.root || '/';
   if (url.pathname.startsWith('/products/')) url.pathname = root.replace(/\/$/, '') + url.pathname;
+  const theme = window.Shopify?.theme;
+  if (theme?.id && theme.role !== 'main' && !url.searchParams.has('preview_theme_id')) {
+    url.searchParams.set('preview_theme_id', String(theme.id));
+  }
   for (const param of ['section_id', 'sections[]', 'variant', 'option_values']) {
     url.searchParams.delete(param);
   }
   url.searchParams.set('sections', sectionId);
   for (const [param, value] of Object.entries(selection)) url.searchParams.set(param, value);
 
-  const response = await fetch(url, { headers: { Accept: 'application/json' }, signal });
+  const response = await fetch(url, { signal });
   if (response.status === 404) return null;
   if (!response.ok) throw new Error(`Bulk variant request failed (HTTP ${response.status})`);
   const sections = await response.json();
