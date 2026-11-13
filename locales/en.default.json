@@ -71,6 +71,10 @@
     "price_filter_high": "High price"
   },
   "actions": {
+    "save_color": "Save color",
+    "save_named_color": "Save {{ color }}",
+    "color_saved": "{{ color }} saved",
+    "save_color_failed": "Couldn’t update {{ color }}. Try again.",
     // Quick add button on product cards, shortened version of add to cart
     "add": "Add",
     "add_to_cart": "Add to cart",

@@ -20,7 +20,7 @@
 {%- capture escaped_lt -%}\u003c{%- endcapture -%}
 {%- capture config_payload -%}
   {
-    "productId": {{ product_resource.id | json }},
+    "productId": {{ product_resource.id | append: '' | json }},
     "productUrl": {{ product_resource.url | json }},
     "sectionId": {{ section.id | json }},
     "productFeaturedImage": {% if at_bulk_product_img == blank %}null{% else %}{{ at_bulk_product_img | image_url: width: 100 | json }}{% endif %},

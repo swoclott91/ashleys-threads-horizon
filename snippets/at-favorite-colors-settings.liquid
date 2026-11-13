@@ -1,0 +1,17 @@
+{% doc %}
+  Provides the signed-in customer's saved colors and shared favorite control strings.
+{% enddoc %}
+
+<script type="application/json" id="at-favorite-colors-settings">
+  {
+    "favorites": {{ customer.metafields.wagner.favorite_colors.value | json }},
+    "save": {{ 'actions.save_color' | t | json }},
+    "saveNamed": {{ 'actions.save_named_color' | t: color: '[color]' | json }},
+    "saved": {{ 'actions.color_saved' | t: color: '[color]' | json }},
+    "failure": {{ 'actions.save_color_failed' | t: color: '[color]' | json }}
+  }
+</script>
+<template id="at-favorite-color-heart">
+  {% render 'at-favorite-color-heart' %}
+</template>
+{{ 'at-favorite-colors.css' | asset_url | stylesheet_tag }}

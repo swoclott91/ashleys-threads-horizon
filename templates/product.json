@@ -446,11 +446,17 @@
                     "link_text_color": ""
                   },
                   "blocks": {}
+                },
+                "save-color": {
+                  "type": "at-save-color",
+                  "settings": {},
+                  "blocks": {}
                 }
               },
               "block_order": [
                 "buy-buttons-form",
-                "bulk-add-to-cart"
+                "bulk-add-to-cart",
+                "save-color"
               ]
             },
             "accordion_G8h4j4": {

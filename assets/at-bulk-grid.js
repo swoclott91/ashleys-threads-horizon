@@ -8,6 +8,7 @@ import { formatMoney } from '@theme/money-formatting';
 import { CartLinesUpdateEvent } from '@shopify/events';
 import { onAnimationEnd, yieldToMainThread, preloadImage } from '@theme/utilities';
 import { fetchBulkVariantBatch, postBulkCartItems } from '@theme/at-bulk-transport';
+import '@theme/at-favorite-colors';
 
 const BULK_GRID_SELECTORS = {
   container: '[data-at-bulk-grid]',
@@ -18,6 +19,7 @@ const BULK_GRID_SELECTORS = {
 };
 
 const MOBILE_BREAKPOINT = 750;
+const favoriteHeart = document.getElementById('at-favorite-color-heart');
 
 /** Quick-add context constants */
 const QUICK_ADD_MODAL_CONTENT_ID = 'quick-add-modal-content';
@@ -359,7 +361,7 @@ function getBulkGridLoadingHtml(container) {
 
 /**
  * @param {string} sectionId
- * @returns {{ productId: number, productUrl: string, sectionId: string, variants: Array<{ id: number, available: boolean, inventory_quantity: number, inventory_policy: string, option1: string, option2?: string, option3?: string }>, options: Array<{ name: string, position: number, values: string[] }> } | null}
+ * @returns {{ productId: string, productUrl: string, sectionId: string, variants: Array<{ id: string, available: boolean, inventory_quantity: number, inventory_policy: string, option1: string, option2?: string, option3?: string }>, options: Array<{ name: string, position: number, values: string[], valueIds: string[] }> } | null}
  */
 /**
  * Normalize variant entries: either index arrays [id,a,q,p,i1,i2[,i3],price,compare_at_price]
@@ -408,14 +410,16 @@ function normalizeBulkConfig(config) {
   return config;
 }
 
+function getBulkConfigScript(sectionId) {
+  return document.getElementById(`shopify-section-${sectionId}`)?.querySelector(BULK_GRID_SELECTORS.configScript);
+}
+
 function getBulkConfig(sectionId) {
   // Quick-add context: config lives in the cache, not in a section element
   if (sectionId === QUICK_ADD_SECTION_KEY) {
     return bulkGridConfigCache.get(QUICK_ADD_SECTION_KEY) || null;
   }
-  const section = document.getElementById(`shopify-section-${sectionId}`);
-  if (!section) return null;
-  const script = section.querySelector(BULK_GRID_SELECTORS.configScript);
+  const script = getBulkConfigScript(sectionId);
   if (!script || !script.textContent) return null;
   try {
     const config = JSON.parse(script.textContent.trim());
@@ -689,6 +693,10 @@ function getGridOptions(config) {
   const groupIndex = options.findIndex((_, i) => i !== rowIndex && i !== colIndex);
   const rowOption = options[rowIndex];
   const groupOption = options[groupIndex];
+  const colorIds = new Map();
+  if (colorIndex >= 0) {
+    rowOption.values.forEach((color, index) => colorIds.set(color, rowOption.valueIds?.[index]));
+  }
   const { byId, idsByTuple } = indexBulkVariants(variants);
   const rowsByGroup = new Map();
   for (const { optionValues } of byId.values()) {
@@ -699,6 +707,7 @@ function getGridOptions(config) {
 
   return {
     optionRowName: rowOption.name,
+    colorIds,
     optionColName: options[colIndex]?.name || 'Quantity',
     sizeValues: options[colIndex]?.values || [''],
     groups: (groupOption?.values || [undefined]).filter((value) => rowsByGroup.has(value)).map((value) => ({
@@ -731,7 +740,7 @@ function renderDesktopGrid(container, config, sectionId) {
     return;
   }
 
-  const { optionRowName, optionColName, sizeValues, groups, getVariant, getSwatchStyle } = getGridOptions(config);
+  const { optionRowName, optionColName, sizeValues, groups, colorIds, getVariant, getSwatchStyle } = getGridOptions(config);
 
   let html = '';
   html += '<div class="at-bulk-grid__body">';
@@ -755,7 +764,8 @@ function renderDesktopGrid(container, config, sectionId) {
       if (swatchStyle) {
         html += '<span class="at-bulk-grid__swatch swatch" style="' + swatchStyle + '" aria-hidden="true"></span>';
       }
-      html += '<span class="at-bulk-grid__color-name">' + escapeHtml(color) + '</span></div></td>';
+      html += '<span class="at-bulk-grid__color-name">' + escapeHtml(color) + '</span>';
+      html += favoriteButton(config.productId, colorIds.get(color), color) + '</div></td>';
       sizeValues.forEach((size) => {
         const v = getVariant(color, size, value);
         if (!v) {
@@ -856,6 +866,15 @@ function escapeHtml(s) {
     .replace(/"/g, '&quot;');
 }
 
+function favoriteButton(productId, colorId, colorName) {
+  if (!favoriteHeart || !colorId) return '';
+  return `<at-favorite-color class="at-bulk-grid__favorite" data-product-id="${escapeAttr(productId)}"
+    data-color-id="${escapeAttr(colorId)}" data-color-name="${escapeAttr(colorName)}">
+    <button type="button" class="at-favorite-color__button" aria-pressed="false">${favoriteHeart.innerHTML}</button>
+    <span class="at-favorite-color__error" role="status"></span>
+  </at-favorite-color>`;
+}
+
 /**
  * Mobile: accordion per color, size rows with qty + availability.
  */
@@ -865,7 +884,7 @@ function renderMobileGrid(container, config, sectionId) {
     return;
   }
 
-  const { optionRowName, sizeValues, groups, getVariant, getSwatchStyle } = getGridOptions(config);
+  const { optionRowName, sizeValues, groups, colorIds, getVariant, getSwatchStyle } = getGridOptions(config);
 
   let html = '';
   html += '<div class="at-bulk-grid__body">';
@@ -882,12 +901,13 @@ function renderMobileGrid(container, config, sectionId) {
     colors.forEach((color) => {
       const swatchStyle = getSwatchStyle(color);
       html += '<div class="at-bulk-grid__mobile-accordion" data-at-bulk-color-row data-at-bulk-color-value="' + escapeAttr(color) + '">';
+      html += '<div class="at-bulk-grid__mobile-accordion-heading">';
       html += '<button type="button" class="at-bulk-grid__mobile-accordion-header" data-at-bulk-accordion-toggle aria-expanded="false">';
       if (swatchStyle) {
         html += '<span class="at-bulk-grid__swatch swatch" style="' + swatchStyle + '" aria-hidden="true"></span>';
       }
       html += '<span class="at-bulk-grid__color-name">' + escapeHtml(color) + '</span> <span class="at-bulk-grid__color-count" data-at-bulk-color-count aria-hidden="true"></span> <span class="svg-wrapper icon-caret icon-animated at-bulk-grid__accordion-icon" aria-hidden="true" data-at-bulk-accordion-icon>' + ICON_CARET_SVG + '</span>';
-      html += '</button>';
+      html += '</button>' + favoriteButton(config.productId, colorIds.get(color), color) + '</div>';
       html += '<div class="at-bulk-grid__mobile-accordion-content" hidden>';
       sizeValues.forEach((size) => {
         const v = getVariant(color, size, value);
@@ -982,7 +1002,7 @@ function renderMobileGrid(container, config, sectionId) {
 
   container.querySelectorAll('[data-at-bulk-accordion-toggle]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const content = btn.nextElementSibling;
+      const content = btn.parentElement?.nextElementSibling;
       const open = content?.getAttribute('hidden') != null;
       content?.toggleAttribute('hidden', !open);
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -1018,6 +1038,17 @@ const bulkGridConfigCache = new Map();
 const deferredLoadPromises = new Map();
 const pendingGridRenders = new WeakMap();
 
+function invalidateStaleBulkConfig(sectionId) {
+  if (sectionId === QUICK_ADD_SECTION_KEY) return;
+  const productId = getBulkConfigScript(sectionId)?.dataset.atProductId;
+  if (bulkGridConfigCache.get(sectionId)?.productId !== productId) {
+    bulkGridConfigCache.delete(sectionId);
+  }
+  if (deferredLoadPromises.get(sectionId)?.productId !== productId) {
+    deferredLoadPromises.delete(sectionId);
+  }
+}
+
 function needsDeferredVariants(config) {
   return !config.deferredLoaded && config.variants.length < expectedVariantCount(config)
     && config.options[0]?.valueIds?.length > 0;
@@ -1046,6 +1077,7 @@ function getDeferredGridConfig(sectionId, config) {
  * The promise is reused by renderGrid to avoid duplicate fetches.
  */
 function preloadBulkGridVariants(sectionId) {
+  invalidateStaleBulkConfig(sectionId);
   const config = bulkGridConfigCache.get(sectionId) || getBulkConfig(sectionId);
   if (!config) return;
 
@@ -1060,6 +1092,7 @@ async function renderGrid(container) {
   const sectionId = container.dataset.atBulkGridSectionId;
   if (!sectionId) return;
 
+  invalidateStaleBulkConfig(sectionId);
   let config = bulkGridConfigCache.get(sectionId) || getBulkConfig(sectionId);
   if (!config) return;
 
@@ -1067,12 +1100,16 @@ async function renderGrid(container) {
     const promise = getDeferredGridConfig(sectionId, config);
     if (pendingGridRenders.get(container) === promise) return;
     pendingGridRenders.set(container, promise);
+    const productId = config.productId;
+    const isCurrent = () => container.isConnected
+      && pendingGridRenders.get(container) === promise
+      && (sectionId === QUICK_ADD_SECTION_KEY || getBulkConfigScript(sectionId)?.dataset.atProductId === productId);
     container.innerHTML = getBulkGridLoadingHtml(container);
     try {
       config = await promise;
-      if (pendingGridRenders.get(container) !== promise) return;
+      if (!isCurrent()) return;
     } catch (error) {
-      if (pendingGridRenders.get(container) !== promise) return;
+      if (!isCurrent()) return;
       console.error('at-bulk-grid: deferred load failed', error);
       config = { ...config, deferredFailed: true };
     }
@@ -1157,6 +1194,7 @@ function initQuickAddBulkGrid() {
 
     // Cache config under the quick-add sentinel key
     bulkGridConfigCache.set(QUICK_ADD_SECTION_KEY, config);
+    deferredLoadPromises.delete(QUICK_ADD_SECTION_KEY);
 
     // Find the at-bulk-grid container inside the nested dialog
     const container = bulkDialog.querySelector(BULK_GRID_SELECTORS.container);
@@ -1201,14 +1239,10 @@ function init() {
     });
   });
 
-  document.querySelectorAll(BULK_GRID_SELECTORS.container).forEach((container) => {
-    const dialogComponent = container.closest('dialog-component');
-    if (dialogComponent) {
-      dialogComponent.addEventListener('dialog:open', () => {
-        renderGrid(container);
-      });
-    }
-  });
+  document.addEventListener('dialog:open', (event) => {
+    const container = event.target.querySelector(BULK_GRID_SELECTORS.container);
+    if (container) renderGrid(container);
+  }, true);
 
   window.matchMedia(`(width < ${MOBILE_BREAKPOINT}px)`).addEventListener('change', () => {
     document.querySelectorAll(BULK_GRID_SELECTORS.container).forEach((container) => {
