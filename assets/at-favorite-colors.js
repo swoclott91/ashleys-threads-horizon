@@ -16,6 +16,27 @@ const withColor = (text, color) => text.replace('[color]', () => color);
 
 let openingSignIn = false;
 
+function setFavoritesAccountHeading(account) {
+  const root = account.shadowRoot;
+  if (!root) return;
+
+  // Shopify exposes no title slot. Preserve its accessible heading and change
+  // the text only while the main signed-out view is showing its login form.
+  const updateHeading = () => {
+    const dialog = root.querySelector('dialog[part~="dialog"][aria-labelledby="dialog-heading"]');
+    const heading = dialog?.querySelector('h2#dialog-heading');
+    if (heading && dialog.querySelector('.account__login-slot:not([hidden])')
+      && heading.textContent !== settings.signInMessage) {
+      heading.textContent = settings.signInMessage;
+    }
+  };
+
+  updateHeading();
+  const observer = new MutationObserver(updateHeading);
+  observer.observe(root, { subtree: true, childList: true, attributes: true, attributeFilter: ['hidden'] });
+  account.addEventListener('close', () => observer.disconnect(), { once: true });
+}
+
 async function openSignIn({ productUrl, variantId, optionValues }) {
   if (openingSignIn) return;
   const currentUrl = new URL(window.location.href);
@@ -40,7 +61,10 @@ async function openSignIn({ productUrl, variantId, optionValues }) {
     customElements.upgrade(account);
     if (typeof account.showModal === 'function') {
       let opened = false;
-      const onOpen = () => { opened = true; };
+      const onOpen = () => {
+        opened = true;
+        setFavoritesAccountHeading(account);
+      };
       openingSignIn = true;
       account.addEventListener('open', onOpen);
       try {

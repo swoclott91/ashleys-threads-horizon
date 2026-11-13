@@ -68,10 +68,13 @@
   position: fixed;
   inset: 0;
   margin: auto;
-  width: min(28rem, calc(100% - 2rem));
+  width: min(22.5rem, calc(100% - 2rem));
   max-width: none;
+  /* An auto-height fixed dialog stretches when both vertical insets are set. */
+  height: fit-content;
   min-height: 0;
   max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
   border-radius: var(--shopify-account-radius-dialog);
 }
 
