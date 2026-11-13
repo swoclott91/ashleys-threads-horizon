@@ -52,6 +52,7 @@
   max-block-size: calc(100dvh - 2rem);
   padding: 1.5rem;
   border: var(--style-border-popover);
+  box-shadow: var(--shadow-popover);
   border-radius: var(--style-border-radius-popover);
   background: var(--color-background);
   color: var(--color-foreground);
@@ -62,8 +63,22 @@
   background: rgb(0 0 0 / 50%);
 }
 
+.at-save-color-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-block-end: 1rem;
+}
+
+.at-save-color-dialog__header h2 {
+  margin: 0;
+}
+
 .at-save-color-dialog__close {
-  float: inline-end;
+  flex: none;
+  margin-block-start: -0.5rem;
+  margin-inline-end: -0.5rem;
 }
 
 .at-save-color-dialog__close button {
@@ -78,7 +93,13 @@
   block-size: 1rem;
 }
 
-.at-save-color-dialog > a {
-  display: inline-block;
-  margin-block-start: 0.75rem;
+.at-save-color-dialog__actions {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+}
+
+.at-save-color-dialog__actions > a {
+  inline-size: 100%;
+  text-align: center;
 }
