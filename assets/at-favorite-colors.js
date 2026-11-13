@@ -14,7 +14,10 @@ const selectedValues = 'input[data-option-value-id]:checked, option[data-option-
 const optionValueId = (element) => element?.dataset.optionValueId || element?.dataset.singleOptionValueId;
 const withColor = (text, color) => text.replace('[color]', () => color);
 
-function openSignIn({ productUrl, variantId, optionValues }) {
+let openingSignIn = false;
+
+async function openSignIn({ productUrl, variantId, optionValues }) {
+  if (openingSignIn) return;
   const currentUrl = new URL(window.location.href);
   const product = new URL(productUrl, currentUrl);
   if (currentUrl.pathname === product.pathname) product.search = currentUrl.search;
@@ -27,6 +30,33 @@ function openSignIn({ productUrl, variantId, optionValues }) {
   }
   const login = new URL(settings.loginUrl, currentUrl);
   login.searchParams.set('return_to', product.pathname + product.search);
+  const accountMount = document.getElementById('at-favorites-account');
+  const accountTemplate = document.getElementById('at-favorites-account-template');
+  if (accountMount && accountTemplate instanceof HTMLTemplateElement) {
+    const account = document.importNode(accountTemplate.content.firstElementChild, true);
+    account.setAttribute('sign-in-url', login.href);
+    // The native form reads sign-in-url when it initializes. Create a fresh
+    // component so reopening for a different color gets a fresh return URL.
+    customElements.upgrade(account);
+    if (typeof account.showModal === 'function') {
+      let opened = false;
+      const onOpen = () => { opened = true; };
+      openingSignIn = true;
+      account.addEventListener('open', onOpen);
+      try {
+        accountMount.replaceChildren(account);
+        await account.showModal();
+      } catch (error) {
+        console.warn('Could not open the Shopify account sheet', error);
+      } finally {
+        account.removeEventListener('open', onOpen);
+        openingSignIn = false;
+      }
+      if (opened) return;
+      account.remove();
+    }
+  }
+
   const dialog = document.getElementById('at-save-color-dialog');
   if (!(dialog instanceof HTMLDialogElement)) {
     window.location.assign(login.href);
@@ -104,9 +134,11 @@ class FavoriteColor extends HTMLElement {
     if (signedIn) {
       this.#button.setAttribute('aria-pressed', String(isSaved));
       this.#button.removeAttribute('aria-haspopup');
+      this.#button.removeAttribute('aria-description');
     } else {
       this.#button.removeAttribute('aria-pressed');
       this.#button.setAttribute('aria-haspopup', 'dialog');
+      this.#button.setAttribute('aria-description', settings.signInMessage);
     }
     this.#button.setAttribute('aria-label', withColor(isSaved ? settings.removeNamed : settings.saveNamed, colorName));
     const label = this.querySelector('[data-at-favorite-label]');
