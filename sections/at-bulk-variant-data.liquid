@@ -1,0 +1,51 @@
+{%- if product != blank -%}
+  {%- assign variant = product.selected_variant -%}
+  {%- capture escaped_lt -%}\u003c{%- endcapture -%}
+  {%- capture payload -%}
+    {
+      "productId": {{ product.id | append: '' | json }},
+      "currency": {{ cart.currency.iso_code | json }},
+      "variant":
+      {%- if variant == blank -%}
+        null
+      {%- else -%}
+        {
+          "id": {{ variant.id | append: '' | json }},
+          "available": {{ variant.available | json }},
+          "inventoryQuantity": {{ variant.inventory_quantity | default: 0 }},
+          "inventoryPolicy": {{ variant.inventory_policy | json }},
+          "price": {{ variant.price }},
+          "compareAtPrice": {% if variant.compare_at_price != blank %}{{ variant.compare_at_price }}{% else %}null{% endif %},
+          "quantityRule": {
+            "min": {{ variant.quantity_rule.min | default: 1 }},
+            "increment": {{ variant.quantity_rule.increment | default: 1 }},
+            "max": {% if variant.quantity_rule.max != blank %}{{ variant.quantity_rule.max }}{% else %}null{% endif %}
+          },
+          "options": [
+            {%- for option in product.options_with_values -%}
+              {%- liquid
+                assign value = variant.options[forloop.index0]
+                assign option_value = option.values | find: 'name', value
+                assign swatch_background = null
+                if option_value.swatch.color
+                  assign swatch_background = 'rgb(' | append: option_value.swatch.color.rgb | append: ')'
+                elsif option_value.swatch.image
+                  assign swatch_image_url = option_value.swatch.image | image_url: width: 80
+                  assign swatch_background = 'url(' | append: swatch_image_url | append: ')'
+                endif
+              -%}
+              {"id":{{ option_value.id | append: '' | json }},"name":{{ option.name | json }},"value":{{ value | json }},"swatchBackground":{% if swatch_background %}{{ swatch_background | json }}{% else %}null{% endif %}}{% unless forloop.last %},{% endunless %}
+            {%- endfor -%}
+          ]
+        }
+      {%- endif -%}
+    }
+  {%- endcapture -%}
+  <script type="application/json" data-at-bulk-variant>{{ payload | replace: '<', escaped_lt }}</script>
+{%- endif -%}
+{% schema %}
+{
+  "name": "AT Bulk Variant Data",
+  "settings": []
+}
+{% endschema %}

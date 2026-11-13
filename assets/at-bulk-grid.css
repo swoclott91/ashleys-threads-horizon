@@ -392,6 +392,14 @@
   font-size: var(--font-size--sm);
 }
 
+.at-bulk-grid__table caption,
+.at-bulk-grid__mobile-accordions > h3 {
+  padding-block: var(--padding-sm);
+  font-size: var(--font-size--sm);
+  font-weight: 600;
+  text-align: start;
+}
+
 /* Sticky table header so Color/sizes stay visible when scrolling */
 .at-bulk-grid__table thead {
   position: sticky;
@@ -519,6 +527,15 @@
   gap: var(--gap-sm);
   align-items: center;
   margin-top: var(--gap-md);
+}
+
+.at-bulk-grid__cart-error {
+  flex-basis: 100%;
+  color: var(--color-error, currentColor);
+}
+
+.at-bulk-grid__cart-error:empty {
+  position: absolute;
 }
 
 @media screen and (min-width: 750px) {
