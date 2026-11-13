@@ -1,6 +1,13 @@
 {% doc %}
-  Renders the sign-in dialog shared by product and bulk-grid favorite buttons.
+  Renders the native account sheet and fallback shared by favorite buttons.
 {% enddoc %}
+
+{% if shop.customer_accounts_enabled %}
+  <div id="at-favorites-account" class="color-custom-popover"></div>
+  <template id="at-favorites-account-template">
+    <shopify-account menu="customer-account-main-menu"></shopify-account>
+  </template>
+{% endif %}
 
 <dialog
   id="at-save-color-dialog"

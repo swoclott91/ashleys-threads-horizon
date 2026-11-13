@@ -44,6 +44,37 @@
   position: absolute;
 }
 
+#at-favorites-account shopify-account {
+  --shopify-account-font-heading: var(--font-heading--family);
+  --shopify-account-font-heading-weight: var(--font-heading--weight);
+  --shopify-account-font-body: var(--font-body--family);
+  --shopify-account-font-body-weight: var(--font-body--weight);
+  --shopify-account-radius-base: var(--style-border-radius-popover);
+  --shopify-account-radius-button: var(--style-border-radius-buttons-primary);
+  --shopify-account-radius-button-small: var(--style-border-radius-buttons-primary);
+  --shopify-account-radius-input: var(--style-border-radius-buttons-primary);
+  --shopify-account-color-background: var(--color-background);
+  --shopify-account-color-text: var(--color-foreground);
+  --shopify-account-color-accent: var(--color-primary-button-background);
+  --shopify-account-color-accent-text: var(--color-primary-button-text);
+  --shopify-account-dialog-position-top: 1rem;
+}
+
+#at-favorites-account shopify-account::part(signed-out-avatar) {
+  display: none;
+}
+
+#at-favorites-account shopify-account::part(dialog) {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(28rem, calc(100% - 2rem));
+  max-width: none;
+  min-height: 0;
+  max-height: calc(100dvh - 2rem);
+  border-radius: var(--shopify-account-radius-dialog);
+}
+
 .at-save-color-dialog {
   position: fixed;
   inset: 0;

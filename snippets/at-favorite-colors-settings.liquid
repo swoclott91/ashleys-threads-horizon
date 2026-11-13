@@ -7,6 +7,7 @@
     "signedIn": {% if customer %}true{% else %}false{% endif %},
     "favorites": {% if customer %}{{ customer.metafields.wagner.favorite_colors.value | json }}{% else %}[]{% endif %},
     "loginUrl": {{ routes.storefront_login_url | json }},
+    "signInMessage": {{ 'actions.save_color_sign_in_message' | t | json }},
     "save": {{ 'actions.save_color' | t | json }},
     "saveNamed": {{ 'actions.save_named_color' | t: color: '[color]' | json }},
     "removeNamed": {{ 'actions.remove_named_color' | t: color: '[color]' | json }},
