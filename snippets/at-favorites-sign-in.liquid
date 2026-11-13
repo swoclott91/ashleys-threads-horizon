@@ -1,0 +1,27 @@
+{% doc %}
+  Renders the sign-in dialog shared by product and bulk-grid favorite buttons.
+{% enddoc %}
+
+<dialog
+  id="at-save-color-dialog"
+  class="at-save-color-dialog color-custom-popover"
+  aria-labelledby="at-save-color-dialog-title"
+>
+  <div class="at-save-color-dialog__header">
+    <h2 id="at-save-color-dialog-title" class="h4">{{ 'actions.save_color_sign_in_message' | t }}</h2>
+    <form method="dialog" class="at-save-color-dialog__close">
+      <button type="submit" class="button-unstyled" aria-label="{{ 'accessibility.close_dialog' | t | escape }}" autofocus>
+        {{- 'icon-close.svg' | inline_asset_content -}}
+      </button>
+    </form>
+  </div>
+
+  <div class="at-save-color-dialog__actions">
+    {% if shop.customer_accounts_enabled %}
+      {{ shop | login_button }}
+    {% endif %}
+    <a class="button button-secondary" href="{{ routes.storefront_login_url }}" data-at-favorites-sign-in>
+      {{- 'actions.save_color_sign_in' | t -}}
+    </a>
+  </div>
+</dialog>

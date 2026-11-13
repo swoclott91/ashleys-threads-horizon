@@ -14,7 +14,7 @@ const selectedValues = 'input[data-option-value-id]:checked, option[data-option-
 const optionValueId = (element) => element?.dataset.optionValueId || element?.dataset.singleOptionValueId;
 const withColor = (text, color) => text.replace('[color]', () => color);
 
-function signIn({ productUrl, variantId, optionValues }) {
+function openSignIn({ productUrl, variantId, optionValues }) {
   const currentUrl = new URL(window.location.href);
   const product = new URL(productUrl, currentUrl);
   if (currentUrl.pathname === product.pathname) product.search = currentUrl.search;
@@ -27,7 +27,14 @@ function signIn({ productUrl, variantId, optionValues }) {
   }
   const login = new URL(settings.loginUrl, currentUrl);
   login.searchParams.set('return_to', product.pathname + product.search);
-  window.location.assign(login.href);
+  const dialog = document.getElementById('at-save-color-dialog');
+  if (!(dialog instanceof HTMLDialogElement)) {
+    window.location.assign(login.href);
+    return;
+  }
+
+  dialog.querySelector('[data-at-favorites-sign-in]').href = login.href;
+  if (!dialog.open) dialog.showModal();
 }
 
 class FavoriteColor extends HTMLElement {
@@ -94,7 +101,13 @@ class FavoriteColor extends HTMLElement {
 
     const isSaved = signedIn && saved.has(key);
     this.#button.disabled = signedIn && pending.has(key);
-    this.#button.setAttribute('aria-pressed', String(isSaved));
+    if (signedIn) {
+      this.#button.setAttribute('aria-pressed', String(isSaved));
+      this.#button.removeAttribute('aria-haspopup');
+    } else {
+      this.#button.removeAttribute('aria-pressed');
+      this.#button.setAttribute('aria-haspopup', 'dialog');
+    }
     this.#button.setAttribute('aria-label', withColor(isSaved ? settings.removeNamed : settings.saveNamed, colorName));
     const label = this.querySelector('[data-at-favorite-label]');
     if (label) {
@@ -114,7 +127,7 @@ class FavoriteColor extends HTMLElement {
     const { productId, colorId, colorName } = color;
     if (!productId || !colorId || !colorName) return;
     if (!signedIn) {
-      signIn(color);
+      openSignIn(color);
       return;
     }
     const key = pairKey(productId, colorId);
@@ -138,7 +151,7 @@ class FavoriteColor extends HTMLElement {
       if (response.status === 403 && result.error === 'login_required') {
         saved.clear();
         signedIn = false;
-        if (this.isConnected && this.#key === key) signIn(color);
+        if (this.isConnected && this.#key === key) openSignIn(color);
         return;
       }
       if (!response.ok) throw new Error('Favorite color request failed');
@@ -163,15 +176,6 @@ class FavoriteColor extends HTMLElement {
 
 if (settings) {
   customElements.define('at-favorite-color', FavoriteColor);
-
-  if (window.Shopify?.designMode) {
-    document.addEventListener('click', (event) => {
-      if (event.target instanceof Element && event.target.closest('[data-at-preview-save-color]')) {
-        const dialog = document.getElementById('at-save-color-dialog');
-        if (dialog instanceof HTMLDialogElement && !dialog.open) dialog.showModal();
-      }
-    });
-  }
 
   document.addEventListener('shopify:product:select', (event) => {
     if (!(event.target instanceof Element) || !event.target.matches(pickerSelector)) return;
