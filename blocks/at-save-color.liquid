@@ -1,0 +1,46 @@
+{% liquid
+  assign favorite_product = closest.product
+  for option in favorite_product.options_with_values
+    assign option_name = option.name | strip | downcase
+    if option_name == 'color' or option_name == 'colour'
+      assign color_option = option
+      break
+    endif
+  endfor
+%}
+
+{% if color_option %}
+  {% liquid
+    for value in color_option.values
+      if value.selected
+        assign current_color = value
+        break
+      endif
+    endfor
+  %}
+  <script src="{{ 'at-favorite-colors.js' | asset_url }}" type="module"></script>
+  <at-favorite-color
+    class="at-save-color"
+    data-picker-position="{{ color_option.position }}"
+    data-product-id="{{ favorite_product.id }}"
+    data-color-id="{{ current_color.id }}"
+    data-color-name="{{ current_color.name | escape }}"
+    hidden
+    {{ block.shopify_attributes }}
+  >
+    <button type="button" class="at-favorite-color__button" {% if customer %}aria-pressed="false"{% else %}aria-haspopup="dialog"{% endif %}>
+      {% render 'at-favorite-color-heart' %}
+      <span data-at-favorite-label>{{ 'actions.save_color' | t }}</span>
+    </button>
+    <span class="at-favorite-color__error" role="status"></span>
+  </at-favorite-color>
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:names.at_save_color",
+  "tag": null,
+  "settings": [],
+  "presets": [{ "name": "t:names.at_save_color", "category": "t:categories.product" }]
+}
+{% endschema %}

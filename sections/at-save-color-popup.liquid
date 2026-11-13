@@ -1,0 +1,42 @@
+{% unless customer %}
+  <dialog
+    id="at-save-color-dialog"
+    class="at-save-color-dialog color-{{ section.settings.color_scheme }}"
+    aria-labelledby="at-save-color-dialog-title"
+  >
+    <form method="dialog" class="at-save-color-dialog__close">
+      <button type="submit" class="button-unstyled" aria-label="{{ 'actions.close' | t | escape }}" autofocus>
+        {{- 'icon-close.svg' | inline_asset_content -}}
+      </button>
+    </form>
+    <h2 id="at-save-color-dialog-title" class="h4">{{ 'actions.save_color' | t }}</h2>
+    <p>{{ 'actions.save_color_sign_in_message' | t }}</p>
+    {% for block in section.blocks %}
+      {% render block %}
+    {% endfor %}
+    <a
+      class="{% if section.blocks.size == 0 %}button{% else %}link{% endif %}"
+      href="{{ routes.storefront_login_url }}"
+    >
+      {{- 'actions.save_color_sign_in' | t -}}
+    </a>
+  </dialog>
+  {% if request.design_mode %}
+    <button type="button" class="button-secondary" data-at-preview-save-color>
+      {{ 'actions.save_color_preview' | t }}
+    </button>
+    <script src="{{ 'at-favorite-colors.js' | asset_url }}" type="module"></script>
+  {% endif %}
+{% endunless %}
+
+{% schema %}
+{
+  "name": "Save color popup",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [{ "type": "@app" }],
+  "enabled_on": { "templates": ["product"] },
+  "presets": [{ "name": "Save color popup" }]
+}
+{% endschema %}

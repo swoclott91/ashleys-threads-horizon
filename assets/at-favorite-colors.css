@@ -1,0 +1,84 @@
+.at-save-color:not([hidden]) {
+  display: block;
+  align-self: flex-start;
+}
+
+.at-favorite-color__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+  min-block-size: var(--minimum-touch-target, 44px);
+  min-inline-size: var(--minimum-touch-target, 44px);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #243e34;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.at-favorite-color__button[aria-disabled='true'] {
+  cursor: progress;
+  opacity: 0.65;
+}
+
+.at-favorite-color__button svg {
+  inline-size: 1.15em;
+  block-size: 1.15em;
+  flex-shrink: 0;
+}
+
+.at-favorite-color__button[aria-pressed='true'] svg {
+  fill: currentColor;
+}
+
+.at-favorite-color__error:not(:empty) {
+  display: block;
+  font-size: var(--font-size--xs, 0.8125rem);
+  color: var(--color-foreground);
+}
+
+.at-favorite-color__error:empty {
+  position: absolute;
+}
+
+.at-save-color-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  inline-size: min(28rem, calc(100% - 2rem));
+  max-block-size: calc(100dvh - 2rem);
+  padding: 1.5rem;
+  border: var(--style-border-popover);
+  border-radius: var(--style-border-radius-popover);
+  background: var(--color-background);
+  color: var(--color-foreground);
+  overflow-y: auto;
+}
+
+.at-save-color-dialog::backdrop {
+  background: rgb(0 0 0 / 50%);
+}
+
+.at-save-color-dialog__close {
+  float: inline-end;
+}
+
+.at-save-color-dialog__close button {
+  display: grid;
+  place-items: center;
+  min-inline-size: var(--minimum-touch-target, 44px);
+  min-block-size: var(--minimum-touch-target, 44px);
+}
+
+.at-save-color-dialog__close svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+
+.at-save-color-dialog > a {
+  display: inline-block;
+  margin-block-start: 0.75rem;
+}

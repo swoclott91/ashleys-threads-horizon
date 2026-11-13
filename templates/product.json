@@ -446,11 +446,17 @@
                     "link_text_color": ""
                   },
                   "blocks": {}
+                },
+                "save-color": {
+                  "type": "at-save-color",
+                  "settings": {},
+                  "blocks": {}
                 }
               },
               "block_order": [
                 "buy-buttons-form",
-                "bulk-add-to-cart"
+                "bulk-add-to-cart",
+                "save-color"
               ]
             },
             "accordion_G8h4j4": {
@@ -1030,6 +1036,10 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
+    },
+    "save_color_popup": {
+      "type": "at-save-color-popup",
+      "settings": {}
     }
   },
   "order": [
@@ -1038,6 +1048,7 @@
     "main",
     "product_recommendations_qggXJq",
     "product_recommendations_WNCP9L",
-    "1775022707a6a381f3"
+    "1775022707a6a381f3",
+    "save_color_popup"
   ]
 }

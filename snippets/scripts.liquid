@@ -27,6 +27,7 @@
       "@theme/utilities": "{{ 'utilities.js' | asset_url }}",
       "@theme/variant-picker": "{{ 'variant-picker.js' | asset_url }}",
       "@theme/variant-resolution": "{{ 'variant-resolution.js' | asset_url }}",
+      "@theme/at-favorite-colors": "{{ 'at-favorite-colors.js' | asset_url }}",
       "@theme/media-gallery": "{{ 'media-gallery.js' | asset_url }}",
       "@theme/quick-add": "{{ 'quick-add.js' | asset_url }}",
       "@theme/paginated-list-aspect-ratio": "{{ 'paginated-list-aspect-ratio.js' | asset_url }}",
@@ -39,6 +40,10 @@
     }
   }
 </script>
+
+{% if customer or request.page_type == 'product' %}
+  {% render 'at-favorite-colors-settings' %}
+{% endif %}
 
 {%- comment -%}
   Registers Horizon's cart-drawer behaviour against the standard-actions
