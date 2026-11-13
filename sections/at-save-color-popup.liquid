@@ -1,4 +1,4 @@
-{% unless customer %}
+{% if request.design_mode %}
   <dialog
     id="at-save-color-dialog"
     class="at-save-color-dialog color-{{ section.settings.color_scheme }}"
@@ -21,13 +21,11 @@
       {{- 'actions.save_color_sign_in' | t -}}
     </a>
   </dialog>
-  {% if request.design_mode %}
-    <button type="button" class="button-secondary" data-at-preview-save-color>
-      {{ 'actions.save_color_preview' | t }}
-    </button>
-    <script src="{{ 'at-favorite-colors.js' | asset_url }}" type="module"></script>
-  {% endif %}
-{% endunless %}
+  <button type="button" class="button-secondary" data-at-preview-save-color>
+    {{ 'actions.save_color_preview' | t }}
+  </button>
+  <script src="{{ 'at-favorite-colors.js' | asset_url }}" type="module"></script>
+{% endif %}
 
 {% schema %}
 {

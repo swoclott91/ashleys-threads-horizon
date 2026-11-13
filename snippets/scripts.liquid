@@ -41,7 +41,7 @@
   }
 </script>
 
-{% if customer or request.page_type == 'product' %}
+{% if customer or request.page_type == 'product' or settings.quick_add or settings.mobile_quick_add %}
   {% render 'at-favorite-colors-settings' %}
 {% endif %}
 
