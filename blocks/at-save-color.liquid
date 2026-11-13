@@ -9,7 +9,7 @@
   endfor
 %}
 
-{% if customer and color_option %}
+{% if color_option %}
   {% liquid
     for value in color_option.values
       if value.selected
@@ -28,7 +28,7 @@
     hidden
     {{ block.shopify_attributes }}
   >
-    <button type="button" class="at-favorite-color__button" aria-pressed="false">
+    <button type="button" class="at-favorite-color__button" {% if customer %}aria-pressed="false"{% else %}aria-haspopup="dialog"{% endif %}>
       {% render 'at-favorite-color-heart' %}
       <span data-at-favorite-label>{{ 'actions.save_color' | t }}</span>
     </button>

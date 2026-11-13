@@ -41,7 +41,7 @@
   }
 </script>
 
-{% if customer %}
+{% if customer or request.page_type == 'product' %}
   {% render 'at-favorite-colors-settings' %}
 {% endif %}
 

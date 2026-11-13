@@ -10,6 +10,19 @@ const pending = new Set();
 const failures = new Set();
 const changes = new EventTarget();
 
+function openSaveColorDialog(colorName) {
+  const dialog = document.getElementById('at-save-color-dialog');
+  if (!(dialog instanceof HTMLDialogElement)) {
+    window.location.assign(settings.signInUrl);
+    return;
+  }
+
+  const title = dialog.querySelector('#at-save-color-dialog-title');
+  title.textContent = colorName ? settings.saveNamed.replace('[color]', () => colorName) : settings.save;
+  if (!dialog.open) dialog.showModal();
+}
+
+
 class FavoriteColor extends HTMLElement {
   #listeners;
   #button;
@@ -61,8 +74,13 @@ class FavoriteColor extends HTMLElement {
 
     const key = pairKey(productId, colorId);
     const isSaved = saved.has(key);
-    this.#button.setAttribute('aria-pressed', String(isSaved));
-    this.#button.setAttribute('aria-disabled', String(pending.has(key)));
+    if (settings.signedIn) {
+      this.#button.setAttribute('aria-pressed', String(isSaved));
+      this.#button.setAttribute('aria-disabled', String(pending.has(key)));
+    } else {
+      this.#button.removeAttribute('aria-pressed');
+      this.#button.setAttribute('aria-haspopup', 'dialog');
+    }
     const label = this.querySelector('[data-at-favorite-label]');
     if (label) {
       label.textContent = isSaved ? settings.saved.replace('[color]', () => colorName) : settings.save;
@@ -76,6 +94,10 @@ class FavoriteColor extends HTMLElement {
   #toggle = async () => {
     const { productId, colorId, colorName } = this.#currentColor();
     if (!productId || !colorId || !colorName) return;
+    if (!settings.signedIn) {
+      openSaveColorDialog(colorName);
+      return;
+    }
     const key = pairKey(productId, colorId);
     if (pending.has(key)) return;
 
@@ -107,6 +129,14 @@ class FavoriteColor extends HTMLElement {
 
 if (settings) {
   customElements.define('at-favorite-color', FavoriteColor);
+
+  if (window.Shopify?.designMode) {
+    document.addEventListener('click', (event) => {
+      if (event.target instanceof Element && event.target.closest('[data-at-preview-save-color]')) {
+        openSaveColorDialog();
+      }
+    });
+  }
 
   document.addEventListener('shopify:product:select', (event) => {
     if (!(event.target instanceof Element) || !event.target.matches(pickerSelector)) return;

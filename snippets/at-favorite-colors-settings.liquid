@@ -1,10 +1,12 @@
 {% doc %}
-  Provides the signed-in customer's saved colors and shared favorite control strings.
+  Provides favorite control strings, sign-in routing, and the current customer's saved colors.
 {% enddoc %}
 
 <script type="application/json" id="at-favorite-colors-settings">
   {
-    "favorites": {{ customer.metafields.wagner.favorite_colors.value | json }},
+    "signedIn": {% if customer %}true{% else %}false{% endif %},
+    "signInUrl": {{ routes.storefront_login_url | json }},
+    "favorites": {% if customer %}{{ customer.metafields.wagner.favorite_colors.value | json }}{% else %}[]{% endif %},
     "save": {{ 'actions.save_color' | t | json }},
     "saveNamed": {{ 'actions.save_named_color' | t: color: '[color]' | json }},
     "saved": {{ 'actions.color_saved' | t: color: '[color]' | json }},

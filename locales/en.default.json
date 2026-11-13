@@ -72,6 +72,9 @@
   },
   "actions": {
     "save_color": "Save color",
+    "save_color_sign_in": "Sign in",
+    "save_color_sign_in_message": "Sign in to save this color to your favorites.",
+    "save_color_preview": "Preview Save color popup",
     "save_named_color": "Save {{ color }}",
     "color_saved": "{{ color }} saved",
     "save_color_failed": "Couldn’t update {{ color }}. Try again.",
