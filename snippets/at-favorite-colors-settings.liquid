@@ -5,12 +5,14 @@
 <script type="application/json" id="at-favorite-colors-settings">
   {
     "signedIn": {% if customer %}true{% else %}false{% endif %},
-    "signInUrl": {{ routes.storefront_login_url | json }},
     "favorites": {% if customer %}{{ customer.metafields.wagner.favorite_colors.value | json }}{% else %}[]{% endif %},
+    "loginUrl": {{ routes.storefront_login_url | json }},
     "save": {{ 'actions.save_color' | t | json }},
     "saveNamed": {{ 'actions.save_named_color' | t: color: '[color]' | json }},
+    "removeNamed": {{ 'actions.remove_named_color' | t: color: '[color]' | json }},
     "saved": {{ 'actions.color_saved' | t: color: '[color]' | json }},
-    "failure": {{ 'actions.save_color_failed' | t: color: '[color]' | json }}
+    "removed": {{ 'actions.color_removed' | t: color: '[color]' | json }},
+    "failure": {{ 'actions.save_color_failed' | t | json }}
   }
 </script>
 <template id="at-favorite-color-heart">

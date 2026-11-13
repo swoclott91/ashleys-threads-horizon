@@ -765,7 +765,7 @@ function renderDesktopGrid(container, config, sectionId) {
         html += '<span class="at-bulk-grid__swatch swatch" style="' + swatchStyle + '" aria-hidden="true"></span>';
       }
       html += '<span class="at-bulk-grid__color-name">' + escapeHtml(color) + '</span>';
-      html += favoriteButton(config.productId, colorIds.get(color), color) + '</div></td>';
+      html += favoriteButton(config, colorIds.get(color), color) + '</div></td>';
       sizeValues.forEach((size) => {
         const v = getVariant(color, size, value);
         if (!v) {
@@ -866,12 +866,21 @@ function escapeHtml(s) {
     .replace(/"/g, '&quot;');
 }
 
-function favoriteButton(productId, colorId, colorName) {
+function favoriteButton(config, colorId, colorName) {
   if (!favoriteHeart || !colorId) return '';
-  return `<at-favorite-color class="at-bulk-grid__favorite" data-product-id="${escapeAttr(productId)}"
-    data-color-id="${escapeAttr(colorId)}" data-color-name="${escapeAttr(colorName)}">
+  const colorOption = config.options.find(({ name }) => /^(color|colour)$/i.test(name.trim()));
+  const optionKey = `option${colorOption.position}`;
+  const variant = config.variants.find((variant) => variant[optionKey] === colorName && variant.available)
+    || config.variants.find((variant) => variant[optionKey] === colorName);
+  const optionValues = variant ? '' : config.options.map((option) =>
+    option === colorOption ? colorId : option.valueIds?.[0]
+  ).join(',');
+  return `<at-favorite-color class="at-bulk-grid__favorite" data-product-id="${escapeAttr(config.productId)}"
+    data-product-url="${escapeAttr(config.productUrl)}" data-variant-id="${escapeAttr(variant?.id ?? '')}"
+    data-color-id="${escapeAttr(colorId)}" data-color-name="${escapeAttr(colorName)}"
+    data-option-values="${escapeAttr(optionValues)}">
     <button type="button" class="at-favorite-color__button" aria-pressed="false">${favoriteHeart.innerHTML}</button>
-    <span class="at-favorite-color__error" role="status"></span>
+    <span class="at-favorite-color__error" role="status" aria-atomic="true"></span>
   </at-favorite-color>`;
 }
 
@@ -907,7 +916,7 @@ function renderMobileGrid(container, config, sectionId) {
         html += '<span class="at-bulk-grid__swatch swatch" style="' + swatchStyle + '" aria-hidden="true"></span>';
       }
       html += '<span class="at-bulk-grid__color-name">' + escapeHtml(color) + '</span> <span class="at-bulk-grid__color-count" data-at-bulk-color-count aria-hidden="true"></span> <span class="svg-wrapper icon-caret icon-animated at-bulk-grid__accordion-icon" aria-hidden="true" data-at-bulk-accordion-icon>' + ICON_CARET_SVG + '</span>';
-      html += '</button>' + favoriteButton(config.productId, colorIds.get(color), color) + '</div>';
+      html += '</button>' + favoriteButton(config, colorIds.get(color), color) + '</div>';
       html += '<div class="at-bulk-grid__mobile-accordion-content" hidden>';
       sizeValues.forEach((size) => {
         const v = getVariant(color, size, value);

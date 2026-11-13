@@ -23,16 +23,18 @@
     class="at-save-color"
     data-picker-position="{{ color_option.position }}"
     data-product-id="{{ favorite_product.id }}"
+    data-product-url="{{ favorite_product.url | escape }}"
+    data-variant-id="{{ favorite_product.selected_or_first_available_variant.id }}"
     data-color-id="{{ current_color.id }}"
     data-color-name="{{ current_color.name | escape }}"
     hidden
     {{ block.shopify_attributes }}
   >
-    <button type="button" class="at-favorite-color__button" {% if customer %}aria-pressed="false"{% else %}aria-haspopup="dialog"{% endif %}>
+    <button type="button" class="at-favorite-color__button" aria-pressed="false">
       {% render 'at-favorite-color-heart' %}
       <span data-at-favorite-label>{{ 'actions.save_color' | t }}</span>
     </button>
-    <span class="at-favorite-color__error" role="status"></span>
+    <span class="at-favorite-color__error" role="status" aria-atomic="true"></span>
   </at-favorite-color>
 {% endif %}
 

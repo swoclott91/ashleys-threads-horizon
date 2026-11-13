@@ -1,5 +1,6 @@
 const settingsElement = document.getElementById('at-favorite-colors-settings');
 const settings = settingsElement ? JSON.parse(settingsElement.textContent) : null;
+let signedIn = settings?.signedIn ?? false;
 const pickerSelector = 'variant-picker[ref="mainVariantPicker"]';
 const pairKey = (productId, colorId) => `${productId}:${colorId}`;
 const favorites = Array.isArray(settings?.favorites) ? settings.favorites : [];
@@ -9,23 +10,31 @@ const saved = new Set(favorites.map(({ productId, colorOptionValueId }) =>
 const pending = new Set();
 const failures = new Set();
 const changes = new EventTarget();
+const selectedValues = 'input[data-option-value-id]:checked, option[data-option-value-id]:checked, [data-single-option-value-id]';
+const optionValueId = (element) => element?.dataset.optionValueId || element?.dataset.singleOptionValueId;
+const withColor = (text, color) => text.replace('[color]', () => color);
 
-function openSaveColorDialog(colorName) {
-  const dialog = document.getElementById('at-save-color-dialog');
-  if (!(dialog instanceof HTMLDialogElement)) {
-    window.location.assign(settings.signInUrl);
-    return;
+function signIn({ productUrl, variantId, optionValues }) {
+  const currentUrl = new URL(window.location.href);
+  const product = new URL(productUrl, currentUrl);
+  if (currentUrl.pathname === product.pathname) product.search = currentUrl.search;
+  product.searchParams.delete('variant');
+  product.searchParams.delete('option_values');
+  if (optionValues?.length) {
+    product.searchParams.set('option_values', optionValues.join(','));
+  } else if (variantId) {
+    product.searchParams.set('variant', variantId);
   }
-
-  const title = dialog.querySelector('#at-save-color-dialog-title');
-  title.textContent = colorName ? settings.saveNamed.replace('[color]', () => colorName) : settings.save;
-  if (!dialog.open) dialog.showModal();
+  const login = new URL(settings.loginUrl, currentUrl);
+  login.searchParams.set('return_to', product.pathname + product.search);
+  window.location.assign(login.href);
 }
-
 
 class FavoriteColor extends HTMLElement {
   #listeners;
   #button;
+  #liveRegion;
+  #key;
 
   connectedCallback() {
     if (!settings) return;
@@ -33,6 +42,7 @@ class FavoriteColor extends HTMLElement {
     this.#listeners = new AbortController();
     const { signal } = this.#listeners;
     this.#button = this.querySelector('button');
+    this.#liveRegion = this.querySelector('[role="status"]');
     this.#button.addEventListener('click', this.#toggle, { signal });
     changes.addEventListener('change', this.refresh, { signal });
     this.refresh();
@@ -48,9 +58,12 @@ class FavoriteColor extends HTMLElement {
   }
 
   #currentColor() {
-    const { pickerPosition, productId, colorId, colorName } = this.dataset;
+    const { pickerPosition, productId, productUrl, variantId, colorId, colorName } = this.dataset;
     const picker = this.picker;
-    if (!picker) return { productId, colorId, colorName };
+    if (!picker) {
+      const optionValues = this.dataset.optionValues?.split(',').filter(Boolean);
+      return { productId, productUrl, variantId, colorId, colorName, optionValues };
+    }
 
     const optionPosition = `[data-input-id^="${pickerPosition}-"]`;
     const selected = picker.querySelector(
@@ -62,48 +75,58 @@ class FavoriteColor extends HTMLElement {
     }
     return {
       productId: picker.dataset.productId,
-      colorId: selected?.dataset.optionValueId || selected?.dataset.singleOptionValueId,
+      productUrl: picker.dataset.productUrl || productUrl,
+      optionValues: Array.from(picker.querySelectorAll(selectedValues), optionValueId),
+      colorId: optionValueId(selected),
       colorName: selected?.value ?? selected?.textContent.trim(),
     };
   }
 
   refresh = () => {
     const { productId, colorId, colorName } = this.#currentColor();
-    this.hidden = !productId || !colorId || !colorName;
+    const key = productId && colorId && colorName ? pairKey(productId, colorId) : null;
+    if (this.#key !== key) {
+      this.#liveRegion.textContent = '';
+      this.#key = key;
+    }
+    this.hidden = !key;
     if (this.hidden) return;
 
-    const key = pairKey(productId, colorId);
-    const isSaved = saved.has(key);
-    if (settings.signedIn) {
-      this.#button.setAttribute('aria-pressed', String(isSaved));
-      this.#button.setAttribute('aria-disabled', String(pending.has(key)));
-    } else {
-      this.#button.removeAttribute('aria-pressed');
-      this.#button.setAttribute('aria-haspopup', 'dialog');
-    }
+    const isSaved = signedIn && saved.has(key);
+    this.#button.disabled = signedIn && pending.has(key);
+    this.#button.setAttribute('aria-pressed', String(isSaved));
+    this.#button.setAttribute('aria-label', withColor(isSaved ? settings.removeNamed : settings.saveNamed, colorName));
     const label = this.querySelector('[data-at-favorite-label]');
     if (label) {
-      label.textContent = isSaved ? settings.saved.replace('[color]', () => colorName) : settings.save;
-    } else {
-      this.#button.setAttribute('aria-label', settings.saveNamed.replace('[color]', () => colorName));
+      label.textContent = isSaved ? withColor(settings.saved, colorName) : settings.save;
     }
-    this.querySelector('[role="status"]').textContent =
-      failures.has(key) ? settings.failure.replace('[color]', () => colorName) : '';
+    const failed = signedIn && failures.has(key);
+    this.#liveRegion.classList.toggle('visually-hidden', !failed);
+    if (failed) {
+      this.#liveRegion.textContent = settings.failure;
+    } else if (this.#liveRegion.textContent === settings.failure) {
+      this.#liveRegion.textContent = '';
+    }
   };
 
   #toggle = async () => {
-    const { productId, colorId, colorName } = this.#currentColor();
+    const color = this.#currentColor();
+    const { productId, colorId, colorName } = color;
     if (!productId || !colorId || !colorName) return;
-    if (!settings.signedIn) {
-      openSaveColorDialog(colorName);
+    if (!signedIn) {
+      signIn(color);
       return;
     }
     const key = pairKey(productId, colorId);
     if (pending.has(key)) return;
 
-    const action = saved.has(key) ? 'remove' : 'add';
+    const wasSaved = saved.has(key);
+    const action = wasSaved ? 'remove' : 'add';
     pending.add(key);
     failures.delete(key);
+    this.#liveRegion.textContent = '';
+    if (wasSaved) saved.delete(key);
+    else saved.add(key);
     changes.dispatchEvent(new Event('change'));
     try {
       const response = await fetch('/apps/wagner/favorite-colors', {
@@ -111,14 +134,25 @@ class FavoriteColor extends HTMLElement {
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({ action, productId, colorOptionValueId: colorId }),
       });
-      if (!response.ok) throw new Error('Favorite color request failed');
       const result = await response.json();
+      if (response.status === 403 && result.error === 'login_required') {
+        saved.clear();
+        signedIn = false;
+        if (this.isConnected && this.#key === key) signIn(color);
+        return;
+      }
+      if (!response.ok) throw new Error('Favorite color request failed');
       if (result.productId !== productId || result.colorOptionValueId !== colorId || typeof result.saved !== 'boolean') {
         throw new Error('Unexpected favorite color response');
       }
       if (result.saved) saved.add(key);
       else saved.delete(key);
+      if (signedIn && this.isConnected && this.#key === key) {
+        this.#liveRegion.textContent = withColor(result.saved ? settings.saved : settings.removed, colorName);
+      }
     } catch {
+      if (wasSaved) saved.add(key);
+      else saved.delete(key);
       failures.add(key);
     } finally {
       pending.delete(key);
@@ -133,7 +167,8 @@ if (settings) {
   if (window.Shopify?.designMode) {
     document.addEventListener('click', (event) => {
       if (event.target instanceof Element && event.target.closest('[data-at-preview-save-color]')) {
-        openSaveColorDialog();
+        const dialog = document.getElementById('at-save-color-dialog');
+        if (dialog instanceof HTMLDialogElement && !dialog.open) dialog.showModal();
       }
     });
   }
