@@ -14,7 +14,8 @@
       "settings": {
         "guest_collections": [],
         "quick_order_url": ""
-      }
+      },
+      "disabled": true
     },
     "at_personal_home": {
       "type": "at-personal-home",
@@ -23,7 +24,8 @@
         "quick_order_url": "",
         "certificate_url": "",
         "preview_segment": "graphic-tees"
-      }
+      },
+      "disabled": true
     },
     "section_YrFnRz": {
       "type": "section",
@@ -1447,7 +1449,8 @@
         "padding-block-start": 10,
         "padding-block-end": 10,
         "at_visibility": "guests"
-      }
+      },
+      "disabled": true
     },
     "section_QVRHnM": {
       "type": "section",
@@ -2573,7 +2576,8 @@
         "padding-block-start": 0,
         "padding-block-end": 0,
         "at_visibility": "guests"
-      }
+      },
+      "disabled": true
     },
     "hero_jVaWmY": {
       "type": "hero",
@@ -3168,7 +3172,8 @@
         "padding-block-start": 48,
         "padding-block-end": 48,
         "at_visibility": "guests"
-      }
+      },
+      "disabled": true
     },
     "at_make_tiles": {
       "type": "at-make-tiles",
@@ -3177,13 +3182,38 @@
         "heading": "What are you making?",
         "decorator_url": ""
       }
+    },
+    "at_home_top": {
+      "type": "at-home-top",
+      "settings": {}
+    },
+    "at_home_shortcuts": {
+      "type": "at-home-shortcuts",
+      "settings": {}
+    },
+    "at_home_profile": {
+      "type": "at-home-profile",
+      "settings": {}
+    },
+    "at_home_categories": {
+      "type": "at-home-categories",
+      "settings": {}
+    },
+    "at_home_discovery": {
+      "type": "at-home-discovery",
+      "settings": {}
     }
   },
   "order": [
+    "at_home_top",
+    "at_home_shortcuts",
+    "at_make_tiles",
+    "at_home_profile",
+    "at_home_categories",
+    "at_home_discovery",
     "at_visitor_chips",
     "at_personal_home",
     "section_YrFnRz",
-    "at_make_tiles",
     "section_QVRHnM",
     "hero_jVaWmY",
     "collection_list_YNhPde",

@@ -1,0 +1,8 @@
+{%- doc -%}
+  Hero row side panel: "Your last order" with thumbnails, a style and piece count, and Review
+  & reorder. Reads `customer.orders` in Liquid. Must render nothing when the latest order has
+  nothing reorderable, so the hero row falls through to favorites, then staples. Owned by the
+  member top row work. Renders nothing until built.
+
+  @param {string} section_id - Section ID, for unique element IDs
+{%- enddoc -%}

@@ -1,0 +1,297 @@
+{%- comment -%}
+  Homepage first row (homepage strategy): the seasonal hero at about 60% width beside one
+  side panel at about 40%. The hero is the same in every state; the side panel changes with
+  the shopping state from `at-home-state`:
+
+    guest  -> Start with the staples          snippets/at-home-staples.liquid
+    new    -> Your favorites, else staples    snippets/at-home-favorites-panel.liquid
+    buyer  -> Your last order, else favorites, else staples
+                                              snippets/at-home-last-order.liquid
+
+  Each panel snippet renders nothing when it has no content, and this section falls through
+  to the next one. Panel snippets own their markup and styles; this section owns the hero,
+  the two-column grid and the member strip. Nothing here calls Wagner.
+{%- endcomment -%}
+{%- capture at_home_state -%}{% render 'at-home-state' %}{%- endcapture -%}
+{%- liquid
+  assign at_home_state = at_home_state | strip
+  assign hero_collection = section.settings.collection
+  assign hero_url = section.settings.link | default: hero_collection.url | default: routes.all_products_collection_url
+
+  if at_home_state == 'guest'
+    assign hero_heading = section.settings.guest_heading
+    assign hero_text = section.settings.guest_text
+    assign hero_kicker = ''
+  else
+    assign hero_heading = section.settings.member_heading | default: section.settings.guest_heading
+    assign hero_text = section.settings.member_text | default: section.settings.guest_text
+    assign hero_kicker = 'Welcome back.'
+    if customer.first_name != blank
+      assign hero_kicker = 'Welcome back, ' | append: customer.first_name | append: '.'
+    endif
+  endif
+
+  # Member strip: shipping code and Threads Cash, kept from the previous personal home.
+  assign ship = customer.metafields.wagner.ship_code.value
+  assign cash = customer.metafields.wagner.threads_cash.value
+  capture ship_ok
+    render 'at-ship-code-valid', ship: ship
+  endcapture
+-%}
+{%- capture at_side -%}
+  {%- if at_home_state == 'buyer' -%}
+    {%- render 'at-home-last-order', section_id: section.id -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- assign at_side_check = at_side | strip -%}
+{%- if at_side_check == blank and at_home_state != 'guest' -%}
+  {%- capture at_side -%}{%- render 'at-home-favorites-panel', section_id: section.id -%}{%- endcapture -%}
+  {%- assign at_side_check = at_side | strip -%}
+{%- endif -%}
+{%- if at_side_check == blank -%}
+  {%- capture at_side -%}
+    {%- render 'at-home-staples',
+      section_id: section.id,
+      products: section.settings.staples,
+      collection: section.settings.staples_collection,
+      note_1: section.settings.staple_note_1,
+      note_2: section.settings.staple_note_2
+    -%}
+  {%- endcapture -%}
+  {%- assign at_side_check = at_side | strip -%}
+{%- endif -%}
+
+<div class="section section--page-width">
+  <div
+    class="at-home-top{% if at_side_check == blank %} at-home-top--solo{% endif %}"
+    data-home-state="{{ at_home_state }}"
+  >
+    <a class="at-home-hero" href="{{ hero_url }}">
+      {%- if section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 1600
+          | image_tag:
+            class: 'at-home-hero__image',
+            loading: 'eager',
+            fetchpriority: 'high',
+            sizes: '(min-width: 990px) 60vw, 100vw',
+            widths: '480, 750, 1100, 1600',
+            alt: ''
+        }}
+      {%- endif -%}
+      <span class="at-home-hero__content">
+        {%- if hero_kicker != blank -%}
+          <span class="at-home-hero__kicker">{{ hero_kicker }}</span>
+        {%- endif -%}
+        <span class="at-home-hero__heading h1">{{ hero_heading }}</span>
+        {%- if hero_text != blank -%}
+          <span class="at-home-hero__text">{{ hero_text }}</span>
+        {%- endif -%}
+        {%- if section.settings.button_label != blank -%}
+          <span class="button at-home-hero__button">{{ section.settings.button_label }}</span>
+        {%- endif -%}
+      </span>
+    </a>
+    {%- if at_side_check != blank -%}
+      <div class="at-home-top__side">{{ at_side }}</div>
+    {%- endif -%}
+  </div>
+
+  {%- if at_home_state != 'guest' -%}
+    {%- capture at_strip -%}
+      {%- if ship_ok contains 'true' -%}
+        <span>
+          {%- if ship.kind == 'welcome' -%}
+            Free shipping on your first order · code <code>{{ ship.code }}</code>
+          {%- else -%}
+            Free shipment ready: <code>{{ ship.code }}</code>
+          {%- endif -%}
+        </span>
+      {%- endif -%}
+      {%- if cash.balance != blank -%}
+        <span>Threads Cash {{ cash.balance | times: 100 | round | money }}</span>
+      {%- endif -%}
+    {%- endcapture -%}
+    {%- assign at_strip_check = at_strip | strip -%}
+    {%- if at_strip_check != blank -%}
+      <p class="at-home-strip">{{ at_strip }}</p>
+    {%- endif -%}
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .at-home-top {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media screen and (min-width: 990px) {
+    .at-home-top {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      align-items: stretch;
+    }
+    .at-home-top--solo {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  .at-home-top__side {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .at-home-top__side > * {
+    flex: 1 1 auto;
+  }
+  .at-home-hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 260px;
+    overflow: hidden;
+    border-radius: 14px;
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+    color: inherit;
+    text-decoration: none;
+  }
+  @media screen and (min-width: 990px) {
+    .at-home-hero {
+      min-height: 340px;
+    }
+  }
+  .at-home-hero__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .at-home-hero__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 30rem;
+    padding: 24px;
+  }
+  .at-home-hero__kicker {
+    font-size: 1rem;
+  }
+  .at-home-hero__heading {
+    margin: 0;
+    line-height: 1.05;
+  }
+  .at-home-hero__text {
+    font-size: 1rem;
+  }
+  .at-home-hero__button {
+    margin-block-start: 6px;
+  }
+  .at-home-strip {
+    margin: 12px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    padding: 10px 14px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
+    border-radius: 10px;
+    font-size: 0.9rem;
+  }
+  .at-home-strip code {
+    font-weight: 700;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Home: hero row",
+  "tag": "section",
+  "class": "at-home-top-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Seasonal hero beside one panel that changes by shopper: staples for guests, favorites for members with saved styles, the last order for members who have ordered."
+    },
+    {
+      "type": "header",
+      "content": "Seasonal hero"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link",
+      "info": "Overrides the collection link."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop holiday fleece"
+    },
+    {
+      "type": "text",
+      "id": "guest_heading",
+      "label": "Heading for guests",
+      "default": "Blank apparel for your next project."
+    },
+    {
+      "type": "text",
+      "id": "guest_text",
+      "label": "Text for guests",
+      "default": "Ships from U.S. warehouses. No minimums."
+    },
+    {
+      "type": "text",
+      "id": "member_heading",
+      "label": "Heading for members",
+      "info": "Leave blank to use the guest heading.",
+      "default": "The Holiday Fleece Edit"
+    },
+    {
+      "type": "text",
+      "id": "member_text",
+      "label": "Text for members",
+      "default": "Crewnecks, hoodies, and beanies for holiday orders."
+    },
+    {
+      "type": "header",
+      "content": "Start with the staples"
+    },
+    {
+      "type": "product_list",
+      "id": "staples",
+      "label": "Staple products",
+      "limit": 2
+    },
+    {
+      "type": "text",
+      "id": "staple_note_1",
+      "label": "First product note",
+      "default": "Budget-friendly everyday tee"
+    },
+    {
+      "type": "text",
+      "id": "staple_note_2",
+      "label": "Second product note",
+      "default": "Heavier, garment-dyed feel"
+    },
+    {
+      "type": "collection",
+      "id": "staples_collection",
+      "label": "View staples link"
+    }
+  ],
+  "presets": [{ "name": "Home: hero row" }]
+}
+{% endschema %}
