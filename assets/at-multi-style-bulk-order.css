@@ -1,0 +1,376 @@
+/**
+ * AT Multi-style bulk order – style selector. Matches assets/at-bulk-grid.css: neutral text
+ * instead of the palette's gold foreground, gold hairlines, discount accent (#243e34) for
+ * selected and primary states.
+ */
+
+.at-msbo {
+  --color-foreground: #2c2c2c;
+  --color-foreground-rgb: 44 44 44;
+  --at-msbo-accent: var(--at-dp-accent, #243e34);
+  --at-msbo-line: rgb(var(--at-bulk-gold-rgb, 187 152 124) / 0.5);
+  --at-msbo-line-strong: rgb(var(--at-bulk-gold-rgb, 187 152 124) / 0.65);
+  --at-msbo-surface: var(--at-bulk-surface, #f6f1e7);
+  --at-msbo-selected: rgb(36 62 52 / 0.09);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg, 1.5rem);
+  padding-block: var(--padding-3xl, 2.25rem) var(--padding-5xl, 4rem);
+  color: var(--color-foreground);
+}
+
+.at-msbo__page-title,
+.at-msbo__heading,
+.at-msbo__panel-heading {
+  margin: 0;
+  color: #000;
+}
+
+.at-msbo__preview-note {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px dashed var(--at-msbo-line-strong);
+  font-size: var(--font-size--sm, 0.875rem);
+}
+
+.at-msbo__state {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 36rem;
+}
+
+.at-msbo__state > * {
+  margin: 0;
+}
+
+.at-msbo__state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.at-msbo__layout {
+  display: grid;
+  gap: var(--gap-xl, 2rem);
+  align-items: start;
+}
+
+@media screen and (min-width: 990px) {
+  .at-msbo__layout {
+    grid-template-columns: minmax(0, 2fr) minmax(18rem, 1fr);
+  }
+}
+
+.at-msbo__chooser {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.at-msbo__intro {
+  margin: 0;
+  font-size: var(--font-size--sm, 0.875rem);
+  color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text, 0.7));
+}
+
+/* Filter tabs: real radio buttons styled as pills. */
+.at-msbo__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.25rem 0 0.5rem;
+  padding: 0;
+  border: 0;
+}
+
+.at-msbo__filter {
+  position: relative;
+  display: inline-flex;
+}
+
+.at-msbo__filter input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.at-msbo__filter > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: var(--minimum-touch-target, 44px);
+  padding: 0 1rem;
+  border: 1px solid var(--at-msbo-line-strong);
+  border-radius: 999px;
+  font-size: var(--font-size--sm, 0.875rem);
+  font-weight: 600;
+  background: var(--color-background);
+}
+
+.at-msbo__filter input:checked + span {
+  background: var(--at-msbo-accent);
+  border-color: var(--at-msbo-accent);
+  color: #fff;
+}
+
+.at-msbo__filter input:focus-visible + span {
+  outline: 2px solid var(--at-msbo-accent);
+  outline-offset: 2px;
+}
+
+.at-msbo__filter-count {
+  font-weight: 400;
+}
+
+/* Rows */
+.at-msbo__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.at-msbo__row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'check label price'
+    '. colors colors';
+  align-items: center;
+  column-gap: 0.75rem;
+  row-gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--at-msbo-line);
+  border-radius: var(--style-border-radius-inputs, 4px);
+  background: var(--color-background);
+}
+
+.at-msbo__row[hidden] {
+  display: none;
+}
+
+.at-msbo__row:has(.at-msbo__check:checked) {
+  background: var(--at-msbo-selected);
+  border-color: var(--at-msbo-accent);
+}
+
+.at-msbo__check {
+  grid-area: check;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  margin: 0;
+  accent-color: var(--at-msbo-accent);
+  cursor: pointer;
+}
+
+.at-msbo__label {
+  grid-area: label;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.at-msbo__media {
+  flex: none;
+  inline-size: 3.5rem;
+  block-size: 3.5rem;
+  background: rgb(var(--color-foreground-rgb) / 0.04);
+}
+
+.at-msbo__image {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+}
+
+.at-msbo__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.at-msbo__title {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.at-msbo__sources,
+.at-msbo__tier-label {
+  font-size: var(--font-size--xs, 0.8125rem);
+  color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text, 0.7));
+}
+
+.at-msbo__price {
+  grid-area: price;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: end;
+  font-weight: 700;
+}
+
+.at-msbo__price .volume-pricing-note {
+  font-weight: 400;
+}
+
+.at-msbo__colors {
+  grid-area: colors;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.at-msbo__color {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2rem;
+  font-size: var(--font-size--sm, 0.875rem);
+}
+
+.at-msbo__favorite .at-favorite-color__button {
+  min-block-size: 2.25rem;
+  min-inline-size: 2.25rem;
+}
+
+/* Selected styles panel */
+.at-msbo__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border: 1px solid var(--at-msbo-line);
+  border-radius: var(--style-border-radius-inputs, 4px);
+  background: var(--at-msbo-surface);
+}
+
+@media screen and (min-width: 990px) {
+  .at-msbo__panel {
+    position: sticky;
+    top: calc(var(--header-height, 0px) + 1rem);
+  }
+}
+
+.at-msbo__panel-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding-block-end: 0.75rem;
+  border-bottom: 1px solid var(--at-msbo-line);
+}
+
+.at-msbo__panel-count {
+  font-size: var(--font-size--sm, 0.875rem);
+  font-weight: 700;
+  color: var(--at-msbo-accent);
+}
+
+.at-msbo__panel-empty,
+.at-msbo__notice,
+.at-msbo__filter-empty {
+  margin: 0;
+  font-size: var(--font-size--sm, 0.875rem);
+}
+
+.at-msbo__notice:empty {
+  display: none;
+}
+
+.at-msbo__selected {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.at-msbo__selected-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--at-msbo-line);
+  font-size: var(--font-size--sm, 0.875rem);
+}
+
+.at-msbo__remove {
+  display: grid;
+  place-items: center;
+  flex: none;
+  min-inline-size: var(--minimum-touch-target, 44px);
+  min-block-size: var(--minimum-touch-target, 44px);
+  color: #000;
+  cursor: pointer;
+}
+
+.at-msbo__choose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 3rem;
+  background: var(--at-msbo-accent);
+  border-color: var(--at-msbo-accent);
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.at-msbo__choose:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Mobile: keep the count and the button in reach at the bottom of the screen. The
+   checkboxes above already show and change the selection. */
+@media screen and (max-width: 749px) {
+  .at-msbo__row {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      'check label'
+      '. price'
+      '. colors';
+  }
+
+  .at-msbo__price {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 0.5rem;
+  }
+
+  .at-msbo__panel {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    padding: 0.75rem var(--padding-md, 1rem);
+    box-shadow: 0 -1px 0 var(--at-msbo-line);
+  }
+
+  .at-msbo__panel-heading {
+    padding-block-end: 0;
+    border-bottom: 0;
+  }
+
+  .at-msbo__panel-empty,
+  .at-msbo__selected {
+    display: none;
+  }
+}

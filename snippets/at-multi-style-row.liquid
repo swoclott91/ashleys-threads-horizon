@@ -1,0 +1,185 @@
+{%- doc -%}
+  One style row in the multi-style bulk order selector (sections/at-multi-style-bulk-order.liquid).
+  Renders nothing when the product is blank, has no Color/Colour option, or none of its
+  current color values is a saved or purchased pair, so a saved color that no longer exists
+  on the product is dropped here.
+
+  The row's colors are the union of favorited and purchased colors, in the product's own
+  option order. Each color carries data-sources ("favorite", "purchase" or both). Purchased
+  colors that are not favorites get the shared at-favorite-color heart
+  (assets/at-favorite-colors.js), so saving reuses the existing endpoint and state.
+
+  The section counts tabs by testing the captured row for `data-row-favorite` and
+  `data-row-purchase`, so keep those markers on the row element only.
+
+  @param {product} product - The style
+  @param {string} favorite_keys - Saved pairs from snippets/at-favorite-color-keys
+  @param {string} purchase_keys - Purchased pairs in the same `|productId:optionValueId|` form
+  @param {string} section_id - Section ID, for unique element IDs
+  @param {string} [tier_label] - Member/Pro/Wholesale price label when catalog pricing applies
+{%- enddoc -%}
+{%- liquid
+  assign at_color_option = nil
+  for option in product.options_with_values
+    assign at_option_name = option.name | strip | downcase
+    if at_option_name == 'color' or at_option_name == 'colour'
+      assign at_color_option = option
+      break
+    endif
+  endfor
+
+  assign at_product_id = product.id | append: ''
+  assign at_is_favorite = false
+  assign at_is_purchase = false
+  assign at_color_count = 0
+  assign at_row_id = section_id | append: '-style-' | append: at_product_id
+-%}
+{%- if product != blank and at_color_option != nil -%}
+  {%- capture at_colors -%}
+    {%- for value in at_color_option.values -%}
+      {%- liquid
+        assign at_value_id = value.id | append: ''
+        assign at_key = '|' | append: at_product_id | append: ':' | append: at_value_id | append: '|'
+        assign at_in_favorite = false
+        assign at_in_purchase = false
+        if favorite_keys contains at_key
+          assign at_in_favorite = true
+        endif
+        if purchase_keys contains at_key
+          assign at_in_purchase = true
+        endif
+        unless at_in_favorite or at_in_purchase
+          continue
+        endunless
+
+        assign at_color_count = at_color_count | plus: 1
+        assign at_sources = ''
+        if at_in_favorite
+          assign at_is_favorite = true
+          assign at_sources = 'favorite'
+        endif
+        if at_in_purchase
+          assign at_is_purchase = true
+          assign at_sources = at_sources | append: ' purchase' | strip
+        endif
+
+        assign at_swatch_background = ''
+        if value.swatch.color
+          assign at_swatch_background = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+        elsif value.swatch.image
+          assign at_swatch_image_url = value.swatch.image | image_url: width: 80
+          assign at_swatch_background = 'url(' | append: at_swatch_image_url | append: ')'
+        endif
+      -%}
+      <li
+        class="at-msbo__color"
+        data-at-style-color
+        data-option-value-id="{{ at_value_id }}"
+        data-name="{{ value.name | escape }}"
+        data-swatch="{{ at_swatch_background | escape }}"
+        data-sources="{{ at_sources }}"
+      >
+        {% render 'swatch', swatch: value.swatch, mode: 'pill' %}
+        <span class="at-msbo__color-name">{{ value.name }}</span>
+        {%- if at_in_purchase and at_in_favorite == false -%}
+          <at-favorite-color
+            class="at-msbo__favorite"
+            data-product-id="{{ at_product_id }}"
+            data-product-url="{{ product.url | escape }}"
+            data-color-id="{{ at_value_id }}"
+            data-color-name="{{ value.name | escape }}"
+          >
+            <button
+              type="button"
+              class="at-favorite-color__button"
+              aria-pressed="false"
+              aria-label="{{ 'actions.save_named_color' | t: color: value.name | escape }}"
+            >
+              {%- render 'at-favorite-color-heart' -%}
+            </button>
+            <span class="at-favorite-color__error" role="status" aria-atomic="true"></span>
+          </at-favorite-color>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- if at_color_count > 0 -%}
+    {%- liquid
+      assign at_variant = product.selected_or_first_available_variant
+      assign at_show_tier_label = false
+      if tier_label != blank and at_variant.compare_at_price > at_variant.price
+        assign at_show_tier_label = true
+      endif
+      assign at_image = product.featured_media.preview_image | default: product.featured_image
+      assign at_image_url = ''
+      if at_image != blank
+        assign at_image_url = at_image | image_url: width: 240
+      endif
+      assign at_row_sources = ''
+      if at_is_purchase
+        assign at_row_sources = 'purchase'
+      endif
+      if at_is_favorite
+        assign at_row_sources = at_row_sources | append: ' favorite' | strip
+      endif
+    -%}
+    <li
+      class="at-msbo__row"
+      data-at-style
+      data-product-id="{{ at_product_id }}"
+      data-product-url="{{ product.url | escape }}"
+      data-title="{{ product.title | escape }}"
+      data-image-url="{{ at_image_url | escape }}"
+      data-color-position="{{ at_color_option.position }}"
+      data-sources="{{ at_row_sources }}"
+      {% if at_is_favorite %}
+        data-row-favorite
+      {% endif %}
+      {% if at_is_purchase %}
+        data-row-purchase
+      {% endif %}
+    >
+      <input
+        type="checkbox"
+        class="at-msbo__check"
+        id="{{ at_row_id }}"
+        value="{{ at_product_id }}"
+        data-at-style-checkbox
+        aria-describedby="{{ at_row_id }}-price"
+      >
+      <label class="at-msbo__label" for="{{ at_row_id }}">
+        <span class="at-msbo__media">
+          {%- if at_image != blank -%}
+            {{
+              at_image
+              | image_url: width: 160
+              | image_tag: loading: 'lazy', class: 'at-msbo__image', width: 64, height: 64, alt: ''
+            }}
+          {%- endif -%}
+        </span>
+        <span class="at-msbo__text">
+          <span class="at-msbo__title">{{ product.title }}</span>
+          <span class="at-msbo__sources">
+            {%- if at_is_purchase -%}{{ 'at_bulk_order.source_purchase' | t }}{%- endif -%}
+            {%- if at_is_purchase and at_is_favorite %} · {% endif -%}
+            {%- if at_is_favorite -%}{{ 'at_bulk_order.source_favorite' | t }}{%- endif -%}
+          </span>
+        </span>
+      </label>
+      <div class="at-msbo__price" id="{{ at_row_id }}-price">
+        {% render 'price', product_resource: product %}
+        {%- if at_show_tier_label -%}
+          <span class="at-msbo__tier-label">{{ tier_label }}</span>
+        {%- endif -%}
+      </div>
+      <ul
+        class="at-msbo__colors"
+        role="list"
+        aria-label="{{ 'at_bulk_order.colors_for' | t: title: product.title | escape }}"
+      >
+        {{ at_colors }}
+      </ul>
+    </li>
+  {%- endif -%}
+{%- endif -%}

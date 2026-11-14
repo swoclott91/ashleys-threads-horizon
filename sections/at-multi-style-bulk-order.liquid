@@ -1,0 +1,355 @@
+{%- comment -%}
+  Multi-style bulk order: style selector (work item B, part one).
+  Handoff: wagner docs/ACCOUNT_FAVORITES_BULK_ORDER_HANDOFF.md.
+
+  Reads Shopify only:
+  - Favorites: customer `wagner.favorite_colors` (JSON pairs, heart state) joined by product ID
+    with `wagner.favorite_products` (list.product_reference, one product per favorited style).
+  - Past purchases: `customer.orders`, first page of 20 orders. Color option value ID from
+    `line_item.variant.options[n].id`, n = index of the Color/Colour option. Lines whose
+    product or variant is gone, and products without a color option, are skipped.
+    Never decide on `customer.orders_count` (it is 0 for test orders).
+
+  One row per product (snippets/at-multi-style-row.liquid). Past purchase rows come first in
+  order-history order (newest first), then favorite-only rows in `favorite_products` order.
+  A color counts as a favorite when its pair is in `favorite_colors`, so a purchased style
+  with a hearted color is labelled Favorite even before `favorite_products` lists it; a
+  favorite-only style needs `favorite_products`, because Liquid cannot load a product by ID.
+
+  `favorite_products` holds up to 100 references and a reference list loops only 50 items
+  unless paginated, so it is read inside `paginate … by 100` (one page holds the whole list).
+  Both paginate blocks read the same `page` URL parameter; this page never links to page 2.
+
+  Editor preview: while `request.design_mode` is true and the customer has no
+  `favorite_products` (the editor has no signed-in customer), the "Preview products" setting
+  stands in with sample favorite and purchase pairs. Shoppers never get fixture data:
+  `request.design_mode` is false on the storefront and on shared theme previews.
+
+  The quantities dialog and cart code live elsewhere; see the contract at the top of
+  assets/at-multi-style-bulk-order.js.
+{%- endcomment -%}
+{%- liquid
+  assign at_preview = false
+  if request.design_mode and section.settings.preview_products != blank and customer.metafields.wagner.favorite_products == blank
+    assign at_preview = true
+  endif
+  assign at_signed_in = false
+  if customer
+    assign at_signed_in = true
+  endif
+
+  capture at_tier
+    render 'at-member-tier'
+  endcapture
+  assign at_tier = at_tier | strip
+  assign at_tier_label = ''
+  if at_tier != 'guest' and customer.b2b? and customer.current_location != blank
+    assign at_tier_label_key = 'at_member.price_label.' | append: at_tier
+    assign at_tier_label = at_tier_label_key | t
+  endif
+
+  assign at_purchase_keys = '|'
+  assign at_purchase_pids = '|'
+  assign at_rendered_pids = '|'
+  assign at_rows = ''
+  assign at_count_all = 0
+  assign at_count_favorite = 0
+  assign at_count_purchase = 0
+
+  if at_preview
+    # Editor-only sample pairs: every third product is favorite-only, purchase-only, or both
+    # with an overlapping color, a favorite-only color and a purchase-only (heartable) color.
+    assign at_favorite_keys = '|'
+    for at_p in section.settings.preview_products
+      assign at_pid = at_p.id | append: ''
+      assign at_mod = forloop.index0 | modulo: 3
+      for option in at_p.options_with_values
+        assign at_option_name = option.name | strip | downcase
+        if at_option_name == 'color' or at_option_name == 'colour'
+          for value in option.values limit: 3
+            assign at_key = at_pid | append: ':' | append: value.id | append: '|'
+            if at_mod == 0 and forloop.index0 < 2
+              assign at_favorite_keys = at_favorite_keys | append: at_key
+            elsif at_mod == 1 and forloop.index0 == 0
+              assign at_purchase_keys = at_purchase_keys | append: at_key
+            elsif at_mod == 2
+              if forloop.index0 < 2
+                assign at_favorite_keys = at_favorite_keys | append: at_key
+              endif
+              if forloop.index0 != 1
+                assign at_purchase_keys = at_purchase_keys | append: at_key
+              endif
+            endif
+          endfor
+          break
+        endif
+      endfor
+    endfor
+  else
+    capture at_favorite_keys
+      render 'at-favorite-color-keys', favorites: customer.metafields.wagner.favorite_colors.value
+    endcapture
+    assign at_favorite_keys = at_favorite_keys | strip
+  endif
+-%}
+
+{%- if at_preview -%}
+  {%- for at_p in section.settings.preview_products -%}
+    {%- liquid
+      assign at_pid = at_p.id | append: ''
+      assign at_pid_key = '|' | append: at_pid | append: '|'
+      if at_rendered_pids contains at_pid_key
+        continue
+      endif
+      assign at_rendered_pids = at_rendered_pids | append: at_pid | append: '|'
+      capture at_row
+        render 'at-multi-style-row', product: at_p, favorite_keys: at_favorite_keys, purchase_keys: at_purchase_keys, section_id: section.id, tier_label: at_tier_label
+      endcapture
+      if at_row contains 'data-at-style'
+        assign at_rows = at_rows | append: at_row
+        assign at_count_all = at_count_all | plus: 1
+        if at_row contains 'data-row-favorite'
+          assign at_count_favorite = at_count_favorite | plus: 1
+        endif
+        if at_row contains 'data-row-purchase'
+          assign at_count_purchase = at_count_purchase | plus: 1
+        endif
+      endif
+    -%}
+  {%- endfor -%}
+{%- elsif at_signed_in -%}
+  {%- paginate customer.orders by 20 -%}
+    {%- comment -%} Pass 1: collect purchased product + color pairs. {%- endcomment -%}
+    {%- for order in customer.orders -%}
+      {%- for line_item in order.line_items -%}
+        {%- liquid
+          assign at_li_product = line_item.product
+          assign at_li_variant = line_item.variant
+          if at_li_product == blank or at_li_variant == blank
+            continue
+          endif
+          assign at_color_index = -1
+          for option in at_li_product.options_with_values
+            assign at_option_name = option.name | strip | downcase
+            if at_option_name == 'color' or at_option_name == 'colour'
+              assign at_color_index = forloop.index0
+              break
+            endif
+          endfor
+          if at_color_index < 0
+            continue
+          endif
+          assign at_cid = at_li_variant.options[at_color_index].id | append: ''
+          if at_cid == blank
+            continue
+          endif
+          assign at_pid = at_li_product.id | append: ''
+          assign at_key = '|' | append: at_pid | append: ':' | append: at_cid | append: '|'
+          unless at_purchase_keys contains at_key
+            assign at_purchase_keys = at_purchase_keys | append: at_pid | append: ':' | append: at_cid | append: '|'
+          endunless
+          assign at_pid_key = '|' | append: at_pid | append: '|'
+          unless at_purchase_pids contains at_pid_key
+            assign at_purchase_pids = at_purchase_pids | append: at_pid | append: '|'
+          endunless
+        -%}
+      {%- endfor -%}
+    {%- endfor -%}
+
+    {%- comment -%} Pass 2: one row per purchased product, all its colors known. {%- endcomment -%}
+    {%- for order in customer.orders -%}
+      {%- for line_item in order.line_items -%}
+        {%- liquid
+          assign at_li_product = line_item.product
+          if at_li_product == blank
+            continue
+          endif
+          assign at_pid = at_li_product.id | append: ''
+          assign at_pid_key = '|' | append: at_pid | append: '|'
+          if at_rendered_pids contains at_pid_key
+            continue
+          endif
+          unless at_purchase_pids contains at_pid_key
+            continue
+          endunless
+          assign at_rendered_pids = at_rendered_pids | append: at_pid | append: '|'
+          capture at_row
+            render 'at-multi-style-row', product: at_li_product, favorite_keys: at_favorite_keys, purchase_keys: at_purchase_keys, section_id: section.id, tier_label: at_tier_label
+          endcapture
+          if at_row contains 'data-at-style'
+            assign at_rows = at_rows | append: at_row
+            assign at_count_all = at_count_all | plus: 1
+            if at_row contains 'data-row-favorite'
+              assign at_count_favorite = at_count_favorite | plus: 1
+            endif
+            if at_row contains 'data-row-purchase'
+              assign at_count_purchase = at_count_purchase | plus: 1
+            endif
+          endif
+        -%}
+      {%- endfor -%}
+    {%- endfor -%}
+  {%- endpaginate -%}
+
+  {%- if customer.metafields.wagner.favorite_products != blank -%}
+    {%- paginate customer.metafields.wagner.favorite_products.value by 100 -%}
+      {%- for at_p in customer.metafields.wagner.favorite_products.value -%}
+        {%- liquid
+          if at_p == blank
+            continue
+          endif
+          assign at_pid = at_p.id | append: ''
+          assign at_pid_key = '|' | append: at_pid | append: '|'
+          if at_rendered_pids contains at_pid_key
+            continue
+          endif
+          assign at_rendered_pids = at_rendered_pids | append: at_pid | append: '|'
+          capture at_row
+            render 'at-multi-style-row', product: at_p, favorite_keys: at_favorite_keys, purchase_keys: at_purchase_keys, section_id: section.id, tier_label: at_tier_label
+          endcapture
+          if at_row contains 'data-at-style'
+            assign at_rows = at_rows | append: at_row
+            assign at_count_all = at_count_all | plus: 1
+            if at_row contains 'data-row-favorite'
+              assign at_count_favorite = at_count_favorite | plus: 1
+            endif
+            if at_row contains 'data-row-purchase'
+              assign at_count_purchase = at_count_purchase | plus: 1
+            endif
+          endif
+        -%}
+      {%- endfor -%}
+    {%- endpaginate -%}
+  {%- endif -%}
+{%- endif -%}
+
+{{ 'at-multi-style-bulk-order.css' | asset_url | stylesheet_tag }}
+{% render 'swatch-styles' %}
+
+<div class="section section--page-width">
+  <div class="at-msbo">
+    {%- liquid
+      assign at_title = page.title | default: section.settings.heading
+      if at_title == blank
+        assign at_title = 'at_bulk_order.title' | t
+      endif
+    -%}
+    <h1 class="at-msbo__page-title h2">{{ at_title }}</h1>
+
+    {%- if at_preview -%}
+      <p class="at-msbo__preview-note">{{ 'at_bulk_order.preview_notice' | t }}</p>
+    {%- endif -%}
+
+    {%- if at_signed_in == false and at_preview == false -%}
+      <div class="at-msbo__state">
+        <h2 class="h4">{{ 'at_bulk_order.guest_heading' | t }}</h2>
+        <p>{{ 'at_bulk_order.guest_body' | t }}</p>
+        <div class="at-msbo__state-actions">
+          {%- if shop.customer_accounts_enabled -%}
+            {{ shop | login_button }}
+          {%- endif -%}
+          <a
+            class="button{% if shop.customer_accounts_enabled %} button-secondary{% endif %}"
+            href="{{ routes.storefront_login_url }}?return_to={{ request.path | url_encode }}"
+          >
+            {{- 'actions.log_in' | t -}}
+          </a>
+        </div>
+      </div>
+    {%- elsif at_count_all == 0 -%}
+      <div class="at-msbo__state">
+        <h2 class="h4">{{ 'at_bulk_order.empty_heading' | t }}</h2>
+        <p>{{ 'at_bulk_order.empty_body' | t }}</p>
+        <div class="at-msbo__state-actions">
+          <a class="button" href="{{ routes.all_products_collection_url }}">{{ 'actions.continue_shopping' | t }}</a>
+        </div>
+      </div>
+    {%- else -%}
+      <script src="{{ 'at-favorite-colors.js' | asset_url }}" type="module"></script>
+      <script src="{{ 'at-multi-style-bulk-order.js' | asset_url }}" type="module"></script>
+      <at-multi-style-bulk-order class="at-msbo__layout" data-section-id="{{ section.id }}">
+        <script type="application/json" data-at-msbo-strings>
+          {
+            "selectedOne": {{ 'at_bulk_order.selected_count.one' | t: count: '[count]' | json }},
+            "selectedOther": {{ 'at_bulk_order.selected_count.other' | t: count: '[count]' | json }},
+            "removeStyle": {{ 'at_bulk_order.remove_style' | t: title: '[title]' | json }},
+            "quantitiesUnavailable": {{ 'at_bulk_order.quantities_unavailable' | t | json }}
+          }
+        </script>
+
+        <div class="at-msbo__chooser">
+          <h2 class="at-msbo__heading h3" id="{{ section.id }}-heading">{{ 'at_bulk_order.heading' | t }}</h2>
+          <p class="at-msbo__intro">{{ 'at_bulk_order.intro' | t }}</p>
+
+          <fieldset class="at-msbo__filters" data-at-msbo-filters>
+            <legend class="visually-hidden">{{ 'at_bulk_order.filter_label' | t }}</legend>
+            <label class="at-msbo__filter">
+              <input type="radio" name="{{ section.id }}-filter" value="all" checked>
+              <span>{{ 'at_bulk_order.filter_all' | t }} <span class="at-msbo__filter-count">{{ at_count_all }}</span></span>
+            </label>
+            <label class="at-msbo__filter">
+              <input type="radio" name="{{ section.id }}-filter" value="purchase">
+              <span>{{ 'at_bulk_order.filter_purchases' | t }} <span class="at-msbo__filter-count">{{ at_count_purchase }}</span></span>
+            </label>
+            <label class="at-msbo__filter">
+              <input type="radio" name="{{ section.id }}-filter" value="favorite">
+              <span>{{ 'at_bulk_order.filter_favorites' | t }} <span class="at-msbo__filter-count">{{ at_count_favorite }}</span></span>
+            </label>
+          </fieldset>
+
+          <ul class="at-msbo__rows" role="list" aria-labelledby="{{ section.id }}-heading">
+            {{ at_rows }}
+          </ul>
+          <p class="at-msbo__filter-empty" data-at-msbo-empty="purchase" hidden>{{ 'at_bulk_order.empty_purchases' | t }}</p>
+          <p class="at-msbo__filter-empty" data-at-msbo-empty="favorite" hidden>{{ 'at_bulk_order.empty_favorites' | t }}</p>
+        </div>
+
+        <aside class="at-msbo__panel" aria-labelledby="{{ section.id }}-selected-heading">
+          <h2 class="at-msbo__panel-heading h4" id="{{ section.id }}-selected-heading">
+            {{ 'at_bulk_order.selected_heading' | t }}
+            <span class="at-msbo__panel-count" data-at-msbo-count aria-hidden="true">0</span>
+          </h2>
+          <p class="at-msbo__panel-empty" data-at-msbo-selected-empty>{{ 'at_bulk_order.selected_empty' | t }}</p>
+          <ul class="at-msbo__selected" role="list" data-at-msbo-selected></ul>
+          <p class="visually-hidden" role="status" aria-live="polite" aria-atomic="true" data-at-msbo-status></p>
+          <button type="button" class="button at-msbo__choose" data-at-msbo-choose disabled>
+            {{- 'at_bulk_order.choose_quantities' | t -}}
+            <span aria-hidden="true">&rarr;</span>
+          </button>
+          <p class="at-msbo__notice" role="status" data-at-msbo-notice></p>
+        </aside>
+      </at-multi-style-bulk-order>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Multi-style bulk order",
+  "tag": "section",
+  "class": "at-multi-style-bulk-order-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Signed-in customers see their past purchases (first 20 orders) and favorites (customer metafields wagner.favorite_colors and wagner.favorite_products)."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading when the page has no title"
+    },
+    {
+      "type": "header",
+      "content": "Theme editor preview"
+    },
+    {
+      "type": "product_list",
+      "id": "preview_products",
+      "label": "Preview products",
+      "limit": 12,
+      "info": "Only used inside the theme editor while there is no favorite_products data. Shows sample favorite and purchase rows. Shoppers never see these."
+    }
+  ],
+  "presets": [{ "name": "Multi-style bulk order" }]
+}
+{% endschema %}

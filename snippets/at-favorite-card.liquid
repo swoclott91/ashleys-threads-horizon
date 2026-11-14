@@ -1,0 +1,79 @@
+{%- doc -%}
+  One card on the Favorites page (sections/at-favorites.liquid): Horizon's resource-card for
+  image, title, link and the visitor's catalog price, then the saved colors as swatches with
+  names. Renders nothing when the product is blank, has no Color/Colour option, or none of its
+  saved colors still exists on it.
+
+  @param {product} product - A favorited product
+  @param {string} favorite_keys - Saved pairs from snippets/at-favorite-color-keys
+{%- enddoc -%}
+{%- liquid
+  assign at_color_option = nil
+  for option in product.options_with_values
+    assign at_option_name = option.name | strip | downcase
+    if at_option_name == 'color' or at_option_name == 'colour'
+      assign at_color_option = option
+      break
+    endif
+  endfor
+  assign at_product_id = product.id | append: ''
+-%}
+{%- if product != blank and at_color_option != nil -%}
+  {%- capture at_colors -%}
+    {%- for value in at_color_option.values -%}
+      {%- liquid
+        assign at_key = '|' | append: at_product_id | append: ':' | append: value.id | append: '|'
+        unless favorite_keys contains at_key
+          continue
+        endunless
+      -%}
+      <li class="at-favorite-card__color">
+        {% render 'swatch', swatch: value.swatch, mode: 'pill' %}
+        <span>{{ value.name }}</span>
+      </li>
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- assign at_colors = at_colors | strip -%}
+  {%- if at_colors != blank -%}
+    <li class="at-favorite-card" data-product-id="{{ at_product_id }}">
+      {% render 'resource-card',
+        resource_type: 'product',
+        resource: product,
+        image_width: 500,
+        image_aspect_ratio: '4 / 5'
+      %}
+      <ul
+        class="at-favorite-card__colors"
+        role="list"
+        aria-label="{{ 'at_favorites.saved_colors_for' | t: title: product.title | escape }}"
+      >
+        {{ at_colors }}
+      </ul>
+    </li>
+  {%- endif -%}
+{%- endif -%}
+
+{% stylesheet %}
+  .at-favorite-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .at-favorite-card__colors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .at-favorite-card__color {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--font-size--sm, 0.875rem);
+  }
+{% endstylesheet %}

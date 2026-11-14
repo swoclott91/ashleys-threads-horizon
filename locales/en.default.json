@@ -214,6 +214,45 @@
       "terms_hold": "Your terms are on hold. Contact us before ordering on terms."
     }
   },
+  "at_favorites": {
+    "title": "Favorites",
+    "intro": "Styles you saved, with the colors you picked.",
+    "bulk_order_link": "Order these in bulk",
+    "saved_colors_for": "Saved colors for {{ title }}",
+    "guest_heading": "Sign in to see your favorites",
+    "guest_body": "Save colors with the heart on any product. They show up here and on the bulk order page.",
+    "empty_heading": "No favorites yet",
+    "empty_body": "Tap the heart next to a color on any product to save it here.",
+    "preview_notice": "Theme editor preview: sample products from the section settings. Shoppers see their own favorites."
+  },
+  "at_bulk_order": {
+    "title": "Bulk order",
+    "heading": "Choose styles",
+    "intro": "Past purchases and favorites can go into the same order.",
+    "filter_label": "Show styles",
+    "filter_all": "All styles",
+    "filter_purchases": "Past purchases",
+    "filter_favorites": "Favorites",
+    "source_purchase": "Past purchase",
+    "source_favorite": "Favorite",
+    "colors_for": "Colors for {{ title }}",
+    "empty_purchases": "No past purchases yet.",
+    "empty_favorites": "No favorites yet. Use the heart next to a color to save it.",
+    "selected_heading": "Selected styles",
+    "selected_empty": "Select one or more styles to order them together.",
+    "selected_count": {
+      "one": "{{ count }} style selected",
+      "other": "{{ count }} styles selected"
+    },
+    "remove_style": "Remove {{ title }}",
+    "choose_quantities": "Choose quantities",
+    "quantities_unavailable": "Choosing quantities isn’t available yet.",
+    "guest_heading": "Sign in to order your usual styles",
+    "guest_body": "Your past purchases and favorites show up here when you’re signed in.",
+    "empty_heading": "Nothing to reorder yet",
+    "empty_body": "Styles you buy or save as favorites show up here.",
+    "preview_notice": "Theme editor preview: sample favorite and purchase rows from the section settings. Shoppers see their own styles."
+  },
   "at_discount_progress": {
     "get_member_discounts": "Get member discounts",
     "log_in_prompt": "Log in to see discounts.",
