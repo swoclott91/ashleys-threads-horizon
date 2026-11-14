@@ -334,3 +334,11 @@
   text-align: center;
 }
 .at-dp-member-prompt a { color: inherit; text-decoration: underline; }
+
+/* ---------- Account menu: Your usuals ---------- */
+.at-acct__usuals { display: flex; flex-direction: column; gap: 0.5rem; padding-block: 0.5rem 0.25rem; }
+.at-acct__usuals-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; }
+.at-acct__usuals-title { margin: 0; font-size: inherit; font-weight: 700; }
+.at-acct__usuals-count { font-size: 0.875rem; color: #2b4a3f; }
+.at-acct__usuals-hint { margin: 0; font-size: 0.875rem; color: rgb(var(--color-foreground-rgb) / 0.72); }
+.at-acct__usuals-button { width: 100%; justify-content: center; text-align: center; }

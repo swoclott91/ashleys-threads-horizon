@@ -227,10 +227,13 @@
       </form>
     </div>
 
+    {%- assign at_bulk_url = routes.root_url | append: 'pages/bulk-order' -%}
+    {%- assign at_favorites_url = routes.root_url | append: 'pages/favorites' -%}
     {%- assign method_title = 'Picked for how you decorate' -%}
     {%- if method_names != blank -%}{%- assign method_title = 'Picked for ' | append: method_names -%}{%- endif -%}
     {% render 'at-product-row', id: 'start', title: 'Start with these', note: 'From your guide, at member prices', products: list_start, limit: 12 %}
-    {% render 'at-product-row', id: 'reorder', title: 'Reorder your staples', note: 'From your past orders', products: list_reorder, limit: 12 %}
+    {% render 'at-product-row', id: 'reorder', title: 'Reorder your staples', note: 'From your past orders', products: list_reorder, limit: 12, link_url: at_bulk_url, link_label: 'Order in bulk' %}
+    {% render 'at-product-row', id: 'favorites', title: 'Your favorites', note: 'Styles you saved', products: mf.favorite_products.value, limit: 12, link_url: at_favorites_url, link_label: 'See all favorites' %}
     {% render 'at-product-row', id: 'method', title: method_title, note: 'Fabrics that suit your methods', products: list_method, limit: 12 %}
     {% render 'at-product-row', id: 'make', title: 'Picked for what you make', products: list_make, limit: 12 %}
     {% render 'at-product-row', id: 'deals', title: 'This month’s Member Deals', note: 'Filtered to blanks that work with how you decorate', products: list_deals, limit: 12 %}
