@@ -194,6 +194,14 @@
       "free_shipment": "Free shipment",
       "saved_this_year": "Saved this year",
       "my_membership": "My membership",
+      "usuals_title": "Your usuals",
+      "usuals_saved": {
+        "one": "{{ count }} saved style",
+        "other": "{{ count }} saved styles"
+      },
+      "usuals_hint": "Tap the heart next to a color to save it, then reorder it here.",
+      "order_in_bulk": "Order in bulk",
+      "favorites": "Favorites",
       "orders_profile": "Orders and profile",
       "log_out": "Log out"
     },

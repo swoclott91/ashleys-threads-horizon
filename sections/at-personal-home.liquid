@@ -82,7 +82,15 @@
     endif
 
     assign for_you_url = settings.at_for_you_page.url | default: '/pages/for-you'
-    assign reorder_url = for_you_url | append: '#reorder'
+    # Favorites and past purchases are ordered from the bulk order page (color is the only
+    # narrowing there; sizes and quantities are picked fresh each time).
+    assign bulk_url = routes.root_url | append: 'pages/bulk-order'
+    assign favorites_url = routes.root_url | append: 'pages/favorites'
+    assign reorder_url = bulk_url
+    assign list_favorites = mf.favorite_products.value
+    if at_preview and list_favorites == blank
+      assign list_favorites = at_sample
+    endif
 
     assign modules = mf.home_modules.value
     if modules == blank or at_preview
@@ -140,8 +148,8 @@
           else
             assign hero_title = 'Your usual blanks, one tap away'
           endif
-          assign hero_sub = 'Same styles and sizes as last time, at your prices.'
-          assign hero_url = for_you_url | append: '#reorder'
+          assign hero_sub = 'Your usual styles and colors. Pick sizes and quantities for this batch, at your prices.'
+          assign hero_url = bulk_url
         when 'start_with_these'
           if guide != blank
             assign hero_kicker = guide.title
@@ -206,10 +214,20 @@
       <p class="at-home__strip">{{ strip }}</p>
     {%- endif -%}
 
+    {%- liquid
+      # The favorites row is placed by the theme (not a Wagner module yet): right after
+      # Buy again / Reorder kit when the plan has one, otherwise after the first module.
+      assign favorites_after = modules | first
+      if modules contains 'buy_again'
+        assign favorites_after = 'buy_again'
+      elsif modules contains 'reorder_kit'
+        assign favorites_after = 'reorder_kit'
+      endif
+    -%}
     {%- for key in modules -%}
       {%- case key -%}
         {%- when 'buy_again' -%}
-          {% render 'at-product-row', id: 'at-buy-again', title: 'Buy again', note: 'From your past orders', products: list_reorder, link_url: reorder_url, link_label: 'Add same sizes' %}
+          {% render 'at-product-row', id: 'at-buy-again', title: 'Buy again', note: 'From your past orders', products: list_reorder, link_url: reorder_url, link_label: 'Order in bulk' %}
         {%- when 'reorder_kit' -%}
           {% render 'at-product-row', id: 'at-reorder-kit', title: 'Reorder kit', note: 'Your usual items', products: list_reorder, link_url: section.settings.quick_order_url, link_label: 'Quick order' %}
         {%- when 'start_with_these' -%}
@@ -279,10 +297,16 @@
             <span>Add your tax-exempt certificate once, and we'll apply it to every order after review.</span>
           </a>
       {%- endcase -%}
+      {%- if key == favorites_after -%}
+        {% render 'at-product-row', id: 'at-favorites', title: 'Your favorites', note: 'Styles you saved', products: list_favorites, link_url: favorites_url, link_label: 'See all favorites' %}
+      {%- endif -%}
     {%- endfor -%}
 
     {%- liquid
       assign any_products = false
+      if list_favorites != blank
+        assign any_products = true
+      endif
       if list_start != blank or list_reorder != blank or list_make != blank or list_deals != blank
         assign any_products = true
       endif

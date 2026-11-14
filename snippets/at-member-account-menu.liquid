@@ -2,7 +2,8 @@
   Header membership chip for signed-in member tiers, rendered beside the stock `shopify-account`
   button (which keeps the merchant's account menu and B2B company / location switching and gets a
   tier ring via `.at-acct-ring--<tier>`). The chip opens a menu with the tier, renewal date,
-  Threads Cash, this month's shipping code, savings this year and a My membership link.
+  Threads Cash, this month's shipping code, savings this year, a "Your usuals" block (saved style
+  count from customer `wagner.favorite_products`, Order in bulk button) and Favorites / My membership links.
   Reads contract metafields only: customer `wagner.pro_expires`, `wagner.threads_cash`,
   `wagner.ship_code`, `wagner.savings_ytd`; company location `wagner.terms_status`.
 
@@ -66,6 +67,7 @@
   endif
   assign my_membership_url = settings.at_my_membership_page_url | default: '/pages/my-membership'
   assign customer_name = customer.first_name | default: customer.name
+  assign favorite_count = customer.metafields.wagner.favorite_products.value.count | default: 0
 -%}
 {{ 'at-member.css' | asset_url | stylesheet_tag }}
 <div class="header-actions__action at-acct at-acct--{{ tier }}" data-testid="at-member-account" data-at-tier="{{ tier }}">
@@ -113,7 +115,25 @@
       {%- endif -%}
     </dl>
     <hr class="at-acct__rule">
+    <section class="at-acct__usuals" aria-labelledby="AtMemberAccountUsuals">
+      <div class="at-acct__usuals-head">
+        <h3 class="at-acct__usuals-title" id="AtMemberAccountUsuals">{{ 'at_member.menu.usuals_title' | t }}</h3>
+        {%- if favorite_count > 0 -%}
+          <a class="at-acct__usuals-count" href="{{ routes.root_url }}pages/favorites">
+            {{- 'at_member.menu.usuals_saved' | t: count: favorite_count -}}
+          </a>
+        {%- endif -%}
+      </div>
+      {%- if favorite_count == 0 -%}
+        <p class="at-acct__usuals-hint">{{ 'at_member.menu.usuals_hint' | t }}</p>
+      {%- endif -%}
+      <a class="button at-acct__usuals-button" href="{{ routes.root_url }}pages/bulk-order">
+        {{- 'at_member.menu.order_in_bulk' | t -}}
+      </a>
+    </section>
+    <hr class="at-acct__rule">
     <ul class="at-acct__links" role="list">
+      <li><a href="{{ routes.root_url }}pages/favorites">{{ 'at_member.menu.favorites' | t }}</a></li>
       <li><a href="{{ my_membership_url }}">{{ 'at_member.menu.my_membership' | t }}</a></li>
     </ul>
   </div>
