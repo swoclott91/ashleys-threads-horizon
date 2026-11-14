@@ -1,6 +1,11 @@
 {%- doc -%}
   Hero row side panel: "Start with the staples". Shown to guests, and to members with no last
-  order and no favorites. Owned by the guest home work. Renders nothing until built.
+  order and no favorites. Two product cards (image, title with arrow, one-line reason to buy,
+  the visitor's price) and a quieter "View staples" link. Fills the hero's height beside it on
+  desktop and stacks under it on mobile (the grid itself is `at-home-top`'s).
+
+  Prices use Horizon's `price` snippet, so a signed-in customer sees their catalog price.
+  Renders nothing when no products are picked, except for a setup note in the theme editor.
 
   @param {string} section_id - Section ID, for unique element IDs
   @param {object[]} [products] - Up to two staple products (section setting)
@@ -8,3 +13,171 @@
   @param {string} [note_1] - Reason to buy the first product
   @param {string} [note_2] - Reason to buy the second product
 {%- enddoc -%}
+{%- liquid
+  assign at_staples_count = 0
+  if products != blank
+    assign at_staples_count = products.size | default: 0
+  endif
+-%}
+{%- if at_staples_count > 0 -%}
+  <section class="at-staples" aria-labelledby="AtStaples-{{ section_id }}">
+    <div class="at-staples__head">
+      <h2 class="at-staples__title h4" id="AtStaples-{{ section_id }}">Start with the staples</h2>
+      {%- if collection != blank -%}
+        <a class="at-staples__all" href="{{ collection.url }}">View staples</a>
+      {%- endif -%}
+    </div>
+    <ul class="at-staples__grid" role="list">
+      {%- for p in products limit: 2 -%}
+        {%- liquid
+          if forloop.index == 1
+            assign at_note = note_1
+          else
+            assign at_note = note_2
+          endif
+          assign at_image = p.featured_media.preview_image | default: p.featured_image
+        -%}
+        <li class="at-staples__item">
+          <a class="at-staples__media" href="{{ p.url }}" tabindex="-1" aria-hidden="true">
+            {%- if at_image != blank -%}
+              {{
+                at_image
+                | image_url: width: 600
+                | image_tag:
+                  class: 'at-staples__image',
+                  loading: 'eager',
+                  widths: '240, 360, 480, 600',
+                  sizes: '(min-width: 990px) 20vw, 50vw',
+                  alt: ''
+              }}
+            {%- endif -%}
+          </a>
+          <div class="at-staples__body">
+            <a class="at-staples__name" href="{{ p.url }}">
+              <span>{{ p.title }}</span>
+              <svg class="at-staples__arrow" aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="14" height="14">
+                <path d="M3 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            {%- if at_note != blank -%}
+              <p class="at-staples__note">{{ at_note }}</p>
+            {%- endif -%}
+            <div class="at-staples__price">
+              {%- render 'price', product_resource: p, show_unit_price: true -%}
+            </div>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </section>
+{%- elsif request.design_mode -%}
+  <div class="at-staples at-staples--setup">
+    <h2 class="at-staples__title h4">Start with the staples</h2>
+    <p class="at-staples__note">
+      Pick two staple products under "Start with the staples" in this section's settings. Guests
+      see them here beside the hero.
+    </p>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .at-staples {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.12);
+    background: rgb(var(--color-foreground-rgb) / 0.03);
+  }
+  .at-staples__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px 16px;
+  }
+  .at-staples__title {
+    margin: 0;
+  }
+  .at-staples__all {
+    font-size: 0.875rem;
+    color: rgb(var(--color-foreground-rgb) / 0.72);
+    text-underline-offset: 3px;
+  }
+  .at-staples__all:hover {
+    color: inherit;
+  }
+  .at-staples__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    flex: 1 1 auto;
+  }
+  .at-staples__item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+  .at-staples__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 10px;
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+  }
+  .at-staples__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .at-staples__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .at-staples__name {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: inherit;
+    text-decoration: none;
+  }
+  .at-staples__name:hover span {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .at-staples__arrow {
+    flex: none;
+    transform: translateY(2px);
+  }
+  .at-staples__note {
+    margin: 0;
+    font-size: 0.875rem;
+    color: rgb(var(--color-foreground-rgb) / 0.72);
+  }
+  .at-staples__price {
+    margin-block-start: 2px;
+    font-size: 0.95rem;
+  }
+  /* Desktop: the hero row stretches this panel to the hero's height; the photos take up the
+     slack instead of a fixed 4:5 so the panel never forces the hero taller than it needs. */
+  @media screen and (min-width: 990px) {
+    .at-staples__media {
+      flex: 1 1 auto;
+      aspect-ratio: auto;
+      min-height: 160px;
+    }
+  }
+{% endstylesheet %}
