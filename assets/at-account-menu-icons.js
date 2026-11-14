@@ -67,7 +67,7 @@ function decorate(root) {
   }
 }
 
-function renderMembership(account, root, badge) {
+function renderMembershipAvatar(root, badge) {
   const trigger = root.querySelector('.wrapper > .account-button');
   const avatar = trigger?.querySelector('.account-button__avatar');
   const guestAvatar = badge.hasAttribute('data-at-preview') ? trigger?.querySelector('slot[name="signed-out-avatar"]') : null;
@@ -82,25 +82,12 @@ function renderMembership(account, root, badge) {
     slot.style.cssText = 'position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;';
     trigger.style.position = 'relative';
     trigger.prepend(slot);
-    const tier = account.querySelector('#AtMemberAccountTier');
-    if (tier) trigger.setAttribute('aria-description', tier.textContent.trim());
+    trigger.setAttribute('aria-description', badge.dataset.atTierLabel);
   } else if (!originalAvatar && badgeSlot) {
     badgeSlot.remove();
     trigger.removeAttribute('aria-description');
   }
   badge.toggleAttribute('data-at-preview-fallback', Boolean(guestAvatar && !avatar));
-
-  const menu = root.querySelector('dialog[part~="dialog"] .account__menu-region');
-  const mainMenu = menu?.querySelector('.account__menu-items[data-transition="enter-left"]');
-  const membership = menu?.querySelector('slot[name="at-member-details"]');
-  const canShowDetails = mainMenu && originalAvatar;
-  if (canShowDetails && !membership) {
-    const slot = document.createElement('slot');
-    slot.name = 'at-member-details';
-    menu.append(slot);
-  } else if (!canShowDetails) {
-    membership?.remove();
-  }
 }
 
 function watch(account) {
@@ -109,7 +96,7 @@ function watch(account) {
   account.dataset.atAccountIcons = '';
   const badge = account.querySelector('svg[slot="at-member-avatar"]');
   const update = () => {
-    if (badge) renderMembership(account, root, badge);
+    if (badge) renderMembershipAvatar(root, badge);
     decorate(root);
   };
   update();
