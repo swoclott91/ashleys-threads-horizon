@@ -1,49 +1,72 @@
 {%- comment -%}
-  "What are you making?" tiles for guests (design §15). Each tile opens its guide collection.
-  Guest personalization is client-side only (Liquid can't read local storage):
-  - picking a tile saves the answer in localStorage `at_guest_hint` ({q1, url, title, at});
-  - on the next visit the tiles show "Pick up where you left off" and mark that tile;
+  "What are you making?" photo cards for guests (homepage strategy, design §15). Each card
+  opens its project collection. Guest personalization is client-side only (Liquid can't read
+  local storage):
+  - picking a card saves the answer in localStorage `at_guest_hint` ({q1, url, title, at});
+  - on the next visit the cards show "Pick up where you left off" and mark that card;
   - when the Shopify Forms popup opens, the matching Q1 radio is preselected (best effort:
     the Forms markup isn't ours, so this looks for an input whose value is the `use:*` value).
+  The `use:*` values and collection URLs are fixed; the photos are per-card settings. Cards
+  work without photos (label only). Six in one row on desktop, two columns on mobile.
   The server-rendered page is the same for every guest, so it stands on its own for search.
 {%- endcomment -%}
 {%- capture at_section_visible -%}{% render 'at-section-visible', visibility: section.settings.at_visibility %}{%- endcapture -%}
 {%- if at_section_visible contains 'true' -%}
   {%- liquid
     assign decorator_url = section.settings.decorator_url | default: '/collections/all'
+    # q1 value | label | collection URL | image setting id
+    assign tiles = "use:decorator|Clients' designs|" | append: decorator_url | append: '|image_decorator'
+    assign tiles = tiles | append: ';use:graphic-tees|My own designs|/collections/graphic-tees-boutique-sellers|image_graphic_tees'
+    assign tiles = tiles | append: ';use:apparel-brand|My own label|/collections/building-your-apparel-brand|image_apparel_brand'
+    assign tiles = tiles | append: ';use:groups-events|Group, team, or event|/collections/groups-events|image_groups_events'
+    assign tiles = tiles | append: ';use:business-merch|Company apparel|/collections/business-merch|image_business_merch'
+    assign tiles = tiles | append: ';use:personal|Me and my family|/collections/family-matching-sets|image_personal'
+    assign tiles = tiles | split: ';'
   -%}
   <div class="section section--page-width">
-<div class="at-tiles" data-at-tiles>
-    <div class="at-tiles__head">
-      <h2 class="at-tiles__title h3">{{ section.settings.heading }}</h2>
-      <p class="at-tiles__resume" data-at-resume hidden>
-        Pick up where you left off: <a href="#" data-at-resume-link></a>
-      </p>
+    <div class="at-tiles" data-at-tiles>
+      <div class="at-tiles__head">
+        <h2 class="at-tiles__title h3" id="AtTiles-{{ section.id }}">{{ section.settings.heading }}</h2>
+        {%- if section.settings.helper != blank -%}
+          <p class="at-tiles__helper">{{ section.settings.helper }}</p>
+        {%- endif -%}
+        <p class="at-tiles__resume" data-at-resume hidden>
+          Pick up where you left off: <a href="#" data-at-resume-link></a>
+        </p>
+      </div>
+      <ul class="at-tiles__grid" role="list" aria-labelledby="AtTiles-{{ section.id }}">
+        {%- for tile in tiles -%}
+          {%- liquid
+            assign t = tile | split: '|'
+            assign tile_image = section.settings[t[3]]
+          -%}
+          <li>
+            <a
+              class="at-tiles__tile{% if tile_image != blank %} at-tiles__tile--photo{% endif %}"
+              href="{{ t[2] }}"
+              data-at-q1="{{ t[0] }}"
+              data-at-title="{{ t[1] | escape }}"
+            >
+              {%- if tile_image != blank -%}
+                <span class="at-tiles__media">
+                  {{
+                    tile_image
+                    | image_url: width: 600
+                    | image_tag:
+                      class: 'at-tiles__image',
+                      loading: 'lazy',
+                      widths: '240, 360, 480, 600',
+                      sizes: '(min-width: 990px) 16vw, (min-width: 750px) 33vw, 50vw',
+                      alt: ''
+                  }}
+                </span>
+              {%- endif -%}
+              <span class="at-tiles__label">{{ t[1] }}</span>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
     </div>
-    {%- liquid
-      assign tiles = "use:decorator|Clients' designs|Custom orders for businesses, teams, events|" | append: decorator_url
-      assign tiles = tiles | append: ';use:graphic-tees|My own designs|Graphic tees for Etsy, markets, boutiques|/collections/graphic-tees-boutique-sellers'
-      assign tiles = tiles | append: ';use:apparel-brand|My own label|Building an apparel brand or collection|/collections/building-your-apparel-brand'
-      assign tiles = tiles | append: ';use:groups-events|My group, team or event|Schools, clubs, reunions, fundraisers|/collections/groups-events'
-      assign tiles = tiles | append: ';use:business-merch|My company|Staff shirts, uniforms, company events|/collections/business-merch'
-      assign tiles = tiles | append: ';use:personal|Me and my family|Matching sets, crafting, wearing blank|/collections/family-matching-sets'
-      assign tiles = tiles | split: ';'
-    -%}
-    <div class="at-tiles__groups">
-      {%- for tile in tiles -%}
-        {%- assign t = tile | split: '|' -%}
-        {%- if forloop.index == 1 -%}<p class="at-tiles__group">I sell or print</p><ul class="at-tiles__grid" role="list">{%- endif -%}
-        {%- if forloop.index == 4 -%}</ul><p class="at-tiles__group">I'm buying for</p><ul class="at-tiles__grid" role="list">{%- endif -%}
-        <li>
-          <a class="at-tiles__tile" href="{{ t[3] }}" data-at-q1="{{ t[0] }}" data-at-title="{{ t[1] | escape }}">
-            <span class="at-tiles__label">{{ t[1] }}</span>
-            <span class="at-tiles__help">{{ t[2] }}</span>
-          </a>
-        </li>
-        {%- if forloop.last -%}</ul>{%- endif -%}
-      {%- endfor -%}
-    </div>
-  </div>
   </div>
 
   <script>
@@ -67,7 +90,7 @@
         tile.setAttribute('aria-current', 'true');
         const resume = root.querySelector('[data-at-resume]');
         const link = root.querySelector('[data-at-resume-link]');
-        link.textContent = hint.title || tile.dataset.atTitle;
+        link.textContent = tile.dataset.atTitle || hint.title;
         link.href = hint.url || tile.getAttribute('href');
         resume.hidden = false;
       }
@@ -133,17 +156,10 @@
     padding-block: 28px;
   }
   .at-tiles__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
-  .at-tiles__title, .at-tiles__resume { margin: 0; }
-  .at-tiles__resume { font-size: 0.95rem; }
+  .at-tiles__title, .at-tiles__helper, .at-tiles__resume { margin: 0; }
+  .at-tiles__helper { font-size: 0.95rem; color: rgb(var(--color-foreground-rgb) / 0.72); }
+  .at-tiles__resume { font-size: 0.95rem; flex-basis: 100%; }
   .at-tiles__resume a { font-weight: 700; }
-  .at-tiles__group {
-    margin: 10px 0 6px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgb(var(--color-foreground-rgb) / 0.72);
-  }
   .at-tiles__grid {
     list-style: none;
     margin: 0;
@@ -153,30 +169,56 @@
     gap: 10px;
   }
   @media screen and (min-width: 750px) {
-    .at-tiles__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .at-tiles__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
   }
+  @media screen and (min-width: 990px) {
+    .at-tiles__grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  }
+  .at-tiles__grid > li { min-width: 0; }
   .at-tiles__tile {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    justify-content: flex-end;
+    gap: 8px;
     min-height: 64px;
     height: 100%;
     box-sizing: border-box;
-    padding: 14px;
+    padding: 12px;
     border-radius: 12px;
     border: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
     background: rgb(var(--color-foreground-rgb) / 0.03);
     color: inherit;
     text-decoration: none;
   }
+  .at-tiles__tile--photo { justify-content: flex-start; padding: 6px 6px 10px; }
+  .at-tiles__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 8px;
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+  }
+  .at-tiles__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  .at-tiles__tile:hover .at-tiles__image { transform: scale(1.03); }
+  .at-tiles__tile--photo .at-tiles__label { padding-inline: 6px; }
   .at-tiles__tile:hover, .at-tiles__tile[aria-current='true'] {
     border-color: #2b4a3f;
     background: #e9efec;
     color: #1a2e27;
   }
-  .at-tiles__label { font-weight: 700; }
-  .at-tiles__help { font-size: 0.85rem; color: rgb(var(--color-foreground-rgb) / 0.72); }
-  .at-tiles__tile:hover .at-tiles__help, .at-tiles__tile[aria-current='true'] .at-tiles__help { color: #3f3f3b; }
+  .at-tiles__label { font-weight: 700; line-height: 1.25; }
+  @media (prefers-reduced-motion: reduce) {
+    .at-tiles__image { transition: none; }
+    .at-tiles__tile:hover .at-tiles__image { transform: none; }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -203,10 +245,51 @@
       "default": "What are you making?"
     },
     {
+      "type": "text",
+      "id": "helper",
+      "label": "Helper text",
+      "default": "Choose a project to see blanks that fit."
+    },
+    {
       "type": "url",
       "id": "decorator_url",
       "label": "Clients' designs link",
       "info": "No single guide for decorators; defaults to all products."
+    },
+    {
+      "type": "header",
+      "content": "Card photos",
+      "info": "Optional. A card without a photo shows its label only."
+    },
+    {
+      "type": "image_picker",
+      "id": "image_decorator",
+      "label": "Clients' designs"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_graphic_tees",
+      "label": "My own designs"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_apparel_brand",
+      "label": "My own label"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_groups_events",
+      "label": "Group, team, or event"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_business_merch",
+      "label": "Company apparel"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_personal",
+      "label": "Me and my family"
     }
   ],
   "presets": [{ "name": "What are you making?" }]

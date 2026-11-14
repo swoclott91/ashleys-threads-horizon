@@ -1,16 +1,242 @@
 {%- comment -%}
-  "Shop by category" aisle shown in every state (homepage strategy). Owned by the guest home
-  work. Renders nothing until built.
+  "Shop by category" aisle shown in every state (homepage strategy). One block per category:
+  a collection, an optional photo (defaults to the collection's image) and an optional label
+  (defaults to the collection's title). Five across on desktop by default, two columns on
+  mobile. Blocks without a collection are skipped on the storefront and shown as a setup card
+  in the theme editor.
 {%- endcomment -%}
+{%- liquid
+  assign at_cat_columns = section.settings.columns_desktop | default: 5
+  assign at_cat_cards = 0
+  for block in section.blocks
+    if block.settings.collection != blank or request.design_mode
+      assign at_cat_cards = at_cat_cards | plus: 1
+    endif
+  endfor
+-%}
+{%- if at_cat_cards > 0 -%}
+  <div class="section section--page-width">
+    <section
+      class="at-cats"
+      style="--at-cats-columns: {{ at_cat_columns }};"
+      aria-labelledby="AtCats-{{ section.id }}"
+    >
+      <div class="at-cats__head">
+        <h2 class="at-cats__title h3" id="AtCats-{{ section.id }}">{{ section.settings.heading }}</h2>
+        {%- if section.settings.link_label != blank and section.settings.link != blank -%}
+          <a class="at-cats__all" href="{{ section.settings.link }}">{{ section.settings.link_label }}</a>
+        {%- endif -%}
+      </div>
+      <ul class="at-cats__grid" role="list">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign cat = block.settings.collection
+            assign cat_label = block.settings.label | default: cat.title
+            assign cat_image = block.settings.image | default: cat.featured_image
+          -%}
+          {%- if cat == blank and request.design_mode != true -%}{%- continue -%}{%- endif -%}
+          <li class="at-cats__item" {{ block.shopify_attributes }}>
+            {%- if cat != blank -%}
+              <a class="at-cats__card" href="{{ cat.url }}">
+                <span class="at-cats__media">
+                  {%- if cat_image != blank -%}
+                    {{
+                      cat_image
+                      | image_url: width: 700
+                      | image_tag:
+                        class: 'at-cats__image',
+                        loading: 'lazy',
+                        widths: '240, 360, 520, 700',
+                        sizes: '(min-width: 990px) 20vw, (min-width: 750px) 33vw, 50vw',
+                        alt: ''
+                    }}
+                  {%- endif -%}
+                </span>
+                <span class="at-cats__label">{{ cat_label }}</span>
+              </a>
+            {%- else -%}
+              <div class="at-cats__card at-cats__card--setup">
+                <span class="at-cats__media">
+                  {{ 'collection-1' | placeholder_svg_tag: 'at-cats__placeholder' }}
+                </span>
+                <span class="at-cats__label">{{ block.settings.label | default: 'Category' }}</span>
+                <span class="at-cats__setup">Pick a collection for this card. Hidden on the store until you do.</span>
+              </div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </section>
+  </div>
+{%- elsif request.design_mode -%}
+  <div class="section section--page-width">
+    <p class="at-cats__setup">Shop by category: add a Category block for each collection to show here.</p>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .at-cats {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-block: 28px;
+  }
+  .at-cats__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px 18px;
+  }
+  .at-cats__title {
+    margin: 0;
+  }
+  .at-cats__all {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .at-cats__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  @media screen and (min-width: 750px) {
+    .at-cats__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media screen and (min-width: 990px) {
+    .at-cats__grid {
+      grid-template-columns: repeat(var(--at-cats-columns, 5), minmax(0, 1fr));
+    }
+  }
+  .at-cats__item {
+    min-width: 0;
+  }
+  .at-cats__card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: inherit;
+    text-decoration: none;
+  }
+  .at-cats__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 12px;
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+  }
+  .at-cats__image,
+  .at-cats__placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .at-cats__image {
+    transition: transform 0.3s ease;
+  }
+  .at-cats__card:hover .at-cats__image {
+    transform: scale(1.03);
+  }
+  .at-cats__label {
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .at-cats__card:hover .at-cats__label {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .at-cats__setup {
+    margin: 0;
+    font-size: 0.8rem;
+    color: rgb(var(--color-foreground-rgb) / 0.72);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .at-cats__image {
+      transition: none;
+    }
+    .at-cats__card:hover .at-cats__image {
+      transform: none;
+    }
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "Home: shop by category",
   "tag": "section",
   "class": "at-home-categories-section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by category"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link label",
+      "info": "Optional link beside the heading, such as \"All categories\"."
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Cards per row on desktop",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo",
+          "info": "Optional. Defaults to the collection's image."
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "Optional. Defaults to the collection's title."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
   "presets": [
     {
-      "name": "Home: shop by category"
+      "name": "Home: shop by category",
+      "blocks": [
+        { "type": "category", "settings": { "label": "T-Shirts" } },
+        { "type": "category", "settings": { "label": "Hoodies" } },
+        { "type": "category", "settings": { "label": "Hats" } },
+        { "type": "category", "settings": { "label": "Youth" } },
+        { "type": "category", "settings": { "label": "Family Sets" } }
+      ]
     }
   ]
 }
