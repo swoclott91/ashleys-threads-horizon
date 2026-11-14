@@ -871,6 +871,13 @@
 
     /* Mobile layout */
     --header-mobile-bookend: 44px;
+    --header-mobile-left-inner: var(--header-mobile-bookend);
+    --header-mobile-right-inner: var(--header-mobile-bookend);
+
+    &:has(header-actions .at-acct) {
+      --header-mobile-left-inner: clamp(44px, calc(50vw - 116px), 88px);
+      --header-mobile-right-inner: 88px;
+    }
 
     display: grid;
     grid-template-areas: 'left center right';
@@ -906,8 +913,8 @@
     }
 
     @media screen and (max-width: 749px) {
-      --header-template-columns: var(--header-mobile-bookend) var(--header-mobile-bookend) 1fr
-        var(--header-mobile-bookend) var(--header-mobile-bookend);
+      --header-template-columns: var(--header-mobile-bookend) var(--header-mobile-left-inner) minmax(0, 1fr)
+        var(--header-mobile-right-inner) var(--header-mobile-bookend);
 
       grid-template-areas: 'leftA leftB center rightA rightB';
       grid-column: span 3;
@@ -921,6 +928,11 @@
 
       .header-logo {
         grid-area: center;
+      }
+
+      .header-logo > span,
+      .header-logo__image {
+        max-width: 100%;
       }
 
       &:not(:has(header-actions)) .search-action {
@@ -944,14 +956,18 @@
         grid-area: rightB;
         justify-content: flex-end;
       }
+
+      header-actions:has(.at-acct) {
+        grid-column: rightA-start / rightB-end;
+      }
     }
   }
 
   /* not ideal but we need to duplicate these styles for when touch comes into play
     We could avoid the duplication using js to set the data-menu-style attribute on small screens instead of using @media queries */
   #header-component[data-menu-style='drawer'] .header__columns {
-    --header-template-columns: var(--header-mobile-bookend) var(--header-mobile-bookend) 1fr
-      var(--header-mobile-bookend) var(--header-mobile-bookend);
+    --header-template-columns: var(--header-mobile-bookend) var(--header-mobile-left-inner) minmax(0, 1fr)
+      var(--header-mobile-right-inner) var(--header-mobile-bookend);
 
     grid-template-areas: 'leftA leftB center rightA rightB';
     grid-column: span 3;
@@ -965,6 +981,11 @@
 
     .header-logo {
       grid-area: center;
+    }
+
+    .header-logo > span,
+    .header-logo__image {
+      max-width: 100%;
     }
 
     &:not(:has(header-actions)) .search-action {
@@ -988,6 +1009,10 @@
     header-actions {
       grid-area: rightB;
       justify-content: flex-end;
+    }
+
+    header-actions:has(.at-acct) {
+      grid-column: rightA-start / rightB-end;
     }
   }
 

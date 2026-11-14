@@ -1,14 +1,13 @@
 {%- doc -%}
-  Header membership chip for signed-in member tiers, rendered beside the stock `shopify-account`
-  button (which keeps the merchant's account menu and B2B company / location switching and gets a
-  tier ring via `.at-acct-ring--<tier>`). The chip opens a menu with the tier, renewal date,
+  Header membership badge for signed-in member tiers, rendered beside the stock `shopify-account`
+  button (which keeps the merchant's account menu and B2B company / location switching).
+  The badge opens a menu with the tier, renewal date,
   Threads Cash, this month's shipping code, savings this year, a "Your usuals" block (saved style
   count from customer `wagner.favorite_products`, Order in bulk button) and Favorites / My membership links.
   Reads contract metafields only: customer `wagner.pro_expires`, `wagner.threads_cash`,
   `wagner.ship_code`, `wagner.savings_ytd`; company location `wagner.terms_status`.
 
   @param {string} tier - member | pro | wholesale
-  @param {string} [display_style] - 'icon' | 'text' (header setting; unused, kept for callers)
 {%- enddoc -%}
 {%- liquid
   assign sample = false
@@ -60,7 +59,7 @@
 
   assign tier_name_key = 'at_member.menu.tier_' | append: tier
   assign tier_name = tier_name_key | t
-  assign tier_chip_key = 'at_member.tiers.' | append: tier
+  assign tier_badge_key = 'at_member.tiers.' | append: tier
   assign renew_date = ''
   if pro_expires != blank
     assign renew_date = pro_expires | date: '%b %Y'
@@ -75,11 +74,31 @@
     type="button"
     class="at-acct__trigger button-unstyled"
     popovertarget="AtMemberAccountMenu"
-    aria-label="{{ 'at_member.menu.open' | t: tier: tier_name }}"
+    aria-label="{{ 'at_member.menu.open' | t: tier: tier_name | escape }}"
   >
-    <span class="at-chip at-chip--{{ tier }} at-acct__chip">
-      {%- if tier == 'pro' -%}{{ 'at_member.tiers.pro_chip' | t }}{%- else -%}{{ tier_chip_key | t }}{%- endif -%}
-    </span>
+    <svg
+      class="at-acct__badge"
+      xmlns="http://www.w3.org/2000/svg"
+      width="180"
+      height="200"
+      viewBox="0 0 180 200"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs>
+        <path id="AtMemberBadgeTop" d="M 12,100 A 78,78 0 0 1 168,100"/>
+        <path id="AtMemberBadgeBottom" d="M -4,100 A 94,94 0 0 0 184,100"/>
+      </defs>
+      <circle class="at-acct__badge-disc" cx="90" cy="100" r="69"/>
+      <circle class="at-acct__badge-ring" cx="90" cy="100" r="58"/>
+      <path fill="#fff9ee" d="M57 76h11l8 33 9-33h10l9 33 8-33h11l-14 45H99l-9-32-9 32H71z"/>
+      <text class="at-acct__badge-lettering"{% if tier == 'wholesale' %} font-size="22"{% endif %}>
+        <textPath href="#AtMemberBadgeTop" startOffset="50%">{{ tier_badge_key | t | upcase | escape }}</textPath>
+      </text>
+      <text class="at-acct__badge-lettering">
+        <textPath href="#AtMemberBadgeBottom" startOffset="50%">ASHLEY’S</textPath>
+      </text>
+    </svg>
   </button>
 
   <div id="AtMemberAccountMenu" class="at-acct__menu color-custom-popover" popover>

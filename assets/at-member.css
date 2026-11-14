@@ -1,4 +1,4 @@
-/* AT member pricing: price bar, pricing modal, tier label, header ring + menu, cart strip. */
+/* AT member pricing: price bar, pricing modal, tier label, header badge and menu, cart strip. */
 :root {
   --at-tier-member: #1d4ed8;
   --at-tier-pro: #b45309;
@@ -211,15 +211,7 @@
 .at-pmodal__row--current .at-ring--pro { border-width: 3px; }
 .at-ring--wholesale { border: 3px solid var(--at-tier-wholesale); color: var(--at-tier-wholesale); }
 
-/* ---------- Header ring (on the stock shopify-account button) + membership chip menu ---------- */
-.at-acct-ring--member { --at-acct-ring: var(--at-tier-member); }
-.at-acct-ring--pro { --at-acct-ring: var(--at-tier-pro); }
-.at-acct-ring--wholesale { --at-acct-ring: var(--at-tier-wholesale); }
-.at-acct-ring shopify-account {
-  display: inline-flex;
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px var(--at-acct-ring);
-}
+/* ---------- Header membership badge and menu ---------- */
 .at-acct {
   position: relative;
   display: inline-flex;
@@ -228,14 +220,51 @@
 .at-acct__trigger {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
   min-height: 2.75rem;
   color: inherit;
   cursor: pointer;
   anchor-name: --at-acct;
 }
-.at-chip--member { background: var(--at-tier-member); }
-.at-chip--wholesale { background: var(--at-tier-wholesale); }
-.at-acct__chip { padding: 0.1875rem 0.4375rem; font-size: 0.625rem; text-transform: uppercase; }
+
+.at-acct--member { --at-badge-ink: #174532; }
+.at-acct--pro { --at-badge-ink: #6c2639; }
+.at-acct--wholesale { --at-badge-ink: #122f41; }
+
+.at-acct .at-acct__trigger .at-acct__badge {
+  display: block;
+  width: auto;
+  height: 2.875rem;
+}
+
+@media screen and (min-width: 750px) {
+  .at-acct .at-acct__trigger .at-acct__badge {
+    height: 3.5rem;
+  }
+}
+
+.at-acct__badge-disc { fill: var(--at-badge-ink); }
+.at-acct__badge-ring {
+  fill: none;
+  stroke: #fff9ee;
+  stroke-width: 1.75;
+  stroke-dasharray: 8 4.15;
+  stroke-linecap: round;
+}
+.at-acct--wholesale .at-acct__badge-ring {
+  stroke: #c89e59;
+  stroke-width: 3.5;
+  stroke-dasharray: none;
+}
+.at-acct__badge-lettering {
+  fill: var(--at-badge-ink);
+  font-family: system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  text-anchor: middle;
+}
+.at-acct__badge-lettering:not([font-size]) { font-size: 25px; }
 
 .at-acct__menu {
   position: fixed;
