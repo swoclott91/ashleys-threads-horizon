@@ -1,0 +1,31 @@
+{%- doc -%}
+  One variant as compact JSON for sections/at-bulk-color-data.liquid. Prices are the
+  visitor's contextual (catalog) prices in minor units. `options` is the full ordered tuple
+  of option value IDs and names, so callers can key cells by variant ID and tell a third
+  option apart.
+
+  @param {variant} variant - The variant to print
+  @param {product} product - The variant's product
+{%- enddoc -%}
+{
+  "id": {{ variant.id | append: '' | json }},
+  "available": {{ variant.available | json }},
+  "price": {{ variant.price | default: 0 }},
+  "compareAtPrice": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price }}{% else %}null{% endif %},
+  "inventoryQuantity": {{ variant.inventory_quantity | default: 0 }},
+  "inventoryPolicy": {{ variant.inventory_policy | json }},
+  "quantityRule": {
+    "min": {{ variant.quantity_rule.min | default: 1 }},
+    "increment": {{ variant.quantity_rule.increment | default: 1 }},
+    "max": {% if variant.quantity_rule.max != blank %}{{ variant.quantity_rule.max }}{% else %}null{% endif %}
+  },
+  "options": [
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign at_value_name = variant.options[forloop.index0]
+        assign at_option_value = option.values | find: 'name', at_value_name
+      -%}
+      {"id":{{ at_option_value.id | append: '' | json }},"value":{{ at_value_name | json }}}{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+}

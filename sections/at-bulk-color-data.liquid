@@ -1,0 +1,99 @@
+{%- comment -%}
+  Data-only section for the multi-style bulk order dialog (assets/at-multi-style-quantities.js).
+  Lists every size Shopify offers for ONE color, without looping product.variants, so it
+  works past the first 250 variants and returns only a few KB.
+
+  Fetched via the Section Rendering API (assets/at-bulk-transport.js → fetchBulkColorBatch):
+    /products/<handle>?sections=at-bulk-color-data&option_values=<id>[,<id>,<id>]
+
+  Unlike at-bulk-grid-data (which assumes color is option 1 and size option 2) this section
+  finds the options by name, the same way the selector and at-bulk-grid.js do:
+  - color: the first option named Color/Colour (`colorPosition`, null when there is none);
+  - size: the option named Size, else the first option that is not color (`sizePosition`,
+    null when the product has color only);
+  - any remaining option is a third option. Its values are listed in `options`; the caller
+    requests one full tuple per value because `option_value.variant` combines the size
+    value with the CURRENTLY SELECTED values of the other options.
+  The variant list is `option_value.variant` for each size value (or the selected variant
+  when there is no size option). The caller must check each variant's option tuple: Shopify
+  falls back to another variant when the requested color no longer exists.
+
+  Prices are rendered for the visitor, so B2B / member catalog prices apply. All IDs are
+  decimal strings.
+{%- endcomment -%}
+{%- if product != blank -%}
+  {%- liquid
+    assign at_opts = product.options_with_values
+    assign at_color_index = -1
+    for option in at_opts
+      assign at_option_name = option.name | strip | downcase
+      if at_option_name == 'color' or at_option_name == 'colour'
+        assign at_color_index = forloop.index0
+        break
+      endif
+    endfor
+
+    assign at_size_index = -1
+    for option in at_opts
+      if forloop.index0 == at_color_index
+        continue
+      endif
+      assign at_option_name = option.name | strip | downcase
+      if at_option_name == 'size'
+        assign at_size_index = forloop.index0
+        break
+      endif
+    endfor
+    if at_size_index == -1
+      for option in at_opts
+        if forloop.index0 != at_color_index
+          assign at_size_index = forloop.index0
+          break
+        endif
+      endfor
+    endif
+
+    assign at_selected = product.selected_or_first_available_variant
+  -%}
+  {%- capture escaped_lt -%}\u003c{%- endcapture -%}
+  {%- capture at_variants -%}
+    {%- if at_size_index >= 0 -%}
+      {%- assign at_first = true -%}
+      {%- for at_size_value in at_opts[at_size_index].values -%}
+        {%- assign at_v = at_size_value.variant -%}
+        {%- if at_v -%}
+          {%- unless at_first -%},{%- endunless -%}
+          {%- assign at_first = false -%}
+          {%- render 'at-bulk-color-variant', variant: at_v, product: product -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- elsif at_selected -%}
+      {%- render 'at-bulk-color-variant', variant: at_selected, product: product -%}
+    {%- endif -%}
+  {%- endcapture -%}
+  {%- capture at_payload -%}
+    {
+      "productId": {{ product.id | append: '' | json }},
+      "currency": {{ cart.currency.iso_code | json }},
+      "colorPosition": {% if at_color_index >= 0 %}{{ at_color_index | plus: 1 }}{% else %}null{% endif %},
+      "sizePosition": {% if at_size_index >= 0 %}{{ at_size_index | plus: 1 }}{% else %}null{% endif %},
+      "options": [
+        {%- for option in at_opts -%}
+          {"name":{{ option.name | json }},"position":{{ forloop.index }},"values":[
+            {%- for at_value in option.values -%}
+              {"id":{{ at_value.id | append: '' | json }},"value":{{ at_value.name | json }}}{% unless forloop.last %},{% endunless %}
+            {%- endfor -%}
+          ]}{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ],
+      "variants": [{{ at_variants }}]
+    }
+  {%- endcapture -%}
+  <script type="application/json" data-at-bulk-color>{{ at_payload | replace: '<', escaped_lt }}</script>
+{%- endif -%}
+{% schema %}
+{
+  "name": "AT Bulk Color Data",
+  "settings": []
+}
+{% endschema %}

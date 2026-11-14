@@ -251,7 +251,69 @@
     "guest_body": "Your past purchases and favorites show up here when you’re signed in.",
     "empty_heading": "Nothing to reorder yet",
     "empty_body": "Styles you buy or save as favorites show up here.",
-    "preview_notice": "Theme editor preview: sample favorite and purchase rows from the section settings. Shoppers see their own styles."
+    "preview_notice": "Theme editor preview: sample favorite and purchase rows from the section settings. Shoppers see their own styles.",
+    "dialog": {
+      "title": "Add multiple colors & sizes",
+      "subtitle": {
+        "one": "{{ count }} style · Colors you bought or saved",
+        "other": "{{ count }} styles · Colors you bought or saved"
+      },
+      "colors": {
+        "one": "{{ count }} color",
+        "other": "{{ count }} colors"
+      },
+      "units": {
+        "one": "{{ count }} unit",
+        "other": "{{ count }} units"
+      },
+      "add_all": {
+        "one": "Add {{ count }} to cart",
+        "other": "Add all {{ count }} to cart"
+      },
+      "added": {
+        "one": "{{ count }} item added to your cart.",
+        "other": "{{ count }} items added to your cart."
+      },
+      "partial": {
+        "one": "{{ count }} item was added. The rest is still below.",
+        "other": "{{ count }} items were added. The rest are still below."
+      },
+      "add_empty": "Add to cart",
+      "member_subtotal": "Member subtotal",
+      "subtotal": "Subtotal",
+      "color_column": "Color",
+      "quantity_column": "Quantity",
+      "extra_option": "{{ name }}: {{ value }}",
+      "loading": "Loading sizes…",
+      "load_failed": "Some sizes for this style didn’t load.",
+      "retry": "Try again",
+      "style_gone": "This style is no longer available.",
+      "color_gone": "This color is no longer available.",
+      "color_failed": "Sizes didn’t load.",
+      "not_offered": "Not offered",
+      "sold_out": "Sold out",
+      "in_stock": "In stock",
+      "stock_count": "{{ count }} in stock",
+      "quantity_label": "Quantity, {{ variant }}",
+      "decrease": "Decrease quantity, {{ variant }}",
+      "increase": "Increase quantity, {{ variant }}",
+      "rule_min": "Min {{ min }}",
+      "rule_max": "Max {{ max }}",
+      "rule_increment": "Packs of {{ increment }}",
+      "error_integer": "Enter a whole number.",
+      "error_min": "Order at least {{ min }}.",
+      "error_max": "Order at most {{ max }}.",
+      "error_increment": "Order in multiples of {{ increment }}.",
+      "fix_errors": "Fix the highlighted quantities, then add again.",
+      "baseline_failed": "We couldn’t check your cart, so nothing was added. Try again.",
+      "none_added": "Nothing was added to your cart.",
+      "lost_none": "We couldn’t confirm the add. Nothing from this order shows in your cart yet.",
+      "uncertain": "We couldn’t tell what was added. Your quantities are still here; check your cart before adding again.",
+      "review_cart": "Review cart",
+      "row_partial": "{{ added }} of {{ requested }} added. {{ remaining }} not added.",
+      "row_not_added": "Not added.",
+      "row_unconfirmed": "Not confirmed. Check your cart before adding again."
+    }
   },
   "at_discount_progress": {
     "get_member_discounts": "Get member discounts",

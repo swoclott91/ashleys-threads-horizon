@@ -25,8 +25,10 @@
   stands in with sample favorite and purchase pairs. Shoppers never get fixture data:
   `request.design_mode` is false on the storefront and on shared theme previews.
 
-  The quantities dialog and cart code live elsewhere; see the contract at the top of
-  assets/at-multi-style-bulk-order.js.
+  The quantities dialog (<at-msbo-quantities>, rendered below the selector) and the cart code
+  live in assets/at-multi-style-quantities.js (+ -core.js); the hand-off contract is at the
+  top of assets/at-multi-style-bulk-order.js. Sizes per color come from
+  sections/at-bulk-color-data.liquid.
 {%- endcomment -%}
 {%- liquid
   assign at_preview = false
@@ -319,6 +321,128 @@
           <p class="at-msbo__notice" role="status" data-at-msbo-notice></p>
         </aside>
       </at-multi-style-bulk-order>
+
+      {%- comment -%}
+        Quantities dialog (assets/at-multi-style-quantities.js). It claims the
+        `at-bulk-order:choose-quantities` event for this section ID. Variant data per color comes
+        from sections/at-bulk-color-data.liquid.
+      {%- endcomment -%}
+      {{ 'at-bulk-grid.css' | asset_url | stylesheet_tag }}
+      <script src="{{ 'at-multi-style-quantities.js' | asset_url }}" type="module"></script>
+      {%- liquid
+        assign at_msq_heading_id = section.id | append: '-msq-heading'
+        if at_tier_label != blank
+          assign at_msq_subtotal_label = 'at_bulk_order.dialog.member_subtotal' | t
+        else
+          assign at_msq_subtotal_label = 'at_bulk_order.dialog.subtotal' | t
+        endif
+      -%}
+      <at-msbo-quantities
+        class="at-msq-host"
+        data-section-id="{{ section.id }}"
+        data-money-format="{{ shop.money_format | escape }}"
+        data-currency="{{ cart.currency.iso_code }}"
+        data-cart-url="{{ routes.cart_url }}"
+      >
+        <script type="application/json" data-at-msq-strings>
+          {
+            "subtitle_one": {{ 'at_bulk_order.dialog.subtitle.one' | t: count: '[count]' | json }},
+            "subtitle_other": {{ 'at_bulk_order.dialog.subtitle.other' | t: count: '[count]' | json }},
+            "colors_one": {{ 'at_bulk_order.dialog.colors.one' | t: count: '[count]' | json }},
+            "colors_other": {{ 'at_bulk_order.dialog.colors.other' | t: count: '[count]' | json }},
+            "units_one": {{ 'at_bulk_order.dialog.units.one' | t: count: '[count]' | json }},
+            "units_other": {{ 'at_bulk_order.dialog.units.other' | t: count: '[count]' | json }},
+            "add_all_one": {{ 'at_bulk_order.dialog.add_all.one' | t: count: '[count]' | json }},
+            "add_all_other": {{ 'at_bulk_order.dialog.add_all.other' | t: count: '[count]' | json }},
+            "added_one": {{ 'at_bulk_order.dialog.added.one' | t: count: '[count]' | json }},
+            "added_other": {{ 'at_bulk_order.dialog.added.other' | t: count: '[count]' | json }},
+            "partial_one": {{ 'at_bulk_order.dialog.partial.one' | t: count: '[count]' | json }},
+            "partial_other": {{ 'at_bulk_order.dialog.partial.other' | t: count: '[count]' | json }},
+            "add_empty": {{ 'at_bulk_order.dialog.add_empty' | t | json }},
+            "color_column": {{ 'at_bulk_order.dialog.color_column' | t | json }},
+            "quantity_column": {{ 'at_bulk_order.dialog.quantity_column' | t | json }},
+            "extra_option": {{ 'at_bulk_order.dialog.extra_option' | t: name: '[name]', value: '[value]' | json }},
+            "loading": {{ 'at_bulk_order.dialog.loading' | t | json }},
+            "load_failed": {{ 'at_bulk_order.dialog.load_failed' | t | json }},
+            "retry": {{ 'at_bulk_order.dialog.retry' | t | json }},
+            "style_gone": {{ 'at_bulk_order.dialog.style_gone' | t | json }},
+            "color_gone": {{ 'at_bulk_order.dialog.color_gone' | t | json }},
+            "color_failed": {{ 'at_bulk_order.dialog.color_failed' | t | json }},
+            "not_offered": {{ 'at_bulk_order.dialog.not_offered' | t | json }},
+            "sold_out": {{ 'at_bulk_order.dialog.sold_out' | t | json }},
+            "in_stock": {{ 'at_bulk_order.dialog.in_stock' | t | json }},
+            "stock_count": {{ 'at_bulk_order.dialog.stock_count' | t: count: '[count]' | json }},
+            "quantity_label": {{ 'at_bulk_order.dialog.quantity_label' | t: variant: '[variant]' | json }},
+            "decrease": {{ 'at_bulk_order.dialog.decrease' | t: variant: '[variant]' | json }},
+            "increase": {{ 'at_bulk_order.dialog.increase' | t: variant: '[variant]' | json }},
+            "rule_min": {{ 'at_bulk_order.dialog.rule_min' | t: min: '[min]' | json }},
+            "rule_max": {{ 'at_bulk_order.dialog.rule_max' | t: max: '[max]' | json }},
+            "rule_increment": {{ 'at_bulk_order.dialog.rule_increment' | t: increment: '[increment]' | json }},
+            "error_integer": {{ 'at_bulk_order.dialog.error_integer' | t | json }},
+            "error_min": {{ 'at_bulk_order.dialog.error_min' | t: min: '[min]' | json }},
+            "error_max": {{ 'at_bulk_order.dialog.error_max' | t: max: '[max]' | json }},
+            "error_increment": {{ 'at_bulk_order.dialog.error_increment' | t: increment: '[increment]' | json }},
+            "fix_errors": {{ 'at_bulk_order.dialog.fix_errors' | t | json }},
+            "baseline_failed": {{ 'at_bulk_order.dialog.baseline_failed' | t | json }},
+            "none_added": {{ 'at_bulk_order.dialog.none_added' | t | json }},
+            "lost_none": {{ 'at_bulk_order.dialog.lost_none' | t | json }},
+            "uncertain": {{ 'at_bulk_order.dialog.uncertain' | t | json }},
+            "review_cart": {{ 'at_bulk_order.dialog.review_cart' | t | json }},
+            "row_partial": {{ 'at_bulk_order.dialog.row_partial' | t: added: '[added]', requested: '[requested]', remaining: '[remaining]' | json }},
+            "row_not_added": {{ 'at_bulk_order.dialog.row_not_added' | t | json }},
+            "row_unconfirmed": {{ 'at_bulk_order.dialog.row_unconfirmed' | t | json }}
+          }
+        </script>
+        <p class="at-msbo__notice at-msq__page-status" role="status" aria-live="polite" data-at-msq-page-status></p>
+        <dialog
+          class="at-msq-dialog color-custom-popover"
+          aria-labelledby="{{ at_msq_heading_id }}"
+          data-at-msq-dialog
+        >
+          <div class="at-bulk-grid-modal__inner at-msq__inner">
+            <div class="at-bulk-grid__header">
+              <h2 id="{{ at_msq_heading_id }}" class="at-bulk-grid__title" tabindex="-1" data-at-msq-heading>
+                {{- 'at_bulk_order.dialog.title' | t -}}
+              </h2>
+              <p class="at-bulk-grid__subtitle" data-at-msq-subtitle></p>
+            </div>
+            <div class="at-bulk-grid at-msq">
+              <div class="at-bulk-grid__body at-msq__body" data-at-msq-body></div>
+              <div class="at-bulk-grid__actions at-msq__actions">
+                <p class="at-bulk-grid__cart-error at-msq__message" role="alert" data-at-msq-message></p>
+                <div class="at-msq__summary">
+                  <span class="at-msq__summary-label">{{ at_msq_subtotal_label }}</span>
+                  <span class="at-msq__summary-values">
+                    <span class="at-msq__subtotal" data-at-msq-subtotal></span>
+                    <span class="at-msq__count" data-at-msq-count></span>
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  class="button add-to-cart-button button-primary at-bulk-grid__add at-msq__add"
+                  data-at-msq-add
+                  disabled
+                >
+                  <span class="add-to-cart-text">
+                    <span data-at-msq-add-label>
+                      {{- 'at_bulk_order.dialog.add_empty' | t -}}
+                    </span>
+                    <span aria-hidden="true">&rarr;</span>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            class="button button-unstyled close-button at-bulk-grid-modal__close at-msq__close"
+            aria-label="{{ 'accessibility.close_dialog' | t }}"
+            data-at-msq-close
+          >
+            {{- 'icon-close.svg' | inline_asset_content -}}
+          </button>
+        </dialog>
+      </at-msbo-quantities>
     {%- endif -%}
   </div>
 </div>
