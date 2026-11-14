@@ -281,7 +281,7 @@ async function handleBulkAddSuccess(
   }
 
   container.querySelectorAll('[data-at-bulk-qty]').forEach((input) => {
-    if (input instanceof HTMLInputElement) input.value = '0';
+    if (input instanceof HTMLInputElement) input.value = '';
   });
   const section = document.getElementById(`shopify-section-${sectionId}`);
   const form = section?.querySelector('[data-at-bulk-form]');
@@ -790,7 +790,7 @@ function renderDesktopGrid(container, config, sectionId) {
           v.id +
           '">' +
           '<div class="at-bulk-grid__cell-inner">' +
-          '<input type="number" class="at-bulk-grid__qty-input" min="0" value="0" data-at-bulk-qty data-at-bulk-variant-price="' +
+          '<input type="number" class="at-bulk-grid__qty-input" min="0" value="" placeholder="0" data-at-bulk-qty data-at-bulk-variant-price="' +
           v.price +
           '" data-variant-id="' +
           v.id +
@@ -951,7 +951,7 @@ function renderMobileGrid(container, config, sectionId) {
           '<span class="visually-hidden">Decrease quantity</span><span class="svg-wrapper icon-plus">' +
           ICON_MINUS_SVG +
           '</span></button>' +
-          '<input type="number" class="at-bulk-grid__qty-input" min="0" value="0" data-at-bulk-qty data-at-bulk-variant-price="' +
+          '<input type="number" class="at-bulk-grid__qty-input" min="0" value="" placeholder="0" data-at-bulk-qty data-at-bulk-variant-price="' +
           v.price +
           '" data-variant-id="' +
           v.id +
@@ -998,7 +998,7 @@ function renderMobileGrid(container, config, sectionId) {
       e.preventDefault();
       e.stopPropagation();
       const val = Math.max(0, readBulkQuantity(input) - 1);
-      input.value = String(val);
+      input.value = val > 0 ? String(val) : '';
       updateTotal();
     } else if (plusBtn) {
       e.preventDefault();

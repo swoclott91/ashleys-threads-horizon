@@ -1,0 +1,22 @@
+{%- doc -%}
+  Outputs the customer's saved product + color pairs as one lookup string:
+  `|productId:colorOptionValueId|productId:colorOptionValueId|`. Capture it and test a pair
+  with `contains '|<productId>:<optionValueId>|'`. Liquid has no maps, and this keeps each
+  lookup a single string test instead of a loop over up to 200 saved pairs.
+
+  @param {object[]} favorites - `customer.metafields.wagner.favorite_colors.value`
+    (JSON array of `{"productId": "…", "colorOptionValueId": "…"}`, decimal-string IDs)
+
+  @example
+  {%- capture at_favorite_keys -%}{% render 'at-favorite-color-keys', favorites: customer.metafields.wagner.favorite_colors.value %}{%- endcapture -%}
+{%- enddoc -%}
+{%- liquid
+  echo '|'
+  for favorite in favorites
+    assign at_pid = favorite.productId | append: '' | strip
+    assign at_cid = favorite.colorOptionValueId | append: '' | strip
+    if at_pid != blank and at_cid != blank
+      echo at_pid | append: ':' | append: at_cid | append: '|'
+    endif
+  endfor
+-%}

@@ -48,6 +48,26 @@ export async function fetchBulkVariantBatch(productUrl, optionValueIds, { signal
 }
 
 /**
+ * Load every size of one color from sections/at-bulk-color-data.liquid. Pass the color's
+ * option value ID alone, or a full ordered tuple to pin a third option. Returns null when
+ * the product is gone (404). The data is checked by the caller
+ * (assets/at-multi-style-quantities-core.js → normalizeColorBatch).
+ * @param {string} productUrl
+ * @param {Array<string>} optionValueIds
+ * @param {{ signal?: AbortSignal }} [options]
+ */
+export async function fetchBulkColorBatch(productUrl, optionValueIds, { signal } = {}) {
+  if (!Array.isArray(optionValueIds) || optionValueIds.length < 1 || optionValueIds.length > 3
+    || !optionValueIds.every(isDecimalId)) {
+    throw new TypeError('Expected one to three decimal option value IDs');
+  }
+  return requestBulkSection(
+    productUrl, 'at-bulk-color-data', 'script[data-at-bulk-color]',
+    { option_values: optionValueIds.join(',') }, signal
+  );
+}
+
+/**
  * Resolve one exact variant with one request. Supply a variant ID or the full
  * list of option value IDs in Shopify's option order. A missing or mismatched
  * selection returns status "missing". Request and decode failures reject.
