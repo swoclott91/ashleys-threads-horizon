@@ -100,6 +100,7 @@
     <div
       class="account-button header-actions__action{% if display_style == 'text' %} account-button--text{% endif %} color-custom-popover{% if at_tier != 'guest' %} at-acct-ring at-acct-ring--{{ at_tier }}{% endif %}"
     >
+      <script src="{{ 'at-account-menu-icons.js' | asset_url }}" type="module" fetchpriority="low"></script>
       <shopify-account
         menu="{{ customer_account_menu }}"
         {% if account_actions_style != blank %}
@@ -108,7 +109,6 @@
       >
         {% if customer %}
           <div class="account-button__fallback"></div>
-          <script src="{{ 'at-account-menu-icons.js' | asset_url }}" type="module" fetchpriority="low"></script>
         {% else %}
           <span
             slot="signed-out-avatar"

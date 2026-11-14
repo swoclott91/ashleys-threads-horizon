@@ -1,9 +1,11 @@
 /**
- * Adds icons to the Favorites and Bulk order links inside Shopify's account sheet
+ * Adds icons to the Orders, Profile, Favorites and Bulk order links inside Shopify's account sheet
  * (<shopify-account>, snippets/header-actions.liquid).
  *
  * Shopify renders that sheet in its own shadow root from the `customer-account-main-menu`
  * menu and exposes no slot for it, so the links themselves come from the menu in admin.
+ * With more than two links Shopify lists them as plain rows and drops its own Orders and
+ * Profile icons, which is why those two are drawn here as well.
  * This only decorates them. If Shopify changes the sheet's markup the links keep working
  * and the icons simply stop appearing.
  */
@@ -12,6 +14,16 @@ const SVG_ATTRIBUTES = 'viewBox="0 0 20 20" fill="none" stroke="currentColor" st
   + 'stroke-linejoin="round" aria-hidden="true" focusable="false" data-at-account-icon';
 
 const ICONS = [
+  {
+    path: '/orders',
+    svg: `<svg ${SVG_ATTRIBUTES}>`
+      + '<path d="M2.5 6 10 2.5 17.5 6v8L10 17.5 2.5 14V6Z"/><path d="M2.5 6 10 9.5 17.5 6M10 9.5v8M6.25 4.25l7.5 3.5"/></svg>',
+  },
+  {
+    path: '/profile',
+    svg: `<svg ${SVG_ATTRIBUTES}>`
+      + '<circle cx="10" cy="10" r="7.5"/><circle cx="10" cy="8" r="2.75"/><path d="M4.9 15.5a5.6 5.6 0 0 1 10.2 0"/></svg>',
+  },
   {
     path: '/pages/bulk-order',
     svg: `<svg ${SVG_ATTRIBUTES}>`
