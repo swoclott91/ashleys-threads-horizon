@@ -1,15 +1,665 @@
 {%- comment -%}
-  Member profile area (homepage strategy, "Signed-in profile states"): the next unanswered
-  question one at a time, collection links for saved answers, and "Shop for what you make"
-  when complete. Guests get the project cards from at-make-tiles instead. Owned by the member
-  profile work. Renders nothing until built.
+  Member profile area (homepage strategy, "Signed-in profile states"). Members only; guests get
+  the project cards from at-make-tiles instead.
+
+  - Asks the earliest unanswered question, one at a time: Q1 "What are you making?" (one tap
+    saves), Q2 "What matters most?" (one tap saves), Q3 "How do you decorate?" (multi-select,
+    "Save methods"; "None" is exclusive and counts as answered).
+  - Saved answers show their collection links below the question. When all three are saved the
+    area becomes "Shop for what you make" with "Edit profile".
+  - Answers are customer metafields `wagner.onboarding_q1|q2|q3`, saved through the app proxy
+    `POST /apps/wagner/answers` (Wagner MEMBER_CONTRACT.md, behind MEMBER_ONBOARDING_ENABLED).
+
+  Liquid renders all three questions and every configured collection link, and marks the right
+  ones visible from the metafields, so the first paint is right for every saved-answer state.
+  assets/at-home-profile.js then advances in place after each save; the decision rules live in
+  assets/at-home-profile-core.js (tested by scripts/test-at-home-profile.cjs) and the Liquid
+  below mirrors them for the first paint.
+
+  Collections: each answer maps to its own collection setting. Q1 falls back to the project
+  guide collection from at-guide (all products for "Clients' designs"); Q2 and Q3 answers with
+  no collection set show no link.
 {%- endcomment -%}
+{%- capture at_home_state -%}{% render 'at-home-state' %}{%- endcapture -%}
+{%- assign at_home_state = at_home_state | strip -%}
+{%- if at_home_state != 'guest' -%}
+  {%- liquid
+    assign mf = customer.metafields.wagner
+
+    assign q1_defs = "use:decorator|decorator|Clients’ designs;use:graphic-tees|graphic_tees|My own designs;use:apparel-brand|apparel_brand|My own label;use:groups-events|groups_events|Group, team, or event;use:business-merch|business_merch|Company apparel;use:personal|personal|Me and my family" | split: ';'
+    assign q2_defs = 'lowest_price|Lowest workable price;premium_feel|Premium feel;trend_styles|On-trend styles;in_stock|Reliable stock;matching_families|Matching adult, youth, and infant colors' | split: ';'
+    assign q3_defs = 'screen-print|screen_print|Screen printing;plastisol-transfer|plastisol_transfer|Plastisol transfers;dtg|dtg|DTG;dtf|dtf|DTF;sublimation|sublimation|Sublimation;embroidery|embroidery|Embroidery;htv|htv|HTV' | split: ';'
+    assign q1_allowed = 'use:decorator,use:graphic-tees,use:apparel-brand,use:groups-events,use:business-merch,use:personal' | split: ','
+    assign q2_allowed = 'lowest_price,premium_feel,trend_styles,in_stock,matching_families' | split: ','
+    assign q3_methods_allowed = 'screen-print,plastisol-transfer,dtg,dtf,sublimation,embroidery,htv' | split: ','
+
+    # Saved answers, normalized the same way as normalizeAnswers() in at-home-profile-core.js.
+    assign q1 = mf.onboarding_q1.value | default: '' | strip
+    unless q1_allowed contains q1
+      assign q1 = ''
+    endunless
+    assign q2 = mf.onboarding_q2.value | default: '' | strip
+    unless q2_allowed contains q2
+      assign q2 = ''
+    endunless
+    assign q3_raw = mf.onboarding_q3.value
+    assign q3_str = ''
+    for v in q3_methods_allowed
+      if q3_raw contains v
+        assign q3_str = q3_str | append: ',' | append: v
+      endif
+    endfor
+    if q3_str == blank and q3_raw contains 'none'
+      assign q3_str = ',none'
+    endif
+    assign q3 = q3_str | remove_first: ',' | split: ','
+
+    assign next_q = ''
+    if q1 == blank
+      assign next_q = 'q1'
+    elsif q2 == blank
+      assign next_q = 'q2'
+    elsif q3.size == 0
+      assign next_q = 'q3'
+    endif
+    assign mode = 'complete'
+    if next_q != blank
+      assign mode = 'question'
+    endif
+    assign has_links = false
+    assign method_links = 0
+    assign json_entries = ''
+  -%}
+
+  {%- comment -%} Collection links, one per answer value, hidden unless saved. {%- endcomment -%}
+  {%- capture project_links -%}
+    {%- for def in q1_defs -%}
+      {%- liquid
+        assign d = def | split: '|'
+        assign setting_key = 'q1_' | append: d[1] | append: '_collection'
+        assign image_key = 'q1_' | append: d[1] | append: '_image'
+        assign c = section.settings[setting_key]
+        assign url = c.url
+        assign title = c.title
+        if c == blank
+          capture guide
+            render 'at-guide', segment: d[0]
+          endcapture
+          assign guide = guide | strip
+          if guide != blank and collections[guide] != blank
+            assign c = collections[guide]
+            assign url = c.url
+            assign title = c.title
+          elsif d[0] == 'use:decorator'
+            assign url = routes.all_products_collection_url
+            assign title = 'All blanks'
+          else
+            assign url = ''
+          endif
+        endif
+        assign image = section.settings[image_key] | default: c.featured_image
+      -%}
+      {%- if url != blank -%}
+        {%- capture at_json_entry -%}"q1:{{ d[0] }}":{"url":{{ url | json }},"title":{{ title | json }}}{%- endcapture -%}
+        {%- assign json_entries = json_entries | append: at_json_entry | append: '¦' -%}
+        {%- if d[0] == q1 -%}{%- assign has_links = true -%}{%- endif -%}
+        <a class="at-profile__link at-profile__link--project" href="{{ url }}" data-link="q1:{{ d[0] }}"{% if d[0] != q1 %} hidden{% endif %}>
+          {%- if image != blank -%}
+            <span class="at-profile__link-media">
+              {{- image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 50vw, 100vw', widths: '400, 600, 900, 1200', alt: '' -}}
+            </span>
+          {%- endif -%}
+          <span class="at-profile__link-text">
+            <span class="at-profile__link-kicker">Your project · {{ d[2] }}</span>
+            <span class="at-profile__link-title">{{ title | escape }}</span>
+            <span class="at-profile__link-cta" aria-hidden="true">Shop now →</span>
+          </span>
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- capture priority_links -%}
+    {%- for def in q2_defs -%}
+      {%- liquid
+        assign d = def | split: '|'
+        assign setting_key = 'q2_' | append: d[0] | append: '_collection'
+        assign image_key = 'q2_' | append: d[0] | append: '_image'
+        assign c = section.settings[setting_key]
+        assign image = section.settings[image_key] | default: c.featured_image
+      -%}
+      {%- if c != blank -%}
+        {%- capture at_json_entry -%}"q2:{{ d[0] }}":{"url":{{ c.url | json }},"title":{{ c.title | json }}}{%- endcapture -%}
+        {%- assign json_entries = json_entries | append: at_json_entry | append: '¦' -%}
+        {%- if d[0] == q2 -%}{%- assign has_links = true -%}{%- endif -%}
+        <a class="at-profile__link at-profile__link--priority" href="{{ c.url }}" data-link="q2:{{ d[0] }}"{% if d[0] != q2 %} hidden{% endif %}>
+          {%- if image != blank -%}
+            <span class="at-profile__link-media">
+              {{- image | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 30vw, 100vw', widths: '300, 450, 600, 900', alt: '' -}}
+            </span>
+          {%- endif -%}
+          <span class="at-profile__link-text">
+            <span class="at-profile__link-kicker">What matters most · {{ d[1] }}</span>
+            <span class="at-profile__link-title">{{ c.title | escape }}</span>
+            <span class="at-profile__link-cta" aria-hidden="true">Shop now →</span>
+          </span>
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- capture method_items -%}
+    {%- for def in q3_defs -%}
+      {%- liquid
+        assign d = def | split: '|'
+        assign setting_key = 'q3_' | append: d[1] | append: '_collection'
+        assign c = section.settings[setting_key]
+        assign selected = false
+        if q3 contains d[0]
+          assign selected = true
+        endif
+      -%}
+      {%- if c != blank -%}
+        {%- capture at_json_entry -%}"q3:{{ d[0] }}":{"url":{{ c.url | json }},"title":{{ c.title | json }}}{%- endcapture -%}
+        {%- assign json_entries = json_entries | append: at_json_entry | append: '¦' -%}
+        {%- assign is_more = false -%}
+        {%- if selected -%}
+          {%- assign has_links = true -%}
+          {%- assign method_links = method_links | plus: 1 -%}
+          {%- if method_links > 2 -%}{%- assign is_more = true -%}{%- endif -%}
+        {%- endif -%}
+        <li class="at-profile__method" data-link="q3:{{ d[0] }}"{% if is_more %} data-more{% endif %}{% unless selected %} hidden{% endunless %}{% if is_more %} hidden{% endif %}>
+          <a class="at-profile__method-link" href="{{ c.url }}">
+            <span class="at-profile__method-name">{{ d[2] }}</span>
+            <span class="at-profile__method-title">{{ c.title | escape }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- liquid
+    assign json_entries = json_entries | split: '¦' | join: ','
+  -%}
+
+  <div class="section section--page-width">
+    <at-home-profile
+      class="at-profile"
+      data-mode="{{ mode }}"
+      data-question="{{ next_q }}"
+      {% if has_links %}data-has-links{% endif %}
+      data-endpoint="/apps/wagner/answers"
+    >
+      <script type="application/json" data-answers>{"q1":{{ q1 | json }},"q2":{{ q2 | json }},"q3":{{ q3 | json }}}</script>
+      <script type="application/json" data-collections>{ {{- json_entries -}} }</script>
+
+      <div class="at-profile__ask" data-ask>
+        <div class="at-profile__edit-head" data-edit-head hidden>
+          <h2 class="at-profile__title h3" tabindex="-1" data-edit-heading>Edit your profile</h2>
+          <button type="button" class="at-profile__quiet" data-done>Done</button>
+        </div>
+
+        {%- comment -%} Q1 {%- endcomment -%}
+        <form class="at-profile__question" action="/apps/wagner/answers" method="post" data-form="q1"{% if next_q != 'q1' %} hidden{% endif %}>
+          <div class="at-profile__head">
+            <div class="at-profile__head-text">
+              <p class="at-profile__step">Question 1 of 3</p>
+              <h2 class="at-profile__title h2" id="AtProfileQ1-{{ section.id }}" tabindex="-1">What are you making?</h2>
+              <p class="at-profile__help">Choose one to get a collection of blanks for your project.</p>
+            </div>
+            <button type="button" class="at-profile__quiet at-profile__later" data-later>Maybe later</button>
+          </div>
+          <fieldset class="at-profile__fieldset" aria-labelledby="AtProfileQ1-{{ section.id }}">
+            <ul class="at-profile__cards at-profile__cards--q1" role="list">
+              {%- for def in q1_defs -%}
+                {%- liquid
+                  assign d = def | split: '|'
+                  assign image_key = 'q1_' | append: d[1] | append: '_image'
+                  assign image = section.settings[image_key]
+                -%}
+                <li>
+                  <label class="at-profile__card{% if image != blank %} at-profile__card--media{% endif %}">
+                    {%- if image != blank -%}
+                      <span class="at-profile__card-media">
+                        {{- image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 16vw, 45vw', widths: '200, 300, 450, 600', alt: '' -}}
+                      </span>
+                    {%- endif -%}
+                    <span class="at-profile__card-choice">
+                      <input class="at-profile__input" type="radio" name="q1" value="{{ d[0] }}"{% if d[0] == q1 %} checked{% endif %}>
+                      <span class="at-profile__card-label">{{ d[2] }}</span>
+                    </span>
+                  </label>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </fieldset>
+          <div class="at-profile__actions at-profile__actions--single">
+            <button type="submit" class="button at-profile__save">Save answer</button>
+          </div>
+          <div class="at-profile__saved" data-saved hidden>
+            <p class="at-profile__saved-text">Saved. <span data-saved-links></span></p>
+            <button type="button" class="at-profile__quiet" data-next hidden>Next question</button>
+          </div>
+        </form>
+
+        {%- comment -%} Q2 {%- endcomment -%}
+        <form class="at-profile__question" action="/apps/wagner/answers" method="post" data-form="q2"{% if next_q != 'q2' %} hidden{% endif %}>
+          <div class="at-profile__head">
+            <div class="at-profile__head-text">
+              <p class="at-profile__step">Question 2 of 3</p>
+              <h2 class="at-profile__title h2" id="AtProfileQ2-{{ section.id }}" tabindex="-1">What matters most?</h2>
+              <p class="at-profile__help">Choose one to get blanks picked for it.</p>
+            </div>
+            <button type="button" class="at-profile__quiet at-profile__later" data-later>Maybe later</button>
+          </div>
+          <fieldset class="at-profile__fieldset" aria-labelledby="AtProfileQ2-{{ section.id }}">
+            <ul class="at-profile__cards at-profile__cards--q2" role="list">
+              {%- for def in q2_defs -%}
+                {%- liquid
+                  assign d = def | split: '|'
+                  assign image_key = 'q2_' | append: d[0] | append: '_image'
+                  assign image = section.settings[image_key]
+                -%}
+                <li>
+                  <label class="at-profile__card{% if image != blank %} at-profile__card--media{% endif %}">
+                    {%- if image != blank -%}
+                      <span class="at-profile__card-media">
+                        {{- image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 19vw, 45vw', widths: '200, 300, 450, 600', alt: '' -}}
+                      </span>
+                    {%- endif -%}
+                    <span class="at-profile__card-choice">
+                      <input class="at-profile__input" type="radio" name="q2" value="{{ d[0] }}"{% if d[0] == q2 %} checked{% endif %}>
+                      <span class="at-profile__card-label">{{ d[1] }}</span>
+                    </span>
+                  </label>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </fieldset>
+          <div class="at-profile__actions at-profile__actions--single">
+            <button type="submit" class="button at-profile__save">Save answer</button>
+          </div>
+          <div class="at-profile__saved" data-saved hidden>
+            <p class="at-profile__saved-text">Saved. <span data-saved-links></span></p>
+            <button type="button" class="at-profile__quiet" data-next hidden>Next question</button>
+          </div>
+        </form>
+
+        {%- comment -%} Q3 {%- endcomment -%}
+        <form class="at-profile__question" action="/apps/wagner/answers" method="post" data-form="q3"{% if next_q != 'q3' %} hidden{% endif %}>
+          <div class="at-profile__head">
+            <div class="at-profile__head-text">
+              <p class="at-profile__step">Question 3 of 3</p>
+              <h2 class="at-profile__title h2" id="AtProfileQ3-{{ section.id }}" tabindex="-1">How do you decorate?</h2>
+              <p class="at-profile__help">Select every method you use, then save. Choose None if you don’t decorate.</p>
+            </div>
+            <button type="button" class="at-profile__quiet at-profile__later" data-later>Maybe later</button>
+          </div>
+          <fieldset class="at-profile__fieldset" aria-labelledby="AtProfileQ3-{{ section.id }}">
+            <ul class="at-profile__cards at-profile__cards--q3" role="list">
+              {%- for def in q3_defs -%}
+                {%- assign d = def | split: '|' -%}
+                <li>
+                  <label class="at-profile__card">
+                    <span class="at-profile__card-choice">
+                      <input class="at-profile__input" type="checkbox" name="q3" value="{{ d[0] }}"{% if q3 contains d[0] %} checked{% endif %}>
+                      <span class="at-profile__card-label">{{ d[2] }}</span>
+                    </span>
+                  </label>
+                </li>
+              {%- endfor -%}
+              <li>
+                <label class="at-profile__card">
+                  <span class="at-profile__card-choice">
+                    <input class="at-profile__input" type="checkbox" name="q3" value="none"{% if q3 contains 'none' %} checked{% endif %}>
+                    <span class="at-profile__card-label">None</span>
+                  </span>
+                </label>
+              </li>
+            </ul>
+          </fieldset>
+          <div class="at-profile__actions">
+            <button type="submit" class="button at-profile__save">Save methods</button>
+          </div>
+          <div class="at-profile__saved" data-saved hidden>
+            <p class="at-profile__saved-text">Saved. <span data-saved-links></span></p>
+            <button type="button" class="at-profile__quiet" data-next hidden>Next question</button>
+          </div>
+        </form>
+
+      </div>
+
+      <div class="at-profile__feedback">
+        <p class="at-profile__status" role="status" aria-live="polite" data-status></p>
+        <button type="button" class="button button-secondary at-profile__retry" data-retry hidden>Try again</button>
+      </div>
+
+      <div class="at-profile__shop" data-shop>
+        <div class="at-profile__shop-head">
+          <h2 class="at-profile__title h2" tabindex="-1" data-complete-heading>Shop for what you make</h2>
+          <button type="button" class="at-profile__quiet" data-edit>Edit profile</button>
+        </div>
+        <div class="at-profile__links-head">
+          <p class="at-profile__links-label">Your collections</p>
+          <button type="button" class="at-profile__quiet" data-resume hidden>Answer the next question</button>
+        </div>
+        <div class="at-profile__tiles{% if method_links == 0 %} at-profile__tiles--no-methods{% endif %}" data-tiles>
+          <div class="at-profile__slot at-profile__slot--project">{{ project_links }}</div>
+          <div class="at-profile__slot at-profile__slot--priority">{{ priority_links }}</div>
+          <div class="at-profile__methods" data-methods{% if method_links == 0 %} hidden{% endif %}>
+            <p class="at-profile__methods-title">How you decorate</p>
+            <ul class="at-profile__method-list" role="list" id="AtProfileMethods-{{ section.id }}">
+              {{- method_items -}}
+            </ul>
+            <button
+              type="button"
+              class="at-profile__quiet"
+              aria-controls="AtProfileMethods-{{ section.id }}"
+              aria-expanded="false"
+              data-more-methods
+              {% if method_links <= 2 %}hidden{% endif %}
+            >
+              See all your methods
+            </button>
+          </div>
+        </div>
+      </div>
+    </at-home-profile>
+    {%- comment -%} "Maybe later" lasts for the visit; apply it before paint to avoid a flash. {%- endcomment -%}
+    <script>
+      try {
+        if (sessionStorage.getItem('at_profile_later') === '1') document.currentScript.previousElementSibling.setAttribute('data-later', '');
+      } catch (e) {}
+    </script>
+  </div>
+  <script src="{{ 'at-home-profile.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+{% stylesheet %}
+  .at-profile {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-block: 24px;
+    padding: 20px 16px;
+    border: 1px solid rgb(43 74 63 / 0.25);
+    border-radius: 14px;
+    background: #eef2e6;
+    color: #1f2a24;
+  }
+  @media screen and (min-width: 750px) {
+    .at-profile { padding: 24px; }
+  }
+  .at-profile[hidden],
+  .at-profile [hidden] { display: none !important; }
+
+  /* Mode visibility. JS keeps `hidden` attributes in step; these rules cover the first paint. */
+  .at-profile[data-mode='question'] .at-profile__shop-head,
+  .at-profile[data-mode='complete'] .at-profile__links-head,
+  .at-profile[data-mode='complete'] .at-profile__ask,
+  .at-profile[data-mode='edit'] .at-profile__shop { display: none; }
+  .at-profile[data-mode='question'][data-later] .at-profile__ask { display: none; }
+  .at-profile[data-mode='question'][data-later]:not([data-has-links]) { display: none; }
+  .at-profile[data-mode='question']:not([data-has-links]) .at-profile__shop { display: none; }
+  .at-profile[data-mode='edit'] .at-profile__step,
+  .at-profile[data-mode='edit'] .at-profile__later,
+  .at-profile[data-mode='edit'] [data-next] { display: none; }
+
+  .at-profile__ask { display: flex; flex-direction: column; gap: 28px; }
+  .at-profile__question { display: flex; flex-direction: column; gap: 16px; margin: 0; }
+  .at-profile__head,
+  .at-profile__edit-head,
+  .at-profile__shop-head,
+  .at-profile__links-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px 18px;
+  }
+  .at-profile__head-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .at-profile__step, .at-profile__help, .at-profile__title, .at-profile__links-label { margin: 0; }
+  .at-profile__step { font-size: 0.95rem; }
+  .at-profile__title { color: #1f3d33; }
+  .at-profile__title:focus { outline: none; }
+  .at-profile__title:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+  .at-profile__help { font-size: 1rem; }
+  .at-profile[data-mode='edit'] .at-profile__title.h2 { font-size: 1.35rem; }
+
+  .at-profile__quiet {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .at-profile__quiet:hover { text-decoration-thickness: 2px; }
+
+  .at-profile__fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+  .at-profile__cards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  @media screen and (min-width: 750px) {
+    .at-profile__cards--q3 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  @media screen and (min-width: 990px) {
+    .at-profile__cards--q1 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .at-profile__cards--q2 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  }
+  .at-profile__cards > li { display: flex; min-width: 0; }
+  .at-profile__card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid rgb(43 74 63 / 0.22);
+    border-radius: 10px;
+    background: #fbfaf5;
+    cursor: pointer;
+  }
+  .at-profile__card:hover { border-color: #2b4a3f; }
+  .at-profile__card:has(.at-profile__input:checked) {
+    border-color: #1f3d33;
+    box-shadow: inset 0 0 0 1px #1f3d33;
+    background: #ffffff;
+  }
+  .at-profile__card:has(.at-profile__input:focus-visible) { outline: 2px solid #1f3d33; outline-offset: 2px; }
+  .at-profile__card-media { display: block; aspect-ratio: 1; background: rgb(43 74 63 / 0.08); }
+  .at-profile__card-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .at-profile__card-choice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1 1 auto;
+    min-height: 56px;
+    padding: 10px 12px;
+  }
+  .at-profile__input {
+    flex: none;
+    width: 1.15rem;
+    height: 1.15rem;
+    margin: 0;
+    accent-color: #1f3d33;
+  }
+  .at-profile__card-label { font-weight: 700; line-height: 1.25; }
+
+  .at-profile__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  /* One tap saves Q1 and Q2; Save answer shows after a keyboard choice and before scripts load. */
+  .at-profile__actions--single { display: none; }
+  .at-profile__question[data-keyboard] .at-profile__actions--single,
+  at-home-profile:not(:defined) .at-profile__actions--single { display: flex; }
+
+  .at-profile__saved {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 18px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #ffffff;
+  }
+  .at-profile__saved-text { margin: 0; font-weight: 600; }
+  .at-profile__saved-text a { font-weight: 700; }
+
+  .at-profile__feedback { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .at-profile__feedback:not(:has(.at-profile__status:not(:empty))) { display: none; }
+  .at-profile__status { margin: 0; }
+  .at-profile__status[data-tone='error'] { color: #8a1c1c; font-weight: 600; }
+
+  /* Collections for saved answers. */
+  .at-profile__shop { display: flex; flex-direction: column; gap: 12px; }
+  .at-profile__links-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .at-profile__tiles { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+  .at-profile__slot:not(:has(> .at-profile__link:not([hidden]))) { display: none; }
+  .at-profile__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #fbfaf5;
+    color: inherit;
+    text-decoration: none;
+  }
+  .at-profile__link:hover .at-profile__link-title { text-decoration: underline; }
+  .at-profile__link-media { display: block; aspect-ratio: 16 / 9; background: rgb(43 74 63 / 0.08); }
+  .at-profile__link-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .at-profile__link-text { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; }
+  .at-profile__link-kicker { font-size: 0.85rem; color: rgb(31 42 36 / 0.78); }
+  .at-profile__link-title { font-size: 1.15rem; font-weight: 700; }
+  .at-profile__link-cta { font-weight: 600; font-size: 0.95rem; }
+  .at-profile__link--project .at-profile__link-title { font-size: 1.4rem; }
+
+  .at-profile__methods {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: #fbfaf5;
+  }
+  .at-profile__methods-title { margin: 0; font-weight: 700; }
+  .at-profile__method-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; width: 100%; }
+  .at-profile__method-link {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 12px;
+    border: 1px solid rgb(43 74 63 / 0.2);
+    border-radius: 8px;
+    color: inherit;
+    text-decoration: none;
+  }
+  .at-profile__method-link:hover { border-color: #1f3d33; }
+  .at-profile__method-name { font-weight: 700; }
+  .at-profile__method-title { font-size: 0.9rem; }
+
+  /* While questions remain: compact links, no images. */
+  .at-profile[data-mode='question'] .at-profile__tiles {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+  .at-profile[data-mode='question'] .at-profile__link-media,
+  .at-profile[data-mode='question'] .at-profile__link-cta { display: none; }
+  .at-profile[data-mode='question'] .at-profile__link-text { padding: 10px 14px; }
+  .at-profile[data-mode='question'] .at-profile__link--project .at-profile__link-title,
+  .at-profile[data-mode='question'] .at-profile__link-title { font-size: 1rem; }
+  .at-profile[data-mode='question'] .at-profile__methods { padding: 10px 14px; }
+  .at-profile[data-mode='question'] .at-profile__method-list { flex-direction: row; flex-wrap: wrap; }
+
+  /* Complete: project largest, priority second, methods grouped. */
+  @media screen and (min-width: 750px) {
+    .at-profile[data-mode='complete'] .at-profile__tiles {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr);
+      align-items: stretch;
+    }
+    .at-profile[data-mode='complete'] .at-profile__tiles--no-methods {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    }
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "Home: profile questions",
   "tag": "section",
   "class": "at-home-profile-section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Signed-in members only. Asks the next unanswered profile question and links each saved answer to its own collection. Answers save through Wagner (/apps/wagner/answers)."
+    },
+    {
+      "type": "header",
+      "content": "Question 1: What are you making?"
+    },
+    {
+      "type": "paragraph",
+      "content": "Each project links to its guide collection unless you pick another here. Images show on the question cards and the project tile; without one, the collection's image is used on the tile."
+    },
+    { "type": "image_picker", "id": "q1_decorator_image", "label": "Clients’ designs: image" },
+    { "type": "collection", "id": "q1_decorator_collection", "label": "Clients’ designs: collection", "info": "Defaults to all products." },
+    { "type": "image_picker", "id": "q1_graphic_tees_image", "label": "My own designs: image" },
+    { "type": "collection", "id": "q1_graphic_tees_collection", "label": "My own designs: collection" },
+    { "type": "image_picker", "id": "q1_apparel_brand_image", "label": "My own label: image" },
+    { "type": "collection", "id": "q1_apparel_brand_collection", "label": "My own label: collection" },
+    { "type": "image_picker", "id": "q1_groups_events_image", "label": "Group, team, or event: image" },
+    { "type": "collection", "id": "q1_groups_events_collection", "label": "Group, team, or event: collection" },
+    { "type": "image_picker", "id": "q1_business_merch_image", "label": "Company apparel: image" },
+    { "type": "collection", "id": "q1_business_merch_collection", "label": "Company apparel: collection" },
+    { "type": "image_picker", "id": "q1_personal_image", "label": "Me and my family: image" },
+    { "type": "collection", "id": "q1_personal_collection", "label": "Me and my family: collection" },
+    {
+      "type": "header",
+      "content": "Question 2: What matters most?"
+    },
+    {
+      "type": "paragraph",
+      "content": "An answer with no collection shows no link."
+    },
+    { "type": "image_picker", "id": "q2_lowest_price_image", "label": "Lowest workable price: image" },
+    { "type": "collection", "id": "q2_lowest_price_collection", "label": "Lowest workable price: collection" },
+    { "type": "image_picker", "id": "q2_premium_feel_image", "label": "Premium feel: image" },
+    { "type": "collection", "id": "q2_premium_feel_collection", "label": "Premium feel: collection" },
+    { "type": "image_picker", "id": "q2_trend_styles_image", "label": "On-trend styles: image" },
+    { "type": "collection", "id": "q2_trend_styles_collection", "label": "On-trend styles: collection" },
+    { "type": "image_picker", "id": "q2_in_stock_image", "label": "Reliable stock: image" },
+    { "type": "collection", "id": "q2_in_stock_collection", "label": "Reliable stock: collection" },
+    { "type": "image_picker", "id": "q2_matching_families_image", "label": "Matching colors: image" },
+    { "type": "collection", "id": "q2_matching_families_collection", "label": "Matching colors: collection", "info": "Matching adult, youth, and infant colors." },
+    {
+      "type": "header",
+      "content": "Question 3: How do you decorate?"
+    },
+    {
+      "type": "paragraph",
+      "content": "One collection per method. A method with no collection shows no link. None has no collection."
+    },
+    { "type": "collection", "id": "q3_screen_print_collection", "label": "Screen printing" },
+    { "type": "collection", "id": "q3_plastisol_transfer_collection", "label": "Plastisol transfers" },
+    { "type": "collection", "id": "q3_dtg_collection", "label": "DTG" },
+    { "type": "collection", "id": "q3_dtf_collection", "label": "DTF" },
+    { "type": "collection", "id": "q3_sublimation_collection", "label": "Sublimation" },
+    { "type": "collection", "id": "q3_embroidery_collection", "label": "Embroidery" },
+    { "type": "collection", "id": "q3_htv_collection", "label": "HTV" }
+  ],
   "presets": [
     {
       "name": "Home: profile questions"
