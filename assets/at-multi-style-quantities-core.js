@@ -413,3 +413,183 @@ export function applyReconciliation(draft, result) {
   }
   return draft;
 }
+
+/* ── Review & reorder prefill ───────────────────────────────────────────────────────────── */
+
+/*
+ * `/pages/bulk-order?reorder=<order>` opens the quantities dialog prefilled with one past
+ * order. `<order>` is the order ID (what the homepage "Your last order" panel links with) or
+ * the order name ("#1001" or "1001"). The order's lines come from
+ * sections/at-reorder-data.liquid (first page of `customer.orders`, 20 orders), fetched only
+ * when the parameter is present. Quantities stay fully editable; nothing is added to the
+ * cart until the shopper presses add.
+ */
+
+export const REORDER_PARAM = 'reorder';
+const REMOVED_COLOR_PREFIX = 'removed-';
+
+const orderKey = (value) => String(value ?? '').trim().replace(/^#/, '').toLowerCase();
+
+/** The `reorder` value from a query string, or null when absent or unusable. */
+export function parseReorderParam(search) {
+  let value = '';
+  try {
+    value = new URLSearchParams(search ?? '').get(REORDER_PARAM) ?? '';
+  } catch {
+    return null;
+  }
+  value = value.trim();
+  if (!value || value.length > 64 || !/^#?[\w-]+$/.test(value)) return null;
+  return value;
+}
+
+function normalizeReorderLine(raw) {
+  const quantity = Number(raw?.quantity);
+  if (!Number.isSafeInteger(quantity) || quantity < 1) return null;
+  const id = (value) => (isDecimalId(String(value ?? '')) ? String(value) : null);
+  const productId = id(raw.productId);
+  return {
+    productId,
+    variantId: productId ? id(raw.variantId) : null,
+    colorId: productId ? id(raw.colorId) : null,
+    colorName: typeof raw.colorName === 'string' ? raw.colorName : '',
+    title: typeof raw.title === 'string' ? raw.title : '',
+    quantity,
+  };
+}
+
+/**
+ * Validates the JSON from sections/at-reorder-data.liquid: { orders: [{ id, name, lines }] }.
+ * Malformed orders and lines are dropped rather than failing the whole page.
+ */
+export function normalizeReorderData(data) {
+  const orders = [];
+  for (const raw of Array.isArray(data?.orders) ? data.orders : []) {
+    const id = String(raw?.id ?? '');
+    if (!isDecimalId(id)) continue;
+    const lines = (Array.isArray(raw.lines) ? raw.lines : []).map(normalizeReorderLine).filter(Boolean);
+    orders.push({ id, name: typeof raw.name === 'string' ? raw.name : '', lines });
+  }
+  return { orders };
+}
+
+/** The order matching the parameter by ID, else by name with or without "#". */
+export function findReorderOrder(data, param) {
+  const key = orderKey(param);
+  if (!key) return null;
+  const { orders } = normalizeReorderData(data);
+  return orders.find((order) => order.id === key)
+    ?? orders.find((order) => order.name && orderKey(order.name) === key)
+    ?? null;
+}
+
+/** Product IDs to preselect, in the order they first appear in the order. */
+export function reorderProductIds(order) {
+  const ids = [];
+  for (const line of order?.lines ?? []) {
+    if (line.productId && !ids.includes(line.productId)) ids.push(line.productId);
+  }
+  return ids;
+}
+
+/**
+ * Turns an order and the selector's styles into the dialog's prefill.
+ *
+ * - styles: one per ordered product the selector shows, in order, narrowed to the order's
+ *   colors (in the product's option order). A color no longer on the product becomes a
+ *   `removed: true` color with a placeholder ID, which the dialog shows as "no longer
+ *   available" without loading it.
+ * - quantities: ordered quantity per exact variant ID (lines of the same variant summed).
+ * - unavailable: lines that cannot be prefilled at all (product gone, product not offered on
+ *   the bulk page, or the exact variant gone), for the dialog's notice.
+ *
+ * @param {{ lines: Array<any> }} order
+ * @param {Array<{ productId: string, colors: Array<{ optionValueId: string }> }>} styles
+ */
+export function buildReorderPrefill(order, styles) {
+  const byId = new Map((styles ?? []).map((style) => [style.productId, style]));
+  const picked = new Map();
+  const quantities = new Map();
+  const unavailable = [];
+
+  for (const line of order?.lines ?? []) {
+    const style = line.productId ? byId.get(line.productId) : null;
+    if (!style) {
+      unavailable.push({ title: line.title, quantity: line.quantity });
+      continue;
+    }
+    let entry = picked.get(style.productId);
+    if (!entry) {
+      entry = { style, colorIds: new Set(), removed: new Map() };
+      picked.set(style.productId, entry);
+    }
+    if (!line.colorId) {
+      const name = line.colorName || line.title;
+      entry.removed.set(name.toLowerCase(), name);
+      continue;
+    }
+    entry.colorIds.add(line.colorId);
+    if (!line.variantId) {
+      unavailable.push({ title: line.title, quantity: line.quantity });
+      continue;
+    }
+    const existing = quantities.get(line.variantId);
+    if (existing) existing.quantity += line.quantity;
+    else {
+      quantities.set(line.variantId, {
+        variantId: line.variantId,
+        productId: style.productId,
+        colorId: line.colorId,
+        quantity: line.quantity,
+      });
+    }
+  }
+
+  const prefillStyles = [];
+  for (const { style, colorIds, removed } of picked.values()) {
+    const known = new Set(style.colors.map((color) => color.optionValueId));
+    const colors = style.colors.filter((color) => colorIds.has(color.optionValueId)).map((color) => ({ ...color }));
+    // A color still on the product that the selector does not list (all of its ordered
+    // variants are gone): show it so the shopper sees the current sizes.
+    for (const colorId of colorIds) {
+      if (!known.has(colorId)) {
+        const line = order.lines.find((candidate) => candidate.colorId === colorId);
+        colors.push({ optionValueId: colorId, name: line?.colorName ?? '', swatchBackground: null, sources: ['purchase'] });
+      }
+    }
+    let index = 0;
+    for (const name of removed.values()) {
+      colors.push({
+        optionValueId: `${REMOVED_COLOR_PREFIX}${index++}`,
+        name,
+        swatchBackground: null,
+        sources: ['purchase'],
+        removed: true,
+      });
+    }
+    prefillStyles.push({ ...style, sources: [...(style.sources ?? [])], colors });
+  }
+  return { styles: prefillStyles, quantities: [...quantities.values()], unavailable };
+}
+
+/**
+ * Splits prefill quantities once their style has loaded:
+ * - seed: available variants, to put in the draft with the ordered quantity;
+ * - soldOut: variants loaded but not available now (flagged, never put in the draft, so they
+ *   never block the add or count in the total);
+ * - missing: variants the loaded grid does not have (no longer offered).
+ * @param {Array<{ variantId: string, productId: string, colorId: string, quantity: number }>} quantities
+ * @param {(variantId: string) => any} lookup
+ */
+export function planPrefillSeed(quantities, lookup) {
+  const seed = [];
+  const soldOut = [];
+  const missing = [];
+  for (const entry of quantities ?? []) {
+    const variant = lookup(entry.variantId);
+    if (!variant) missing.push(entry);
+    else if (!variant.available) soldOut.push(entry);
+    else seed.push(entry);
+  }
+  return { seed, soldOut, missing };
+}

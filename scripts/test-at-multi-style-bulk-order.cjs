@@ -104,3 +104,15 @@ test('formats the live selected count with plural rules', async () => {
   assert.equal(formatCount(strings, 0, 'en'), '0 styles selected');
   assert.equal(formatCount(strings, 3, 'not a locale!'), '3 styles selected');
 });
+
+test('the tab link opens Past purchases or Favorites; anything else keeps All', async () => {
+  const { initialFilter } = await selector;
+  assert.equal(initialFilter('?tab=favorite'), 'favorite');
+  assert.equal(initialFilter('?tab=purchase'), 'purchase');
+  assert.equal(initialFilter('?tab=Favorites'), 'favorite');
+  assert.equal(initialFilter('?tab=purchases&reorder=1'), 'purchase');
+  assert.equal(initialFilter('?tab=all'), null);
+  assert.equal(initialFilter('?tab=bogus'), null);
+  assert.equal(initialFilter(''), null);
+  assert.equal(initialFilter(undefined), null);
+});

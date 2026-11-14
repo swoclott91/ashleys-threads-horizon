@@ -260,6 +260,9 @@
     "empty_heading": "Nothing to reorder yet",
     "empty_body": "Styles you buy or save as favorites show up here.",
     "preview_notice": "Theme editor preview: sample favorite and purchase rows from the section settings. Shoppers see their own styles.",
+    "reorder_not_found": "We couldn’t find that order. Reorder works for your 20 most recent orders; choose styles below instead.",
+    "reorder_failed": "Your order didn’t load. Choose styles below, or reload the page to try again.",
+    "reorder_nothing": "Nothing from that order can be reordered here anymore. Choose styles below instead.",
     "dialog": {
       "title": "Add multiple colors & sizes",
       "subtitle": {
@@ -320,7 +323,17 @@
       "review_cart": "Review cart",
       "row_partial": "{{ added }} of {{ requested }} added. {{ remaining }} not added.",
       "row_not_added": "Not added.",
-      "row_unconfirmed": "Not confirmed. Check your cart before adding again."
+      "row_unconfirmed": "Not confirmed. Check your cart before adding again.",
+      "prefill_intro": "Filled in from order {{ order }}. Change any quantity before adding.",
+      "prefill_ordered": "You ordered {{ count }}.",
+      "prefill_sold_out": {
+        "one": "{{ count }} size is sold out and isn’t included.",
+        "other": "{{ count }} sizes are sold out and aren’t included."
+      },
+      "prefill_unavailable": {
+        "one": "No longer available: {{ items }}.",
+        "other": "{{ count }} items are no longer available: {{ items }}."
+      }
     }
   },
   "at_discount_progress": {

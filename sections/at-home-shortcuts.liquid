@@ -1,14 +1,264 @@
 {%- comment -%}
   Compact "Past purchases" and "Your favorites" shortcuts under the hero row for members
-  (homepage strategy). Each shortcut is omitted when it has no content. Owned by the member
-  top row work. Renders nothing until built.
+  (homepage strategy). Each shortcut is omitted when it has no content, and the section
+  renders nothing (no wrapper markup) when both are empty or the shopper is a guest.
+
+  - Past purchases: styles from the first page of `customer.orders` (20 orders) whose product
+    and variant still exist and that have a Color/Colour option, the same styles the bulk order
+    page lists. Photo: the newest such style that is not in the latest order (the last order
+    panel already shows those), else the newest. Link: `/pages/bulk-order?tab=purchase`.
+  - Your favorites: from `wagner.favorite_products`. Shown only while the hero row shows the
+    last order panel; otherwise the favorites panel is already beside the hero (same rule as
+    sections/at-home-top.liquid: buyer with a last order to show). Links:
+    `/pages/bulk-order?tab=favorite` and `/pages/favorites`.
+
+  The bulk order tab links only switch the tab; nothing is preselected.
+  Never reads `customer.orders_count` or `product.variants`.
 {%- endcomment -%}
+{%- capture at_sc_state -%}{% render 'at-home-state' %}{%- endcapture -%}
+{%- liquid
+  assign at_sc_state = at_sc_state | strip
+  assign at_sc_root = routes.root_url | append: '/' | replace: '//', '/'
+
+  assign at_sc_purchase_count = 0
+  assign at_sc_purchase_image = nil
+  assign at_sc_fav_count = 0
+  assign at_sc_fav_image = nil
+  assign at_sc_show_fav = false
+-%}
+{%- if customer and at_sc_state == 'buyer' -%}
+  {%- liquid
+    assign at_sc_pids = '|'
+    assign at_sc_no_color = '|'
+    assign at_sc_first_image = nil
+  -%}
+  {%- paginate customer.orders by 20 -%}
+    {%- for order in customer.orders -%}
+      {%- assign at_sc_order_index = forloop.index -%}
+      {%- for line_item in order.line_items -%}
+        {%- liquid
+          assign at_sc_product = line_item.product
+          if at_sc_product == blank or line_item.variant == blank
+            continue
+          endif
+          assign at_sc_pid = at_sc_product.id | append: ''
+          assign at_sc_key = '|' | append: at_sc_pid | append: '|'
+          if at_sc_pids contains at_sc_key or at_sc_no_color contains at_sc_key
+            continue
+          endif
+          assign at_sc_has_color = false
+          for option in at_sc_product.options_with_values
+            assign at_sc_option = option.name | strip | downcase
+            if at_sc_option == 'color' or at_sc_option == 'colour'
+              assign at_sc_has_color = true
+              break
+            endif
+          endfor
+          unless at_sc_has_color
+            assign at_sc_no_color = at_sc_no_color | append: at_sc_pid | append: '|'
+            continue
+          endunless
+
+          assign at_sc_pids = at_sc_pids | append: at_sc_pid | append: '|'
+          assign at_sc_purchase_count = at_sc_purchase_count | plus: 1
+          assign at_sc_image = at_sc_product.featured_media.preview_image | default: at_sc_product.featured_image
+          if at_sc_first_image == nil and at_sc_image != blank
+            assign at_sc_first_image = at_sc_image
+          endif
+          if at_sc_order_index > 1 and at_sc_purchase_image == nil and at_sc_image != blank
+            assign at_sc_purchase_image = at_sc_image
+          endif
+        -%}
+      {%- endfor -%}
+    {%- endfor -%}
+  {%- endpaginate -%}
+  {%- liquid
+    if at_sc_purchase_image == nil
+      assign at_sc_purchase_image = at_sc_first_image
+    endif
+  -%}
+
+  {%- capture at_sc_last_order -%}{%- render 'at-home-last-order', section_id: section.id -%}{%- endcapture -%}
+  {%- assign at_sc_last_order = at_sc_last_order | strip -%}
+  {%- if at_sc_last_order != blank -%}
+    {%- liquid
+      assign at_sc_fav_list = customer.metafields.wagner.favorite_products.value
+      if at_sc_fav_list != blank
+        for at_sc_fav in at_sc_fav_list
+          if at_sc_fav == blank
+            continue
+          endif
+          assign at_sc_show_fav = true
+          assign at_sc_fav_image = at_sc_fav.featured_media.preview_image | default: at_sc_fav.featured_image
+
+          break
+        endfor
+        assign at_sc_fav_count = at_sc_fav_list.count | default: 1
+      endif
+    -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if at_sc_purchase_count > 0 or at_sc_show_fav -%}
+  {%- liquid
+    if at_sc_purchase_count == 1
+      assign at_sc_purchase_label = '1 style from your recent orders'
+    else
+      assign at_sc_purchase_label = at_sc_purchase_count | append: ' styles from your recent orders'
+    endif
+    if at_sc_fav_count == 1
+      assign at_sc_fav_label = '1 saved style'
+    else
+      assign at_sc_fav_label = at_sc_fav_count | append: ' saved styles'
+    endif
+  -%}
+  <div class="section section--page-width">
+    <ul class="at-home-shortcuts" role="list">
+      {%- if at_sc_purchase_count > 0 -%}
+        <li class="at-home-shortcuts__card">
+          <span class="at-home-shortcuts__media">
+            {%- if at_sc_purchase_image != blank -%}
+              {{
+                at_sc_purchase_image
+                | image_url: width: 160
+                | image_tag: loading: 'lazy', width: 72, height: 72, alt: '', class: 'at-home-shortcuts__image'
+              }}
+            {%- endif -%}
+          </span>
+          <span class="at-home-shortcuts__text">
+            <span class="at-home-shortcuts__title">Past purchases</span>
+            <span class="at-home-shortcuts__meta">{{ at_sc_purchase_label }}</span>
+            <span class="at-home-shortcuts__links">
+              <a class="at-home-shortcuts__link" href="{{ at_sc_root }}pages/bulk-order?tab=purchase">
+                Bulk order past purchases <span aria-hidden="true">&rarr;</span>
+              </a>
+            </span>
+          </span>
+        </li>
+      {%- endif -%}
+      {%- if at_sc_show_fav -%}
+        <li class="at-home-shortcuts__card">
+          <span class="at-home-shortcuts__media">
+            {%- if at_sc_fav_image != blank -%}
+              {{
+                at_sc_fav_image
+                | image_url: width: 160
+                | image_tag: loading: 'lazy', width: 72, height: 72, alt: '', class: 'at-home-shortcuts__image'
+              }}
+            {%- endif -%}
+          </span>
+          <span class="at-home-shortcuts__text">
+            <span class="at-home-shortcuts__title">Your favorites</span>
+            <span class="at-home-shortcuts__meta">{{ at_sc_fav_label }}</span>
+            <span class="at-home-shortcuts__links">
+              <a class="at-home-shortcuts__link" href="{{ at_sc_root }}pages/bulk-order?tab=favorite">
+                Bulk order favorites <span aria-hidden="true">&rarr;</span>
+              </a>
+              <a class="at-home-shortcuts__link at-home-shortcuts__link--quiet" href="{{ at_sc_root }}pages/favorites">
+                View favorites
+              </a>
+            </span>
+          </span>
+        </li>
+      {%- endif -%}
+    </ul>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .at-home-shortcuts-section:not(:has(.at-home-shortcuts)) {
+    display: none;
+  }
+  .at-home-shortcuts {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media screen and (min-width: 750px) {
+    .at-home-shortcuts {
+      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    }
+  }
+  .at-home-shortcuts__card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    padding: 14px 16px;
+    border: 1px solid rgb(36 62 52 / 0.18);
+    border-radius: 12px;
+    background: #f6f1e7;
+    color: #243e34;
+  }
+  .at-home-shortcuts__media {
+    flex: 0 0 72px;
+    width: 72px;
+    height: 72px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #fff;
+  }
+  .at-home-shortcuts__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .at-home-shortcuts__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .at-home-shortcuts__title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .at-home-shortcuts__meta {
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+  .at-home-shortcuts__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    margin-block-start: 6px;
+  }
+  .at-home-shortcuts__link {
+    color: inherit;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .at-home-shortcuts__link:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .at-home-shortcuts__link--quiet {
+    font-weight: 400;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .at-home-shortcuts__link:focus-visible {
+    outline: 2px solid #243e34;
+    outline-offset: 2px;
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "Home: reorder shortcuts",
   "tag": "section",
   "class": "at-home-shortcuts-section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Signed-in members only: Past purchases and Your favorites shortcuts to the bulk order page. Each shows only when it has content; favorites show here only when the hero row shows the last order."
+    }
+  ],
   "presets": [
     {
       "name": "Home: reorder shortcuts"

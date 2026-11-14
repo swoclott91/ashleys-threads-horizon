@@ -173,3 +173,15 @@ test('keeps partial lines on rejection and reads authoritative cart without cach
   mockResponse(Response.json({}));
   assert.equal((await readBulkCart()).ok, false);
 });
+
+test('loads reorder data for the bulk order page itself, keeping its locale path', async () => {
+  const { fetchReorderData } = await transport;
+  const data = { orders: [{ id: '61', name: '#1001', lines: [] }] };
+  mockSection('at-reorder-data', 'data-at-reorder-orders', data);
+  assert.deepEqual(await fetchReorderData('/fr-ca/pages/bulk-order?reorder=61&tab=favorite'), data);
+  assert.equal(requests.length, 1);
+  assert.equal(requests[0].url.pathname, '/fr-ca/pages/bulk-order');
+  assert.equal(requests[0].url.searchParams.get('sections'), 'at-reorder-data');
+  mockResponse(new Response(null, { status: 404 }));
+  assert.equal(await fetchReorderData('/pages/bulk-order'), null);
+});

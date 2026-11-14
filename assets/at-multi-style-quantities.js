@@ -13,21 +13,34 @@
  * a CartLinesUpdateEvent is dispatched from the add button inside the modal before the
  * request and resolved with the cart afterwards, so the cart icon and drawer update and the
  * drawer opens once the dialog closes.
+ *
+ * Review & reorder: with `?reorder=<order ID or name>` on the page URL, the dialog loads that
+ * order's lines (sections/at-reorder-data.liquid), checks the ordered styles in the selector
+ * and opens itself with those colors and the order's exact variants prefilled with their
+ * ordered quantities. Everything stays editable; sold-out sizes keep a blank, disabled input
+ * with an "ordered N" note, and lines that cannot be prefilled are listed in a notice. None
+ * of them count in the total. Nothing is added until the shopper presses add. An order not in
+ * the first 20 falls back to the normal selector with a notice.
  */
 
 import { formatMoney } from '@theme/money-formatting';
 import { CartLinesUpdateEvent } from '@shopify/events';
-import { fetchBulkColorBatch, postBulkCartItems, readBulkCart } from '@theme/at-bulk-transport';
+import { fetchBulkColorBatch, fetchReorderData, postBulkCartItems, readBulkCart } from '@theme/at-bulk-transport';
 import {
   QuantityDraft,
   SubmitGuard,
   applyReconciliation,
   availabilityBand,
+  buildReorderPrefill,
   buildStyleGrid,
   cartQuantities,
   classifyAddResponse,
+  findReorderOrder,
   loadColorVariants,
+  parseReorderParam,
+  planPrefillSeed,
   reconcileCartAdd,
+  reorderProductIds,
   runWithConcurrency,
   stepQuantity,
   validateQuantity,
@@ -110,6 +123,8 @@ class MultiStyleQuantities extends HTMLElement {
   #notes = new Map();
   #expanded = new Set();
   #media;
+  /** Review & reorder: { name, pending: Map<productId, entries>, soldOut: Set, unavailable: string[] } */
+  #prefill = null;
 
   connectedCallback() {
     this.#listeners?.abort();
@@ -133,6 +148,9 @@ class MultiStyleQuantities extends HTMLElement {
     this.#media.addEventListener('change', () => {
       if (this.#dialog.open) this.#renderAll();
     }, { signal });
+
+    const reorder = parseReorderParam(window.location.search);
+    if (reorder) this.#startReorder(reorder, signal);
   }
 
   disconnectedCallback() {
@@ -159,7 +177,13 @@ class MultiStyleQuantities extends HTMLElement {
   #onChoose = (event) => {
     if (event.detail?.sectionId !== this.dataset.sectionId) return;
     event.preventDefault();
-    this.#styles = Array.isArray(event.detail.styles) ? event.detail.styles : [];
+    // A normal "Choose quantities" ends the reorder review; quantities already typed stay.
+    this.#prefill = null;
+    this.#open(Array.isArray(event.detail.styles) ? event.detail.styles : []);
+  };
+
+  #open(styles) {
+    this.#styles = styles;
     // Keep quantities for styles and colors that are still selected.
     this.#draft.retainSelection(this.#styles);
     for (const variantId of [...this.#notes.keys()]) {
@@ -174,7 +198,124 @@ class MultiStyleQuantities extends HTMLElement {
     this.querySelector('[data-at-msq-heading]')?.focus();
     // Styles already loaded come from the cache; styles still loading finish on their own.
     this.#loadStyles(this.#styles.filter((style) => !['ready', 'loading'].includes(this.#state.get(style.productId)?.status)));
-  };
+    for (const style of this.#styles) {
+      if (this.#state.get(style.productId)?.status === 'ready' && this.#applyPrefill(style)) this.#renderStyle(style);
+    }
+    this.#renderPrefillNotice();
+    this.#renderSummary();
+  }
+
+  /* ── Review & reorder ─────────────────────────────────────────────────────────────────── */
+
+  async #startReorder(param, signal) {
+    const fallback = (key) => {
+      if (signal.aborted) return;
+      const notice = this.closest('.at-msbo')?.querySelector('[data-at-msbo-reorder-notice]');
+      if (notice) {
+        notice.textContent = this.#strings[key] ?? '';
+        notice.hidden = false;
+      }
+      this.#selector()?.setFilter('purchase');
+    };
+
+    let order = null;
+    let failed = false;
+    try {
+      const data = await fetchReorderData(window.location.pathname);
+      order = data ? findReorderOrder(data, param) : null;
+    } catch (error) {
+      console.warn('[at-msbo-quantities] Order lines failed to load', error);
+      failed = true;
+    }
+    await customElements.whenDefined('at-multi-style-bulk-order');
+    if (signal.aborted) return;
+    const selector = this.#selector();
+    if (failed || !order || !selector) {
+      fallback(failed ? 'reorder_failed' : 'reorder_not_found');
+      return;
+    }
+
+    selector.selectStyles(reorderProductIds(order));
+    const prefill = buildReorderPrefill(order, selector.selection);
+    if (!prefill.styles.length) {
+      fallback('reorder_nothing');
+      return;
+    }
+    const pending = new Map();
+    for (const entry of prefill.quantities) {
+      if (!pending.has(entry.productId)) pending.set(entry.productId, []);
+      pending.get(entry.productId).push(entry);
+    }
+    this.#prefill = {
+      name: order.name,
+      pending,
+      soldOut: new Set(),
+      unavailable: prefill.unavailable.map((line) => line.title).filter(Boolean),
+    };
+    this.#open(prefill.styles);
+  }
+
+  #selector() {
+    return document.querySelector(
+      `at-multi-style-bulk-order[data-section-id="${CSS.escape(this.dataset.sectionId || '')}"]`
+    );
+  }
+
+  /**
+   * Puts a loaded style's ordered quantities in the draft (available sizes only) and flags
+   * the rest. Returns true when anything changed, so the caller re-renders the style.
+   */
+  #applyPrefill(style) {
+    const entries = this.#prefill?.pending.get(style.productId);
+    const state = this.#state.get(style.productId);
+    if (!entries || (state?.status !== 'ready' && state?.status !== 'error')) return false;
+    const { seed, soldOut, missing } = planPrefillSeed(entries, this.#lookup);
+    for (const entry of seed) {
+      this.#draft.set(entry.variantId, String(entry.quantity), entry);
+    }
+    for (const entry of soldOut) {
+      this.#prefill.soldOut.add(entry.variantId);
+      this.#notes.set(entry.variantId, fill(this.#strings.prefill_ordered, { count: entry.quantity }));
+      // Keep the color open on mobile so the flag is seen.
+      const row = this.#body.querySelector(`[data-at-msq-cell][data-variant-id="${entry.variantId}"]`)
+        ?.closest('[data-row-key]');
+      if (row instanceof HTMLElement && row.dataset.rowKey) this.#expanded.add(row.dataset.rowKey);
+    }
+    const unresolved = [];
+    for (const entry of missing) {
+      // A color that failed to load may still come back with Try again.
+      if (state.results.get(entry.colorId)?.status === 'error') {
+        unresolved.push(entry);
+        continue;
+      }
+      const color = style.colors.find((candidate) => candidate.optionValueId === entry.colorId);
+      this.#prefill.unavailable.push([style.title, color?.name].filter(Boolean).join(' - '));
+    }
+    if (unresolved.length) this.#prefill.pending.set(style.productId, unresolved);
+    else this.#prefill.pending.delete(style.productId);
+    this.#renderPrefillNotice();
+    return seed.length > 0 || soldOut.length > 0;
+  }
+
+  #renderPrefillNotice() {
+    const target = this.querySelector('[data-at-msq-prefill]');
+    if (!target) return;
+    const prefill = this.#prefill;
+    if (!prefill) {
+      target.hidden = true;
+      target.textContent = '';
+      return;
+    }
+    const parts = [fill(this.#strings.prefill_intro, { order: prefill.name })];
+    if (prefill.soldOut.size) parts.push(plural(this.#strings, 'prefill_sold_out', prefill.soldOut.size));
+    const titles = [...new Set(prefill.unavailable)];
+    if (titles.length) {
+      const shown = titles.slice(0, 4).join(', ') + (titles.length > 4 ? ', …' : '');
+      parts.push(plural(this.#strings, 'prefill_unavailable', titles.length, { items: shown }));
+    }
+    target.textContent = parts.join(' ');
+    target.hidden = false;
+  }
 
   #onClose = () => {
     document.documentElement.classList.remove('at-msq-scroll-lock');
@@ -239,6 +380,11 @@ class MultiStyleQuantities extends HTMLElement {
       const state = this.#state.get(style.productId);
       let failed = false;
       for (const color of style.colors) {
+        if (color.removed) {
+          // Review & reorder: a color the product no longer has. Nothing to load.
+          state.results.set(color.optionValueId, { status: 'missing' });
+          continue;
+        }
         try {
           state.results.set(color.optionValueId, await loadColor(style, color));
         } catch (error) {
@@ -249,6 +395,7 @@ class MultiStyleQuantities extends HTMLElement {
       }
       state.status = failed ? 'error' : 'ready';
       this.#renderStyle(style, { focus });
+      if (this.#applyPrefill(style)) this.#renderStyle(style, { focus });
       this.#renderSummary();
     });
     return runWithConcurrency(tasks, STYLE_CONCURRENCY);
