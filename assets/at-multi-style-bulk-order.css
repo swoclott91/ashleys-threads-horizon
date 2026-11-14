@@ -828,3 +828,34 @@ html.at-msq-scroll-lock {
     flex: 1 0 100%;
   }
 }
+
+/* Style titles and images link to the product page. */
+a.at-msbo__title,
+.at-msq__style-title-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+a.at-msbo__title:hover,
+.at-msq__style-title-link:hover {
+  text-decoration: underline;
+}
+
+a.at-msbo__media,
+.at-msq__style-link {
+  display: block;
+  flex: none;
+}
+
+/* Mobile steppers have their own buttons, so hide the browser's number arrows there. */
+.at-msq__stepper .at-msq__qty {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.at-msq__stepper .at-msq__qty::-webkit-outer-spin-button,
+.at-msq__stepper .at-msq__qty::-webkit-inner-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}

@@ -225,6 +225,7 @@ function defineElement() {
 
       this.addEventListener('change', this.#onChange, { signal });
       this.addEventListener('click', this.#onClick, { signal });
+      this.#watchFavorites(signal);
       this.#applyFilter(this.#currentFilter());
       this.#renderPanel({ announce: false });
     }
@@ -276,6 +277,62 @@ function defineElement() {
       }
       if (target?.closest('[data-at-msbo-choose]')) this.#chooseQuantities();
     };
+
+    /**
+     * The shared heart (assets/at-favorite-colors.js) flips aria-pressed when a color is
+     * saved or removed, including the optimistic toggle and its revert. Mirror that onto
+     * the row so the label, the Favorites tab and its count update without a reload.
+     */
+    #watchFavorites(signal) {
+      if (typeof MutationObserver === 'undefined') return;
+      const observer = new MutationObserver((records) => {
+        const rows = new Set();
+        for (const record of records) {
+          const button = record.target;
+          if (!(button instanceof Element) || !button.closest('at-favorite-color')) continue;
+          const color = button.closest('[data-at-style-color]');
+          const row = button.closest('[data-at-style]');
+          if (!color || !row) continue;
+          const sources = parseSources(color.dataset.sources, ['favorite', 'purchase'])
+            .filter((source) => source !== 'favorite');
+          if (button.getAttribute('aria-pressed') === 'true') sources.unshift('favorite');
+          color.dataset.sources = sources.join(' ');
+          rows.add(row);
+        }
+        if (!rows.size) return;
+        for (const row of rows) this.#refreshRowSources(row);
+        this.#applyFilter(this.#currentFilter());
+      });
+      observer.observe(this, { subtree: true, attributes: true, attributeFilter: ['aria-pressed'] });
+      signal.addEventListener('abort', () => observer.disconnect(), { once: true });
+    }
+
+    #refreshRowSources(row) {
+      const id = row.dataset.productId;
+      if (!this.#styles.has(id)) return;
+      const colors = Array.from(row.querySelectorAll('[data-at-style-color]'));
+      const has = (source) => colors.some((item) => String(item.dataset.sources).split(/\s+/).includes(source));
+      const sources = ['purchase', 'favorite'].filter(has);
+      row.dataset.sources = sources.join(' ');
+      row.toggleAttribute('data-row-favorite', sources.includes('favorite'));
+      row.toggleAttribute('data-row-purchase', sources.includes('purchase'));
+      const label = row.querySelector('[data-at-msbo-sources]');
+      if (label) {
+        label.textContent = sources
+          .map((source) => (source === 'purchase' ? this.#strings.sourcePurchase : this.#strings.sourceFavorite))
+          .filter(Boolean)
+          .join(' · ');
+      }
+      const style = readStyle(row);
+      if (style) this.#styles.set(id, style);
+      for (const source of ['purchase', 'favorite']) {
+        const count = this.querySelector(`[data-at-msbo-filter-count="${source}"]`);
+        if (!count) continue;
+        let total = 0;
+        for (const item of this.#styles.values()) if (item.sources.includes(source)) total += 1;
+        count.textContent = String(total);
+      }
+    }
 
     #applyFilter(filter) {
       let visible = 0;

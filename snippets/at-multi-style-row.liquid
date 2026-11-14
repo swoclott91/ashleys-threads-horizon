@@ -149,7 +149,7 @@
         aria-describedby="{{ at_row_id }}-price"
       >
       <label class="at-msbo__label" for="{{ at_row_id }}">
-        <span class="at-msbo__media">
+        <a class="at-msbo__media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
           {%- if at_image != blank -%}
             {{
               at_image
@@ -157,10 +157,10 @@
               | image_tag: loading: 'lazy', class: 'at-msbo__image', width: 64, height: 64, alt: ''
             }}
           {%- endif -%}
-        </span>
+        </a>
         <span class="at-msbo__text">
-          <span class="at-msbo__title">{{ product.title }}</span>
-          <span class="at-msbo__sources">
+          <a class="at-msbo__title" href="{{ product.url }}">{{ product.title }}</a>
+          <span class="at-msbo__sources" data-at-msbo-sources>
             {%- if at_is_purchase -%}{{ 'at_bulk_order.source_purchase' | t }}{%- endif -%}
             {%- if at_is_purchase and at_is_favorite %} · {% endif -%}
             {%- if at_is_favorite -%}{{ 'at_bulk_order.source_favorite' | t }}{%- endif -%}

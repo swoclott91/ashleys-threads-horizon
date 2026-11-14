@@ -272,6 +272,8 @@
       <at-multi-style-bulk-order class="at-msbo__layout" data-section-id="{{ section.id }}">
         <script type="application/json" data-at-msbo-strings>
           {
+            "sourcePurchase": {{ 'at_bulk_order.source_purchase' | t | json }},
+            "sourceFavorite": {{ 'at_bulk_order.source_favorite' | t | json }},
             "selectedOne": {{ 'at_bulk_order.selected_count.one' | t: count: '[count]' | json }},
             "selectedOther": {{ 'at_bulk_order.selected_count.other' | t: count: '[count]' | json }},
             "removeStyle": {{ 'at_bulk_order.remove_style' | t: title: '[title]' | json }},
@@ -291,11 +293,11 @@
             </label>
             <label class="at-msbo__filter">
               <input type="radio" name="{{ section.id }}-filter" value="purchase">
-              <span>{{ 'at_bulk_order.filter_purchases' | t }} <span class="at-msbo__filter-count">{{ at_count_purchase }}</span></span>
+              <span>{{ 'at_bulk_order.filter_purchases' | t }} <span class="at-msbo__filter-count" data-at-msbo-filter-count="purchase">{{ at_count_purchase }}</span></span>
             </label>
             <label class="at-msbo__filter">
               <input type="radio" name="{{ section.id }}-filter" value="favorite">
-              <span>{{ 'at_bulk_order.filter_favorites' | t }} <span class="at-msbo__filter-count">{{ at_count_favorite }}</span></span>
+              <span>{{ 'at_bulk_order.filter_favorites' | t }} <span class="at-msbo__filter-count" data-at-msbo-filter-count="favorite">{{ at_count_favorite }}</span></span>
             </label>
           </fieldset>
 

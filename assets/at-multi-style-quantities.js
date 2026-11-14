@@ -307,11 +307,12 @@ class MultiStyleQuantities extends HTMLElement {
       }
     }
 
+    const href = escapeHtml(style.productUrl);
     const image = style.imageUrl
-      ? `<img class="at-msq__style-image" src="${escapeHtml(style.imageUrl)}" alt="" width="56" height="56" loading="lazy">`
+      ? `<a class="at-msq__style-link" href="${href}" tabindex="-1" aria-hidden="true"><img class="at-msq__style-image" src="${escapeHtml(style.imageUrl)}" alt="" width="56" height="56" loading="lazy"></a>`
       : '<span class="at-msq__style-image" aria-hidden="true"></span>';
     section.innerHTML = `<header class="at-msq__style-head">${image}`
-      + `<div class="at-msq__style-text"><h3 class="at-msq__style-title" id="${this.#id(style.productId, 'title')}">${escapeHtml(style.title)}</h3>`
+      + `<div class="at-msq__style-text"><h3 class="at-msq__style-title" id="${this.#id(style.productId, 'title')}"><a class="at-msq__style-title-link" href="${href}">${escapeHtml(style.title)}</a></h3>`
       + `<p class="at-msq__style-meta">${escapeHtml(plural(strings, 'colors', style.colors.length))}</p></div>`
       + `<p class="at-msq__style-total" data-at-msq-style-total></p></header>`
       + `<div class="at-msq__style-content">${content}</div>`;
@@ -382,7 +383,7 @@ class MultiStyleQuantities extends HTMLElement {
     const soldOut = !variant.available;
     const aria = soldOut ? `${label} (${this.#strings.sold_out})` : label;
     const { min, increment, max } = variant.quantityRule;
-    return `<input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" class="at-bulk-grid__qty-input at-msq__qty"`
+    return `<input type="number" inputmode="numeric" min="0" step="${increment}" autocomplete="off" class="at-bulk-grid__qty-input at-msq__qty"`
       + ` data-at-msq-qty data-variant-id="${variant.id}" value="${escapeHtml(value)}" placeholder="0"`
       + ` aria-label="${escapeHtml(fill(this.#strings.quantity_label, { variant: aria }))}"`
       + ` aria-describedby="${this.#id('note', variant.id)}"`
