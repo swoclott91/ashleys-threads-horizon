@@ -59,7 +59,6 @@
     assign renew_date = pro_expires | date: '%b %Y'
   endif
   assign my_membership_url = settings.at_my_membership_page_url | default: '/pages/my-membership'
-  assign favorite_count = customer.metafields.wagner.favorite_products.value.count | default: 0
 -%}
   <svg
     slot="at-member-avatar"
@@ -123,23 +122,6 @@
         </div>
       {%- endif -%}
     </dl>
-    <hr class="at-acct__rule">
-    <section class="at-acct__usuals" aria-labelledby="AtMemberAccountUsuals">
-      <div class="at-acct__usuals-head">
-        <h3 class="at-acct__usuals-title" id="AtMemberAccountUsuals">{{ 'at_member.menu.usuals_title' | t }}</h3>
-        {%- if favorite_count > 0 -%}
-          <a class="at-acct__usuals-count" href="{{ routes.root_url }}pages/favorites">
-            {{- 'at_member.menu.usuals_saved' | t: count: favorite_count -}}
-          </a>
-        {%- endif -%}
-      </div>
-      {%- if favorite_count == 0 -%}
-        <p class="at-acct__usuals-hint">{{ 'at_member.menu.usuals_hint' | t }}</p>
-      {%- endif -%}
-      <a class="button at-acct__usuals-button" href="{{ routes.root_url }}pages/bulk-order">
-        {{- 'at_member.menu.order_in_bulk' | t -}}
-      </a>
-    </section>
     <hr class="at-acct__rule">
     <ul class="at-acct__links" role="list">
       <li><a href="{{ routes.root_url }}pages/favorites">{{ 'at_member.menu.favorites' | t }}</a></li>
