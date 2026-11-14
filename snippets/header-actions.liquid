@@ -108,6 +108,7 @@
       >
         {% if customer %}
           <div class="account-button__fallback"></div>
+          <script src="{{ 'at-account-menu-icons.js' | asset_url }}" type="module" fetchpriority="low"></script>
         {% else %}
           <span
             slot="signed-out-avatar"
