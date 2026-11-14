@@ -52,19 +52,41 @@
  *   element.selection        -> the `styles` array above (fresh copy each read)
  *   element.getSelection()   -> same as `selection`
  *   element.clearSelection() -> unchecks every style (e.g. after a successful cart add)
+ *   element.selectStyles(ids)-> checks these product IDs (keeps any already checked) and
+ *                               returns the IDs it found; used by Review & reorder
+ *   element.setFilter(name)  -> shows the 'all' | 'purchase' | 'favorite' tab
+ *
+ * Deep links: `?tab=purchase` or `?tab=favorite` (also the plurals) opens with that tab
+ * shown. It only filters; nothing is preselected. `?reorder=<order>` is handled by the
+ * quantities dialog (assets/at-multi-style-quantities.js), which calls selectStyles.
  * ─────────────────────────────────────────────────────────────────────────────────────────
  */
 
 export const CHOOSE_QUANTITIES_EVENT = 'at-bulk-order:choose-quantities';
 export const FILTERS = Object.freeze(['all', 'purchase', 'favorite']);
 
+export const TAB_PARAM = 'tab';
 const SOURCE_ORDER = ['purchase', 'favorite'];
+const TAB_ALIASES = { purchases: 'purchase', favorites: 'favorite' };
 const isDecimalId = (id) => typeof id === 'string' && /^[1-9]\d*$/.test(id);
 
 /** Splits a space-separated sources attribute into known sources, deduplicated and ordered. */
 export function parseSources(value, order = SOURCE_ORDER) {
   const found = new Set(String(value ?? '').split(/\s+/).filter(Boolean));
   return order.filter((source) => found.has(source));
+}
+
+/** The tab named by `?tab=` ('purchase' | 'favorite'), or null to keep the default (All). */
+export function initialFilter(search) {
+  let value = '';
+  try {
+    value = new URLSearchParams(search ?? '').get(TAB_PARAM) ?? '';
+  } catch {
+    return null;
+  }
+  value = value.trim().toLowerCase();
+  value = TAB_ALIASES[value] ?? value;
+  return value !== 'all' && FILTERS.includes(value) ? value : null;
 }
 
 /** Whether a row with these sources shows under a filter tab. */
@@ -226,6 +248,8 @@ function defineElement() {
       this.addEventListener('change', this.#onChange, { signal });
       this.addEventListener('click', this.#onClick, { signal });
       this.#watchFavorites(signal);
+      const linked = initialFilter(window.location.search);
+      if (linked) this.#checkFilter(linked);
       this.#applyFilter(this.#currentFilter());
       this.#renderPanel({ announce: false });
     }
@@ -246,6 +270,31 @@ function defineElement() {
       for (const id of this.#selection.ids) this.#checkbox(id).checked = false;
       this.#selection.clear();
       this.#renderPanel({ announce: true });
+    }
+
+    selectStyles(ids) {
+      const found = [];
+      for (const id of ids ?? []) {
+        const key = String(id);
+        const checkbox = this.#checkbox(key);
+        if (!checkbox || !this.#styles.has(key)) continue;
+        checkbox.checked = true;
+        this.#selection.set(key, true);
+        found.push(key);
+      }
+      this.#renderPanel({ announce: found.length > 0 });
+      return found;
+    }
+
+    setFilter(filter) {
+      if (!FILTERS.includes(filter)) return;
+      this.#checkFilter(filter);
+      this.#applyFilter(filter);
+    }
+
+    #checkFilter(filter) {
+      const radio = this.querySelector(`[data-at-msbo-filters] input[type="radio"][value="${filter}"]`);
+      if (radio instanceof HTMLInputElement) radio.checked = true;
     }
 
     #checkbox(id) {

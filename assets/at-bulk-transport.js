@@ -108,6 +108,17 @@ export async function fetchBulkVariant(productUrl, { variantId, optionValueIds, 
   return { status: 'found', productId: data.productId, currency: data.currency, variant };
 }
 
+/**
+ * Load the order lines for Review & reorder from sections/at-reorder-data.liquid, rendered
+ * for the page at `pageUrl` (the bulk order page, same origin). Returns null on a 404. The
+ * data is checked by the caller (assets/at-multi-style-quantities-core.js → findReorderOrder).
+ * @param {string} pageUrl
+ * @param {{ signal?: AbortSignal }} [options]
+ */
+export async function fetchReorderData(pageUrl, { signal } = {}) {
+  return requestBulkSection(pageUrl, 'at-reorder-data', 'script[data-at-reorder-orders]', {}, signal);
+}
+
 async function decodeCartResponse(response, { read = false } = {}) {
   let data;
   try {

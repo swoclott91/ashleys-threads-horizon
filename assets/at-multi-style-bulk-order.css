@@ -389,6 +389,29 @@ html.at-msq-scroll-lock {
   display: none;
 }
 
+/* Review & reorder (`?reorder=`): fallback notice above the selector, summary in the dialog. */
+.at-msbo__reorder-notice {
+  margin: 0;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--at-msbo-line-strong);
+  border-radius: 8px;
+  font-size: var(--font-size--sm, 0.875rem);
+}
+
+.at-msq__prefill {
+  margin: 0.5rem 0 0;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid var(--at-msq-accent);
+  background: rgb(var(--color-foreground-rgb) / 0.04);
+  font-size: var(--font-size--sm, 0.875rem);
+  line-height: 1.4;
+}
+
+.at-msbo__reorder-notice[hidden],
+.at-msq__prefill[hidden] {
+  display: none;
+}
+
 .at-msq-dialog {
   --at-msq-accent: var(--at-dp-accent, #243e34);
   --at-msq-line: rgb(var(--at-bulk-gold-rgb, 187 152 124) / 0.5);

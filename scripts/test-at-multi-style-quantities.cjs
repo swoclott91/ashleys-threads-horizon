@@ -415,3 +415,129 @@ test('requests one color from the color data section', async () => {
   global.fetch = async () => new Response(null, { status: 404 });
   assert.equal(await fetchBulkColorBatch('/products/hat', ['11']), null);
 });
+
+/* ── Review & reorder prefill ─────────────────────────────────────────────────────────── */
+
+const reorderData = {
+  orders: [
+    {
+      id: '6100000000001',
+      name: '#1002',
+      lines: [
+        { productId: '101', variantId: '9001', colorId: '501', colorName: 'Black', title: 'Tee - Black / M', quantity: 6 },
+        { productId: '101', variantId: '9002', colorId: '501', colorName: 'Black', title: 'Tee - Black / L', quantity: 4 },
+        { productId: '101', variantId: '9001', colorId: '501', colorName: 'Black', title: 'Tee - Black / M', quantity: 2 },
+        { productId: '101', variantId: null, colorId: '502', colorName: 'Navy', title: 'Tee - Navy / XS', quantity: 3 },
+        { productId: '101', variantId: null, colorId: null, colorName: 'Lime', title: 'Tee - Lime / S', quantity: 5 },
+        { productId: '202', variantId: '9101', colorId: '601', colorName: 'Red', title: 'Hoodie - Red / S', quantity: 8 },
+        { productId: null, variantId: null, colorId: null, colorName: 'Blue', title: 'Old cap - Blue', quantity: 1 },
+        { productId: '303', variantId: '9201', colorId: '701', colorName: 'Gray', title: 'Beanie - Gray', quantity: 2 },
+        { productId: '101', variantId: '9003', colorId: '503', colorName: 'White', title: 'bad qty', quantity: 0 },
+      ],
+    },
+    { id: '6100000000000', name: '#1001', lines: [] },
+    { id: 'not-an-id', name: '#999', lines: [] },
+  ],
+};
+
+const reorderStyles = [
+  {
+    productId: '202',
+    productUrl: '/products/hoodie',
+    title: 'Hoodie',
+    imageUrl: '',
+    colorOptionPosition: 1,
+    sources: ['purchase'],
+    colors: [{ optionValueId: '601', name: 'Red', swatchBackground: null, sources: ['purchase'] }],
+  },
+  {
+    productId: '101',
+    productUrl: '/products/tee',
+    title: 'Tee',
+    imageUrl: '',
+    colorOptionPosition: 1,
+    sources: ['purchase', 'favorite'],
+    colors: [
+      { optionValueId: '500', name: 'White', swatchBackground: null, sources: ['favorite'] },
+      { optionValueId: '501', name: 'Black', swatchBackground: 'rgb(0 0 0)', sources: ['purchase'] },
+    ],
+  },
+];
+
+test('reads the reorder parameter and ignores unusable values', async () => {
+  const { parseReorderParam } = await core;
+  assert.equal(parseReorderParam('?reorder=6100000000001'), '6100000000001');
+  assert.equal(parseReorderParam('?tab=favorite&reorder=%231002'), '#1002');
+  assert.equal(parseReorderParam('?reorder='), null);
+  assert.equal(parseReorderParam(''), null);
+  assert.equal(parseReorderParam('?reorder=<script>'), null);
+  assert.equal(parseReorderParam('?reorder=' + '1'.repeat(80)), null);
+});
+
+test('finds the order by ID, then by name with or without #', async () => {
+  const { findReorderOrder } = await core;
+  assert.equal(findReorderOrder(reorderData, '6100000000001').name, '#1002');
+  assert.equal(findReorderOrder(reorderData, '#1001').id, '6100000000000');
+  assert.equal(findReorderOrder(reorderData, '1002').id, '6100000000001');
+  assert.equal(findReorderOrder(reorderData, '#999'), null, 'malformed order IDs are dropped');
+  assert.equal(findReorderOrder(reorderData, '6100000000009'), null, 'older than the first page');
+  assert.equal(findReorderOrder(null, '1002'), null);
+  assert.equal(findReorderOrder(reorderData, ''), null);
+  const order = findReorderOrder(reorderData, '1002');
+  assert.equal(order.lines.length, 8, 'a zero-quantity line is dropped');
+});
+
+test('preselects the ordered products in order of appearance', async () => {
+  const { findReorderOrder, reorderProductIds } = await core;
+  assert.deepEqual(reorderProductIds(findReorderOrder(reorderData, '1002')), ['101', '202', '303']);
+  assert.deepEqual(reorderProductIds(null), []);
+});
+
+test('prefills exact variants with ordered quantities, narrowed to the order colors', async () => {
+  const { findReorderOrder, buildReorderPrefill } = await core;
+  const prefill = buildReorderPrefill(findReorderOrder(reorderData, '1002'), reorderStyles);
+
+  assert.deepEqual(prefill.styles.map((style) => style.productId), ['101', '202'], 'order of appearance');
+  const tee = prefill.styles[0];
+  assert.deepEqual(tee.colors.map((color) => color.optionValueId), ['501', '502', 'removed-0'],
+    'the favorite-only White is not shown; Navy is still on the product; Lime is gone');
+  assert.equal(tee.colors[2].removed, true);
+  assert.equal(tee.colors[2].name, 'Lime');
+  assert.equal(tee.colors[0].swatchBackground, 'rgb(0 0 0)');
+  assert.equal(reorderStyles[1].colors.length, 2, 'the selector style is not mutated');
+
+  assert.deepEqual(prefill.quantities, [
+    { variantId: '9001', productId: '101', colorId: '501', quantity: 8 },
+    { variantId: '9002', productId: '101', colorId: '501', quantity: 4 },
+    { variantId: '9101', productId: '202', colorId: '601', quantity: 8 },
+  ]);
+  assert.deepEqual(prefill.unavailable.map((line) => line.title),
+    ['Tee - Navy / XS', 'Old cap - Blue', 'Beanie - Gray'],
+    'gone size, gone product, and a product the bulk page does not offer');
+});
+
+test('sold-out and missing prefill variants are flagged, never seeded', async () => {
+  const { QuantityDraft, planPrefillSeed } = await core;
+  const variants = new Map([
+    ['9001', { id: '9001', available: true, price: 500, quantityRule: rule() }],
+    ['9002', { id: '9002', available: false, price: 500, quantityRule: rule() }],
+  ]);
+  const quantities = [
+    { variantId: '9001', productId: '101', colorId: '501', quantity: 8 },
+    { variantId: '9002', productId: '101', colorId: '501', quantity: 4 },
+    { variantId: '9003', productId: '101', colorId: '501', quantity: 2 },
+  ];
+  const plan = planPrefillSeed(quantities, (id) => variants.get(id));
+  assert.deepEqual(plan.seed.map((entry) => entry.variantId), ['9001']);
+  assert.deepEqual(plan.soldOut.map((entry) => entry.variantId), ['9002']);
+  assert.deepEqual(plan.missing.map((entry) => entry.variantId), ['9003']);
+
+  const draft = new QuantityDraft();
+  for (const entry of plan.seed) draft.set(entry.variantId, String(entry.quantity), entry);
+  const summary = draft.summarize((id) => variants.get(id));
+  assert.deepEqual(summary.items, [{ id: '9001', quantity: 8 }]);
+  assert.equal(summary.subtotal, 4000);
+  assert.deepEqual(summary.invalid, [], 'nothing blocks the add');
+  draft.set('9001', '3', quantities[0]);
+  assert.equal(draft.summarize((id) => variants.get(id)).count, 3, 'prefilled quantities stay editable');
+});

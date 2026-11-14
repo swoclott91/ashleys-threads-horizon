@@ -29,6 +29,13 @@
   live in assets/at-multi-style-quantities.js (+ -core.js); the hand-off contract is at the
   top of assets/at-multi-style-bulk-order.js. Sizes per color come from
   sections/at-bulk-color-data.liquid.
+
+  URL parameters (handled in the scripts; Liquid cannot read the query string):
+  - `?tab=purchase` / `?tab=favorite`: open with that tab shown. Only filters, selects nothing.
+  - `?reorder=<order ID or name>`: Review & reorder. The dialog loads the order's lines from
+    sections/at-reorder-data.liquid, checks those styles and opens prefilled with the order's
+    exact variants and quantities, all editable. An order outside the first 20 shows the
+    notice below and the Past purchases tab instead.
 {%- endcomment -%}
 {%- liquid
   assign at_preview = false
@@ -269,6 +276,7 @@
     {%- else -%}
       <script src="{{ 'at-favorite-colors.js' | asset_url }}" type="module"></script>
       <script src="{{ 'at-multi-style-bulk-order.js' | asset_url }}" type="module"></script>
+      <p class="at-msbo__reorder-notice" role="status" data-at-msbo-reorder-notice hidden></p>
       <at-multi-style-bulk-order class="at-msbo__layout" data-section-id="{{ section.id }}">
         <script type="application/json" data-at-msbo-strings>
           {
@@ -392,7 +400,16 @@
             "review_cart": {{ 'at_bulk_order.dialog.review_cart' | t | json }},
             "row_partial": {{ 'at_bulk_order.dialog.row_partial' | t: added: '[added]', requested: '[requested]', remaining: '[remaining]' | json }},
             "row_not_added": {{ 'at_bulk_order.dialog.row_not_added' | t | json }},
-            "row_unconfirmed": {{ 'at_bulk_order.dialog.row_unconfirmed' | t | json }}
+            "row_unconfirmed": {{ 'at_bulk_order.dialog.row_unconfirmed' | t | json }},
+            "prefill_intro": {{ 'at_bulk_order.dialog.prefill_intro' | t: order: '[order]' | json }},
+            "prefill_ordered": {{ 'at_bulk_order.dialog.prefill_ordered' | t: count: '[count]' | json }},
+            "prefill_sold_out_one": {{ 'at_bulk_order.dialog.prefill_sold_out.one' | t: count: '[count]' | json }},
+            "prefill_sold_out_other": {{ 'at_bulk_order.dialog.prefill_sold_out.other' | t: count: '[count]' | json }},
+            "prefill_unavailable_one": {{ 'at_bulk_order.dialog.prefill_unavailable.one' | t: count: '[count]', items: '[items]' | json }},
+            "prefill_unavailable_other": {{ 'at_bulk_order.dialog.prefill_unavailable.other' | t: count: '[count]', items: '[items]' | json }},
+            "reorder_not_found": {{ 'at_bulk_order.reorder_not_found' | t | json }},
+            "reorder_failed": {{ 'at_bulk_order.reorder_failed' | t | json }},
+            "reorder_nothing": {{ 'at_bulk_order.reorder_nothing' | t | json }}
           }
         </script>
         <p class="at-msbo__notice at-msq__page-status" role="status" aria-live="polite" data-at-msq-page-status></p>
@@ -407,6 +424,7 @@
                 {{- 'at_bulk_order.dialog.title' | t -}}
               </h2>
               <p class="at-bulk-grid__subtitle" data-at-msq-subtitle></p>
+              <p class="at-msq__prefill" data-at-msq-prefill hidden></p>
             </div>
             <div class="at-bulk-grid at-msq">
               <div class="at-bulk-grid__body at-msq__body" data-at-msq-body></div>

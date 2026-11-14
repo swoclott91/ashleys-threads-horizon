@@ -1,8 +1,168 @@
 {%- doc -%}
   Hero row side panel: "Your favorites", from customer `wagner.favorite_products`. Shown to
   members with saved styles when there is no last order to show. Must render nothing when the
-  customer has no favorites, so the hero row falls through to the staples. Owned by the member
-  top row work. Renders nothing until built.
+  customer has no favorites, so the hero row falls through to the staples.
+
+  Up to three thumbnails (the first three products in the list), the saved style count, a
+  "Bulk order favorites" button (`/pages/bulk-order?tab=favorite`: the bulk page opens on the
+  Favorites tab with nothing preselected) and a quieter "View favorites" link.
 
   @param {string} section_id - Section ID, for unique element IDs
 {%- enddoc -%}
+{%- liquid
+  assign at_fp_list = customer.metafields.wagner.favorite_products.value
+  assign at_fp_count = 0
+  assign at_fp_thumbs = ''
+  assign at_fp_shown = 0
+  if customer and at_fp_list != blank
+    assign at_fp_count = at_fp_list.count | default: 0
+    for at_fp_product in at_fp_list
+      if at_fp_product == blank
+        continue
+      endif
+      assign at_fp_shown = at_fp_shown | plus: 1
+      assign at_fp_image = at_fp_product.featured_media.preview_image | default: at_fp_product.featured_image
+      capture at_fp_thumb
+        echo '<li class="at-home-favorites-panel__thumb">'
+        if at_fp_image != blank
+          echo at_fp_image | image_url: width: 240 | image_tag: loading: 'lazy', width: 120, height: 120, alt: at_fp_product.title, class: 'at-home-favorites-panel__image'
+        else
+          assign at_fp_title = at_fp_product.title | escape
+          echo '<span class="at-home-favorites-panel__image at-home-favorites-panel__image--empty" aria-hidden="true"></span>'
+          echo '<span class="visually-hidden">' | append: at_fp_title | append: '</span>'
+        endif
+        echo '</li>'
+      endcapture
+      assign at_fp_thumbs = at_fp_thumbs | append: at_fp_thumb
+      if at_fp_shown >= 3
+        break
+      endif
+    endfor
+  endif
+-%}
+{%- if at_fp_shown > 0 -%}
+  {%- liquid
+    if at_fp_count < at_fp_shown
+      assign at_fp_count = at_fp_shown
+    endif
+    if at_fp_count == 1
+      assign at_fp_label = '1 saved style'
+    else
+      assign at_fp_label = at_fp_count | append: ' saved styles'
+    endif
+    assign at_fp_root = routes.root_url | append: '/' | replace: '//', '/'
+    assign at_fp_bulk_url = at_fp_root | append: 'pages/bulk-order?tab=favorite'
+    assign at_fp_view_url = at_fp_root | append: 'pages/favorites'
+    assign at_fp_heading_id = section_id | append: '-favorites-panel-heading'
+  -%}
+  <section class="at-home-favorites-panel" aria-labelledby="{{ at_fp_heading_id }}">
+    <div class="at-home-favorites-panel__head">
+      <h2 class="at-home-favorites-panel__heading" id="{{ at_fp_heading_id }}">Your favorites</h2>
+      <p class="at-home-favorites-panel__count">{{ at_fp_label }}</p>
+    </div>
+    <ul class="at-home-favorites-panel__thumbs" role="list">
+      {{- at_fp_thumbs -}}
+    </ul>
+    <div class="at-home-favorites-panel__actions">
+      <a class="at-home-favorites-panel__button" href="{{ at_fp_bulk_url }}">
+        Bulk order favorites <span aria-hidden="true">&rarr;</span>
+      </a>
+      <a class="at-home-favorites-panel__link" href="{{ at_fp_view_url }}">View favorites</a>
+    </div>
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  .at-home-favorites-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+    padding: 22px;
+    border: 1px solid rgb(36 62 52 / 0.18);
+    border-radius: 14px;
+    background: #f6f1e7;
+    color: #243e34;
+  }
+  .at-home-favorites-panel__head {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .at-home-favorites-panel__heading {
+    margin: 0;
+    color: inherit;
+    font-size: 1.5rem;
+    line-height: 1.15;
+  }
+  .at-home-favorites-panel__count {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  .at-home-favorites-panel__thumbs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .at-home-favorites-panel__thumb {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #fff;
+  }
+  .at-home-favorites-panel__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .at-home-favorites-panel__image--empty {
+    background: rgb(36 62 52 / 0.08);
+  }
+  .at-home-favorites-panel__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 18px;
+    margin-block-start: auto;
+  }
+  .at-home-favorites-panel__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: #243e34;
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .at-home-favorites-panel__button:hover {
+    background: #2b4a3f;
+  }
+  .at-home-favorites-panel__link {
+    color: inherit;
+    font-size: 0.95rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .at-home-favorites-panel__button:focus-visible,
+  .at-home-favorites-panel__link:focus-visible {
+    outline: 2px solid #243e34;
+    outline-offset: 3px;
+  }
+  @media screen and (max-width: 989px) {
+    .at-home-favorites-panel {
+      padding: 18px;
+    }
+    .at-home-favorites-panel__thumbs {
+      max-width: 300px;
+    }
+  }
+{% endstylesheet %}
