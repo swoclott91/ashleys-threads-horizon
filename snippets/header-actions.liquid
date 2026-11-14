@@ -96,10 +96,16 @@
       <script src="{{ 'at-account-menu-icons.js' | asset_url }}" type="module" fetchpriority="low"></script>
       <shopify-account
         menu="{{ customer_account_menu }}"
+        {% if at_tier != 'guest' %}
+          data-at-tier="{{ at_tier }}"
+        {% endif %}
         {% if account_actions_style != blank %}
           style="{{ account_actions_style }}"
         {% endif %}
       >
+        {% if at_tier != 'guest' %}
+          {% render 'at-member-account-menu', tier: at_tier %}
+        {% endif %}
         {% if customer %}
           <div class="account-button__fallback"></div>
         {% else %}
@@ -120,10 +126,6 @@
         {% endif %}
       </shopify-account>
     </div>
-
-    {% if at_tier != 'guest' %}
-      {% render 'at-member-account-menu', tier: at_tier %}
-    {% endif %}
   {% endif %}
 
   {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
@@ -224,6 +226,119 @@
     color: inherit;
   }
 
+  shopify-account[data-at-tier] {
+    --shopify-account-signed-in-avatar-size: 32px;
+    --shopify-account-avatar-size: 54px;
+    --shopify-account-signed-in-avatar-color-background: var(--at-badge-ink);
+    --shopify-account-signed-in-avatar-color-text: #fff9ee;
+  }
+  shopify-account[data-at-tier='member'] { --at-badge-ink: #174532; }
+  shopify-account[data-at-tier='pro'] { --at-badge-ink: #6c2639; }
+  shopify-account[data-at-tier='wholesale'] { --at-badge-ink: #122f41; }
+
+  shopify-account[data-at-tier]:not(:defined) {
+    min-width: var(--shopify-account-avatar-size);
+    height: var(--shopify-account-avatar-size);
+  }
+
+  .at-acct__badge {
+    display: block;
+  }
+
+  .at-acct__badge-preview { display: none; }
+  .at-acct__badge[data-at-preview-fallback] .at-acct__badge-preview { display: block; }
+  .at-acct__badge-preview circle { fill: var(--at-badge-ink); }
+  .at-acct__badge-border {
+    fill: none;
+    stroke: var(--at-badge-ink);
+    stroke-width: 13;
+  }
+  .at-acct__badge-ring {
+    fill: none;
+    stroke: #fff9ee;
+    stroke-width: 1.75;
+    stroke-dasharray: 8 4.15;
+    stroke-linecap: round;
+  }
+  shopify-account[data-at-tier='wholesale'] .at-acct__badge-ring {
+    stroke: #c89e59;
+    stroke-width: 3.5;
+    stroke-dasharray: none;
+  }
+  .at-acct__badge-lettering {
+    fill: var(--at-badge-ink);
+    font-family: system-ui, sans-serif;
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+    text-anchor: middle;
+  }
+  shopify-account[data-at-tier='wholesale'] .at-acct__badge-tier {
+    font-size: 22px;
+  }
+
+  .at-acct__details {
+    display: block;
+    margin-top: 1rem;
+    padding: 0.875rem;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.16);
+    border-radius: var(--style-border-radius-popover);
+    font-size: 0.875rem;
+    line-height: 1.35;
+  }
+  .at-acct__head,
+  .at-acct__fact,
+  .at-acct__usuals-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 0.75rem;
+  }
+  .at-acct__tier,
+  .at-acct__usuals-title {
+    margin: 0;
+    font-size: 1em;
+    font-weight: 700;
+  }
+  .at-acct__facts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    margin: 0.5rem 0 0;
+  }
+  .at-acct__facts:empty { display: none; }
+  .at-acct__fact dd,
+  .at-acct__usuals-hint {
+    margin: 0;
+  }
+  .at-acct__rule {
+    border: 0;
+    border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.16);
+    margin: 0.625rem 0;
+  }
+  .at-acct__usuals {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .at-acct__usuals-button {
+    width: 100%;
+    text-align: center;
+  }
+  .at-acct__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .at-acct__links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+  }
+
   .cart-actions summary {
     padding-inline: 0;
     padding-block: var(--padding-sm);
@@ -233,10 +348,6 @@
 
   header-actions {
     display: flex;
-
-    &:has(.at-acct) {
-      align-items: center;
-    }
 
     @media screen and (max-width: 749px) {
       justify-self: flex-end;

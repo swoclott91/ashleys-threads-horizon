@@ -1,11 +1,5 @@
 {%- doc -%}
-  Header membership badge for signed-in member tiers, rendered beside the stock `shopify-account`
-  button (which keeps the merchant's account menu and B2B company / location switching).
-  The badge opens a menu with the tier, renewal date,
-  Threads Cash, this month's shipping code, savings this year, a "Your usuals" block (saved style
-  count from customer `wagner.favorite_products`, Order in bulk button) and Favorites / My membership links.
-  Reads contract metafields only: customer `wagner.pro_expires`, `wagner.threads_cash`,
-  `wagner.ship_code`, `wagner.savings_ytd`; company location `wagner.terms_status`.
+  Membership artwork and details projected into Shopify's existing account button and sheet.
 
   @param {string} tier - member | pro | wholesale
 {%- enddoc -%}
@@ -65,54 +59,50 @@
     assign renew_date = pro_expires | date: '%b %Y'
   endif
   assign my_membership_url = settings.at_my_membership_page_url | default: '/pages/my-membership'
-  assign customer_name = customer.first_name | default: customer.name
   assign favorite_count = customer.metafields.wagner.favorite_products.value.count | default: 0
 -%}
-{{ 'at-member.css' | asset_url | stylesheet_tag }}
-<div class="header-actions__action at-acct at-acct--{{ tier }}" data-testid="at-member-account" data-at-tier="{{ tier }}">
-  <button
-    type="button"
-    class="at-acct__trigger button-unstyled"
-    popovertarget="AtMemberAccountMenu"
-    aria-label="{{ 'at_member.menu.open' | t: tier: tier_name | escape }}"
+  <svg
+    slot="at-member-avatar"
+    class="at-acct__badge"
+    {% if sample %}
+      data-at-preview
+    {% endif %}
+    xmlns="http://www.w3.org/2000/svg"
+    width="49"
+    height="54"
+    viewBox="0 0 180 200"
+    aria-hidden="true"
+    focusable="false"
   >
-    <svg
-      class="at-acct__badge"
-      xmlns="http://www.w3.org/2000/svg"
-      width="180"
-      height="200"
-      viewBox="0 0 180 200"
-      aria-hidden="true"
-      focusable="false"
-    >
       <defs>
         <path id="AtMemberBadgeTop" d="M 12,100 A 78,78 0 0 1 168,100"/>
         <path id="AtMemberBadgeBottom" d="M -4,100 A 94,94 0 0 0 184,100"/>
       </defs>
-      <circle class="at-acct__badge-disc" cx="90" cy="100" r="69"/>
-      <circle class="at-acct__badge-ring" cx="90" cy="100" r="58"/>
-      <path fill="#fff9ee" d="M57 76h11l8 33 9-33h10l9 33 8-33h11l-14 45H99l-9-32-9 32H71z"/>
-      <text class="at-acct__badge-lettering"{% if tier == 'wholesale' %} font-size="22"{% endif %}>
+      {% if sample %}
+        <g class="at-acct__badge-preview">
+          <circle cx="90" cy="100" r="60"/>
+          <path fill="#fff9ee" d="M57 76h11l8 33 9-33h10l9 33 8-33h11l-14 45H99l-9-32-9 32H71z"/>
+        </g>
+      {% endif %}
+      <circle class="at-acct__badge-border" cx="90" cy="100" r="64"/>
+      <circle class="at-acct__badge-ring" cx="90" cy="100" r="64"/>
+      <text class="at-acct__badge-lettering at-acct__badge-tier">
         <textPath href="#AtMemberBadgeTop" startOffset="50%">{{ tier_badge_key | t | upcase | escape }}</textPath>
       </text>
       <text class="at-acct__badge-lettering">
         <textPath href="#AtMemberBadgeBottom" startOffset="50%">ASHLEY’S</textPath>
       </text>
-    </svg>
-  </button>
+  </svg>
 
-  <div id="AtMemberAccountMenu" class="at-acct__menu color-custom-popover" popover>
+  <section slot="at-member-details" class="at-acct__details" aria-labelledby="AtMemberAccountTier">
     <div class="at-acct__head">
-      <span class="at-acct__tier">{{ tier_name }}</span>
+      <h3 id="AtMemberAccountTier" class="at-acct__tier">{{ tier_name }}</h3>
       {%- if tier == 'pro' and pro_expires != blank -%}
-        <span class="at-acct__renews">{{ 'at_member.menu.renews' | t: date: renew_date }}</span>
+        <span>{{ 'at_member.menu.renews' | t: date: renew_date }}</span>
       {%- elsif tier == 'wholesale' and terms_label != blank -%}
-        <span class="at-acct__renews">{{ terms_label }}</span>
+        <span>{{ terms_label }}</span>
       {%- endif -%}
     </div>
-    {%- if customer_name != blank -%}
-      <p class="at-acct__name">{{ customer_name }}</p>
-    {%- endif -%}
     <dl class="at-acct__facts">
       {%- if cash_balance != blank -%}
         <div class="at-acct__fact">
@@ -155,5 +145,4 @@
       <li><a href="{{ routes.root_url }}pages/favorites">{{ 'at_member.menu.favorites' | t }}</a></li>
       <li><a href="{{ my_membership_url }}">{{ 'at_member.menu.my_membership' | t }}</a></li>
     </ul>
-  </div>
-</div>
+  </section>

@@ -1,13 +1,6 @@
 /**
- * Adds icons to the Orders, Profile, Favorites and Bulk order links inside Shopify's account sheet
- * (<shopify-account>, snippets/header-actions.liquid).
- *
- * Shopify renders that sheet in its own shadow root from the `customer-account-main-menu`
- * menu and exposes no slot for it, so the links themselves come from the menu in admin.
- * With more than two links Shopify lists them as plain rows and drops its own Orders and
- * Profile icons, which is why those two are drawn here as well.
- * This only decorates them. If Shopify changes the sheet's markup the links keep working
- * and the icons simply stop appearing.
+ * Decorates Shopify's original account avatar and sheet in their shadow root.
+ * If Shopify changes the markup, its native controls still work.
  */
 
 const SVG_ATTRIBUTES = 'viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" '
@@ -74,12 +67,53 @@ function decorate(root) {
   }
 }
 
+function renderMembership(account, root, badge) {
+  const trigger = root.querySelector('.wrapper > .account-button');
+  const avatar = trigger?.querySelector('.account-button__avatar');
+  const guestAvatar = badge.hasAttribute('data-at-preview') ? trigger?.querySelector('slot[name="signed-out-avatar"]') : null;
+  const originalAvatar = avatar ?? guestAvatar;
+  if (avatar && !avatar.style.getPropertyValue('--shop-brand-color')) {
+    avatar.style.setProperty('--shop-brand-color', 'var(--at-badge-ink)');
+  }
+  const badgeSlot = trigger?.querySelector('slot[name="at-member-avatar"]');
+  if (originalAvatar && !badgeSlot) {
+    const slot = document.createElement('slot');
+    slot.name = 'at-member-avatar';
+    slot.style.cssText = 'position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;';
+    trigger.style.position = 'relative';
+    trigger.prepend(slot);
+    const tier = account.querySelector('#AtMemberAccountTier');
+    if (tier) trigger.setAttribute('aria-description', tier.textContent.trim());
+  } else if (!originalAvatar && badgeSlot) {
+    badgeSlot.remove();
+    trigger.removeAttribute('aria-description');
+  }
+  badge.toggleAttribute('data-at-preview-fallback', Boolean(guestAvatar && !avatar));
+
+  const menu = root.querySelector('dialog[part~="dialog"] .account__menu-region');
+  const mainMenu = menu?.querySelector('.account__menu-items[data-transition="enter-left"]');
+  const membership = menu?.querySelector('slot[name="at-member-details"]');
+  const canShowDetails = mainMenu && originalAvatar;
+  if (canShowDetails && !membership) {
+    const slot = document.createElement('slot');
+    slot.name = 'at-member-details';
+    menu.append(slot);
+  } else if (!canShowDetails) {
+    membership?.remove();
+  }
+}
+
 function watch(account) {
   const root = account.shadowRoot;
   if (!root || account.dataset.atAccountIcons !== undefined) return;
   account.dataset.atAccountIcons = '';
-  decorate(root);
-  new MutationObserver(() => decorate(root)).observe(root, { subtree: true, childList: true });
+  const badge = account.querySelector('svg[slot="at-member-avatar"]');
+  const update = () => {
+    if (badge) renderMembership(account, root, badge);
+    decorate(root);
+  };
+  update();
+  new MutationObserver(update).observe(root, { subtree: true, childList: true });
 }
 
 function start() {
@@ -89,6 +123,7 @@ function start() {
 if (typeof customElements !== 'undefined') {
   customElements.whenDefined('shopify-account').then(() => {
     start();
+    document.addEventListener('shopify:section:load', start);
     // The shadow root can be attached a tick after the element is defined.
     requestAnimationFrame(start);
     setTimeout(start, 1000);
