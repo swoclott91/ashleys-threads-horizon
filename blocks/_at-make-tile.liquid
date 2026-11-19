@@ -33,7 +33,6 @@
   endif
   assign tile_label = bs.label | default: 'Project'
   assign tile_image = bs.image
-  assign dialog_id = 'AtTileForm-' | append: block.id
 -%}
 {%- capture at_tile_form -%}{% content_for 'blocks' %}{%- endcapture -%}
 {%- assign at_tile_form_check = at_tile_form | strip -%}
@@ -80,10 +79,9 @@
         ref="dialog"
         class="at-tiles__dialog dialog-modal color-custom-popover"
         scroll-lock
-        aria-labelledby="{{ dialog_id }}"
+        aria-label="{{ tile_label | escape }}"
       >
         <div class="at-tiles__dialog-inner">
-          <h2 class="at-tiles__dialog-title h3" id="{{ dialog_id }}">{{ tile_label | escape }}</h2>
           <div class="at-tiles__form">{{ at_tile_form }}</div>
           <p class="at-tiles__skip">
             <a href="{{ tile_url }}">Skip to the collection</a>
