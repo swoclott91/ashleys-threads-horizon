@@ -1,28 +1,22 @@
 {%- comment -%}
-  "What are you making?" photo cards for guests (homepage strategy, design §15). Each card
-  opens its project collection. Guest personalization is client-side only (Liquid can't read
-  local storage):
+  "What are you making?" photo cards for guests (homepage strategy, design §15). Each card is a
+  "Project card" block (blocks/_at-make-tile.liquid):
+  - with a Shopify Forms block inside it, a guest's click on the whole card opens that form in a
+    popup; the form's own redirect after submission (set in Shopify Forms) then opens the
+    card's collection, and the popup links to the collection for guests who skip the form;
+  - without a form, or for a signed-in customer, the card links straight to its collection.
+  Guest personalization is client-side only (Liquid can't read local storage):
   - picking a card saves the answer in localStorage `at_guest_hint` ({q1, url, title, at});
   - on the next visit the cards show "Pick up where you left off" and mark that card;
-  - when the Shopify Forms popup opens, the matching Q1 radio is preselected (best effort:
+  - when a Shopify Forms popup opens, the matching Q1 radio is preselected (best effort:
     the Forms markup isn't ours, so this looks for an input whose value is the `use:*` value).
-  The `use:*` values and collection URLs are fixed; the photos are per-card settings. Cards
-  work without photos (label only). Six in one row on desktop, two columns on mobile.
+  Cards work without photos (label only). Six in one row on desktop, two columns on mobile.
   The server-rendered page is the same for every guest, so it stands on its own for search.
 {%- endcomment -%}
 {%- capture at_section_visible -%}{% render 'at-section-visible', visibility: section.settings.at_visibility %}{%- endcapture -%}
 {%- if at_section_visible contains 'true' -%}
-  {%- liquid
-    assign decorator_url = section.settings.decorator_url | default: '/collections/all'
-    # q1 value | label | collection URL | image setting id
-    assign tiles = "use:decorator|Clients' designs|" | append: decorator_url | append: '|image_decorator'
-    assign tiles = tiles | append: ';use:graphic-tees|My own designs|/collections/graphic-tees-boutique-sellers|image_graphic_tees'
-    assign tiles = tiles | append: ';use:apparel-brand|My own label|/collections/building-your-apparel-brand|image_apparel_brand'
-    assign tiles = tiles | append: ';use:groups-events|Group, team, or event|/collections/groups-events|image_groups_events'
-    assign tiles = tiles | append: ';use:business-merch|Company apparel|/collections/business-merch|image_business_merch'
-    assign tiles = tiles | append: ';use:personal|Me and my family|/collections/family-matching-sets|image_personal'
-    assign tiles = tiles | split: ';'
-  -%}
+  <script src="{{ 'dialog.js' | asset_url }}" type="module"></script>
+  {% render 'dialog-styles' %}
   <div class="section section--page-width">
     <div class="at-tiles" data-at-tiles>
       <div class="at-tiles__head">
@@ -35,36 +29,7 @@
         </p>
       </div>
       <ul class="at-tiles__grid" role="list" aria-labelledby="AtTiles-{{ section.id }}">
-        {%- for tile in tiles -%}
-          {%- liquid
-            assign t = tile | split: '|'
-            assign tile_image = section.settings[t[3]]
-          -%}
-          <li>
-            <a
-              class="at-tiles__tile{% if tile_image != blank %} at-tiles__tile--photo{% endif %}"
-              href="{{ t[2] }}"
-              data-at-q1="{{ t[0] }}"
-              data-at-title="{{ t[1] | escape }}"
-            >
-              {%- if tile_image != blank -%}
-                <span class="at-tiles__media">
-                  {{
-                    tile_image
-                    | image_url: width: 600
-                    | image_tag:
-                      class: 'at-tiles__image',
-                      loading: 'lazy',
-                      widths: '240, 360, 480, 600',
-                      sizes: '(min-width: 990px) 16vw, (min-width: 750px) 33vw, 50vw',
-                      alt: ''
-                  }}
-                </span>
-              {%- endif -%}
-              <span class="at-tiles__label">{{ t[1] }}</span>
-            </a>
-          </li>
-        {%- endfor -%}
+        {%- content_for 'blocks' -%}
       </ul>
     </div>
   </div>
@@ -80,8 +45,20 @@
       root.addEventListener('click', (event) => {
         const tile = event.target.closest('[data-at-q1]');
         if (!tile) return;
-        write({ q1: tile.dataset.atQ1, url: tile.getAttribute('href'), title: tile.dataset.atTitle, at: Date.now() });
+        write({ q1: tile.dataset.atQ1, url: tile.dataset.atUrl, title: tile.dataset.atTitle, at: Date.now() });
       });
+
+      // Theme editor: open a card's popup while its form block is selected.
+      if (window.Shopify && Shopify.designMode) {
+        document.addEventListener('shopify:block:select', (event) => {
+          const popup = event.target.closest?.('[data-at-tile-popup]');
+          if (popup && root.contains(popup) && event.target.closest('dialog')) popup.showDialog?.();
+        });
+        document.addEventListener('shopify:block:deselect', (event) => {
+          const popup = event.target.closest?.('[data-at-tile-popup]');
+          if (popup && root.contains(popup)) popup.closeDialog?.();
+        });
+      }
 
       const hint = read();
       if (!hint || !hint.q1) return;
@@ -91,7 +68,7 @@
         const resume = root.querySelector('[data-at-resume]');
         const link = root.querySelector('[data-at-resume-link]');
         link.textContent = tile.dataset.atTitle || hint.title;
-        link.href = hint.url || tile.getAttribute('href');
+        link.href = tile.dataset.atUrl || hint.url;
         resume.hidden = false;
       }
 
@@ -175,6 +152,9 @@
     .at-tiles__grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   }
   .at-tiles__grid > li { min-width: 0; }
+  .at-tiles__item { display: flex; }
+  .at-tiles__item > * { flex: 1 1 auto; min-width: 0; }
+  .at-tiles__popup { display: flex; }
   .at-tiles__tile {
     display: flex;
     flex-direction: column;
@@ -188,8 +168,13 @@
     border: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
     background: rgb(var(--color-foreground-rgb) / 0.03);
     color: inherit;
+    font: inherit;
+    text-align: start;
     text-decoration: none;
+    cursor: pointer;
   }
+  button.at-tiles__tile { width: 100%; appearance: none; }
+  .at-tiles__tile:focus-visible { outline: 2px solid #2b4a3f; outline-offset: 2px; }
   .at-tiles__tile--photo { justify-content: flex-start; padding: 6px 6px 10px; }
   .at-tiles__media {
     position: relative;
@@ -215,6 +200,30 @@
     color: #1a2e27;
   }
   .at-tiles__label { font-weight: 700; line-height: 1.25; }
+  .at-tiles__dialog {
+    width: min(36rem, calc(100vw - 32px));
+    max-height: var(--modal-max-height, 90dvh);
+    padding: 0;
+    border: var(--style-border-popover);
+    border-radius: var(--style-border-radius-popover, 12px);
+    background-color: var(--color-background);
+    box-shadow: var(--shadow-popover);
+  }
+  .at-tiles__dialog[open] { animation: modalSlideInTop var(--animation-speed) var(--animation-easing) forwards; }
+  .at-tiles__dialog.dialog-closing { animation: modalSlideOutTop var(--animation-speed) var(--animation-easing) forwards; }
+  .at-tiles__dialog-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 40px 20px 20px;
+  }
+  @media screen and (min-width: 750px) {
+    .at-tiles__dialog-inner { padding: 48px 32px 28px; }
+  }
+  .at-tiles__dialog-title, .at-tiles__skip { margin: 0; }
+  .at-tiles__skip { text-align: center; font-size: 0.95rem; }
+  .at-tiles__skip a { font-weight: 600; }
+  .at-tiles__close { top: 8px; right: 8px; opacity: 0.8; animation: none; }
   @media (prefers-reduced-motion: reduce) {
     .at-tiles__image { transition: none; }
     .at-tiles__tile:hover .at-tiles__image { transform: none; }
@@ -226,6 +235,8 @@
   "name": "What are you making?",
   "tag": "section",
   "class": "at-make-tiles-section",
+  "blocks": [{ "type": "_at-make-tile" }],
+  "max_blocks": 12,
   "settings": [
     {
       "type": "select",
@@ -251,47 +262,23 @@
       "default": "Choose a project to see blanks that fit."
     },
     {
-      "type": "url",
-      "id": "decorator_url",
-      "label": "Clients' designs link",
-      "info": "No single guide for decorators; defaults to all products."
-    },
-    {
-      "type": "header",
-      "content": "Card photos",
-      "info": "Optional. A card without a photo shows its label only."
-    },
-    {
-      "type": "image_picker",
-      "id": "image_decorator",
-      "label": "Clients' designs"
-    },
-    {
-      "type": "image_picker",
-      "id": "image_graphic_tees",
-      "label": "My own designs"
-    },
-    {
-      "type": "image_picker",
-      "id": "image_apparel_brand",
-      "label": "My own label"
-    },
-    {
-      "type": "image_picker",
-      "id": "image_groups_events",
-      "label": "Group, team, or event"
-    },
-    {
-      "type": "image_picker",
-      "id": "image_business_merch",
-      "label": "Company apparel"
-    },
-    {
-      "type": "image_picker",
-      "id": "image_personal",
-      "label": "Me and my family"
+      "type": "paragraph",
+      "content": "Each card is a Project card block. Add a Shopify Forms block inside a card to open that form when a guest clicks the card."
     }
   ],
-  "presets": [{ "name": "What are you making?" }]
+  "presets": [
+    {
+      "name": "What are you making?",
+      "blocks": {
+        "decorator": { "type": "_at-make-tile", "settings": { "project": "use:decorator", "label": "Clients' designs" } },
+        "graphic_tees": { "type": "_at-make-tile", "settings": { "project": "use:graphic-tees", "label": "My own designs" } },
+        "apparel_brand": { "type": "_at-make-tile", "settings": { "project": "use:apparel-brand", "label": "My own label" } },
+        "groups_events": { "type": "_at-make-tile", "settings": { "project": "use:groups-events", "label": "Group, team, or event" } },
+        "business_merch": { "type": "_at-make-tile", "settings": { "project": "use:business-merch", "label": "Company apparel" } },
+        "personal": { "type": "_at-make-tile", "settings": { "project": "use:personal", "label": "Me and my family" } }
+      },
+      "block_order": ["decorator", "graphic_tees", "apparel_brand", "groups_events", "business_merch", "personal"]
+    }
+  ]
 }
 {% endschema %}
