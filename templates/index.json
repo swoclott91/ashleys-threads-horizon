@@ -31,11 +31,194 @@
     },
     "at_make_tiles": {
       "type": "at-make-tiles",
+      "blocks": {
+        "tile_decorator": {
+          "type": "_at-make-tile",
+          "settings": {
+            "project": "use:decorator",
+            "label": "Clients' designs"
+          },
+          "blocks": {
+            "form_decorator": {
+              "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+              "settings": {
+                "form_id": "1264649",
+                "text_color": "#202020",
+                "button_background_color": "#202020",
+                "button_label_color": "#FFFFFF",
+                "links_color": "#1878B9",
+                "errors_color": "#E02229",
+                "text_alignment": "center",
+                "form_alignment": "center",
+                "padding_top": 0,
+                "padding_bottom": 24,
+                "padding_right": 0,
+                "padding_left": 0
+              }
+            }
+          },
+          "block_order": [
+            "form_decorator"
+          ]
+        },
+        "tile_graphic_tees": {
+          "type": "_at-make-tile",
+          "settings": {
+            "project": "use:graphic-tees",
+            "label": "My own designs"
+          },
+          "blocks": {
+            "form_graphic_tees": {
+              "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+              "settings": {
+                "form_id": "1248303",
+                "text_color": "#202020",
+                "button_background_color": "#202020",
+                "button_label_color": "#FFFFFF",
+                "links_color": "#1878B9",
+                "errors_color": "#E02229",
+                "text_alignment": "center",
+                "form_alignment": "center",
+                "padding_top": 0,
+                "padding_bottom": 24,
+                "padding_right": 0,
+                "padding_left": 0
+              }
+            }
+          },
+          "block_order": [
+            "form_graphic_tees"
+          ]
+        },
+        "tile_apparel_brand": {
+          "type": "_at-make-tile",
+          "settings": {
+            "project": "use:apparel-brand",
+            "label": "My own label"
+          },
+          "blocks": {
+            "form_apparel_brand": {
+              "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+              "settings": {
+                "form_id": "1264661",
+                "text_color": "#202020",
+                "button_background_color": "#202020",
+                "button_label_color": "#FFFFFF",
+                "links_color": "#1878B9",
+                "errors_color": "#E02229",
+                "text_alignment": "center",
+                "form_alignment": "center",
+                "padding_top": 0,
+                "padding_bottom": 24,
+                "padding_right": 0,
+                "padding_left": 0
+              }
+            }
+          },
+          "block_order": [
+            "form_apparel_brand"
+          ]
+        },
+        "tile_groups_events": {
+          "type": "_at-make-tile",
+          "settings": {
+            "project": "use:groups-events",
+            "label": "Group, team, or event"
+          },
+          "blocks": {
+            "form_groups_events": {
+              "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+              "settings": {
+                "form_id": "1264663",
+                "text_color": "#202020",
+                "button_background_color": "#202020",
+                "button_label_color": "#FFFFFF",
+                "links_color": "#1878B9",
+                "errors_color": "#E02229",
+                "text_alignment": "center",
+                "form_alignment": "center",
+                "padding_top": 0,
+                "padding_bottom": 24,
+                "padding_right": 0,
+                "padding_left": 0
+              }
+            }
+          },
+          "block_order": [
+            "form_groups_events"
+          ]
+        },
+        "tile_business_merch": {
+          "type": "_at-make-tile",
+          "settings": {
+            "project": "use:business-merch",
+            "label": "Company apparel"
+          },
+          "blocks": {
+            "form_business_merch": {
+              "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+              "settings": {
+                "form_id": "1264668",
+                "text_color": "#202020",
+                "button_background_color": "#202020",
+                "button_label_color": "#FFFFFF",
+                "links_color": "#1878B9",
+                "errors_color": "#E02229",
+                "text_alignment": "center",
+                "form_alignment": "center",
+                "padding_top": 0,
+                "padding_bottom": 24,
+                "padding_right": 0,
+                "padding_left": 0
+              }
+            }
+          },
+          "block_order": [
+            "form_business_merch"
+          ]
+        },
+        "tile_personal": {
+          "type": "_at-make-tile",
+          "settings": {
+            "project": "use:personal",
+            "label": "Me and my family"
+          },
+          "blocks": {
+            "form_personal": {
+              "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+              "settings": {
+                "form_id": "1264671",
+                "text_color": "#202020",
+                "button_background_color": "#202020",
+                "button_label_color": "#FFFFFF",
+                "links_color": "#1878B9",
+                "errors_color": "#E02229",
+                "text_alignment": "center",
+                "form_alignment": "center",
+                "padding_top": 0,
+                "padding_bottom": 24,
+                "padding_right": 0,
+                "padding_left": 0
+              }
+            }
+          },
+          "block_order": [
+            "form_personal"
+          ]
+        }
+      },
+      "block_order": [
+        "tile_decorator",
+        "tile_graphic_tees",
+        "tile_apparel_brand",
+        "tile_groups_events",
+        "tile_business_merch",
+        "tile_personal"
+      ],
       "settings": {
         "at_visibility": "guests",
         "heading": "What are you making?",
-        "helper": "Choose a project to see blanks that fit.",
-        "decorator_url": ""
+        "helper": "Choose a project to see blanks that fit."
       }
     },
     "at_home_profile": {
