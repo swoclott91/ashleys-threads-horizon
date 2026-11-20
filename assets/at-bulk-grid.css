@@ -485,6 +485,14 @@
   transition: border-color var(--animation-speed) ease;
 }
 
+/* Rapid taps on − / + read as a double-tap, which zooms the page on mobile. `manipulation`
+   keeps scrolling and pinch-zoom but drops double-tap zoom. */
+.at-bulk-grid__qty-selector,
+.at-bulk-grid__qty-selector button,
+.at-bulk-grid__qty-input {
+  touch-action: manipulation;
+}
+
 /* Accent the quantity field once it has a value (desktop table + mobile stepper) */
 .at-bulk-grid__qty-input--active {
   border-color: var(--at-dp-accent, var(--color-selected-variant-background));

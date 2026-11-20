@@ -757,6 +757,8 @@
 
   .at-pdp .at-bulk-grid__qty-selector .at-bulk-grid__qty-input {
     min-width: 3ch;
+    /* 16px or more, or iOS zooms in when the field takes focus. */
+    font-size: max(16px, var(--font-size--md, 1rem));
   }
 }
 
