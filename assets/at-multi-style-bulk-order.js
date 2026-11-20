@@ -253,6 +253,9 @@ function defineElement() {
 
       this.addEventListener('change', this.#onChange, { signal });
       this.addEventListener('click', this.#onClick, { signal });
+      // Back/forward can restore checkbox state after this ran (or bring the page back from
+      // the back/forward cache); pageshow fires once restoring is done, so re-read it then.
+      window.addEventListener('pageshow', this.#syncFromInputs, { signal });
       this.#watchFavorites(signal);
       const linked = initialFilter(window.location.search);
       if (linked) this.#checkFilter(linked);
@@ -263,6 +266,16 @@ function defineElement() {
     disconnectedCallback() {
       this.#listeners?.abort();
     }
+
+    /** Rebuilds the selection and filter from what the checkboxes and tabs show right now. */
+    #syncFromInputs = () => {
+      this.#selection.clear();
+      for (const [id, row] of this.#rows) {
+        if (row.querySelector('[data-at-style-checkbox]')?.checked) this.#selection.set(id, true);
+      }
+      this.#applyFilter(this.#currentFilter());
+      this.#renderPanel({ announce: false });
+    };
 
     get selection() {
       return clonePayloadStyles(this.#selection.resolve(this.#styles));
