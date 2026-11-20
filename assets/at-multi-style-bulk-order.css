@@ -924,6 +924,21 @@ html.at-msq-scroll-lock {
   min-height: var(--minimum-touch-target, 44px);
 }
 
+/* Rapid taps on − / + read as a double-tap, which zooms the page on mobile. `manipulation`
+   keeps scrolling and pinch-zoom but drops double-tap zoom. The 16px input stops iOS from
+   zooming in when the quantity field takes focus. */
+.at-msq__stepper,
+.at-msq__stepper button,
+.at-msq__stepper .at-msq__qty {
+  touch-action: manipulation;
+}
+
+@media screen and (max-width: 749px) {
+  .at-msq__stepper .at-msq__qty {
+    font-size: max(16px, 1rem);
+  }
+}
+
 .at-msq__stepper button:disabled {
   opacity: 0.35;
   cursor: not-allowed;
