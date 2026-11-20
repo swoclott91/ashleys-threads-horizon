@@ -658,10 +658,17 @@ html.at-msq-scroll-lock {
 
 .at-msq__style-total {
   margin: 0;
+  /* Room for the total before it appears, so the title doesn't rewrap when a quantity is set. */
+  min-inline-size: 8rem;
   font-size: var(--font-size--sm, 0.875rem);
   font-weight: 700;
   text-align: end;
   white-space: nowrap;
+}
+
+/* Beats the theme's p:empty { display: none } so the total's space stays reserved. */
+.at-msq__style-total:empty {
+  display: block;
 }
 
 .at-msq__style-content {
@@ -921,6 +928,25 @@ html.at-msq-scroll-lock {
   font-weight: 700;
 }
 
+/* The shared grid outlines an input once it has a value (.at-bulk-grid__qty-input--active).
+   Here the whole stepper turns green instead, so keep the input itself borderless. */
+.at-msq .at-msq__stepper .at-msq__qty,
+.at-msq .at-msq__stepper .at-msq__qty:is(.at-bulk-grid__qty-input--active, :focus) {
+  border: 0;
+  box-shadow: none;
+  color: var(--at-msq-ink);
+}
+
+.at-msq .at-msq__stepper:has(.at-msq__qty[aria-invalid]) {
+  border-color: var(--color-error, #b3261e);
+  box-shadow: 0 0 0 1px var(--color-error, #b3261e);
+}
+
+.at-msq .at-msq__stepper:focus-within {
+  outline: 2px solid var(--at-msq-accent);
+  outline-offset: 1px;
+}
+
 .at-msq__stepper .at-msq__qty {
   width: 3.5rem;
   min-width: 0;
@@ -1054,15 +1080,16 @@ html.at-msq-scroll-lock {
     padding: 0.75rem 0.75rem 0.625rem;
   }
 
+  /* The total's line is always reserved, even while empty, so adding the first unit
+     doesn't push the product's colors down. */
   .at-msq__style-total {
     grid-column: 2;
+    min-inline-size: 0;
+    min-block-size: 1.25rem;
     font-size: var(--font-size--xs, 0.8125rem);
+    line-height: 1.25rem;
     color: var(--at-msq-accent);
     text-align: start;
-  }
-
-  .at-msq__style-total:empty {
-    display: none;
   }
 
   .at-msq-dialog .at-msq__actions {
