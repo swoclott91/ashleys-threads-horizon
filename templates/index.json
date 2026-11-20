@@ -36,7 +36,7 @@
           "type": "_at-make-tile",
           "settings": {
             "project": "use:decorator",
-            "label": "Clients' designs",
+            "label": "Custom client orders",
             "image": "shopify://shop_images/Cozy_Craft_Desk_T-Shirt_Flatlay.png",
             "collection": "graphic-tees-boutique-sellers"
           },
@@ -67,7 +67,7 @@
           "type": "_at-make-tile",
           "settings": {
             "project": "use:graphic-tees",
-            "label": "My own designs",
+            "label": "My own apparel or merch",
             "collection": ""
           },
           "blocks": {
@@ -97,7 +97,7 @@
           "type": "_at-make-tile",
           "settings": {
             "project": "use:apparel-brand",
-            "label": "My own label",
+            "label": "Workwear / company events",
             "collection": ""
           },
           "blocks": {
@@ -127,7 +127,7 @@
           "type": "_at-make-tile",
           "settings": {
             "project": "use:groups-events",
-            "label": "Group, team, or event",
+            "label": "School, team, or club",
             "collection": ""
           },
           "blocks": {
@@ -157,7 +157,7 @@
           "type": "_at-make-tile",
           "settings": {
             "project": "use:business-merch",
-            "label": "Company apparel",
+            "label": "Gifts / personal projects",
             "collection": ""
           },
           "blocks": {
@@ -187,7 +187,7 @@
           "type": "_at-make-tile",
           "settings": {
             "project": "use:personal",
-            "label": "Me and my family",
+            "label": "Clothing to wear blank",
             "collection": ""
           },
           "blocks": {
