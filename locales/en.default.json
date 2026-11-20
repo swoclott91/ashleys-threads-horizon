@@ -280,8 +280,8 @@
         "other": "{{ count }} units"
       },
       "add_all": {
-        "one": "Add {{ count }} to cart",
-        "other": "Add all {{ count }} to cart"
+        "one": "Add {{ count }} item to cart",
+        "other": "Add {{ count }} items to cart"
       },
       "added": {
         "one": "{{ count }} item added to your cart.",
