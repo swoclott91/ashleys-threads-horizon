@@ -460,7 +460,9 @@ class MultiStyleQuantities extends HTMLElement {
       : '<span class="at-msq__style-image" aria-hidden="true"></span>';
     const brand = style.brandImageUrl
       ? `<img class="at-msq__style-brand" src="${escapeHtml(style.brandImageUrl)}" alt="${escapeHtml(style.brandName ?? '')}" height="16" loading="lazy">`
-      : '';
+      : style.brandName
+        ? `<span class="at-msq__style-brand-name">${escapeHtml(style.brandName)}</span>`
+        : '';
     section.innerHTML = `<header class="at-msq__style-head">${image}`
       + `<div class="at-msq__style-text">${brand}<h3 class="at-msq__style-title" id="${this.#id(style.productId, 'title')}"><a class="at-msq__style-title-link" href="${href}">${escapeHtml(style.title)}</a></h3>`
       + `<p class="at-msq__style-meta">${escapeHtml(plural(strings, 'colors', style.colors.length))}</p></div>`

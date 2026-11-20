@@ -496,6 +496,12 @@ html.at-msq-scroll-lock {
   --at-msq-accent: var(--at-dp-accent, #243e34);
   --at-msq-line: rgb(var(--at-bulk-gold-rgb, 187 152 124) / 0.5);
   --at-msq-line-strong: rgb(var(--at-bulk-gold-rgb, 187 152 124) / 0.75);
+  /* Warm cream page, cream-white product cards, charcoal ink, pale green for open/selected. */
+  --at-msq-bg: var(--at-bulk-surface, #f6f1e7);
+  --at-msq-card: #fdfbf7;
+  --at-msq-ink: #2c2c2c;
+  --at-msq-tint: #e1e8d8;
+  --at-msq-control-line: rgb(44 44 44 / 0.45);
   --at-msq-height: min(
     94dvh,
     calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - var(--padding-md, 1rem))
@@ -505,14 +511,15 @@ html.at-msq-scroll-lock {
   inset: 0;
   width: min(72rem, calc(100vw - 3rem));
   max-width: min(72rem, calc(100vw - 3rem));
-  height: var(--at-msq-height);
+  height: fit-content;
   max-height: var(--at-msq-height);
   margin: auto;
   padding: clamp(1.25rem, 2.5vw, 2.5rem);
   border: var(--style-border-popover);
   border-radius: var(--style-border-radius-popover);
   box-shadow: var(--shadow-popover);
-  background-color: var(--color-background);
+  background-color: var(--at-msq-bg);
+  color: var(--at-msq-ink);
 }
 
 .at-msq-dialog:not([open]) {
@@ -530,7 +537,7 @@ html.at-msq-scroll-lock {
 }
 
 .at-msq-dialog .at-msq__inner {
-  flex: 1 1 0;
+  flex: 0 1 auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -538,13 +545,13 @@ html.at-msq-scroll-lock {
 }
 
 .at-msq-dialog .at-msq {
-  flex: 1 1 0;
+  flex: 0 1 auto;
   min-height: 0;
   overflow: hidden;
 }
 
 .at-msq-dialog .at-msq__body {
-  flex: 1 1 0;
+  flex: 0 1 auto;
   min-height: 0;
   overflow-y: auto;
   gap: var(--gap-md, 1rem);
@@ -572,19 +579,20 @@ html.at-msq-scroll-lock {
   outline-offset: 2px;
 }
 
-/* One block per style. The style is the outer card (accent edge, white header that stays
-   pinned while its colors scroll); its colors sit in a tinted tray below, as white cards. */
+/* Product → Color → Sizes. Each style is one continuous card with a dark green rail down its
+   whole height; its colors are inset sections inside it, and each open color's size grid is
+   attached under its header inside the same border. Products are spaced further apart than
+   the colors inside them. */
 .at-msq-dialog .at-msq__body {
-  gap: 1.25rem;
+  gap: 1.375rem;
 }
 
 .at-msq__style {
   flex: none;
   border: 1px solid var(--at-msq-line-strong);
-  border-inline-start: 4px solid var(--at-msq-accent);
-  border-radius: var(--style-border-radius-inputs, 4px);
-  background: var(--color-background);
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.06);
+  border-inline-start: 6px solid var(--at-msq-accent);
+  border-radius: 8px;
+  background: var(--at-msq-card);
 }
 
 .at-msq__style-head {
@@ -594,10 +602,11 @@ html.at-msq-scroll-lock {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  background: var(--color-background);
-  border-bottom: 2px solid var(--at-msq-accent);
+  gap: 0.875rem;
+  padding: 0.75rem 0.875rem 0.625rem;
+  border-bottom: 1px solid var(--at-msq-line);
+  border-start-end-radius: 7px;
+  background: var(--at-msq-card);
 }
 
 .at-msq__style-image {
@@ -605,7 +614,6 @@ html.at-msq-scroll-lock {
   inline-size: 3.5rem;
   block-size: 3.5rem;
   object-fit: contain;
-  background: rgb(var(--color-foreground-rgb) / 0.04);
 }
 
 .at-msq__style-text {
@@ -614,12 +622,23 @@ html.at-msq-scroll-lock {
 
 .at-msq__style-brand {
   display: block;
-  block-size: 1rem;
+  block-size: 0.875rem;
   inline-size: auto;
   max-inline-size: 6rem;
-  margin-block-end: 0.2rem;
+  margin-block-end: 0.25rem;
   object-fit: contain;
   object-position: left center;
+}
+
+.at-msq__style-brand-name {
+  display: block;
+  margin-block-end: 0.125rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--at-msq-ink);
 }
 
 .at-msq__style-title {
@@ -627,14 +646,14 @@ html.at-msq-scroll-lock {
   font-size: var(--font-size--lg, 1.125rem);
   font-weight: 700;
   line-height: 1.25;
-  color: #000;
+  color: var(--at-msq-ink);
   overflow-wrap: anywhere;
 }
 
 .at-msq__style-meta {
-  margin: 0;
-  font-size: var(--font-size--xs, 0.8125rem);
-  color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text, 0.7));
+  margin: 0.125rem 0 0;
+  font-size: var(--font-size--sm, 0.875rem);
+  color: rgb(44 44 44 / 0.7);
 }
 
 .at-msq__style-total {
@@ -648,9 +667,8 @@ html.at-msq-scroll-lock {
 .at-msq__style-content {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.625rem;
   padding: 0.75rem;
-  background: var(--at-bulk-surface, #f6f1e7);
 }
 
 .at-msq__loading {
@@ -755,46 +773,46 @@ html.at-msq-scroll-lock {
   color: var(--color-error, #b3261e);
 }
 
-/* Mobile accordions with steppers */
+/* Mobile accordions with steppers: one bordered section per color, header and size grid
+   inside the same border. Open headers get the pale green tint. */
 .at-msq__accordions {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.625rem;
 }
 
 .at-msq__accordion {
-  border: 1px solid var(--at-msq-line);
-  border-radius: var(--style-border-radius-inputs, 4px);
+  border: 1px solid var(--at-msq-line-strong);
+  border-radius: 6px;
   overflow: hidden;
-  background: var(--color-background);
+  background: var(--at-msq-card);
 }
 
 .at-msq__accordion-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   width: 100%;
-  min-height: var(--minimum-touch-target, 44px);
-  padding: 0.5rem 0.75rem;
+  min-height: 3rem;
+  padding: 0.5rem 0.875rem;
   border: 0;
-  background: var(--color-background);
-  color: inherit;
+  background: var(--at-msq-card);
+  color: var(--at-msq-ink);
   font: inherit;
-  font-weight: 600;
+  font-size: var(--font-size--md, 1rem);
+  font-weight: 700;
   text-align: start;
   cursor: pointer;
 }
 
+.at-msq__accordion-header .at-bulk-grid__swatch {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .at-msq__accordion-header[aria-expanded='true'] {
   border-bottom: 1px solid var(--at-msq-line);
-}
-
-.at-msq__accordion--has-items {
-  border-color: var(--at-msq-accent);
-}
-
-.at-msq__accordion--has-items .at-msq__accordion-header {
-  background: color-mix(in srgb, var(--at-msq-accent) 8%, var(--color-background));
+  background: var(--at-msq-tint);
 }
 
 .at-msq__accordion--static .at-msq__accordion-header {
@@ -803,7 +821,7 @@ html.at-msq-scroll-lock {
 
 .at-msq__accordion--static .at-msq__row-message {
   margin: 0;
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 0.875rem;
 }
 
 .at-msq__accordion-header .at-msq__row-name {
@@ -812,7 +830,7 @@ html.at-msq-scroll-lock {
 
 .at-msq__row-count {
   font-size: var(--font-size--xs, 0.8125rem);
-  font-weight: 400;
+  font-weight: 600;
   color: var(--at-msq-accent);
   white-space: nowrap;
 }
@@ -829,7 +847,7 @@ html.at-msq-scroll-lock {
 }
 
 .at-msq__accordion-content {
-  padding: 0.25rem 0.75rem;
+  padding: 0.25rem 0.875rem;
 }
 
 .at-msq__size-row {
@@ -853,8 +871,20 @@ html.at-msq-scroll-lock {
 
 .at-msq__size-label {
   font-weight: 700;
+  color: var(--at-msq-ink);
 }
 
+.at-msq__size-info .at-bulk-grid__price {
+  font-size: var(--font-size--sm, 0.875rem);
+  color: var(--at-msq-ink);
+}
+
+/* Plenty in stock is information, not a signal: keep it quiet. Low and sold out keep their colors. */
+.at-msq__size-info .at-bulk-grid__availability--in-stock {
+  color: rgb(44 44 44 / 0.6);
+}
+
+/* The quantity controls are the strongest outlines in the dialog; a nonzero one turns green. */
 .at-msq__stepper {
   flex: none;
   display: inline-flex;
@@ -862,10 +892,31 @@ html.at-msq-scroll-lock {
   min-width: var(--quantity-selector-width, 124px);
 }
 
+.at-msq .at-msq__stepper {
+  border: 1.5px solid var(--at-msq-control-line);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.at-msq .at-msq__stepper :is(.quantity-minus, .quantity-plus) {
+  border-radius: 6px;
+}
+
+.at-msq .at-msq__size-row--selected .at-msq__stepper {
+  border-color: var(--at-msq-accent);
+  background: var(--at-msq-tint);
+}
+
+.at-msq__size-row--selected .at-msq__qty {
+  font-weight: 700;
+}
+
 .at-msq__stepper .at-msq__qty {
   width: 3.5rem;
   min-width: 0;
   border-radius: 0;
+  background: transparent;
+  color: var(--at-msq-ink);
 }
 
 .at-msq__stepper button {
@@ -878,9 +929,15 @@ html.at-msq-scroll-lock {
   cursor: not-allowed;
 }
 
-/* Footer: member subtotal, unit count, add-all button */
+/* Footer: member subtotal, unit count, add-all button. It sits outside the scrolling list,
+   so it stays visible, and directly under the last product when the list is short. */
 .at-msq__actions {
   flex-shrink: 0;
+  border-top: 1px solid var(--at-msq-line-strong);
+}
+
+.at-msq-dialog .at-msq__actions {
+  background: var(--at-msq-bg);
 }
 
 .at-msq__summary {
@@ -906,7 +963,7 @@ html.at-msq-scroll-lock {
 .at-msq__subtotal {
   font-size: var(--font-size--lg, 1.25rem);
   font-weight: 700;
-  color: #000;
+  color: var(--at-msq-ink);
 }
 
 .at-msq__count {
@@ -950,49 +1007,72 @@ html.at-msq-scroll-lock {
     top: max(var(--margin-2xs, 0.25rem), env(safe-area-inset-top, 0px));
   }
 
+  /* Left-aligned title block, as in the product cards below it. */
+  .at-msq-dialog .at-bulk-grid__header {
+    align-items: flex-start;
+    text-align: start;
+    padding-inline: 0 var(--minimum-touch-target, 44px);
+  }
+
   .at-msq__style-head {
     grid-template-columns: auto minmax(0, 1fr);
-    padding: 0.5rem 0.75rem;
+    gap: 0 0.875rem;
+    padding: 0.75rem 0.75rem 0.625rem;
   }
 
   .at-msq__style-total {
     grid-column: 2;
+    font-size: var(--font-size--xs, 0.8125rem);
+    color: var(--at-msq-accent);
     text-align: start;
   }
 
-  .at-msq__style-content {
-    padding: 0.5rem;
+  .at-msq__style-total:empty {
+    display: none;
+  }
+
+  .at-msq-dialog .at-msq__actions {
+    padding-block-start: 0.875rem;
+    box-shadow: none;
   }
 
   .at-msq__add.button {
     flex: 1 0 100%;
+    min-height: max(3rem, var(--height-buy-buttons, 3rem));
+    justify-content: center;
+    border-radius: 6px;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: var(--font-size--md, 1rem);
   }
 
   /* Sizes as a two-column grid of cards, matching the product page bulk grid
-     (assets/at-pdp.css, .at-bulk-grid__mobile-size-row). */
+     (assets/at-pdp.css, .at-bulk-grid__mobile-size-row). A lone size (OSFA) keeps one
+     column's width. */
   .at-msq__accordion-content:not([hidden]) {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--gap-xs, 0.5rem);
-    padding: var(--padding-sm, 0.75rem);
+    gap: 0.5rem;
+    padding: 0.625rem;
   }
 
   .at-msq__size-row {
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
-    gap: var(--gap-xs, 0.5rem);
-    padding: var(--padding-xs, 0.5rem);
+    gap: 0.5rem;
+    padding: 0.625rem;
     border: 1px solid var(--at-msq-line);
-    border-radius: var(--style-border-radius-inputs, 4px);
+    border-radius: 6px;
+    background: #fff;
   }
 
   .at-msq__size-row:last-child {
     border-bottom: 1px solid var(--at-msq-line);
   }
 
-  .at-msq__size-row--selected {
-    background: color-mix(in srgb, var(--at-msq-accent) 8%, transparent);
+  .at-msq__size-info {
+    gap: 0.0625rem;
   }
 
   .at-msq__size-info .at-msq__note {
