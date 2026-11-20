@@ -458,8 +458,11 @@ class MultiStyleQuantities extends HTMLElement {
     const image = style.imageUrl
       ? `<a class="at-msq__style-link" href="${href}" tabindex="-1" aria-hidden="true"><img class="at-msq__style-image" src="${escapeHtml(style.imageUrl)}" alt="" width="56" height="56" loading="lazy"></a>`
       : '<span class="at-msq__style-image" aria-hidden="true"></span>';
+    const brand = style.brandImageUrl
+      ? `<img class="at-msq__style-brand" src="${escapeHtml(style.brandImageUrl)}" alt="${escapeHtml(style.brandName ?? '')}" height="16" loading="lazy">`
+      : '';
     section.innerHTML = `<header class="at-msq__style-head">${image}`
-      + `<div class="at-msq__style-text"><h3 class="at-msq__style-title" id="${this.#id(style.productId, 'title')}"><a class="at-msq__style-title-link" href="${href}">${escapeHtml(style.title)}</a></h3>`
+      + `<div class="at-msq__style-text">${brand}<h3 class="at-msq__style-title" id="${this.#id(style.productId, 'title')}"><a class="at-msq__style-title-link" href="${href}">${escapeHtml(style.title)}</a></h3>`
       + `<p class="at-msq__style-meta">${escapeHtml(plural(strings, 'colors', style.colors.length))}</p></div>`
       + `<p class="at-msq__style-total" data-at-msq-style-total></p></header>`
       + `<div class="at-msq__style-content">${content}</div>`;
@@ -683,6 +686,7 @@ class MultiStyleQuantities extends HTMLElement {
         const variant = this.#lookup(input.dataset.variantId);
         const { quantity, error } = validateQuantity(input.value, variant);
         if (!error) rowCount += quantity;
+        input.closest('.at-msq__size-row')?.classList.toggle('at-msq__size-row--selected', !error && quantity > 0);
       }
       badge.textContent = rowCount ? plural(this.#strings, 'units', rowCount) : '';
       accordion?.classList.toggle('at-msq__accordion--has-items', rowCount > 0);

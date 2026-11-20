@@ -50,6 +50,8 @@ test('normalizes a style: string IDs, merged duplicate colors, invalid colors dr
     productUrl: '/products/gildan-5000',
     title: 'Gildan 5000',
     imageUrl: '//cdn.shopify.com/x.jpg',
+    brandImageUrl: '',
+    brandName: '',
     colorOptionPosition: 1,
     sources: ['purchase', 'favorite'],
     colors: [

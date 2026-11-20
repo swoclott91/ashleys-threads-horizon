@@ -116,6 +116,12 @@
       if at_image != blank
         assign at_image_url = at_image | image_url: width: 240
       endif
+      assign at_brand_image = product.metafields.custom.brand_image.value
+      assign at_brand_name = product.vendor | default: ''
+      assign at_brand_image_url = ''
+      if at_brand_image != blank
+        assign at_brand_image_url = at_brand_image | image_url: height: 48
+      endif
       assign at_row_sources = ''
       if at_is_purchase
         assign at_row_sources = 'purchase'
@@ -131,6 +137,8 @@
       data-product-url="{{ product.url | escape }}"
       data-title="{{ product.title | escape }}"
       data-image-url="{{ at_image_url | escape }}"
+      data-brand-image-url="{{ at_brand_image_url | escape }}"
+      data-brand-name="{{ at_brand_name | escape }}"
       data-color-position="{{ at_color_option.position }}"
       data-sources="{{ at_row_sources }}"
       {% if at_is_favorite %}
@@ -149,7 +157,7 @@
         aria-describedby="{{ at_row_id }}-price"
       >
       <label class="at-msbo__label" for="{{ at_row_id }}">
-        <a class="at-msbo__media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+        <span class="at-msbo__media">
           {%- if at_image != blank -%}
             {{
               at_image
@@ -157,9 +165,16 @@
               | image_tag: loading: 'lazy', class: 'at-msbo__image', width: 64, height: 64, alt: ''
             }}
           {%- endif -%}
-        </a>
+        </span>
         <span class="at-msbo__text">
-          <a class="at-msbo__title" href="{{ product.url }}">{{ product.title }}</a>
+          {%- if at_brand_image != blank -%}
+            {{
+              at_brand_image
+              | image_url: height: 48
+              | image_tag: loading: 'lazy', class: 'at-msbo__brand', height: 16, alt: at_brand_name
+            }}
+          {%- endif -%}
+          <span class="at-msbo__title">{{ product.title }}</span>
           <span class="at-msbo__sources" data-at-msbo-sources>
             {%- if at_is_purchase -%}{{ 'at_bulk_order.source_purchase' | t }}{%- endif -%}
             {%- if at_is_purchase and at_is_favorite %} · {% endif -%}
@@ -167,6 +182,14 @@
           </span>
         </span>
       </label>
+      <a
+        class="at-msbo__goto"
+        href="{{ product.url }}"
+        aria-label="{{ 'at_bulk_order.go_to_item_label' | t: title: product.title | escape }}"
+      >
+        {{- 'at_bulk_order.go_to_item' | t -}}
+        <span class="at-msbo__goto-icon" aria-hidden="true">&rarr;</span>
+      </a>
       <div class="at-msbo__price" id="{{ at_row_id }}-price">
         {% render 'price', product_resource: product %}
         {%- if at_show_tier_label -%}

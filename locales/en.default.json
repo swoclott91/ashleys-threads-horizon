@@ -244,6 +244,8 @@
     "source_purchase": "Past purchase",
     "source_favorite": "Favorite",
     "colors_for": "Colors for {{ title }}",
+    "go_to_item": "Go to item",
+    "go_to_item_label": "Go to {{ title }}",
     "empty_purchases": "No past purchases yet.",
     "empty_favorites": "No favorites yet. Use the heart next to a color to save it.",
     "selected_heading": "Selected styles",
