@@ -444,10 +444,12 @@
                   disabled
                 >
                   <span class="add-to-cart-text">
-                    <span data-at-msq-add-label>
+                    <span aria-hidden="true" class="svg-wrapper add-to-cart-icon">
+                      {{- 'at-bulk-add-to-cart.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="add-to-cart-text__content" data-at-msq-add-label>
                       {{- 'at_bulk_order.dialog.add_empty' | t -}}
                     </span>
-                    <span aria-hidden="true">&rarr;</span>
                   </span>
                 </button>
               </div>

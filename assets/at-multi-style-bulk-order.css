@@ -1022,13 +1022,26 @@ html.at-msq-scroll-lock {
   color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text, 0.7));
 }
 
+/* Same look as the product page "Bulk add to cart" button (blocks/at-bulk-add-to-cart.liquid,
+   assets/at-pdp.css .at-buy-buttons__bulk-trigger): bulk icon, theme button case, semibold. */
 .at-msq__add.button {
+  --button-color: #fff;
+  --button-background-color: var(--at-msq-accent);
+  --button-border-color: var(--at-msq-accent);
+  --button-focus-outline-color: var(--at-msq-accent);
   background: var(--at-msq-accent);
   border-color: var(--at-msq-accent);
   color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-weight: 700;
+  font-size: var(--font-size--md, 1rem);
+  font-weight: 600;
+  line-height: 1.25;
+  text-transform: var(--button-text-case-primary, uppercase);
+}
+
+.at-msq__add.button:not(:disabled):hover {
+  --button-background-color: color-mix(in srgb, var(--at-msq-accent) 88%, #000);
+  background: color-mix(in srgb, var(--at-msq-accent) 88%, #000);
+  border-color: color-mix(in srgb, var(--at-msq-accent) 88%, #000);
 }
 
 .at-msq__add .add-to-cart-text {
@@ -1101,10 +1114,6 @@ html.at-msq-scroll-lock {
     flex: 1 0 100%;
     min-height: max(3rem, var(--height-buy-buttons, 3rem));
     justify-content: center;
-    border-radius: 6px;
-    text-transform: none;
-    letter-spacing: 0;
-    font-size: var(--font-size--md, 1rem);
   }
 
   /* Sizes as a two-column grid of cards, matching the product page bulk grid
