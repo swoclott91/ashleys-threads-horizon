@@ -784,7 +784,8 @@ html.at-msq-scroll-lock {
 .at-msq__accordion {
   border: 1px solid var(--at-msq-line-strong);
   border-radius: 6px;
-  overflow: hidden;
+  /* clip, not hidden: hidden makes a scroll container and would stop the header sticking. */
+  overflow: clip;
   background: var(--at-msq-card);
 }
 
@@ -813,6 +814,15 @@ html.at-msq-scroll-lock {
 .at-msq__accordion-header[aria-expanded='true'] {
   border-bottom: 1px solid var(--at-msq-line);
   background: var(--at-msq-tint);
+}
+
+/* An open color's header sticks just under its product's header while you scroll through its
+   sizes, and scrolls away with the last size. --at-msq-head-h is the product header's height,
+   set by assets/at-multi-style-quantities.js. */
+.at-msq__accordion-header[aria-expanded='true'] {
+  position: sticky;
+  top: var(--at-msq-head-h, 0px);
+  z-index: 1;
 }
 
 .at-msq__accordion--static .at-msq__accordion-header {
@@ -1011,15 +1021,24 @@ html.at-msq-scroll-lock {
 }
 
 @media screen and (max-width: 749px) {
+  /* Full-height sheet, same as the product page bulk dialog (assets/at-bulk-grid.css,
+     .at-buy-buttons__bulk-dialog): the list fills the sheet and the footer sits at the bottom. */
   .at-msq-dialog {
     width: 100%;
     max-width: 100%;
+    height: var(--at-msq-height);
     padding-block: calc(var(--minimum-touch-target, 44px) + var(--padding-xs, 0.5rem)) var(--padding-md, 1rem);
     padding-inline: max(var(--padding-md, 1rem), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   }
 
   .at-msq-dialog .at-msq__close {
     top: max(var(--margin-2xs, 0.25rem), env(safe-area-inset-top, 0px));
+  }
+
+  .at-msq-dialog .at-msq__inner,
+  .at-msq-dialog .at-msq,
+  .at-msq-dialog .at-msq__body {
+    flex: 1 1 0;
   }
 
   /* Left-aligned title block, as in the product cards below it. */

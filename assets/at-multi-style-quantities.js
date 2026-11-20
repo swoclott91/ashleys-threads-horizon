@@ -125,6 +125,14 @@ class MultiStyleQuantities extends HTMLElement {
   #media;
   /** Review & reorder: { name, pending: Map<productId, entries>, soldOut: Set, unavailable: string[] } */
   #prefill = null;
+  /** Measures each sticky style header so an open color's header can stick just below it. */
+  #headObserver = typeof ResizeObserver === 'function'
+    ? new ResizeObserver((entries) => {
+      for (const { target } of entries) {
+        target.parentElement?.style.setProperty('--at-msq-head-h', `${target.offsetHeight}px`);
+      }
+    })
+    : null;
 
   connectedCallback() {
     this.#listeners?.abort();
@@ -155,6 +163,7 @@ class MultiStyleQuantities extends HTMLElement {
 
   disconnectedCallback() {
     this.#listeners?.abort();
+    this.#headObserver?.disconnect();
   }
 
   get #isDesktop() {
@@ -406,6 +415,7 @@ class MultiStyleQuantities extends HTMLElement {
   #renderAll() {
     const subtitle = this.querySelector('[data-at-msq-subtitle]');
     if (subtitle) subtitle.textContent = plural(this.#strings, 'subtitle', this.#styles.length);
+    this.#headObserver?.disconnect();
     this.#body.replaceChildren(...this.#styles.map((style) => {
       const section = document.createElement('section');
       section.className = 'at-msq__style';
@@ -463,11 +473,15 @@ class MultiStyleQuantities extends HTMLElement {
       : style.brandName
         ? `<span class="at-msq__style-brand-name">${escapeHtml(style.brandName)}</span>`
         : '';
+    const oldHead = section.querySelector('.at-msq__style-head');
+    if (oldHead) this.#headObserver?.unobserve(oldHead);
     section.innerHTML = `<header class="at-msq__style-head">${image}`
       + `<div class="at-msq__style-text">${brand}<h3 class="at-msq__style-title" id="${this.#id(style.productId, 'title')}"><a class="at-msq__style-title-link" href="${href}">${escapeHtml(style.title)}</a></h3>`
       + `<p class="at-msq__style-meta">${escapeHtml(plural(strings, 'colors', style.colors.length))}</p></div>`
       + `<p class="at-msq__style-total" data-at-msq-style-total></p></header>`
       + `<div class="at-msq__style-content">${content}</div>`;
+    const head = section.querySelector('.at-msq__style-head');
+    if (head) this.#headObserver?.observe(head);
     this.#renderStyleTotal(style.productId);
     this.#refreshValidity(section);
 
