@@ -20,6 +20,8 @@
  *       productUrl: string,           // storefront path from `product.url`, e.g. "/products/gildan-5000"
  *       title: string,
  *       imageUrl: string,             // Shopify CDN URL (may be protocol-relative) or ""
+ *       brandImageUrl: string,        // product metafield custom.brand_image (CDN URL) or ""
+ *       brandName: string,            // product.vendor, alt text for the brand image, or ""
  *       colorOptionPosition: number,  // 1-based position of the Color/Colour option
  *       sources: Array<'purchase' | 'favorite'>,
  *       colors: Array<{
@@ -132,6 +134,8 @@ export function normalizeStyle(raw) {
     productUrl,
     title: String(raw.title ?? ''),
     imageUrl: String(raw.imageUrl ?? ''),
+    brandImageUrl: String(raw.brandImageUrl ?? ''),
+    brandName: String(raw.brandName ?? ''),
     colorOptionPosition: Number.isInteger(position) && position > 0 ? position : 1,
     sources: rowSources,
     colors: [...colors.values()],
@@ -199,6 +203,8 @@ function readStyle(row) {
     productUrl: row.dataset.productUrl,
     title: row.dataset.title,
     imageUrl: row.dataset.imageUrl,
+    brandImageUrl: row.dataset.brandImageUrl,
+    brandName: row.dataset.brandName,
     colorOptionPosition: row.dataset.colorPosition,
     sources: row.dataset.sources,
     colors: Array.from(row.querySelectorAll('[data-at-style-color]'), (item) => ({
@@ -324,7 +330,16 @@ function defineElement() {
         this.#remove(remove.dataset.productId);
         return;
       }
-      if (target?.closest('[data-at-msbo-choose]')) this.#chooseQuantities();
+      if (target?.closest('[data-at-msbo-choose]')) {
+        this.#chooseQuantities();
+        return;
+      }
+      // The whole style card selects. Links, buttons, the label (already toggles natively),
+      // inputs and the heart keep their own behavior.
+      const row = target?.closest('[data-at-style]');
+      if (!row || target.closest('a, button, input, label, select, textarea, at-favorite-color')) return;
+      if (window.getSelection?.()?.toString()) return;
+      row.querySelector('[data-at-style-checkbox]')?.click();
     };
 
     /**
