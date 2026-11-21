@@ -37,7 +37,7 @@
           "settings": {
             "project": "use:decorator",
             "label": "Custom client orders",
-            "image": "shopify://shop_images/Cozy_Craft_Desk_T-Shirt_Flatlay.png",
+            "image": "shopify://shop_images/Repeat_order_evergreen_tee.png",
             "collection": "graphic-tees-boutique-sellers"
           },
           "blocks": {
@@ -68,6 +68,7 @@
           "settings": {
             "project": "use:graphic-tees",
             "label": "My own apparel or merch",
+            "image": "shopify://shop_images/Cobalt_Sun_Tee_and_Tote_Display.png",
             "collection": ""
           },
           "blocks": {
@@ -98,6 +99,7 @@
           "settings": {
             "project": "use:apparel-brand",
             "label": "Workwear / company events",
+            "image": "shopify://shop_images/Warm_Sunlight_Over_Architectural_Plans.png",
             "collection": ""
           },
           "blocks": {
@@ -128,6 +130,7 @@
           "settings": {
             "project": "use:groups-events",
             "label": "School, team, or club",
+            "image": "shopify://shop_images/Riverside_Panthers_in_golden_stadium_light.png",
             "collection": ""
           },
           "blocks": {
