@@ -161,6 +161,7 @@
           "settings": {
             "project": "use:business-merch",
             "label": "Gifts / personal projects",
+            "image": "shopify://shop_images/Finishing_a_Cherry_Gift_Tee.png",
             "collection": ""
           },
           "blocks": {
