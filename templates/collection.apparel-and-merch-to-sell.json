@@ -5194,7 +5194,7 @@
         "groups": {
           "type": "text",
           "settings": {
-            "text": "<p><a href=\"/collections/groups-events\">Groups &amp; Events</a> for staff uniforms and committed rosters.</p>",
+            "text": "<p><a href=\"/collections/staff-and-company-events\">Apparel for Your Staff &amp; Company Events</a> for staff uniforms and event orders.</p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
