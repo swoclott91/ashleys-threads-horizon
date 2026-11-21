@@ -192,6 +192,7 @@
           "settings": {
             "project": "use:personal",
             "label": "Clothing to wear blank",
+            "image": "shopify://shop_images/Golden_window_light_gift-making_duo.png",
             "collection": ""
           },
           "blocks": {
