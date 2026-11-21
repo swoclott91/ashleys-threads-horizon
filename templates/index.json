@@ -67,7 +67,7 @@
           "type": "_at-make-tile",
           "settings": {
             "project": "use:graphic-tees",
-            "label": "My own apparel or merch",
+            "label": "Sell my own apparel or merch",
             "image": "shopify://shop_images/Cobalt_Sun_Tee_and_Tote_Display.png",
             "collection": ""
           },
