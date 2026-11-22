@@ -67,6 +67,49 @@ export function normalizeColorBatch(data) {
   };
 }
 
+/** Only theme-rendered swatch backgrounds go into a style attribute. */
+function safeSwatch(value) {
+  return typeof value === 'string' && /^(rgb\([\d.\s/%,]+\)|url\(\/\/[^()\s"'<>]+\)|url\(https:\/\/[^()\s"'<>]+\))$/.test(value)
+    ? value
+    : null;
+}
+
+/**
+ * Every color of a product, in the product's option order, from any at-bulk-color-data
+ * response. Used by "More colors" in the dialog. Throws on malformed data.
+ * @param {any} data - raw section JSON
+ * @param {number} fallbackPosition - the row's color option position when the data has none
+ * @returns {Array<{ optionValueId: string, name: string, swatchBackground: string | null }>}
+ */
+export function parseColorCatalog(data, fallbackPosition) {
+  const batch = normalizeColorBatch(data);
+  const position = batch.colorPosition ?? fallbackPosition;
+  const option = data.options[position - 1];
+  if (!option || !Array.isArray(option.values)) throw new Error('Invalid bulk color option');
+  return option.values.map((value) => ({
+    optionValueId: value.id,
+    name: value.value,
+    swatchBackground: safeSwatch(value.swatch),
+  }));
+}
+
+/**
+ * Colors a shopper can still add: catalog colors not already shown, in catalog order.
+ * @param {Array<{ optionValueId: string }>} catalog
+ * @param {Iterable<string>} shownIds
+ */
+export function addableColors(catalog, shownIds) {
+  const shown = new Set(shownIds);
+  return catalog.filter((color) => !shown.has(color.optionValueId));
+}
+
+/** Case- and accent-insensitive "contains" match for the color search. */
+export function matchesColorQuery(name, query) {
+  const fold = (text) => String(text ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+  const needle = fold(query);
+  return !needle || fold(name).includes(needle);
+}
+
 /**
  * Loads all sizes Shopify offers for one color. `fetchBatch(optionValueIds)` resolves the
  * raw section JSON (or null for a 404) and may reject; rejections propagate to the caller.

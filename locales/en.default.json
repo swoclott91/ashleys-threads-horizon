@@ -335,7 +335,26 @@
       "prefill_unavailable": {
         "one": "No longer available: {{ items }}.",
         "other": "{{ count }} items are no longer available: {{ items }}."
-      }
+      },
+      "more_colors": "More colors",
+      "more_colors_count": {
+        "one": "{{ count }} more",
+        "other": "{{ count }} more"
+      },
+      "more_colors_hint": "Pick colors to add. Tap the heart on an added color to save it to your favorites.",
+      "search_colors": "Search colors",
+      "no_matching_colors": "No colors match “{{ query }}”.",
+      "colors_loading": "Loading colors…",
+      "colors_failed": "Colors didn’t load.",
+      "add_colors": {
+        "one": "Add {{ count }} color",
+        "other": "Add {{ count }} colors"
+      },
+      "add_colors_empty": "Add colors",
+      "cancel": "Cancel",
+      "remove_color": "Remove color",
+      "remove_color_label": "Remove {{ color }}",
+      "added_color": "Added"
     }
   },
   "at_discount_progress": {

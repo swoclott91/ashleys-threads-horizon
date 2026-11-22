@@ -541,3 +541,34 @@ test('sold-out and missing prefill variants are flagged, never seeded', async ()
   draft.set('9001', '3', quantities[0]);
   assert.equal(draft.summarize((id) => variants.get(id)).count, 3, 'prefilled quantities stay editable');
 });
+
+test('the color catalog lists every color in option order with safe swatches only', async () => {
+  const { parseColorCatalog, addableColors, matchesColorQuery } = await core;
+  const data = {
+    productId: '1', currency: 'USD', colorPosition: 2, sizePosition: 1,
+    options: [
+      { name: 'Size', values: [{ id: '21', value: 'S' }] },
+      { name: 'Color', values: [
+        { id: '11', value: 'Black', swatch: 'rgb(0 0 0)' },
+        { id: '12', value: 'Heather Navy', swatch: 'url(//cdn.shopify.com/s/files/navy.png?v=1&width=80)' },
+        { id: '13', value: 'Crème', swatch: 'url(javascript:alert(1))' },
+        { id: '14', value: 'Red', swatch: 'red; background: url(x)' },
+      ] },
+    ],
+    variants: [],
+  };
+  const catalog = parseColorCatalog(data, 1);
+  assert.deepEqual(catalog, [
+    { optionValueId: '11', name: 'Black', swatchBackground: 'rgb(0 0 0)' },
+    { optionValueId: '12', name: 'Heather Navy', swatchBackground: 'url(//cdn.shopify.com/s/files/navy.png?v=1&width=80)' },
+    { optionValueId: '13', name: 'Crème', swatchBackground: null },
+    { optionValueId: '14', name: 'Red', swatchBackground: null },
+  ]);
+  assert.deepEqual(parseColorCatalog({ ...data, colorPosition: null }, 2).map((c) => c.optionValueId), ['11', '12', '13', '14']);
+  assert.throws(() => parseColorCatalog({ ...data, colorPosition: null }, 3));
+  assert.deepEqual(addableColors(catalog, ['12', '14']).map((c) => c.optionValueId), ['11', '13']);
+  assert.equal(matchesColorQuery('Heather Navy', 'navy'), true);
+  assert.equal(matchesColorQuery('Crème', 'creme'), true);
+  assert.equal(matchesColorQuery('Black', '  '), true);
+  assert.equal(matchesColorQuery('Black', 'red'), false);
+});

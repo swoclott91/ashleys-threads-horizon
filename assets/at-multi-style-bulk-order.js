@@ -23,6 +23,7 @@
  *       brandImageUrl: string,        // product metafield custom.brand_image (CDN URL) or ""
  *       brandName: string,            // product.vendor, alt text for the brand image, or ""
  *       colorOptionPosition: number,  // 1-based position of the Color/Colour option
+ *       colorCount: number,           // every color the product has (0 if unknown), for "More colors"
  *       sources: Array<'purchase' | 'favorite'>,
  *       colors: Array<{
  *         optionValueId: string,      // decimal string product_option_value ID
@@ -128,6 +129,7 @@ export function normalizeStyle(raw) {
   if (!colors.size) return null;
 
   const position = Number(raw.colorOptionPosition);
+  const colorCount = Number(raw.colorCount);
   const rowSources = parseSources(Array.isArray(raw.sources) ? raw.sources.join(' ') : raw.sources);
   return {
     productId,
@@ -137,6 +139,7 @@ export function normalizeStyle(raw) {
     brandImageUrl: String(raw.brandImageUrl ?? ''),
     brandName: String(raw.brandName ?? ''),
     colorOptionPosition: Number.isInteger(position) && position > 0 ? position : 1,
+    colorCount: Number.isSafeInteger(colorCount) && colorCount > 0 ? colorCount : 0,
     sources: rowSources,
     colors: [...colors.values()],
   };
@@ -206,6 +209,7 @@ function readStyle(row) {
     brandImageUrl: row.dataset.brandImageUrl,
     brandName: row.dataset.brandName,
     colorOptionPosition: row.dataset.colorPosition,
+    colorCount: row.dataset.colorCount,
     sources: row.dataset.sources,
     colors: Array.from(row.querySelectorAll('[data-at-style-color]'), (item) => ({
       optionValueId: item.dataset.optionValueId,

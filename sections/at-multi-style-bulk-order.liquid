@@ -409,9 +409,28 @@
             "prefill_unavailable_other": {{ 'at_bulk_order.dialog.prefill_unavailable.other' | t: count: '[count]', items: '[items]' | json }},
             "reorder_not_found": {{ 'at_bulk_order.reorder_not_found' | t | json }},
             "reorder_failed": {{ 'at_bulk_order.reorder_failed' | t | json }},
-            "reorder_nothing": {{ 'at_bulk_order.reorder_nothing' | t | json }}
+            "reorder_nothing": {{ 'at_bulk_order.reorder_nothing' | t | json }},
+            "more_colors": {{ 'at_bulk_order.dialog.more_colors' | t | json }},
+            "more_colors_count_one": {{ 'at_bulk_order.dialog.more_colors_count.one' | t: count: '[count]' | json }},
+            "more_colors_count_other": {{ 'at_bulk_order.dialog.more_colors_count.other' | t: count: '[count]' | json }},
+            "more_colors_hint": {{ 'at_bulk_order.dialog.more_colors_hint' | t | json }},
+            "search_colors": {{ 'at_bulk_order.dialog.search_colors' | t | json }},
+            "no_matching_colors": {{ 'at_bulk_order.dialog.no_matching_colors' | t: query: '[query]' | json }},
+            "colors_loading": {{ 'at_bulk_order.dialog.colors_loading' | t | json }},
+            "colors_failed": {{ 'at_bulk_order.dialog.colors_failed' | t | json }},
+            "add_colors_one": {{ 'at_bulk_order.dialog.add_colors.one' | t: count: '[count]' | json }},
+            "add_colors_other": {{ 'at_bulk_order.dialog.add_colors.other' | t: count: '[count]' | json }},
+            "add_colors_empty": {{ 'at_bulk_order.dialog.add_colors_empty' | t | json }},
+            "cancel": {{ 'at_bulk_order.dialog.cancel' | t | json }},
+            "remove_color": {{ 'at_bulk_order.dialog.remove_color' | t | json }},
+            "remove_color_label": {{ 'at_bulk_order.dialog.remove_color_label' | t: color: '[color]' | json }},
+            "added_color": {{ 'at_bulk_order.dialog.added_color' | t | json }},
+            "save_named_color": {{ 'actions.save_named_color' | t: color: '[color]' | json }}
           }
         </script>
+        <template data-at-msq-heart>
+          {%- render 'at-favorite-color-heart' -%}
+        </template>
         <p class="at-msbo__notice at-msq__page-status" role="status" aria-live="polite" data-at-msq-page-status></p>
         <dialog
           class="at-msq-dialog color-custom-popover"

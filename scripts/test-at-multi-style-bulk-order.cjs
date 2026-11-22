@@ -53,6 +53,7 @@ test('normalizes a style: string IDs, merged duplicate colors, invalid colors dr
     brandImageUrl: '',
     brandName: '',
     colorOptionPosition: 1,
+    colorCount: 0,
     sources: ['purchase', 'favorite'],
     colors: [
       { optionValueId: '9007199254740993', name: 'Black', swatchBackground: 'rgb(0 0 0)', sources: ['favorite', 'purchase'] },
@@ -69,6 +70,8 @@ test('rejects styles the dialog could not load', async () => {
   assert.equal(normalizeStyle({ productId: '0', productUrl: '/products/a', colors: [color] }), null);
   assert.equal(normalizeStyle({ productId: '1', productUrl: 'https://evil.example/products/a', colors: [color] }), null);
   assert.equal(normalizeStyle({ productId: '1', productUrl: '/products/a', colors: [color] }).colorOptionPosition, 1);
+  assert.equal(normalizeStyle({ productId: '1', productUrl: '/products/a', colorCount: '42', colors: [color] }).colorCount, 42);
+  assert.equal(normalizeStyle({ productId: '1', productUrl: '/products/a', colorCount: 'x', colors: [color] }).colorCount, 0);
   assert.equal(normalizeStyle({ productId: '1', productUrl: '/products/a', colorOptionPosition: '2', colors: [color] })
     .colorOptionPosition, 2);
 });
