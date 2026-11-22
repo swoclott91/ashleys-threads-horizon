@@ -6,6 +6,7 @@
   @param {string} description - Accessible description of the selected photo.
   @param {string} [badge_label] - Featured badge shown over the photo, such as "Ashley’s Choice".
   @param {boolean} [play_video] - When the product's first media is a video, play it as a muted loop (the selected photo becomes its poster).
+  @param {boolean} [favorite] - Adds the favorite heart (snippets/at-card-favorite) over the photo.
 {%- enddoc -%}
 
 {%- liquid
@@ -29,6 +30,9 @@
       }}
     {%- endif -%}
     {% render 'product-card-badge', product: product, featured_label: badge_label %}
+    {%- if favorite -%}
+      {% render 'at-card-favorite', product: product %}
+    {%- endif -%}
   </div>
   {% render 'product-badges-styles' %}
 {% endif %}

@@ -1,0 +1,64 @@
+{%- comment -%}
+  Color swatches for the card favorite panel (snippets/at-card-favorite). Not placed in any
+  template: assets/at-card-favorite.js fetches it on a product URL through the Section
+  Rendering API (`/products/<handle>?section_id=at-card-favorite-colors`) the first time a
+  shopper opens a card's heart, so guide pages don't ship every style's full color list.
+
+  Each swatch is a shared `at-favorite-color` control keyed by product ID + color option value
+  ID, the same pair the product page heart and the Favorites page use.
+{%- endcomment -%}
+{%- liquid
+  assign at_cfc_color_option = nil
+  for option in product.options_with_values
+    assign at_cfc_option_name = option.name | strip | downcase
+    if at_cfc_option_name == 'color' or at_cfc_option_name == 'colour'
+      assign at_cfc_color_option = option
+      break
+    endif
+  endfor
+  assign at_cfc_style = product.title | remove_first: product.vendor | strip
+  assign at_cfc_title = product.vendor | append: ' ' | append: at_cfc_style
+-%}
+{%- if product != blank and at_cfc_color_option != nil -%}
+  <ul
+    class="at-card-favorite__grid"
+    role="list"
+    aria-label="{{ 'at_favorites.card_colors' | t: title: at_cfc_title | escape }}"
+  >
+    {%- for value in at_cfc_color_option.values -%}
+      <li>
+        <at-favorite-color
+          data-product-id="{{ product.id }}"
+          data-product-url="{{ product.url | escape }}"
+          data-variant-id="{{ value.variant.id | default: product.selected_or_first_available_variant.id }}"
+          data-color-id="{{ value.id }}"
+          data-color-name="{{ value.name | escape }}"
+          hidden
+        >
+          <button
+            type="button"
+            class="at-card-favorite__swatch"
+            aria-pressed="false"
+            aria-label="{{ 'actions.save_named_color' | t: color: value.name | escape }}"
+            data-name="{{ value.name | escape }}"
+          >
+            {%- render 'swatch', swatch: value.swatch, mode: 'pill' -%}
+            <span class="at-card-favorite__mark" aria-hidden="true">
+              {%- render 'at-favorite-color-heart' -%}
+            </span>
+          </button>
+          <span class="at-favorite-color__error" role="status" aria-atomic="true"></span>
+        </at-favorite-color>
+      </li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Card favorite colors",
+  "tag": "div",
+  "class": "at-card-favorite-colors",
+  "settings": []
+}
+{% endschema %}

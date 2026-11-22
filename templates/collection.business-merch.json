@@ -1599,6 +1599,7 @@
                       "settings": {
                         "play_first_video": false,
                         "show_variant_image": false,
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -1727,6 +1728,7 @@
                       "settings": {
                         "play_first_video": false,
                         "show_variant_image": false,
+                        "show_favorite": true,
                         "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
@@ -1855,6 +1857,7 @@
                       "settings": {
                         "play_first_video": false,
                         "show_variant_image": false,
+                        "show_favorite": true,
                         "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
@@ -1983,6 +1986,7 @@
                       "settings": {
                         "play_first_video": false,
                         "show_variant_image": false,
+                        "show_favorite": true,
                         "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
@@ -2111,6 +2115,7 @@
                       "settings": {
                         "play_first_video": false,
                         "show_variant_image": false,
+                        "show_favorite": true,
                         "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
@@ -2713,6 +2718,7 @@
                       "settings": {
                         "play_first_video": false,
                         "show_variant_image": false,
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -2849,6 +2855,7 @@
                       "settings": {
                         "play_first_video": false,
                         "show_variant_image": false,
+                        "show_favorite": true,
                         "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
@@ -2985,6 +2992,7 @@
                       "settings": {
                         "play_first_video": false,
                         "show_variant_image": false,
+                        "show_favorite": true,
                         "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
@@ -3121,6 +3129,7 @@
                       "settings": {
                         "play_first_video": false,
                         "show_variant_image": false,
+                        "show_favorite": true,
                         "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
@@ -3257,6 +3266,7 @@
                       "settings": {
                         "play_first_video": false,
                         "show_variant_image": false,
+                        "show_favorite": true,
                         "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
@@ -3854,6 +3864,7 @@
                       "settings": {
                         "play_first_video": false,
                         "show_variant_image": false,
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -3982,6 +3993,7 @@
                       "settings": {
                         "play_first_video": false,
                         "show_variant_image": false,
+                        "show_favorite": true,
                         "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
@@ -4110,6 +4122,7 @@
                       "settings": {
                         "play_first_video": false,
                         "show_variant_image": false,
+                        "show_favorite": true,
                         "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",
@@ -4238,6 +4251,7 @@
                       "settings": {
                         "play_first_video": false,
                         "show_variant_image": false,
+                        "show_favorite": true,
                         "featured_badge_label": "",
                         "image_ratio": "square",
                         "border": "none",

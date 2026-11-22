@@ -231,7 +231,15 @@
     "guest_body": "Save colors with the heart on any product. They show up here and on the bulk order page.",
     "empty_heading": "No favorites yet",
     "empty_body": "Tap the heart next to a color on any product to save it here.",
-    "preview_notice": "Theme editor preview: sample products from the section settings. Shoppers see their own favorites."
+    "preview_notice": "Theme editor preview: sample products from the section settings. Shoppers see their own favorites.",
+    "card_save": "Save colors of {{ title }}",
+    "card_saved": "Saved colors of {{ title }}",
+    "card_heading": "Save colors",
+    "card_hint": "Tap a color to save it",
+    "card_loading": "Loading colors…",
+    "card_load_failed": "Couldn’t load colors. Try again.",
+    "card_view_favorites": "View favorites",
+    "card_colors": "Colors of {{ title }}"
   },
   "at_bulk_order": {
     "title": "Bulk order",

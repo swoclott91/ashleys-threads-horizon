@@ -1918,7 +1918,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -2052,7 +2053,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -2178,7 +2180,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -2312,7 +2315,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -2438,7 +2442,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -3031,7 +3036,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -3165,7 +3171,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -3299,7 +3306,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -3433,7 +3441,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -4033,7 +4042,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -4167,7 +4177,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -4293,7 +4304,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -4427,7 +4439,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -5035,7 +5048,7 @@
                     "gallery": {
                       "type": "custom-liquid",
                       "settings": {
-                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: 'PC54PFD_PFD_Model_Front.jpg', description: 'Front view of the Port &amp; Company PC54PFD tee in PFD.', badge_label: \"Ashley’s Choice\" %}",
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: 'PC54PFD_PFD_Model_Front.jpg', description: 'Front view of the Port &amp; Company PC54PFD tee in PFD.', badge_label: \"Ashley’s Choice\", favorite: true %}",
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -5162,7 +5175,7 @@
                     "gallery": {
                       "type": "custom-liquid",
                       "settings": {
-                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '36154_omf_fl.jpg', description: 'Front view of the LAT 6901 in White.' %}",
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '36154_omf_fl.jpg', description: 'Front view of the LAT 6901 in White.', favorite: true %}",
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -5297,7 +5310,7 @@
                     "gallery": {
                       "type": "custom-liquid",
                       "settings": {
-                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '36162_omf_fl.jpg', description: 'Front view of the LAT 6101 youth tee in White.' %}",
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '36162_omf_fl.jpg', description: 'Front view of the LAT 6101 youth tee in White.', favorite: true %}",
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -5432,7 +5445,7 @@
                     "gallery": {
                       "type": "custom-liquid",
                       "settings": {
-                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: 'PC78HPFD_PFD_Model_Front.jpg', description: 'Front view of the Port &amp; Company PC78HPFD hoodie in PFD.' %}",
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: 'PC78HPFD_PFD_Model_Front.jpg', description: 'Front view of the Port &amp; Company PC78HPFD hoodie in PFD.', favorite: true %}",
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",

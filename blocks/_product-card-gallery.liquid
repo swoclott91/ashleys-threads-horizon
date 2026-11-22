@@ -7,6 +7,9 @@
 {% capture children %}
   {% unless product == blank %}
     {{ product_badge }}
+    {% if block.settings.show_favorite %}
+      {% render 'at-card-favorite', product: product %}
+    {% endif %}
     {% if product.available and settings.quick_add or settings.mobile_quick_add %}
       {% render 'quick-add', product: product, section_id: section.id %}
     {% endif %}
@@ -83,6 +86,13 @@
       "id": "show_variant_image",
       "label": "Show selected variant's image",
       "info": "Lead with the image of the variant whose price the card shows, instead of the product's main image.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_favorite",
+      "label": "Show favorite heart",
+      "info": "Adds a small heart to the photo. Shoppers tap it to save one or more colors of this style to their Favorites.",
       "default": false
     },
     {

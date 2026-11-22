@@ -16,6 +16,22 @@ const withColor = (text, color) => text.replace('[color]', () => color);
 
 let openingSignIn = false;
 
+/** True when the page carries favorites settings, so hearts can work. */
+export const favoritesReady = Boolean(settings);
+
+/** Fires `change` whenever a saved color is added, removed or rolled back. */
+export const favoriteChanges = changes;
+
+/** Whether the signed-in shopper has saved at least one color of the product. */
+export function hasSavedColor(productId) {
+  if (!signedIn || !productId) return false;
+  const prefix = `${productId}:`;
+  for (const key of saved) {
+    if (key.startsWith(prefix)) return true;
+  }
+  return false;
+}
+
 function setFavoritesAccountHeading(account) {
   const root = account.shadowRoot;
   if (!root) return;
