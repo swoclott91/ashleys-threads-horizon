@@ -233,6 +233,10 @@
           add_to_cart_text: add_to_cart_text
         %}
 
+        {%- if block_settings.show_save_color -%}
+          {%- render 'at-save-color', product: product, layout: 'icon' -%}
+        {%- endif -%}
+
         {% content_for 'block',
           type: 'accelerated-checkout',
           id: 'accelerated-checkout',
@@ -267,6 +271,13 @@
       "type": "checkbox",
       "id": "stacking",
       "label": "t:settings.always_stack_buttons",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_save_color",
+      "label": "Save color heart beside Add to cart",
+      "info": "Use instead of a separate Save color block.",
       "default": false
     },
     {

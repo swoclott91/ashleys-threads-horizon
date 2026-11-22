@@ -19,6 +19,59 @@
   cursor: pointer;
 }
 
+/* Icon layout: a square heart button in the buy buttons row, beside Add to cart. */
+.product-form-buttons > at-favorite-color.at-save-color--icon {
+  position: relative;
+  flex: 0 0 var(--height-buy-buttons);
+  min-width: 0;
+  align-self: stretch;
+}
+
+.product-form-buttons > at-favorite-color.at-save-color--icon[hidden] {
+  display: none;
+}
+
+/* Quantity + Add to cart + heart need about 400px. On narrower rows, quantity takes its own
+   line so Add to cart and the heart stay together. */
+.product-form-buttons:has(> .at-save-color--icon:not([hidden])) {
+  container-type: inline-size;
+}
+
+@container (max-width: 420px) {
+  .product-form-buttons > .quantity-selector-wrapper {
+    flex-basis: 100%;
+  }
+}
+
+.product-form-buttons > .at-save-color--icon .at-favorite-color__button {
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: var(--height-buy-buttons);
+  padding: 0;
+  border: 1px solid currentColor;
+  border-radius: var(--style-border-radius-buttons-secondary, 0);
+  color: var(--color-foreground);
+  transition: background-color 0.15s ease;
+}
+
+.product-form-buttons > .at-save-color--icon .at-favorite-color__button:hover {
+  background-color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.06);
+}
+
+.product-form-buttons > .at-save-color--icon .at-favorite-color__button svg {
+  inline-size: 22px;
+  block-size: 22px;
+}
+
+.product-form-buttons > .at-save-color--icon .at-favorite-color__error:not(.visually-hidden):not(:empty) {
+  position: absolute;
+  inset-block-start: calc(100% + 4px);
+  inset-inline-end: 0;
+  inline-size: max-content;
+  max-inline-size: 16rem;
+  text-align: end;
+}
+
 .at-favorite-color__button:disabled {
   cursor: progress;
   opacity: 0.65;

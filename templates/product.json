@@ -397,7 +397,8 @@
                     "padding-block-start": 0,
                     "padding-block-end": 24,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "show_save_color": true
                   },
                   "blocks": {
                     "quantity": {
@@ -446,17 +447,11 @@
                     "link_text_color": ""
                   },
                   "blocks": {}
-                },
-                "save-color": {
-                  "type": "at-save-color",
-                  "settings": {},
-                  "blocks": {}
                 }
               },
               "block_order": [
                 "buy-buttons-form",
-                "bulk-add-to-cart",
-                "save-color"
+                "bulk-add-to-cart"
               ]
             },
             "accordion_G8h4j4": {

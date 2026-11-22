@@ -1,0 +1,64 @@
+{%- doc -%}
+  Save-color control for the product page: a shared `at-favorite-color` element
+  (assets/at-favorite-colors.js) that follows the section's color picker and saves the
+  selected color. Renders nothing for a product without a Color/Colour option.
+
+  @param {product} product - The product on the page
+  @param {string} [layout] - 'link' (heart + "Save color" text, default) or 'icon' (square
+    heart button that sits in the buy buttons row beside Add to cart)
+  @param {string} [attributes] - Extra attributes for the element, e.g. block.shopify_attributes
+
+  @example
+  {% render 'at-save-color', product: product, layout: 'icon' %}
+{%- enddoc -%}
+{% liquid
+  assign at_sc_color_option = nil
+  for option in product.options_with_values
+    assign at_sc_option_name = option.name | strip | downcase
+    if at_sc_option_name == 'color' or at_sc_option_name == 'colour'
+      assign at_sc_color_option = option
+      break
+    endif
+  endfor
+%}
+
+{% if at_sc_color_option %}
+  {% liquid
+    assign at_sc_current_color = nil
+    for value in at_sc_color_option.values
+      if value.selected
+        assign at_sc_current_color = value
+        break
+      endif
+    endfor
+  %}
+  <script src="{{ 'at-favorite-colors.js' | asset_url }}" type="module"></script>
+  <at-favorite-color
+    class="at-save-color{% if layout == 'icon' %} at-save-color--icon{% endif %}"
+    data-picker-position="{{ at_sc_color_option.position }}"
+    data-product-id="{{ product.id }}"
+    data-product-url="{{ product.url | escape }}"
+    data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+    data-color-id="{{ at_sc_current_color.id }}"
+    data-color-name="{{ at_sc_current_color.name | escape }}"
+    hidden
+    {{ attributes }}
+  >
+    {%- if layout == 'icon' -%}
+      <button
+        type="button"
+        class="at-favorite-color__button"
+        aria-pressed="false"
+        aria-label="{{ 'actions.save_color' | t | escape }}"
+      >
+        {% render 'at-favorite-color-heart' %}
+      </button>
+    {%- else -%}
+      <button type="button" class="at-favorite-color__button" aria-pressed="false">
+        {% render 'at-favorite-color-heart' %}
+        <span data-at-favorite-label>{{ 'actions.save_color' | t }}</span>
+      </button>
+    {%- endif -%}
+    <span class="at-favorite-color__error" role="status" aria-atomic="true"></span>
+  </at-favorite-color>
+{% endif %}
