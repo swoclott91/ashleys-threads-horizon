@@ -15,14 +15,17 @@
         "collection": "",
         "link": "",
         "button_label": "Shop holiday fleece",
-        "guest_heading": "Blank apparel for your next project.",
+        "guest_heading": "THE EASYEST PLACE TO ORDER BLANK APPAREL",
         "guest_text": "Ships from U.S. warehouses. No minimums.",
         "member_heading": "The Holiday Fleece Edit",
         "member_text": "Crewnecks, hoodies, and beanies for holiday orders.",
-        "staples": [],
+        "staples": [
+          "gildan-5000-heavy-cotton-100-cotton-t-shirt",
+          "comfort-colors-1717-heavyweight-ring-spun-tee"
+        ],
         "staple_note_1": "Budget-friendly everyday tee",
         "staple_note_2": "Heavier, garment-dyed feel",
-        "staples_collection": ""
+        "staples_collection": "seller-staples"
       }
     },
     "at_home_shortcuts": {
@@ -3282,6 +3285,7 @@
               "settings": {
                 "play_first_video": false,
                 "show_variant_image": false,
+                "show_favorite": false,
                 "featured_badge_label": "",
                 "image_ratio": "adapt",
                 "border": "none",
