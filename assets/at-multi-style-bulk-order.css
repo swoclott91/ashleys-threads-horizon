@@ -796,15 +796,29 @@ html.at-msq-scroll-lock {
   background: var(--at-msq-card);
 }
 
+.at-msq__accordion {
+  /* Keeps a newly added color clear of the sticky product header when it scrolls into view. */
+  scroll-margin-block-start: calc(var(--at-msq-head-h, 0px) + 0.5rem);
+}
+
+/* The bar holds the header button and, for an added color, its favorite heart beside it. */
+.at-msq__accordion-bar {
+  display: flex;
+  align-items: center;
+  background: var(--at-msq-card);
+}
+
 .at-msq__accordion-header {
   display: flex;
+  flex: 1 1 auto;
   align-items: center;
   gap: 0.75rem;
   width: 100%;
+  min-width: 0;
   min-height: 3rem;
   padding: 0.5rem 0.875rem;
   border: 0;
-  background: var(--at-msq-card);
+  background: transparent;
   color: var(--at-msq-ink);
   font: inherit;
   font-size: var(--font-size--md, 1rem);
@@ -818,7 +832,7 @@ html.at-msq-scroll-lock {
   height: 1.5rem;
 }
 
-.at-msq__accordion-header[aria-expanded='true'] {
+.at-msq__accordion-bar--open {
   border-bottom: 1px solid var(--at-msq-line);
   background: var(--at-msq-tint);
 }
@@ -826,10 +840,292 @@ html.at-msq-scroll-lock {
 /* An open color's header sticks just under its product's header while you scroll through its
    sizes, and scrolls away with the last size. --at-msq-head-h is the product header's height,
    set by assets/at-multi-style-quantities.js. */
-.at-msq__accordion-header[aria-expanded='true'] {
+.at-msq__accordion-bar--open {
   position: sticky;
   top: var(--at-msq-head-h, 0px);
   z-index: 1;
+}
+
+.at-msq__accordion-header:focus-visible {
+  outline: 2px solid var(--at-msq-accent);
+  outline-offset: -2px;
+}
+
+.at-msq__accordion-header:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.at-msq__favorite {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+}
+
+.at-msq__favorite .at-favorite-color__button {
+  min-block-size: var(--minimum-touch-target, 44px);
+  min-inline-size: var(--minimum-touch-target, 44px);
+}
+
+.at-msq__accordion-bar .at-msq__favorite {
+  margin-inline-end: 0.25rem;
+}
+
+/* Remove for an added color: a quiet text button under its sizes. */
+.at-msq__row-actions {
+  display: flex;
+  justify-content: flex-end;
+  grid-column: 1 / -1;
+}
+
+.at-msq__accordion--static .at-msq__row-actions {
+  padding: 0 0.875rem 0.375rem;
+}
+
+.at-msq__remove-color {
+  min-height: var(--minimum-touch-target, 44px);
+  padding-inline: 0.25rem;
+  font-size: var(--font-size--sm, 0.875rem);
+  font-weight: 600;
+  color: rgb(44 44 44 / 0.75);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.at-msq__remove-color:hover {
+  color: var(--at-msq-ink);
+}
+
+.at-msq__table .at-msq__row-actions {
+  justify-content: flex-start;
+}
+
+.at-msq__table .at-msq__remove-color {
+  min-height: 2rem;
+  font-size: var(--font-size--xs, 0.8125rem);
+}
+
+/* More colors: a quiet row under a style's colors that opens a compact, searchable chip list.
+   The list scrolls inside its own box, so a style with 60+ colors never makes a long page. */
+.at-msq__more {
+  padding: 0 0.75rem 0.75rem;
+}
+
+.at-msq__more[hidden] {
+  display: none;
+}
+
+.at-msq__more-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: var(--minimum-touch-target, 44px);
+  padding: 0.5rem 0.875rem;
+  border: 1px dashed var(--at-msq-line-strong);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--at-msq-accent);
+  font: inherit;
+  font-size: var(--font-size--sm, 0.875rem);
+  font-weight: 700;
+  text-align: start;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.at-msq__more-toggle:hover {
+  border-style: solid;
+  background: rgb(255 255 255 / 0.6);
+}
+
+.at-msq__more-toggle:focus-visible {
+  outline: 2px solid var(--at-msq-accent);
+  outline-offset: 2px;
+}
+
+.at-msq__more-toggle[aria-expanded='true'] {
+  border-style: solid;
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+  background: var(--at-msq-tint);
+}
+
+.at-msq__more-icon,
+.at-msq__more-toggle .at-msq__caret {
+  display: inline-flex;
+  flex: none;
+  width: var(--icon-size-xs, 14px);
+  height: var(--icon-size-xs, 14px);
+}
+
+.at-msq__more-label {
+  flex: 1 1 auto;
+}
+
+.at-msq__more-count {
+  font-weight: 600;
+  color: rgb(44 44 44 / 0.65);
+  white-space: nowrap;
+}
+
+.at-msq__more-toggle[aria-expanded='true'] .at-msq__caret svg {
+  transform: rotate(180deg);
+}
+
+.at-msq__picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: 0.75rem;
+  border: 1px solid var(--at-msq-line-strong);
+  border-top: 0;
+  border-end-start-radius: 6px;
+  border-end-end-radius: 6px;
+  background: #fff;
+}
+
+.at-msq__picker[hidden] {
+  display: none;
+}
+
+.at-msq__picker-hint,
+.at-msq__picker-state {
+  margin: 0;
+  font-size: var(--font-size--xs, 0.8125rem);
+  color: rgb(44 44 44 / 0.7);
+}
+
+.at-msq__picker-state.at-msq__state--error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  color: var(--color-error, #b3261e);
+}
+
+.at-msq__picker-state p {
+  margin: 0;
+}
+
+.at-msq__search {
+  width: 100%;
+  min-height: var(--minimum-touch-target, 44px);
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid var(--at-msq-control-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--at-msq-ink);
+  /* 16px keeps iOS from zooming in when the field takes focus. */
+  font-size: max(16px, 1rem);
+}
+
+.at-msq__search:focus-visible {
+  outline: 2px solid var(--at-msq-accent);
+  outline-offset: 1px;
+}
+
+.at-msq__chips {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: 0.375rem;
+  max-block-size: min(16rem, 38vh);
+  margin: 0;
+  padding: 0.125rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+}
+
+.at-msq__chips > li[hidden] {
+  display: none;
+}
+
+.at-msq__chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: var(--minimum-touch-target, 44px);
+  padding: 0.375rem 0.625rem;
+  border: 1.5px solid var(--at-msq-line-strong);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--at-msq-ink);
+  font: inherit;
+  font-size: var(--font-size--sm, 0.875rem);
+  text-align: start;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.at-msq__chip .at-bulk-grid__swatch {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.at-msq__chip-name {
+  min-width: 0;
+  overflow-wrap: break-word;
+  line-height: 1.25;
+}
+
+.at-msq__chip:hover {
+  border-color: var(--at-msq-control-line);
+}
+
+.at-msq__chip[aria-pressed='true'] {
+  border-color: var(--at-msq-accent);
+  background: var(--at-msq-tint);
+  font-weight: 700;
+}
+
+.at-msq__chip:focus-visible {
+  outline: 2px solid var(--at-msq-accent);
+  outline-offset: 1px;
+}
+
+.at-msq__chips-empty {
+  margin: 0;
+  font-size: var(--font-size--sm, 0.875rem);
+  color: rgb(44 44 44 / 0.7);
+}
+
+.at-msq__chips-empty:empty {
+  display: none;
+}
+
+.at-msq__picker-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+.at-msq__picker-add.button {
+  --button-color: #fff;
+  --button-background-color: var(--at-msq-accent);
+  --button-border-color: var(--at-msq-accent);
+  min-height: var(--minimum-touch-target, 44px);
+  background: var(--at-msq-accent);
+  border-color: var(--at-msq-accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.at-msq__picker-add:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.at-msq__picker-cancel {
+  min-height: var(--minimum-touch-target, 44px);
+  font-size: var(--font-size--sm, 0.875rem);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
 }
 
 .at-msq__accordion--static .at-msq__accordion-header {
@@ -859,7 +1155,8 @@ html.at-msq-scroll-lock {
   height: var(--icon-size-xs, 14px);
 }
 
-.at-msq__accordion-header[aria-expanded='true'] .at-msq__caret svg {
+.at-msq__accordion-header[aria-expanded='true'] .at-msq__caret svg,
+.at-msq__accordion-bar--open .at-msq__caret svg {
   transform: rotate(180deg);
 }
 
@@ -1164,8 +1461,20 @@ html.at-msq-scroll-lock {
   }
 }
 
+@media screen and (max-width: 749px) {
+  .at-msq__chips {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .at-msq__picker-add.button {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+
 @media screen and (max-width: 359px) {
-  .at-msq__accordion-content:not([hidden]) {
+  .at-msq__accordion-content:not([hidden]),
+  .at-msq__chips {
     grid-template-columns: minmax(0, 1fr);
   }
 }

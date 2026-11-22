@@ -80,8 +80,25 @@
       "options": [
         {%- for option in at_opts -%}
           {"name":{{ option.name | json }},"position":{{ forloop.index }},"values":[
+            {%- assign at_is_color_option = false -%}
+            {%- if forloop.index0 == at_color_index -%}
+              {%- assign at_is_color_option = true -%}
+            {%- endif -%}
             {%- for at_value in option.values -%}
-              {"id":{{ at_value.id | append: '' | json }},"value":{{ at_value.name | json }}}{% unless forloop.last %},{% endunless %}
+              {%- liquid
+                assign at_swatch = ''
+                if at_is_color_option
+                  if at_value.swatch.color
+                    assign at_swatch = 'rgb(' | append: at_value.swatch.color.rgb | append: ')'
+                  elsif at_value.swatch.image
+                    assign at_swatch_url = at_value.swatch.image | image_url: width: 80
+                    assign at_swatch = 'url(' | append: at_swatch_url | append: ')'
+                  endif
+                endif
+              -%}
+              {"id":{{ at_value.id | append: '' | json }},"value":{{ at_value.name | json }}
+              {%- if at_swatch != blank %},"swatch":{{ at_swatch | json }}{% endif -%}
+              }{% unless forloop.last %},{% endunless %}
             {%- endfor -%}
           ]}{% unless forloop.last %},{% endunless %}
         {%- endfor -%}
