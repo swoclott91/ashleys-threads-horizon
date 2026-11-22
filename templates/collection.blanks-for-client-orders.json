@@ -484,7 +484,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>01 &middot; Value tee</strong></p>",
+                                "text": "<p><strong>01 · Value tee</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -538,7 +538,7 @@
                             "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>Low-cost tee with every wearer covered.</strong> A classic cotton tee with youth, women&rsquo;s, tall and toddler styles, so one program can cover a mixed roster. Price the full size list.</p>",
+                                "text": "<p>Every wearer covered</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -694,7 +694,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>02 &middot; Softer retail tee</strong></p>",
+                                "text": "<p><strong>02 · Softer retail tee</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -748,7 +748,7 @@
                             "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>Retail feel for a premium client.</strong> A side-seamed jersey tee to quote when the client wants the shirt to feel bought, not issued.</p>",
+                                "text": "<p>Retail feel for a premium client</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -904,7 +904,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>03 &middot; Crewneck</strong></p>",
+                                "text": "<p><strong>03 · Crewneck</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -958,7 +958,7 @@
                             "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>Crewneck that quotes adults and kids.</strong> Traditional fleece whose youth 18000B costs only cents more than the adult.</p>",
+                                "text": "<p>Quotes adults and kids</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1114,7 +1114,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>04 &middot; Pullover hoodie</strong></p>",
+                                "text": "<p><strong>04 · Pullover hoodie</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1168,7 +1168,7 @@
                             "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>Hoodie with an easy youth match.</strong> The standard pullover, with a youth companion and adult sizes through 5XL.</p>",
+                                "text": "<p>An easy youth match</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1324,7 +1324,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>05 &middot; Polo</strong></p>",
+                                "text": "<p><strong>05 · Polo</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1378,7 +1378,7 @@
                             "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>Polo with women&rsquo;s at the same price.</strong> A wicking polo whose women&rsquo;s LST550 is the same blank price, size for size, through 2XL.</p>",
+                                "text": "<p>Women’s at the same price</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1615,7 +1615,7 @@
                         "link_collection": "",
                         "link": "",
                         "open_in_new_tab": false,
-                        "icon_color": "#233d31"
+                        "icon_color": "#efe3c8"
                       },
                       "blocks": {}
                     },
@@ -1633,7 +1633,7 @@
                         "letter_spacing": "loose",
                         "case": "uppercase",
                         "wrap": "pretty",
-                        "text_color": "#233d31",
+                        "text_color": "#efe3c8",
                         "background": false,
                         "background_color": "#00000026",
                         "corner_radius": 0,
@@ -1660,7 +1660,7 @@
                 "description": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>A cheaper adult blank isn&rsquo;t always the cheaper order. Compare what each tee costs once youth, women&rsquo;s, tall and extended sizes are on the roster.</p>",
+                    "text": "<p>Compare what each tee costs once the whole roster is on it.</p>",
                     "width": "fit-content",
                     "max_width": "none",
                     "alignment": "left",
@@ -1671,7 +1671,7 @@
                     "letter_spacing": "normal",
                     "case": "none",
                     "wrap": "pretty",
-                    "text_color": "#233d31",
+                    "text_color": "#f5f1eb",
                     "background": false,
                     "background_color": "#00000026",
                     "corner_radius": 0,
@@ -1696,9 +1696,9 @@
                 "link": "shopify://collections/group-event-tees",
                 "open_in_new_tab": false,
                 "style_class": "button-custom",
-                "custom_button_background": "rgba(0,0,0,0)",
+                "custom_button_background": "#efe3c8",
                 "custom_button_text": "#233d31",
-                "custom_button_border": "#233d31",
+                "custom_button_border": "#efe3c8",
                 "link_text_color": "",
                 "width": "fit-content",
                 "custom_width": 100,
@@ -1733,7 +1733,7 @@
             "height_mobile": "fit",
             "custom_height_mobile": 30,
             "background_media": "none",
-            "background_color": "",
+            "background_color": "#ffffff",
             "video_position": "cover",
             "background_image_position": "cover",
             "custom_mobile_media": false,
@@ -1748,14 +1748,14 @@
             "border_width": 1,
             "border_opacity": 100,
             "border_color": "",
-            "border_radius": 0,
+            "border_radius": 16,
             "link": "",
             "open_in_new_tab": false,
             "placeholder": "",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-block-start": 32,
+            "padding-block-end": 28,
+            "padding-inline-start": 16,
+            "padding-inline-end": 16
           },
           "blocks": {
             "picks": {
@@ -1827,7 +1827,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Classic cotton for adults, youth, women&rsquo;s &amp; tall</p>",
+                        "text": "<p>Whole-roster classic</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -1852,7 +1852,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>One program covers the whole roster, including a tall style, so mixed orders stay with one garment.</p>",
+                        "text": "<p>Adult, youth, women’s and tall in one program.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -1931,10 +1931,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "gildan_3000": {
@@ -1961,7 +1961,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Light cotton for adult-only quotes</p>",
+                        "text": "<p>Adult-only value</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -1986,7 +1986,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A lighter cotton tee to price first when every wearer is an adult. There is no women&rsquo;s or tall style, so mixed rosters need a second program.</p>",
+                        "text": "<p>Lighter cotton; no women’s or tall style.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2065,10 +2065,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "gildan_8000": {
@@ -2095,7 +2095,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>50/50 blend at a value price</p>",
+                        "text": "<p>Value 50/50 blend</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2120,7 +2120,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A cotton/poly DryBlend tee whose youth 8000B is priced almost level with the adult.</p>",
+                        "text": "<p>Youth priced almost level with adult.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2199,10 +2199,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "port_pc54": {
@@ -2229,7 +2229,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Sizes through 6XL and tall</p>",
+                        "text": "<p>Sizes to 6XL and tall</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2254,7 +2254,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>The value tee to quote when the roster runs past 5XL or includes tall sizes. Its women&rsquo;s cut costs more.</p>",
+                        "text": "<p>For rosters past 5XL or with tall wearers.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2333,10 +2333,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "tultex_202": {
@@ -2363,7 +2363,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Ring-spun at a value price</p>",
+                        "text": "<p>Ring-spun value</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2388,7 +2388,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A soft fine-jersey tee near basic-tee cost for adults, with youth and women&rsquo;s styles. Youth 235 is priced higher than 64000B.</p>",
+                        "text": "<p>Soft fine jersey near basic-tee cost.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2467,10 +2467,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 }
               },
@@ -2590,7 +2590,7 @@
         "section_height": "",
         "section_height_custom": 50,
         "background_media": "none",
-        "background_color": "#e6ece6",
+        "background_color": "#f5f1eb",
         "video_position": "cover",
         "background_image_position": "cover",
         "toggle_overlay": false,
@@ -2790,14 +2790,14 @@
                 "heading": {
                   "type": "custom-liquid",
                   "settings": {
-                    "custom_liquid": "<h2 id=\"client-softer-upgrade\" class=\"at-guide-target at-tier-title at-tier-title--on-dark\" tabindex=\"-1\">Offer your client a softer upgrade</h2>"
+                    "custom_liquid": "<h2 id=\"client-softer-upgrade\" class=\"at-guide-target at-tier-title\" tabindex=\"-1\">Offer your client a softer upgrade</h2>"
                   },
                   "blocks": {}
                 },
                 "description": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Softer is a different feel, not a better shirt. Match the tee to what your client asked for, then check its youth and women&rsquo;s styles.</p>",
+                    "text": "<p>Match the tee to the feel your client asked for.</p>",
                     "width": "fit-content",
                     "max_width": "none",
                     "alignment": "left",
@@ -2946,7 +2946,7 @@
                     "product": "gildan-64000-softstyle-t-shirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -2964,7 +2964,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>An easy step up from a basic tee</p>",
+                        "text": "<p>Easy step up</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2989,7 +2989,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Ring-spun Softstyle with youth and women&rsquo;s styles. Its youth tee is priced close to the adult.</p>",
+                        "text": "<p>Ring-spun, with youth priced close to adult.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3068,10 +3068,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "bella_canvas_3001": {
@@ -3080,7 +3080,7 @@
                     "product": "bella-canvas-3001-unisex-jersey-short-sleeve-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3098,7 +3098,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Retail jersey silhouette</p>",
+                        "text": "<p>Retail silhouette</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3123,7 +3123,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A side-seamed retail cut. Its women&rsquo;s 6400 costs less than 64000L, but youth starts at S.</p>",
+                        "text": "<p>Side-seamed; youth starts at S.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3202,10 +3202,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "next_level_nl6210": {
@@ -3214,7 +3214,7 @@
                     "product": "next-level-apparel-nl6210-adult-cvc-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3232,7 +3232,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Cotton-rich CVC blend through 6XL</p>",
+                        "text": "<p>CVC blend to 6XL</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3257,7 +3257,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A 60/40 cotton/poly jersey with adult sizes to 6XL when the client wants a blended hand.</p>",
+                        "text": "<p>60/40 cotton/poly with a blended hand.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3336,10 +3336,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "bella_canvas_3413": {
@@ -3348,7 +3348,7 @@
                     "product": "bella-canvas-3413-unisex-triblend-short-sleeve-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3366,7 +3366,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Tri-blend drape for a premium ask</p>",
+                        "text": "<p>Premium drape</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3391,7 +3391,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>The softest drape in the row, with youth, women&rsquo;s, toddler and infant styles. It is also the biggest cost step.</p>",
+                        "text": "<p>Softest drape here, and the biggest cost step.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3470,10 +3470,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "port_pc450": {
@@ -3482,7 +3482,7 @@
                     "product": "port-company-pc450-fan-favorite-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3500,7 +3500,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Soft tee for a wider size list</p>",
+                        "text": "<p>Soft, wider sizes</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3525,7 +3525,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Adds women&rsquo;s, toddler and 6XL to a soft tee, and keeps PC54 clients in the same brand.</p>",
+                        "text": "<p>Adds women’s, toddler and 6XL.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3604,10 +3604,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 }
               },
@@ -3889,7 +3889,7 @@
                         "link_collection": "",
                         "link": "",
                         "open_in_new_tab": false,
-                        "icon_color": "#233d31"
+                        "icon_color": "#efe3c8"
                       },
                       "blocks": {}
                     },
@@ -3907,7 +3907,7 @@
                         "letter_spacing": "loose",
                         "case": "uppercase",
                         "wrap": "pretty",
-                        "text_color": "#233d31",
+                        "text_color": "#efe3c8",
                         "background": false,
                         "background_color": "#00000026",
                         "corner_radius": 0,
@@ -3934,7 +3934,7 @@
                 "description": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>When one order spans adults, women&rsquo;s, youth, tall and little ones, start with a program that has a real style for each wearer. Then check the colors they share.</p>",
+                    "text": "<p>Start with a program that has a style for every wearer.</p>",
                     "width": "fit-content",
                     "max_width": "none",
                     "alignment": "left",
@@ -3945,7 +3945,7 @@
                     "letter_spacing": "normal",
                     "case": "none",
                     "wrap": "pretty",
-                    "text_color": "#233d31",
+                    "text_color": "#f5f1eb",
                     "background": false,
                     "background_color": "#00000026",
                     "corner_radius": 0,
@@ -3970,9 +3970,9 @@
                 "link": "shopify://collections/everyday-family-tees",
                 "open_in_new_tab": false,
                 "style_class": "button-custom",
-                "custom_button_background": "rgba(0,0,0,0)",
+                "custom_button_background": "#efe3c8",
                 "custom_button_text": "#233d31",
-                "custom_button_border": "#233d31",
+                "custom_button_border": "#efe3c8",
                 "link_text_color": "",
                 "width": "fit-content",
                 "custom_width": 100,
@@ -4007,7 +4007,7 @@
             "height_mobile": "fit",
             "custom_height_mobile": 30,
             "background_media": "none",
-            "background_color": "",
+            "background_color": "#ffffff",
             "video_position": "cover",
             "background_image_position": "cover",
             "custom_mobile_media": false,
@@ -4022,14 +4022,14 @@
             "border_width": 1,
             "border_opacity": 100,
             "border_color": "",
-            "border_radius": 0,
+            "border_radius": 16,
             "link": "",
             "open_in_new_tab": false,
             "placeholder": "",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-block-start": 32,
+            "padding-block-end": 28,
+            "padding-inline-start": 16,
+            "padding-inline-end": 16
           },
           "blocks": {
             "picks": {
@@ -4083,7 +4083,7 @@
                     "product": "port-company-pc54-core-cotton-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 25,
+                    "custom_width": 20,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -4101,7 +4101,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Widest tee coverage for one order</p>",
+                        "text": "<p>Widest tee range</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4126,7 +4126,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Adult to 6XL plus women&rsquo;s, youth, tall, toddler and infant records in one program.</p>",
+                        "text": "<p>Adult to 6XL, plus women’s, youth, tall and baby.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4205,10 +4205,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "port_pc55": {
@@ -4217,7 +4217,7 @@
                     "product": "port-company-pc55-core-blend-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 25,
+                    "custom_width": 20,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -4235,7 +4235,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Cotton/poly blend across every wearer</p>",
+                        "text": "<p>Blend for every wearer</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4260,7 +4260,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>The blend tee with women&rsquo;s, youth, tall and 6XL styles in one program.</p>",
+                        "text": "<p>Women’s, youth, tall and 6XL styles.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4339,10 +4339,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "bella_canvas_3413": {
@@ -4351,7 +4351,7 @@
                     "product": "bella-canvas-3413-unisex-triblend-short-sleeve-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 25,
+                    "custom_width": 20,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -4369,7 +4369,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Tri-blend set from adult to baby</p>",
+                        "text": "<p>Tri-blend, adult to baby</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4394,7 +4394,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Women&rsquo;s, youth, toddler and infant tri-blend styles for a soft-look set.</p>",
+                        "text": "<p>Women’s, youth, toddler and infant styles.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4473,10 +4473,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "port_pc78h": {
@@ -4485,7 +4485,7 @@
                     "product": "port-company-pc78h-core-fleece-pullover-hooded-sweatshirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 25,
+                    "custom_width": 20,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -4503,7 +4503,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Fleece across every wearer</p>",
+                        "text": "<p>Fleece for every wearer</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4528,7 +4528,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>The only hoodie here with women&rsquo;s, tall, 6XL, youth and toddler records.</p>",
+                        "text": "<p>Women’s, tall, 6XL, youth and toddler.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4607,10 +4607,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 }
               },
@@ -4729,7 +4729,7 @@
         "section_height": "",
         "section_height_custom": 50,
         "background_media": "none",
-        "background_color": "#e6ece6",
+        "background_color": "#f5f1eb",
         "video_position": "cover",
         "background_image_position": "cover",
         "toggle_overlay": false,
@@ -4953,14 +4953,14 @@
                 "heading": {
                   "type": "custom-liquid",
                   "settings": {
-                    "custom_liquid": "<h2 id=\"client-repeat-core\" class=\"at-guide-target at-tier-title at-tier-title--on-dark\" tabindex=\"-1\">Find core styles for repeat orders</h2>"
+                    "custom_liquid": "<h2 id=\"client-repeat-core\" class=\"at-guide-target at-tier-title\" tabindex=\"-1\">Find core styles for repeat orders</h2>"
                   },
                   "blocks": {}
                 },
                 "description": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Pick one default per garment and a documented backup, so each reorder starts from the same styles. Your core tee is opening pick 01, the Gildan 5000.</p>",
+                    "text": "<p>One default per garment, plus a backup, for every reorder.</p>",
                     "width": "fit-content",
                     "max_width": "none",
                     "alignment": "left",
@@ -5109,7 +5109,7 @@
                     "product": "gildan-64000-softstyle-t-shirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -5127,7 +5127,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Repeatable soft upgrade</p>",
+                        "text": "<p>Repeat soft tee</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -5152,7 +5152,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Keep it as the client&rsquo;s soft tee. Switch to the 3001 if they ask for a retail silhouette.</p>",
+                        "text": "<p>Switch to the 3001 for a retail cut.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -5231,10 +5231,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "gildan_18000": {
@@ -5243,7 +5243,7 @@
                     "product": "gildan-18000-heavy-blend-crewneck-sweatshirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -5261,7 +5261,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Same crew every reorder</p>",
+                        "text": "<p>Repeat crewneck</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -5286,7 +5286,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Keep it as the client&rsquo;s crewneck. Switch to Softstyle SF000 if they want ring-spun fleece.</p>",
+                        "text": "<p>Switch to SF000 for ring-spun fleece.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -5365,10 +5365,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "gildan_18500": {
@@ -5377,7 +5377,7 @@
                     "product": "gildan-18500-heavy-blend-hooded-sweatshirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -5395,7 +5395,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Same hoodie every reorder</p>",
+                        "text": "<p>Repeat hoodie</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -5420,7 +5420,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Keep it as the client&rsquo;s hoodie. Switch to PC78H when women&rsquo;s, tall or 6XL wearers join the roster.</p>",
+                        "text": "<p>Switch to PC78H for women’s, tall or 6XL.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -5499,10 +5499,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "sport_tek_st550": {
@@ -5511,7 +5511,7 @@
                     "product": "sport-tek-st550-posicharge-competitor-polo",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -5529,7 +5529,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Same polo across men&rsquo;s &amp; women&rsquo;s</p>",
+                        "text": "<p>Repeat polo</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -5554,7 +5554,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Keep it for polo programs. Switch to K500 when women&rsquo;s need navy or the roster runs tall or past 4XL.</p>",
+                        "text": "<p>Switch to K500 for navy women’s or tall.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -5633,10 +5633,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "port_authority_k500": {
@@ -5645,7 +5645,7 @@
                     "product": "port-authority-k500-silk-touch-polo",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -5663,7 +5663,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Backup polo for every wearer</p>",
+                        "text": "<p>Backup polo</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -5688,7 +5688,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Women&rsquo;s, youth, tall and 7XL&ndash;10XL styles, with Navy listed in each. Check youth stock before quoting.</p>",
+                        "text": "<p>Women’s, youth, tall and 7XL–10XL.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -5767,10 +5767,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 }
               },

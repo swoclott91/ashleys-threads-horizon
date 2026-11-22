@@ -240,47 +240,52 @@
   /* Optional wearer coverage line ("Sizes for · Adult · Youth ...") above a card's companion links. */
   .at-tier-card__coverage {
     margin: 0;
-    font-size: var(--font-size--xs, 0.8125rem);
-    line-height: 1.6;
-    color: #233d31;
+    padding-block-start: 6px;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: rgb(35 61 49 / 0.6);
   }
 
-  .at-tier-card__coverage > span,
-  .at-tier-card__companions > span {
-    display: block;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #233d31;
+  .at-tier-card__coverage > span {
+    color: inherit;
+  }
+
+  .at-tier-card__coverage > span::after {
+    content: ':';
   }
 
   .at-tier-card__coverage + .at-tier-card__companions {
-    margin-block-start: 8px;
+    padding-block-start: 0;
   }
 
   /* Companion fits: youth / women's / tall links grouped under a card's description. */
+  /* Kept quiet so the card label, price and photo stay the focus. */
   .at-tier-card__companions {
     margin: 0;
-    font-size: var(--font-size--xs, 0.8125rem);
-    line-height: 1.6;
-    color: rgb(35 61 49 / 0.72);
+    padding-block-start: 6px;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: rgb(35 61 49 / 0.6);
   }
 
   .at-tier-card__companions > span {
-    display: block;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #233d31;
+    display: inline;
+    font-size: inherit;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: inherit;
+  }
+
+  .at-tier-card__companions > span::after {
+    content: ':';
   }
 
   .at-tier-card__companions a {
     position: relative;
-    color: #233d31;
+    color: inherit;
     text-decoration: underline;
-    text-decoration-color: rgb(35 61 49 / 0.35);
+    text-decoration-color: rgb(35 61 49 / 0.25);
     text-underline-offset: 0.2em;
     white-space: nowrap;
   }

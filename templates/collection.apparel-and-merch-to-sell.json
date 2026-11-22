@@ -493,7 +493,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>One soft tee for many designs</strong></p>",
+                                "text": "<p><strong>01 · Graphic-shop tee</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -544,10 +544,10 @@
                               },
                               "blocks": {}
                             },
-                            "sentence": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>Ring-spun softness, 76 colors and a low blank cost make it easy to repeat across a whole design catalog.</p>",
+                                "text": "<p>One soft tee for many designs</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -572,8 +572,8 @@
                           },
                           "block_order": [
                             "label",
-                            "sentence",
                             "name",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -703,7 +703,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>Relaxed 7.5 oz with a dropped shoulder</strong></p>",
+                                "text": "<p><strong>02 · Relaxed heavyweight</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -754,10 +754,10 @@
                               },
                               "blocks": {}
                             },
-                            "sentence": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>21&#8541;&quot; across at M, nearly 2&quot; wider than a classic tee, in 7.5 oz ring-spun cotton.</p>",
+                                "text": "<p>7.5 oz, dropped shoulder</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -782,8 +782,8 @@
                           },
                           "block_order": [
                             "label",
-                            "sentence",
                             "name",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -913,7 +913,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>Washed color customers notice</strong></p>",
+                                "text": "<p><strong>03 · Garment-dyed</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -964,10 +964,10 @@
                               },
                               "blocks": {}
                             },
-                            "sentence": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>A garment-dyed finish gives the shirt itself a lived-in character.</p>",
+                                "text": "<p>Washed color customers notice</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -992,8 +992,8 @@
                           },
                           "block_order": [
                             "label",
-                            "sentence",
                             "name",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -1123,7 +1123,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>A hoodie to anchor a drop</strong></p>",
+                                "text": "<p><strong>04 · Fleece</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1174,10 +1174,10 @@
                               },
                               "blocks": {}
                             },
-                            "sentence": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>An 8.5 oz drawcord hoodie in 46 colors from a fleece specialist.</p>",
+                                "text": "<p>A hoodie to anchor a drop</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1202,8 +1202,8 @@
                           },
                           "block_order": [
                             "label",
-                            "sentence",
                             "name",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -1333,7 +1333,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>Heavy canvas tote for the counter</strong></p>",
+                                "text": "<p><strong>05 · Tote</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1384,10 +1384,10 @@
                               },
                               "blocks": {}
                             },
-                            "sentence": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>12 oz cotton canvas with webbed handles in 25 colors. It feels more like retail than a giveaway tote.</p>",
+                                "text": "<p>Heavy canvas for the counter</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1412,8 +1412,8 @@
                           },
                           "block_order": [
                             "label",
-                            "sentence",
                             "name",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -1669,7 +1669,7 @@
                 "description": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Make the shape, weight, wash and fleece differences part of the line. A classic tee sits next to a relaxed heavyweight.</p>",
+                    "text": "<p>Shape, weight, wash and fleece, side by side.</p>",
                     "width": "fit-content",
                     "max_width": "none",
                     "alignment": "left",
@@ -1836,7 +1836,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A retail tee to build a range on</p>",
+                        "text": "<p>Retail base tee</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -1861,7 +1861,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Regular retail fit and a deep palette that carries into matching crews and hoodies.</p>",
+                        "text": "<p>A deep palette that carries into fleece.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -1940,10 +1940,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "bella_canvas_4610": {
@@ -1970,7 +1970,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Relaxed heavyweight silhouette</p>",
+                        "text": "<p>Relaxed heavyweight</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -1995,7 +1995,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Same graphic, different shape. It is 1&#8542;&quot; wider and &frac12;&quot; shorter than the 3001 at M, with a drop shoulder.</p>",
+                        "text": "<p>Wider and shorter than the 3001, drop shoulder.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2074,10 +2074,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "comfort_colors_1717": {
@@ -2104,7 +2104,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Washed finish as your signature</p>",
+                        "text": "<p>Washed signature</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2129,7 +2129,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Garment-dyed color makes the finish part of the brand.</p>",
+                        "text": "<p>Garment-dyed color as part of the brand.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2208,10 +2208,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "bella_canvas_1010": {
@@ -2238,7 +2238,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A fitted rib silhouette</p>",
+                        "text": "<p>Fitted rib baby tee</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2263,7 +2263,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A close-fitting women&rsquo;s micro-rib baby tee for compact logos and smaller graphics.</p>",
+                        "text": "<p>Women’s micro-rib for compact graphics.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2364,7 +2364,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Sponge-fleece hoodie with a matching jogger</p>",
+                        "text": "<p>Fleece set</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2389,7 +2389,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>An 8 oz retail-fit sponge-fleece hoodie (21&frac12;&quot; across at M) with the 3727 jogger in the same fleece, so a fleece-led line can launch as a set.</p>",
+                        "text": "<p>Sponge-fleece hoodie with a matching jogger.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2468,10 +2468,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 }
               },
@@ -2842,7 +2842,7 @@
                 "description": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Choose one dependable tee you can use across a whole catalog of designs. Compare print surface, softness, blank cost and colors.</p>",
+                    "text": "<p>One dependable tee for a whole catalog of designs.</p>",
                     "width": "fit-content",
                     "max_width": "none",
                     "alignment": "left",
@@ -2991,7 +2991,7 @@
                     "product": "gildan-5000-heavy-cotton-100-cotton-t-shirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3009,7 +3009,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>The dependable default</p>",
+                        "text": "<p>Dependable default</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3034,7 +3034,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Midweight cotton with a smooth print surface, 81 colors and sizes to 5XL at a low blank cost.</p>",
+                        "text": "<p>Smooth print surface, 81 colors, to 5XL.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3117,7 +3117,7 @@
                     "product": "gildan-3000-light-cotton-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3135,7 +3135,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Lowest blank cost per design</p>",
+                        "text": "<p>Lighter, lower cost</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3160,7 +3160,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Lighter cotton for when the cost of each design matters most.</p>",
+                        "text": "<p>When the cost of each design matters most.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3243,7 +3243,7 @@
                     "product": "gildan-64000-softstyle-t-shirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3286,7 +3286,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Ring-spun jersey for a softer hand at a budget blank cost.</p>",
+                        "text": "<p>Ring-spun jersey for a softer hand.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3369,7 +3369,7 @@
                     "product": "next-level-apparel-nl6210-adult-cvc-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3387,7 +3387,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Cotton/poly blend that drapes</p>",
+                        "text": "<p>Blend that drapes</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3412,7 +3412,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>60/40 CVC jersey in 43 colors, sized XS&ndash;6XL. Check how the ink behaves on poly.</p>",
+                        "text": "<p>60/40 CVC, XS–6XL. Test ink on poly.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3495,7 +3495,7 @@
                     "product": "bella-canvas-3010-unisex-6-ounce-heavyweight-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3513,7 +3513,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Relaxed shape changes the graphic</p>",
+                        "text": "<p>Relaxed shape</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3538,7 +3538,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>6 oz with a drop shoulder (maker: &ldquo;boxy relaxed fit&rdquo;). It is 21&#8539;&quot; across at M versus 20&quot; for the 5000, and comes in vintage-wash colors.</p>",
+                        "text": "<p>Drop shoulder, about 1″ wider than the 5000.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4106,7 +4106,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>The lowest-cost merch tee customers recognize</p>",
+                        "text": "<p>Low-cost merch tee</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4131,7 +4131,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A classic cotton tee in 81 colors that keeps opening cash low.</p>",
+                        "text": "<p>Classic cotton in 81 colors.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4232,7 +4232,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Pocket tee that feels retail</p>",
+                        "text": "<p>Retail pocket tee</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4257,7 +4257,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Garment-dyed with a pocket. The pocket changes the logo area, so check placement.</p>",
+                        "text": "<p>Garment-dyed; check logo placement.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4358,7 +4358,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A hoodie at a lower blank cost</p>",
+                        "text": "<p>Hoodie tier</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4383,7 +4383,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A classic 50/50 hoodie in 46 colors. Pair it with the 18000 crew if you want both.</p>",
+                        "text": "<p>A classic 50/50 hoodie in 46 colors.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4462,10 +4462,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "richardson_112": {
@@ -4492,7 +4492,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>The trucker people ask for</p>",
+                        "text": "<p>The trucker cap</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4517,7 +4517,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A structured snapback trucker in more than 120 color combos. Decoration is usually embroidery or a patch.</p>",
+                        "text": "<p>Structured snapback, usually embroidered.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4643,7 +4643,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>12 oz canvas in 25 colors. It is a step up from a giveaway tote.</p>",
+                        "text": "<p>12 oz canvas in 25 colors.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
