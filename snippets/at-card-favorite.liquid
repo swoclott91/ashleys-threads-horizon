@@ -82,7 +82,8 @@
 
     position: absolute;
     inset: 0;
-    z-index: var(--layer-raised, 2);
+    /* One step above the quick-add overlay (also --layer-raised, later in the card), so the open panel covers its button. */
+    z-index: calc(var(--layer-raised, 2) + 1);
     pointer-events: none;
   }
 
