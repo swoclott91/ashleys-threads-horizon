@@ -493,16 +493,16 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>A classic, straight-cut everyday tee</strong></p>",
+                                "text": "<p><strong>01 · Classic tee</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
                                 "type_preset": "custom",
                                 "font": "var(--font-body--family)",
-                                "font_size": "0.875rem",
+                                "font_size": "0.75rem",
                                 "line_height": "normal",
-                                "letter_spacing": "normal",
-                                "case": "none",
+                                "letter_spacing": "loose",
+                                "case": "uppercase",
                                 "wrap": "pretty",
                                 "text_color": "#233d31",
                                 "background": false,
@@ -544,10 +544,10 @@
                               },
                               "blocks": {}
                             },
-                            "supporting": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>5.3 oz cotton in Gildan&rsquo;s &ldquo;classic fit, seamless body,&rdquo; 20&Prime; across the chest and 29&Prime; long in M.</p>",
+                                "text": "<p>Straight-cut everyday tee</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -573,7 +573,7 @@
                           "block_order": [
                             "label",
                             "name",
-                            "supporting",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -703,16 +703,16 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>Light 4.2 oz jersey in a retail fit</strong></p>",
+                                "text": "<p><strong>02 · Soft and light</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
                                 "type_preset": "custom",
                                 "font": "var(--font-body--family)",
-                                "font_size": "0.875rem",
+                                "font_size": "0.75rem",
                                 "line_height": "normal",
-                                "letter_spacing": "normal",
-                                "case": "none",
+                                "letter_spacing": "loose",
+                                "case": "uppercase",
                                 "wrap": "pretty",
                                 "text_color": "#233d31",
                                 "background": false,
@@ -754,10 +754,10 @@
                               },
                               "blocks": {}
                             },
-                            "supporting": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>Combed, ring-spun 32-singles cotton in a side-seamed retail cut, XS&ndash;5XL.</p>",
+                                "text": "<p>4.2 oz jersey, retail fit</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -783,7 +783,7 @@
                           "block_order": [
                             "label",
                             "name",
-                            "supporting",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -913,16 +913,16 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>Substantial 6.1 oz cotton, soft-washed</strong></p>",
+                                "text": "<p><strong>03 · Substantial tee</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
                                 "type_preset": "custom",
                                 "font": "var(--font-body--family)",
-                                "font_size": "0.875rem",
+                                "font_size": "0.75rem",
                                 "line_height": "normal",
-                                "letter_spacing": "normal",
-                                "case": "none",
+                                "letter_spacing": "loose",
+                                "case": "uppercase",
                                 "wrap": "pretty",
                                 "text_color": "#233d31",
                                 "background": false,
@@ -964,10 +964,10 @@
                               },
                               "blocks": {}
                             },
-                            "supporting": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>Garment-dyed ring-spun cotton with a twill label instead of a tear-away tag. About as wide as a classic tee and an inch shorter in M.</p>",
+                                "text": "<p>6.1 oz, soft-washed</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -993,7 +993,7 @@
                           "block_order": [
                             "label",
                             "name",
-                            "supporting",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -1123,16 +1123,16 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>An 8 oz everyday crew, XS to 5XL</strong></p>",
+                                "text": "<p><strong>04 · Crewneck</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
                                 "type_preset": "custom",
                                 "font": "var(--font-body--family)",
-                                "font_size": "0.875rem",
+                                "font_size": "0.75rem",
                                 "line_height": "normal",
-                                "letter_spacing": "normal",
-                                "case": "none",
+                                "letter_spacing": "loose",
+                                "case": "uppercase",
                                 "wrap": "pretty",
                                 "text_color": "#233d31",
                                 "background": false,
@@ -1174,10 +1174,10 @@
                               },
                               "blocks": {}
                             },
-                            "supporting": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>50/50 fleece with spandex rib cuffs and waistband.</p>",
+                                "text": "<p>8 oz crew, XS–5XL</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1203,7 +1203,7 @@
                           "block_order": [
                             "label",
                             "name",
-                            "supporting",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -1333,16 +1333,16 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>Classic-fit hoodie with a cotton face</strong></p>",
+                                "text": "<p><strong>05 · Hoodie</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
                                 "type_preset": "custom",
                                 "font": "var(--font-body--family)",
-                                "font_size": "0.875rem",
+                                "font_size": "0.75rem",
                                 "line_height": "normal",
-                                "letter_spacing": "normal",
-                                "case": "none",
+                                "letter_spacing": "loose",
+                                "case": "uppercase",
                                 "wrap": "pretty",
                                 "text_color": "#233d31",
                                 "background": false,
@@ -1384,10 +1384,10 @@
                               },
                               "blocks": {}
                             },
-                            "supporting": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>8.5 oz 80/20 ring-spun fleece with a 100% cotton face and a jersey-lined hood. Maker &ldquo;classic fit,&rdquo; 22&Prime; &times; 29&Prime; in M.</p>",
+                                "text": "<p>Classic fit, cotton face</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1413,7 +1413,7 @@
                           "block_order": [
                             "label",
                             "name",
-                            "supporting",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -1818,7 +1818,7 @@
                     "product": "gildan-5000-heavy-cotton-100-cotton-t-shirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 25,
+                    "custom_width": 20,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -1836,7 +1836,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Classic fit, straight through the body</p>",
+                        "text": "<p>Classic fit</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -1861,7 +1861,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Maker: &ldquo;classic fit, seamless body.&rdquo; M is 20&Prime; wide and 29&Prime; long, the reference shape for the rest of this row.</p>",
+                        "text": "<p>The reference shape: 20″ wide at M.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -1944,7 +1944,7 @@
                     "product": "bella-canvas-3010-unisex-6-ounce-heavyweight-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 25,
+                    "custom_width": 20,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -1962,7 +1962,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A little roomier, with a dropped shoulder</p>",
+                        "text": "<p>A little roomier</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -1987,7 +1987,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>6 oz cotton, 21&#8539;&Prime; &times; 28&Prime; at M: about an inch wider and an inch shorter than a classic tee.</p>",
+                        "text": "<p>Dropped shoulder, about 1″ wider.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2070,7 +2070,7 @@
                     "product": "next-level-apparel-nl7200-heavyweight-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 25,
+                    "custom_width": 20,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -2088,7 +2088,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Cut oversized, with a dropped shoulder</p>",
+                        "text": "<p>Oversized cut</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2113,7 +2113,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Maker: &ldquo;oversized fit&rdquo; and &ldquo;drop shoulder.&rdquo; M is 22&frac12;&Prime; wide, 2&frac12;&Prime; wider than a classic M at a similar length, so the room is in the cut and you don&rsquo;t need to size up.</p>",
+                        "text": "<p>2½″ wider at M; no need to size up.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2196,7 +2196,7 @@
                     "product": "bella-canvas-6400-women-s-relaxed-jersey-short-sleeve-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 25,
+                    "custom_width": 20,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -2214,7 +2214,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A women&rsquo;s cut with a relaxed body</p>",
+                        "text": "<p>Women’s relaxed</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2239,7 +2239,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Maker: &ldquo;relaxed fit&rdquo; in women&rsquo;s sizing. M is a 20&Prime; bust and 26&Prime; long, an easy alternative to a unisex tee.</p>",
+                        "text": "<p>An easy alternative to a unisex tee.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2796,7 +2796,7 @@
                     "product": "bella-canvas-3001-unisex-jersey-short-sleeve-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -2814,7 +2814,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Fine 4.2 oz cotton jersey</p>",
+                        "text": "<p>Fine cotton jersey</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2839,7 +2839,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>32-singles combed ring-spun cotton on solids. Heathers are 52/48 cotton/poly, so the fabric changes by color.</p>",
+                        "text": "<p>4.2 oz ring-spun; heathers are blends.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2918,10 +2918,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "next_level_6210": {
@@ -2930,7 +2930,7 @@
                     "product": "next-level-apparel-nl6210-adult-cvc-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -2948,7 +2948,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A 60/40 blend for a smoother, drapier feel</p>",
+                        "text": "<p>Drapier blend</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2973,7 +2973,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>4.3 oz combed ring-spun cotton/poly CVC, side-seamed, XS&ndash;6XL.</p>",
+                        "text": "<p>60/40 CVC, XS–6XL.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3056,7 +3056,7 @@
                     "product": "bella-canvas-3413-unisex-triblend-short-sleeve-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3074,7 +3074,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>The lightest, drapiest tee here</p>",
+                        "text": "<p>Lightest drape</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3099,7 +3099,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>3.8 oz 50/25/25 poly/cotton/rayon, 40 singles, classic fit. Solid Black Triblend is a different 70/15/15 mix.</p>",
+                        "text": "<p>3.8 oz tri-blend.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3182,7 +3182,7 @@
                     "product": "lat-3520-relaxed-crew-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3200,7 +3200,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Light jersey with a relaxed, dropped shoulder</p>",
+                        "text": "<p>Light and relaxed</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3225,7 +3225,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>4.5 oz ring-spun fine jersey cut &ldquo;relaxed, slightly oversized&rdquo;: wider and shorter than a classic tee (22&frac12;&Prime; &times; 25&Prime; M).</p>",
+                        "text": "<p>Dropped shoulder, wider and shorter.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3304,10 +3304,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "bella_canvas_3501": {
@@ -3316,7 +3316,7 @@
                     "product": "bella-canvas-3501-unisex-jersey-long-sleeve-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3334,7 +3334,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A light long sleeve for layering</p>",
+                        "text": "<p>Light long sleeve</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3359,7 +3359,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>The same 4.2 oz Airlume jersey and retail fit as the 3001, with ribbed cuffs.</p>",
+                        "text": "<p>3001 jersey with ribbed cuffs.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3935,7 +3935,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>More cotton in the same classic shape</p>",
+                        "text": "<p>More cotton, same shape</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3960,7 +3960,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>6.0 oz with the same classic fit and seamless body as the 5000. At M the size chart is identical (20&Prime; &times; 29&Prime;), so you get more fabric, not more width.</p>",
+                        "text": "<p>6 oz in the same fit as the 5000.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4039,10 +4039,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "bella_canvas_4610": {
@@ -4069,7 +4069,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>7.5 oz with a relaxed, dropped-shoulder cut</p>",
+                        "text": "<p>Relaxed heavyweight</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4094,7 +4094,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A substantial tee in a relaxed cut with a dropped shoulder and 7/8&Prime; neck. 21&#8542;&Prime; &times; 28&frac12;&Prime; at M, wider and a little shorter than a classic tee.</p>",
+                        "text": "<p>7.5 oz with a dropped shoulder.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4195,7 +4195,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A women&rsquo;s 6.1 oz tee, cut boxy and short</p>",
+                        "text": "<p>Boxy women’s tee</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4220,7 +4220,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Maker: &ldquo;boxy fit, mid-length body.&rdquo; 20&frac14;&Prime; bust &times; 21&Prime; long at M: as wide as a women&rsquo;s relaxed tee, about 5&Prime; shorter. Garment-dyed ring-spun cotton.</p>",
+                        "text": "<p>Garment-dyed and about 5″ shorter.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4299,10 +4299,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "comfort_colors_1566": {
@@ -4329,7 +4329,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A 9.5 oz garment-dyed crew</p>",
+                        "text": "<p>Garment-dyed crew</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4354,7 +4354,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>80/20 ring-spun fleece, rolled-forward shoulder, 23&Prime; &times; 28&frac12;&Prime; M, about an inch roomier and longer than the 8 oz Heavy Blend crew. No Black option; Pepper is the dark shade.</p>",
+                        "text": "<p>9.5 oz and a little roomier.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4433,10 +4433,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "independent_ind4000": {
@@ -4463,7 +4463,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A 10 oz hoodie with a generous fit</p>",
+                        "text": "<p>Generous hoodie</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4488,7 +4488,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>70/30 three-end fleece with a cotton face, fleece-lined hood, &ldquo;generous fit,&rdquo; 23&Prime; &times; 29&frac12;&Prime; M, XS&ndash;5XL.</p>",
+                        "text": "<p>10 oz fleece with a cotton face.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4567,10 +4567,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 }
               },
@@ -5054,7 +5054,7 @@
                     "product": "gildan-3000-light-cotton-tee",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -5072,7 +5072,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Light classic cotton to keep the basket down</p>",
+                        "text": "<p>Lighter basket</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -5097,7 +5097,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>4.45 oz cotton in a modern classic fit. Compare its basket total in the table below.</p>",
+                        "text": "<p>Light classic cotton; see the table below.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -5176,10 +5176,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "tultex_202": {
@@ -5188,7 +5188,7 @@
                     "product": "tultex-202-unisex-fine-jersey-t-shirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -5206,7 +5206,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Ring-spun softness at a basic-tee price</p>",
+                        "text": "<p>Ring-spun for less</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -5231,7 +5231,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>4.5 oz pre-shrunk ring-spun cotton, 30 singles. Compare its basket total with the Gildan 64000 below.</p>",
+                        "text": "<p>Soft 4.5 oz cotton; compare it below.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -5310,10 +5310,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "gildan_8000": {
@@ -5322,7 +5322,7 @@
                     "product": "gildan-8000-dryblend-50-cotton-50-poly-t-shirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -5340,7 +5340,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A 50/50 tee in a classic fit</p>",
+                        "text": "<p>Classic 50/50</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -5365,7 +5365,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>5.5 oz DryBlend cotton/poly, classic fit, seamless, S&ndash;5XL, 20&Prime; &times; 29&Prime; M.</p>",
+                        "text": "<p>5.5 oz cotton/poly, S–5XL.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -5448,7 +5448,7 @@
                     "product": "jerzees-562m-nublend-crewneck-sweatshirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -5466,7 +5466,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>An 8 oz crew for a lower fleece basket</p>",
+                        "text": "<p>Lower-cost crew</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -5491,7 +5491,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>8 oz NuBlend fleece. Compare its four-size total with the Gildan 18000 Heavy Blend crew below.</p>",
+                        "text": "<p>8 oz NuBlend; compare totals below.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -5574,7 +5574,7 @@
                     "product": "jerzees-996m-nublend-pullover-hooded-sweatshirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -5592,7 +5592,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>An 8 oz pullover hood for a lower fleece basket</p>",
+                        "text": "<p>Lower-cost hoodie</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -5617,7 +5617,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>8 oz NuBlend pullover hood. Compare its four-size total with the Independent SS4500 and Gildan 18500 below.</p>",
+                        "text": "<p>8 oz NuBlend; compare totals below.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",

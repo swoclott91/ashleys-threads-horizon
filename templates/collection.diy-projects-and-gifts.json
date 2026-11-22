@@ -493,7 +493,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>Everyday cotton for any project</strong></p>",
+                                "text": "<p><strong>01 · Project tee</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -544,10 +544,10 @@
                               },
                               "blocks": {}
                             },
-                            "note": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>A classic midweight tee in cotton or cotton/poly in every color, so it works for gifts and standard iron-on vinyl.</p>",
+                                "text": "<p>Everyday cotton for any project</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -573,7 +573,7 @@
                           "block_order": [
                             "label",
                             "name",
-                            "note",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -703,7 +703,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>A softer tee for a gift</strong></p>",
+                                "text": "<p><strong>02 · Gift tee</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -754,10 +754,10 @@
                               },
                               "blocks": {}
                             },
-                            "note": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>Lightweight ring-spun cotton in a retail fit, for when the tee needs to feel like a present.</p>",
+                                "text": "<p>A softer tee for a gift</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -783,7 +783,7 @@
                           "block_order": [
                             "label",
                             "name",
-                            "note",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -913,7 +913,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>A crewneck with a clean front</strong></p>",
+                                "text": "<p><strong>03 · Crewneck</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -964,10 +964,10 @@
                               },
                               "blocks": {}
                             },
-                            "note": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>Cotton/poly fleece with no hood or pocket, so a name or design sits uninterrupted on the chest.</p>",
+                                "text": "<p>A clean front to decorate</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -993,7 +993,7 @@
                           "block_order": [
                             "label",
                             "name",
-                            "note",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -1123,7 +1123,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>A baby bodysuit for a shower gift</strong></p>",
+                                "text": "<p><strong>04 · Baby bodysuit</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1174,10 +1174,10 @@
                               },
                               "blocks": {}
                             },
-                            "note": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>Cotton baby rib with snaps. The White bodysuit is sewn with cotton thread, so it can also be a tie-dye base.</p>",
+                                "text": "<p>For a shower gift</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1203,7 +1203,7 @@
                           "block_order": [
                             "label",
                             "name",
-                            "note",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -1333,7 +1333,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>A sturdy canvas tote to make your own</strong></p>",
+                                "text": "<p><strong>05 · Tote</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1384,10 +1384,10 @@
                               },
                               "blocks": {}
                             },
-                            "note": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>Heavy canvas in 25 colors for a useful gift beyond apparel.</p>",
+                                "text": "<p>Sturdy canvas to make your own</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1413,7 +1413,7 @@
                           "block_order": [
                             "label",
                             "name",
-                            "note",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -1669,7 +1669,7 @@
                 "description": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Start with who it&rsquo;s for. Youth, toddler and baby styles sit beside the adult blanks, so a gift for a kid can come from the same family.</p>",
+                    "text": "<p>Start with who it’s for, from adults to babies.</p>",
                     "width": "fit-content",
                     "max_width": "none",
                     "alignment": "left",
@@ -1836,7 +1836,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Softer feel, retail fit</p>",
+                        "text": "<p>Softer retail fit</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -1861,7 +1861,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Lighter ring-spun jersey with youth 3001Y and toddler 3001T when the gift is for a kid.</p>",
+                        "text": "<p>Youth and toddler sizes for kids’ gifts.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -1940,10 +1940,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "comfort_colors_1717": {
@@ -1970,7 +1970,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A washed tee with more weight</p>",
+                        "text": "<p>Washed and weighty</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -1995,7 +1995,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Garment-dyed heavyweight cotton for a gift that already feels broken in.</p>",
+                        "text": "<p>Garment-dyed, so it feels broken in.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2042,7 +2042,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
-                        "featured_badge_label": "",
+                        "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -2096,7 +2096,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A hoodie for a cozy gift</p>",
+                        "text": "<p>Cozy hoodie</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2121,7 +2121,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>8 oz cotton/poly fleece. Put the design on the chest, above the pouch pocket. Youth 18500B matches.</p>",
+                        "text": "<p>Design above the pocket; youth matches.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2168,7 +2168,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
-                        "featured_badge_label": "",
+                        "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -2200,10 +2200,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "qtees_q800": {
@@ -2230,7 +2230,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A tote they&rsquo;ll carry daily</p>",
+                        "text": "<p>Everyday tote</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2302,7 +2302,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
-                        "featured_badge_label": "",
+                        "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -2356,7 +2356,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A baby gift with snaps</p>",
+                        "text": "<p>Baby gift</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2381,7 +2381,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>1x1 cotton rib bodysuit, NB&ndash;24M.</p>",
+                        "text": "<p>Cotton rib bodysuit with snaps, NB–24M.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2428,7 +2428,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
-                        "featured_badge_label": "",
+                        "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -2737,7 +2737,7 @@
                         "link_collection": "",
                         "link": "",
                         "open_in_new_tab": false,
-                        "icon_color": "#efe3c8"
+                        "icon_color": "#233d31"
                       },
                       "blocks": {}
                     },
@@ -2755,7 +2755,7 @@
                         "letter_spacing": "loose",
                         "case": "uppercase",
                         "wrap": "pretty",
-                        "text_color": "#efe3c8",
+                        "text_color": "#233d31",
                         "background": false,
                         "background_color": "#00000026",
                         "corner_radius": 0,
@@ -2775,14 +2775,14 @@
                 "heading": {
                   "type": "custom-liquid",
                   "settings": {
-                    "custom_liquid": "<h2 id=\"matching-family-shirts\" class=\"at-guide-target at-tier-title at-tier-title--on-dark\" tabindex=\"-1\">Make matching shirts for family or friends</h2>"
+                    "custom_liquid": "<h2 id=\"matching-family-shirts\" class=\"at-guide-target at-tier-title\" tabindex=\"-1\">Make matching shirts for family or friends</h2>"
                   },
                   "blocks": {}
                 },
                 "description": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Matching a print across different garments isn&rsquo;t the same as matching a garment color. A shared color name across styles is a lead, not a confirmed shade match, so compare the actual colors before you order.</p>",
+                    "text": "<p>A shared color name across styles is a lead, not a confirmed match.</p>",
                     "width": "fit-content",
                     "max_width": "none",
                     "alignment": "left",
@@ -2793,7 +2793,7 @@
                     "letter_spacing": "normal",
                     "case": "none",
                     "wrap": "pretty",
-                    "text_color": "#f5f1eb",
+                    "text_color": "#233d31",
                     "background": false,
                     "background_color": "#00000026",
                     "corner_radius": 0,
@@ -2818,9 +2818,9 @@
                 "link": "shopify://collections/family-matching-sets",
                 "open_in_new_tab": false,
                 "style_class": "button-custom",
-                "custom_button_background": "#efe3c8",
+                "custom_button_background": "rgba(0,0,0,0)",
                 "custom_button_text": "#233d31",
-                "custom_button_border": "#efe3c8",
+                "custom_button_border": "#233d31",
                 "link_text_color": "",
                 "width": "fit-content",
                 "custom_width": 100,
@@ -2855,7 +2855,7 @@
             "height_mobile": "fit",
             "custom_height_mobile": 30,
             "background_media": "none",
-            "background_color": "#ffffff",
+            "background_color": "",
             "video_position": "cover",
             "background_image_position": "cover",
             "custom_mobile_media": false,
@@ -2870,14 +2870,14 @@
             "border_width": 1,
             "border_opacity": 100,
             "border_color": "",
-            "border_radius": 16,
+            "border_radius": 0,
             "link": "",
             "open_in_new_tab": false,
             "placeholder": "",
-            "padding-block-start": 32,
-            "padding-block-end": 28,
-            "padding-inline-start": 16,
-            "padding-inline-end": 16
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
           },
           "blocks": {
             "picks": {
@@ -2949,7 +2949,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Budget set down to a baby tee</p>",
+                        "text": "<p>Budget family set</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2974,7 +2974,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Core cotton for adults, with women&rsquo;s, youth, toddler and infant tees in the same family.</p>",
+                        "text": "<p>Adult down to infant in one family.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3053,10 +3053,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "lat_6901": {
@@ -3083,7 +3083,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Softer set with a baby bodysuit</p>",
+                        "text": "<p>Softer set</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3108,7 +3108,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Fine jersey for adults, with women&rsquo;s, youth and toddler tees and an infant bodysuit.</p>",
+                        "text": "<p>Fine jersey, with an infant bodysuit.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3155,7 +3155,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
-                        "featured_badge_label": "",
+                        "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -3187,10 +3187,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "comfort_colors_1717": {
@@ -3217,7 +3217,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Washed look for adults &amp; youth</p>",
+                        "text": "<p>Washed set</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3242,7 +3242,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Garment-dyed cotton with a women&rsquo;s and a youth style. There is no toddler or infant size.</p>",
+                        "text": "<p>Adult, women’s and youth; no baby sizes.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3289,7 +3289,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
-                        "featured_badge_label": "",
+                        "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -3321,10 +3321,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "port_pc78h": {
@@ -3351,7 +3351,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Matching hoodies, toddler to adult</p>",
+                        "text": "<p>Matching hoodies</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3376,7 +3376,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Core fleece pullovers for adult, youth and toddler. The women&rsquo;s and infant styles are full zips.</p>",
+                        "text": "<p>Toddler to adult pullovers.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3423,7 +3423,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
-                        "featured_badge_label": "",
+                        "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -3455,10 +3455,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 }
               },
@@ -3577,7 +3577,7 @@
         "section_height": "",
         "section_height_custom": 50,
         "background_media": "none",
-        "background_color": "#f5f1eb",
+        "background_color": "#e6ece6",
         "video_position": "cover",
         "background_image_position": "cover",
         "toggle_overlay": false,
@@ -3784,7 +3784,7 @@
                 "description": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Check your vinyl&rsquo;s fabric list first. Standard HTV such as Siser EasyWeed lists cotton, polyester and cotton/poly blends. Every blank here is one of those in every color. Follow your vinyl maker&rsquo;s settings and test-press first.</p>",
+                    "text": "<p>Every blank is cotton, poly or a blend. Check your vinyl’s list and test-press.</p>",
                     "width": "fit-content",
                     "max_width": "none",
                     "alignment": "left",
@@ -3933,7 +3933,7 @@
                     "product": "gildan-5000-heavy-cotton-100-cotton-t-shirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 25,
+                    "custom_width": 20,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3951,7 +3951,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Cotton tee for everyday HTV</p>",
+                        "text": "<p>Everyday HTV tee</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3976,7 +3976,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Cotton in most colors; heathers and a few colors are cotton/poly. Check your vinyl&rsquo;s fabric list.</p>",
+                        "text": "<p>Mostly cotton; check your vinyl’s list.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4055,10 +4055,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "gildan_8000": {
@@ -4067,7 +4067,7 @@
                     "product": "gildan-8000-dryblend-50-cotton-50-poly-t-shirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 25,
+                    "custom_width": 20,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -4085,7 +4085,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A 50/50 blend tee</p>",
+                        "text": "<p>50/50 tee</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4110,7 +4110,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Cotton/poly in every color; heathers are 65/35. Check your vinyl&rsquo;s fabric list.</p>",
+                        "text": "<p>Cotton/poly; check your vinyl’s list.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4157,7 +4157,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
-                        "featured_badge_label": "",
+                        "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -4193,7 +4193,7 @@
                     "product": "gildan-18000-heavy-blend-crewneck-sweatshirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 25,
+                    "custom_width": 20,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -4211,7 +4211,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Fleece with a flat front</p>",
+                        "text": "<p>Flat-front fleece</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4236,7 +4236,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>50/50 fleece with no hood or pocket in the way. Check your vinyl&rsquo;s fabric list.</p>",
+                        "text": "<p>No hood or pocket in the way.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4283,7 +4283,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
-                        "featured_badge_label": "",
+                        "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -4315,10 +4315,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "port_authority_bg424": {
@@ -4327,7 +4327,7 @@
                     "product": "port-authority-bg424-cotton-canvas-tote",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 25,
+                    "custom_width": 20,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -4345,7 +4345,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A canvas tote for vinyl</p>",
+                        "text": "<p>Vinyl tote</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4370,7 +4370,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>12 oz 100% cotton canvas with a gusset. Check your vinyl&rsquo;s fabric list.</p>",
+                        "text": "<p>12 oz cotton canvas with a gusset.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4417,7 +4417,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
-                        "featured_badge_label": "",
+                        "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
                         "border_width": 1,
@@ -4751,7 +4751,7 @@
                         "link_collection": "",
                         "link": "",
                         "open_in_new_tab": false,
-                        "icon_color": "#efe3c8"
+                        "icon_color": "#233d31"
                       },
                       "blocks": {}
                     },
@@ -4769,7 +4769,7 @@
                         "letter_spacing": "loose",
                         "case": "uppercase",
                         "wrap": "pretty",
-                        "text_color": "#efe3c8",
+                        "text_color": "#233d31",
                         "background": false,
                         "background_color": "#00000026",
                         "corner_radius": 0,
@@ -4789,14 +4789,14 @@
                 "heading": {
                   "type": "custom-liquid",
                   "settings": {
-                    "custom_liquid": "<h2 id=\"tie-dye-project-blanks\" class=\"at-guide-target at-tier-title at-tier-title--on-dark\" tabindex=\"-1\">Pick a base for tie-dye</h2>"
+                    "custom_liquid": "<h2 id=\"tie-dye-project-blanks\" class=\"at-guide-target at-tier-title\" tabindex=\"-1\">Pick a base for tie-dye</h2>"
                   },
                   "blocks": {}
                 },
                 "description": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Fiber-reactive dyes color cotton and other plant fibers. Start with a prepared-for-dye blank or a White cotton blank sewn with cotton thread. Polyester in a blend, finish or thread won&rsquo;t take the same color. Prewash as your dye maker directs.</p>",
+                    "text": "<p>Prepared-for-dye or White cotton blanks sewn with cotton thread.</p>",
                     "width": "fit-content",
                     "max_width": "none",
                     "alignment": "left",
@@ -4807,7 +4807,7 @@
                     "letter_spacing": "normal",
                     "case": "none",
                     "wrap": "pretty",
-                    "text_color": "#f5f1eb",
+                    "text_color": "#233d31",
                     "background": false,
                     "background_color": "#00000026",
                     "corner_radius": 0,
@@ -4832,9 +4832,9 @@
                 "link": "shopify://collections/tie-dye-project-blanks",
                 "open_in_new_tab": false,
                 "style_class": "button-custom",
-                "custom_button_background": "#efe3c8",
+                "custom_button_background": "rgba(0,0,0,0)",
                 "custom_button_text": "#233d31",
-                "custom_button_border": "#efe3c8",
+                "custom_button_border": "#233d31",
                 "link_text_color": "",
                 "width": "fit-content",
                 "custom_width": 100,
@@ -4869,7 +4869,7 @@
             "height_mobile": "fit",
             "custom_height_mobile": 30,
             "background_media": "none",
-            "background_color": "#ffffff",
+            "background_color": "",
             "video_position": "cover",
             "background_image_position": "cover",
             "custom_mobile_media": false,
@@ -4884,14 +4884,14 @@
             "border_width": 1,
             "border_opacity": 100,
             "border_color": "",
-            "border_radius": 16,
+            "border_radius": 0,
             "link": "",
             "open_in_new_tab": false,
             "placeholder": "",
-            "padding-block-start": 32,
-            "padding-block-end": 28,
-            "padding-inline-start": 16,
-            "padding-inline-end": 16
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
           },
           "blocks": {
             "picks": {
@@ -4963,7 +4963,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Prepared for dyeing</p>",
+                        "text": "<p>Prepared for dye</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4988,7 +4988,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>100% cotton sewn with cotton thread, with a tear-away label. Adult S&ndash;4XL.</p>",
+                        "text": "<p>Cotton thread and a tear-away label.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -5035,7 +5035,18 @@
                     "gallery": {
                       "type": "custom-liquid",
                       "settings": {
-                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: 'PC54PFD_PFD_Model_Front.jpg', description: 'Front view of the Port &amp; Company PC54PFD tee in PFD.', badge_label: \"Ashley’s Choice\" %}"
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: 'PC54PFD_PFD_Model_Front.jpg', description: 'Front view of the Port &amp; Company PC54PFD tee in PFD.', badge_label: \"Ashley’s Choice\" %}",
+                        "featured_badge_label": "Ashley’s Choice",
+                        "image_ratio": "square",
+                        "border": "none",
+                        "border_width": 1,
+                        "border_opacity": 100,
+                        "border_color": "",
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
                       },
                       "blocks": {}
                     },
@@ -5079,7 +5090,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>White cotton, cotton thread</p>",
+                        "text": "<p>White, cotton thread</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -5104,7 +5115,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Combed ring-spun cotton; the White is sewn with cotton thread. Choose White, not Blended White.</p>",
+                        "text": "<p>Choose White, not Blended White.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -5151,7 +5162,18 @@
                     "gallery": {
                       "type": "custom-liquid",
                       "settings": {
-                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '36154_omf_fl.jpg', description: 'Front view of the LAT 6901 in White.' %}"
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '36154_omf_fl.jpg', description: 'Front view of the LAT 6901 in White.' %}",
+                        "featured_badge_label": "Ashley’s Choice",
+                        "image_ratio": "square",
+                        "border": "none",
+                        "border_width": 1,
+                        "border_opacity": 100,
+                        "border_color": "",
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
                       },
                       "blocks": {}
                     },
@@ -5173,10 +5195,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "lat_6101_white": {
@@ -5203,7 +5225,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A kids&rsquo; tee to dye</p>",
+                        "text": "<p>Kids’ dye tee</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -5228,7 +5250,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>The same cotton and cotton-thread statement as the 6901 White, in youth sizes.</p>",
+                        "text": "<p>The same cotton-thread White in youth.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -5275,7 +5297,18 @@
                     "gallery": {
                       "type": "custom-liquid",
                       "settings": {
-                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '36162_omf_fl.jpg', description: 'Front view of the LAT 6101 youth tee in White.' %}"
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '36162_omf_fl.jpg', description: 'Front view of the LAT 6101 youth tee in White.' %}",
+                        "featured_badge_label": "Ashley’s Choice",
+                        "image_ratio": "square",
+                        "border": "none",
+                        "border_width": 1,
+                        "border_opacity": 100,
+                        "border_color": "",
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
                       },
                       "blocks": {}
                     },
@@ -5297,10 +5330,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "port_pc78hpfd": {
@@ -5327,7 +5360,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A hoodie prepared for dyeing</p>",
+                        "text": "<p>Dye-ready hoodie</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -5352,7 +5385,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>80/20 fleece with a 100% cotton face and cotton thread. The face takes the dye; the blended inside won&rsquo;t match it.</p>",
+                        "text": "<p>Cotton face takes dye; the inside won’t match.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -5399,7 +5432,18 @@
                     "gallery": {
                       "type": "custom-liquid",
                       "settings": {
-                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: 'PC78HPFD_PFD_Model_Front.jpg', description: 'Front view of the Port &amp; Company PC78HPFD hoodie in PFD.' %}"
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: 'PC78HPFD_PFD_Model_Front.jpg', description: 'Front view of the Port &amp; Company PC78HPFD hoodie in PFD.' %}",
+                        "featured_badge_label": "Ashley’s Choice",
+                        "image_ratio": "square",
+                        "border": "none",
+                        "border_width": 1,
+                        "border_opacity": 100,
+                        "border_color": "",
+                        "border_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
                       },
                       "blocks": {}
                     },
@@ -5561,7 +5605,7 @@
         "section_height": "",
         "section_height_custom": 50,
         "background_media": "none",
-        "background_color": "#f5f1eb",
+        "background_color": "#e6ece6",
         "video_position": "cover",
         "background_image_position": "cover",
         "toggle_overlay": false,

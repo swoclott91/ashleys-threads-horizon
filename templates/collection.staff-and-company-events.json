@@ -493,7 +493,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>01 &middot; One tee program from pocket to tall</strong></p>",
+                                "text": "<p><strong>01 · Staff tee</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -544,10 +544,10 @@
                               },
                               "blocks": {}
                             },
-                            "description": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>A 50/50 crew tee with tall, women&rsquo;s, pocket, tall-pocket and long-sleeve versions, so the whole crew can wear one style.</p>",
+                                "text": "<p>Pocket to tall, one style</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -573,7 +573,7 @@
                           "block_order": [
                             "label",
                             "name",
-                            "description",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -703,7 +703,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>02 &middot; Classic piqu&eacute; in women&rsquo;s &amp; tall fits</strong></p>",
+                                "text": "<p><strong>02 · Classic polo</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -754,10 +754,10 @@
                               },
                               "blocks": {}
                             },
-                            "description": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>A cotton/poly piqu&eacute; polo with a women&rsquo;s cut, tall sizes and an extended-size version to 10XL.</p>",
+                                "text": "<p>Women’s, tall and to 10XL</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -783,7 +783,7 @@
                           "block_order": [
                             "label",
                             "name",
-                            "description",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -913,7 +913,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>03 &middot; Wicking piqu&eacute; polo through 6XL</strong></p>",
+                                "text": "<p><strong>03 · Performance polo</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -964,10 +964,10 @@
                               },
                               "blocks": {}
                             },
-                            "description": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>A polyester performance piqu&eacute; for warm or busy floors, with women&rsquo;s, tall and pocket versions.</p>",
+                                "text": "<p>Wicking piqué through 6XL</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -993,7 +993,7 @@
                           "block_order": [
                             "label",
                             "name",
-                            "description",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -1123,7 +1123,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>04 &middot; Fleece quarter-zip for cooler shifts</strong></p>",
+                                "text": "<p><strong>04 · Layer</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1174,10 +1174,10 @@
                               },
                               "blocks": {}
                             },
-                            "description": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>A fleece layer with a cleaner neckline than a hoodie, for a left-chest logo.</p>",
+                                "text": "<p>Quarter-zip for cooler shifts</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1203,7 +1203,7 @@
                           "block_order": [
                             "label",
                             "name",
-                            "description",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -1333,7 +1333,7 @@
                             "label": {
                               "type": "text",
                               "settings": {
-                                "text": "<p><strong>05 &middot; Low-cost tee for event attendees</strong></p>",
+                                "text": "<p><strong>05 · Event tee</strong></p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1384,10 +1384,10 @@
                               },
                               "blocks": {}
                             },
-                            "description": {
+                            "pitch": {
                               "type": "text",
                               "settings": {
-                                "text": "<p>A low-cost cotton tee for giveaway and volunteer shirts.</p>",
+                                "text": "<p>Low cost for attendees</p>",
                                 "width": "fit-content",
                                 "max_width": "normal",
                                 "alignment": "left",
@@ -1413,7 +1413,7 @@
                           "block_order": [
                             "label",
                             "name",
-                            "description",
+                            "pitch",
                             "price"
                           ]
                         }
@@ -1669,7 +1669,7 @@
                 "description": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Choose a tee your crew can wear every shift. Compare cotton, blend, softer and performance fabrics, then check the tall and women&rsquo;s sizes your team needs.</p>",
+                    "text": "<p>Tees your crew can wear every shift.</p>",
                     "width": "fit-content",
                     "max_width": "none",
                     "alignment": "left",
@@ -1836,7 +1836,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Traditional cotton crew tee</p>",
+                        "text": "<p>Cotton crew tee</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -1861,7 +1861,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>An all-cotton everyday tee with the widest palette in this set and tall and women&rsquo;s fits.</p>",
+                        "text": "<p>Widest palette here, with tall and women’s.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -1940,10 +1940,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "port_pc55": {
@@ -1970,7 +1970,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Cotton/poly for frequent wear</p>",
+                        "text": "<p>Blend for frequent wear</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -1995,7 +1995,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A 50/50 blend version of the same core shape. Compare its tall version with PC54T if your crew needs tall sizes.</p>",
+                        "text": "<p>50/50 core tee with a tall version.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2074,10 +2074,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "port_pc450": {
@@ -2104,7 +2104,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Softer ring-spun tee</p>",
+                        "text": "<p>Softer ring-spun</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2129,7 +2129,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A softer everyday tee for teams who&rsquo;ll wear it off the clock too.</p>",
+                        "text": "<p>Soft enough to wear off the clock.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2208,10 +2208,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "sport_tek_st350": {
@@ -2238,7 +2238,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Performance tee for hot workspaces</p>",
+                        "text": "<p>Hot-workspace tee</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2263,7 +2263,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A lightweight polyester tee for kitchens, warehouses, landscaping or outdoor crews.</p>",
+                        "text": "<p>Lightweight polyester for warm crews.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2342,10 +2342,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "port_pc55p": {
@@ -2372,7 +2372,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Pocket tee for working crews</p>",
+                        "text": "<p>Pocket tee</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2397,7 +2397,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A chest pocket for pens or a small logo placement, with a tall pocket version.</p>",
+                        "text": "<p>Chest pocket, with a tall pocket version.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -2476,10 +2476,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 }
               },
@@ -2761,7 +2761,7 @@
                         "link_collection": "",
                         "link": "",
                         "open_in_new_tab": false,
-                        "icon_color": "#efe3c8"
+                        "icon_color": "#233d31"
                       },
                       "blocks": {}
                     },
@@ -2779,7 +2779,7 @@
                         "letter_spacing": "loose",
                         "case": "uppercase",
                         "wrap": "pretty",
-                        "text_color": "#efe3c8",
+                        "text_color": "#233d31",
                         "background": false,
                         "background_color": "#00000026",
                         "corner_radius": 0,
@@ -2799,14 +2799,14 @@
                 "heading": {
                   "type": "custom-liquid",
                   "settings": {
-                    "custom_liquid": "<h2 id=\"customer-facing\" class=\"at-guide-target at-tier-title at-tier-title--on-dark\" tabindex=\"-1\">Dress your customer-facing team</h2>"
+                    "custom_liquid": "<h2 id=\"customer-facing\" class=\"at-guide-target at-tier-title\" tabindex=\"-1\">Dress your customer-facing team</h2>"
                   },
                   "blocks": {}
                 },
                 "description": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>For staff who greet customers, compare a classic piqu&eacute;, a performance polo, a breathable mesh option, a button-front shirt and a quarter-zip layer. Check women&rsquo;s and tall fits in your chosen color.</p>",
+                    "text": "<p>Polos, a woven shirt and a layer for staff who greet customers.</p>",
                     "width": "fit-content",
                     "max_width": "none",
                     "alignment": "left",
@@ -2817,7 +2817,7 @@
                     "letter_spacing": "normal",
                     "case": "none",
                     "wrap": "pretty",
-                    "text_color": "#f5f1eb",
+                    "text_color": "#233d31",
                     "background": false,
                     "background_color": "#00000026",
                     "corner_radius": 0,
@@ -2842,9 +2842,9 @@
                 "link": "shopify://collections/staff-polos-and-shirts",
                 "open_in_new_tab": false,
                 "style_class": "button-custom",
-                "custom_button_background": "#efe3c8",
+                "custom_button_background": "rgba(0,0,0,0)",
                 "custom_button_text": "#233d31",
-                "custom_button_border": "#efe3c8",
+                "custom_button_border": "#233d31",
                 "link_text_color": "",
                 "width": "fit-content",
                 "custom_width": 100,
@@ -2879,7 +2879,7 @@
             "height_mobile": "fit",
             "custom_height_mobile": 30,
             "background_media": "none",
-            "background_color": "#ffffff",
+            "background_color": "",
             "video_position": "cover",
             "background_image_position": "cover",
             "custom_mobile_media": false,
@@ -2894,14 +2894,14 @@
             "border_width": 1,
             "border_opacity": 100,
             "border_color": "",
-            "border_radius": 16,
+            "border_radius": 0,
             "link": "",
             "open_in_new_tab": false,
             "placeholder": "",
-            "padding-block-start": 32,
-            "padding-block-end": 28,
-            "padding-inline-start": 16,
-            "padding-inline-end": 16
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
           },
           "blocks": {
             "picks": {
@@ -2955,7 +2955,7 @@
                     "product": "port-authority-k500-silk-touch-polo",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -2973,7 +2973,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Classic piqu&eacute; in women&rsquo;s &amp; tall fits</p>",
+                        "text": "<p>Classic piqué</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -2998,7 +2998,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A 5-ounce poly/cotton piqu&eacute; the maker describes as wrinkle- and shrink-resistant, with women&rsquo;s, tall and 7XL&ndash;10XL versions.</p>",
+                        "text": "<p>Women’s, tall and 7XL–10XL versions.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3077,10 +3077,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "core365_88181": {
@@ -3089,7 +3089,7 @@
                     "product": "core365-88181-men-s-origin-performance-piqu-polo",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3107,7 +3107,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Performance piqu&eacute; for warm floors</p>",
+                        "text": "<p>Performance piqué</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3132,7 +3132,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Moisture-wicking polyester piqu&eacute;, with women&rsquo;s, tall to 6XLT and a pocket version.</p>",
+                        "text": "<p>Wicking, with women’s and tall to 6XLT.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3211,10 +3211,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "port_authority_k110": {
@@ -3223,7 +3223,7 @@
                     "product": "port-authority-k110-dry-zone-uv-micro-mesh-polo",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3241,7 +3241,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Breathable mesh for outdoor staff</p>",
+                        "text": "<p>Mesh for outdoors</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3266,7 +3266,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Open micro-mesh with a stated UPF rating for staff who work outside, such as patios, markets and valet.</p>",
+                        "text": "<p>Open micro-mesh for patio and valet staff.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3345,10 +3345,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "port_authority_w100": {
@@ -3357,7 +3357,7 @@
                     "product": "port-authority-w100-long-sleeve-carefree-poplin-shirt",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3375,7 +3375,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Button-front shirt for front desk</p>",
+                        "text": "<p>Front-desk shirt</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3400,7 +3400,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A woven poplin shirt with a stain-release finish for hosts and front-desk roles. Expect roughly twice the blank cost of a piqu&eacute; polo.</p>",
+                        "text": "<p>Woven poplin with a stain-release finish.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3479,10 +3479,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "sport_tek_st357": {
@@ -3491,7 +3491,7 @@
                     "product": "sport-tek-st357-posicharge-competitor-1-4-zip-pullover",
                     "product_card_gap": 12,
                     "width": "custom",
-                    "custom_width": 20,
+                    "custom_width": 25,
                     "width_mobile": "custom",
                     "custom_width_mobile": 78,
                     "background_color": "",
@@ -3509,7 +3509,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Light quarter-zip over a polo</p>",
+                        "text": "<p>Light quarter-zip</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -3534,7 +3534,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A lightweight performance quarter-zip layer, with a women&rsquo;s version.</p>",
+                        "text": "<p>Layers over a polo; women’s version too.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -3613,10 +3613,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 }
               },
@@ -3943,7 +3943,7 @@
                 "description": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Dress attendees and the people running the event differently. Pick a tee for the crowd, a polo for hosts and staff, and a layer if it&rsquo;ll be cool.</p>",
+                    "text": "<p>A tee for the crowd, a polo for hosts, a layer if it’s cool.</p>",
                     "width": "fit-content",
                     "max_width": "none",
                     "alignment": "left",
@@ -4110,7 +4110,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Budget tee for attendees</p>",
+                        "text": "<p>Budget attendee tee</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4135,7 +4135,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A low-cost cotton tee for giveaways, volunteers and run-of-show crews.</p>",
+                        "text": "<p>Low-cost cotton for giveaways and volunteers.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4214,10 +4214,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "gildan_64000": {
@@ -4244,7 +4244,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Softer tee people keep wearing</p>",
+                        "text": "<p>Keeper tee</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4269,7 +4269,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A ring-spun step up when the event shirt should feel like a keeper.</p>",
+                        "text": "<p>A ring-spun step up people keep wearing.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4348,10 +4348,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "a4_n3142": {
@@ -4378,7 +4378,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Performance tee for outdoor events</p>",
+                        "text": "<p>Outdoor event tee</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4403,7 +4403,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A low-cost polyester tee for races, field days and summer outdoor events.</p>",
+                        "text": "<p>Low-cost polyester for races and field days.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4482,10 +4482,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "sport_tek_st550": {
@@ -4512,7 +4512,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Polo that marks hosts &amp; staff</p>",
+                        "text": "<p>Host polo</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4537,7 +4537,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A collared, wicking polo so organizers stand out from attendees in tees.</p>",
+                        "text": "<p>Sets organizers apart from attendees.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4616,10 +4616,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 },
                 "gildan_18500": {
@@ -4646,7 +4646,7 @@
                     "heading": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Hoodie for cool-weather events</p>",
+                        "text": "<p>Cool-weather hoodie</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -4671,7 +4671,7 @@
                     "description": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>A classic pullover hoodie for fall events, retreats and staff appreciation gifts.</p>",
+                        "text": "<p>For fall events, retreats and gifts.</p>",
                         "width": "fit-content",
                         "max_width": "narrow",
                         "alignment": "left",
@@ -4750,10 +4750,10 @@
                   "block_order": [
                     "heading",
                     "description",
-                    "companions",
                     "price",
                     "gallery",
-                    "meta"
+                    "meta",
+                    "companions"
                   ]
                 }
               },
