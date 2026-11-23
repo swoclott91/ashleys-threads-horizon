@@ -38,8 +38,11 @@
 {%- assign at_tile_form_check = at_tile_form | strip -%}
 {%- assign use_form = false -%}
 {%- if at_tile_form_check != blank -%}
-  {%- if customer == blank or request.design_mode -%}
-    {%- assign use_form = true -%}
+  {%- if request.design_mode or customer == blank -%}
+    {%- capture tile_tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
+    {%- if tile_tier == 'guest' -%}
+      {%- assign use_form = true -%}
+    {%- endif -%}
   {%- endif -%}
 {%- endif -%}
 

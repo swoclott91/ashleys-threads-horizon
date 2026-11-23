@@ -26,7 +26,8 @@
   assign at_sc_fav_image = nil
   assign at_sc_show_fav = false
 -%}
-{%- if customer and at_sc_state == 'buyer' -%}
+{%- capture at_home_visible -%}{% render 'at-section-visible', visibility: section.settings.at_visibility %}{%- endcapture -%}
+{%- if customer and at_sc_state == 'buyer' and at_home_visible == 'true' -%}
   {%- liquid
     assign at_sc_pids = '|'
     assign at_sc_no_color = '|'
@@ -254,6 +255,17 @@
   "tag": "section",
   "class": "at-home-shortcuts-section",
   "settings": [
+    {
+      "type": "select",
+      "id": "at_visibility",
+      "label": "t:settings.at_home_visibility",
+      "options": [
+        { "value": "all", "label": "t:options.at_home_everyone" },
+        { "value": "customers", "label": "t:options.at_home_members" },
+        { "value": "pro_and_wholesale", "label": "t:options.at_home_pro_and_wholesale" }
+      ],
+      "default": "all"
+    },
     {
       "type": "paragraph",
       "content": "Signed-in members only: Past purchases and Your favorites shortcuts to the bulk order page. Each shows only when it has content; favorites show here only when the hero row shows the last order."

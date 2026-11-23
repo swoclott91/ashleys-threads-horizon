@@ -15,10 +15,11 @@
 {%- endcomment -%}
 {%- capture at_section_visible -%}{% render 'at-section-visible', visibility: section.settings.at_visibility %}{%- endcapture -%}
 {%- if at_section_visible contains 'true' -%}
+  {%- capture tile_audience -%}{% render 'at-member-tier' %}{%- endcapture -%}
   <script src="{{ 'dialog.js' | asset_url }}" type="module"></script>
   {% render 'dialog-styles' %}
   <div class="section section--page-width">
-    <div class="at-tiles" data-at-tiles>
+    <div class="at-tiles" data-at-tiles{% if tile_audience == 'guest' %} data-at-guest-tiles{% endif %}>
       <div class="at-tiles__head">
         <h2 class="at-tiles__title h3" id="AtTiles-{{ section.id }}">{{ section.settings.heading }}</h2>
         {%- if section.settings.helper != blank -%}
@@ -38,7 +39,7 @@
     (() => {
       const KEY = 'at_guest_hint';
       const root = document.currentScript.previousElementSibling?.querySelector('[data-at-tiles]');
-      if (!root) return;
+      if (!root?.hasAttribute('data-at-guest-tiles')) return;
       const read = () => { try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { return null; } };
       const write = (v) => { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} };
 
@@ -245,7 +246,8 @@
       "options": [
         { "value": "all", "label": "Everyone" },
         { "value": "guests", "label": "Guests (signed out)" },
-        { "value": "customers", "label": "Signed-in customers" }
+        { "value": "customers", "label": "Signed-in customers" },
+        { "value": "guests_and_member", "label": "t:options.at_home_guests_and_member" }
       ],
       "default": "guests"
     },

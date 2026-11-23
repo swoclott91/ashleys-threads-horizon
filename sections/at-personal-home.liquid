@@ -7,7 +7,8 @@
 {%- endcomment -%}
 {%- capture at_visitor -%}{% render 'at-visitor' %}{%- endcapture -%}
 {%- assign at_visitor = at_visitor | strip -%}
-{%- if at_visitor != 'guest' -%}
+{%- capture at_home_visible -%}{% render 'at-section-visible', visibility: section.settings.at_visibility %}{%- endcapture -%}
+{%- if at_visitor != 'guest' and at_home_visible == 'true' -%}
   {%- liquid
     # Editor-only samples while 1C's "Preview tier as" is set.
     assign at_preview = false
@@ -387,7 +388,8 @@
       "id": "at_visibility",
       "label": "Show to",
       "options": [
-        { "value": "customers", "label": "Signed-in customers" }
+        { "value": "customers", "label": "Signed-in customers" },
+        { "value": "pro_and_wholesale", "label": "t:options.at_home_pro_and_wholesale" }
       ],
       "default": "customers"
     },

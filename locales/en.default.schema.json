@@ -279,6 +279,9 @@
     "size_guide_type_preset": "Applies to the open-dialog control when layout is Standalone."
   },
   "names": {
+    "at_home_features": "Home feature row",
+    "at_home_pro_estimate": "Pro savings estimate",
+    "at_member_home_rail": "Member homepage carousel",
     "at_guest_home": "Guest homepage",
     "at_breadcrumbs": "AT Breadcrumbs",
     "column": "Column",
@@ -461,6 +464,11 @@
     "comparison_slider": "Comparison slider"
   },
   "options": {
+    "at_home_guests_and_member": "Guests and Members",
+    "at_home_pro_and_wholesale": "Pro and Wholesale",
+    "at_member_home_favorites": "Favorites",
+    "at_member_home_brands": "Your brands",
+    "at_member_home_companions": "Companion products",
     "at_home_everyone": "Everyone",
     "at_home_guests": "Guests",
     "at_home_members": "Members (Member, Pro, Wholesale)",
@@ -801,6 +809,14 @@
     "below_media": "Below media"
   },
   "settings": {
+    "at_home_pro_url": "Pro signup or details link",
+    "at_member_home_row_description": "Supporting text",
+    "at_member_home_row_link_label": "Link label",
+    "at_member_home_rail_kind": "What to show",
+    "at_member_home_max_items": "Maximum cards",
+    "at_member_home_preview_products": "Theme editor sample products",
+    "at_member_home_preview_anchor": "Theme editor sample anchor product",
+    "at_member_home_preview_brands": "Theme editor sample brand collections",
     "at_home_visibility": "Show to",
     "at_home_featured_products": "Featured products",
     "at_show_member_bar": "Show member pricing bar under the price",
