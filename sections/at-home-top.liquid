@@ -12,6 +12,8 @@
   to the next one. Panel snippets own their markup and styles; this section owns the hero,
   the two-column grid and the member strip. Nothing here calls Wagner.
 {%- endcomment -%}
+{%- capture at_section_visible -%}{% render 'at-section-visible', visibility: section.settings.at_visibility %}{%- endcapture -%}
+{%- if at_section_visible contains 'true' -%}
 {%- capture at_home_state -%}{% render 'at-home-state' %}{%- endcapture -%}
 {%- liquid
   assign at_home_state = at_home_state | strip
@@ -120,6 +122,8 @@
   {%- endif -%}
 </div>
 
+{%- endif -%}
+
 {% stylesheet %}
   .at-home-top {
     display: grid;
@@ -209,6 +213,17 @@
   "tag": "section",
   "class": "at-home-top-section",
   "settings": [
+    {
+      "type": "select",
+      "id": "at_visibility",
+      "label": "t:settings.at_home_visibility",
+      "options": [
+        { "value": "all", "label": "t:options.at_home_everyone" },
+        { "value": "guests", "label": "t:options.at_home_guests" },
+        { "value": "customers", "label": "t:options.at_home_members" }
+      ],
+      "default": "all"
+    },
     {
       "type": "paragraph",
       "content": "Seasonal hero beside one panel that changes by shopper: staples for guests, favorites for members with saved styles, the last order for members who have ordered."

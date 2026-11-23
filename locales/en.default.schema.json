@@ -233,6 +233,7 @@
     "work_quickly_to_ship": "<p>We will work quickly to ship your order as soon as possible. Once your order has shipped, you will receive an email with further information. Delivery times vary depending on your location.</p>"
   },
   "info": {
+    "at_home_featured_products": "Select products to display in this order. Leave empty to use the collection.",
     "at_show_member_bar": "Product page only. Guests see \"Members pay less\" with no number; signed-in tiers see their next level. Tapping it opens the pricing modal.",
     "at_member_preview_tier": "Only applies inside the theme editor, using sample values where Wagner metafields are blank. Shoppers always see their own tier.",
     "actions_display_style": "Icons are always used on mobile",
@@ -278,6 +279,7 @@
     "size_guide_type_preset": "Applies to the open-dialog control when layout is Standalone."
   },
   "names": {
+    "at_guest_home": "Guest homepage",
     "at_breadcrumbs": "AT Breadcrumbs",
     "column": "Column",
     "product_title": "Product title",
@@ -459,6 +461,9 @@
     "comparison_slider": "Comparison slider"
   },
   "options": {
+    "at_home_everyone": "Everyone",
+    "at_home_guests": "Guests",
+    "at_home_members": "Members (Member, Pro, Wholesale)",
     "at_member_preview_off": "Off (real visitor)",
     "at_member_preview_guest": "Guest",
     "at_member_preview_member": "Member",
@@ -796,6 +801,8 @@
     "below_media": "Below media"
   },
   "settings": {
+    "at_home_visibility": "Show to",
+    "at_home_featured_products": "Featured products",
     "at_show_member_bar": "Show member pricing bar under the price",
     "at_member_preview_tier": "Preview tier as (theme editor only)",
     "at_membership_page_url": "Membership page path",

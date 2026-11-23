@@ -3,6 +3,8 @@
   guide and Member Deals; active members and Pro Buy again, Member Deals and a chip for how they
   decorate; Wholesale Quick order and Invoices. A chip whose collection doesn't exist is skipped.
 {%- endcomment -%}
+{%- capture at_section_visible -%}{% render 'at-section-visible', visibility: section.settings.at_visibility %}{%- endcapture -%}
+{%- if at_section_visible contains 'true' -%}
 {%- capture at_visitor -%}{% render 'at-visitor' %}{%- endcapture -%}
 {%- liquid
   assign at_visitor = at_visitor | strip
@@ -89,6 +91,8 @@
 </nav>
 </div>
 
+{%- endif -%}
+
 {% stylesheet %}
   .at-chips { padding-block: 10px; }
   .at-chips__list {
@@ -126,6 +130,17 @@
   "tag": "section",
   "class": "at-visitor-chips-section",
   "settings": [
+    {
+      "type": "select",
+      "id": "at_visibility",
+      "label": "t:settings.at_home_visibility",
+      "options": [
+        { "value": "all", "label": "t:options.at_home_everyone" },
+        { "value": "guests", "label": "t:options.at_home_guests" },
+        { "value": "customers", "label": "t:options.at_home_members" }
+      ],
+      "default": "all"
+    },
     {
       "type": "collection_list",
       "id": "guest_collections",

@@ -5,6 +5,8 @@
   mobile. Blocks without a collection are skipped on the storefront and shown as a setup card
   in the theme editor.
 {%- endcomment -%}
+{%- capture at_section_visible -%}{% render 'at-section-visible', visibility: section.settings.at_visibility %}{%- endcapture -%}
+{%- if at_section_visible contains 'true' -%}
 {%- liquid
   assign at_cat_columns = section.settings.columns_desktop | default: 5
   assign at_cat_cards = 0
@@ -72,6 +74,8 @@
   <div class="section section--page-width">
     <p class="at-cats__setup">Shop by category: add a Category block for each collection to show here.</p>
   </div>
+{%- endif -%}
+
 {%- endif -%}
 
 {% stylesheet %}
@@ -174,6 +178,17 @@
   "tag": "section",
   "class": "at-home-categories-section",
   "settings": [
+    {
+      "type": "select",
+      "id": "at_visibility",
+      "label": "t:settings.at_home_visibility",
+      "options": [
+        { "value": "all", "label": "t:options.at_home_everyone" },
+        { "value": "guests", "label": "t:options.at_home_guests" },
+        { "value": "customers", "label": "t:options.at_home_members" }
+      ],
+      "default": "all"
+    },
     {
       "type": "text",
       "id": "heading",

@@ -12,6 +12,7 @@
     "at_home_top": {
       "type": "at-home-top",
       "settings": {
+        "at_visibility": "customers",
         "collection": "",
         "link": "",
         "button_label": "Shop holiday fleece",
@@ -39,9 +40,9 @@
           "type": "_at-make-tile",
           "settings": {
             "project": "use:decorator",
-            "label": "Custom client orders",
+            "label": "Clients’ designs",
             "image": "shopify://shop_images/Repeat_order_evergreen_tee.png",
-            "collection": "graphic-tees-boutique-sellers"
+            "collection": "blanks-for-client-orders"
           },
           "blocks": {
             "form_decorator": {
@@ -70,9 +71,9 @@
           "type": "_at-make-tile",
           "settings": {
             "project": "use:graphic-tees",
-            "label": "Sell my own apparel or merch",
+            "label": "My own designs",
             "image": "shopify://shop_images/Cobalt_Sun_Tee_and_Tote_Display.png",
-            "collection": ""
+            "collection": "graphic-tees-boutique-sellers"
           },
           "blocks": {
             "form_graphic_tees": {
@@ -101,9 +102,9 @@
           "type": "_at-make-tile",
           "settings": {
             "project": "use:apparel-brand",
-            "label": "Workwear / company events",
-            "image": "shopify://shop_images/L663_SterlingGy-S663_SterlingGy_WW26_WkwrProductGuide_Lifestyle_Model_1.jpg",
-            "collection": ""
+            "label": "My own label",
+            "image": "shopify://shop_images/ashleys-my-own-label.png",
+            "collection": "building-your-apparel-brand"
           },
           "blocks": {
             "form_apparel_brand": {
@@ -132,9 +133,9 @@
           "type": "_at-make-tile",
           "settings": {
             "project": "use:groups-events",
-            "label": "School, team, or club",
+            "label": "Group, team, or event",
             "image": "shopify://shop_images/LST484-LST485-LST475-LST350LS_Q226_WF_MRF_Lifestyle_Model.jpg",
-            "collection": ""
+            "collection": "groups-events"
           },
           "blocks": {
             "form_groups_events": {
@@ -163,9 +164,9 @@
           "type": "_at-make-tile",
           "settings": {
             "project": "use:business-merch",
-            "label": "Gifts / personal projects",
-            "image": "shopify://shop_images/Finishing_a_Cherry_Gift_Tee.png",
-            "collection": ""
+            "label": "Company apparel",
+            "image": "shopify://shop_images/L663_SterlingGy-S663_SterlingGy_WW26_WkwrProductGuide_Lifestyle_Model_1.jpg",
+            "collection": "staff-and-company-events"
           },
           "blocks": {
             "form_business_merch": {
@@ -194,9 +195,9 @@
           "type": "_at-make-tile",
           "settings": {
             "project": "use:personal",
-            "label": "Clothing to wear blank",
+            "label": "Me and my family",
             "image": "shopify://shop_images/BC3719_DF25_ProductGuide_BC_003_Lifestyle_Model_2.jpg",
-            "collection": ""
+            "collection": "family-matching-sets"
           },
           "blocks": {
             "form_personal": {
@@ -230,10 +231,18 @@
         "tile_business_merch",
         "tile_personal"
       ],
+      "custom_css": [
+        ".at-tiles { padding-block: 8px 12px; gap: 10px; }",
+        "h2 { color: #103823; }",
+        ".at-tiles__tile--photo { background: #f5e4d4; padding: 0; overflow: hidden; }",
+        ".at-tiles__media { border-radius: 0; aspect-ratio: 1.4; }",
+        ".at-tiles__label { display: flex; width: 100%; justify-content: space-between; text-align: left; gap: 4px; }",
+        ".at-tiles__tile--photo .at-tiles__label { padding: 6px 9px; }"
+      ],
       "settings": {
         "at_visibility": "guests",
-        "heading": "What do you mainly buy blank apparel for ?",
-        "helper": "Choose a project to start your account and find your first favorites."
+        "heading": "What are you making?",
+        "helper": "Choose a project to see blanks that fit."
       }
     },
     "at_home_profile": {
@@ -243,6 +252,7 @@
     "at_home_categories": {
       "type": "at-home-categories",
       "settings": {
+        "at_visibility": "customers",
         "heading": "Shop by category",
         "link_label": "",
         "link": "",
@@ -385,7 +395,7 @@
       ],
       "name": "t:names.video_section",
       "settings": {
-        "at_visibility": "all",
+        "at_visibility": "customers",
         "content_direction": "column",
         "vertical_on_mobile": true,
         "horizontal_alignment": "flex-start",
@@ -417,6 +427,7 @@
     "at_visitor_chips": {
       "type": "at-visitor-chips",
       "settings": {
+        "at_visibility": "customers",
         "guest_collections": [],
         "quick_order_url": ""
       }
@@ -3581,12 +3592,664 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "at_guest_home": {
+      "type": "at-guest-home",
+      "blocks": {
+        "heading": {
+          "type": "text",
+          "name": "Homepage heading",
+          "static": true,
+          "settings": {
+            "text": "<h1>The easiest place to order blank apparel.</h1>",
+            "width": "100%",
+            "max_width": "none",
+            "type_preset": "h3"
+          }
+        },
+        "intro": {
+          "type": "text",
+          "name": "Homepage introduction",
+          "static": true,
+          "settings": {
+            "text": "<p>Find the right blanks. Bring your favorites together. Build your order in one place.</p>",
+            "width": "100%",
+            "max_width": "none",
+            "type_preset": "rte"
+          }
+        },
+        "seasonal": {
+          "type": "group",
+          "name": "Holiday fleece",
+          "static": true,
+          "settings": {
+            "content_direction": "column",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 4,
+            "width": "fill",
+            "width_mobile": "fill",
+            "height": "fill",
+            "height_mobile": "fill",
+            "background_media": "image",
+            "background_image": "shopify://shop_images/ashleys-holiday-fleece-hero.png",
+            "padding-block-start": 22,
+            "padding-block-end": 22,
+            "padding-inline-start": 22,
+            "padding-inline-end": 22
+          },
+          "blocks": {
+            "label": {
+              "type": "text",
+              "name": "Seasonal label",
+              "settings": {
+                "text": "<p>THE HOLIDAY EDIT</p>",
+                "width": "100%",
+                "max_width": "none",
+                "type_preset": "rte"
+              }
+            },
+            "title": {
+              "type": "text",
+              "name": "Seasonal heading",
+              "settings": {
+                "text": "<h2>Made for cozy season.</h2>",
+                "width": "100%",
+                "max_width": "none",
+                "type_preset": "h2"
+              }
+            },
+            "shop": {
+              "type": "button",
+              "name": "Seasonal link",
+              "settings": {
+                "label": "Shop holiday fleece →",
+                "link": "shopify://collections/sweatshirts-hoodies",
+                "style_class": "button-custom",
+                "custom_button_background": "#103823",
+                "custom_button_text": "#fff0d7",
+                "custom_button_border": "#fff0d7",
+                "width": "fit-content",
+                "width_mobile": "fit-content"
+              }
+            }
+          },
+          "block_order": [
+            "label",
+            "title",
+            "shop"
+          ]
+        },
+        "membership": {
+          "type": "group",
+          "name": "Member savings",
+          "static": true,
+          "settings": {
+            "content_direction": "column",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "width": "fill",
+            "width_mobile": "fill",
+            "height": "fill",
+            "height_mobile": "fill",
+            "background_media": "none",
+            "background_color": "#103823",
+            "padding-block-start": 20,
+            "padding-block-end": 20,
+            "padding-inline-start": 20,
+            "padding-inline-end": 20
+          },
+          "blocks": {
+            "title": {
+              "type": "text",
+              "name": "Membership heading",
+              "settings": {
+                "text": "<h2>Unlock Member Savings</h2>",
+                "width": "100%",
+                "max_width": "none",
+                "type_preset": "h2"
+              }
+            },
+            "divider": {
+              "type": "_divider",
+              "settings": {}
+            },
+            "savings": {
+              "type": "group",
+              "name": "Save 10% on non-sale styles",
+              "settings": {
+                "content_direction": "row",
+                "vertical_on_mobile": false,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 12,
+                "width": "fill",
+                "width_mobile": "fill",
+                "height": "fit",
+                "height_mobile": "fit",
+                "background_media": "none"
+              },
+              "blocks": {
+                "icon": {
+                  "type": "icon",
+                  "settings": {
+                    "icon": "price_tag",
+                    "width": 28,
+                    "icon_color": "#fff0d7"
+                  }
+                },
+                "copy": {
+                  "type": "text",
+                  "name": "Save 10% on non-sale styles",
+                  "settings": {
+                    "text": "<p>Save 10% on non-sale styles</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "type_preset": "rte"
+                  }
+                }
+              },
+              "block_order": [
+                "icon",
+                "copy"
+              ]
+            },
+            "favorites": {
+              "type": "group",
+              "name": "Save favorite styles &amp; colors",
+              "settings": {
+                "content_direction": "row",
+                "vertical_on_mobile": false,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 12,
+                "width": "fill",
+                "width_mobile": "fill",
+                "height": "fit",
+                "height_mobile": "fit",
+                "background_media": "none"
+              },
+              "blocks": {
+                "icon": {
+                  "type": "icon",
+                  "settings": {
+                    "icon": "heart",
+                    "width": 28,
+                    "icon_color": "#fff0d7"
+                  }
+                },
+                "copy": {
+                  "type": "text",
+                  "name": "Save favorite styles &amp; colors",
+                  "settings": {
+                    "text": "<p>Save favorite styles &amp; colors</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "type_preset": "rte"
+                  }
+                }
+              },
+              "block_order": [
+                "icon",
+                "copy"
+              ]
+            },
+            "ordering": {
+              "type": "group",
+              "name": "Order multiple styles in one screen",
+              "settings": {
+                "content_direction": "row",
+                "vertical_on_mobile": false,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 12,
+                "width": "fill",
+                "width_mobile": "fill",
+                "height": "fit",
+                "height_mobile": "fit",
+                "background_media": "none"
+              },
+              "blocks": {
+                "icon": {
+                  "type": "icon",
+                  "settings": {
+                    "icon": "box",
+                    "width": 28,
+                    "icon_color": "#fff0d7"
+                  }
+                },
+                "copy": {
+                  "type": "text",
+                  "name": "Order multiple styles in one screen",
+                  "settings": {
+                    "text": "<p>Order multiple styles in one screen</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "type_preset": "rte"
+                  }
+                }
+              },
+              "block_order": [
+                "icon",
+                "copy"
+              ]
+            },
+            "join": {
+              "type": "button",
+              "name": "Create account",
+              "settings": {
+                "label": "Create your free account",
+                "link": "/account/register",
+                "style_class": "button-custom",
+                "custom_button_background": "#fff0d7",
+                "custom_button_text": "#103823",
+                "custom_button_border": "#fff0d7",
+                "width": "custom",
+                "custom_width": 100,
+                "width_mobile": "custom",
+                "custom_width_mobile": 100
+              }
+            },
+            "signin": {
+              "type": "text",
+              "name": "Member sign-in",
+              "settings": {
+                "text": "<p>Already a member? <a href=\"/account/login\">Sign in</a></p>",
+                "width": "100%",
+                "max_width": "none",
+                "alignment": "center",
+                "type_preset": "rte"
+              }
+            }
+          },
+          "block_order": [
+            "title",
+            "divider",
+            "savings",
+            "favorites",
+            "ordering",
+            "join",
+            "signin"
+          ]
+        },
+        "tees": {
+          "type": "group",
+          "name": "T-Shirts",
+          "static": true,
+          "settings": {
+            "content_direction": "column",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 8,
+            "width": "fill",
+            "width_mobile": "fill",
+            "height": "fill",
+            "height_mobile": "fill",
+            "background_media": "image",
+            "background_image": "shopify://shop_images/64000_navy_flat_front.jpg",
+            "background_image_position": "fit",
+            "padding-block-start": 12,
+            "padding-block-end": 12,
+            "padding-inline-start": 12,
+            "padding-inline-end": 12
+          },
+          "blocks": {
+            "title": {
+              "type": "text",
+              "name": "Heading",
+              "settings": {
+                "text": "<h2>T-Shirts</h2>",
+                "width": "100%",
+                "max_width": "none",
+                "type_preset": "h4"
+              }
+            },
+            "shop": {
+              "type": "button",
+              "name": "Collection link",
+              "settings": {
+                "label": "Shop T-shirts",
+                "link": "shopify://collections/t-shirts",
+                "style_class": "button-unstyled",
+                "width": "fit-content",
+                "width_mobile": "fit-content"
+              }
+            }
+          },
+          "block_order": [
+            "title",
+            "shop"
+          ]
+        },
+        "fleece": {
+          "type": "group",
+          "name": "Sweatshirts",
+          "static": true,
+          "settings": {
+            "content_direction": "column",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 8,
+            "width": "fill",
+            "width_mobile": "fill",
+            "height": "fill",
+            "height_mobile": "fill",
+            "background_media": "image",
+            "background_image": "shopify://shop_images/18000_sand_flat_front.jpg",
+            "background_image_position": "fit",
+            "padding-block-start": 12,
+            "padding-block-end": 12,
+            "padding-inline-start": 12,
+            "padding-inline-end": 12
+          },
+          "blocks": {
+            "title": {
+              "type": "text",
+              "name": "Heading",
+              "settings": {
+                "text": "<h2>Sweatshirts</h2>",
+                "width": "100%",
+                "max_width": "none",
+                "type_preset": "h4"
+              }
+            },
+            "shop": {
+              "type": "button",
+              "name": "Collection link",
+              "settings": {
+                "label": "Shop sweatshirts",
+                "link": "shopify://collections/sweatshirts-hoodies",
+                "style_class": "button-unstyled",
+                "width": "fit-content",
+                "width_mobile": "fit-content"
+              }
+            }
+          },
+          "block_order": [
+            "title",
+            "shop"
+          ]
+        }
+      },
+      "name": "Guest homepage",
+      "settings": {}
+    },
+    "at_guest_featured": {
+      "type": "product-list",
+      "blocks": {
+        "static-header": {
+          "type": "_product-list-content",
+          "name": "Featured styles heading",
+          "static": true,
+          "settings": {
+            "content_direction": "row",
+            "vertical_on_mobile": false,
+            "horizontal_alignment": "space-between",
+            "vertical_alignment": "center",
+            "align_baseline": true,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 8,
+            "width": "fill",
+            "width_mobile": "fill",
+            "height": "fit",
+            "background_media": "none"
+          },
+          "blocks": {
+            "title": {
+              "type": "text",
+              "name": "Heading",
+              "settings": {
+                "text": "<h2>Featured styles</h2>",
+                "width": "fit-content",
+                "max_width": "none",
+                "type_preset": "h3"
+              }
+            },
+            "see_all": {
+              "type": "button",
+              "name": "View all",
+              "settings": {
+                "label": "View all",
+                "link": "shopify://collections/seller-staples",
+                "style_class": "button-unstyled",
+                "width": "fit-content",
+                "width_mobile": "fit-content"
+              }
+            }
+          },
+          "block_order": [
+            "title",
+            "see_all"
+          ]
+        },
+        "static-product-card": {
+          "type": "_product-card",
+          "name": "Product card",
+          "static": true,
+          "settings": {
+            "product_card_gap": 4,
+            "border": "solid",
+            "border_width": 1,
+            "border_opacity": 28,
+            "border_color": "#987b63",
+            "border_radius": 12
+          },
+          "blocks": {
+            "gallery": {
+              "type": "image",
+              "name": "Product photo",
+              "settings": {
+                "image": "{{ closest.product.featured_image }}",
+                "image_ratio": "landscape",
+                "width": "fill",
+                "width_mobile": "fill",
+                "height": "fit",
+                "border": "none"
+              }
+            },
+            "title": {
+              "type": "product-title",
+              "settings": {
+                "width": "100%",
+                "type_preset": "h6",
+                "padding-inline-start": 12,
+                "padding-inline-end": 12
+              }
+            },
+            "swatches": {
+              "type": "swatches",
+              "settings": {
+                "product_swatches_alignment": "flex-start",
+                "product_swatches_alignment_mobile": "flex-start",
+                "product_swatches_padding_bottom": 8,
+                "product_swatches_padding_left": 12,
+                "product_swatches_padding_right": 12
+              }
+            }
+          },
+          "block_order": [
+            "gallery",
+            "title",
+            "swatches"
+          ]
+        }
+      },
+      "custom_css": [
+        "h2{color:#103823;margin:0}",
+        ".product-card{background:#f5e4d4;overflow:hidden}"
+      ],
+      "name": "Featured styles",
+      "settings": {
+        "at_visibility": "guests",
+        "collection": "seller-staples",
+        "at_featured_products": [
+          "gildan-64000-softstyle-t-shirt",
+          "comfort-colors-1717-heavyweight-ring-spun-tee",
+          "gildan-18000-heavy-blend-crewneck-sweatshirt",
+          "richardson-112-trucker-cap"
+        ],
+        "layout_type": "carousel",
+        "carousel_on_mobile": true,
+        "max_products": 4,
+        "columns": 4,
+        "mobile_columns": "2",
+        "mobile_card_size": "60cqw",
+        "columns_gap": 8,
+        "rows_gap": 12,
+        "icons_style": "arrow",
+        "icons_shape": "circle",
+        "section_width": "page-width",
+        "horizontal_alignment": "flex-start",
+        "gap": 12,
+        "background_color": "#fcf0e5",
+        "padding-block-start": 8,
+        "padding-block-end": 14
+      }
+    },
+    "at_guest_demo": {
+      "type": "section",
+      "blocks": {
+        "panel": {
+          "type": "group",
+          "name": "Demo panel",
+          "settings": {
+            "content_direction": "row",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "space-between",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 22,
+            "width": "fill",
+            "width_mobile": "fill",
+            "height": "fit",
+            "height_mobile": "fit",
+            "background_media": "none",
+            "background_color": "#dce1c8",
+            "border_radius": 15,
+            "padding-block-start": 24,
+            "padding-block-end": 24,
+            "padding-inline-start": 24,
+            "padding-inline-end": 24
+          },
+          "blocks": {
+            "pitch": {
+              "type": "group",
+              "name": "Demo introduction",
+              "settings": {
+                "content_direction": "column",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 12,
+                "width": "custom",
+                "custom_width": 42,
+                "width_mobile": "fill",
+                "height": "fit",
+                "height_mobile": "fit",
+                "background_media": "none"
+              },
+              "blocks": {
+                "title": {
+                  "type": "text",
+                  "name": "Heading",
+                  "settings": {
+                    "text": "<h2>Your next restock, all on one screen.</h2>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "type_preset": "h2"
+                  }
+                },
+                "body": {
+                  "type": "text",
+                  "name": "Description",
+                  "settings": {
+                    "text": "<p>Choose your saved styles and colors. Enter sizes and quantities together. Add your whole order to cart.</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "type_preset": "rte"
+                  }
+                },
+                "link": {
+                  "type": "button",
+                  "name": "Bulk order link",
+                  "settings": {
+                    "label": "Explore bulk ordering",
+                    "link": "shopify://pages/bulk-order",
+                    "style_class": "button-unstyled",
+                    "width": "fit-content",
+                    "width_mobile": "fit-content"
+                  }
+                }
+              },
+              "block_order": [
+                "title",
+                "body",
+                "link"
+              ]
+            },
+            "demo": {
+              "type": "video",
+              "name": "Bulk ordering video",
+              "settings": {
+                "source": "uploaded",
+                "video": "shopify://files/videos/2026-11-23 11-50-13.mp4",
+                "video_autoplay": false,
+                "video_loop": false,
+                "alt": "Bulk ordering demo",
+                "custom_width": 54,
+                "custom_width_mobile": 100,
+                "aspect_ratio": "16/9",
+                "border": "solid",
+                "border_width": 2,
+                "border_opacity": 100,
+                "border_color": "#fff9ed",
+                "border_radius": 12
+              }
+            }
+          },
+          "block_order": [
+            "pitch",
+            "demo"
+          ]
+        }
+      },
+      "block_order": [
+        "panel"
+      ],
+      "custom_css": [
+        "h2 { color: #103823; }",
+        ".group-block { border-radius: 15px; }"
+      ],
+      "name": "Bulk ordering demo",
+      "settings": {
+        "at_visibility": "guests",
+        "content_direction": "column",
+        "gap": 0,
+        "section_width": "page-width",
+        "section_height": "",
+        "background_media": "none",
+        "background_color": "#fcf0e5",
+        "padding-block-start": 10,
+        "padding-block-end": 16
+      }
     }
   },
   "order": [
+    "at_guest_home",
     "at_home_top",
     "at_home_shortcuts",
     "at_make_tiles",
+    "at_guest_featured",
+    "at_guest_demo",
     "at_home_profile",
     "at_home_categories",
     "at_home_discovery",
