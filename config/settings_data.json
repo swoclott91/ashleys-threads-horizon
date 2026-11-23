@@ -122,6 +122,7 @@
     "currency_code_enabled_product_pages": false,
     "currency_code_enabled_product_cards": false,
     "currency_code_enabled_cart_items": false,
+    "at_member_preview_tier": "off",
     "show_second_image_on_hover": true,
     "product_card_carousel": true,
     "empty_state_collection": "popular",
