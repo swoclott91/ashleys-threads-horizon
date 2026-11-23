@@ -990,7 +990,7 @@
           "settings": {
             "project": "use:apparel-brand",
             "label": "My own label",
-            "image": "shopify://shop_images/ashleys-my-own-label.png",
+            "image": "shopify://shop_images/My_Label.jpg",
             "collection": "building-your-apparel-brand"
           },
           "blocks": {
@@ -1021,7 +1021,7 @@
           "settings": {
             "project": "use:groups-events",
             "label": "Group, team, or event",
-            "image": "shopify://shop_images/LST484-LST485-LST475-LST350LS_Q226_WF_MRF_Lifestyle_Model.jpg",
+            "image": "shopify://shop_images/Group_team.jpg",
             "collection": "groups-events"
           },
           "blocks": {
@@ -1052,7 +1052,7 @@
           "settings": {
             "project": "use:business-merch",
             "label": "Company apparel",
-            "image": "shopify://shop_images/L663_SterlingGy-S663_SterlingGy_WW26_WkwrProductGuide_Lifestyle_Model_1.jpg",
+            "image": "shopify://shop_images/Company_apparel.jpg",
             "collection": "staff-and-company-events"
           },
           "blocks": {
@@ -1083,7 +1083,7 @@
           "settings": {
             "project": "use:personal",
             "label": "Me and my family",
-            "image": "shopify://shop_images/BC3719_DF25_ProductGuide_BC_003_Lifestyle_Model_2.jpg",
+            "image": "shopify://shop_images/me_and_my_family.jpg",
             "collection": "family-matching-sets"
           },
           "blocks": {
