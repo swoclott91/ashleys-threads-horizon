@@ -41,6 +41,7 @@
           "settings": {
             "source": "uploaded",
             "video": "shopify://files/videos/2026-11-23 11-50-13.mp4",
+            "video_url": "",
             "video_autoplay": true,
             "video_loop": true,
             "alt": "",
@@ -1607,16 +1608,17 @@
             "custom_height": 45,
             "height_mobile": "custom",
             "custom_height_mobile": 65,
-            "background_media": "image",
+            "background_media": "video",
             "background_color": "",
-            "video_position": "cover",
+            "video": "shopify://files/videos/2026-11-23 11-50-13.mp4",
+            "video_position": "contain",
             "background_image": "shopify://shop_images/US_Fulfillment_2_1.jpg",
             "background_image_position": "cover",
             "custom_mobile_media": false,
             "background_media_mobile": "image",
             "background_image_position_mobile": "cover",
             "video_position_mobile": "cover",
-            "toggle_overlay": false,
+            "toggle_overlay": true,
             "overlay_color": "#00000026",
             "overlay_style": "solid",
             "gradient_direction": "to top",
@@ -1821,7 +1823,6 @@
         "group_JedPLY",
         "group_RPN64J"
       ],
-      "disabled": true,
       "custom_css": [
         ".text-block--ANjYzRWhNV0YvZ0tze__text_YzVJzw em {text-decoration: line-through;}",
         ".color-custom-template--27191570137363__section_YrFnRz .group-block-content p strong {color: #bb987c;}"
