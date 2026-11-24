@@ -164,20 +164,22 @@
     assign entry_count = 0
     capture cards
       for entry in entries limit: section.settings.max_items
+        # A for loop variable can't be reassigned, so the card resource gets its own name.
+        assign card_resource = entry
         if card_type == 'collection' and sample == false
           if entry == blank
             continue
           endif
-          assign entry = collections[entry]
+          assign card_resource = collections[entry]
         endif
-        if entry == blank or entry.url == blank
+        if card_resource == blank or card_resource.url == blank
           continue
         endif
         if entry_count > 0
           echo '<!--@list/split-->'
         endif
         assign entry_count = entry_count | plus: 1
-        render 'resource-card', resource_type: card_type, resource: entry, image_width: 640, image_aspect_ratio: card_ratio, image_sizes: '(min-width: 990px) 24vw, 55vw'
+        render 'resource-card', resource_type: card_type, resource: card_resource, image_width: 640, image_aspect_ratio: card_ratio, image_sizes: '(min-width: 990px) 24vw, 55vw'
       endfor
     endcapture
     assign slides = cards | strip | split: '<!--@list/split-->'
