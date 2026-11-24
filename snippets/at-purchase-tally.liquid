@@ -1,0 +1,89 @@
+{%- doc -%}
+  Tallies the signed-in customer's recent purchases from plain line item values only.
+  Shared ranking for Member pages (homepage most-purchased product and brand cards), so pages
+  can't rank purchases differently.
+
+  Reads `customer.orders` (first page of 20, newest first) and skips orders that are cancelled,
+  fully refunded (`financial_status == 'refunded'`) or placed more than 365 days ago. For each
+  line it reads only `product_id`, `quantity` and `vendor`; it never touches `line_item.product`
+  or `line_item.variant`, so no product is loaded here. A plain loop reads the first 50 lines of
+  an order. At most 40 unique products and 40 vendors are tallied.
+
+  Never decides on `customer.orders_count` (0 for test orders); an empty result means no
+  eligible lines.
+
+  Output (capture it): `<products>#<vendors>`
+  - products: `,pid=units,pid=units,` in first-seen order (= most recent purchase first)
+  - vendors: `,vendor-handle=units,` in first-seen order; the vendor is handleized, which is
+    the brand collection handle
+  Either part is `,` when empty.
+
+  {% capture at_tally %}{% render 'at-purchase-tally' %}{% endcapture %}
+  {% assign at_tally_parts = at_tally | strip | split: '#' %}
+
+  Uses `paginate`, so a `?page=` URL parameter shifts the orders read. Don't link pages that
+  render this with that parameter.
+{%- enddoc -%}
+{%- liquid
+  assign at_pt_products = ','
+  assign at_pt_vendors = ','
+  assign at_pt_product_count = 0
+  assign at_pt_vendor_count = 0
+  assign at_pt_cap = 40
+  assign at_pt_since = 'now' | date: '%s' | minus: 31536000
+-%}
+{%- if customer -%}
+  {%- paginate customer.orders by 20 -%}
+    {%- for order in customer.orders -%}
+      {%- liquid
+        if order.cancelled or order.financial_status == 'refunded'
+          continue
+        endif
+        assign at_pt_created = order.created_at | date: '%s' | plus: 0
+        if at_pt_created < at_pt_since
+          continue
+        endif
+      -%}
+      {%- for line_item in order.line_items -%}
+        {%- liquid
+          assign at_pt_pid = line_item.product_id | append: ''
+          if at_pt_pid == blank or at_pt_pid == '0'
+            continue
+          endif
+          assign at_pt_qty = line_item.quantity | plus: 0
+          if at_pt_qty < 1
+            continue
+          endif
+
+          assign at_pt_key = ',' | append: at_pt_pid | append: '='
+          if at_pt_products contains at_pt_key
+            assign at_pt_old = at_pt_products | split: at_pt_key | last | split: ',' | first
+            assign at_pt_new = at_pt_old | plus: at_pt_qty
+            assign at_pt_from = at_pt_key | append: at_pt_old | append: ','
+            assign at_pt_to = at_pt_key | append: at_pt_new | append: ','
+            assign at_pt_products = at_pt_products | replace_first: at_pt_from, at_pt_to
+          elsif at_pt_product_count < at_pt_cap
+            assign at_pt_products = at_pt_products | append: at_pt_pid | append: '=' | append: at_pt_qty | append: ','
+            assign at_pt_product_count = at_pt_product_count | plus: 1
+          endif
+
+          assign at_pt_vendor = line_item.vendor | handleize
+          if at_pt_vendor != blank
+            assign at_pt_key = ',' | append: at_pt_vendor | append: '='
+            if at_pt_vendors contains at_pt_key
+              assign at_pt_old = at_pt_vendors | split: at_pt_key | last | split: ',' | first
+              assign at_pt_new = at_pt_old | plus: at_pt_qty
+              assign at_pt_from = at_pt_key | append: at_pt_old | append: ','
+              assign at_pt_to = at_pt_key | append: at_pt_new | append: ','
+              assign at_pt_vendors = at_pt_vendors | replace_first: at_pt_from, at_pt_to
+            elsif at_pt_vendor_count < at_pt_cap
+              assign at_pt_vendors = at_pt_vendors | append: at_pt_vendor | append: '=' | append: at_pt_qty | append: ','
+              assign at_pt_vendor_count = at_pt_vendor_count | plus: 1
+            endif
+          endif
+        -%}
+      {%- endfor -%}
+    {%- endfor -%}
+  {%- endpaginate -%}
+{%- endif -%}
+{{- at_pt_products | append: '#' | append: at_pt_vendors -}}
