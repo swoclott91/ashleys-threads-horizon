@@ -4,7 +4,10 @@
 {%- enddoc -%}
 
 {%- if customer -%}
-  {%- assign thumbnail_count = 0 -%}
+  {%- liquid
+    assign thumbnail_count = 0
+    assign pro_membership_id = 15495114129683
+  -%}
   {%- capture thumbnails -%}
     {%- if customer.orders != blank -%}
       {%- assign seen_products = '|' -%}
@@ -16,7 +19,7 @@
               assign variant = line_item.variant
               assign product_key = product.id | prepend: '|' | append: '|'
               assign thumbnail = variant.image | default: product.featured_image
-              if product == blank or variant == blank or thumbnail == blank or seen_products contains product_key
+              if product == blank or product.id == pro_membership_id or variant == blank or thumbnail == blank or seen_products contains product_key
                 continue
               endif
 
@@ -35,7 +38,11 @@
               assign seen_products = seen_products | append: product.id | append: '|'
               assign thumbnail_count = thumbnail_count | plus: 1
             -%}
-            <li>{{ thumbnail | image_url: width: 144 | image_tag: widths: '72, 144', sizes: '72px', alt: product.title }}</li>
+            <li>
+              <a href="{{ product.url }}">
+                {{ thumbnail | image_url: width: 144 | image_tag: widths: '72, 144', sizes: '72px', alt: product.title }}
+              </a>
+            </li>
             {%- if thumbnail_count == 3 -%}{%- break -%}{%- endif -%}
           {%- endfor -%}
           {%- if thumbnail_count == 3 -%}{%- break -%}{%- endif -%}
@@ -45,7 +52,11 @@
     {%- if thumbnail_count == 0 -%}
       {%- for favorite in customer.metafields.wagner.favorite_products.value -%}
         {%- unless favorite.featured_image -%}{%- continue -%}{%- endunless -%}
-        <li>{{ favorite.featured_image | image_url: width: 144 | image_tag: widths: '72, 144', sizes: '72px', alt: favorite.title }}</li>
+        <li>
+          <a href="{{ favorite.url }}">
+            {{ favorite.featured_image | image_url: width: 144 | image_tag: widths: '72, 144', sizes: '72px', alt: favorite.title }}
+          </a>
+        </li>
         {%- assign thumbnail_count = thumbnail_count | plus: 1 -%}
         {%- if thumbnail_count == 3 -%}{%- break -%}{%- endif -%}
       {%- endfor -%}

@@ -53,7 +53,9 @@ class HomeRecentlyViewed extends HTMLElement {
         const caption = document.createElement('span');
         caption.className = 'at-member-home__viewed-caption';
         const label = document.createElement('span');
-        label.textContent = title;
+        const vendor = card.closest('[data-product-vendor]')?.dataset.productVendor?.trim();
+        const style = title.split(/\s+/, 1)[0];
+        label.textContent = vendor ? `${vendor} ${style}` : style;
         const arrow = document.createElement('span');
         arrow.setAttribute('aria-hidden', 'true');
         arrow.textContent = '→';

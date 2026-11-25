@@ -127,6 +127,7 @@
     -%}
   {%- endfor -%}
 {%- elsif at_signed_in -%}
+  {%- assign at_pro_membership_id = 15495114129683 -%}
   {%- paginate customer.orders by 20 -%}
     {%- comment -%} Pass 1: collect purchased product + color pairs. {%- endcomment -%}
     {%- for order in customer.orders -%}
@@ -134,7 +135,7 @@
         {%- liquid
           assign at_li_product = line_item.product
           assign at_li_variant = line_item.variant
-          if at_li_product == blank or at_li_variant == blank
+          if at_li_product == blank or at_li_product.id == at_pro_membership_id or at_li_variant == blank
             continue
           endif
           assign at_color_index = -1

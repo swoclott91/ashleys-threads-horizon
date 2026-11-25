@@ -25,6 +25,7 @@
             <ul role="list" data-recent-items{% unless recent_sample %} hidden{% endunless %}>
               {%- if recent_sample -%}
                 {%- for preview_product in section.settings.preview_recent_products -%}
+                  {%- assign preview_style = preview_product.title | strip | split: ' ' | first -%}
                   <li>
                     <a class="at-member-home__viewed-link" href="{{ preview_product.url }}">
                       {%- if preview_product.featured_image -%}
@@ -35,7 +36,10 @@
                         }}
                       {%- endif -%}
                       <span class="at-member-home__viewed-caption">
-                        <span>{{ preview_product.title | escape }}</span>
+                        <span>
+                          {% if preview_product.vendor != blank %}{{ preview_product.vendor | escape }} {% endif -%}
+                          {{- preview_style | escape }}
+                        </span>
                         <span aria-hidden="true">→</span>
                       </span>
                     </a>
@@ -56,7 +60,8 @@
           {%- assign bulk_order_url = pages['bulk-order'].url -%}
           {%- if bulk_order_url != blank -%}
             <a class="at-member-home__bulk-cta" href="{{ bulk_order_url }}">
-              {{ 'at_member_home.bulk.cta' | t }} <span aria-hidden="true">→</span>
+              {{ 'at-bulk-favorite.svg' | inline_asset_content }}
+              {{ 'at_member_home.bulk.cta' | t }}
             </a>
           {%- endif -%}
         </div>
@@ -209,15 +214,19 @@
     line-height: 1.15;
   }
   .at-member-home__tile p { font-size: .9375rem; line-height: 1.3; }
-  .at-member-home__bulk { background: #dddfc8; }
+  .at-member-home__bulk {
+    position: relative;
+    isolation: isolate;
+    background: #dddfc8;
+  }
   .at-member-home__bulk-cta {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     min-height: 44px;
     margin-block-start: auto;
-    padding: 8px 12px;
+    padding: 8px 9px;
     border-radius: 8px;
     background: var(--at-guest-ink);
     color: #fff0d7;
@@ -227,7 +236,19 @@
     text-align: center;
     text-decoration: none;
   }
+  .at-member-home__bulk-cta::after {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--at-guest-radius);
+    content: '';
+  }
+  .at-member-home__bulk-cta:focus-visible { outline: none; }
+  .at-member-home__bulk-cta:focus-visible::after {
+    outline: 2px solid var(--at-guest-ink);
+    outline-offset: 2px;
+  }
   .at-member-home__bulk-cta:hover { background: #1e4d34; color: #fff0d7; }
+  .at-member-home__bulk-cta svg { flex: none; }
   .at-member-home__bulk-thumbnails {
     display: flex;
     gap: 8px;
@@ -238,6 +259,16 @@
   .at-member-home__bulk-thumbnails li {
     flex: 0 1 64px;
     min-width: 0;
+  }
+  .at-member-home__bulk-thumbnails a {
+    position: relative;
+    z-index: 1;
+    display: block;
+    border-radius: 4px;
+  }
+  .at-member-home__bulk-thumbnails a:focus-visible {
+    outline: 2px solid var(--at-guest-ink);
+    outline-offset: 2px;
   }
   .at-member-home__bulk-thumbnails img {
     display: block;

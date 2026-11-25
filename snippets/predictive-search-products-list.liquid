@@ -52,6 +52,7 @@
             <li
               class="predictive-search-results__card predictive-search-results__card--product"
               ref="recentlyViewedItems[]"
+              data-product-vendor="{{ product.vendor | escape }}"
             >
               {% render 'resource-card',
                 resource_type: 'product',
