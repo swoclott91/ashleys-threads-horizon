@@ -27,6 +27,8 @@
     assign at_cf_style = product.title | remove_first: product.vendor | strip
     assign at_cf_title = product.vendor | append: ' ' | append: at_cf_style
     assign at_cf_colors_url = product.url | split: '?' | first | append: '?section_id=at-card-favorite-colors'
+    assign at_cf_bulk_order_url = routes.root_url | append: '/pages/bulk-order' | replace: '//', '/'
+    assign at_cf_bulk_order_url = pages['bulk-order'].url | default: at_cf_bulk_order_url | append: '?tab=favorite'
   -%}
   <script src="{{ 'at-card-favorite.js' | asset_url }}" type="module"></script>
   <at-card-favorite
@@ -45,7 +47,7 @@
       aria-expanded="false"
       aria-label="{{ 'at_favorites.card_save' | t: title: at_cf_title | escape }}"
     >
-      <span class="at-card-favorite__toggle-icon">{%- render 'at-favorite-color-heart' -%}</span>
+      <span class="at-card-favorite__toggle-icon">{{- 'at-bulk-favorite.svg' | inline_asset_content -}}</span>
     </button>
     <div class="at-card-favorite__panel" role="dialog" hidden>
       <div class="at-card-favorite__header">
@@ -68,8 +70,8 @@
         <span class="at-card-favorite__name" data-at-card-favorite-name aria-hidden="true">
           {{- 'at_favorites.card_hint' | t -}}
         </span>
-        <a class="at-card-favorite__link" href="{{ routes.root_url | append: '/pages/favorites' | replace: '//', '/' }}">
-          {{- 'at_favorites.card_view_favorites' | t -}}
+        <a class="at-card-favorite__link" href="{{ at_cf_bulk_order_url | escape }}">
+          {{- 'at_member_home.bulk.cta' | t -}}
         </a>
       </div>
     </div>
@@ -119,8 +121,8 @@
   }
 
   .at-card-favorite__toggle svg {
-    inline-size: 17px;
-    block-size: 17px;
+    inline-size: 20px;
+    block-size: 20px;
   }
 
   .at-card-favorite__toggle:hover .at-card-favorite__toggle-icon {
@@ -136,7 +138,7 @@
     outline-offset: 2px;
   }
 
-  .at-card-favorite.is-saved .at-card-favorite__toggle svg {
+  .at-card-favorite.is-saved .at-card-favorite__toggle .at-bulk-favorite__heart {
     fill: currentColor;
   }
 
