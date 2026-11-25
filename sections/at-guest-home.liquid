@@ -36,10 +36,17 @@
           </a>
         {%- endif -%}
       </div>
-      {%- if home_tier == 'member' -%}
-        <div class="at-guest-home__membership at-member-home__upgrade">
+      <div class="at-guest-home__membership{% if home_tier == 'member' %} at-member-home__upgrade{% endif %}">
+        <span class="at-guest-home__membership-monogram" aria-hidden="true">
+          {{- 'at-monogram.svg' | inline_asset_content -}}
+        </span>
+        {%- if home_tier == 'member' -%}
           {% content_for 'block', type: 'group', id: 'pro' %}
-        </div>
+        {%- else -%}
+          {% content_for 'block', type: 'group', id: 'membership' %}
+        {%- endif -%}
+      </div>
+      {%- if home_tier == 'member' -%}
         <div class="at-guest-home__recent at-member-home__tile">
           <h2 class="h5">{{ 'at_member_home.recent.heading' | t }}</h2>
           <at-home-recently-viewed data-search-url="{{ routes.search_url }}">
@@ -76,9 +83,6 @@
           <script src="{{ 'at-home-recently-viewed.js' | asset_url }}" type="module" fetchpriority="low"></script>
         </div>
       {%- else -%}
-        <div class="at-guest-home__membership">
-          {% content_for 'block', type: 'group', id: 'membership' %}
-        </div>
         <div class="at-guest-home__categories">
           <div class="at-guest-home__category">
             {% content_for 'block', type: 'group', id: 'tees' %}
@@ -132,7 +136,40 @@
     min-height: 185px;
     min-width: 0;
   }
-  .at-guest-home__membership { grid-area: membership; min-width: 0; }
+  .at-guest-home__membership {
+    --monogram-size: clamp(40px, 4.6vw, 64px);
+    --monogram-inset: clamp(18px, 1.9vw, 28px);
+    position: relative;
+    isolation: isolate;
+    grid-area: membership;
+    min-width: 0;
+  }
+  .at-guest-home__membership::after {
+    position: absolute;
+    z-index: 1;
+    inset: 8px;
+    border: 2px dashed rgb(239 227 200 / .85);
+    border-radius: max(5px, calc(var(--at-guest-radius) - 4px));
+    content: '';
+    pointer-events: none;
+  }
+  .at-guest-home__membership > .group-block {
+    padding-block-start: calc(var(--monogram-inset) + 1.21 * var(--monogram-size) + 12px);
+  }
+  .at-guest-home__membership-monogram {
+    position: absolute;
+    z-index: 1;
+    inset-block-start: var(--monogram-inset);
+    inset-inline-end: var(--monogram-inset);
+    inline-size: var(--monogram-size);
+    color: #efe3c8;
+    pointer-events: none;
+  }
+  .at-guest-home__membership-monogram svg {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
   .at-guest-home__recent,
   .at-guest-home__categories { grid-area: discovery; min-width: 0; }
   .at-guest-home__categories {
