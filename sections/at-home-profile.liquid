@@ -1,31 +1,29 @@
 {%- comment -%}
-  Profile questions on the homepage, for any signed-in customer (every tier) until all three
-  answers are saved. Guests get the project cards from at-make-tiles instead.
+  Profile questions 2 and 3 on the homepage, for any signed-in customer (every tier) until both
+  are saved. Question 1 ("What are you making?") is the project cards section (at-make-tiles),
+  which saves it the same way; this section waits until question 1 is answered.
 
-  - Asks only the earliest unanswered question: Q1 "What are you making?", then Q2 "What matters
-    most?", then Q3 "How do you decorate?". One question per visit.
+  - Asks the earliest unanswered question: Q2 "What matters most?", then Q3 "How do you
+    decorate?". One question per visit.
   - Every answer is a card linking to that answer's collection. No form: a tap saves the answer
-    (customer metafields `wagner.onboarding_q1|q2|q3`, through the app proxy
+    (customer metafields `wagner.onboarding_q2|q3`, through the app proxy
     `POST /apps/wagner/answers`) and opens the collection. Q3 saves the one method tapped.
-  - Once all three are saved the section renders nothing.
   - Without scripts, or when the save fails, the card still opens its collection; the question
     is asked again on a later visit.
 
-  assets/at-home-profile.js saves and navigates. Wagner writes the metafields from a queue, so the
-  script keeps answers saved in this browser session (`mergePending` in
-  assets/at-home-profile-core.js) and moves on to the next question if the homepage is reopened
-  before the write lands.
+  assets/at-home-profile.js saves and navigates. Wagner writes the metafields from a queue, so
+  answers saved in this browser session (sessionStorage `at_profile_pending`, also written by the
+  project cards) count until the write lands: the section is rendered hidden while question 1 is
+  unanswered in the metafields, and the script shows question 2 when question 1 is pending.
 
-  Collections: each answer maps to its own collection setting. Q1 falls back to the project
-  guide collection from at-guide; any other answer with no collection set, and Q3 "None", open
-  all products.
+  Collections: each answer maps to its own collection setting; an answer with no collection set,
+  and Q3 "None", open all products.
 {%- endcomment -%}
 {%- liquid
   assign at_profile_show = false
   if customer or request.design_mode
     assign mf = customer.metafields.wagner
 
-    assign q1_defs = "use:decorator|decorator|Clients’ designs;use:graphic-tees|graphic_tees|My own designs;use:apparel-brand|apparel_brand|My own label;use:groups-events|groups_events|Group, team, or event;use:business-merch|business_merch|Company apparel;use:personal|personal|Me and my family" | split: ';'
     assign q2_defs = 'lowest_price|lowest_price|Lowest workable price;premium_feel|premium_feel|Premium feel;trend_styles|trend_styles|On-trend styles;in_stock|in_stock|Reliable stock;matching_families|matching_families|Matching adult, youth, and infant colors' | split: ';'
     assign q3_defs = 'screen-print|screen_print|Screen printing;plastisol-transfer|plastisol_transfer|Plastisol transfers;dtg|dtg|DTG;dtf|dtf|DTF;sublimation|sublimation|Sublimation;embroidery|embroidery|Embroidery;htv|htv|HTV;none|none|None' | split: ';'
     assign q1_allowed = 'use:decorator,use:graphic-tees,use:apparel-brand,use:groups-events,use:business-merch,use:personal' | split: ','
@@ -50,10 +48,10 @@
     endfor
     assign q3_list = q3_list | remove_first: ',' | split: ','
 
+    # Question 1 is asked by the project cards; until it's saved the section stays hidden (the
+    # script reveals question 2 if question 1 was saved earlier this visit).
     assign next_q = ''
-    if q1 == blank
-      assign next_q = 'q1'
-    elsif q2 == blank
+    if q2 == blank
       assign next_q = 'q2'
     elsif q3_list.size == 0
       assign next_q = 'q3'
@@ -61,30 +59,30 @@
     if next_q != blank
       assign at_profile_show = true
     endif
+    assign at_profile_waiting = false
+    if q1 == blank and request.design_mode == false
+      assign at_profile_waiting = true
+    endif
   endif
 -%}
 {%- if at_profile_show -%}
-  {%- assign questions = 'q1|What are you making?|Choose one to shop blanks for your project.;q2|What matters most?|Choose one to shop blanks picked for it.;q3|How do you decorate?|Choose your main method to shop blanks that suit it.' | split: ';' -%}
+  {%- assign questions = 'q2|What matters most?|Choose one to shop blanks picked for it.;q3|How do you decorate?|Choose your main method to shop blanks that suit it.' | split: ';' -%}
   <div class="section section--page-width">
-    <at-home-profile class="at-profile" data-endpoint="/apps/wagner/answers">
+    <at-home-profile class="at-profile" data-endpoint="/apps/wagner/answers"{% if at_profile_waiting %} hidden{% endif %}>
       <script type="application/json" data-answers>{"q1":{{ q1 | json }},"q2":{{ q2 | json }},"q3":{{ q3_list | json }}}</script>
       {%- for question in questions -%}
         {%- liquid
           assign qd = question | split: '|'
           assign q = qd[0]
-          case q
-            when 'q1'
-              assign defs = q1_defs
-            when 'q2'
-              assign defs = q2_defs
-            else
-              assign defs = q3_defs
-          endcase
+          if q == 'q2'
+            assign defs = q2_defs
+          else
+            assign defs = q3_defs
+          endif
         -%}
         <div class="at-profile__question" data-question-panel="{{ q }}"{% if q != next_q %} hidden{% endif %}>
           <div class="at-profile__head">
             <div class="at-profile__head-text">
-              <p class="at-profile__step">Question {{ forloop.index }} of 3</p>
               <h2 class="at-profile__title h2" id="AtProfile-{{ q }}-{{ section.id }}">{{ qd[1] }}</h2>
               <p class="at-profile__help">{{ qd[2] }}</p>
             </div>
@@ -97,15 +95,6 @@
                 assign setting_key = q | append: '_' | append: d[1] | append: '_collection'
                 assign image_key = q | append: '_' | append: d[1] | append: '_image'
                 assign url = section.settings[setting_key].url
-                if url == blank and q == 'q1'
-                  capture guide
-                    render 'at-guide', segment: d[0]
-                  endcapture
-                  assign guide = guide | strip
-                  if guide != blank
-                    assign url = collections[guide].url
-                  endif
-                endif
                 if url == blank
                   assign url = routes.all_products_collection_url
                 endif
@@ -120,7 +109,7 @@
                 >
                   {%- if image != blank -%}
                     <span class="at-profile__card-media">
-                      {{- image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 16vw, 45vw', widths: '200, 300, 450, 600', alt: '' -}}
+                      {{- image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 19vw, 45vw', widths: '200, 300, 450, 600', alt: '' -}}
                     </span>
                   {%- endif -%}
                   <span class="at-profile__card-label">{{ d[2] }}</span>
@@ -170,8 +159,7 @@
     gap: 6px 18px;
   }
   .at-profile__head-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-  .at-profile__step, .at-profile__help, .at-profile__title { margin: 0; }
-  .at-profile__step { font-size: 0.95rem; }
+  .at-profile__help, .at-profile__title { margin: 0; }
   .at-profile__title { color: #1f3d33; }
   .at-profile__help { font-size: 1rem; }
 
@@ -201,7 +189,6 @@
     .at-profile__cards--q3 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   }
   @media screen and (min-width: 990px) {
-    .at-profile__cards--q1 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
     .at-profile__cards--q2 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   }
   .at-profile__cards > li { display: flex; min-width: 0; }
@@ -245,28 +232,8 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Signed-in customers (any tier) until all three answers are saved. Asks the earliest unanswered question; a tap saves the answer through Wagner (/apps/wagner/answers) and opens that answer's collection."
+      "content": "Profile questions 2 and 3, for signed-in customers (any tier) until both are saved. Question 1 is the project cards section and comes first. A tap saves the answer through Wagner (/apps/wagner/answers) and opens that answer's collection."
     },
-    {
-      "type": "header",
-      "content": "Question 1: What are you making?"
-    },
-    {
-      "type": "paragraph",
-      "content": "Each project opens its guide collection unless you pick another here."
-    },
-    { "type": "image_picker", "id": "q1_decorator_image", "label": "Clients’ designs: image" },
-    { "type": "collection", "id": "q1_decorator_collection", "label": "Clients’ designs: collection", "info": "Defaults to all products." },
-    { "type": "image_picker", "id": "q1_graphic_tees_image", "label": "My own designs: image" },
-    { "type": "collection", "id": "q1_graphic_tees_collection", "label": "My own designs: collection" },
-    { "type": "image_picker", "id": "q1_apparel_brand_image", "label": "My own label: image" },
-    { "type": "collection", "id": "q1_apparel_brand_collection", "label": "My own label: collection" },
-    { "type": "image_picker", "id": "q1_groups_events_image", "label": "Group, team, or event: image" },
-    { "type": "collection", "id": "q1_groups_events_collection", "label": "Group, team, or event: collection" },
-    { "type": "image_picker", "id": "q1_business_merch_image", "label": "Company apparel: image" },
-    { "type": "collection", "id": "q1_business_merch_collection", "label": "Company apparel: collection" },
-    { "type": "image_picker", "id": "q1_personal_image", "label": "Me and my family: image" },
-    { "type": "collection", "id": "q1_personal_collection", "label": "Me and my family: collection" },
     {
       "type": "header",
       "content": "Question 2: What matters most?"

@@ -10,16 +10,40 @@
   - on the next visit the cards show "Pick up where you left off" and mark that card;
   - when a Shopify Forms popup opens, the matching Q1 radio is preselected (best effort:
     the Forms markup isn't ours, so this looks for an input whose value is the `use:*` value).
+  Signed-in customers (any tier) are asked this as profile question 1, whatever "Show to" says:
+  - the cards show only while `customer.metafields.wagner.onboarding_q1` is unset;
+  - a tap saves the project through the Wagner app proxy `POST /apps/wagner/answers`, then
+    opens the card's collection (the save never blocks the link: a failed or slow save still
+    opens it, and the cards come back on a later visit);
+  - the answer is also kept in sessionStorage `at_profile_pending` (the record
+    assets/at-home-profile.js reads), so until Wagner's queued metafield write lands the cards
+    stay hidden and the profile section moves on to question 2.
   Cards work without photos (label only). Six in one row on desktop, two columns on mobile.
   The server-rendered page is the same for every guest, so it stands on its own for search.
 {%- endcomment -%}
-{%- capture at_section_visible -%}{% render 'at-section-visible', visibility: section.settings.at_visibility %}{%- endcapture -%}
+{%- liquid
+  assign at_tiles_save = false
+  if customer and request.design_mode == false
+    assign at_q1 = customer.metafields.wagner.onboarding_q1.value | default: '' | strip
+    assign at_q1_allowed = 'use:decorator,use:graphic-tees,use:apparel-brand,use:groups-events,use:business-merch,use:personal' | split: ','
+    if at_q1_allowed contains at_q1
+      assign at_section_visible = 'false'
+    else
+      assign at_section_visible = 'true'
+      assign at_tiles_save = true
+    endif
+  else
+    capture at_section_visible
+      render 'at-section-visible', visibility: section.settings.at_visibility
+    endcapture
+  endif
+-%}
 {%- if at_section_visible contains 'true' -%}
   {%- capture tile_audience -%}{% render 'at-member-tier' %}{%- endcapture -%}
   <script src="{{ 'dialog.js' | asset_url }}" type="module"></script>
   {% render 'dialog-styles' %}
   <div class="section section--page-width">
-    <div class="at-tiles" data-at-tiles{% if tile_audience == 'guest' %} data-at-guest-tiles{% endif %}>
+    <div class="at-tiles" data-at-tiles{% if tile_audience == 'guest' %} data-at-guest-tiles{% endif %}{% if at_tiles_save %} data-at-save-q1="/apps/wagner/answers"{% endif %}>
       <div class="at-tiles__head">
         <h2 class="at-tiles__title h3" id="AtTiles-{{ section.id }}">{{ section.settings.heading }}</h2>
         {%- if section.settings.helper != blank -%}
@@ -34,6 +58,64 @@
       </ul>
     </div>
   </div>
+
+  {%- if at_tiles_save -%}
+    <script>
+      (() => {
+        // Signed-in customer: a tap saves the project as profile question 1, then opens the card.
+        const PENDING_KEY = 'at_profile_pending';
+        const PENDING_TTL_MS = 15 * 60 * 1000;
+        const SAVE_WAIT_MS = 1500;
+        const section = document.currentScript.previousElementSibling;
+        const root = section?.querySelector('[data-at-tiles]');
+        if (!root) return;
+        const readPending = () => {
+          try {
+            const pending = JSON.parse(sessionStorage.getItem(PENDING_KEY) || 'null');
+            return pending && Number.isFinite(pending.at) && Date.now() - pending.at < PENDING_TTL_MS ? pending : null;
+          } catch (e) {
+            return null;
+          }
+        };
+        // Answered earlier this visit; Wagner's metafield write hasn't landed yet.
+        if (readPending()?.answers?.q1) {
+          // `.section` sets display: grid, which beats the hidden attribute.
+          (section.closest('.shopify-section') || section).style.display = 'none';
+          return;
+        }
+        let saving = false;
+        root.addEventListener('click', (event) => {
+          const tile = event.target.closest('a[data-at-q1]');
+          if (!tile || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          event.preventDefault();
+          if (saving) return;
+          saving = true;
+          tile.setAttribute('aria-current', 'true');
+          tile.setAttribute('aria-busy', 'true');
+          const body = { q1: tile.dataset.atQ1 };
+          const request = fetch(root.dataset.atSaveQ1, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify(body),
+            keepalive: true,
+          })
+            .then(async (response) => {
+              const data = await response.json().catch(() => null);
+              if (!response.ok || data?.ok !== true) return;
+              const previous = readPending();
+              const answers = { ...(previous?.answers || {}), ...body };
+              try {
+                sessionStorage.setItem(PENDING_KEY, JSON.stringify({ answers, at: Date.now() }));
+              } catch (e) {}
+            })
+            .catch(() => {});
+          const timeout = new Promise((resolve) => setTimeout(resolve, SAVE_WAIT_MS));
+          Promise.race([request, timeout]).finally(() => window.location.assign(tile.href));
+        });
+      })();
+    </script>
+  {%- endif -%}
 
   <script>
     (() => {
@@ -243,6 +325,7 @@
       "type": "select",
       "id": "at_visibility",
       "label": "Show to",
+      "info": "Signed-in customers always see these cards until they've picked a project (saved to their profile), then never.",
       "options": [
         { "value": "all", "label": "Everyone" },
         { "value": "guests", "label": "Guests (signed out)" },

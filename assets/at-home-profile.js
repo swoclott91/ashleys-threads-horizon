@@ -1,5 +1,7 @@
 /**
- * <at-home-profile>: the profile question on the homepage (sections/at-home-profile.liquid).
+ * <at-home-profile>: profile questions 2 and 3 on the homepage (sections/at-home-profile.liquid;
+ * question 1 is the project cards in sections/at-make-tiles.liquid, which write the same
+ * `at_profile_pending` record).
  * Each answer card links to its collection. A tap saves the answer through
  * POST /apps/wagner/answers and then opens the collection; the save never blocks shopping (a
  * failed or slow save still navigates, and the question is asked again on a later visit).
@@ -51,12 +53,14 @@ class AtHomeProfile extends HTMLElement {
     this.answers = merged.answers;
 
     if (!this.designMode) {
-      // An answer saved earlier this visit may not be in the metafields yet.
+      // An answer saved earlier this visit may not be in the metafields yet. Question 1 belongs
+      // to the project cards (at-make-tiles): while it's unanswered this section waits.
       const question = nextQuestion(this.answers);
-      if (!question || storage.get(LATER_KEY) === '1') {
+      if (!question || question === 'q1' || storage.get(LATER_KEY) === '1') {
         this.hidden = true;
         return;
       }
+      this.hidden = false;
       for (const panel of this.querySelectorAll('[data-question-panel]')) {
         panel.hidden = panel.dataset.questionPanel !== question;
       }
