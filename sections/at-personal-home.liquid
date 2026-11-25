@@ -86,7 +86,8 @@
     # Favorites and past purchases are ordered from the bulk order page (color is the only
     # narrowing there; sizes and quantities are picked fresh each time).
     assign bulk_url = routes.root_url | append: 'pages/bulk-order'
-    assign favorites_url = routes.root_url | append: 'pages/favorites'
+    assign favorites_bulk_url = routes.root_url | append: '/pages/bulk-order?tab=favorite' | replace: '//', '/'
+    assign favorites_bulk_label = 'at_member_home.bulk.cta' | t
     assign reorder_url = bulk_url
     assign list_favorites = mf.favorite_products.value
     if at_preview and list_favorites == blank
@@ -299,7 +300,7 @@
           </a>
       {%- endcase -%}
       {%- if key == favorites_after -%}
-        {% render 'at-product-row', id: 'at-favorites', title: 'Your favorites', note: 'Styles you saved', products: list_favorites, link_url: favorites_url, link_label: 'See all favorites' %}
+        {% render 'at-product-row', id: 'at-favorites', title: 'Your favorites', note: 'Styles you saved', products: list_favorites, link_url: favorites_bulk_url, link_label: favorites_bulk_label %}
       {%- endif -%}
     {%- endfor -%}
 

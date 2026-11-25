@@ -5,7 +5,7 @@
 
   Up to three thumbnails (the first three products in the list), the saved style count, a
   "Bulk order favorites" button (`/pages/bulk-order?tab=favorite`: the bulk page opens on the
-  Favorites tab with nothing preselected) and a quieter "View favorites" link.
+  Favorites tab with nothing preselected).
 
   @param {string} section_id - Section ID, for unique element IDs
 {%- enddoc -%}
@@ -52,7 +52,6 @@
     endif
     assign at_fp_root = routes.root_url | append: '/' | replace: '//', '/'
     assign at_fp_bulk_url = at_fp_root | append: 'pages/bulk-order?tab=favorite'
-    assign at_fp_view_url = at_fp_root | append: 'pages/favorites'
     assign at_fp_heading_id = section_id | append: '-favorites-panel-heading'
   -%}
   <section class="at-home-favorites-panel" aria-labelledby="{{ at_fp_heading_id }}">
@@ -67,7 +66,6 @@
       <a class="at-home-favorites-panel__button" href="{{ at_fp_bulk_url }}">
         Bulk order favorites <span aria-hidden="true">&rarr;</span>
       </a>
-      <a class="at-home-favorites-panel__link" href="{{ at_fp_view_url }}">View favorites</a>
     </div>
   </section>
 {%- endif -%}
@@ -146,14 +144,7 @@
   .at-home-favorites-panel__button:hover {
     background: #2b4a3f;
   }
-  .at-home-favorites-panel__link {
-    color: inherit;
-    font-size: 0.95rem;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  .at-home-favorites-panel__button:focus-visible,
-  .at-home-favorites-panel__link:focus-visible {
+  .at-home-favorites-panel__button:focus-visible {
     outline: 2px solid #243e34;
     outline-offset: 3px;
   }

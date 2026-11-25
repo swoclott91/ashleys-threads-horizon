@@ -9,8 +9,8 @@
     panel already shows those), else the newest. Link: `/pages/bulk-order?tab=purchase`.
   - Your favorites: from `wagner.favorite_products`. Shown only while the hero row shows the
     last order panel; otherwise the favorites panel is already beside the hero (same rule as
-    sections/at-home-top.liquid: buyer with a last order to show). Links:
-    `/pages/bulk-order?tab=favorite` and `/pages/favorites`.
+    sections/at-home-top.liquid: buyer with a last order to show).
+    Link: `/pages/bulk-order?tab=favorite`.
 
   The bulk order tab links only switch the tab; nothing is preselected.
   Never reads `customer.orders_count` or `product.variants`.
@@ -155,9 +155,6 @@
               <a class="at-home-shortcuts__link" href="{{ at_sc_root }}pages/bulk-order?tab=favorite">
                 Bulk order favorites <span aria-hidden="true">&rarr;</span>
               </a>
-              <a class="at-home-shortcuts__link at-home-shortcuts__link--quiet" href="{{ at_sc_root }}pages/favorites">
-                View favorites
-              </a>
             </span>
           </span>
         </li>
@@ -235,11 +232,6 @@
     text-decoration: none;
   }
   .at-home-shortcuts__link:hover {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  .at-home-shortcuts__link--quiet {
-    font-weight: 400;
     text-decoration: underline;
     text-underline-offset: 3px;
   }
