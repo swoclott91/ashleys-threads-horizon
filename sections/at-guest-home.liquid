@@ -36,11 +36,8 @@
                         }}
                       {%- endif -%}
                       <span class="at-member-home__viewed-caption">
-                        <span>
-                          {% if preview_product.vendor != blank %}{{ preview_product.vendor | escape }} {% endif -%}
-                          {{- preview_style | escape }}
-                        </span>
-                        <span aria-hidden="true">→</span>
+                        {% if preview_product.vendor != blank %}{{ preview_product.vendor | escape }} {% endif -%}
+                        {{- preview_style | escape }}
                       </span>
                     </a>
                   </li>
@@ -320,14 +317,8 @@
   }
   .at-member-home__viewed-caption {
     grid-row: 2;
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: 4px;
-    text-align: center;
-  }
-  .at-member-home__viewed-caption > :first-child {
     display: -webkit-box;
+    text-align: center;
     overflow: hidden;
     overflow-wrap: anywhere;
     -webkit-box-orient: vertical;
