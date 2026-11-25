@@ -178,7 +178,7 @@
      Safari also keeps absolute children inside a size container, so the gallery stops being a
      query container while the panel is open. */
   @media screen and (max-width: 749px) {
-    .product-card__content .card-gallery:has(> .at-card-favorite.is-open) {
+    .product-card__content :is(.card-gallery, .image-block):has(> .at-card-favorite.is-open) {
       position: static;
       container-type: normal;
       contain: none;
