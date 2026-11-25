@@ -1,6 +1,11 @@
 {%- capture home_tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
 {%- assign home_tier = home_tier | strip -%}
-{%- if home_tier == 'guest' or home_tier == 'member' -%}
+{%- comment -%}
+  Guests get the guest promo row. Every signed-in tier (Member, Pro, Wholesale) gets the same
+  member row; the second tile is "Save More with Pro" for Members and the tier welcome for Pro
+  and Wholesale.
+{%- endcomment -%}
+{%- if home_tier != blank -%}
   <div class="section-background at-guest-home__background"></div>
   <div class="section section--page-width at-guest-home">
     <div class="at-guest-home__intro">
@@ -11,9 +16,13 @@
       <div class="at-guest-home__seasonal">
         {% content_for 'block', type: 'group', id: 'seasonal' %}
       </div>
-      {%- if home_tier == 'member' -%}
+      {%- if home_tier != 'guest' -%}
         <div class="at-guest-home__membership at-member-home__upgrade">
-          {% content_for 'block', type: 'group', id: 'pro' %}
+          {%- if home_tier == 'member' -%}
+            {% content_for 'block', type: 'group', id: 'pro' %}
+          {%- else -%}
+            {% content_for 'block', type: 'group', id: 'tier_welcome' %}
+          {%- endif -%}
         </div>
         {%- comment -%}
           Recently viewed starts hidden and the script shows it once it has products, so a new
