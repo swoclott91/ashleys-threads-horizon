@@ -63,7 +63,7 @@ class HomeRecentlyViewed extends HTMLElement {
         link.append(caption);
         item.append(link);
         items.push(item);
-        if (items.length === 2) break;
+        if (items.length === 3) break;
       }
 
       if (items.length === 0) return;
