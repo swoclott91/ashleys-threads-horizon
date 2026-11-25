@@ -5,9 +5,10 @@
   which is how a new account looks for the few seconds Wagner takes to set it up. Every Member,
   Pro and Wholesale account has one, so a signed-in session without one is still being set up
   or hasn't switched to it. assets/at-member-setup.js polls sections/at-member-setup-data.liquid
-  (Shopify only, never Wagner), switches the session to the new location when Shopify offers
-  it, and reloads so Member prices, the badge and benefits render. After about 3 minutes it
-  stops and asks the customer to refresh later.
+  (Shopify only, never Wagner) and reloads the page once setup is done (Shopify attaches the
+  new location on a full page load), with timed fallback reloads, at most two per session.
+  Member prices, the badge and benefits then render. After about 3 minutes it stops and asks
+  the customer to refresh later.
 
   Hidden in the theme editor, where the "Preview tier as" setting stands in for a real tier.
 {%- enddoc -%}
