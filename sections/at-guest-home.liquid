@@ -256,7 +256,7 @@
     .at-guest-home__grid {
       grid-template-areas: "bulk membership discovery" "bulk membership seasonal";
       grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr) minmax(0, .87fr);
-      grid-template-rows: auto auto;
+      grid-template-rows: max-content 1fr;
     }
   }
 
@@ -295,7 +295,6 @@
   .at-make-tiles-section .at-tiles__label::after { content: "→" / ""; }
 
   .at-member-home__tile {
-    --at-recent-image-height: clamp(74px, 8vw, 112px);
     min-width: 0;
     display: flex;
     flex-direction: column;
@@ -525,17 +524,16 @@
   at-home-recently-viewed ul { list-style: none; padding: 0; margin: 0; }
   at-home-recently-viewed ul:not([hidden]) {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
     gap: 8px;
   }
   at-home-recently-viewed li {
-    flex: 1 1 70px;
+    flex: 0 1 clamp(74px, 8vw, 112px);
     min-width: 0;
   }
   .at-member-home__viewed-link {
     display: grid;
-    grid-template-rows: var(--at-recent-image-height) auto;
+    grid-template-rows: auto 1fr;
     gap: 4px;
     color: var(--at-guest-ink);
     font-size: .8125rem;
@@ -547,7 +545,8 @@
   .at-member-home__viewed-link img {
     display: block;
     width: 100%;
-    height: var(--at-recent-image-height);
+    height: auto;
+    aspect-ratio: 1;
     object-fit: contain;
     mix-blend-mode: multiply;
   }
