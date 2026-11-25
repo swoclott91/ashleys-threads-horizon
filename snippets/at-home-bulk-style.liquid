@@ -1,0 +1,21 @@
+{%- doc -%}
+  Renders a linked product tile for the homepage bulk-order card.
+
+  @param {product} product - Product to link to
+  @param {image} thumbnail - Product or purchased variant image
+{%- enddoc -%}
+
+{%- assign style_name = product.title | strip | split: ' ' | first -%}
+<li>
+  <a href="{{ product.url }}">
+    {{
+      thumbnail
+      | image_url: width: 480
+      | image_tag: widths: '120, 240, 360, 480', sizes: '(min-width: 750px) 13vw, 30vw', alt: ''
+    }}
+    <span>
+      {% if product.vendor != blank %}{{ product.vendor | escape }} {% endif -%}
+      {{- style_name | escape }}
+    </span>
+  </a>
+</li>

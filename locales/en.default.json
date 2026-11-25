@@ -17,6 +17,9 @@
     "bulk": {
       "heading": "Build your next order",
       "description": "Your favorites and past purchases, together.",
+      "starter_description": "Save your favorite styles to build a bulk order.",
+      "detail": "Choose styles, colors, sizes, and quantities in one place.",
+      "guest_cta": "Explore bulk ordering",
       "cta": "Start bulk order"
     },
     "pro": {
