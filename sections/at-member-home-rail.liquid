@@ -6,6 +6,7 @@
     assign card_ratio = '16 / 9'
     assign sample = false
     assign hydrate = false
+    assign show_favorite = false
 
     case kind
       when 'favorites'
@@ -23,6 +24,7 @@
           assign sample = true
         endif
       when 'companions'
+        assign show_favorite = true
         assign anchor = customer.metafields.wagner.home_most_purchased_product.value
         if request.design_mode and section.settings.preview_products != blank
           assign entries = section.settings.preview_products
@@ -48,7 +50,7 @@
           echo '<!--@list/split-->'
         endif
         assign entry_count = entry_count | plus: 1
-        render 'resource-card', resource_type: card_type, resource: entry, image_width: 640, image_aspect_ratio: card_ratio, image_sizes: '(min-width: 990px) 24vw, 55vw'
+        render 'resource-card', resource_type: card_type, resource: entry, image_width: 640, image_aspect_ratio: card_ratio, image_sizes: '(min-width: 990px) 24vw, 55vw', show_favorite: show_favorite
       endfor
     endcapture
     assign slides = cards | strip | split: '<!--@list/split-->'
