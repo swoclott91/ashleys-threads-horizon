@@ -172,6 +172,19 @@
     display: none;
   }
 
+  /* Phones: the photo alone is too short to scroll the colors, so the open panel covers the
+     whole product card (photo, title and swatches). Un-positioning the gallery while open makes
+     the card content the heart's containing block; the gallery's overflow no longer clips it. */
+  @media screen and (max-width: 749px) {
+    .product-card__content .card-gallery:has(> .at-card-favorite.is-open) {
+      position: static;
+    }
+
+    .product-card__content .at-card-favorite.is-open .at-card-favorite__panel {
+      background: #fff;
+    }
+  }
+
   .at-card-favorite__header {
     display: flex;
     align-items: center;
