@@ -10,40 +10,16 @@
   - on the next visit the cards show "Pick up where you left off" and mark that card;
   - when a Shopify Forms popup opens, the matching Q1 radio is preselected (best effort:
     the Forms markup isn't ours, so this looks for an input whose value is the `use:*` value).
-  Signed-in customers (any tier) are asked this as profile question 1, whatever "Show to" says:
-  - the cards show only while `customer.metafields.wagner.onboarding_q1` is unset;
-  - a tap saves the project through the Wagner app proxy `POST /apps/wagner/answers`, then
-    opens the card's collection (the save never blocks the link: a failed or slow save still
-    opens it, and the cards come back on a later visit);
-  - the answer is also kept in sessionStorage `at_profile_pending` (the record
-    assets/at-home-profile.js reads), so until Wagner's queued metafield write lands the cards
-    stay hidden and the profile section moves on to question 2.
   Cards work without photos (label only). Six in one row on desktop, two columns on mobile.
   The server-rendered page is the same for every guest, so it stands on its own for search.
 {%- endcomment -%}
-{%- liquid
-  assign at_tiles_save = false
-  if customer and request.design_mode == false
-    assign at_q1 = customer.metafields.wagner.onboarding_q1.value | default: '' | strip
-    assign at_q1_allowed = 'use:decorator,use:graphic-tees,use:apparel-brand,use:groups-events,use:business-merch,use:personal' | split: ','
-    if at_q1_allowed contains at_q1
-      assign at_section_visible = 'false'
-    else
-      assign at_section_visible = 'true'
-      assign at_tiles_save = true
-    endif
-  else
-    capture at_section_visible
-      render 'at-section-visible', visibility: section.settings.at_visibility
-    endcapture
-  endif
--%}
+{%- capture at_section_visible -%}{% render 'at-section-visible', visibility: section.settings.at_visibility %}{%- endcapture -%}
 {%- if at_section_visible contains 'true' -%}
   {%- capture tile_audience -%}{% render 'at-member-tier' %}{%- endcapture -%}
   <script src="{{ 'dialog.js' | asset_url }}" type="module"></script>
   {% render 'dialog-styles' %}
   <div class="section section--page-width">
-    <div class="at-tiles" data-at-tiles{% if tile_audience == 'guest' %} data-at-guest-tiles{% endif %}{% if at_tiles_save %} data-at-save-q1="/apps/wagner/answers"{% endif %}>
+    <div class="at-tiles" data-at-tiles{% if tile_audience == 'guest' %} data-at-guest-tiles{% endif %}>
       <div class="at-tiles__head">
         <h2 class="at-tiles__title h3" id="AtTiles-{{ section.id }}">{{ section.settings.heading }}</h2>
         {%- if section.settings.helper != blank -%}
@@ -58,64 +34,6 @@
       </ul>
     </div>
   </div>
-
-  {%- if at_tiles_save -%}
-    <script>
-      (() => {
-        // Signed-in customer: a tap saves the project as profile question 1, then opens the card.
-        const PENDING_KEY = 'at_profile_pending';
-        const PENDING_TTL_MS = 15 * 60 * 1000;
-        const SAVE_WAIT_MS = 1500;
-        const section = document.currentScript.previousElementSibling;
-        const root = section?.querySelector('[data-at-tiles]');
-        if (!root) return;
-        const readPending = () => {
-          try {
-            const pending = JSON.parse(sessionStorage.getItem(PENDING_KEY) || 'null');
-            return pending && Number.isFinite(pending.at) && Date.now() - pending.at < PENDING_TTL_MS ? pending : null;
-          } catch (e) {
-            return null;
-          }
-        };
-        // Answered earlier this visit; Wagner's metafield write hasn't landed yet.
-        if (readPending()?.answers?.q1) {
-          // `.section` sets display: grid, which beats the hidden attribute.
-          (section.closest('.shopify-section') || section).style.display = 'none';
-          return;
-        }
-        let saving = false;
-        root.addEventListener('click', (event) => {
-          const tile = event.target.closest('a[data-at-q1]');
-          if (!tile || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-          event.preventDefault();
-          if (saving) return;
-          saving = true;
-          tile.setAttribute('aria-current', 'true');
-          tile.setAttribute('aria-busy', 'true');
-          const body = { q1: tile.dataset.atQ1 };
-          const request = fetch(root.dataset.atSaveQ1, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-            credentials: 'same-origin',
-            body: JSON.stringify(body),
-            keepalive: true,
-          })
-            .then(async (response) => {
-              const data = await response.json().catch(() => null);
-              if (!response.ok || data?.ok !== true) return;
-              const previous = readPending();
-              const answers = { ...(previous?.answers || {}), ...body };
-              try {
-                sessionStorage.setItem(PENDING_KEY, JSON.stringify({ answers, at: Date.now() }));
-              } catch (e) {}
-            })
-            .catch(() => {});
-          const timeout = new Promise((resolve) => setTimeout(resolve, SAVE_WAIT_MS));
-          Promise.race([request, timeout]).finally(() => window.location.assign(tile.href));
-        });
-      })();
-    </script>
-  {%- endif -%}
 
   <script>
     (() => {
@@ -208,110 +126,149 @@
   </script>
 {%- endif -%}
 
-{% stylesheet %}
+{% style %}
   .at-tiles {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    padding-block: 28px;
+    gap: var(--at-home-gap, var(--gap-sm));
+    padding-block: var(--at-home-section-space, var(--padding-lg));
   }
-  .at-tiles__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
-  .at-tiles__title, .at-tiles__helper, .at-tiles__resume { margin: 0; }
-  .at-tiles__helper { font-size: 0.95rem; color: rgb(var(--color-foreground-rgb) / 0.72); }
-  .at-tiles__resume { font-size: 0.95rem; flex-basis: 100%; }
-  .at-tiles__resume a { font-weight: 700; }
+
+  .at-tiles__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--gap-xs) var(--gap-lg);
+  }
+
+  .at-tiles__title,
+  .at-tiles__helper,
+  .at-tiles__resume { margin: 0; }
+
+  .at-tiles__title { color: var(--at-home-forest, var(--color-foreground)); }
+  .at-tiles__helper { color: var(--color-foreground-muted); }
+  .at-tiles__resume { flex-basis: 100%; }
+
   .at-tiles__grid {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: var(--at-home-gap, var(--gap-sm));
   }
+
   @media screen and (min-width: 750px) {
-    .at-tiles__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .at-tiles__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
+
   @media screen and (min-width: 990px) {
     .at-tiles__grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   }
+
   .at-tiles__grid > li { min-width: 0; }
-  .at-tiles__item { display: flex; }
-  .at-tiles__item > * { flex: 1 1 auto; min-width: 0; }
+  .at-tiles__item,
   .at-tiles__popup { display: flex; }
+  .at-tiles__item > * { flex: 1 1 auto; min-width: 0; }
+
   .at-tiles__tile {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    gap: 8px;
-    min-height: 64px;
     height: 100%;
-    box-sizing: border-box;
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
-    background: rgb(var(--color-foreground-rgb) / 0.03);
-    color: inherit;
-    font: inherit;
+    min-height: var(--button-size);
+    padding: var(--padding-sm);
+    border: var(--style-border-width) solid var(--at-home-border, var(--color-input-border));
+    border-radius: var(--at-home-radius, var(--style-border-radius-md));
+    background: var(--at-home-card, var(--color-background));
+    color: var(--color-foreground);
     text-align: start;
     text-decoration: none;
     cursor: pointer;
   }
+
   button.at-tiles__tile { width: 100%; appearance: none; }
-  .at-tiles__tile:focus-visible { outline: 2px solid #2b4a3f; outline-offset: 2px; }
-  .at-tiles__tile--photo { justify-content: flex-start; padding: 6px 6px 10px; }
+  .at-tiles__tile:focus-visible { outline-color: var(--at-home-forest, var(--color-foreground)); }
+
+  .at-tiles__tile--photo {
+    justify-content: flex-start;
+    padding: 0;
+    overflow: hidden;
+  }
+
   .at-tiles__media {
     position: relative;
     display: block;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 7 / 5;
     overflow: hidden;
-    border-radius: 8px;
-    background: rgb(var(--color-foreground-rgb) / 0.06);
+    background: var(--at-home-neutral, var(--color-input-background));
   }
+
   .at-tiles__image {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform var(--animation-speed) var(--animation-easing);
   }
+
   .at-tiles__tile:hover .at-tiles__image { transform: scale(1.03); }
-  .at-tiles__tile--photo .at-tiles__label { padding-inline: 6px; }
-  .at-tiles__tile:hover, .at-tiles__tile[aria-current='true'] {
-    border-color: #2b4a3f;
-    background: #e9efec;
-    color: #1a2e27;
+
+  .at-tiles__tile:hover,
+  .at-tiles__tile[aria-current='true'] {
+    border-color: var(--at-home-forest, var(--color-foreground));
+    background: var(--at-home-olive, var(--color-input-background));
+    color: var(--at-home-forest, var(--color-foreground));
   }
-  .at-tiles__label { font-weight: 700; line-height: 1.25; }
+
+  .at-tiles__label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--gap-2xs);
+    font-family: var(--font-h5--family);
+    font-size: var(--font-h5--size);
+    font-weight: var(--font-h5--weight);
+    line-height: var(--font-h5--line-height);
+    overflow-wrap: anywhere;
+  }
+
+  .at-tiles__label::after { content: "→" / ""; }
+  .at-tiles__tile--photo .at-tiles__label { padding: var(--padding-xs) var(--padding-sm); }
+
   .at-tiles__dialog {
-    width: min(36rem, calc(100vw - 32px));
+    width: min(36rem, calc(100vw - 2 * var(--page-margin)));
     max-height: var(--modal-max-height, 90dvh);
     padding: 0;
     border: var(--style-border-popover);
-    border-radius: var(--style-border-radius-popover, 12px);
+    border-radius: var(--style-border-radius-popover);
     background-color: var(--color-background);
     box-shadow: var(--shadow-popover);
   }
+
   .at-tiles__dialog[open] { animation: modalSlideInTop var(--animation-speed) var(--animation-easing) forwards; }
   .at-tiles__dialog.dialog-closing { animation: modalSlideOutTop var(--animation-speed) var(--animation-easing) forwards; }
+
   .at-tiles__dialog-inner {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 40px 20px 20px;
+    gap: var(--gap-sm);
+    padding: var(--button-size) var(--padding-xl) var(--padding-xl);
   }
+
   @media screen and (min-width: 750px) {
-    .at-tiles__dialog-inner { padding: 48px 32px 28px; }
+    .at-tiles__dialog-inner { padding-inline: var(--padding-4xl); }
   }
-  .at-tiles__skip { margin: 0; }
-  .at-tiles__skip { text-align: center; font-size: 0.95rem; }
-  .at-tiles__skip a { font-weight: 600; }
-  .at-tiles__close { top: 8px; right: 8px; opacity: 0.8; animation: none; }
+
+  .at-tiles__skip { margin: 0; text-align: center; }
+  .at-tiles__close { top: var(--padding-xs); right: var(--padding-xs); opacity: var(--opacity-80); animation: none; }
+
   @media (prefers-reduced-motion: reduce) {
     .at-tiles__image { transition: none; }
     .at-tiles__tile:hover .at-tiles__image { transform: none; }
   }
-{% endstylesheet %}
+{% endstyle %}
 
 {% schema %}
 {
@@ -325,7 +282,6 @@
       "type": "select",
       "id": "at_visibility",
       "label": "Show to",
-      "info": "Signed-in customers always see these cards until they've picked a project (saved to their profile), then never.",
       "options": [
         { "value": "all", "label": "Everyone" },
         { "value": "guests", "label": "Guests (signed out)" },

@@ -54,14 +54,14 @@
       assign shipping_ready = shipping_ready | strip
     -%}
     <p class="at-home-tier-benefits__kicker">{{ 'at_member_home.pro_active.kicker' | t }}</p>
-    <h2 class="at-home-tier-benefits__heading">{{ 'at_member_home.pro_active.heading' | t }}</h2>
+    <h2 class="h3 at-home-tier-benefits__heading">{{ 'at_member_home.pro_active.heading' | t }}</h2>
     {%- if sample -%}
       <p class="at-home-tier-benefits__note">{{ 'at_member_home.sample' | t }}</p>
     {%- endif -%}
     {%- if cash_balance != nil -%}
       <dl class="at-home-tier-benefits__cash">
         <dt>{{ 'at_member_home.pro_active.available_cash' | t }}</dt>
-        <dd>{{ cash_balance | money }}</dd>
+        <dd class="h3">{{ cash_balance | money }}</dd>
       </dl>
     {%- endif -%}
     {%- if cash_earned != nil or shipping_saved != nil -%}
@@ -69,13 +69,13 @@
         {%- if cash_earned != nil -%}
           <div>
             <dt>{{ 'at_member_home.pro_active.cash_earned' | t }}</dt>
-            <dd>{{ cash_earned | money }}</dd>
+            <dd class="h5">{{ cash_earned | money }}</dd>
           </div>
         {%- endif -%}
         {%- if shipping_saved != nil -%}
           <div>
             <dt>{{ 'at_member_home.pro_active.shipping_saved' | t }}</dt>
-            <dd>{{ shipping_saved | money }}</dd>
+            <dd class="h5">{{ shipping_saved | money }}</dd>
           </div>
         {%- endif -%}
       </dl>
@@ -90,17 +90,17 @@
         {{ 'at_member_home.pro_active.shipment_ready' | t }} <code>{{ ship.code | escape }}</code>
       </p>
     {%- endif -%}
-    <a class="at-home-tier-benefits__cta" href="{{ routes.account_url }}">{{ 'at_member_home.pro_active.account' | t }}</a>
+    <a class="button-secondary at-home-tier-benefits__cta" href="{{ routes.account_url }}">{{ 'at_member_home.pro_active.account' | t }}</a>
   {%- else -%}
     {%- assign terms = customer.current_location.metafields.wagner.terms_status.value -%}
     <p class="at-home-tier-benefits__kicker">{{ 'at_member.tiers.wholesale' | t }}</p>
-    <h2 class="at-home-tier-benefits__heading">{{ 'at_member_home.wholesale.heading' | t }}</h2>
+    <h2 class="h3 at-home-tier-benefits__heading">{{ 'at_member_home.wholesale.heading' | t }}</h2>
     <p class="at-home-tier-benefits__note">{{ 'at_member_home.wholesale.description' | t }}</p>
     {%- if terms.terms != blank -%}
       <dl class="at-home-tier-benefits__metrics">
         <div>
           <dt>{{ 'at_member_home.wholesale.terms' | t }}</dt>
-          <dd>{{ terms.terms | replace: '_', ' ' | capitalize | escape }}</dd>
+          <dd class="h5">{{ terms.terms | replace: '_', ' ' | capitalize | escape }}</dd>
         </div>
       </dl>
       {%- case terms.status -%}
@@ -110,6 +110,6 @@
           <p class="at-home-tier-benefits__note">{{ 'at_member.terms.pending' | t }}</p>
       {%- endcase -%}
     {%- endif -%}
-    <a class="at-home-tier-benefits__cta" href="{{ routes.account_url }}">{{ 'at_member_home.wholesale.account' | t }}</a>
+    <a class="button-secondary at-home-tier-benefits__cta" href="{{ routes.account_url }}">{{ 'at_member_home.wholesale.account' | t }}</a>
   {%- endif -%}
 </div>

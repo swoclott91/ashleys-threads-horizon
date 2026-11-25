@@ -1,42 +1,31 @@
-{%- comment -%}
-  Pro savings estimate for Members (member-homepage-data-handoff, "Pro savings").
-  - Amount: customer `wagner.savings_ytd.pro_would_save`, the gross saving before the fee for
-    the calendar year so far. Currency comes from `savings_ytd.currency` (not `currency_code`).
-  - Fee: shop `wagner.tier_thresholds.pro.fee`, falling back to 79.00.
-  - The number is hidden (general Pro message instead) when the amount is zero or missing, when
-    the currency doesn't match the store and storefront currency, or when the figure is for an
-    earlier calendar year (it resets on January 1 until the next order).
-  - Theme editor: a labelled sample amount, never shopper data.
-{%- endcomment -%}
 {%- liquid
   assign savings = customer.metafields.wagner.savings_ytd.value
   assign amount = savings.pro_would_save | default: 0 | times: 100 | round
-  assign fee = shop.metafields.wagner.tier_thresholds.value.pro.fee | default: '79.00' | times: 100 | round
-  assign currency = savings.currency | default: '' | upcase
-  assign this_year = 'now' | date: '%Y' | plus: 0
-  assign savings_year = savings.year | default: this_year | plus: 0
-  assign sample = false
-
+  assign fee = shop.metafields.wagner.tier_thresholds.value.pro.fee | default: 0 | times: 100 | round
+  assign currency = savings.currency_code | default: shop.currency
   assign show_numbers = false
-  if amount > 0 and currency == shop.currency and localization.country.currency.iso_code == shop.currency and savings_year == this_year
+  assign sample = false
+  if currency == localization.country.currency.iso_code and currency == shop.currency
     assign show_numbers = true
   endif
-
-  if request.design_mode
+  if request.design_mode and settings.at_member_preview_tier == 'member' and savings == blank
     assign amount = 14000
+    assign fee = 7900
     assign sample = true
     assign show_numbers = true
   endif
 
-  # Until the Pro signup or details link is set, the call to action opens the account.
   assign pro_url = block.settings.pro_url
+  if pro_url == blank
+    assign pro_url = pages.membership.url
+  endif
 -%}
 <div class="at-home-pro" {{ block.shopify_attributes }}>
   {%- if sample -%}
     <p class="at-home-pro__caption">{{ 'at_member_home.sample' | t }}</p>
   {%- endif -%}
   {%- if show_numbers and amount > 0 -%}
-    <p class="at-home-pro__amount">
+    <p class="h3 at-home-pro__amount">
       {{ amount | money_with_currency }}
       <span>{{ 'at_member_home.pro.could_save' | t }}</span>
     </p>
@@ -51,9 +40,9 @@
   {%- endif -%}
 
   {%- if pro_url != blank -%}
-    <a class="button at-home-pro__cta" href="{{ pro_url }}">{{ 'at_member_home.pro.cta' | t }}</a>
+    <a class="button-secondary at-home-pro__cta" href="{{ pro_url }}">{{ 'at_member_home.pro.cta' | t }}</a>
   {%- else -%}
-    <a class="button at-home-pro__cta" href="{{ routes.account_url }}">{{ 'at_member_home.pro.account' | t }}</a>
+    <a class="button-secondary at-home-pro__cta" href="{{ routes.account_url }}">{{ 'at_member_home.pro.account' | t }}</a>
   {%- endif -%}
 </div>
 
