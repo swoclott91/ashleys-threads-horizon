@@ -1,5 +1,14 @@
 {%- capture home_tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
-{%- assign home_tier = home_tier | strip -%}
+{%- liquid
+  assign home_tier = home_tier | strip
+  assign show_recently_viewed = false
+  if customer or home_tier != 'guest'
+    assign show_recently_viewed = true
+  endif
+  if request.design_mode and settings.at_member_preview_tier == 'guest'
+    assign show_recently_viewed = false
+  endif
+-%}
 <div class="section-background at-guest-home__background"></div>
 <div class="section section--page-width at-guest-home">
   <div class="at-guest-home__intro">
@@ -48,7 +57,7 @@
           {% content_for 'block', type: 'group', id: 'membership' %}
       {%- endcase -%}
     </div>
-    {%- if home_tier != 'guest' -%}
+    {%- if show_recently_viewed -%}
       <div class="at-guest-home__recent at-member-home__tile">
         <h2 class="h5">{{ 'at_member_home.recent.heading' | t }}</h2>
         <at-home-recently-viewed data-search-url="{{ routes.search_url }}">
