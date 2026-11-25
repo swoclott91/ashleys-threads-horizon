@@ -39,19 +39,26 @@ class HomeRecentlyViewed extends HTMLElement {
         link.href = productUrl.href;
 
         const image = card.querySelector('img.resource-card__image');
-        if (image) {
+        const src = image?.getAttribute('src');
+        if (src) {
           const thumbnail = document.createElement('img');
-          thumbnail.src = image.getAttribute('src') || '';
           const srcset = image.getAttribute('srcset');
+          thumbnail.sizes = '(min-width: 750px) 13vw, 45vw';
           if (srcset) thumbnail.srcset = srcset;
-          thumbnail.sizes = '36px';
-          thumbnail.width = 36;
-          thumbnail.height = 36;
+          thumbnail.src = src;
           thumbnail.alt = '';
           link.append(thumbnail);
         }
 
-        link.append(title);
+        const caption = document.createElement('span');
+        caption.className = 'at-member-home__viewed-caption';
+        const label = document.createElement('span');
+        label.textContent = title;
+        const arrow = document.createElement('span');
+        arrow.setAttribute('aria-hidden', 'true');
+        arrow.textContent = '→';
+        caption.append(label, arrow);
+        link.append(caption);
         item.append(link);
         items.push(item);
         if (items.length === 2) break;
@@ -61,11 +68,9 @@ class HomeRecentlyViewed extends HTMLElement {
       list.replaceChildren(...items);
       list.hidden = false;
       empty.hidden = true;
-      // The tile starts hidden for shoppers so nobody sees an empty one.
-      this.closest('[data-recent-tile]')?.removeAttribute('hidden');
       this.dataset.loaded = 'true';
     } catch {
-      // The tile stays hidden when storage or search is unavailable.
+      // The empty state remains visible when storage or search is unavailable.
     }
   }
 }

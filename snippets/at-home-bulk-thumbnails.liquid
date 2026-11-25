@@ -1,0 +1,59 @@
+{%- doc -%}
+  Previews up to three distinct styles for the member homepage bulk-order card.
+  Prefers order history and uses saved styles when no purchase image is available.
+{%- enddoc -%}
+
+{%- if customer -%}
+  {%- assign thumbnail_count = 0 -%}
+  {%- capture thumbnails -%}
+    {%- if customer.orders != blank -%}
+      {%- assign seen_products = '|' -%}
+      {%- paginate customer.orders by 20 -%}
+        {%- for order in customer.orders -%}
+          {%- for line_item in order.line_items -%}
+            {%- liquid
+              assign product = line_item.product
+              assign variant = line_item.variant
+              assign product_key = product.id | prepend: '|' | append: '|'
+              assign thumbnail = variant.image | default: product.featured_image
+              if product == blank or variant == blank or thumbnail == blank or seen_products contains product_key
+                continue
+              endif
+
+              assign color_value = ''
+              for option in product.options_with_values
+                assign option_name = option.name | strip | downcase
+                if option_name == 'color' or option_name == 'colour'
+                  assign color_value = variant.options[forloop.index0].id | append: ''
+                  break
+                endif
+              endfor
+              if color_value == blank
+                continue
+              endif
+
+              assign seen_products = seen_products | append: product.id | append: '|'
+              assign thumbnail_count = thumbnail_count | plus: 1
+            -%}
+            <li>{{ thumbnail | image_url: width: 144 | image_tag: widths: '72, 144', sizes: '72px', alt: product.title }}</li>
+            {%- if thumbnail_count == 3 -%}{%- break -%}{%- endif -%}
+          {%- endfor -%}
+          {%- if thumbnail_count == 3 -%}{%- break -%}{%- endif -%}
+        {%- endfor -%}
+      {%- endpaginate -%}
+    {%- endif -%}
+    {%- if thumbnail_count == 0 -%}
+      {%- for favorite in customer.metafields.wagner.favorite_products.value -%}
+        {%- unless favorite.featured_image -%}{%- continue -%}{%- endunless -%}
+        <li>{{ favorite.featured_image | image_url: width: 144 | image_tag: widths: '72, 144', sizes: '72px', alt: favorite.title }}</li>
+        {%- assign thumbnail_count = thumbnail_count | plus: 1 -%}
+        {%- if thumbnail_count == 3 -%}{%- break -%}{%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endcapture -%}
+  {%- if thumbnail_count > 0 -%}
+    <ul class="at-member-home__bulk-thumbnails" role="list">
+      {{ thumbnails }}
+    </ul>
+  {%- endif -%}
+{%- endif -%}

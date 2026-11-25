@@ -15,14 +15,13 @@
       "empty": "Styles you view in this browser will appear here."
     },
     "bulk": {
-      "heading": "Order again",
-      "description": "Build an order from saved styles or past purchases.",
-      "favorites": "Bulk order favorites",
-      "purchases": "Bulk order past purchases"
+      "heading": "Build your next order",
+      "description": "Your favorites and past purchases, together.",
+      "cta": "Start bulk order"
     },
     "pro": {
       "could_save": "you could have saved with Pro",
-      "basis": "Estimated on your eligible orders this year, before the annual fee.",
+      "basis": "Estimated on your eligible orders from the last 12 months, before the annual fee.",
       "empty": "See how Pro pricing and shipping benefits could help you save on repeat orders.",
       "annual_fee": "Pro membership is {{ fee }} per year.",
       "cta": "Explore Pro membership",
@@ -30,9 +29,7 @@
     },
     "rails": {
       "anchor": "Pairs well with {{ product }}",
-      "anchor_viewed": "Pairs well with a style you viewed recently",
-      "favorites_empty": "Save styles or colors you like and they’ll appear here.",
-      "brands_empty": "Brands you order or save will appear here."
+      "favorites_empty": "Save styles or colors you like and they’ll appear here."
     }
   },
   "accessibility": {

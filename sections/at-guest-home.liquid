@@ -1,50 +1,43 @@
 {%- capture home_tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
 {%- assign home_tier = home_tier | strip -%}
-{%- comment -%}
-  Guests get the guest promo row. Every signed-in tier (Member, Pro, Wholesale) gets the same
-  member row; the second tile is "Save More with Pro" for Members and the tier welcome for Pro
-  and Wholesale.
-{%- endcomment -%}
-{%- if home_tier != blank -%}
+{%- if home_tier == 'guest' or home_tier == 'member' -%}
   <div class="section-background at-guest-home__background"></div>
   <div class="section section--page-width at-guest-home">
     <div class="at-guest-home__intro">
       {% content_for 'block', type: 'text', id: 'heading' %}
       {% content_for 'block', type: 'text', id: 'intro' %}
     </div>
-    <div class="at-guest-home__grid">
+    <div class="at-guest-home__grid{% if home_tier == 'member' %} at-guest-home__grid--member{% endif %}">
       <div class="at-guest-home__seasonal">
         {% content_for 'block', type: 'group', id: 'seasonal' %}
       </div>
-      {%- if home_tier != 'guest' -%}
+      {%- if home_tier == 'member' -%}
         <div class="at-guest-home__membership at-member-home__upgrade">
-          {%- if home_tier == 'member' -%}
-            {% content_for 'block', type: 'group', id: 'pro' %}
-          {%- else -%}
-            {% content_for 'block', type: 'group', id: 'tier_welcome' %}
-          {%- endif -%}
+          {% content_for 'block', type: 'group', id: 'pro' %}
         </div>
-        {%- comment -%}
-          Recently viewed starts hidden and the script shows it once it has products, so a new
-          member never sees an empty tile; the Bulk order tile takes its space. Always shown in
-          the theme editor.
-        {%- endcomment -%}
-        {%- assign recent_sample = false -%}
-        {%- if request.design_mode and section.settings.preview_recent_products != blank -%}
-          {%- assign recent_sample = true -%}
-        {%- endif -%}
-        <div class="at-guest-home__tees at-member-home__tile" data-recent-tile{% unless request.design_mode %} hidden{% endunless %}>
+        <div class="at-guest-home__tees at-member-home__tile">
           <h2 class="h5">{{ 'at_member_home.recent.heading' | t }}</h2>
           <at-home-recently-viewed data-search-url="{{ routes.search_url }}">
+            {%- assign recent_sample = false -%}
+            {%- if request.design_mode and section.settings.preview_recent_products != blank -%}
+              {%- assign recent_sample = true -%}
+            {%- endif -%}
             <ul role="list" data-recent-items{% unless recent_sample %} hidden{% endunless %}>
               {%- if recent_sample -%}
                 {%- for preview_product in section.settings.preview_recent_products -%}
                   <li>
                     <a class="at-member-home__viewed-link" href="{{ preview_product.url }}">
                       {%- if preview_product.featured_image -%}
-                        {{ preview_product.featured_image | image_url: width: 72 | image_tag: width: 36, height: 36, alt: '', loading: 'lazy' }}
+                        {{
+                          preview_product.featured_image
+                          | image_url: width: 400
+                          | image_tag: widths: '120, 240, 400', sizes: '(min-width: 750px) 13vw, 45vw', alt: ''
+                        }}
                       {%- endif -%}
-                      {{ preview_product.title | escape }}
+                      <span class="at-member-home__viewed-caption">
+                        <span>{{ preview_product.title | escape }}</span>
+                        <span aria-hidden="true">→</span>
+                      </span>
                     </a>
                   </li>
                 {%- endfor -%}
@@ -59,12 +52,12 @@
         <div class="at-guest-home__fleece at-member-home__tile at-member-home__bulk">
           <h2 class="h5">{{ 'at_member_home.bulk.heading' | t }}</h2>
           <p>{{ 'at_member_home.bulk.description' | t }}</p>
+          {% render 'at-home-bulk-thumbnails' %}
           {%- assign bulk_order_url = pages['bulk-order'].url -%}
           {%- if bulk_order_url != blank -%}
-            <div class="at-member-home__bulk-links">
-              <a href="{{ bulk_order_url }}?tab=favorite">{{ 'at_member_home.bulk.favorites' | t }} <span aria-hidden="true">→</span></a>
-              <a href="{{ bulk_order_url }}?tab=purchase">{{ 'at_member_home.bulk.purchases' | t }} <span aria-hidden="true">→</span></a>
-            </div>
+            <a class="at-member-home__bulk-cta" href="{{ bulk_order_url }}">
+              {{ 'at_member_home.bulk.cta' | t }} <span aria-hidden="true">→</span>
+            </a>
           {%- endif -%}
         </div>
       {%- else -%}
@@ -115,10 +108,6 @@
   .at-guest-home__membership { grid-area: membership; }
   .at-guest-home__tees { grid-area: tees; }
   .at-guest-home__fleece { grid-area: fleece; }
-  .at-guest-home__grid [data-recent-tile][hidden] { display: none; }
-  .at-guest-home__grid:has([data-recent-tile][hidden]) {
-    grid-template-areas: "seasonal seasonal" "membership membership" "fleece fleece";
-  }
 
   .at-guest-home__grid > div > .group-block {
     height: 100%;
@@ -164,9 +153,6 @@
       grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr) minmax(0, .87fr);
       grid-template-rows: repeat(2, minmax(0, 1fr));
     }
-    .at-guest-home__grid:has([data-recent-tile][hidden]) {
-      grid-template-areas: "seasonal membership fleece" "seasonal membership fleece";
-    }
   }
 
   @media screen and (max-width: 749px) {
@@ -204,21 +190,63 @@
   .at-make-tiles-section .at-tiles__label::after { content: "→" / ""; }
 
   .at-member-home__tile {
+    --at-recent-image-height: clamp(74px, 8vw, 112px);
     min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    padding: clamp(12px, 1.6vw, 22px);
-    background: #efdbc7;
+    padding: clamp(12px, 1.4vw, 20px);
+    background: #efdac5;
+    color: #202820;
     border-radius: var(--at-guest-radius);
   }
 
   .at-member-home__tile :is(h2, p) { margin: 0; }
-  .at-member-home__tile h2 { color: var(--at-guest-ink); }
-  .at-member-home__tile p { font-size: .875rem; }
-  .at-member-home__bulk { background: #e5e4d2; }
-  .at-member-home__bulk-links { display: grid; gap: 5px; margin-block-start: auto; }
-  .at-member-home__bulk-links a { color: var(--at-guest-ink); font-weight: 600; }
+  .at-member-home__tile h2 {
+    color: var(--at-guest-ink);
+    font-size: clamp(1.125rem, 1.5vw, 1.375rem);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+  .at-member-home__tile p { font-size: .9375rem; line-height: 1.3; }
+  .at-member-home__bulk { background: #dddfc8; }
+  .at-member-home__bulk-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    margin-block-start: auto;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--at-guest-ink);
+    color: #fff0d7;
+    font-size: clamp(.875rem, 1.2vw, 1rem);
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+  }
+  .at-member-home__bulk-cta:hover { background: #1e4d34; color: #fff0d7; }
+  .at-member-home__bulk-thumbnails {
+    display: flex;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .at-member-home__bulk-thumbnails li {
+    flex: 0 1 64px;
+    min-width: 0;
+  }
+  .at-member-home__bulk-thumbnails img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
   .at-member-home__upgrade .at-home-pro { display: grid; gap: 12px; }
   .at-member-home__upgrade .at-home-pro__amount { font-size: clamp(1.8rem, 3.4vw, 2.9rem); line-height: 1; font-weight: 700; }
   .at-member-home__upgrade .at-home-pro__amount span { display: block; font-size: 1rem; font-weight: 600; margin-block-start: 5px; }
@@ -227,12 +255,50 @@
 
   at-home-recently-viewed { display: block; }
   at-home-recently-viewed ul { list-style: none; padding: 0; margin: 0; }
-  at-home-recently-viewed ul:not([hidden]) { display: grid; gap: 7px; }
-  .at-member-home__viewed-link { display: flex; align-items: center; gap: 8px; color: var(--at-guest-ink); font-size: .875rem; line-height: 1.2; }
-  .at-member-home__viewed-link img { width: 36px; height: 36px; flex: 0 0 36px; object-fit: contain; border-radius: 4px; background: #fbede0; }
+  at-home-recently-viewed ul:not([hidden]) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .at-member-home__viewed-link {
+    display: grid;
+    grid-template-rows: var(--at-recent-image-height) auto;
+    gap: 4px;
+    color: var(--at-guest-ink);
+    font-size: .8125rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+  }
+  .at-member-home__viewed-link:hover { text-decoration: underline; }
+  .at-member-home__viewed-link img {
+    display: block;
+    width: 100%;
+    height: var(--at-recent-image-height);
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+  .at-member-home__viewed-caption {
+    grid-row: 2;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .at-member-home__viewed-caption > :first-child {
+    display: -webkit-box;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
 
+  @media screen and (min-width: 750px) {
+    .at-guest-home__grid--member { grid-template-rows: minmax(min-content, .9fr) minmax(min-content, 1.1fr); }
+  }
   @media screen and (max-width: 749px) {
-    .at-member-home__tile { min-height: 150px; }
+    .at-guest-home__grid--member {
+      grid-template-areas: "seasonal seasonal" "membership membership" "tees tees" "fleece fleece";
+    }
   }
 {% endstyle %}
 {%- endif -%}
