@@ -11,6 +11,7 @@
   "sections": {
     "at_home_top": {
       "type": "at-home-top",
+      "disabled": true,
       "settings": {
         "at_visibility": "pro_and_wholesale",
         "collection": "",
@@ -31,6 +32,7 @@
     },
     "at_home_shortcuts": {
       "type": "at-home-shortcuts",
+      "disabled": true,
       "settings": {
         "at_visibility": "pro_and_wholesale"
       }
@@ -242,7 +244,7 @@
         ".at-tiles__tile--photo .at-tiles__label { padding: 6px 9px; }"
       ],
       "settings": {
-        "at_visibility": "guests_and_member",
+        "at_visibility": "all",
         "heading": "What are you making?",
         "helper": "Choose a project to see blanks that fit."
       }
@@ -253,6 +255,7 @@
     },
     "at_home_categories": {
       "type": "at-home-categories",
+      "disabled": true,
       "settings": {
         "at_visibility": "pro_and_wholesale",
         "heading": "Shop by category",
@@ -395,6 +398,7 @@
         "video_gB6wcE",
         "group_6ejfBY"
       ],
+      "disabled": true,
       "name": "t:names.video_section",
       "settings": {
         "at_visibility": "pro_and_wholesale",
@@ -428,6 +432,7 @@
     },
     "at_visitor_chips": {
       "type": "at-visitor-chips",
+      "disabled": true,
       "settings": {
         "at_visibility": "pro_and_wholesale",
         "guest_collections": [],
@@ -436,6 +441,7 @@
     },
     "at_personal_home": {
       "type": "at-personal-home",
+      "disabled": true,
       "settings": {
         "at_visibility": "pro_and_wholesale",
         "fallback_collection": "",
@@ -4144,7 +4150,7 @@
       ],
       "name": "Featured styles",
       "settings": {
-        "at_visibility": "guests_and_member",
+        "at_visibility": "all",
         "collection": "seller-staples",
         "at_featured_products": [
           "gildan-64000-softstyle-t-shirt",
@@ -4287,7 +4293,7 @@
       ],
       "name": "Bulk ordering demo",
       "settings": {
-        "at_visibility": "guests_and_member",
+        "at_visibility": "all",
         "content_direction": "column",
         "gap": 0,
         "section_width": "page-width",

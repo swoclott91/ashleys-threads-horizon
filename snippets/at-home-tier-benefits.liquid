@@ -1,0 +1,115 @@
+{%- doc -%}
+  Shows the current benefits of a Pro or Wholesale shopper on the shared homepage.
+
+  @param {string} tier - Current tier, either pro or wholesale
+{%- enddoc -%}
+<div class="at-home-tier-benefits at-home-tier-benefits--{{ tier }}">
+  {%- if tier == 'pro' -%}
+    {%- liquid
+      assign cash = customer.metafields.wagner.threads_cash.value
+      assign savings = customer.metafields.wagner.savings_ytd.value
+      assign ship = customer.metafields.wagner.ship_code.value
+      assign shop_currency = shop.currency
+      assign storefront_currency = localization.country.currency.iso_code
+      assign cash_currency = cash.currency | default: cash.currency_code | default: shop_currency
+      assign savings_currency = savings.currency | default: savings.currency_code | default: shop_currency
+      assign this_year = 'now' | date: '%Y' | plus: 0
+      assign savings_year = savings.year | plus: 0
+      assign cash_balance = nil
+      assign cash_earned = nil
+      assign shipping_saved = nil
+      assign paid_for_itself = false
+      assign sample = false
+
+      if cash.balance != blank and cash_currency == shop_currency and shop_currency == storefront_currency
+        assign cash_balance = cash.balance | times: 100 | round
+      endif
+      if savings_year == this_year and savings_currency == shop_currency and shop_currency == storefront_currency
+        if savings.threads_cash != blank
+          assign cash_earned = savings.threads_cash | times: 100 | round
+        endif
+        if savings.shipping_saved != blank
+          assign shipping_saved = savings.shipping_saved | times: 100 | round
+        endif
+        assign annual_fee = shop.metafields.wagner.tier_thresholds.value.pro.fee | times: 100 | round
+        if annual_fee > 0 and savings.pro_would_save != blank and shipping_saved != nil
+          assign pro_value = savings.pro_would_save | times: 100 | round | plus: shipping_saved
+          if pro_value >= annual_fee
+            assign paid_for_itself = true
+          endif
+        endif
+      endif
+
+      if request.design_mode and settings.at_member_preview_tier == 'pro' and cash == blank and savings == blank
+        assign sample = true
+        assign cash_balance = 4268
+        assign cash_earned = 12486
+        assign shipping_saved = 3850
+        assign paid_for_itself = true
+      endif
+
+      capture shipping_ready
+        render 'at-ship-code-valid', ship: ship
+      endcapture
+      assign shipping_ready = shipping_ready | strip
+    -%}
+    <p class="at-home-tier-benefits__kicker">{{ 'at_member_home.pro_active.kicker' | t }}</p>
+    <h2 class="at-home-tier-benefits__heading">{{ 'at_member_home.pro_active.heading' | t }}</h2>
+    {%- if sample -%}
+      <p class="at-home-tier-benefits__note">{{ 'at_member_home.sample' | t }}</p>
+    {%- endif -%}
+    {%- if cash_balance != nil -%}
+      <dl class="at-home-tier-benefits__cash">
+        <dt>{{ 'at_member_home.pro_active.available_cash' | t }}</dt>
+        <dd>{{ cash_balance | money }}</dd>
+      </dl>
+    {%- endif -%}
+    {%- if cash_earned != nil or shipping_saved != nil -%}
+      <dl class="at-home-tier-benefits__metrics">
+        {%- if cash_earned != nil -%}
+          <div>
+            <dt>{{ 'at_member_home.pro_active.cash_earned' | t }}</dt>
+            <dd>{{ cash_earned | money }}</dd>
+          </div>
+        {%- endif -%}
+        {%- if shipping_saved != nil -%}
+          <div>
+            <dt>{{ 'at_member_home.pro_active.shipping_saved' | t }}</dt>
+            <dd>{{ shipping_saved | money }}</dd>
+          </div>
+        {%- endif -%}
+      </dl>
+    {%- endif -%}
+    {%- if paid_for_itself -%}
+      <p class="at-home-tier-benefits__note">{{ 'at_member_home.pro_active.paid_for_itself' | t }}</p>
+    {%- elsif cash_balance == nil and cash_earned == nil and shipping_saved == nil -%}
+      <p class="at-home-tier-benefits__note">{{ 'at_member_home.pro_active.empty' | t }}</p>
+    {%- endif -%}
+    {%- if shipping_ready == 'true' and ship.kind == 'pro_monthly' -%}
+      <p class="at-home-tier-benefits__note">
+        {{ 'at_member_home.pro_active.shipment_ready' | t }} <code>{{ ship.code | escape }}</code>
+      </p>
+    {%- endif -%}
+    <a class="at-home-tier-benefits__cta" href="{{ routes.account_url }}">{{ 'at_member_home.pro_active.account' | t }}</a>
+  {%- else -%}
+    {%- assign terms = customer.current_location.metafields.wagner.terms_status.value -%}
+    <p class="at-home-tier-benefits__kicker">{{ 'at_member.tiers.wholesale' | t }}</p>
+    <h2 class="at-home-tier-benefits__heading">{{ 'at_member_home.wholesale.heading' | t }}</h2>
+    <p class="at-home-tier-benefits__note">{{ 'at_member_home.wholesale.description' | t }}</p>
+    {%- if terms.terms != blank -%}
+      <dl class="at-home-tier-benefits__metrics">
+        <div>
+          <dt>{{ 'at_member_home.wholesale.terms' | t }}</dt>
+          <dd>{{ terms.terms | replace: '_', ' ' | capitalize | escape }}</dd>
+        </div>
+      </dl>
+      {%- case terms.status -%}
+        {%- when 'hold', 'overdue' -%}
+          <p class="at-home-tier-benefits__note">{{ 'at_member.terms.on_hold' | t }}</p>
+        {%- when 'pending' -%}
+          <p class="at-home-tier-benefits__note">{{ 'at_member.terms.pending' | t }}</p>
+      {%- endcase -%}
+    {%- endif -%}
+    <a class="at-home-tier-benefits__cta" href="{{ routes.account_url }}">{{ 'at_member_home.wholesale.account' | t }}</a>
+  {%- endif -%}
+</div>

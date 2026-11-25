@@ -1,199 +1,39 @@
-{%- comment -%} Every signed-in tier: Member, Pro and Wholesale. {%- endcomment -%}
 {%- capture member_visible -%}{% render 'at-section-visible', visibility: 'customers' %}{%- endcapture -%}
 {%- if member_visible == 'true' -%}
   {%- liquid
-    # Member homepage carousels (member-homepage-data-handoff, 2026-11-24).
-    # - favorites: first `max_items` of `wagner.favorite_products`.
-    # - brands: purchased vendors by units (snippets/at-purchase-tally), then favorite-only
-    #   vendors from the first 8 favorites, then the brands picked in "Brands for new members";
-    #   deduped, at most 8 `collections[handle]` lookups, blanks skipped. Never reads Brand
-    #   metaobjects.
-    # - companions: Shopify complementary recommendations for an anchor product, taken from
-    #   1. the most-purchased product (most units; a tie goes to the more recent purchase),
-    #      loaded through one `line_item.product`, falling back to the next-ranked product up to
-    #      3 tries;
-    #   2. else the first favorite that's still on the Online Store;
-    #   3. else, in the browser, the most recently viewed product (localStorage; Liquid can't
-    #      read it), with a general "something you viewed" line instead of the product name.
-    #   Hidden when there's no anchor or Shopify has no complementary products for it.
-    # The theme editor always shows the labelled sample settings, never shopper data.
     assign kind = section.settings.kind
     assign card_type = 'product'
     assign card_ratio = '4 / 3'
     assign sample = false
     assign hydrate = false
-    assign entries = blank
-    assign anchor = blank
-    assign viewed_anchor = false
-
-    if kind == 'brands' or kind == 'companions'
-      unless request.design_mode
-        capture at_tally
-          render 'at-purchase-tally'
-        endcapture
-        assign at_tally_parts = at_tally | strip | split: '#'
-        assign at_tally_products = at_tally_parts[0] | split: ','
-        assign at_tally_vendors = at_tally_parts[1] | split: ','
-      endunless
-    endif
 
     case kind
       when 'favorites'
-        if request.design_mode
+        assign entries = customer.metafields.wagner.favorite_products.value
+        if request.design_mode and entries == blank and section.settings.preview_products != blank
           assign entries = section.settings.preview_products
           assign sample = true
-        else
-          assign entries = customer.metafields.wagner.favorite_products.value
         endif
       when 'brands'
         assign card_type = 'collection'
         assign card_ratio = '3 / 2'
-        if request.design_mode
+        assign entries = customer.metafields.wagner.home_brand_collections.value
+        if request.design_mode and entries == blank and section.settings.preview_brands != blank
           assign entries = section.settings.preview_brands
           assign sample = true
-        else
-          # Purchased vendors, most units first. Strict > keeps the first-seen (more recent)
-          # vendor on a tie.
-          assign brand_handles = ','
-          assign brand_count = 0
-          for pick in (1..8)
-            assign best_handle = ''
-            assign best_units = 0
-            for tally_entry in at_tally_vendors
-              if tally_entry == blank
-                continue
-              endif
-              assign tally_pair = tally_entry | split: '='
-              assign tally_key = ',' | append: tally_pair[0] | append: ','
-              if brand_handles contains tally_key
-                continue
-              endif
-              assign tally_units = tally_pair[1] | plus: 0
-              if tally_units > best_units
-                assign best_units = tally_units
-                assign best_handle = tally_pair[0]
-              endif
-            endfor
-            if best_handle == blank
-              break
-            endif
-            assign brand_handles = brand_handles | append: best_handle | append: ','
-            assign brand_count = brand_count | plus: 1
-          endfor
-
-          # Then favorite-only vendors, in favorites order, from the first 8 favorites.
-          if brand_count < 8
-            for favorite in customer.metafields.wagner.favorite_products.value limit: 8
-              assign favorite_handle = favorite.vendor | handleize
-              if favorite_handle == blank
-                continue
-              endif
-              assign favorite_key = ',' | append: favorite_handle | append: ','
-              if brand_handles contains favorite_key
-                continue
-              endif
-              assign brand_handles = brand_handles | append: favorite_handle | append: ','
-              assign brand_count = brand_count | plus: 1
-              if brand_count >= 8
-                break
-              endif
-            endfor
-          endif
-
-          # Then the editor's picks, so a new member still sees brands.
-          if brand_count < 8
-            for picked in section.settings.fallback_brands
-              assign picked_key = ',' | append: picked.handle | append: ','
-              if brand_handles contains picked_key
-                continue
-              endif
-              assign brand_handles = brand_handles | append: picked.handle | append: ','
-              assign brand_count = brand_count | plus: 1
-              if brand_count >= 8
-                break
-              endif
-            endfor
-          endif
-
-          # Handles only; the card loop below looks each up in `collections` (at most 8).
-          assign entries = brand_handles | remove_first: ',' | split: ','
         endif
       when 'companions'
-        if request.design_mode
-          if section.settings.preview_products != blank
-            assign entries = section.settings.preview_products
-            assign anchor = section.settings.preview_anchor
-            assign sample = true
-          endif
-        else
-          assign tried = ','
-          for attempt in (1..3)
-            assign best_pid = ''
-            assign best_units = 0
-            for tally_entry in at_tally_products
-              if tally_entry == blank
-                continue
-              endif
-              assign tally_pair = tally_entry | split: '='
-              assign tally_key = ',' | append: tally_pair[0] | append: ','
-              if tried contains tally_key
-                continue
-              endif
-              assign tally_units = tally_pair[1] | plus: 0
-              if tally_units > best_units
-                assign best_units = tally_units
-                assign best_pid = tally_pair[0]
-              endif
-            endfor
-            if best_pid == blank
-              break
-            endif
-            assign tried = tried | append: best_pid | append: ','
-
-            # Liquid can't load a product by ID: load it through one of its line items.
-            assign candidate = blank
-            assign candidate_found = false
-            paginate customer.orders by 20
-              for order in customer.orders
-                for line_item in order.line_items
-                  assign line_pid = line_item.product_id | append: ''
-                  if line_pid == best_pid
-                    assign candidate = line_item.product
-                    assign candidate_found = true
-                    break
-                  endif
-                endfor
-                if candidate_found
-                  break
-                endif
-              endfor
-            endpaginate
-            # Blank when deleted or not published to the Online Store.
-            if candidate != blank and candidate.url != blank
-              assign anchor = candidate
-              break
-            endif
-          endfor
-
-          # No usable purchase: the first favorite still on the Online Store.
+        assign anchor = customer.metafields.wagner.home_most_purchased_product.value
+        if request.design_mode and section.settings.preview_products != blank
+          assign entries = section.settings.preview_products
           if anchor == blank
-            for favorite in customer.metafields.wagner.favorite_products.value limit: 8
-              if favorite != blank and favorite.url != blank
-                assign anchor = favorite
-                break
-              endif
-            endfor
+            assign anchor = section.settings.preview_anchor
           endif
-
-          if anchor != blank or recommendations.performed
-            # On the recommendations request with no anchor here, the browser asked for a
-            # recently viewed product.
-            assign hydrate = true
-            if recommendations.performed and recommendations.intent == 'complementary'
-              assign entries = recommendations.products
-            endif
-          else
-            assign viewed_anchor = true
+          assign sample = true
+        elsif anchor.id != blank and anchor.url != blank
+          assign hydrate = true
+          if recommendations.performed and recommendations.intent == 'complementary'
+            assign entries = recommendations.products
           endif
         endif
     endcase
@@ -201,22 +41,14 @@
     assign entry_count = 0
     capture cards
       for entry in entries limit: section.settings.max_items
-        # A for loop variable can't be reassigned, so the card resource gets its own name.
-        assign card_resource = entry
-        if card_type == 'collection' and sample == false
-          if entry == blank
-            continue
-          endif
-          assign card_resource = collections[entry]
-        endif
-        if card_resource == blank or card_resource.url == blank
+        if entry == blank or entry.url == blank
           continue
         endif
         if entry_count > 0
           echo '<!--@list/split-->'
         endif
         assign entry_count = entry_count | plus: 1
-        render 'resource-card', resource_type: card_type, resource: card_resource, image_width: 640, image_aspect_ratio: card_ratio, image_sizes: '(min-width: 990px) 24vw, 55vw'
+        render 'resource-card', resource_type: card_type, resource: entry, image_width: 640, image_aspect_ratio: card_ratio, image_sizes: '(min-width: 990px) 24vw, 55vw'
       endfor
     endcapture
     assign slides = cards | strip | split: '<!--@list/split-->'
@@ -238,7 +70,7 @@
     >
   {%- endif -%}
 
-  {%- if entry_count > 0 or kind == 'favorites' or kind == 'brands' -%}
+  {%- if entry_count > 0 or kind == 'favorites' -%}
     <div class="section section--{{ section.settings.section_width }}">
       <section class="at-member-rail" aria-labelledby="MemberRailHeading-{{ section.id }}">
         <header class="at-member-rail__header">
@@ -246,8 +78,6 @@
             <h2 class="h3" id="MemberRailHeading-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
             {%- if kind == 'companions' and anchor.title != blank -%}
               <p>{{ 'at_member_home.rails.anchor' | t: product: anchor.title | escape }}</p>
-            {%- elsif kind == 'companions' and sample == false -%}
-              <p>{{ 'at_member_home.rails.anchor_viewed' | t }}</p>
             {%- elsif section.settings.description != blank -%}
               <p>{{ section.settings.description | escape }}</p>
             {%- endif -%}
@@ -267,13 +97,7 @@
             {%- render 'resource-list-carousel', slides: slides, slide_count: entry_count, settings: section.settings, slide_width_max: '420px' -%}
           </div>
         {%- else -%}
-          <p class="at-member-rail__empty">
-            {%- if kind == 'brands' -%}
-              {{ 'at_member_home.rails.brands_empty' | t }}
-            {%- else -%}
-              {{ 'at_member_home.rails.favorites_empty' | t }}
-            {%- endif -%}
-          </p>
+          <p class="at-member-rail__empty">{{ 'at_member_home.rails.favorites_empty' | t }}</p>
         {%- endif -%}
       </section>
     </div>
@@ -283,38 +107,7 @@
 
   {%- if hydrate -%}</product-recommendations>{%- endif -%}
 
-  {%- if viewed_anchor -%}
-    {%- comment -%} Recently viewed anchor: the browser fills in the product ID. {%- endcomment -%}
-    <template data-at-viewed-anchor>
-      <product-recommendations
-        id="product-recommendations-{{ section.id }}"
-        data-hydration-key="product-recommendations-{{ section.id }}"
-        data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.max_items }}"
-        data-section-id="{{ section.id }}"
-        data-intent="complementary"
-        data-recommendations-performed="false"
-        style="display: block;"
-      ><div style="block-size: 1px;" aria-hidden="true"></div></product-recommendations>
-    </template>
-    <script src="{{ 'product-recommendations.js' | asset_url }}" type="module" fetchpriority="low"></script>
-    <script type="module">
-      import { RecentlyViewed } from '@theme/recently-viewed-products';
-      const template = document.querySelector('#shopify-section-{{ section.id }} template[data-at-viewed-anchor]');
-      let productId = null;
-      try {
-        productId = RecentlyViewed.getProducts().find((id) => /^\d+$/.test(String(id))) ?? null;
-      } catch (error) {
-        /* Storage blocked: no anchor. */
-      }
-      if (template && productId) {
-        const element = template.content.firstElementChild.cloneNode(true);
-        element.dataset.productId = productId;
-        template.replaceWith(element);
-      }
-    </script>
-  {%- endif -%}
-
-  {%- if entry_count > 0 or kind == 'favorites' or kind == 'brands' -%}
+  {%- if entry_count > 0 or kind == 'favorites' -%}
     {% style %}
       .at-member-rail { display: grid; gap: 12px; padding-block: 14px; }
       .at-member-rail__header { display: flex; align-items: end; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; }
@@ -427,17 +220,6 @@
       "type": "collection_list",
       "id": "preview_brands",
       "label": "t:settings.at_member_home_preview_brands",
-      "limit": 8
-    },
-    {
-      "type": "header",
-      "content": "Brands for new members"
-    },
-    {
-      "type": "collection_list",
-      "id": "fallback_brands",
-      "label": "Brands for new members",
-      "info": "Brand carousel only. Fills the carousel up to 8 after the member's purchased and favorited brands, so members with neither still see brands.",
       "limit": 8
     }
   ],

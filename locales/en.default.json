@@ -30,6 +30,23 @@
       "cta": "Explore Pro membership",
       "account": "Open your account"
     },
+    "pro_active": {
+      "kicker": "Ashley’s Pro",
+      "heading": "Your Pro benefits",
+      "available_cash": "Available Threads Cash",
+      "cash_earned": "Threads Cash earned this year",
+      "shipping_saved": "Shipping savings this year",
+      "paid_for_itself": "Your Pro benefits have covered the annual fee this year.",
+      "empty": "Your Pro pricing is active. Your Threads Cash and shipping savings will appear here as you use your benefits.",
+      "shipment_ready": "Free shipment ready. Use code",
+      "account": "View your Pro account"
+    },
+    "wholesale": {
+      "heading": "Your wholesale account",
+      "description": "Wholesale pricing applies when you shop with your company account.",
+      "terms": "Payment terms",
+      "account": "Open your wholesale account"
+    },
     "rails": {
       "anchor": "Pairs well with {{ product }}",
       "favorites_empty": "Save styles or colors you like and they’ll appear here."

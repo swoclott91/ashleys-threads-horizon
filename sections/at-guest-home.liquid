@@ -1,102 +1,104 @@
 {%- capture home_tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
 {%- assign home_tier = home_tier | strip -%}
-{%- if home_tier == 'guest' or home_tier == 'member' -%}
-  <div class="section-background at-guest-home__background"></div>
-  <div class="section section--page-width at-guest-home">
-    <div class="at-guest-home__intro">
-      {% content_for 'block', type: 'text', id: 'heading' %}
-      {% content_for 'block', type: 'text', id: 'intro' %}
+<div class="section-background at-guest-home__background"></div>
+<div class="section section--page-width at-guest-home">
+  <div class="at-guest-home__intro">
+    {% content_for 'block', type: 'text', id: 'heading' %}
+    {% content_for 'block', type: 'text', id: 'intro' %}
+  </div>
+  <div class="at-guest-home__grid{% if home_tier != 'guest' %} at-guest-home__grid--member{% endif %}">
+    {%- capture personal_styles -%}
+      {%- if home_tier != 'guest' -%}
+        {%- render 'at-home-bulk-thumbnails' -%}
+      {%- endif -%}
+    {%- endcapture -%}
+    {%- assign personal_styles = personal_styles | strip -%}
+    <div class="at-member-home__bulk">
+      <h2 class="h2">{{ 'at_member_home.bulk.heading' | t }}</h2>
+      {%- if personal_styles != blank -%}
+        <p>{{ 'at_member_home.bulk.description' | t }}</p>
+        {{ personal_styles }}
+      {%- else -%}
+        <p>{{ 'at_member_home.bulk.starter_description' | t }}</p>
+        {% render 'at-home-bulk-thumbnails', starter_only: true, starter_products: section.settings.bulk_starter_products %}
+      {%- endif -%}
+      <p class="at-member-home__bulk-detail">{{ 'at_member_home.bulk.detail' | t }}</p>
+      {%- assign bulk_order_url = pages['bulk-order'].url -%}
+      {%- if bulk_order_url != blank -%}
+        <a class="at-member-home__bulk-cta" href="{{ bulk_order_url }}">
+          {{ 'at-bulk-favorite.svg' | inline_asset_content }}
+          {%- if home_tier != 'guest' -%}
+            {{- 'at_member_home.bulk.cta' | t -}}
+          {%- else -%}
+            {{- 'at_member_home.bulk.guest_cta' | t -}}
+          {%- endif -%}
+        </a>
+      {%- endif -%}
     </div>
-    <div class="at-guest-home__grid{% if home_tier == 'member' %} at-guest-home__grid--member{% endif %}">
-      {%- capture personal_styles -%}
-        {%- if home_tier == 'member' -%}
-          {%- render 'at-home-bulk-thumbnails' -%}
-        {%- endif -%}
-      {%- endcapture -%}
-      {%- assign personal_styles = personal_styles | strip -%}
-      <div class="at-member-home__bulk">
-        <h2 class="h2">{{ 'at_member_home.bulk.heading' | t }}</h2>
-        {%- if personal_styles != blank -%}
-          <p>{{ 'at_member_home.bulk.description' | t }}</p>
-          {{ personal_styles }}
-        {%- else -%}
-          <p>{{ 'at_member_home.bulk.starter_description' | t }}</p>
-          {% render 'at-home-bulk-thumbnails', starter_only: true, starter_products: section.settings.bulk_starter_products %}
-        {%- endif -%}
-        <p class="at-member-home__bulk-detail">{{ 'at_member_home.bulk.detail' | t }}</p>
-        {%- assign bulk_order_url = pages['bulk-order'].url -%}
-        {%- if bulk_order_url != blank -%}
-          <a class="at-member-home__bulk-cta" href="{{ bulk_order_url }}">
-            {{ 'at-bulk-favorite.svg' | inline_asset_content }}
-            {%- if home_tier == 'member' -%}
-              {{- 'at_member_home.bulk.cta' | t -}}
-            {%- else -%}
-              {{- 'at_member_home.bulk.guest_cta' | t -}}
-            {%- endif -%}
-          </a>
-        {%- endif -%}
-      </div>
-      <div class="at-guest-home__membership{% if home_tier == 'member' %} at-member-home__upgrade{% endif %}">
-        <span class="at-guest-home__membership-monogram" aria-hidden="true">
-          {{- 'at-monogram.svg' | inline_asset_content -}}
-        </span>
-        {%- if home_tier == 'member' -%}
+    <div class="at-guest-home__membership{% if home_tier == 'member' %} at-member-home__upgrade{% endif %}">
+      <span class="at-guest-home__membership-monogram" aria-hidden="true">
+        {{- 'at-monogram.svg' | inline_asset_content -}}
+      </span>
+      {%- case home_tier -%}
+        {%- when 'member' -%}
           {% content_for 'block', type: 'group', id: 'pro' %}
+        {%- when 'pro', 'wholesale' -%}
+          {% render 'at-home-tier-benefits', tier: home_tier %}
         {%- else -%}
           {% content_for 'block', type: 'group', id: 'membership' %}
-        {%- endif -%}
-      </div>
-      {%- if home_tier == 'member' -%}
-        <div class="at-guest-home__recent at-member-home__tile">
-          <h2 class="h5">{{ 'at_member_home.recent.heading' | t }}</h2>
-          <at-home-recently-viewed data-search-url="{{ routes.search_url }}">
-            {%- assign recent_sample = false -%}
-            {%- if request.design_mode and section.settings.preview_recent_products != blank -%}
-              {%- assign recent_sample = true -%}
+      {%- endcase -%}
+    </div>
+    {%- if home_tier != 'guest' -%}
+      <div class="at-guest-home__recent at-member-home__tile">
+        <h2 class="h5">{{ 'at_member_home.recent.heading' | t }}</h2>
+        <at-home-recently-viewed data-search-url="{{ routes.search_url }}">
+          {%- assign recent_sample = false -%}
+          {%- if request.design_mode and section.settings.preview_recent_products != blank -%}
+            {%- assign recent_sample = true -%}
+          {%- endif -%}
+          <ul role="list" data-recent-items{% unless recent_sample %} hidden{% endunless %}>
+            {%- if recent_sample -%}
+              {%- for preview_product in section.settings.preview_recent_products -%}
+                {%- assign preview_style = preview_product.title | strip | split: ' ' | first -%}
+                <li>
+                  <a class="at-member-home__viewed-link" href="{{ preview_product.url }}">
+                    {%- if preview_product.featured_image -%}
+                      {{
+                        preview_product.featured_image
+                        | image_url: width: 400
+                        | image_tag: widths: '120, 240, 400', sizes: '(min-width: 750px) 13vw, 45vw', alt: ''
+                      }}
+                    {%- endif -%}
+                    <span class="at-member-home__viewed-caption">
+                      {% if preview_product.vendor != blank %}{{ preview_product.vendor | escape }} {% endif -%}
+                      {{- preview_style | escape }}
+                    </span>
+                  </a>
+                </li>
+              {%- endfor -%}
             {%- endif -%}
-            <ul role="list" data-recent-items{% unless recent_sample %} hidden{% endunless %}>
-              {%- if recent_sample -%}
-                {%- for preview_product in section.settings.preview_recent_products -%}
-                  {%- assign preview_style = preview_product.title | strip | split: ' ' | first -%}
-                  <li>
-                    <a class="at-member-home__viewed-link" href="{{ preview_product.url }}">
-                      {%- if preview_product.featured_image -%}
-                        {{
-                          preview_product.featured_image
-                          | image_url: width: 400
-                          | image_tag: widths: '120, 240, 400', sizes: '(min-width: 750px) 13vw, 45vw', alt: ''
-                        }}
-                      {%- endif -%}
-                      <span class="at-member-home__viewed-caption">
-                        {% if preview_product.vendor != blank %}{{ preview_product.vendor | escape }} {% endif -%}
-                        {{- preview_style | escape }}
-                      </span>
-                    </a>
-                  </li>
-                {%- endfor -%}
-              {%- endif -%}
-            </ul>
-            <p data-recent-empty{% if recent_sample %} data-recent-sample{% endif %}>
-              {%- if recent_sample -%}{{ 'at_member_home.sample' | t }}{%- else -%}{{ 'at_member_home.recent.empty' | t }}{%- endif -%}
-            </p>
-          </at-home-recently-viewed>
-          <script src="{{ 'at-home-recently-viewed.js' | asset_url }}" type="module" fetchpriority="low"></script>
-        </div>
-      {%- else -%}
-        <div class="at-guest-home__categories">
-          <div class="at-guest-home__category">
-            {% content_for 'block', type: 'group', id: 'tees' %}
-          </div>
-          <div class="at-guest-home__category at-guest-home__fleece">
-            {% content_for 'block', type: 'group', id: 'fleece' %}
-          </div>
-        </div>
-      {%- endif -%}
-      <div class="at-guest-home__seasonal">
-        {% content_for 'block', type: 'group', id: 'seasonal' %}
+          </ul>
+          <p data-recent-empty{% if recent_sample %} data-recent-sample{% endif %}>
+            {%- if recent_sample -%}{{ 'at_member_home.sample' | t }}{%- else -%}{{ 'at_member_home.recent.empty' | t }}{%- endif -%}
+          </p>
+        </at-home-recently-viewed>
+        <script src="{{ 'at-home-recently-viewed.js' | asset_url }}" type="module" fetchpriority="low"></script>
       </div>
+    {%- else -%}
+      <div class="at-guest-home__categories">
+        <div class="at-guest-home__category">
+          {% content_for 'block', type: 'group', id: 'tees' %}
+        </div>
+        <div class="at-guest-home__category at-guest-home__fleece">
+          {% content_for 'block', type: 'group', id: 'fleece' %}
+        </div>
+      </div>
+    {%- endif -%}
+    <div class="at-guest-home__seasonal">
+      {% content_for 'block', type: 'group', id: 'seasonal' %}
     </div>
   </div>
+</div>
 
 {% style %}
   .at-guest-home__background,
@@ -153,7 +155,7 @@
     content: '';
     pointer-events: none;
   }
-  .at-guest-home__membership > .group-block {
+  .at-guest-home__membership > :is(.group-block, .at-home-tier-benefits) {
     padding-block-start: calc(var(--monogram-inset) + 1.21 * var(--monogram-size) + 12px);
   }
   .at-guest-home__membership-monogram {
@@ -430,6 +432,86 @@
   .at-member-home__upgrade .at-home-pro__cta { border-radius: 8px; background: #fff0d7; color: #6c2639; border-color: #fff0d7; text-transform: none; }
   .at-member-home__upgrade .at-home-pro__caption { font-size: .875rem; }
 
+  .at-home-tier-benefits {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    height: 100%;
+    min-width: 0;
+    padding: 20px clamp(16px, 1.7vw, 26px);
+    border-radius: var(--at-guest-radius);
+    background: var(--tier-benefits-color);
+    color: var(--at-member-cream);
+  }
+  .at-home-tier-benefits--pro { --tier-benefits-color: #6c2639; }
+  .at-home-tier-benefits--wholesale { --tier-benefits-color: #122f41; }
+  .at-home-tier-benefits :is(p, dl, dd) { margin: 0; }
+  .at-home-tier-benefits__kicker {
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .at-guest-home__membership .at-home-tier-benefits__heading {
+    margin: 0;
+    font-size: clamp(1.5rem, 2.35vw, 2.375rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -.025em;
+    text-wrap: balance;
+  }
+  .at-home-tier-benefits__cash {
+    display: grid;
+    gap: 4px;
+    font-size: .875rem;
+    line-height: 1.3;
+  }
+  .at-home-tier-benefits__cash dd {
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.85rem, 3.15vw, 3rem);
+    font-weight: 700;
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+  }
+  .at-home-tier-benefits__metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 92px), 1fr));
+    gap: 10px;
+    padding-block-start: 12px;
+    border-top: 1px solid rgb(239 227 200 / .35);
+  }
+  .at-home-tier-benefits__metrics > div {
+    display: grid;
+    align-content: space-between;
+  }
+  .at-home-tier-benefits__metrics dt { font-size: .8125rem; line-height: 1.3; }
+  .at-home-tier-benefits__metrics dd { font-size: 1.125rem; font-weight: 700; }
+  .at-home-tier-benefits__note { font-size: .875rem; line-height: 1.35; }
+  .at-home-tier-benefits__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--at-member-cream);
+    color: var(--tier-benefits-color);
+    font-size: .9375rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+  }
+  .at-home-tier-benefits__cta:hover {
+    background: #efe3c8;
+    color: var(--tier-benefits-color);
+  }
+  .at-home-tier-benefits__cta:focus-visible {
+    outline: 2px solid var(--at-member-cream);
+    outline-offset: 2px;
+  }
+
   at-home-recently-viewed { display: block; }
   at-home-recently-viewed ul { list-style: none; padding: 0; margin: 0; }
   at-home-recently-viewed ul:not([hidden]) {
@@ -471,7 +553,6 @@
   }
 
 {% endstyle %}
-{%- endif -%}
 
 {% schema %}
 {
