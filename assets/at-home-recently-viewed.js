@@ -61,9 +61,11 @@ class HomeRecentlyViewed extends HTMLElement {
       list.replaceChildren(...items);
       list.hidden = false;
       empty.hidden = true;
+      // The tile starts hidden for shoppers so nobody sees an empty one.
+      this.closest('[data-recent-tile]')?.removeAttribute('hidden');
       this.dataset.loaded = 'true';
     } catch {
-      // The empty state remains visible when storage or search is unavailable.
+      // The tile stays hidden when storage or search is unavailable.
     }
   }
 }

@@ -15,13 +15,18 @@
         <div class="at-guest-home__membership at-member-home__upgrade">
           {% content_for 'block', type: 'group', id: 'pro' %}
         </div>
-        <div class="at-guest-home__tees at-member-home__tile">
+        {%- comment -%}
+          Recently viewed starts hidden and the script shows it once it has products, so a new
+          member never sees an empty tile; the Bulk order tile takes its space. Always shown in
+          the theme editor.
+        {%- endcomment -%}
+        {%- assign recent_sample = false -%}
+        {%- if request.design_mode and section.settings.preview_recent_products != blank -%}
+          {%- assign recent_sample = true -%}
+        {%- endif -%}
+        <div class="at-guest-home__tees at-member-home__tile" data-recent-tile{% unless request.design_mode %} hidden{% endunless %}>
           <h2 class="h5">{{ 'at_member_home.recent.heading' | t }}</h2>
           <at-home-recently-viewed data-search-url="{{ routes.search_url }}">
-            {%- assign recent_sample = false -%}
-            {%- if request.design_mode and section.settings.preview_recent_products != blank -%}
-              {%- assign recent_sample = true -%}
-            {%- endif -%}
             <ul role="list" data-recent-items{% unless recent_sample %} hidden{% endunless %}>
               {%- if recent_sample -%}
                 {%- for preview_product in section.settings.preview_recent_products -%}
@@ -101,6 +106,10 @@
   .at-guest-home__membership { grid-area: membership; }
   .at-guest-home__tees { grid-area: tees; }
   .at-guest-home__fleece { grid-area: fleece; }
+  .at-guest-home__grid [data-recent-tile][hidden] { display: none; }
+  .at-guest-home__grid:has([data-recent-tile][hidden]) {
+    grid-template-areas: "seasonal seasonal" "membership membership" "fleece fleece";
+  }
 
   .at-guest-home__grid > div > .group-block {
     height: 100%;
@@ -145,6 +154,9 @@
       grid-template-areas: "seasonal membership tees" "seasonal membership fleece";
       grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr) minmax(0, .87fr);
       grid-template-rows: repeat(2, minmax(0, 1fr));
+    }
+    .at-guest-home__grid:has([data-recent-tile][hidden]) {
+      grid-template-areas: "seasonal membership fleece" "seasonal membership fleece";
     }
   }
 

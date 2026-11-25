@@ -3,12 +3,12 @@
  * (sections/at-home-profile.liquid, assets/at-home-profile.js). No imports and no DOM, so every
  * function here is tested in Node (scripts/test-at-home-profile.cjs).
  *
- * Homepage strategy, "Signed-in profile states":
- * - The earliest unanswered question is offered, one at a time (Q1, then Q2, then Q3).
- * - Saved answers show their collection links while questions remain; when all three are saved
- *   the area becomes "Shop for what you make".
+ * The homepage asks the earliest unanswered question (Q1, then Q2, then Q3); a tap on an answer
+ * saves it and opens its collection, and the area disappears once all three are saved. The page
+ * uses normalizeAnswers, nextQuestion, buildSaveBody and mergePending. The link and view helpers
+ * below (collectionLinks, profileView, toggleMethod, ...) are from the earlier in-place version
+ * and kept, tested, for an account-page profile editor.
  * - Q3 is a list. "none" is exclusive, counts as answered and yields no decoration link.
- * - With more than two decoration links, two show and the rest sit behind "See all your methods".
  *
  * Answers are stored as customer metafields (wagner.onboarding_q1 / q2 / q3) and saved through
  * the app proxy POST /apps/wagner/answers. Wagner queues the metafield write, so a reload right

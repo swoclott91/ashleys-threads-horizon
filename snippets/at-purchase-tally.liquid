@@ -5,7 +5,8 @@
 
   Reads `customer.orders` (first page of 20, newest first) and skips orders that are cancelled,
   fully refunded (`financial_status == 'refunded'`) or placed more than 365 days ago. For each
-  line it reads only `product_id`, `quantity` and `vendor`; it never touches `line_item.product`
+  line it reads only `product_id`, `quantity`, `vendor`, `requires_shipping` and `gift_card`
+  (unshipped lines such as the Pro Membership are skipped); it never touches `line_item.product`
   or `line_item.variant`, so no product is loaded here. A plain loop reads the first 50 lines of
   an order. At most 40 unique products and 40 vendors are tallied.
 
@@ -52,6 +53,11 @@
           endif
           assign at_pt_qty = line_item.quantity | plus: 0
           if at_pt_qty < 1
+            continue
+          endif
+          # Memberships (Pro, SKU WAGNER-PRO-1Y), gift cards and other unshipped lines aren't
+          # apparel purchases: they never rank as a product or a brand.
+          if line_item.requires_shipping == false or line_item.gift_card
             continue
           endif
 

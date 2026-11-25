@@ -30,6 +30,7 @@
     },
     "rails": {
       "anchor": "Pairs well with {{ product }}",
+      "anchor_viewed": "Pairs well with a style you viewed recently",
       "favorites_empty": "Save styles or colors you like and they’ll appear here.",
       "brands_empty": "Brands you order or save will appear here."
     }

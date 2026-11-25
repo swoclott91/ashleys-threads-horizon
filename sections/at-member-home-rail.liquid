@@ -4,11 +4,17 @@
     # Member homepage carousels (member-homepage-data-handoff, 2026-11-24).
     # - favorites: first `max_items` of `wagner.favorite_products`.
     # - brands: purchased vendors by units (snippets/at-purchase-tally), then favorite-only
-    #   vendors from the first 8 favorites; deduped, at most 8 `collections[vendor | handleize]`
-    #   lookups, blanks skipped. Never reads Brand metaobjects.
-    # - companions: the most-purchased product (most units; a tie goes to the more recent
-    #   purchase), loaded through one `line_item.product`, falling back to the next-ranked
-    #   product up to 3 tries; Shopify complementary recommendations for it.
+    #   vendors from the first 8 favorites, then the brands picked in "Brands for new members";
+    #   deduped, at most 8 `collections[handle]` lookups, blanks skipped. Never reads Brand
+    #   metaobjects.
+    # - companions: Shopify complementary recommendations for an anchor product, taken from
+    #   1. the most-purchased product (most units; a tie goes to the more recent purchase),
+    #      loaded through one `line_item.product`, falling back to the next-ranked product up to
+    #      3 tries;
+    #   2. else the first favorite that's still on the Online Store;
+    #   3. else, in the browser, the most recently viewed product (localStorage; Liquid can't
+    #      read it), with a general "something you viewed" line instead of the product name.
+    #   Hidden when there's no anchor or Shopify has no complementary products for it.
     # The theme editor always shows the labelled sample settings, never shopper data.
     assign kind = section.settings.kind
     assign card_type = 'product'
@@ -17,6 +23,7 @@
     assign hydrate = false
     assign entries = blank
     assign anchor = blank
+    assign viewed_anchor = false
 
     if kind == 'brands' or kind == 'companions'
       unless request.design_mode
@@ -92,6 +99,21 @@
             endfor
           endif
 
+          # Then the editor's picks, so a new member still sees brands.
+          if brand_count < 8
+            for picked in section.settings.fallback_brands
+              assign picked_key = ',' | append: picked.handle | append: ','
+              if brand_handles contains picked_key
+                continue
+              endif
+              assign brand_handles = brand_handles | append: picked.handle | append: ','
+              assign brand_count = brand_count | plus: 1
+              if brand_count >= 8
+                break
+              endif
+            endfor
+          endif
+
           # Handles only; the card loop below looks each up in `collections` (at most 8).
           assign entries = brand_handles | remove_first: ',' | split: ','
         endif
@@ -152,11 +174,25 @@
             endif
           endfor
 
-          if anchor != blank
+          # No usable purchase: the first favorite still on the Online Store.
+          if anchor == blank
+            for favorite in customer.metafields.wagner.favorite_products.value limit: 8
+              if favorite != blank and favorite.url != blank
+                assign anchor = favorite
+                break
+              endif
+            endfor
+          endif
+
+          if anchor != blank or recommendations.performed
+            # On the recommendations request with no anchor here, the browser asked for a
+            # recently viewed product.
             assign hydrate = true
             if recommendations.performed and recommendations.intent == 'complementary'
               assign entries = recommendations.products
             endif
+          else
+            assign viewed_anchor = true
           endif
         endif
     endcase
@@ -209,6 +245,8 @@
             <h2 class="h3" id="MemberRailHeading-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
             {%- if kind == 'companions' and anchor.title != blank -%}
               <p>{{ 'at_member_home.rails.anchor' | t: product: anchor.title | escape }}</p>
+            {%- elsif kind == 'companions' and sample == false -%}
+              <p>{{ 'at_member_home.rails.anchor_viewed' | t }}</p>
             {%- elsif section.settings.description != blank -%}
               <p>{{ section.settings.description | escape }}</p>
             {%- endif -%}
@@ -243,6 +281,37 @@
   {%- endif -%}
 
   {%- if hydrate -%}</product-recommendations>{%- endif -%}
+
+  {%- if viewed_anchor -%}
+    {%- comment -%} Recently viewed anchor: the browser fills in the product ID. {%- endcomment -%}
+    <template data-at-viewed-anchor>
+      <product-recommendations
+        id="product-recommendations-{{ section.id }}"
+        data-hydration-key="product-recommendations-{{ section.id }}"
+        data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.max_items }}"
+        data-section-id="{{ section.id }}"
+        data-intent="complementary"
+        data-recommendations-performed="false"
+        style="display: block;"
+      ><div style="block-size: 1px;" aria-hidden="true"></div></product-recommendations>
+    </template>
+    <script src="{{ 'product-recommendations.js' | asset_url }}" type="module" fetchpriority="low"></script>
+    <script type="module">
+      import { RecentlyViewed } from '@theme/recently-viewed-products';
+      const template = document.querySelector('#shopify-section-{{ section.id }} template[data-at-viewed-anchor]');
+      let productId = null;
+      try {
+        productId = RecentlyViewed.getProducts().find((id) => /^\d+$/.test(String(id))) ?? null;
+      } catch (error) {
+        /* Storage blocked: no anchor. */
+      }
+      if (template && productId) {
+        const element = template.content.firstElementChild.cloneNode(true);
+        element.dataset.productId = productId;
+        template.replaceWith(element);
+      }
+    </script>
+  {%- endif -%}
 
   {%- if entry_count > 0 or kind == 'favorites' or kind == 'brands' -%}
     {% style %}
@@ -357,6 +426,17 @@
       "type": "collection_list",
       "id": "preview_brands",
       "label": "t:settings.at_member_home_preview_brands",
+      "limit": 8
+    },
+    {
+      "type": "header",
+      "content": "Brands for new members"
+    },
+    {
+      "type": "collection_list",
+      "id": "fallback_brands",
+      "label": "Brands for new members",
+      "info": "Brand carousel only. Fills the carousel up to 8 after the member's purchased and favorited brands, so members with neither still see brands.",
       "limit": 8
     }
   ],
