@@ -1257,7 +1257,7 @@
               "name": "Product photo",
               "settings": {
                 "image": "{{ closest.product.featured_image }}",
-                "link": "",
+                "link": "{{ closest.product.url }}",
                 "show_favorite": true,
                 "image_ratio": "landscape",
                 "width": "fill",
