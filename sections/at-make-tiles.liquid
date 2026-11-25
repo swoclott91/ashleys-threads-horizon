@@ -208,149 +208,110 @@
   </script>
 {%- endif -%}
 
-{% style %}
+{% stylesheet %}
   .at-tiles {
     display: flex;
     flex-direction: column;
-    gap: var(--at-home-gap, var(--gap-sm));
-    padding-block: var(--at-home-section-space, var(--padding-lg));
+    gap: 14px;
+    padding-block: 28px;
   }
-
-  .at-tiles__head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--gap-xs) var(--gap-lg);
-  }
-
-  .at-tiles__title,
-  .at-tiles__helper,
-  .at-tiles__resume { margin: 0; }
-
-  .at-tiles__title { color: var(--at-home-forest, var(--color-foreground)); }
-  .at-tiles__helper { color: var(--color-foreground-muted); }
-  .at-tiles__resume { flex-basis: 100%; }
-
+  .at-tiles__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+  .at-tiles__title, .at-tiles__helper, .at-tiles__resume { margin: 0; }
+  .at-tiles__helper { font-size: 0.95rem; color: rgb(var(--color-foreground-rgb) / 0.72); }
+  .at-tiles__resume { font-size: 0.95rem; flex-basis: 100%; }
+  .at-tiles__resume a { font-weight: 700; }
   .at-tiles__grid {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--at-home-gap, var(--gap-sm));
+    gap: 10px;
   }
-
   @media screen and (min-width: 750px) {
-    .at-tiles__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .at-tiles__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
   }
-
   @media screen and (min-width: 990px) {
     .at-tiles__grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   }
-
   .at-tiles__grid > li { min-width: 0; }
-  .at-tiles__item,
-  .at-tiles__popup { display: flex; }
+  .at-tiles__item { display: flex; }
   .at-tiles__item > * { flex: 1 1 auto; min-width: 0; }
-
+  .at-tiles__popup { display: flex; }
   .at-tiles__tile {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    gap: 8px;
+    min-height: 64px;
     height: 100%;
-    min-height: var(--button-size);
-    padding: var(--padding-sm);
-    border: var(--style-border-width) solid var(--at-home-border, var(--color-input-border));
-    border-radius: var(--at-home-radius, var(--style-border-radius-md));
-    background: var(--at-home-card, var(--color-background));
-    color: var(--color-foreground);
+    box-sizing: border-box;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
+    background: rgb(var(--color-foreground-rgb) / 0.03);
+    color: inherit;
+    font: inherit;
     text-align: start;
     text-decoration: none;
     cursor: pointer;
   }
-
   button.at-tiles__tile { width: 100%; appearance: none; }
-  .at-tiles__tile:focus-visible { outline-color: var(--at-home-forest, var(--color-foreground)); }
-
-  .at-tiles__tile--photo {
-    justify-content: flex-start;
-    padding: 0;
-    overflow: hidden;
-  }
-
+  .at-tiles__tile:focus-visible { outline: 2px solid #2b4a3f; outline-offset: 2px; }
+  .at-tiles__tile--photo { justify-content: flex-start; padding: 6px 6px 10px; }
   .at-tiles__media {
     position: relative;
     display: block;
-    aspect-ratio: 7 / 5;
+    aspect-ratio: 4 / 5;
     overflow: hidden;
-    background: var(--at-home-neutral, var(--color-input-background));
+    border-radius: 8px;
+    background: rgb(var(--color-foreground-rgb) / 0.06);
   }
-
   .at-tiles__image {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform var(--animation-speed) var(--animation-easing);
+    transition: transform 0.3s ease;
   }
-
   .at-tiles__tile:hover .at-tiles__image { transform: scale(1.03); }
-
-  .at-tiles__tile:hover,
-  .at-tiles__tile[aria-current='true'] {
-    border-color: var(--at-home-forest, var(--color-foreground));
-    background: var(--at-home-olive, var(--color-input-background));
-    color: var(--at-home-forest, var(--color-foreground));
+  .at-tiles__tile--photo .at-tiles__label { padding-inline: 6px; }
+  .at-tiles__tile:hover, .at-tiles__tile[aria-current='true'] {
+    border-color: #2b4a3f;
+    background: #e9efec;
+    color: #1a2e27;
   }
-
-  .at-tiles__label {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: var(--gap-2xs);
-    font-family: var(--font-h5--family);
-    font-size: var(--font-h5--size);
-    font-weight: var(--font-h5--weight);
-    line-height: var(--font-h5--line-height);
-    overflow-wrap: anywhere;
-  }
-
-  .at-tiles__label::after { content: "→" / ""; }
-  .at-tiles__tile--photo .at-tiles__label { padding: var(--padding-xs) var(--padding-sm); }
-
+  .at-tiles__label { font-weight: 700; line-height: 1.25; }
   .at-tiles__dialog {
-    width: min(36rem, calc(100vw - 2 * var(--page-margin)));
+    width: min(36rem, calc(100vw - 32px));
     max-height: var(--modal-max-height, 90dvh);
     padding: 0;
     border: var(--style-border-popover);
-    border-radius: var(--style-border-radius-popover);
+    border-radius: var(--style-border-radius-popover, 12px);
     background-color: var(--color-background);
     box-shadow: var(--shadow-popover);
   }
-
   .at-tiles__dialog[open] { animation: modalSlideInTop var(--animation-speed) var(--animation-easing) forwards; }
   .at-tiles__dialog.dialog-closing { animation: modalSlideOutTop var(--animation-speed) var(--animation-easing) forwards; }
-
   .at-tiles__dialog-inner {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-sm);
-    padding: var(--button-size) var(--padding-xl) var(--padding-xl);
+    gap: 12px;
+    padding: 40px 20px 20px;
   }
-
   @media screen and (min-width: 750px) {
-    .at-tiles__dialog-inner { padding-inline: var(--padding-4xl); }
+    .at-tiles__dialog-inner { padding: 48px 32px 28px; }
   }
-
-  .at-tiles__skip { margin: 0; text-align: center; }
-  .at-tiles__close { top: var(--padding-xs); right: var(--padding-xs); opacity: var(--opacity-80); animation: none; }
-
+  .at-tiles__skip { margin: 0; }
+  .at-tiles__skip { text-align: center; font-size: 0.95rem; }
+  .at-tiles__skip a { font-weight: 600; }
+  .at-tiles__close { top: 8px; right: 8px; opacity: 0.8; animation: none; }
   @media (prefers-reduced-motion: reduce) {
     .at-tiles__image { transition: none; }
     .at-tiles__tile:hover .at-tiles__image { transform: none; }
   }
-{% endstyle %}
+{% endstylesheet %}
 
 {% schema %}
 {
@@ -364,6 +325,7 @@
       "type": "select",
       "id": "at_visibility",
       "label": "Show to",
+      "info": "Signed-in customers always see these cards until they've picked a project (saved to their profile), then never.",
       "options": [
         { "value": "all", "label": "Everyone" },
         { "value": "guests", "label": "Guests (signed out)" },

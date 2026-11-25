@@ -3,7 +3,7 @@
   {%- liquid
     assign kind = section.settings.kind
     assign card_type = 'product'
-    assign card_ratio = '16 / 9'
+    assign card_ratio = '4 / 3'
     assign sample = false
     assign hydrate = false
     assign show_favorite = false
@@ -86,14 +86,14 @@
             {%- if sample -%}<p>{{ 'at_member_home.sample' | t }}</p>{%- endif -%}
           </div>
           {%- if section.settings.link != blank and section.settings.link_label != blank -%}
-            <a class="button-unstyled button-link" href="{{ section.settings.link }}"><span class="button-link__label">{{ section.settings.link_label | escape }}</span> <span class="button-link__icon svg-wrapper" aria-hidden="true">{{ "icon-arrow.svg" | inline_asset_content }}</span></a>
+            <a class="at-member-rail__link" href="{{ section.settings.link }}">{{ section.settings.link_label | escape }} <span aria-hidden="true">→</span></a>
           {%- endif -%}
         </header>
 
         {%- if entry_count > 0 -%}
           <div
             class="resource-list at-member-rail__carousel"
-            style="--column-count: {{ section.settings.columns }}; --mobile-card-size: 56cqw; --resource-list-column-gap-desktop: var(--at-home-gap, var(--gap-sm)); --peek-next-slide-size: 0px;"
+            style="--column-count: {{ section.settings.columns }}; --mobile-card-size: 56cqw; --resource-list-column-gap-desktop: 10px; --peek-next-slide-size: 0px;"
           >
             {%- render 'resource-list-styles' -%}
             {%- render 'resource-list-carousel', slides: slides, slide_count: entry_count, settings: section.settings, slide_width_max: '420px' -%}
@@ -111,66 +111,44 @@
 
   {%- if entry_count > 0 or kind == 'favorites' -%}
     {% style %}
-      .at-member-rail {
-        display: grid;
-        gap: var(--at-home-gap, var(--gap-sm));
-        padding-block: var(--at-home-section-space, var(--padding-lg));
+      .at-member-rail { display: grid; gap: 12px; padding-block: 14px; }
+      .at-member-rail__header { display: flex; align-items: end; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; }
+      .at-member-rail__header :is(h2, p), .at-member-rail__empty { margin: 0; }
+      .at-member-rail__header h2 { color: #103823; }
+      .at-member-rail__header p { margin-block-start: 3px; font-size: .875rem; }
+      .at-member-rail__link { font-weight: 600; color: #103823; }
+      .at-member-rail__empty { background: #f4e4d5; border-radius: 10px; padding: 16px; }
+      .at-member-rail__carousel {
+        --util-page-margin-offset: 0px;
+        --color-background: #fcf0e5;
+        --color-background-rgb: 252 240 229;
       }
-
-      .at-member-rail__header {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: var(--gap-xs) var(--gap-lg);
-      }
-
-      .at-member-rail__header :is(h2, p),
-      .at-member-rail__empty { margin: 0; }
-
-      .at-member-rail__header h2 { color: var(--at-home-forest, var(--color-foreground)); }
-      .at-member-rail__header p { margin-block-start: var(--gap-2xs); }
-
-      .at-member-rail__empty,
-      .at-member-rail__carousel .resource-card {
-        border: var(--style-border-width) solid var(--at-home-border, var(--color-input-border));
-        border-radius: var(--at-home-radius, var(--style-border-radius-md));
-        background: var(--at-home-card, var(--color-background));
-      }
-
-      .at-member-rail__empty { padding: var(--at-home-card-padding, var(--padding-lg)); }
-
-      .at-member-rail__carousel { --util-page-margin-offset: 0px; }
       .at-member-rail__carousel :is(slideshow-container, slideshow-slides, .resource-list__slide) { background: transparent; }
       .at-member-rail__carousel .resource-list__slide { max-inline-size: 100%; }
-      .at-member-rail__carousel .resource-card__wrapper { min-width: 0; }
-      .at-member-rail__carousel .resource-card { min-width: 0; overflow: hidden; }
-
-      .at-member-rail__carousel .resource-card__media {
-        position: relative;
-        aspect-ratio: var(--resource-card-aspect-ratio);
-        background: var(--at-home-neutral, var(--color-input-background));
+      .at-member-rail__carousel .resource-card__wrapper { display: block; min-width: 0; }
+      .at-member-rail__carousel .resource-card {
+        min-width: 0;
+        border: 1px solid #dfcbb8;
+        border-radius: 12px;
+        background: #f5e4d4;
         overflow: hidden;
       }
-
-      .at-member-rail__carousel .resource-card__image {
-        display: block;
+      .at-member-rail__carousel .resource-card__media {
+        position: relative;
+        height: clamp(116px, 13vw, 208px);
+        min-height: 0;
+        overflow: hidden;
+        background: #efdbc7;
+      }
+      .at-member-rail__carousel .resource-card__media > :is(img, svg) {
+        position: absolute;
+        inset: 0;
         width: 100%;
         height: 100%;
         object-fit: contain;
         mix-blend-mode: multiply;
       }
-
-      .at-member-rail__carousel .resource-card__image--secondary { inset: 0; }
-      .at-member-rail__carousel .resource-card__content { padding: var(--padding-xs) var(--padding-sm); }
-
-      .at-member-rail__carousel .resource-card__title {
-        font-family: var(--font-h5--family);
-        font-size: var(--font-h5--size);
-        font-weight: var(--font-h5--weight);
-        line-height: var(--font-h5--line-height);
-        min-block-size: 2lh;
-      }
+      .at-member-rail__carousel .resource-card__content { padding: 8px 12px; }
     {% endstyle %}
   {%- endif -%}
 {%- endif -%}

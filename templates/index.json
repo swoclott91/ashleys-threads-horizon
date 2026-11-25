@@ -235,6 +235,14 @@
         "tile_business_merch",
         "tile_personal"
       ],
+      "custom_css": [
+        ".at-tiles { padding-block: 8px 12px; gap: 10px; }",
+        "h2 { color: #103823; }",
+        ".at-tiles__tile--photo { background: #f5e4d4; padding: 0; overflow: hidden; }",
+        ".at-tiles__media { border-radius: 0; aspect-ratio: 1.4; }",
+        ".at-tiles__label { display: flex; width: 100%; justify-content: space-between; text-align: left; gap: 4px; }",
+        ".at-tiles__tile--photo .at-tiles__label { padding: 6px 9px; }"
+      ],
       "settings": {
         "at_visibility": "all",
         "heading": "What are you making?",
@@ -3626,7 +3634,7 @@
             "content_direction": "column",
             "horizontal_alignment_flex_direction_column": "flex-start",
             "vertical_alignment_flex_direction_column": "flex-start",
-            "gap": 8,
+            "gap": 4,
             "width": "fill",
             "width_mobile": "fill",
             "height": "fill",
@@ -3656,7 +3664,7 @@
                 "text": "<h2>Made for cozy season.</h2>",
                 "width": "100%",
                 "max_width": "none",
-                "type_preset": "h4"
+                "type_preset": "h2"
               }
             },
             "shop": {
@@ -3665,7 +3673,10 @@
               "settings": {
                 "label": "Shop holiday fleece →",
                 "link": "shopify://collections/sweatshirts-hoodies",
-                "style_class": "button",
+                "style_class": "button-custom",
+                "custom_button_background": "#103823",
+                "custom_button_text": "#fff0d7",
+                "custom_button_border": "#fff0d7",
                 "width": "fit-content",
                 "width_mobile": "fit-content"
               }
@@ -3691,7 +3702,7 @@
             "height": "fill",
             "height_mobile": "fill",
             "background_media": "none",
-            "background_color": "",
+            "background_color": "#103823",
             "padding-block-start": 20,
             "padding-block-end": 20,
             "padding-inline-start": 20,
@@ -3705,7 +3716,7 @@
                 "text": "<h2>Unlock Member Savings</h2>",
                 "width": "100%",
                 "max_width": "none",
-                "type_preset": "h3"
+                "type_preset": "h2"
               }
             },
             "divider": {
@@ -3844,7 +3855,10 @@
               "settings": {
                 "label": "Create your free account",
                 "link": "/account/register",
-                "style_class": "button-secondary",
+                "style_class": "button-custom",
+                "custom_button_background": "#fff0d7",
+                "custom_button_text": "#103823",
+                "custom_button_border": "#fff0d7",
                 "width": "custom",
                 "custom_width": 100,
                 "width_mobile": "custom",
@@ -3902,7 +3916,7 @@
                 "text": "<h2>T-Shirts</h2>",
                 "width": "100%",
                 "max_width": "none",
-                "type_preset": "h5"
+                "type_preset": "h4"
               }
             },
             "shop": {
@@ -3951,7 +3965,7 @@
                 "text": "<h2>Sweatshirts</h2>",
                 "width": "100%",
                 "max_width": "none",
-                "type_preset": "h5"
+                "type_preset": "h4"
               }
             },
             "shop": {
@@ -3985,7 +3999,7 @@
             "height": "fill",
             "height_mobile": "fill",
             "background_media": "none",
-            "background_color": "",
+            "background_color": "#6c2639",
             "padding-block-start": 20,
             "padding-block-end": 20,
             "padding-inline-start": 20,
@@ -3999,7 +4013,7 @@
                 "text": "<h2>Save More with Pro</h2>",
                 "width": "100%",
                 "max_width": "none",
-                "type_preset": "h3"
+                "type_preset": "h2"
               }
             },
             "estimate": {
@@ -4083,11 +4097,12 @@
           "name": "Product card",
           "static": true,
           "settings": {
-            "product_card_gap": 8,
-            "border": "none",
+            "product_card_gap": 4,
+            "border": "solid",
             "border_width": 1,
             "border_opacity": 28,
-            "border_radius": 0
+            "border_color": "#987b63",
+            "border_radius": 12
           },
           "blocks": {
             "gallery": {
@@ -4107,7 +4122,7 @@
               "type": "product-title",
               "settings": {
                 "width": "100%",
-                "type_preset": "h5",
+                "type_preset": "h6",
                 "padding-inline-start": 12,
                 "padding-inline-end": 12
               }
@@ -4130,6 +4145,10 @@
           ]
         }
       },
+      "custom_css": [
+        "h2{color:#103823;margin:0}",
+        ".product-card{background:#f5e4d4;overflow:hidden}"
+      ],
       "name": "Featured styles",
       "settings": {
         "at_visibility": "all",
@@ -4146,16 +4165,16 @@
         "columns": 4,
         "mobile_columns": "2",
         "mobile_card_size": "60cqw",
-        "columns_gap": 12,
+        "columns_gap": 8,
         "rows_gap": 12,
         "icons_style": "arrow",
         "icons_shape": "circle",
         "section_width": "page-width",
         "horizontal_alignment": "flex-start",
         "gap": 12,
-        "background_color": "",
-        "padding-block-start": 16,
-        "padding-block-end": 16
+        "background_color": "#fcf0e5",
+        "padding-block-start": 8,
+        "padding-block-end": 14
       }
     },
     "at_guest_demo": {
@@ -4172,14 +4191,14 @@
             "align_baseline": false,
             "horizontal_alignment_flex_direction_column": "flex-start",
             "vertical_alignment_flex_direction_column": "center",
-            "gap": 24,
+            "gap": 22,
             "width": "fill",
             "width_mobile": "fill",
             "height": "fit",
             "height_mobile": "fit",
             "background_media": "none",
-            "background_color": "",
-            "border_radius": 0,
+            "background_color": "#dce1c8",
+            "border_radius": 15,
             "padding-block-start": 24,
             "padding-block-end": 24,
             "padding-inline-start": 24,
@@ -4253,7 +4272,7 @@
                 "custom_width_mobile": 100,
                 "aspect_ratio": "16/9",
                 "border": "solid",
-                "border_width": 1,
+                "border_width": 2,
                 "border_opacity": 100,
                 "border_color": "#fff9ed",
                 "border_radius": 12
@@ -4269,6 +4288,10 @@
       "block_order": [
         "panel"
       ],
+      "custom_css": [
+        "h2 { color: #103823; }",
+        ".group-block { border-radius: 15px; }"
+      ],
       "name": "Bulk ordering demo",
       "settings": {
         "at_visibility": "all",
@@ -4277,8 +4300,8 @@
         "section_width": "page-width",
         "section_height": "",
         "background_media": "none",
-        "background_color": "",
-        "padding-block-start": 16,
+        "background_color": "#fcf0e5",
+        "padding-block-start": 10,
         "padding-block-end": 16
       }
     },

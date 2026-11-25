@@ -36,7 +36,7 @@
     <p class="at-home-pro__caption">{{ 'at_member_home.sample' | t }}</p>
   {%- endif -%}
   {%- if show_numbers and amount > 0 -%}
-    <p class="h3 at-home-pro__amount">
+    <p class="at-home-pro__amount">
       {{ amount | money_with_currency }}
       <span>{{ 'at_member_home.pro.could_save' | t }}</span>
     </p>
@@ -51,9 +51,9 @@
   {%- endif -%}
 
   {%- if pro_url != blank -%}
-    <a class="button-secondary at-home-pro__cta" href="{{ pro_url }}">{{ 'at_member_home.pro.cta' | t }}</a>
+    <a class="button at-home-pro__cta" href="{{ pro_url }}">{{ 'at_member_home.pro.cta' | t }}</a>
   {%- else -%}
-    <a class="button-secondary at-home-pro__cta" href="{{ routes.account_url }}">{{ 'at_member_home.pro.account' | t }}</a>
+    <a class="button at-home-pro__cta" href="{{ routes.account_url }}">{{ 'at_member_home.pro.account' | t }}</a>
   {%- endif -%}
 </div>
 
