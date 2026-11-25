@@ -73,6 +73,9 @@
     {{ block.shopify_attributes }}
   >
     {{ image }}
+    {% if block_settings.show_favorite and closest.product != blank %}
+      {% render 'at-card-favorite', product: closest.product %}
+    {% endif %}
   </div>
 {% else %}
   <a
@@ -106,6 +109,10 @@
 
     /* When the image is nested in a group, section, etc, respect the parent's horizontal alignment */
     justify-content: var(--horizontal-alignment, 'inline-start');
+  }
+
+  .image-block:has(> .at-card-favorite) {
+    position: relative;
   }
 
   .image-block--height-fill .image-block__image {
@@ -163,6 +170,14 @@
       "type": "url",
       "id": "link",
       "label": "t:settings.link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_favorite",
+      "label": "t:settings.show_favorite_heart",
+      "info": "t:settings.show_favorite_heart_info",
+      "default": false,
+      "visible_if": "{{ block.settings.link == blank }}"
     },
     {
       "type": "header",

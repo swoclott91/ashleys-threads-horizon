@@ -29,6 +29,7 @@
       "@theme/variant-picker": "{{ 'variant-picker.js' | asset_url }}",
       "@theme/variant-resolution": "{{ 'variant-resolution.js' | asset_url }}",
       "@theme/at-favorite-colors": "{{ 'at-favorite-colors.js' | asset_url }}",
+      "@theme/at-card-favorite": "{{ 'at-card-favorite.js' | asset_url }}",
       "@theme/media-gallery": "{{ 'media-gallery.js' | asset_url }}",
       "@theme/quick-add": "{{ 'quick-add.js' | asset_url }}",
       "@theme/paginated-list-aspect-ratio": "{{ 'paginated-list-aspect-ratio.js' | asset_url }}",
@@ -42,7 +43,7 @@
   }
 </script>
 
-{% if customer or request.page_type == 'product' or request.page_type == 'collection' or settings.quick_add or settings.mobile_quick_add %}
+{% if customer or request.page_type == 'index' or request.page_type == 'product' or request.page_type == 'collection' or settings.quick_add or settings.mobile_quick_add %}
   {% render 'at-favorite-colors-settings' %}
 {% endif %}
 

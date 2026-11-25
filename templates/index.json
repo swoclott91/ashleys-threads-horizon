@@ -4110,6 +4110,7 @@
               "name": "Product photo",
               "settings": {
                 "image": "{{ closest.product.featured_image }}",
+                "show_favorite": true,
                 "image_ratio": "landscape",
                 "width": "fill",
                 "width_mobile": "fill",

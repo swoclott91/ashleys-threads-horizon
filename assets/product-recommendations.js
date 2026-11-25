@@ -1,5 +1,6 @@
 import { Component } from '@theme/component';
 import { morphSection } from '@theme/section-renderer';
+import '@theme/at-card-favorite';
 
 class ProductRecommendations extends Component {
   /**

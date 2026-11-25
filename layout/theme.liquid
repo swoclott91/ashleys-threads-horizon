@@ -177,7 +177,7 @@
       {% render 'quick-add-modal' %}
     {% endif %}
 
-    {% if customer or request.page_type == 'product' or request.page_type == 'collection' or settings.quick_add or settings.mobile_quick_add %}
+    {% if customer or request.page_type == 'index' or request.page_type == 'product' or request.page_type == 'collection' or settings.quick_add or settings.mobile_quick_add %}
       {% render 'at-favorites-sign-in' %}
     {% endif %}
 
