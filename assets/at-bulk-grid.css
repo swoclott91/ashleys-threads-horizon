@@ -841,6 +841,16 @@
     background: transparent;
   }
 
+  .at-bulk-grid__mobile-accordion-heading:has(.at-bulk-grid__favorite) .at-bulk-grid__mobile-accordion-header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .at-bulk-grid__mobile-accordion-heading > .at-bulk-grid__favorite {
+    z-index: 1;
+  }
+
   .at-bulk-grid__mobile-accordion-heading:has(.at-bulk-grid__favorite) .at-bulk-grid__color-count {
     position: absolute;
     inset-inline-end: calc(var(--icon-size-xs) + var(--padding-md) + var(--padding-sm));
