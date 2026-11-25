@@ -1,4 +1,5 @@
-{%- capture member_visible -%}{% render 'at-section-visible', visibility: 'member' %}{%- endcapture -%}
+{%- comment -%} Every signed-in tier: Member, Pro and Wholesale. {%- endcomment -%}
+{%- capture member_visible -%}{% render 'at-section-visible', visibility: 'customers' %}{%- endcapture -%}
 {%- if member_visible == 'true' -%}
   {%- liquid
     # Member homepage carousels (member-homepage-data-handoff, 2026-11-24).

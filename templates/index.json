@@ -27,13 +27,15 @@
         "staple_note_1": "Budget-friendly everyday tee",
         "staple_note_2": "Heavier, garment-dyed feel",
         "staples_collection": "seller-staples"
-      }
+      },
+      "disabled": true
     },
     "at_home_shortcuts": {
       "type": "at-home-shortcuts",
       "settings": {
         "at_visibility": "pro_and_wholesale"
-      }
+      },
+      "disabled": true
     },
     "at_make_tiles": {
       "type": "at-make-tiles",
@@ -259,7 +261,8 @@
         "link_label": "",
         "link": "",
         "columns_desktop": 5
-      }
+      },
+      "disabled": true
     },
     "at_home_discovery": {
       "type": "at-home-discovery",
@@ -424,7 +427,8 @@
         "border_radius": 0,
         "padding-block-start": 32,
         "padding-block-end": 32
-      }
+      },
+      "disabled": true
     },
     "at_visitor_chips": {
       "type": "at-visitor-chips",
@@ -432,7 +436,8 @@
         "at_visibility": "pro_and_wholesale",
         "guest_collections": [],
         "quick_order_url": ""
-      }
+      },
+      "disabled": true
     },
     "at_personal_home": {
       "type": "at-personal-home",
@@ -442,7 +447,8 @@
         "quick_order_url": "",
         "certificate_url": "",
         "preview_segment": "graphic-tees"
-      }
+      },
+      "disabled": true
     },
     "section_YrFnRz": {
       "type": "section",
@@ -4022,6 +4028,37 @@
             "title",
             "estimate"
           ]
+        },
+        "tier_welcome": {
+          "type": "group",
+          "name": "Pro and Wholesale welcome",
+          "static": true,
+          "settings": {
+            "content_direction": "column",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "width": "fill",
+            "width_mobile": "fill",
+            "height": "fill",
+            "height_mobile": "fill",
+            "background_media": "none",
+            "background_color": "#103823",
+            "padding-block-start": 20,
+            "padding-block-end": 20,
+            "padding-inline-start": 20,
+            "padding-inline-end": 20
+          },
+          "blocks": {
+            "welcome": {
+              "type": "at-home-tier-welcome",
+              "name": "Tier welcome",
+              "settings": {}
+            }
+          },
+          "block_order": [
+            "welcome"
+          ]
         }
       },
       "name": "Guest homepage",
@@ -4139,7 +4176,7 @@
       ],
       "name": "Featured styles",
       "settings": {
-        "at_visibility": "guests_and_member",
+        "at_visibility": "all",
         "collection": "seller-staples",
         "at_featured_products": [
           "gildan-64000-softstyle-t-shirt",
@@ -4282,7 +4319,7 @@
       ],
       "name": "Bulk ordering demo",
       "settings": {
-        "at_visibility": "guests_and_member",
+        "at_visibility": "all",
         "content_direction": "column",
         "gap": 0,
         "section_width": "page-width",
