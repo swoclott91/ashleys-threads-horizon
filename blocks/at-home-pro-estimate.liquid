@@ -51,9 +51,9 @@
   {%- endif -%}
 
   {%- if pro_url != blank -%}
-    <a class="button at-home-pro__cta" href="{{ pro_url }}">{{ 'at_member_home.pro.cta' | t }}</a>
+    <a class="button-secondary" href="{{ pro_url }}">{{ 'at_member_home.pro.cta' | t }}</a>
   {%- else -%}
-    <a class="button at-home-pro__cta" href="{{ routes.account_url }}">{{ 'at_member_home.pro.account' | t }}</a>
+    <a class="button-secondary" href="{{ routes.account_url }}">{{ 'at_member_home.pro.account' | t }}</a>
   {%- endif -%}
 </div>
 

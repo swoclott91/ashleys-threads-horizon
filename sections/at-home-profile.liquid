@@ -86,7 +86,12 @@
               <h2 class="at-profile__title h2" id="AtProfile-{{ q }}-{{ section.id }}">{{ qd[1] }}</h2>
               <p class="at-profile__help">{{ qd[2] }}</p>
             </div>
-            <button type="button" class="at-profile__quiet" data-later>Maybe later</button>
+            <button type="button" class="button-unstyled button-link at-profile__quiet" data-later>
+              <span class="button-link__label">Maybe later</span>
+              <span class="button-link__icon svg-wrapper" aria-hidden="true">
+                {{- 'icon-arrow.svg' | inline_asset_content -}}
+              </span>
+            </button>
           </div>
           <ul class="at-profile__cards at-profile__cards--{{ q }}" role="list" aria-labelledby="AtProfile-{{ q }}-{{ section.id }}">
             {%- for def in defs -%}
@@ -164,18 +169,10 @@
   .at-profile__help { font-size: 1rem; }
 
   .at-profile__quiet {
-    padding: 0;
-    border: 0;
-    background: none;
     color: inherit;
-    font: inherit;
     font-size: 0.95rem;
     font-weight: 600;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    cursor: pointer;
   }
-  .at-profile__quiet:hover { text-decoration-thickness: 2px; }
 
   .at-profile__cards {
     list-style: none;

@@ -1,5 +1,5 @@
 .at-pdp {
-  --at-pdp-control-height: 3rem;
+  --at-pdp-control-height: var(--button-min-height);
 }
 
 .at-pdp .at-breadcrumbs-section {
@@ -135,41 +135,6 @@
 
 .at-pdp .product-details .at-buy-buttons-block ~ .accordion {
   margin-block-start: 0.5rem;
-}
-
-.at-pdp .product-details .product-form-buttons .add-to-cart-button,
-.at-pdp .at-buy-buttons__bulk-trigger {
-  height: auto;
-  min-height: var(--at-pdp-control-height);
-  padding-block: var(--padding-sm);
-  font-size: var(--font-size--md);
-  line-height: 1.25;
-}
-
-.at-pdp .product-details .product-form-buttons .add-to-cart-button {
-  font-weight: 500;
-}
-
-.at-pdp .product-details .add-to-cart-button.button-secondary {
-  --button-color: var(--at-pdp-accent);
-  --button-border-color: var(--at-pdp-accent);
-}
-
-.at-pdp .at-buy-buttons__bulk-trigger,
-.at-pdp .at-bulk-grid__add {
-  --button-color: var(--at-pdp-on-accent);
-  --button-background-color: var(--at-pdp-accent);
-  --button-border-color: var(--at-pdp-accent);
-  --button-focus-outline-color: var(--at-pdp-accent);
-  font-size: var(--font-size--md);
-  font-weight: 600;
-}
-
-.at-pdp .at-buy-buttons__bulk-trigger:hover,
-.at-pdp .at-bulk-grid__add:hover {
-  --button-color: var(--at-pdp-on-accent);
-  --button-background-color: var(--at-pdp-accent-hover);
-  --button-border-color: var(--at-pdp-accent-hover);
 }
 
 /* Preserve the accordion, feature icons, links and dialogs; refine type only. */
@@ -579,7 +544,7 @@
 
 @media screen and (max-width: 749px) {
   .at-pdp {
-    --at-pdp-control-height: 3.25rem;
+    --at-pdp-control-height: max(3.25rem, var(--button-min-height));
   }
 
   .at-pdp .at-breadcrumbs-section {

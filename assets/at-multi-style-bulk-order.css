@@ -1103,22 +1103,6 @@ html.at-msq-scroll-lock {
   gap: 0.5rem 1rem;
 }
 
-.at-msq__picker-add.button {
-  --button-color: #fff;
-  --button-background-color: var(--at-msq-accent);
-  --button-border-color: var(--at-msq-accent);
-  min-height: var(--minimum-touch-target, 44px);
-  background: var(--at-msq-accent);
-  border-color: var(--at-msq-accent);
-  color: #fff;
-  font-weight: 600;
-}
-
-.at-msq__picker-add:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
 .at-msq__picker-cancel {
   min-height: var(--minimum-touch-target, 44px);
   font-size: var(--font-size--sm, 0.875rem);
@@ -1319,32 +1303,10 @@ html.at-msq-scroll-lock {
   color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text, 0.7));
 }
 
-/* Same look as the product page "Bulk add to cart" button (blocks/at-bulk-add-to-cart.liquid,
-   assets/at-pdp.css .at-buy-buttons__bulk-trigger): bulk icon, theme button case, semibold. */
-.at-msq__add.button {
-  --button-color: #fff;
-  --button-background-color: var(--at-msq-accent);
-  --button-border-color: var(--at-msq-accent);
-  --button-focus-outline-color: var(--at-msq-accent);
-  background: var(--at-msq-accent);
-  border-color: var(--at-msq-accent);
-  color: #fff;
-  font-size: var(--font-size--md, 1rem);
-  font-weight: 600;
-  line-height: 1.25;
-  text-transform: var(--button-text-case-primary, uppercase);
-}
-
-.at-msq__add.button:not(:disabled):hover {
-  --button-background-color: color-mix(in srgb, var(--at-msq-accent) 88%, #000);
-  background: color-mix(in srgb, var(--at-msq-accent) 88%, #000);
-  border-color: color-mix(in srgb, var(--at-msq-accent) 88%, #000);
-}
-
 .at-msq__add .add-to-cart-text {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--button-icon-gap);
 }
 
 .at-msq__add:disabled {
@@ -1409,7 +1371,7 @@ html.at-msq-scroll-lock {
 
   .at-msq__add.button {
     flex: 1 0 100%;
-    min-height: max(3rem, var(--height-buy-buttons, 3rem));
+    min-height: max(var(--button-min-height), var(--height-buy-buttons));
     justify-content: center;
   }
 

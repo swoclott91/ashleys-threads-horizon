@@ -438,7 +438,7 @@
                 "bulk-add-to-cart": {
                   "type": "at-bulk-add-to-cart",
                   "settings": {
-                    "at_bulk_trigger_label": "Bulk Add to Cart",
+                    "at_bulk_trigger_label": "Bulk add to cart",
                     "at_bulk_behavior": "default",
                     "style_class": "button",
                     "custom_button_background": "{{ settings.color_palette.foreground }}",

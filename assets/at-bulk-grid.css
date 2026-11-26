@@ -614,8 +614,7 @@
 
 /* Match theme buy buttons: same height, no quantity selector in this row */
 .at-bulk-grid__actions .button {
-  height: var(--height-buy-buttons);
-  min-height: var(--height-buy-buttons);
+  min-height: max(var(--height-buy-buttons), var(--button-min-height));
 }
 
 .at-bulk-grid__actions .add-to-cart-button {

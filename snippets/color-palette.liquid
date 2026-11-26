@@ -179,6 +179,9 @@
 
     --color-primary-button-text: rgb({{ settings.palette_primary_button_text.rgba }});
     --color-primary-button-background: rgb({{ settings.palette_primary_button_background.rgba }});
+    {% if settings.palette_primary_button_gradient != blank %}
+      --color-primary-button-gradient: {{ settings.palette_primary_button_gradient }};
+    {% endif %}
     --color-primary-button-border: rgb({{ settings.palette_primary_button_border.rgba }});
     --color-primary-button-focus-outline: rgb({{ effective_primary_button_focus_outline.rgb }});
     --color-primary-button-hover-text: rgb({{ effective_primary_button_hover_text.rgba }});
@@ -187,10 +190,14 @@
 
     --color-secondary-button-text: rgb({{ settings.palette_secondary_button_text.rgba }});
     --color-secondary-button-background: rgb({{ settings.palette_secondary_button_background.rgba }});
+    {% if settings.palette_secondary_button_gradient != blank %}
+      --color-secondary-button-gradient: {{ settings.palette_secondary_button_gradient }};
+    {% endif %}
     --color-secondary-button-border: rgb({{ settings.palette_secondary_button_border.rgba }});
     --color-secondary-button-hover-text: rgb({{ effective_secondary_button_hover_text.rgba }});
     --color-secondary-button-hover-background: {{ effective_secondary_button_hover_background }};
     --color-secondary-button-hover-border: {{ effective_secondary_button_hover_border }};
+    --color-pro-button-text: {{ settings.palette_pro_button_text }};
 
     --color-input-background: rgb({{ settings.palette_input_background.rgba }});
     --color-input-text: rgb({{ settings.palette_input_text.rgba }});

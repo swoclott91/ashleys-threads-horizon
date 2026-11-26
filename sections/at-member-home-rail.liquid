@@ -86,7 +86,12 @@
             {%- if sample -%}<p>{{ 'at_member_home.sample' | t }}</p>{%- endif -%}
           </div>
           {%- if section.settings.link != blank and section.settings.link_label != blank -%}
-            <a class="at-member-rail__link" href="{{ section.settings.link }}">{{ section.settings.link_label | escape }} <span aria-hidden="true">→</span></a>
+            <a class="button-unstyled button-link at-member-rail__link" href="{{ section.settings.link }}">
+              <span class="button-link__label">{{ section.settings.link_label | escape }}</span>
+              <span class="button-link__icon svg-wrapper" aria-hidden="true">
+                {{- 'icon-arrow.svg' | inline_asset_content -}}
+              </span>
+            </a>
           {%- endif -%}
         </header>
 

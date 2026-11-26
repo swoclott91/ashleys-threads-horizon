@@ -90,7 +90,7 @@
         {{ 'at_member_home.pro_active.shipment_ready' | t }} <code>{{ ship.code | escape }}</code>
       </p>
     {%- endif -%}
-    <a class="at-home-tier-benefits__cta" href="{{ routes.account_url }}">{{ 'at_member_home.pro_active.account' | t }}</a>
+    <a class="button-secondary" href="{{ routes.account_url }}">{{ 'at_member_home.pro_active.account' | t }}</a>
   {%- else -%}
     {%- assign terms = customer.current_location.metafields.wagner.terms_status.value -%}
     <p class="at-home-tier-benefits__kicker">{{ 'at_member.tiers.wholesale' | t }}</p>
@@ -110,6 +110,6 @@
           <p class="at-home-tier-benefits__note">{{ 'at_member.terms.pending' | t }}</p>
       {%- endcase -%}
     {%- endif -%}
-    <a class="at-home-tier-benefits__cta" href="{{ routes.account_url }}">{{ 'at_member_home.wholesale.account' | t }}</a>
+    <a class="button-secondary" href="{{ routes.account_url }}">{{ 'at_member_home.wholesale.account' | t }}</a>
   {%- endif -%}
 </div>

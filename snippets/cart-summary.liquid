@@ -179,7 +179,7 @@
                       >
                       <button
                         type="submit"
-                        class="button cart-discount__button"
+                        class="button-secondary cart-discount__button"
                       >
                         {{ 'actions.apply' | t }}
                       </button>
@@ -507,8 +507,7 @@
 
   .cart__ctas .cart__checkout-button {
     width: 100%;
-    height: clamp(25px, var(--height-buy-buttons), 55px);
-    padding-inline: var(--padding-4xl);
+    min-height: var(--height-buy-buttons);
   }
 
   .cart-drawer__summary .cart-totals:not(:has(.cart-totals__original-container:empty)) {

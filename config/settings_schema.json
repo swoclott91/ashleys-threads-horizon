@@ -1490,6 +1490,52 @@
     "name": "t:names.buttons",
     "settings": [
       {
+        "type": "font_picker",
+        "id": "type_button_font",
+        "label": "t:settings.font",
+        "default": "dm_sans_n6"
+      },
+      {
+        "type": "range",
+        "id": "button_font_size",
+        "label": "t:settings.size",
+        "min": 14,
+        "max": 24,
+        "step": 1,
+        "unit": "px",
+        "default": 18
+      },
+      {
+        "type": "range",
+        "id": "button_min_height",
+        "label": "t:settings.minimum_height",
+        "min": 48,
+        "max": 72,
+        "step": 1,
+        "unit": "px",
+        "default": 48
+      },
+      {
+        "type": "range",
+        "id": "button_horizontal_padding",
+        "label": "t:settings.horizontal_padding",
+        "min": 12,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 24
+      },
+      {
+        "type": "range",
+        "id": "button_shadow_opacity",
+        "label": "t:settings.shadow_opacity",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "unit": "%",
+        "default": 14
+      },
+      {
         "type": "header",
         "content": "t:options.button_primary"
       },
@@ -1497,21 +1543,27 @@
         "type": "color",
         "id": "palette_primary_button_background",
         "label": "t:settings.background",
-        "default": "{{ settings.color_palette.foreground }}",
+        "default": "#224536",
         "alpha": true
+      },
+      {
+        "type": "color_background",
+        "id": "palette_primary_button_gradient",
+        "label": "t:options.gradient",
+        "default": "linear-gradient(180deg, #2C5747 0%, #224536 100%)"
       },
       {
         "type": "color",
         "id": "palette_primary_button_text",
         "label": "t:settings.text",
-        "default": "{{ settings.color_palette.background }}",
+        "default": "#F7F0E3",
         "alpha": true
       },
       {
         "type": "color",
         "id": "palette_primary_button_border",
         "label": "t:settings.borders",
-        "default": "{{ settings.color_palette.background }}",
+        "default": "#18382C",
         "alpha": true
       },
       {
@@ -1522,7 +1574,7 @@
         "step": 1,
         "unit": "px",
         "label": "t:settings.border_width",
-        "default": 0
+        "default": 1
       },
       {
         "type": "range",
@@ -1532,13 +1584,17 @@
         "step": 1,
         "unit": "px",
         "label": "t:settings.border_radius",
-        "default": 100
+        "default": 8
       },
       {
         "type": "select",
         "id": "type_font_button_primary",
         "label": "t:settings.font",
         "options": [
+          {
+            "value": "button",
+            "label": "t:options.default"
+          },
           {
             "value": "body",
             "label": "t:options.body"
@@ -1548,7 +1604,7 @@
             "label": "t:options.accent"
           }
         ],
-        "default": "body"
+        "default": "button"
       },
       {
         "type": "select",
@@ -1574,21 +1630,27 @@
         "type": "color",
         "id": "palette_secondary_button_background",
         "label": "t:settings.background",
-        "default": "{{ settings.color_palette.background }}",
+        "default": "#EFDFC5",
         "alpha": true
+      },
+      {
+        "type": "color_background",
+        "id": "palette_secondary_button_gradient",
+        "label": "t:options.gradient",
+        "default": "linear-gradient(180deg, #FFF5E7 0%, #EFDFC5 100%)"
       },
       {
         "type": "color",
         "id": "palette_secondary_button_text",
         "label": "t:settings.text",
-        "default": "{{ settings.color_palette.foreground }}",
+        "default": "#244B3D",
         "alpha": true
       },
       {
         "type": "color",
         "id": "palette_secondary_button_border",
         "label": "t:settings.borders",
-        "default": "{{ settings.color_palette.foreground }}",
+        "default": "#C7B394",
         "alpha": true
       },
       {
@@ -1609,13 +1671,17 @@
         "step": 1,
         "unit": "px",
         "label": "t:settings.border_radius",
-        "default": 100
+        "default": 8
       },
       {
         "type": "select",
         "id": "type_font_button_secondary",
         "label": "t:settings.font",
         "options": [
+          {
+            "value": "button",
+            "label": "t:options.default"
+          },
           {
             "value": "body",
             "label": "t:options.body"
@@ -1625,7 +1691,7 @@
             "label": "t:options.accent"
           }
         ],
-        "default": "body"
+        "default": "button"
       },
       {
         "type": "select",
@@ -1642,6 +1708,12 @@
           }
         ],
         "default": "default"
+      },
+      {
+        "type": "color",
+        "id": "palette_pro_button_text",
+        "label": "Pro promotion button text",
+        "default": "#783447"
       },
       {
         "type": "header",

@@ -121,6 +121,12 @@
       echo accent_font_bold_italic | font_face: font_display: 'swap'
       assign rendered_fonts = rendered_fonts | append: accent_font_bold_italic_face_id
     endunless
+
+    assign button_font = settings.type_button_font
+    assign button_font_face_id = button_font.family | append: '-' | append: button_font.weight | append: '-' | append: button_font.style | append: '|'
+    unless rendered_fonts contains button_font_face_id
+      echo button_font | font_face: font_display: 'swap'
+    endunless
   %}
 
   :root {
@@ -562,16 +568,29 @@
     /* Button size */
     --button-size-md: 36px;
     --button-size: var(--minimum-touch-target);
-    --button-padding-inline: 24px;
-    --button-padding-block: 16px;
+    --button-min-height: {{ settings.button_min_height | default: 48 }}px;
+    --button-padding-inline: {{ settings.button_horizontal_padding | default: 24 }}px;
+    --button-padding-block: 10px;
+    --button-icon-gap: 8px;
 
-    /* Button font-family */
+    --button-shadow-opacity: {{ settings.button_shadow_opacity | default: 14 }}%;
+    --button-edge-highlight: inset 0 1px 0 rgb(255 255 255 / 18%);
+    --button-edge-highlight-pressed: inset 0 1px 0 rgb(255 255 255 / 5%);
+    --button-shadow-rest: 0 2px 4px rgb(24 35 27 / var(--button-shadow-opacity));
+    --button-shadow-hover: 0 3px 6px rgb(24 35 27 / calc(var(--button-shadow-opacity) * 1.3));
+    --button-shadow-pressed: 0 1px 2px rgb(24 35 27 / calc(var(--button-shadow-opacity) * 0.6));
+
+    /* Button typography */
+    --font-button--family: {{ button_font.family }}, {{ button_font.fallback_families }};
+    --button-font-style: {{ button_font.style | default: "normal" }};
+    --button-font-weight: {{ button_font.weight | default: 600 }};
+    --button-font-size: {{ settings.button_font_size | default: 18 | divided_by: 16.0 }}rem;
     --button-font-family-primary: var(--font-{{ settings.type_font_button_primary }}--family);
     --button-font-family-secondary: var(--font-{{ settings.type_font_button_secondary }}--family);
 
     /* Button text case */
-    --button-text-case-primary: {{ settings.button_text_case_primary }};
-    --button-text-case-secondary: {{ settings.button_text_case_secondary }};
+    --button-text-case-primary: {{ settings.button_text_case_primary | replace: "default", "none" }};
+    --button-text-case-secondary: {{ settings.button_text_case_secondary | replace: "default", "none" }};
 
     /* Borders */
     --border-color: rgb(var(--color-border-rgb) / var(--opacity-50));
@@ -614,7 +633,7 @@
     /* Shapes */
 
     /* Buy buttons */
-    --height-buy-buttons: calc(var(--padding-lg) * 2 + var(--icon-size-sm));
+    --height-buy-buttons: max(var(--button-min-height), calc(var(--padding-lg) * 2 + var(--icon-size-sm)));
 
     /* Card image width and height variables */
     --card-width-small: 10rem;

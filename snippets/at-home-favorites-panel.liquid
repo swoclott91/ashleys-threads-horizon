@@ -63,7 +63,7 @@
       {{- at_fp_thumbs -}}
     </ul>
     <div class="at-home-favorites-panel__actions">
-      <a class="at-home-favorites-panel__button" href="{{ at_fp_bulk_url }}">
+      <a class="button button-with-icon" href="{{ at_fp_bulk_url }}">
         Bulk order favorites <span aria-hidden="true">&rarr;</span>
       </a>
     </div>
@@ -127,26 +127,6 @@
     align-items: center;
     gap: 10px 18px;
     margin-block-start: auto;
-  }
-  .at-home-favorites-panel__button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-height: 46px;
-    padding: 10px 18px;
-    border-radius: 999px;
-    background: #243e34;
-    color: #fff;
-    font-weight: 700;
-    text-decoration: none;
-  }
-  .at-home-favorites-panel__button:hover {
-    background: #2b4a3f;
-  }
-  .at-home-favorites-panel__button:focus-visible {
-    outline: 2px solid #243e34;
-    outline-offset: 3px;
   }
   @media screen and (max-width: 989px) {
     .at-home-favorites-panel {
