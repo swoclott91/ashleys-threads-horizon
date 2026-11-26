@@ -1,0 +1,52 @@
+{% liquid
+  assign product = closest.product
+
+  if product == blank
+    assign card_title = 'placeholders.product_title' | t
+  else
+    assign title_start = product.title | strip | split: ' ' | slice: 0, 2 | join: ' '
+    assign card_title = product.vendor | strip | append: ' ' | append: title_start | strip
+  endif
+%}
+
+{% capture title_markup %}<p role="heading" aria-level="3">{{ card_title | escape }}</p>{% endcapture %}
+{% render 'text', fallback_text: title_markup, block: block, width: 'fit-content' %}
+
+{% schema %}
+{
+  "name": "t:names.product_card_short_title",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "type_preset",
+      "label": "t:settings.preset",
+      "options": [
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        }
+      ],
+      "default": "paragraph"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.product_card_short_title",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

@@ -286,6 +286,7 @@
     "at_breadcrumbs": "AT Breadcrumbs",
     "column": "Column",
     "product_title": "Product title",
+    "product_card_short_title": "Short product title",
     "custom_liquid": "Custom Liquid",
     "404": "404",
     "accelerated_checkout": "Accelerated checkout",
