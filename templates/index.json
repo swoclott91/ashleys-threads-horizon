@@ -1279,10 +1279,11 @@
               },
               "blocks": {}
             },
-            "title": {
-              "type": "product-title",
+            "product_card_short_title_PWhwVX": {
+              "type": "_product-card-short-title",
+              "name": "t:names.product_card_short_title",
               "settings": {
-                "width": "100%",
+                "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
                 "type_preset": "h6",
@@ -1319,7 +1320,7 @@
           },
           "block_order": [
             "gallery",
-            "title",
+            "product_card_short_title_PWhwVX",
             "swatches"
           ]
         }
