@@ -3,7 +3,8 @@
   (docs/pro-membership-pdp.md). Presentation lives in the sections; this snippet only decides the
   state and the figures, so a compact tile and the expanded PDP always report the same numbers.
 
-  @param {string} [preview] - Theme editor only: a | b | c | d | e | f loads a labeled fixture.
+  @param {string} [preview] - Theme editor only: a | b | c | d | e | f loads a labeled fixture;
+    d_ytd and e_ytd load the `savings_ytd` fallback shape (calendar year, pricing only for Members).
 
   States
   - a: guest, or a Member with no orders → sell the opportunity, calculator.
@@ -27,6 +28,10 @@
 
   Output (capture it): `;key=value;` — keys: state tier source sample basis pricing cash ship total
   net fee recovered_bp has_orders spend_12m monthly_hint balance renew ship_status ship_code
+  complete exact
+  - complete: 1 when pricing, Threads Cash and shipping are all known. 0 means `total` is only the
+    known part (today: Members get pricing alone), so it must not be labeled a total or a net.
+  - exact: 0 when `wagner.pro_value.exact` is false (Pro prices were estimated), else 1.
   {% capture at_pv %}{% render 'at-pro-value' %}{% endcapture %}
   {% assign at_pv_state = at_pv | split: ';state=' | last | split: ';' | first %}
 {%- enddoc -%}
@@ -52,6 +57,7 @@
   assign at_pv_renew = ''
   assign at_pv_ship_status = 'none'
   assign at_pv_ship_code = ''
+  assign at_pv_exact = 1
 
   # ---------- Real customer data ----------
   if customer
@@ -95,6 +101,9 @@
     if at_pv_use_pv
       assign at_pv_source = 'pro_value'
       assign at_pv_basis = at_pv_pv.period.basis | default: 'trailing_12m'
+      if at_pv_pv.exact == false
+        assign at_pv_exact = 0
+      endif
       if at_pv_pv.pricing_savings != blank
         assign at_pv_pricing = at_pv_pv.pricing_savings | times: 100 | round
       endif
@@ -159,6 +168,7 @@
     assign at_pv_ship_status = 'none'
     assign at_pv_has_orders = 1
     assign at_pv_spend = 0
+    assign at_pv_exact = 1
     case preview
       when 'a'
         assign at_pv_tier = 'member'
@@ -194,6 +204,20 @@
         assign at_pv_ship_status = 'ready'
         assign at_pv_ship_code = 'PRO-SAMPLE'
         assign at_pv_basis = 'membership_year'
+      when 'd_ytd'
+        assign at_pv_tier = 'member'
+        assign at_pv_pricing = 12400
+        assign at_pv_spend = 85700
+        assign at_pv_basis = 'calendar_ytd'
+      when 'e_ytd'
+        assign at_pv_tier = 'pro'
+        assign at_pv_pricing = 21800
+        assign at_pv_cash = 2600
+        assign at_pv_ship = 4500
+        assign at_pv_balance = 1180
+        assign at_pv_renew = 'now' | date: '%s' | plus: 17280000 | date: '%Y-%m-%d'
+        assign at_pv_ship_status = 'used'
+        assign at_pv_basis = 'calendar_ytd'
       when 'f'
         assign at_pv_tier = 'wholesale'
     endcase
@@ -211,6 +235,10 @@
     assign at_pv_total = at_pv_total | plus: at_pv_ship
   endif
   assign at_pv_net = at_pv_total | minus: at_pv_fee
+  assign at_pv_complete = 0
+  if at_pv_pricing >= 0 and at_pv_cash >= 0 and at_pv_ship >= 0
+    assign at_pv_complete = 1
+  endif
   assign at_pv_recovered = 0
   if at_pv_fee > 0
     assign at_pv_recovered = at_pv_total | times: 10000 | divided_by: at_pv_fee
@@ -257,5 +285,7 @@
   echo ';renew=' | append: at_pv_renew
   echo ';ship_status=' | append: at_pv_ship_status
   echo ';ship_code=' | append: at_pv_ship_code
+  echo ';complete=' | append: at_pv_complete
+  echo ';exact=' | append: at_pv_exact
   echo ';'
 -%}

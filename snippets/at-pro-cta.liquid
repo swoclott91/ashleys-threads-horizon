@@ -12,7 +12,7 @@
   @param {object} product - The Pro membership product.
   @param {string} state - a | b | c | d | e | f
   @param {string} [label] - Purchase button label (default "Become a Pro").
-  @param {boolean} [with_price] - Append "— $79/year" to the purchase label.
+  @param {boolean} [with_price] - Append "— [fee]/year" to the purchase label (fee from `at-pro-config`).
   @param {string} [id] - id for the purchase button (the sticky bar watches it).
   @param {string} [form_id] - Unique form id.
 {%- enddoc -%}
@@ -23,7 +23,10 @@
     assign at_cta_label = label
   endif
   if with_price and at_cta_variant
-    assign at_cta_price = at_cta_variant.price | money_without_trailing_zeros
+    capture at_cta_config
+      render 'at-pro-config'
+    endcapture
+    assign at_cta_price = at_cta_config | split: ';fee=' | last | split: ';' | first | plus: 0 | money_without_trailing_zeros
     assign at_cta_suffix = 'at_pro.price.per_year_suffix' | t
     assign at_cta_label = at_cta_label | append: ' — ' | append: at_cta_price | append: at_cta_suffix
   endif

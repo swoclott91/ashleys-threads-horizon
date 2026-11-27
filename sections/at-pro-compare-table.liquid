@@ -1,6 +1,7 @@
 {%- comment -%}
-  Pro PDP section 6: Member vs. Pro. Rows are editor blocks; values accept [tokens].
-  A Pro Promise row is added automatically while the Promise is visible (Theme settings › Membership).
+  Pro PDP section: Member vs. Pro. Rows are editor blocks; values accept [tokens].
+  Rows marked "Pro difference" (pricing, Threads Cash, shipping credit) carry the emphasis; shared
+  benefits are quieter. A Pro Promise row is added automatically while the Promise is visible.
   Guest and Wholesale are deliberately left out so they don't distract from the upgrade decision.
 {%- endcomment -%}
 {%- capture pc -%}{% render 'at-pro-config' %}{%- endcapture -%}
@@ -28,14 +29,14 @@
       </thead>
       <tbody>
         {%- for block in section.blocks -%}
-          <tr {{ block.shopify_attributes }}>
+          <tr class="{% if block.settings.difference %}at-pro-versus__row--difference{% else %}at-pro-versus__row--shared{% endif %}" {{ block.shopify_attributes }}>
             <th scope="row">{{ block.settings.label | escape }}</th>
             <td>{% render 'at-pro-tokens', text: block.settings.member %}</td>
             <td class="at-pro-table__pro">{% render 'at-pro-tokens', text: block.settings.pro %}</td>
           </tr>
         {%- endfor -%}
         {%- if promise != 'off' -%}
-          <tr>
+          <tr class="at-pro-versus__row--difference">
             <th scope="row">{{ 'at_pro.versus.promise' | t }}</th>
             <td>—</td>
             <td class="at-pro-table__pro">
@@ -66,7 +67,8 @@
       "settings": [
         { "type": "text", "id": "label", "label": "Benefit", "default": "Benefit" },
         { "type": "text", "id": "member", "label": "Member", "default": "—" },
-        { "type": "text", "id": "pro", "label": "Pro", "default": "Included" }
+        { "type": "text", "id": "pro", "label": "Pro", "default": "Included" },
+        { "type": "checkbox", "id": "difference", "label": "Pro difference", "default": false, "info": "Emphasize rows where Pro is better than Member." }
       ]
     }
   ],
@@ -75,11 +77,11 @@
       "name": "Pro: Member vs. Pro",
       "blocks": [
         { "type": "row", "settings": { "label": "Annual membership", "member": "Free", "pro": "[fee]" } },
-        { "type": "row", "settings": { "label": "Everyday pricing", "member": "Member pricing", "pro": "Exclusive Pro pricing" } },
+        { "type": "row", "settings": { "label": "Everyday pricing", "member": "Member pricing", "pro": "Exclusive Pro pricing", "difference": true } },
         { "type": "row", "settings": { "label": "Favorites and bulk ordering", "member": "Included", "pro": "Included" } },
         { "type": "row", "settings": { "label": "Personalized shopping", "member": "Included", "pro": "Included" } },
-        { "type": "row", "settings": { "label": "Threads Cash", "member": "—", "pro": "[cash_rate] back" } },
-        { "type": "row", "settings": { "label": "Monthly shipping credit", "member": "—", "pro": "Up to [ship_max]" } },
+        { "type": "row", "settings": { "label": "Threads Cash", "member": "—", "pro": "[cash_rate] back", "difference": true } },
+        { "type": "row", "settings": { "label": "Monthly shipping credit", "member": "—", "pro": "Up to [ship_max]", "difference": true } },
         { "type": "row", "settings": { "label": "Free standard shipping", "member": "[free_ship]+", "pro": "[free_ship]+" } }
       ]
     }

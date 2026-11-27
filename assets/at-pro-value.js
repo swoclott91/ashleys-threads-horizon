@@ -1,9 +1,9 @@
 /**
  * Ashley's Pro value calculator (docs/pro-membership-pdp.md, "Calculator math").
  *
- * The one implementation of the projection math. The compact calculator above the fold and the
- * expanded calculator section both use <at-pro-calculator>; config comes from snippets/at-pro-config
- * through `data-config`, so the theme never hardcodes rates, caps or the fee.
+ * The one implementation of the projection math, used by the single <at-pro-calculator> on the Pro
+ * PDP (snippets/at-pro-calculator). Config comes from snippets/at-pro-config through `data-config`,
+ * so the theme never hardcodes rates, caps or the fee.
  *
  * Spending basis: what the customer spends on blank apparel at standard Member prices.
  *   proSpend   = memberSpend × ratio
@@ -77,15 +77,34 @@ class AtProCalculator extends HTMLElement {
     const locale = document.documentElement.lang || undefined;
     const currency = this.dataset.currency || 'USD';
     this.money = new Intl.NumberFormat(locale, { style: 'currency', currency, maximumFractionDigits: 0 });
-    this.addEventListener('input', this.update);
-    this.addEventListener('change', this.update);
+    this.addEventListener('input', this.onInput);
+    this.addEventListener('change', this.onInput);
     this.update();
   }
 
   disconnectedCallback() {
-    this.removeEventListener('input', this.update);
-    this.removeEventListener('change', this.update);
+    this.removeEventListener('input', this.onInput);
+    this.removeEventListener('change', this.onInput);
   }
+
+  /** Keeps the slider and its number field in step, then recalculates. */
+  onInput = (event) => {
+    const target = /** @type {HTMLInputElement} */ (event.target);
+    const mirrorOf = target?.getAttribute?.('data-pro-mirror');
+    if (mirrorOf) {
+      const field = /** @type {HTMLInputElement|null} */ (this.querySelector(`[data-pro-input="${mirrorOf}"]`));
+      if (field) field.value = target.value;
+    } else if (target?.getAttribute?.('data-pro-input')) {
+      const name = target.getAttribute('data-pro-input');
+      const range = /** @type {HTMLInputElement|null} */ (this.querySelector(`[data-pro-mirror="${name}"]`));
+      if (range) {
+        const value = Math.max(0, parseFloat(target.value) || 0);
+        if (value > Number(range.max)) range.max = String(Math.ceil(value / 500) * 500);
+        range.value = String(value);
+      }
+    }
+    this.update();
+  };
 
   /** @param {string} name */
   read(name, fallback) {
@@ -100,8 +119,8 @@ class AtProCalculator extends HTMLElement {
     if (!config) return;
     const inputs = {
       monthlySpend: this.read('monthly', 0) * 100,
-      restocks: this.read('restocks', Number(this.dataset.defaultRestocks || 1)),
-      shipCharge: this.read('ship', Number(this.dataset.defaultShip || 0)) * 100,
+      restocks: this.read('restocks', Number(this.dataset.defaultRestocks || 3)),
+      shipCharge: Math.max(0, this.read('ship', Number(this.dataset.defaultShip || 0))) * 100,
     };
     const result = estimateProValue(inputs, config);
     const format = (cents) => this.money.format(Math.round((cents || 0) / 100));
@@ -111,6 +130,10 @@ class AtProCalculator extends HTMLElement {
       if (key === 'monthly') node.textContent = format(inputs.monthlySpend);
       if (key === 'restocks') node.textContent = String(inputs.restocks);
       if (key === 'ship') node.textContent = format(inputs.shipCharge);
+      if (key === 'assumption') {
+        const template = node.getAttribute(inputs.restocks === 1 ? 'data-one' : 'data-other');
+        if (template) node.textContent = template.replace('[count]', String(inputs.restocks)).replace('[ship]', format(inputs.shipCharge));
+      }
     });
 
     this.querySelectorAll('[data-pro-out]').forEach((node) => {
@@ -157,20 +180,51 @@ class AtProCalculator extends HTMLElement {
 
 if (!customElements.get('at-pro-calculator')) customElements.define('at-pro-calculator', AtProCalculator);
 
-/** Mobile sticky purchase bar: shows once the main purchase button scrolls out of view. */
+/**
+ * Mobile sticky purchase bar: shows once the main purchase button scrolls out of view.
+ * While it shows, `html[data-at-pro-sticky]` and `--at-pro-sticky-height` let assets/at-pro.css lift
+ * the Shopify Inbox chat launcher above the bar instead of overlapping it.
+ */
 class AtProStickyBar extends HTMLElement {
   connectedCallback() {
-    const target = document.getElementById(this.dataset.target || '');
-    if (!target || !('IntersectionObserver' in window)) return;
-    this.observer = new IntersectionObserver(([entry]) => {
-      const above = entry.boundingClientRect.top < 0;
-      this.toggleAttribute('data-visible', !entry.isIntersecting && above);
+    this.target = document.getElementById(this.dataset.target || '');
+    if (!this.target) return;
+    // A scroll check rather than an IntersectionObserver: on mobile the button starts below the
+    // fold, and a jump straight past it (an anchor link, restored scroll) never "intersects", so an
+    // observer would never report that it is now above the viewport.
+    window.addEventListener('scroll', this.schedule, { passive: true });
+    window.addEventListener('resize', this.schedule, { passive: true });
+    this.check();
+  }
+
+  schedule = () => {
+    if (this.frame) return;
+    this.frame = requestAnimationFrame(() => {
+      this.frame = 0;
+      this.check();
     });
-    this.observer.observe(target);
+  };
+
+  check() {
+    if (!this.target) return;
+    this.setVisible(this.target.getBoundingClientRect().bottom < 0);
+  }
+
+  /** @param {boolean} visible */
+  setVisible(visible) {
+    if (visible === this.hasAttribute('data-visible')) return;
+    this.toggleAttribute('data-visible', visible);
+    const root = document.documentElement;
+    const shown = visible && getComputedStyle(this).display !== 'none';
+    root.toggleAttribute('data-at-pro-sticky', shown);
+    if (shown) root.style.setProperty('--at-pro-sticky-height', `${Math.round(this.getBoundingClientRect().height)}px`);
   }
 
   disconnectedCallback() {
-    this.observer?.disconnect();
+    window.removeEventListener('scroll', this.schedule);
+    window.removeEventListener('resize', this.schedule);
+    if (this.frame) cancelAnimationFrame(this.frame);
+    document.documentElement.removeAttribute('data-at-pro-sticky');
   }
 }
 

@@ -1,5 +1,6 @@
 {%- comment -%}
-  Pro PDP section 7: FAQ. Answers accept [tokens].
+  Pro PDP section: FAQ. Answers accept [tokens]. Heading beside a wide accordion on desktop, so a
+  short list (most answers are still pending policy) doesn't leave an empty column.
   A question marked "Answer pending policy" is hidden from shoppers and shown in the theme editor
   with a Pending badge, so unresolved policy is visible during development but never published.
 {%- endcomment -%}
@@ -8,8 +9,10 @@
 {%- unless tier == 'wholesale' -%}
 {{ 'at-pro.css' | asset_url | stylesheet_tag }}
 <div class="section section--page-width at-pro-page at-pro-section at-pro-faq">
-  <div class="at-pro-section__head">
+  <div class="at-pro-faq__layout">
+  <div class="at-pro-section__head at-pro-faq__head">
     <h2 class="at-pro-serif at-pro-section__heading">{{ section.settings.heading | escape }}</h2>
+    {%- if section.settings.intro != blank -%}<p class="at-pro-section__intro">{{ section.settings.intro | escape }}</p>{%- endif -%}
   </div>
   <div class="at-pro-faq__list">
     {%- for block in section.blocks -%}
@@ -24,6 +27,7 @@
       </details>
     {%- endfor -%}
   </div>
+  </div>
 </div>
 {%- endunless -%}
 
@@ -34,7 +38,8 @@
   "class": "at-pro-section-wrap",
   "settings": [
     { "type": "paragraph", "content": "Tokens: [fee] [cash_rate] [ship_max] [ship_min] [free_ship] [breakeven_annual] [breakeven_monthly]." },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Questions from business owners" }
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Questions from business owners" },
+    { "type": "text", "id": "intro", "label": "Intro", "default": "Straight answers about how Pro works." }
   ],
   "blocks": [
     {
