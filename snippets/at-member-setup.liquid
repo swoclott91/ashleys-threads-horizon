@@ -1,0 +1,110 @@
+{%- doc -%}
+  Member setup notice. Rendered once in layout/theme.liquid.
+
+  Shows only to a signed-in customer whose session isn't buying for a company location yet,
+  which is how a new account looks for the few seconds Wagner takes to set it up. Every Member,
+  Pro and Wholesale account has one, so a signed-in session without one is still being set up
+  or hasn't switched to it. assets/at-member-setup.js polls sections/at-member-setup-data.liquid
+  (Shopify only, never Wagner) and reloads the page once setup is done (Shopify attaches the
+  new location on a full page load), with timed fallback reloads, at most two per session.
+  Member prices, the badge and benefits then render. After about 3 minutes it stops and asks
+  the customer to refresh later.
+
+  Hidden in the theme editor, where the "Preview tier as" setting stands in for a real tier.
+{%- enddoc -%}
+{%- liquid
+  assign at_setup_show = false
+  if customer and request.design_mode == false
+    unless customer.b2b? and customer.current_location
+      assign at_setup_show = true
+    endunless
+  endif
+-%}
+{%- if at_setup_show -%}
+  <div
+    class="at-member-setup color-custom-popover"
+    data-at-member-setup-notice
+    data-section-url="{{ routes.root_url }}"
+    data-customer="{{ customer.id }}"
+    role="status"
+    aria-live="polite"
+    hidden
+  >
+    <span class="at-member-setup__spinner" aria-hidden="true"></span>
+    <p class="at-member-setup__text" data-at-member-setup-text>
+      Setting up your Member prices. This page updates in a few seconds.
+    </p>
+    <button
+      type="button"
+      class="button-unstyled at-member-setup__close"
+      data-at-member-setup-close
+      aria-label="{{ 'accessibility.close_dialog' | t | escape }}"
+      hidden
+    >
+      {{- 'icon-close.svg' | inline_asset_content -}}
+    </button>
+  </div>
+  <script src="{{ 'at-member-setup.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{%- endif -%}
+
+{% stylesheet %}
+  .at-member-setup {
+    position: fixed;
+    inset-block-end: 16px;
+    inset-inline: 16px;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 420px;
+    margin-inline: auto;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: var(--color-background);
+    color: var(--color-foreground);
+    box-shadow: 0 6px 24px rgb(0 0 0 / 0.16);
+  }
+
+  .at-member-setup[hidden] {
+    display: none;
+  }
+
+  .at-member-setup__text {
+    margin: 0;
+    flex: 1;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .at-member-setup__spinner {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid color-mix(in srgb, var(--color-foreground) 20%, transparent);
+    border-top-color: var(--color-foreground);
+    border-radius: 50%;
+    animation: at-member-setup-spin 0.8s linear infinite;
+  }
+
+  .at-member-setup--stopped .at-member-setup__spinner {
+    display: none;
+  }
+
+  .at-member-setup__close {
+    flex: none;
+    width: 20px;
+    height: 20px;
+  }
+
+  @keyframes at-member-setup-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .at-member-setup__spinner {
+      animation-duration: 2.4s;
+    }
+  }
+{% endstylesheet %}

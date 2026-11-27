@@ -1,0 +1,101 @@
+{
+  "issues": [
+    {
+      "code": "ambiguous",
+      "id": "gid://shopify/Product/10426119618835",
+      "detail": "Exactly one verified garment family is required"
+    }
+  ],
+  "assignments": [],
+  "collectionEdits": [
+    {
+      "id": "gid://shopify/Collection/523280777491",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": null,
+        "label": "T-Shirts"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/525843595539",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": "gid://shopify/Collection/523280777491",
+        "label": "Short Sleeve"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/523279794451",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": "gid://shopify/Collection/523280777491",
+        "label": "Long Sleeve"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/523280744723",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": null,
+        "label": "Sweatshirts & Hoodies"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/523279499539",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": "gid://shopify/Collection/523280744723",
+        "label": "Hoodies"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/523279335699",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": null,
+        "label": "Hats"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/523281236243",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": "gid://shopify/Collection/523279335699",
+        "label": "Trucker Hats"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/523278942483",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": "gid://shopify/Collection/523279335699",
+        "label": "Beanies"
+      }
+    }
+  ],
+  "ready": false
+}

@@ -1,0 +1,31 @@
+{%- doc -%}
+  Outputs the homepage shopping state (homepage strategy, "Layout by shopping state"):
+  guest | new | buyer
+
+  - guest: not a member. Same rule as `at-section-visible`: signed out, or signed in without
+    a member tier (1C's `at-member-tier`, so the editor's "Preview tier as" applies).
+  - new: a member with no orders.
+  - buyer: a member with at least one order.
+
+  Purchases are detected by reading `customer.orders`, never `customer.orders_count`, which
+  is 0 for test orders. A tier previewed in the editor with no customer signed in is `new`.
+
+  Capture it:
+  {% capture at_home_state %}{% render 'at-home-state' %}{% endcapture %}{% assign at_home_state = at_home_state | strip %}
+
+  Favorites and profile answers are independent of this state; sections read those themselves
+  (`customer.metafields.wagner.favorite_products`, `wagner.onboarding_q1..q3`).
+{%- enddoc -%}
+{%- capture at_hs_tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
+{%- liquid
+  assign at_hs = 'guest'
+  unless at_hs_tier contains 'guest'
+    assign at_hs = 'new'
+    if customer
+      for order in customer.orders limit: 1
+        assign at_hs = 'buyer'
+      endfor
+    endif
+  endunless
+  echo at_hs
+-%}

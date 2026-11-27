@@ -1490,6 +1490,52 @@
     "name": "t:names.buttons",
     "settings": [
       {
+        "type": "font_picker",
+        "id": "type_button_font",
+        "label": "t:settings.font",
+        "default": "dm_sans_n6"
+      },
+      {
+        "type": "range",
+        "id": "button_font_size",
+        "label": "t:settings.size",
+        "min": 14,
+        "max": 24,
+        "step": 1,
+        "unit": "px",
+        "default": 18
+      },
+      {
+        "type": "range",
+        "id": "button_min_height",
+        "label": "t:settings.minimum_height",
+        "min": 48,
+        "max": 72,
+        "step": 1,
+        "unit": "px",
+        "default": 48
+      },
+      {
+        "type": "range",
+        "id": "button_horizontal_padding",
+        "label": "t:settings.horizontal_padding",
+        "min": 12,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 24
+      },
+      {
+        "type": "range",
+        "id": "button_shadow_opacity",
+        "label": "t:settings.shadow_opacity",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "unit": "%",
+        "default": 14
+      },
+      {
         "type": "header",
         "content": "t:options.button_primary"
       },
@@ -1497,21 +1543,27 @@
         "type": "color",
         "id": "palette_primary_button_background",
         "label": "t:settings.background",
-        "default": "{{ settings.color_palette.foreground }}",
+        "default": "#224536",
         "alpha": true
+      },
+      {
+        "type": "color_background",
+        "id": "palette_primary_button_gradient",
+        "label": "t:options.gradient",
+        "default": "linear-gradient(180deg, #2C5747 0%, #224536 100%)"
       },
       {
         "type": "color",
         "id": "palette_primary_button_text",
         "label": "t:settings.text",
-        "default": "{{ settings.color_palette.background }}",
+        "default": "#F7F0E3",
         "alpha": true
       },
       {
         "type": "color",
         "id": "palette_primary_button_border",
         "label": "t:settings.borders",
-        "default": "{{ settings.color_palette.background }}",
+        "default": "#18382C",
         "alpha": true
       },
       {
@@ -1522,7 +1574,7 @@
         "step": 1,
         "unit": "px",
         "label": "t:settings.border_width",
-        "default": 0
+        "default": 1
       },
       {
         "type": "range",
@@ -1532,13 +1584,17 @@
         "step": 1,
         "unit": "px",
         "label": "t:settings.border_radius",
-        "default": 100
+        "default": 8
       },
       {
         "type": "select",
         "id": "type_font_button_primary",
         "label": "t:settings.font",
         "options": [
+          {
+            "value": "button",
+            "label": "t:options.default"
+          },
           {
             "value": "body",
             "label": "t:options.body"
@@ -1548,7 +1604,7 @@
             "label": "t:options.accent"
           }
         ],
-        "default": "body"
+        "default": "button"
       },
       {
         "type": "select",
@@ -1574,21 +1630,27 @@
         "type": "color",
         "id": "palette_secondary_button_background",
         "label": "t:settings.background",
-        "default": "{{ settings.color_palette.background }}",
+        "default": "#EFDFC5",
         "alpha": true
+      },
+      {
+        "type": "color_background",
+        "id": "palette_secondary_button_gradient",
+        "label": "t:options.gradient",
+        "default": "linear-gradient(180deg, #FFF5E7 0%, #EFDFC5 100%)"
       },
       {
         "type": "color",
         "id": "palette_secondary_button_text",
         "label": "t:settings.text",
-        "default": "{{ settings.color_palette.foreground }}",
+        "default": "#244B3D",
         "alpha": true
       },
       {
         "type": "color",
         "id": "palette_secondary_button_border",
         "label": "t:settings.borders",
-        "default": "{{ settings.color_palette.foreground }}",
+        "default": "#C7B394",
         "alpha": true
       },
       {
@@ -1609,13 +1671,17 @@
         "step": 1,
         "unit": "px",
         "label": "t:settings.border_radius",
-        "default": 100
+        "default": 8
       },
       {
         "type": "select",
         "id": "type_font_button_secondary",
         "label": "t:settings.font",
         "options": [
+          {
+            "value": "button",
+            "label": "t:options.default"
+          },
           {
             "value": "body",
             "label": "t:options.body"
@@ -1625,7 +1691,7 @@
             "label": "t:options.accent"
           }
         ],
-        "default": "body"
+        "default": "button"
       },
       {
         "type": "select",
@@ -1642,6 +1708,12 @@
           }
         ],
         "default": "default"
+      },
+      {
+        "type": "color",
+        "id": "palette_pro_button_text",
+        "label": "Pro promotion button text",
+        "default": "#783447"
       },
       {
         "type": "header",
@@ -2183,6 +2255,57 @@
         "id": "currency_code_enabled_cart_total",
         "label": "t:settings.cart_total",
         "default": true
+      },
+      {
+        "type": "header",
+        "content": "t:content.at_member_pricing_heading"
+      },
+      {
+        "type": "select",
+        "id": "at_member_preview_tier",
+        "label": "t:settings.at_member_preview_tier",
+        "info": "t:info.at_member_preview_tier",
+        "options": [
+          {
+            "value": "off",
+            "label": "t:options.at_member_preview_off"
+          },
+          {
+            "value": "guest",
+            "label": "t:options.at_member_preview_guest"
+          },
+          {
+            "value": "member",
+            "label": "t:options.at_member_preview_member"
+          },
+          {
+            "value": "pro",
+            "label": "t:options.at_member_preview_pro"
+          },
+          {
+            "value": "wholesale",
+            "label": "t:options.at_member_preview_wholesale"
+          }
+        ],
+        "default": "off"
+      },
+      {
+        "type": "text",
+        "id": "at_membership_page_url",
+        "label": "t:settings.at_membership_page_url",
+        "default": "/pages/membership"
+      },
+      {
+        "type": "text",
+        "id": "at_my_membership_page_url",
+        "label": "t:settings.at_my_membership_page_url",
+        "default": "/pages/my-membership"
+      },
+      {
+        "type": "text",
+        "id": "at_wholesale_page_url",
+        "label": "t:settings.at_wholesale_page_url",
+        "default": "/pages/wholesale"
       }
     ]
   },
@@ -2456,6 +2579,165 @@
           }
         ],
         "default": "equal-width-buttons"
+      }
+    ]
+  },
+  {
+    "name": "Personal home",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Home split, What are you making tiles and the For you page (membership 2B). Personal content comes from Wagner-written customer metafields (wagner.home_modules, wagner.for_you_*). The preview tier and the Membership page link are 1C's settings (Cart › Member pricing)."
+      },
+      {
+        "type": "collection",
+        "id": "at_preview_collection",
+        "label": "Preview sample products",
+        "info": "Theme editor only: fills empty For you lists while a tier is set in Cart › Member pricing › Preview tier as (1C)."
+      },
+      {
+        "type": "page",
+        "id": "at_for_you_page",
+        "label": "For you page"
+      },
+      {
+        "type": "collection",
+        "id": "at_member_deals_collection",
+        "label": "Member Deals collection",
+        "info": "Fallback when wagner.for_you_deals is empty."
+      }
+    ]
+  },
+  {
+    "name": "Membership",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Ashley’s Pro identity and program values used by the Pro membership page, the homepage Pro tile and (later) cart and account. Financial math reads only these values and Wagner metafields (snippets/at-pro-config)."
+      },
+      {
+        "type": "product",
+        "id": "at_pro_product",
+        "label": "Pro membership product",
+        "info": "The $79/year membership product. The homepage Pro tile links here."
+      },
+      {
+        "type": "header",
+        "content": "Pro identity"
+      },
+      {
+        "type": "color",
+        "id": "at_pro_identity_color",
+        "label": "Pro identity color",
+        "default": "#6C2639",
+        "info": "Burgundy that marks Ashley’s Pro (emblem, value panel, Pro labels). Buy buttons stay on the primary (forest green) button style."
+      },
+      {
+        "type": "color",
+        "id": "at_pro_identity_ink",
+        "label": "Text on Pro identity color",
+        "default": "#FFF0D7"
+      },
+      {
+        "type": "color",
+        "id": "at_membership_surface",
+        "label": "Membership page background",
+        "default": "#FCF0E5"
+      },
+      {
+        "type": "color",
+        "id": "at_membership_card",
+        "label": "Membership card background",
+        "default": "#FFFAF3"
+      },
+      {
+        "type": "font_picker",
+        "id": "at_editorial_serif_font",
+        "label": "Editorial serif",
+        "default": "fraunces_n4",
+        "info": "Used only for membership editorial headlines. Prices, numbers and controls keep the body font."
+      },
+      {
+        "type": "header",
+        "content": "Pro program values"
+      },
+      {
+        "type": "paragraph",
+        "content": "Pending final financial validation: keep these in step with Wagner. The annual fee comes from the shop metafield wagner.tier_thresholds.pro.fee, then the Pro product price."
+      },
+      {
+        "type": "number",
+        "id": "at_pro_price_per_100",
+        "label": "Pro price of $100 at Member prices (cents)",
+        "default": 8553,
+        "info": "8553 means $100 of merchandise at Member prices costs about $85.53 at Pro prices (target margins Member 35%, Pro 24%). Used by the calculator and labeled price estimates."
+      },
+      {
+        "type": "number",
+        "id": "at_pro_cash_rate",
+        "label": "Pro Threads Cash rate (%)",
+        "default": 2
+      },
+      {
+        "type": "number",
+        "id": "at_member_cash_rate",
+        "label": "Member Threads Cash rate (%)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "at_pro_ship_credit_max",
+        "label": "Monthly shipping credit, maximum ($)",
+        "default": 15
+      },
+      {
+        "type": "number",
+        "id": "at_pro_ship_credit_min_order",
+        "label": "Monthly shipping credit, minimum merchandise order ($)",
+        "default": 100
+      },
+      {
+        "type": "number",
+        "id": "at_free_shipping_threshold",
+        "label": "Free standard shipping threshold ($)",
+        "default": 200
+      },
+      {
+        "type": "number",
+        "id": "at_pro_history_min_value",
+        "label": "Smallest personal estimate to show ($)",
+        "default": 20,
+        "info": "Below this, the Pro page sells the opportunity instead of showing a small historical number."
+      },
+      {
+        "type": "header",
+        "content": "Pro Promise"
+      },
+      {
+        "type": "select",
+        "id": "at_pro_promise_mode",
+        "label": "Pro Promise visibility",
+        "options": [
+          {
+            "value": "off",
+            "label": "Hidden"
+          },
+          {
+            "value": "preview",
+            "label": "Theme editor preview only"
+          },
+          {
+            "value": "live",
+            "label": "Live for shoppers"
+          }
+        ],
+        "default": "preview",
+        "info": "Keep on editor preview until the guarantee terms are final."
+      },
+      {
+        "type": "url",
+        "id": "at_pro_promise_terms_url",
+        "label": "Pro Promise terms page"
       }
     ]
   }

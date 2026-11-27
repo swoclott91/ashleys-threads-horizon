@@ -1,0 +1,99 @@
+{
+  "store": "ashleys-threads-3.myshopify.com",
+  "scope": "Only the new breadcrumb metafields from this pilot",
+  "beforeExport": "preview-rollout-before.json",
+  "afterExport": "preview-rollout-after.json",
+  "instructions": "Verify that current values still match the after export before deleting these newly created metafields. All were absent in the before export. Keep the three definitions unless separately removing this feature.",
+  "newMetafieldIdentifiers": [
+    {
+      "ownerId": "gid://shopify/Collection/523280777491",
+      "namespace": "custom",
+      "key": "breadcrumb_label"
+    },
+    {
+      "ownerId": "gid://shopify/Collection/525843595539",
+      "namespace": "custom",
+      "key": "breadcrumb_label"
+    },
+    {
+      "ownerId": "gid://shopify/Collection/525843595539",
+      "namespace": "custom",
+      "key": "breadcrumb_parent"
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523279794451",
+      "namespace": "custom",
+      "key": "breadcrumb_label"
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523279794451",
+      "namespace": "custom",
+      "key": "breadcrumb_parent"
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523280744723",
+      "namespace": "custom",
+      "key": "breadcrumb_label"
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523279499539",
+      "namespace": "custom",
+      "key": "breadcrumb_label"
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523279499539",
+      "namespace": "custom",
+      "key": "breadcrumb_parent"
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523279335699",
+      "namespace": "custom",
+      "key": "breadcrumb_label"
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523281236243",
+      "namespace": "custom",
+      "key": "breadcrumb_label"
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523281236243",
+      "namespace": "custom",
+      "key": "breadcrumb_parent"
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523278942483",
+      "namespace": "custom",
+      "key": "breadcrumb_label"
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523278942483",
+      "namespace": "custom",
+      "key": "breadcrumb_parent"
+    },
+    {
+      "ownerId": "gid://shopify/Product/10425148440851",
+      "namespace": "custom",
+      "key": "breadcrumb_collection"
+    },
+    {
+      "ownerId": "gid://shopify/Product/10426121421075",
+      "namespace": "custom",
+      "key": "breadcrumb_collection"
+    },
+    {
+      "ownerId": "gid://shopify/Product/10426124534035",
+      "namespace": "custom",
+      "key": "breadcrumb_collection"
+    },
+    {
+      "ownerId": "gid://shopify/Product/10425198379283",
+      "namespace": "custom",
+      "key": "breadcrumb_collection"
+    },
+    {
+      "ownerId": "gid://shopify/Product/10426119618835",
+      "namespace": "custom",
+      "key": "breadcrumb_collection"
+    }
+  ]
+}

@@ -1,0 +1,246 @@
+{
+  "capturedAt": "2026-10-13T03:40:20.514Z",
+  "store": "ashleys-threads-3.myshopify.com",
+  "productDefinitions": {
+    "nodes": [],
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": null
+    }
+  },
+  "collectionDefinitions": {
+    "nodes": [
+      {
+        "id": "gid://shopify/MetafieldDefinition/226247147795",
+        "namespace": "custom",
+        "key": "brand",
+        "name": "Brand",
+        "type": {
+          "name": "metaobject_reference"
+        },
+        "access": {
+          "storefront": "NONE"
+        }
+      },
+      {
+        "id": "gid://shopify/MetafieldDefinition/228141728019",
+        "namespace": "custom",
+        "key": "pretty_title",
+        "name": "Pretty Title",
+        "type": {
+          "name": "single_line_text_field"
+        },
+        "access": {
+          "storefront": "PUBLIC_READ"
+        }
+      }
+    ],
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "eyJsYXN0X2lkIjoyMjgxNDE3MjgwMTksImxhc3RfdmFsdWUiOiIyMjgxNDE3MjgwMTkifQ=="
+    }
+  },
+  "destinations": [
+    {
+      "id": "gid://shopify/Collection/523280777491",
+      "title": "T-Shirts",
+      "handle": "t-shirts",
+      "parent": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/525843595539",
+      "title": "Short Sleeve T-Shirts",
+      "handle": "long-sleeve-t-shirts-copy",
+      "parent": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523279794451",
+      "title": "Long Sleeve T-Shirts",
+      "handle": "long-sleeve-t-shirts",
+      "parent": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523280744723",
+      "title": "Sweatshirts & Hoodies",
+      "handle": "sweatshirts-hoodies",
+      "parent": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523279499539",
+      "title": "Hoodies",
+      "handle": "hoodies",
+      "parent": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523279335699",
+      "title": "Hats",
+      "handle": "hats",
+      "parent": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523281236243",
+      "title": "Trucker Hats",
+      "handle": "trucker-hats",
+      "parent": null,
+      "label": null
+    },
+    {
+      "id": "gid://shopify/Collection/523278942483",
+      "title": "Beanies",
+      "handle": "beanies",
+      "parent": null,
+      "label": null
+    }
+  ],
+  "published": {
+    "nodes": [
+      {
+        "id": "gid://shopify/Collection/523278942483",
+        "title": "Beanies"
+      },
+      {
+        "id": "gid://shopify/Collection/523279335699",
+        "title": "Hats"
+      },
+      {
+        "id": "gid://shopify/Collection/523279499539",
+        "title": "Hoodies"
+      },
+      {
+        "id": "gid://shopify/Collection/523279794451",
+        "title": "Long Sleeve T-Shirts"
+      },
+      {
+        "id": "gid://shopify/Collection/523280744723",
+        "title": "Sweatshirts & Hoodies"
+      },
+      {
+        "id": "gid://shopify/Collection/523280777491",
+        "title": "T-Shirts"
+      },
+      {
+        "id": "gid://shopify/Collection/523281236243",
+        "title": "Trucker Hats"
+      },
+      {
+        "id": "gid://shopify/Collection/525843595539",
+        "title": "Short Sleeve T-Shirts"
+      }
+    ],
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "eyJsYXN0X2lkIjo1MjU4NDM1OTU1MzksImxhc3RfdmFsdWUiOiI1MjU4NDM1OTU1MzkifQ=="
+    }
+  },
+  "themes": {
+    "themes": {
+      "nodes": [
+        {
+          "id": "gid://shopify/OnlineStoreTheme/187448525075",
+          "name": "Horizon",
+          "role": "UNPUBLISHED"
+        },
+        {
+          "id": "gid://shopify/OnlineStoreTheme/187518812435",
+          "name": "ashleys-threads-horizon/main",
+          "role": "MAIN"
+        },
+        {
+          "id": "gid://shopify/OnlineStoreTheme/187518845203",
+          "name": "ashleys-threads-horizon/dev",
+          "role": "UNPUBLISHED"
+        },
+        {
+          "id": "gid://shopify/OnlineStoreTheme/187518877971",
+          "name": "ashleys-threads-horizon/staging",
+          "role": "UNPUBLISHED"
+        },
+        {
+          "id": "gid://shopify/OnlineStoreTheme/187741045011",
+          "name": "ashleys-threads-horizon/dev-v4-upgrade",
+          "role": "UNPUBLISHED"
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "eyJsYXN0X2lkIjoxODc3NDEwNDUwMTEsImxhc3RfdmFsdWUiOjE4Nzc0MTA0NTAxMX0="
+      }
+    }
+  },
+  "products": [
+    {
+      "id": "gid://shopify/Product/10425148440851",
+      "title": "5000 Heavy Cotton 100% Cotton T-Shirt",
+      "handle": "gildan-5000-heavy-cotton-100-cotton-t-shirt",
+      "breadcrumb": null
+    },
+    {
+      "id": "gid://shopify/Product/10426121421075",
+      "title": "PC54LS Long Sleeve Core Cotton Tee",
+      "handle": "port-company-pc54ls-long-sleeve-core-cotton-tee",
+      "breadcrumb": null
+    },
+    {
+      "id": "gid://shopify/Product/10426124534035",
+      "title": "PC78H Core Fleece Pullover Hooded Sweatshirt",
+      "handle": "port-company-pc78h-core-fleece-pullover-hooded-sweatshirt",
+      "breadcrumb": null
+    },
+    {
+      "id": "gid://shopify/Product/10425198379283",
+      "title": "CP90 Knit Cap",
+      "handle": "port-authority-cp90-knit-cap",
+      "breadcrumb": null
+    },
+    {
+      "id": "gid://shopify/Product/10426119618835",
+      "title": "PC380H Performance Pullover Hooded Tee",
+      "handle": "port-company-pc380h-performance-pullover-hooded-tee",
+      "breadcrumb": null
+    }
+  ],
+  "definitionsToCreate": {
+    "product": {
+      "ownerType": "PRODUCT",
+      "namespace": "custom",
+      "key": "breadcrumb_collection",
+      "name": "Breadcrumb collection",
+      "type": "collection_reference",
+      "description": "Reviewed canonical collection above this product. Requires product membership and Online Store visibility.",
+      "access": {
+        "storefront": "PUBLIC_READ"
+      },
+      "pin": true
+    },
+    "parent": {
+      "ownerType": "COLLECTION",
+      "namespace": "custom",
+      "key": "breadcrumb_parent",
+      "name": "Breadcrumb parent",
+      "type": "collection_reference",
+      "description": "Reviewed canonical parent collection. Leave empty for roots; avoid cycles.",
+      "access": {
+        "storefront": "PUBLIC_READ"
+      },
+      "pin": true
+    },
+    "label": {
+      "ownerType": "COLLECTION",
+      "namespace": "custom",
+      "key": "breadcrumb_label",
+      "name": "Breadcrumb label",
+      "type": "single_line_text_field",
+      "description": "Optional concise breadcrumb label. Leave empty to use the collection title.",
+      "access": {
+        "storefront": "PUBLIC_READ"
+      },
+      "pin": true
+    }
+  }
+}

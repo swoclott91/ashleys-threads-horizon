@@ -1,0 +1,60 @@
+{
+  "verifiedAt": "2026-10-13T04:16:50.609Z",
+  "theme": {
+    "id": "gid://shopify/OnlineStoreTheme/187518845203",
+    "role": "UNPUBLISHED",
+    "branch": "dev",
+    "implementationCommit": "749cdbe"
+  },
+  "sourceFilesMatch": true,
+  "ruleEntries": 8,
+  "seededAssignmentsRemoved": 5,
+  "liveChecks": [
+    {
+      "product": "Gildan 5400",
+      "individualAssignment": null,
+      "trail": [
+        "T-Shirts",
+        "Long Sleeve"
+      ]
+    },
+    {
+      "product": "Gildan 5000",
+      "individualAssignment": null,
+      "trail": [
+        "T-Shirts",
+        "Short Sleeve"
+      ]
+    },
+    {
+      "product": "PC380H",
+      "individualAssignment": null,
+      "trail": [
+        "T-Shirts"
+      ]
+    },
+    {
+      "product": "Richardson 112",
+      "individualAssignment": null,
+      "trail": [
+        "Hats",
+        "Trucker Hats"
+      ]
+    }
+  ],
+  "validation": [
+    "Theme Check: four changed Liquid files passed",
+    "Resolver/rendering and mapping fixtures passed",
+    "Nine real catalog fixtures passed without individual assignment fields",
+    "Shared rule graph audit passed",
+    "Shop rule list and five field removals verified by Admin read-back"
+  ],
+  "unchanged": [
+    "Published theme",
+    "Collection membership",
+    "Product categories",
+    "Menus",
+    "Product structured data"
+  ],
+  "rollback": "Restore source and the five pilot fields from rules-migration-before.json if reverting to v1. The new shared list was absent in rules-before.json."
+}

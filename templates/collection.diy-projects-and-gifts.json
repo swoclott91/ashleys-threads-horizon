@@ -1908,6 +1908,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -2042,6 +2043,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -2168,6 +2170,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -2302,6 +2305,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -2428,6 +2432,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -3021,6 +3026,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -3155,6 +3161,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -3289,6 +3296,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -3423,6 +3431,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -4023,6 +4032,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -4157,6 +4167,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -4283,6 +4294,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -4417,6 +4429,7 @@
                     "gallery": {
                       "type": "_product-card-gallery",
                       "settings": {
+                        "show_favorite": true,
                         "featured_badge_label": "Ashley’s Choice",
                         "image_ratio": "square",
                         "border": "none",
@@ -5035,18 +5048,7 @@
                     "gallery": {
                       "type": "custom-liquid",
                       "settings": {
-                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: 'PC54PFD_PFD_Model_Front.jpg', description: 'Front view of the Port &amp; Company PC54PFD tee in PFD.', badge_label: \"Ashley’s Choice\" %}",
-                        "featured_badge_label": "Ashley’s Choice",
-                        "image_ratio": "square",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_color": "",
-                        "border_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: 'PC54PFD_PFD_Model_Front.jpg', description: 'Front view of the Port &amp; Company PC54PFD tee in PFD.', badge_label: \"Ashley’s Choice\", favorite: true %}"
                       },
                       "blocks": {}
                     },
@@ -5162,18 +5164,7 @@
                     "gallery": {
                       "type": "custom-liquid",
                       "settings": {
-                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '36154_omf_fl.jpg', description: 'Front view of the LAT 6901 in White.' %}",
-                        "featured_badge_label": "Ashley’s Choice",
-                        "image_ratio": "square",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_color": "",
-                        "border_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '36154_omf_fl.jpg', description: 'Front view of the LAT 6901 in White.', favorite: true %}"
                       },
                       "blocks": {}
                     },
@@ -5297,18 +5288,7 @@
                     "gallery": {
                       "type": "custom-liquid",
                       "settings": {
-                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '36162_omf_fl.jpg', description: 'Front view of the LAT 6101 youth tee in White.' %}",
-                        "featured_badge_label": "Ashley’s Choice",
-                        "image_ratio": "square",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_color": "",
-                        "border_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: '36162_omf_fl.jpg', description: 'Front view of the LAT 6101 youth tee in White.', favorite: true %}"
                       },
                       "blocks": {}
                     },
@@ -5432,18 +5412,7 @@
                     "gallery": {
                       "type": "custom-liquid",
                       "settings": {
-                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: 'PC78HPFD_PFD_Model_Front.jpg', description: 'Front view of the Port &amp; Company PC78HPFD hoodie in PFD.' %}",
-                        "featured_badge_label": "Ashley’s Choice",
-                        "image_ratio": "square",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_color": "",
-                        "border_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "custom_liquid": "{% render 'at-guide-product-photo', product: closest.product, image_key: 'PC78HPFD_PFD_Model_Front.jpg', description: 'Front view of the Port &amp; Company PC78HPFD hoodie in PFD.', favorite: true %}"
                       },
                       "blocks": {}
                     },
@@ -5889,42 +5858,32 @@
     },
     "related": {
       "type": "section",
-      "name": "Related buying guides",
-      "settings": {
-        "section_width": "page-width",
-        "content_direction": "column",
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "gap": 12,
-        "padding-block-start": 36,
-        "padding-block-end": 36,
-        "background_color": "#f7f6f2"
-      },
       "blocks": {
         "heading": {
           "type": "text",
           "settings": {
             "text": "<h2>Explore related guides</h2>",
-            "type_preset": "h3",
+            "max_width": "normal",
             "alignment": "left",
-            "max_width": "normal"
+            "type_preset": "h3"
           }
         },
         "family": {
           "type": "text",
           "settings": {
             "text": "<p><strong>Matching a whole family?</strong> Explore <a href=\"/collections/family-matching-sets\">Family &amp; Matching Sets</a>.</p>",
-            "type_preset": "rte",
+            "max_width": "normal",
             "alignment": "left",
-            "max_width": "normal"
+            "type_preset": "rte"
           }
         },
         "graphics": {
           "type": "text",
           "settings": {
             "text": "<p><strong>Selling your designs?</strong> Explore <a href=\"/collections/graphic-tees-boutique-sellers\">Graphic Tees &amp; Boutique Sellers</a>.</p>",
-            "type_preset": "rte",
+            "max_width": "normal",
             "alignment": "left",
-            "max_width": "normal"
+            "type_preset": "rte"
           }
         }
       },
@@ -5932,7 +5891,17 @@
         "heading",
         "family",
         "graphics"
-      ]
+      ],
+      "name": "Related buying guides",
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "gap": 12,
+        "section_width": "page-width",
+        "background_color": "#f7f6f2",
+        "padding-block-start": 36,
+        "padding-block-end": 36
+      }
     }
   },
   "order": [

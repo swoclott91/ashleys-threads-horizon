@@ -1,0 +1,126 @@
+{
+  "issues": [],
+  "assignments": [
+    {
+      "id": "gid://shopify/Product/10425148440851",
+      "before": null,
+      "after": "gid://shopify/Collection/525843595539",
+      "source": "Native sleeve-length-type metaobject label Short, native T-Shirts category, and both T-Shirts / Short Sleeve membership."
+    },
+    {
+      "id": "gid://shopify/Product/10426121421075",
+      "before": null,
+      "after": "gid://shopify/Collection/523279794451",
+      "source": "Native T-Shirts category, explicit long-sleeve description, and both T-Shirts / Long Sleeve membership."
+    },
+    {
+      "id": "gid://shopify/Product/10426124534035",
+      "before": null,
+      "after": "gid://shopify/Collection/523279499539",
+      "source": "Native Hoodies category, explicit cotton-poly fleece construction, and Hoodies / Sweatshirts & Hoodies membership."
+    },
+    {
+      "id": "gid://shopify/Product/10425198379283",
+      "before": null,
+      "after": "gid://shopify/Collection/523278942483",
+      "source": "Native Beanies category, knit cuff description, and both Hats / Beanies membership."
+    },
+    {
+      "id": "gid://shopify/Product/10426119618835",
+      "before": null,
+      "after": "gid://shopify/Collection/523280777491",
+      "source": "Prior merchant editorial confirmation, corrected native Activewear Tops > T-Shirts category, and T-Shirts membership."
+    }
+  ],
+  "collectionEdits": [
+    {
+      "id": "gid://shopify/Collection/523280777491",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": null,
+        "label": "T-Shirts"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/525843595539",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": "gid://shopify/Collection/523280777491",
+        "label": "Short Sleeve"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/523279794451",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": "gid://shopify/Collection/523280777491",
+        "label": "Long Sleeve"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/523280744723",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": null,
+        "label": "Sweatshirts & Hoodies"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/523279499539",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": "gid://shopify/Collection/523280744723",
+        "label": "Hoodies"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/523279335699",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": null,
+        "label": "Hats"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/523281236243",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": "gid://shopify/Collection/523279335699",
+        "label": "Trucker Hats"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/523278942483",
+      "before": {
+        "parentId": null,
+        "label": null
+      },
+      "after": {
+        "parentId": "gid://shopify/Collection/523279335699",
+        "label": "Beanies"
+      }
+    }
+  ],
+  "ready": true
+}

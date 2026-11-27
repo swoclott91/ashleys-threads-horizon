@@ -1,0 +1,148 @@
+{
+  "metafields": [
+    {
+      "ownerId": "gid://shopify/Collection/523280777491",
+      "namespace": "custom",
+      "key": "breadcrumb_label",
+      "type": "single_line_text_field",
+      "value": "T-Shirts",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Collection/525843595539",
+      "namespace": "custom",
+      "key": "breadcrumb_label",
+      "type": "single_line_text_field",
+      "value": "Short Sleeve",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Collection/525843595539",
+      "namespace": "custom",
+      "key": "breadcrumb_parent",
+      "type": "collection_reference",
+      "value": "gid://shopify/Collection/523280777491",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523279794451",
+      "namespace": "custom",
+      "key": "breadcrumb_label",
+      "type": "single_line_text_field",
+      "value": "Long Sleeve",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523279794451",
+      "namespace": "custom",
+      "key": "breadcrumb_parent",
+      "type": "collection_reference",
+      "value": "gid://shopify/Collection/523280777491",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523280744723",
+      "namespace": "custom",
+      "key": "breadcrumb_label",
+      "type": "single_line_text_field",
+      "value": "Sweatshirts & Hoodies",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523279499539",
+      "namespace": "custom",
+      "key": "breadcrumb_label",
+      "type": "single_line_text_field",
+      "value": "Hoodies",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523279499539",
+      "namespace": "custom",
+      "key": "breadcrumb_parent",
+      "type": "collection_reference",
+      "value": "gid://shopify/Collection/523280744723",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523279335699",
+      "namespace": "custom",
+      "key": "breadcrumb_label",
+      "type": "single_line_text_field",
+      "value": "Hats",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523281236243",
+      "namespace": "custom",
+      "key": "breadcrumb_label",
+      "type": "single_line_text_field",
+      "value": "Trucker Hats",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523281236243",
+      "namespace": "custom",
+      "key": "breadcrumb_parent",
+      "type": "collection_reference",
+      "value": "gid://shopify/Collection/523279335699",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523278942483",
+      "namespace": "custom",
+      "key": "breadcrumb_label",
+      "type": "single_line_text_field",
+      "value": "Beanies",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Collection/523278942483",
+      "namespace": "custom",
+      "key": "breadcrumb_parent",
+      "type": "collection_reference",
+      "value": "gid://shopify/Collection/523279335699",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Product/10425148440851",
+      "namespace": "custom",
+      "key": "breadcrumb_collection",
+      "type": "collection_reference",
+      "value": "gid://shopify/Collection/525843595539",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Product/10426121421075",
+      "namespace": "custom",
+      "key": "breadcrumb_collection",
+      "type": "collection_reference",
+      "value": "gid://shopify/Collection/523279794451",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Product/10426124534035",
+      "namespace": "custom",
+      "key": "breadcrumb_collection",
+      "type": "collection_reference",
+      "value": "gid://shopify/Collection/523279499539",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Product/10425198379283",
+      "namespace": "custom",
+      "key": "breadcrumb_collection",
+      "type": "collection_reference",
+      "value": "gid://shopify/Collection/523278942483",
+      "compareDigest": null
+    },
+    {
+      "ownerId": "gid://shopify/Product/10426119618835",
+      "namespace": "custom",
+      "key": "breadcrumb_collection",
+      "type": "collection_reference",
+      "value": "gid://shopify/Collection/523280777491",
+      "compareDigest": null
+    }
+  ]
+}

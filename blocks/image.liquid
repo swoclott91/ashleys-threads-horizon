@@ -66,6 +66,13 @@
   {%- endif -%}
 {% endcapture %}
 
+{% liquid
+  assign show_favorite = false
+  if block_settings.show_favorite and closest.product != blank
+    assign show_favorite = true
+  endif
+%}
+
 {% if block_settings.link == blank %}
   <div
     class="{{ class }}"
@@ -73,6 +80,21 @@
     {{ block.shopify_attributes }}
   >
     {{ image }}
+    {% if show_favorite %}
+      {% render 'at-card-favorite', product: closest.product %}
+    {% endif %}
+  </div>
+{% elsif show_favorite %}
+  {% # The heart is a button, which can't sit inside a link, so the link and the heart are siblings. %}
+  <div
+    class="{{ class }}"
+    style="{{ style }}"
+    {{ block.shopify_attributes }}
+  >
+    <a href="{{ block_settings.link }}" class="image-block__link">
+      {{ image }}
+    </a>
+    {% render 'at-card-favorite', product: closest.product %}
   </div>
 {% else %}
   <a
@@ -106,6 +128,14 @@
 
     /* When the image is nested in a group, section, etc, respect the parent's horizontal alignment */
     justify-content: var(--horizontal-alignment, 'inline-start');
+  }
+
+  .image-block:has(> .at-card-favorite) {
+    position: relative;
+  }
+
+  .image-block__link {
+    display: contents;
   }
 
   .image-block--height-fill .image-block__image {
@@ -163,6 +193,13 @@
       "type": "url",
       "id": "link",
       "label": "t:settings.link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_favorite",
+      "label": "t:settings.show_favorite_heart",
+      "info": "t:settings.show_favorite_heart_info",
+      "default": false
     },
     {
       "type": "header",

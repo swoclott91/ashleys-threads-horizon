@@ -1,8 +1,7 @@
 {%- doc -%}
   Intended for use in a block similar to the button block.
 
-  Link style (`button-unstyled`) renders as a theme text link: underlined label
-  and a trailing arrow. A label that already ends in ">" or "→" keeps a single arrow.
+  Link style (`button-unstyled`) renders a text label and a trailing arrow. A label that already ends in ">" or "→" keeps a single arrow.
 
   @param {string} link - link to render
   @param {object} [block] - The block
@@ -63,41 +62,3 @@
     {{ button_label }}
   {%- endif -%}
 </a>
-
-{% stylesheet %}
-  /* Link style matches paragraph links: underlined label, trailing theme arrow.
-     Scoped to the button snippet so icon-only .button-unstyled controls stay plain. */
-  .button-unstyled.button-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: var(--gap-2xs);
-    overflow: visible;
-    text-decoration: none;
-    text-transform: none;
-    cursor: pointer;
-  }
-
-  .button-link__label {
-    text-decoration-line: underline;
-    text-decoration-color: currentcolor;
-    text-decoration-thickness: 0.075em;
-    text-underline-offset: 0.15em;
-  }
-
-  .button-unstyled.button-link:hover .button-link__label,
-  .button-unstyled.button-link:focus-visible .button-link__label {
-    text-decoration-color: currentcolor;
-  }
-
-  .button-link__icon {
-    --icon-size-sm: 1em;
-    flex-shrink: 0;
-  }
-
-  @media (forced-colors: active) {
-    .button-unstyled.button-link:focus-visible {
-      outline: var(--focus-outline-width) solid transparent;
-    }
-  }
-{% endstylesheet %}

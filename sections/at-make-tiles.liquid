@@ -1,0 +1,369 @@
+{%- comment -%}
+  "What are you making?" photo cards for guests (homepage strategy, design §15). Each card is a
+  "Project card" block (blocks/_at-make-tile.liquid):
+  - with a Shopify Forms block inside it, a guest's click on the whole card opens that form in a
+    popup; the form's own redirect after submission (set in Shopify Forms) then opens the
+    card's collection, and the popup links to the collection for guests who skip the form;
+  - without a form, or for a signed-in customer, the card links straight to its collection.
+  Guest personalization is client-side only (Liquid can't read local storage):
+  - picking a card saves the answer in localStorage `at_guest_hint` ({q1, url, title, at});
+  - on the next visit the cards show "Pick up where you left off" and mark that card;
+  - when a Shopify Forms popup opens, the matching Q1 radio is preselected (best effort:
+    the Forms markup isn't ours, so this looks for an input whose value is the `use:*` value).
+  Signed-in customers (any tier) are asked this as profile question 1, whatever "Show to" says:
+  - the cards show only while `customer.metafields.wagner.onboarding_q1` is unset;
+  - a tap saves the project through the Wagner app proxy `POST /apps/wagner/answers`, then
+    opens the card's collection (the save never blocks the link: a failed or slow save still
+    opens it, and the cards come back on a later visit);
+  - the answer is also kept in sessionStorage `at_profile_pending` (the record
+    assets/at-home-profile.js reads), so until Wagner's queued metafield write lands the cards
+    stay hidden and the profile section moves on to question 2.
+  Cards work without photos (label only). Six in one row on desktop, two columns on mobile.
+  The server-rendered page is the same for every guest, so it stands on its own for search.
+{%- endcomment -%}
+{%- liquid
+  assign at_tiles_save = false
+  if customer and request.design_mode == false
+    assign at_q1 = customer.metafields.wagner.onboarding_q1.value | default: '' | strip
+    assign at_q1_allowed = 'use:decorator,use:graphic-tees,use:apparel-brand,use:groups-events,use:business-merch,use:personal' | split: ','
+    if at_q1_allowed contains at_q1
+      assign at_section_visible = 'false'
+    else
+      assign at_section_visible = 'true'
+      assign at_tiles_save = true
+    endif
+  else
+    capture at_section_visible
+      render 'at-section-visible', visibility: section.settings.at_visibility
+    endcapture
+  endif
+-%}
+{%- if at_section_visible contains 'true' -%}
+  {%- capture tile_audience -%}{% render 'at-member-tier' %}{%- endcapture -%}
+  <script src="{{ 'dialog.js' | asset_url }}" type="module"></script>
+  {% render 'dialog-styles' %}
+  <div class="section section--page-width">
+    <div class="at-tiles" data-at-tiles{% if tile_audience == 'guest' %} data-at-guest-tiles{% endif %}{% if at_tiles_save %} data-at-save-q1="/apps/wagner/answers"{% endif %}>
+      <div class="at-tiles__head">
+        <h2 class="at-tiles__title h3" id="AtTiles-{{ section.id }}">{{ section.settings.heading }}</h2>
+        {%- if section.settings.helper != blank -%}
+          <p class="at-tiles__helper">{{ section.settings.helper }}</p>
+        {%- endif -%}
+        <p class="at-tiles__resume" data-at-resume hidden>
+          Pick up where you left off: <a href="#" data-at-resume-link></a>
+        </p>
+      </div>
+      <ul class="at-tiles__grid" role="list" aria-labelledby="AtTiles-{{ section.id }}">
+        {%- content_for 'blocks' -%}
+      </ul>
+    </div>
+  </div>
+
+  {%- if at_tiles_save -%}
+    <script>
+      (() => {
+        // Signed-in customer: a tap saves the project as profile question 1, then opens the card.
+        const PENDING_KEY = 'at_profile_pending';
+        const PENDING_TTL_MS = 15 * 60 * 1000;
+        const SAVE_WAIT_MS = 1500;
+        const section = document.currentScript.previousElementSibling;
+        const root = section?.querySelector('[data-at-tiles]');
+        if (!root) return;
+        const readPending = () => {
+          try {
+            const pending = JSON.parse(sessionStorage.getItem(PENDING_KEY) || 'null');
+            return pending && Number.isFinite(pending.at) && Date.now() - pending.at < PENDING_TTL_MS ? pending : null;
+          } catch (e) {
+            return null;
+          }
+        };
+        // Answered earlier this visit; Wagner's metafield write hasn't landed yet.
+        if (readPending()?.answers?.q1) {
+          // `.section` sets display: grid, which beats the hidden attribute.
+          (section.closest('.shopify-section') || section).style.display = 'none';
+          return;
+        }
+        let saving = false;
+        root.addEventListener('click', (event) => {
+          const tile = event.target.closest('a[data-at-q1]');
+          if (!tile || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          event.preventDefault();
+          if (saving) return;
+          saving = true;
+          tile.setAttribute('aria-current', 'true');
+          tile.setAttribute('aria-busy', 'true');
+          const body = { q1: tile.dataset.atQ1 };
+          const request = fetch(root.dataset.atSaveQ1, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify(body),
+            keepalive: true,
+          })
+            .then(async (response) => {
+              const data = await response.json().catch(() => null);
+              if (!response.ok || data?.ok !== true) return;
+              const previous = readPending();
+              const answers = { ...(previous?.answers || {}), ...body };
+              try {
+                sessionStorage.setItem(PENDING_KEY, JSON.stringify({ answers, at: Date.now() }));
+              } catch (e) {}
+            })
+            .catch(() => {});
+          const timeout = new Promise((resolve) => setTimeout(resolve, SAVE_WAIT_MS));
+          Promise.race([request, timeout]).finally(() => window.location.assign(tile.href));
+        });
+      })();
+    </script>
+  {%- endif -%}
+
+  <script>
+    (() => {
+      const KEY = 'at_guest_hint';
+      const root = document.currentScript.previousElementSibling?.querySelector('[data-at-tiles]');
+      if (!root?.hasAttribute('data-at-guest-tiles')) return;
+      const read = () => { try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { return null; } };
+      const write = (v) => { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} };
+
+      root.addEventListener('click', (event) => {
+        const tile = event.target.closest('[data-at-q1]');
+        if (!tile) return;
+        write({ q1: tile.dataset.atQ1, url: tile.dataset.atUrl, title: tile.dataset.atTitle, at: Date.now() });
+      });
+
+      // Theme editor: open a card's popup while its form block is selected.
+      if (window.Shopify && Shopify.designMode) {
+        document.addEventListener('shopify:block:select', (event) => {
+          const popup = event.target.closest?.('[data-at-tile-popup]');
+          if (popup && root.contains(popup) && event.target.closest('dialog')) popup.showDialog?.();
+        });
+        document.addEventListener('shopify:block:deselect', (event) => {
+          const popup = event.target.closest?.('[data-at-tile-popup]');
+          if (popup && root.contains(popup)) popup.closeDialog?.();
+        });
+      }
+
+      const hint = read();
+      if (!hint || !hint.q1) return;
+      const tile = root.querySelector(`[data-at-q1="${CSS.escape(hint.q1)}"]`);
+      if (tile) {
+        tile.setAttribute('aria-current', 'true');
+        const resume = root.querySelector('[data-at-resume]');
+        const link = root.querySelector('[data-at-resume-link]');
+        link.textContent = tile.dataset.atTitle || hint.title;
+        link.href = tile.dataset.atUrl || hint.url;
+        resume.hidden = false;
+      }
+
+      // Preselect Q1 in the Shopify Forms popup when it appears (best effort, 30 s).
+      // One scan now; after that only added nodes are searched. Forms renders in shadow
+      // DOM, so shadow roots found in added nodes are watched too. Stops once found.
+      const selector = `input[type="radio"][value="${CSS.escape(hint.q1)}"]`;
+      const observers = [];
+      const watched = new WeakSet();
+      let done = false;
+      const stop = () => { done = true; observers.splice(0).forEach((o) => o.disconnect()); };
+      const search = (node) => {
+        if (!node || (node.nodeType !== 1 && node.nodeType !== 11)) return null;
+        if (node.matches && node.matches(selector)) return node;
+        const hit = node.querySelector(selector);
+        if (hit) return hit;
+        const hosts = node.shadowRoot ? [node] : [];
+        node.querySelectorAll('*').forEach((el) => { if (el.shadowRoot) hosts.push(el); });
+        for (const host of hosts) {
+          const found = search(host.shadowRoot);
+          if (found) return found;
+          watch(host.shadowRoot);
+        }
+        return null;
+      };
+      const preselect = (input) => {
+        stop();
+        if (!input.checked && !input.dataset.atTouched) {
+          input.dataset.atTouched = '1';
+          input.click();
+        }
+      };
+      const onMutations = (records) => {
+        if (done) return;
+        for (const record of records) {
+          for (const node of record.addedNodes) {
+            const input = search(node);
+            if (input) return preselect(input);
+          }
+        }
+      };
+      function watch(root) {
+        if (done || watched.has(root)) return;
+        watched.add(root);
+        const observer = new MutationObserver(onMutations);
+        observer.observe(root, { childList: true, subtree: true });
+        observers.push(observer);
+      }
+      const now = search(document.body);
+      if (now) return preselect(now);
+      watch(document.body);
+      setTimeout(stop, 30000);
+    })();
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .at-tiles {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-block: 28px;
+  }
+  .at-tiles__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+  .at-tiles__title, .at-tiles__helper, .at-tiles__resume { margin: 0; }
+  .at-tiles__helper { font-size: 0.95rem; color: rgb(var(--color-foreground-rgb) / 0.72); }
+  .at-tiles__resume { font-size: 0.95rem; flex-basis: 100%; }
+  .at-tiles__resume a { font-weight: 700; }
+  .at-tiles__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  @media screen and (min-width: 750px) {
+    .at-tiles__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  }
+  @media screen and (min-width: 990px) {
+    .at-tiles__grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  }
+  .at-tiles__grid > li { min-width: 0; }
+  .at-tiles__item { display: flex; }
+  .at-tiles__item > * { flex: 1 1 auto; min-width: 0; }
+  .at-tiles__popup { display: flex; }
+  .at-tiles__tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 8px;
+    min-height: 64px;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
+    background: rgb(var(--color-foreground-rgb) / 0.03);
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  button.at-tiles__tile { width: 100%; appearance: none; }
+  .at-tiles__tile:focus-visible { outline: 2px solid #2b4a3f; outline-offset: 2px; }
+  .at-tiles__tile--photo { justify-content: flex-start; padding: 6px 6px 10px; }
+  .at-tiles__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 8px;
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+  }
+  .at-tiles__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  .at-tiles__tile:hover .at-tiles__image { transform: scale(1.03); }
+  .at-tiles__tile--photo .at-tiles__label { padding-inline: 6px; }
+  .at-tiles__tile:hover, .at-tiles__tile[aria-current='true'] {
+    border-color: #2b4a3f;
+    background: #e9efec;
+    color: #1a2e27;
+  }
+  .at-tiles__label { font-weight: 700; line-height: 1.25; }
+  .at-tiles__dialog {
+    width: min(36rem, calc(100vw - 32px));
+    max-height: var(--modal-max-height, 90dvh);
+    padding: 0;
+    border: var(--style-border-popover);
+    border-radius: var(--style-border-radius-popover, 12px);
+    background-color: var(--color-background);
+    box-shadow: var(--shadow-popover);
+  }
+  .at-tiles__dialog[open] { animation: modalSlideInTop var(--animation-speed) var(--animation-easing) forwards; }
+  .at-tiles__dialog.dialog-closing { animation: modalSlideOutTop var(--animation-speed) var(--animation-easing) forwards; }
+  .at-tiles__dialog-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 40px 20px 20px;
+  }
+  @media screen and (min-width: 750px) {
+    .at-tiles__dialog-inner { padding: 48px 32px 28px; }
+  }
+  .at-tiles__skip { margin: 0; }
+  .at-tiles__skip { text-align: center; font-size: 0.95rem; }
+  .at-tiles__skip a { font-weight: 600; }
+  .at-tiles__close { top: 8px; right: 8px; opacity: 0.8; animation: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .at-tiles__image { transition: none; }
+    .at-tiles__tile:hover .at-tiles__image { transform: none; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "What are you making?",
+  "tag": "section",
+  "class": "at-make-tiles-section",
+  "blocks": [{ "type": "_at-make-tile" }],
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "select",
+      "id": "at_visibility",
+      "label": "Show to",
+      "info": "Signed-in customers always see these cards until they've picked a project (saved to their profile), then never.",
+      "options": [
+        { "value": "all", "label": "Everyone" },
+        { "value": "guests", "label": "Guests (signed out)" },
+        { "value": "customers", "label": "Signed-in customers" },
+        { "value": "guests_and_member", "label": "t:options.at_home_guests_and_member" }
+      ],
+      "default": "guests"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What are you making?"
+    },
+    {
+      "type": "text",
+      "id": "helper",
+      "label": "Helper text",
+      "default": "Choose a project to see blanks that fit."
+    },
+    {
+      "type": "paragraph",
+      "content": "Each card is a Project card block. Add a Shopify Forms block inside a card to open that form when a guest clicks the card."
+    }
+  ],
+  "presets": [
+    {
+      "name": "What are you making?",
+      "blocks": {
+        "decorator": { "type": "_at-make-tile", "settings": { "project": "use:decorator", "label": "Clients' designs" } },
+        "graphic_tees": { "type": "_at-make-tile", "settings": { "project": "use:graphic-tees", "label": "My own designs" } },
+        "apparel_brand": { "type": "_at-make-tile", "settings": { "project": "use:apparel-brand", "label": "My own label" } },
+        "groups_events": { "type": "_at-make-tile", "settings": { "project": "use:groups-events", "label": "Group, team, or event" } },
+        "business_merch": { "type": "_at-make-tile", "settings": { "project": "use:business-merch", "label": "Company apparel" } },
+        "personal": { "type": "_at-make-tile", "settings": { "project": "use:personal", "label": "Me and my family" } }
+      },
+      "block_order": ["decorator", "graphic_tees", "apparel_brand", "groups_events", "business_merch", "personal"]
+    }
+  ]
+}
+{% endschema %}

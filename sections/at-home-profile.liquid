@@ -1,0 +1,274 @@
+{%- comment -%}
+  Profile questions 2 and 3 on the homepage, for any signed-in customer (every tier) until both
+  are saved. Question 1 ("What are you making?") is the project cards section (at-make-tiles),
+  which saves it the same way; this section waits until question 1 is answered.
+
+  - Asks the earliest unanswered question: Q2 "What matters most?", then Q3 "How do you
+    decorate?". One question per visit.
+  - Every answer is a card linking to that answer's collection. No form: a tap saves the answer
+    (customer metafields `wagner.onboarding_q2|q3`, through the app proxy
+    `POST /apps/wagner/answers`) and opens the collection. Q3 saves the one method tapped.
+  - Without scripts, or when the save fails, the card still opens its collection; the question
+    is asked again on a later visit.
+
+  assets/at-home-profile.js saves and navigates. Wagner writes the metafields from a queue, so
+  answers saved in this browser session (sessionStorage `at_profile_pending`, also written by the
+  project cards) count until the write lands: the section is rendered hidden while question 1 is
+  unanswered in the metafields, and the script shows question 2 when question 1 is pending.
+
+  Collections: each answer maps to its own collection setting; an answer with no collection set,
+  and Q3 "None", open all products.
+{%- endcomment -%}
+{%- liquid
+  assign at_profile_show = false
+  if customer or request.design_mode
+    assign mf = customer.metafields.wagner
+
+    assign q2_defs = 'lowest_price|lowest_price|Lowest workable price;premium_feel|premium_feel|Premium feel;trend_styles|trend_styles|On-trend styles;in_stock|in_stock|Reliable stock;matching_families|matching_families|Matching adult, youth, and infant colors' | split: ';'
+    assign q3_defs = 'screen-print|screen_print|Screen printing;plastisol-transfer|plastisol_transfer|Plastisol transfers;dtg|dtg|DTG;dtf|dtf|DTF;sublimation|sublimation|Sublimation;embroidery|embroidery|Embroidery;htv|htv|HTV;none|none|None' | split: ';'
+    assign q1_allowed = 'use:decorator,use:graphic-tees,use:apparel-brand,use:groups-events,use:business-merch,use:personal' | split: ','
+    assign q2_allowed = 'lowest_price,premium_feel,trend_styles,in_stock,matching_families' | split: ','
+    assign q3_allowed = 'screen-print,plastisol-transfer,dtg,dtf,sublimation,embroidery,htv,none' | split: ','
+
+    # Saved answers, normalized like normalizeAnswers() in at-home-profile-core.js.
+    assign q1 = mf.onboarding_q1.value | default: '' | strip
+    unless q1_allowed contains q1
+      assign q1 = ''
+    endunless
+    assign q2 = mf.onboarding_q2.value | default: '' | strip
+    unless q2_allowed contains q2
+      assign q2 = ''
+    endunless
+    assign q3_raw = mf.onboarding_q3.value
+    assign q3_list = ''
+    for v in q3_allowed
+      if q3_raw contains v
+        assign q3_list = q3_list | append: ',' | append: v
+      endif
+    endfor
+    assign q3_list = q3_list | remove_first: ',' | split: ','
+
+    # Question 1 is asked by the project cards; until it's saved the section stays hidden (the
+    # script reveals question 2 if question 1 was saved earlier this visit).
+    assign next_q = ''
+    if q2 == blank
+      assign next_q = 'q2'
+    elsif q3_list.size == 0
+      assign next_q = 'q3'
+    endif
+    if next_q != blank
+      assign at_profile_show = true
+    endif
+    assign at_profile_waiting = false
+    if q1 == blank and request.design_mode == false
+      assign at_profile_waiting = true
+    endif
+  endif
+-%}
+{%- if at_profile_show -%}
+  {%- assign questions = 'q2|What matters most?|Choose one to shop blanks picked for it.;q3|How do you decorate?|Choose your main method to shop blanks that suit it.' | split: ';' -%}
+  <div class="section section--page-width">
+    <at-home-profile class="at-profile" data-endpoint="/apps/wagner/answers"{% if at_profile_waiting %} hidden{% endif %}>
+      <script type="application/json" data-answers>{"q1":{{ q1 | json }},"q2":{{ q2 | json }},"q3":{{ q3_list | json }}}</script>
+      {%- for question in questions -%}
+        {%- liquid
+          assign qd = question | split: '|'
+          assign q = qd[0]
+          if q == 'q2'
+            assign defs = q2_defs
+          else
+            assign defs = q3_defs
+          endif
+        -%}
+        <div class="at-profile__question" data-question-panel="{{ q }}"{% if q != next_q %} hidden{% endif %}>
+          <div class="at-profile__head">
+            <div class="at-profile__head-text">
+              <h2 class="at-profile__title h2" id="AtProfile-{{ q }}-{{ section.id }}">{{ qd[1] }}</h2>
+              <p class="at-profile__help">{{ qd[2] }}</p>
+            </div>
+            <button type="button" class="button-unstyled button-link at-profile__quiet" data-later>
+              <span class="button-link__label">Maybe later</span>
+              <span class="button-link__icon svg-wrapper" aria-hidden="true">
+                {{- 'icon-arrow.svg' | inline_asset_content -}}
+              </span>
+            </button>
+          </div>
+          <ul class="at-profile__cards at-profile__cards--{{ q }}" role="list" aria-labelledby="AtProfile-{{ q }}-{{ section.id }}">
+            {%- for def in defs -%}
+              {%- liquid
+                assign d = def | split: '|'
+                assign setting_key = q | append: '_' | append: d[1] | append: '_collection'
+                assign image_key = q | append: '_' | append: d[1] | append: '_image'
+                assign url = section.settings[setting_key].url
+                if url == blank
+                  assign url = routes.all_products_collection_url
+                endif
+                assign image = section.settings[image_key]
+              -%}
+              <li>
+                <a
+                  class="at-profile__card{% if image != blank %} at-profile__card--media{% endif %}"
+                  href="{{ url }}"
+                  data-answer="{{ q }}"
+                  data-value="{{ d[0] }}"
+                >
+                  {%- if image != blank -%}
+                    <span class="at-profile__card-media">
+                      {{- image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 19vw, 45vw', widths: '200, 300, 450, 600', alt: '' -}}
+                    </span>
+                  {%- endif -%}
+                  <span class="at-profile__card-label">{{ d[2] }}</span>
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endfor -%}
+    </at-home-profile>
+    {%- comment -%} "Maybe later" lasts for the visit; apply it before paint to avoid a flash. {%- endcomment -%}
+    {%- unless request.design_mode -%}
+      <script>
+        try {
+          if (sessionStorage.getItem('at_profile_later') === '1') document.currentScript.previousElementSibling.hidden = true;
+        } catch (e) {}
+      </script>
+    {%- endunless -%}
+  </div>
+  <script src="{{ 'at-home-profile.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+{% stylesheet %}
+  .at-profile {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-block: 24px;
+    padding: 20px 16px;
+    border: 1px solid rgb(43 74 63 / 0.25);
+    border-radius: 14px;
+    background: #eef2e6;
+    color: #1f2a24;
+  }
+  @media screen and (min-width: 750px) {
+    .at-profile { padding: 24px; }
+  }
+  .at-profile[hidden],
+  .at-profile [hidden] { display: none !important; }
+
+  .at-profile__question { display: flex; flex-direction: column; gap: 16px; }
+  .at-profile__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px 18px;
+  }
+  .at-profile__head-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .at-profile__help, .at-profile__title { margin: 0; }
+  .at-profile__title { color: #1f3d33; }
+  .at-profile__help { font-size: 1rem; }
+
+  .at-profile__quiet {
+    color: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .at-profile__cards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  @media screen and (min-width: 750px) {
+    .at-profile__cards--q3 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  @media screen and (min-width: 990px) {
+    .at-profile__cards--q2 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  }
+  .at-profile__cards > li { display: flex; min-width: 0; }
+  .at-profile__card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid rgb(43 74 63 / 0.22);
+    border-radius: 10px;
+    background: #fbfaf5;
+    color: inherit;
+    text-decoration: none;
+  }
+  .at-profile__card:hover { border-color: #2b4a3f; }
+  .at-profile__card:focus-visible { outline: 2px solid #1f3d33; outline-offset: 2px; }
+  .at-profile__card[aria-busy='true'] {
+    border-color: #1f3d33;
+    box-shadow: inset 0 0 0 1px #1f3d33;
+    background: #ffffff;
+    cursor: progress;
+  }
+  .at-profile__card-media { display: block; aspect-ratio: 1; background: rgb(43 74 63 / 0.08); }
+  .at-profile__card-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .at-profile__card-label {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    min-height: 56px;
+    padding: 10px 12px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Home: profile questions",
+  "tag": "section",
+  "class": "at-home-profile-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Profile questions 2 and 3, for signed-in customers (any tier) until both are saved. Question 1 is the project cards section and comes first. A tap saves the answer through Wagner (/apps/wagner/answers) and opens that answer's collection."
+    },
+    {
+      "type": "header",
+      "content": "Question 2: What matters most?"
+    },
+    {
+      "type": "paragraph",
+      "content": "An answer with no collection opens all products."
+    },
+    { "type": "image_picker", "id": "q2_lowest_price_image", "label": "Lowest workable price: image" },
+    { "type": "collection", "id": "q2_lowest_price_collection", "label": "Lowest workable price: collection" },
+    { "type": "image_picker", "id": "q2_premium_feel_image", "label": "Premium feel: image" },
+    { "type": "collection", "id": "q2_premium_feel_collection", "label": "Premium feel: collection" },
+    { "type": "image_picker", "id": "q2_trend_styles_image", "label": "On-trend styles: image" },
+    { "type": "collection", "id": "q2_trend_styles_collection", "label": "On-trend styles: collection" },
+    { "type": "image_picker", "id": "q2_in_stock_image", "label": "Reliable stock: image" },
+    { "type": "collection", "id": "q2_in_stock_collection", "label": "Reliable stock: collection" },
+    { "type": "image_picker", "id": "q2_matching_families_image", "label": "Matching colors: image" },
+    { "type": "collection", "id": "q2_matching_families_collection", "label": "Matching colors: collection", "info": "Matching adult, youth, and infant colors." },
+    {
+      "type": "header",
+      "content": "Question 3: How do you decorate?"
+    },
+    {
+      "type": "paragraph",
+      "content": "One collection per method. A method with no collection, and None, open all products."
+    },
+    { "type": "collection", "id": "q3_screen_print_collection", "label": "Screen printing" },
+    { "type": "collection", "id": "q3_plastisol_transfer_collection", "label": "Plastisol transfers" },
+    { "type": "collection", "id": "q3_dtg_collection", "label": "DTG" },
+    { "type": "collection", "id": "q3_dtf_collection", "label": "DTF" },
+    { "type": "collection", "id": "q3_sublimation_collection", "label": "Sublimation" },
+    { "type": "collection", "id": "q3_embroidery_collection", "label": "Embroidery" },
+    { "type": "collection", "id": "q3_htv_collection", "label": "HTV" }
+  ],
+  "presets": [
+    {
+      "name": "Home: profile questions"
+    }
+  ]
+}
+{% endschema %}

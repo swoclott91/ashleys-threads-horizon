@@ -102,7 +102,7 @@
           </div>
           <button
             type="button"
-            class="button predictive-search__close-modal-button"
+            class="button-unstyled predictive-search__close-modal-button"
             aria-label="{{ 'accessibility.close_dialog' | t }}"
             on:click="dialog-component/closeDialog"
             ref="closeModalButton"
@@ -472,25 +472,11 @@
   .predictive-search__search-button {
     margin: auto;
     z-index: var(--layer-raised);
-    transition: transform var(--animation-speed-medium) var(--animation-timing-bounce),
-      box-shadow var(--animation-speed-medium) var(--animation-timing-hover);
-    transform-origin: center;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgb(0 0 0 / var(--opacity-5));
-    }
-
-    &:active {
-      transform: scale(0.97);
-      transition: transform 100ms var(--animation-timing-active);
-      box-shadow: none;
-    }
   }
 
   .predictive-search__close-modal-button {
-    --button-color: var(--color-foreground);
-    --button-background-color: transparent;
+    background-color: transparent;
+    color: var(--color-foreground);
 
     display: flex;
     justify-content: center;
@@ -514,7 +500,7 @@
   }
 
   .predictive-search__close-modal-button:hover {
-    --button-color: var(--color-foreground);
-    --button-background-color: transparent;
+    background-color: transparent;
+    color: var(--color-foreground);
   }
 {% endstylesheet %}

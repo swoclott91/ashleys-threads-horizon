@@ -1,0 +1,366 @@
+{%- doc -%}
+  Small heart on a product card's photo, rendered by blocks/_product-card-gallery when its
+  "Show favorite heart" setting is on. Tapping it opens a compact color panel over the photo.
+  The panel's swatches are fetched from sections/at-card-favorite-colors only when it first
+  opens, and each swatch is a shared `at-favorite-color` control (assets/at-favorite-colors.js),
+  so saving, sign-in and the saved state all reuse the existing per-color favorites store.
+
+  Renders nothing for a blank product or one without a Color/Colour option.
+
+  @param {product} product - The card's product
+
+  @example
+  {% render 'at-card-favorite', product: closest.product %}
+{%- enddoc -%}
+{%- liquid
+  assign at_cf_color_option = nil
+  for option in product.options_with_values
+    assign at_cf_option_name = option.name | strip | downcase
+    if at_cf_option_name == 'color' or at_cf_option_name == 'colour'
+      assign at_cf_color_option = option
+      break
+    endif
+  endfor
+-%}
+{%- if product != blank and at_cf_color_option != nil -%}
+  {%- liquid
+    assign at_cf_style = product.title | remove_first: product.vendor | strip
+    assign at_cf_title = product.vendor | append: ' ' | append: at_cf_style
+    assign at_cf_colors_url = product.url | split: '?' | first | append: '?section_id=at-card-favorite-colors'
+    assign at_cf_bulk_order_url = routes.root_url | append: '/pages/bulk-order' | replace: '//', '/'
+    assign at_cf_bulk_order_url = pages['bulk-order'].url | default: at_cf_bulk_order_url | append: '?tab=favorite'
+  -%}
+  <script src="{{ 'at-card-favorite.js' | asset_url }}" type="module"></script>
+  <at-card-favorite
+    class="at-card-favorite"
+    data-product-id="{{ product.id }}"
+    data-colors-url="{{ at_cf_colors_url | escape }}"
+    data-label-save="{{ 'at_favorites.card_save' | t: title: at_cf_title | escape }}"
+    data-label-saved="{{ 'at_favorites.card_saved' | t: title: at_cf_title | escape }}"
+    data-label-failed="{{ 'at_favorites.card_load_failed' | t | escape }}"
+    data-hint="{{ 'at_favorites.card_hint' | t | escape }}"
+    hidden
+  >
+    <button
+      type="button"
+      class="at-card-favorite__toggle"
+      aria-expanded="false"
+      aria-label="{{ 'at_favorites.card_save' | t: title: at_cf_title | escape }}"
+    >
+      <span class="at-card-favorite__toggle-icon">{{- 'at-bulk-favorite.svg' | inline_asset_content -}}</span>
+    </button>
+    <div class="at-card-favorite__panel" role="dialog" hidden>
+      <div class="at-card-favorite__header">
+        <p class="at-card-favorite__title" data-at-card-favorite-title>
+          {{- 'at_favorites.card_heading' | t -}}
+          <span class="at-card-favorite__style"> &middot; {{ at_cf_style }}</span>
+        </p>
+        <button
+          type="button"
+          class="at-card-favorite__close"
+          aria-label="{{ 'accessibility.close_dialog' | t | escape }}"
+        >
+          {{- 'icon-close.svg' | inline_asset_content -}}
+        </button>
+      </div>
+      <div class="at-card-favorite__colors" data-at-card-favorite-colors>
+        <p class="at-card-favorite__status">{{ 'at_favorites.card_loading' | t }}</p>
+      </div>
+      <div class="at-card-favorite__footer">
+        <span class="at-card-favorite__name" data-at-card-favorite-name aria-hidden="true">
+          {{- 'at_favorites.card_hint' | t -}}
+        </span>
+        <a class="at-card-favorite__link" href="{{ at_cf_bulk_order_url | escape }}">
+          {{- 'at_member_home.bulk.cta' | t -}}
+        </a>
+      </div>
+    </div>
+  </at-card-favorite>
+{%- endif -%}
+
+{% stylesheet %}
+  .at-card-favorite {
+    --at-cf-ink: #233d31;
+
+    position: absolute;
+    inset: 0;
+    /* One step above the quick-add overlay (also --layer-raised, later in the card), so the open panel covers its button. */
+    z-index: calc(var(--layer-raised, 2) + 1);
+    pointer-events: none;
+  }
+
+  .at-card-favorite[hidden] {
+    display: none;
+  }
+
+  .at-card-favorite__toggle {
+    position: absolute;
+    inset-block-start: 4px;
+    inset-inline-end: 4px;
+    display: grid;
+    place-items: center;
+    inline-size: var(--minimum-touch-target, 44px);
+    block-size: var(--minimum-touch-target, 44px);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--at-cf-ink);
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  .at-card-favorite__toggle-icon {
+    display: grid;
+    place-items: center;
+    inline-size: 32px;
+    block-size: 32px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.92);
+    box-shadow: 0 1px 3px rgb(35 61 49 / 0.18);
+    transition: transform 0.15s ease;
+  }
+
+  .at-card-favorite__toggle svg {
+    inline-size: 20px;
+    block-size: 20px;
+  }
+
+  .at-card-favorite__toggle:hover .at-card-favorite__toggle-icon {
+    transform: scale(1.08);
+  }
+
+  .at-card-favorite__toggle:focus-visible {
+    outline: none;
+  }
+
+  .at-card-favorite__toggle:focus-visible .at-card-favorite__toggle-icon {
+    outline: 2px solid var(--at-cf-ink);
+    outline-offset: 2px;
+  }
+
+  .at-card-favorite.is-saved .at-card-favorite__toggle .at-bulk-favorite__heart {
+    fill: currentColor;
+  }
+
+  .at-card-favorite.is-open .at-card-favorite__toggle {
+    visibility: hidden;
+  }
+
+  /* The featured badge also sits top-right; keep it clear of the heart. */
+  :is(.card-gallery, .at-guide-product-photo):has(> .at-card-favorite:not([hidden])) .product-badges--top-right {
+    right: calc(var(--badge-inset) + var(--padding-inline-start) + 40px);
+  }
+
+  .at-card-favorite__panel {
+    position: absolute;
+    inset: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 10px 10px 12px;
+    border-radius: 10px;
+    background: rgb(255 255 255 / 0.97);
+    box-shadow: 0 6px 20px rgb(35 61 49 / 0.18);
+    color: var(--at-cf-ink);
+    font-size: var(--font-size--xs, 0.8125rem);
+    line-height: 1.3;
+    pointer-events: auto;
+    cursor: default;
+  }
+
+  .at-card-favorite__panel[hidden] {
+    display: none;
+  }
+
+  /* Phones: the photo alone is too short to scroll the colors, so the open panel covers the
+     whole product card (photo, title and swatches). Un-positioning the gallery while open makes
+     the card content the heart's containing block; the gallery's overflow no longer clips it.
+     Safari also keeps absolute children inside a size container, so the gallery stops being a
+     query container while the panel is open. */
+  @media screen and (max-width: 749px) {
+    .product-card__content :is(.card-gallery, .image-block):has(> .at-card-favorite.is-open) {
+      position: static;
+      container-type: normal;
+      contain: none;
+    }
+
+    .product-card__content .at-card-favorite.is-open .at-card-favorite__panel {
+      background: #fff;
+    }
+  }
+
+  .at-card-favorite__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+  }
+
+  .at-card-favorite__title {
+    margin: 0;
+    min-inline-size: 0;
+    overflow: hidden;
+    font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .at-card-favorite__style {
+    font-weight: 400;
+    color: rgb(35 61 49 / 0.7);
+  }
+
+  .at-card-favorite__close {
+    display: grid;
+    flex: none;
+    place-items: center;
+    inline-size: 32px;
+    block-size: 32px;
+    margin: -6px -4px -6px 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .at-card-favorite__close svg {
+    inline-size: 12px;
+    block-size: 12px;
+  }
+
+  .at-card-favorite__colors {
+    position: relative;
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    margin-inline: -4px;
+    padding: 4px;
+  }
+
+  .at-card-favorite__status {
+    margin: 0;
+    color: rgb(35 61 49 / 0.7);
+  }
+
+  .at-card-favorite__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(32px, 1fr));
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .at-card-favorite__grid > li {
+    display: grid;
+    place-items: center;
+  }
+
+  .at-card-favorite__grid at-favorite-color:not([hidden]) {
+    display: contents;
+  }
+
+  .at-card-favorite__swatch {
+    position: relative;
+    display: grid;
+    place-items: center;
+    inline-size: 32px;
+    block-size: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .at-card-favorite__swatch .swatch {
+    --pill-size: 24px;
+
+    inline-size: 24px;
+    block-size: 24px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.14);
+  }
+
+  .at-card-favorite__swatch:hover,
+  .at-card-favorite__swatch:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 1.5px var(--at-cf-ink);
+  }
+
+  .at-card-favorite__swatch[aria-pressed='true'] {
+    box-shadow: 0 0 0 2px var(--at-cf-ink);
+  }
+
+  .at-card-favorite__swatch:disabled {
+    cursor: progress;
+    opacity: 0.6;
+  }
+
+  .at-card-favorite__mark {
+    position: absolute;
+    inset-block-end: -2px;
+    inset-inline-end: -3px;
+    display: none;
+    place-items: center;
+    inline-size: 15px;
+    block-size: 15px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--at-cf-ink);
+    box-shadow: 0 0 0 1px rgb(35 61 49 / 0.15);
+  }
+
+  .at-card-favorite__mark svg {
+    inline-size: 10px;
+    block-size: 10px;
+    fill: currentColor;
+  }
+
+  .at-card-favorite__swatch[aria-pressed='true'] .at-card-favorite__mark {
+    display: grid;
+  }
+
+  /* A failed save shows the shared error line across the panel, not inside the swatch. */
+  .at-card-favorite__grid .at-favorite-color__error:not(.visually-hidden):not(:empty) {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    padding: 4px 6px;
+    background: #fff;
+    font-size: inherit;
+    color: #8a1c1c;
+  }
+
+  .at-card-favorite__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex: none;
+  }
+
+  .at-card-favorite__name {
+    min-inline-size: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgb(35 61 49 / 0.75);
+  }
+
+  .at-card-favorite__link {
+    flex: none;
+    font-weight: 600;
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .at-card-favorite__toggle-icon {
+      transition: none;
+    }
+  }
+{% endstylesheet %}

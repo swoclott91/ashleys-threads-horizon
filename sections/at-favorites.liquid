@@ -1,0 +1,246 @@
+{%- comment -%}
+  Favorites page (work item B). Handoff: wagner docs/ACCOUNT_FAVORITES_BULK_ORDER_HANDOFF.md.
+
+  One card per product in customer `wagner.favorite_products` (list.product_reference,
+  written by Wagner), using Horizon's resource-card so image, title, link and the visitor's
+  own catalog (member tier) price match the rest of the store. Under each card: the saved
+  colors, from customer `wagner.favorite_colors` pairs with that product's ID, resolved to
+  name and swatch through the product's Color/Colour option. Saved colors that no longer
+  exist are skipped; a product with none left is skipped. Favorites whose product is not in
+  `favorite_products` do not appear.
+
+  `favorite_products` holds up to 100 references and a reference list loops only 50 items
+  unless paginated, so it is read inside `paginate … by 100` (one page holds the whole list).
+
+  Editor preview: while `request.design_mode` is true and there is no `favorite_products`
+  value (the editor has no signed-in customer), the "Preview products" setting stands in,
+  with each product's first two colors shown as saved. Shoppers never see fixture data.
+{%- endcomment -%}
+{%- liquid
+  assign at_preview = false
+  if request.design_mode and section.settings.preview_products != blank and customer.metafields.wagner.favorite_products == blank
+    assign at_preview = true
+  endif
+
+  if at_preview
+    assign at_favorite_keys = '|'
+    for at_p in section.settings.preview_products
+      for option in at_p.options_with_values
+        assign at_option_name = option.name | strip | downcase
+        if at_option_name == 'color' or at_option_name == 'colour'
+          for value in option.values limit: 2
+            assign at_favorite_keys = at_favorite_keys | append: at_p.id | append: ':' | append: value.id | append: '|'
+          endfor
+          break
+        endif
+      endfor
+    endfor
+  else
+    capture at_favorite_keys
+      render 'at-favorite-color-keys', favorites: customer.metafields.wagner.favorite_colors.value
+    endcapture
+    assign at_favorite_keys = at_favorite_keys | strip
+  endif
+
+  assign at_seen = '|'
+-%}
+
+{%- capture at_card_loop -%}
+  {%- if at_preview -%}
+    {%- for at_p in section.settings.preview_products -%}
+      {%- render 'at-favorite-card', product: at_p, favorite_keys: at_favorite_keys -%}
+    {%- endfor -%}
+  {%- elsif customer and customer.metafields.wagner.favorite_products != blank -%}
+    {%- paginate customer.metafields.wagner.favorite_products.value by 100 -%}
+      {%- for at_p in customer.metafields.wagner.favorite_products.value -%}
+        {%- liquid
+          if at_p == blank
+            continue
+          endif
+          assign at_pid_key = '|' | append: at_p.id | append: '|'
+          if at_seen contains at_pid_key
+            continue
+          endif
+          assign at_seen = at_seen | append: at_p.id | append: '|'
+        -%}
+        {%- render 'at-favorite-card', product: at_p, favorite_keys: at_favorite_keys -%}
+      {%- endfor -%}
+    {%- endpaginate -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- liquid
+  assign at_cards = at_card_loop | strip
+  assign at_title = page.title | default: section.settings.heading
+  if at_title == blank
+    assign at_title = 'at_favorites.title' | t
+  endif
+  assign at_bulk_url = section.settings.bulk_order_url | default: '/pages/bulk-order'
+-%}
+
+{% render 'swatch-styles' %}
+
+<div class="section section--page-width">
+  <div class="at-favorites">
+    <header class="at-favorites__head">
+      <h1 class="at-favorites__title h2">{{ at_title }}</h1>
+      {%- if at_cards != blank -%}
+        <p class="at-favorites__intro">{{ 'at_favorites.intro' | t }}</p>
+        <a class="at-favorites__bulk" href="{{ at_bulk_url }}">{{ 'at_favorites.bulk_order_link' | t }}</a>
+      {%- endif -%}
+    </header>
+
+    {%- if at_preview -%}
+      <p class="at-favorites__preview-note">{{ 'at_favorites.preview_notice' | t }}</p>
+    {%- endif -%}
+
+    {%- if customer == blank and at_preview == false -%}
+      <div class="at-favorites__state">
+        <h2 class="h4">{{ 'at_favorites.guest_heading' | t }}</h2>
+        <p>{{ 'at_favorites.guest_body' | t }}</p>
+        <div class="at-favorites__actions">
+          {%- if shop.customer_accounts_enabled -%}
+            {{ shop | login_button }}
+          {%- endif -%}
+          <a
+            class="button{% if shop.customer_accounts_enabled %} button-secondary{% endif %}"
+            href="{{ routes.storefront_login_url }}?return_to={{ request.path | url_encode }}"
+          >
+            {{- 'actions.log_in' | t -}}
+          </a>
+        </div>
+      </div>
+    {%- elsif at_cards == blank -%}
+      <div class="at-favorites__state">
+        <h2 class="h4">{{ 'at_favorites.empty_heading' | t }}</h2>
+        <p>{{ 'at_favorites.empty_body' | t }}</p>
+        <div class="at-favorites__actions">
+          <a class="button" href="{{ routes.all_products_collection_url }}">{{ 'actions.continue_shopping' | t }}</a>
+        </div>
+      </div>
+    {%- else -%}
+      <ul class="at-favorites__grid" role="list">
+        {{ at_cards }}
+      </ul>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .at-favorites {
+    --color-foreground: #2c2c2c;
+    --color-foreground-rgb: 44 44 44;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lg, 1.5rem);
+    padding-block: var(--padding-3xl, 2.25rem) var(--padding-5xl, 4rem);
+  }
+
+  .at-favorites__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
+  }
+
+  .at-favorites__title {
+    margin: 0;
+    color: #000;
+  }
+
+  .at-favorites__intro {
+    flex: 1 1 16rem;
+    margin: 0;
+    font-size: var(--font-size--sm, 0.875rem);
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text, 0.7));
+  }
+
+  .at-favorites__bulk {
+    font-size: var(--font-size--sm, 0.875rem);
+    font-weight: 700;
+  }
+
+  .at-favorites__preview-note {
+    margin: 0;
+    padding: 0.5rem 0.75rem;
+    border: 1px dashed rgb(var(--at-bulk-gold-rgb, 187 152 124) / 0.65);
+    font-size: var(--font-size--sm, 0.875rem);
+  }
+
+  .at-favorites__state {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 36rem;
+  }
+
+  .at-favorites__state > * {
+    margin: 0;
+  }
+
+  .at-favorites__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .at-favorites__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media screen and (min-width: 750px) {
+    .at-favorites__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2rem 1rem;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .at-favorites__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Favorites",
+  "tag": "section",
+  "class": "at-favorites-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Signed-in customers see the products in customer metafield wagner.favorite_products with the colors saved in wagner.favorite_colors."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading when the page has no title"
+    },
+    {
+      "type": "text",
+      "id": "bulk_order_url",
+      "label": "Bulk order page path",
+      "default": "/pages/bulk-order"
+    },
+    {
+      "type": "header",
+      "content": "Theme editor preview"
+    },
+    {
+      "type": "product_list",
+      "id": "preview_products",
+      "label": "Preview products",
+      "limit": 12,
+      "info": "Only used inside the theme editor while there is no favorite_products data. Each product's first two colors show as saved. Shoppers never see these."
+    }
+  ],
+  "presets": [{ "name": "Favorites" }]
+}
+{% endschema %}

@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "favorites": {
+      "type": "at-favorites",
+      "settings": {
+        "bulk_order_url": "/pages/bulk-order"
+      }
+    }
+  },
+  "order": [
+    "favorites"
+  ]
+}

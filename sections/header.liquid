@@ -871,6 +871,11 @@
 
     /* Mobile layout */
     --header-mobile-bookend: 44px;
+    --header-mobile-inner: var(--header-mobile-bookend);
+
+    &:has(shopify-account[data-at-tier]) {
+      --header-mobile-inner: 54px;
+    }
 
     display: grid;
     grid-template-areas: 'left center right';
@@ -906,8 +911,8 @@
     }
 
     @media screen and (max-width: 749px) {
-      --header-template-columns: var(--header-mobile-bookend) var(--header-mobile-bookend) 1fr
-        var(--header-mobile-bookend) var(--header-mobile-bookend);
+      --header-template-columns: var(--header-mobile-bookend) var(--header-mobile-inner) minmax(0, 1fr)
+        var(--header-mobile-inner) var(--header-mobile-bookend);
 
       grid-template-areas: 'leftA leftB center rightA rightB';
       grid-column: span 3;
@@ -921,6 +926,11 @@
 
       .header-logo {
         grid-area: center;
+      }
+
+      .header-logo > span,
+      .header-logo__image {
+        max-width: 100%;
       }
 
       &:not(:has(header-actions)) .search-action {
@@ -950,8 +960,8 @@
   /* not ideal but we need to duplicate these styles for when touch comes into play
     We could avoid the duplication using js to set the data-menu-style attribute on small screens instead of using @media queries */
   #header-component[data-menu-style='drawer'] .header__columns {
-    --header-template-columns: var(--header-mobile-bookend) var(--header-mobile-bookend) 1fr
-      var(--header-mobile-bookend) var(--header-mobile-bookend);
+    --header-template-columns: var(--header-mobile-bookend) var(--header-mobile-inner) minmax(0, 1fr)
+      var(--header-mobile-inner) var(--header-mobile-bookend);
 
     grid-template-areas: 'leftA leftB center rightA rightB';
     grid-column: span 3;
@@ -965,6 +975,11 @@
 
     .header-logo {
       grid-area: center;
+    }
+
+    .header-logo > span,
+    .header-logo__image {
+      max-width: 100%;
     }
 
     &:not(:has(header-actions)) .search-action {

@@ -1,0 +1,68 @@
+{%- doc -%}
+  Previews up to three styles for the homepage bulk-order card. Uses recent purchases
+  first, saved styles second, or the configured catalog examples in starter mode.
+
+  @param {boolean} [starter_only] - Show the configured catalog examples
+  @param {product[]} [starter_products] - Catalog examples for shoppers without saved styles
+{%- enddoc -%}
+
+{%- liquid
+  assign thumbnail_count = 0
+  assign pro_membership_id = 15495114129683
+  if starter_only
+    assign fallback_products = starter_products
+  else
+    assign fallback_products = customer.metafields.wagner.favorite_products.value
+  endif
+-%}
+{%- capture thumbnails -%}
+  {%- if starter_only != true and customer.orders != blank -%}
+    {%- assign seen_products = '|' -%}
+    {%- paginate customer.orders by 20 -%}
+      {%- for order in customer.orders -%}
+        {%- for line_item in order.line_items -%}
+          {%- liquid
+            assign product = line_item.product
+            assign variant = line_item.variant
+            assign product_key = product.id | prepend: '|' | append: '|'
+            assign thumbnail = variant.image | default: product.featured_image
+            if product == blank or product.id == pro_membership_id or variant == blank or thumbnail == blank or seen_products contains product_key
+              continue
+            endif
+
+            assign color_value = ''
+            for option in product.options_with_values
+              assign option_name = option.name | strip | downcase
+              if option_name == 'color' or option_name == 'colour'
+                assign color_value = variant.options[forloop.index0].id | append: ''
+                break
+              endif
+            endfor
+            if color_value == blank
+              continue
+            endif
+
+            assign seen_products = seen_products | append: product.id | append: '|'
+            assign thumbnail_count = thumbnail_count | plus: 1
+          -%}
+          {%- render 'at-home-bulk-style', product: product, thumbnail: thumbnail -%}
+          {%- if thumbnail_count == 3 -%}{%- break -%}{%- endif -%}
+        {%- endfor -%}
+        {%- if thumbnail_count == 3 -%}{%- break -%}{%- endif -%}
+      {%- endfor -%}
+    {%- endpaginate -%}
+  {%- endif -%}
+  {%- if thumbnail_count == 0 -%}
+    {%- for product in fallback_products -%}
+      {%- unless product.featured_image -%}{%- continue -%}{%- endunless -%}
+      {%- render 'at-home-bulk-style', product: product, thumbnail: product.featured_image -%}
+      {%- assign thumbnail_count = thumbnail_count | plus: 1 -%}
+      {%- if thumbnail_count == 3 -%}{%- break -%}{%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- if thumbnail_count > 0 -%}
+  <ul class="at-member-home__bulk-thumbnails" role="list">
+    {{ thumbnails }}
+  </ul>
+{%- endif -%}

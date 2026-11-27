@@ -1,0 +1,96 @@
+{%- comment -%}
+  Data-only section for Review & reorder on the bulk order page
+  (assets/at-multi-style-quantities.js → core `findReorderOrder` / `buildReorderPrefill`).
+  Not placed in any template. Fetched only when the page has `?reorder=<order>`:
+    /pages/bulk-order?sections=at-reorder-data
+
+  Liquid cannot look an order up by ID, so this lists the lines of the first page of
+  `customer.orders` (20 orders, newest first, the same orders the selector's Past purchases
+  use) and the script matches the order by ID or name. An older order is not found and the
+  page falls back to the normal selector with a short notice.
+
+  Per line:
+  - productId: null when the product is gone.
+  - variantId: null when the variant is gone (the size or color was removed).
+  - colorId: the Color/Colour option value ID. From the variant when it exists; otherwise
+    matched by name against the product's current color values; null when the color is gone
+    or the product has no color option.
+  - colorName, title (line title, e.g. "Gildan 5000 - Black / L"), quantity.
+  All IDs are decimal strings. Never reads `customer.orders_count` or `product.variants`.
+{%- endcomment -%}
+{%- capture escaped_lt -%}\u003c{%- endcapture -%}
+<script type="application/json" data-at-reorder-orders>
+  {"orders":[
+  {%- if customer -%}
+    {%- paginate customer.orders by 20 -%}
+      {%- for order in customer.orders -%}
+        {%- unless forloop.first %},{% endunless -%}
+        {"id":{{ order.id | append: '' | json }},"name":{{ order.name | json | replace: '<', escaped_lt }},"lines":[
+        {%- for line_item in order.line_items -%}
+          {%- liquid
+            assign at_product = line_item.product
+            assign at_variant = line_item.variant
+            assign at_pid = nil
+            assign at_vid = nil
+            assign at_cid = nil
+            assign at_color_name = ''
+
+            for option in line_item.options_with_values
+              assign at_option_name = option.name | strip | downcase
+              if at_option_name == 'color' or at_option_name == 'colour'
+                assign at_color_name = option.value
+                break
+              endif
+            endfor
+
+            if at_product != blank
+              assign at_pid = at_product.id | append: ''
+              assign at_color_index = -1
+              for option in at_product.options_with_values
+                assign at_option_name = option.name | strip | downcase
+                if at_option_name == 'color' or at_option_name == 'colour'
+                  assign at_color_index = forloop.index0
+                  assign at_color_option = option
+                  break
+                endif
+              endfor
+              if at_color_index >= 0
+                if at_variant != blank
+                  assign at_vid = at_variant.id | append: ''
+                  assign at_cid = at_variant.options[at_color_index].id | append: ''
+                  if at_color_name == blank
+                    assign at_color_name = at_variant.options[at_color_index].name
+                  endif
+                else
+                  assign at_wanted = at_color_name | strip | downcase
+                  for value in at_color_option.values
+                    assign at_value_name = value.name | strip | downcase
+                    if at_wanted != blank and at_value_name == at_wanted
+                      assign at_cid = value.id | append: ''
+                      break
+                    endif
+                  endfor
+                endif
+                if at_cid == blank
+                  assign at_cid = nil
+                endif
+              endif
+            endif
+          -%}
+          {%- unless forloop.first %},{% endunless -%}
+          {"productId":{{ at_pid | json }},"variantId":{{ at_vid | json }},"colorId":{{ at_cid | json }},"colorName":{{ at_color_name | json | replace: '<', escaped_lt }},"title":{{ line_item.title | json | replace: '<', escaped_lt }},"quantity":{{ line_item.quantity | json }}}
+        {%- endfor -%}
+        ]}
+      {%- endfor -%}
+    {%- endpaginate -%}
+  {%- endif -%}
+  ]}
+</script>
+
+{% schema %}
+{
+  "name": "Reorder data",
+  "tag": "div",
+  "settings": []
+}
+{% endschema %}

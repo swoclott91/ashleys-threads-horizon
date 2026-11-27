@@ -94,6 +94,11 @@ class AtDiscountProgressBar extends HTMLElement {
     'data-non-sale-url',
     'data-context',
     'data-section-uid',
+    'data-free-shipping',
+    'data-reward-rate',
+    'data-ship-code',
+    'data-ship-min',
+    'data-ship-cap',
   ];
 
   /** @type {Array<{ threshold: number, name: string, benefitShort: string, benefitLabel: string, kind?: string }>} */
@@ -105,6 +110,10 @@ class AtDiscountProgressBar extends HTMLElement {
   /** @type {number} */
   #subtotal = 0;
 
+  /** Codes on the cart (tier strip: is the free-shipping code on it?). Null until cart.js is read. */
+  /** @type {string[] | null} */
+  #discountCodes = null;
+
   /** @type {HTMLElement | null} */
   #bulkGrid = null;
 
@@ -115,6 +124,7 @@ class AtDiscountProgressBar extends HTMLElement {
     this.#parseAttributes();
     this.#bindEvents();
     this.render();
+    if (this.dataset.mode === 'tier' && this.dataset.shipCode) void this.#applyCartResource(undefined);
   }
 
   disconnectedCallback() {
@@ -208,6 +218,11 @@ class AtDiscountProgressBar extends HTMLElement {
       } catch {
         return;
       }
+    }
+    if (Array.isArray(r?.discount_codes)) {
+      this.#discountCodes = /** @type {Array<{ code?: string }>} */ (r.discount_codes)
+        .map((d) => String(d?.code || '').toUpperCase())
+        .filter(Boolean);
     }
     if (typeof r?.items_subtotal_price === 'number') {
       this.#subtotal = /** @type {number} */ (r.items_subtotal_price);
@@ -575,7 +590,93 @@ class AtDiscountProgressBar extends HTMLElement {
     });
   }
 
+  /**
+   * Member / Pro cart strip (data-mode="tier"): one free-shipping progress line + Threads Cash earned.
+   * Thresholds and rates come from the `wagner.tier_thresholds` shop metafield via Liquid; the theme
+   * only displays them.
+   */
+  #renderTier() {
+    const subtotal = this.#subtotal;
+    const ctx = this.dataset.context || 'cart';
+    const basis = ctx === 'cart' ? subtotal : subtotal + this.#getPendingCents();
+    const freeShipping = Number(this.dataset.freeShipping) || 0;
+    const rate = Number(this.dataset.rewardRate) || 0;
+    const fmt = this.dataset.moneyFormat || '{{amount}}';
+    const cur = this.dataset.currency || 'USD';
+
+    let statusHtml = '';
+    let barHtml = '';
+    if (freeShipping > 0) {
+      const need = freeShipping - basis;
+      const pct = Math.max(0, Math.min(100, (basis / freeShipping) * 100));
+      statusHtml =
+        need > 0
+          ? textForInnerHtml(
+              applyLiquidPlaceholders(decodeHtmlEntities(this.#i18n.away || ''), { amount: formatMoney(need, fmt, cur) })
+            )
+          : textForInnerHtml(this.#i18n.unlocked || '');
+      barHtml = `<div class="at-mstrip__track" aria-hidden="true"><span class="at-mstrip__fill" style="width:${pct.toFixed(1)}%"></span></div>`;
+    }
+
+    let earnHtml = '';
+    if (rate > 0 && basis > 0) {
+      const earned = Math.round(basis * rate);
+      earnHtml = `<p class="at-mstrip__earn">${textForInnerHtml(
+        applyLiquidPlaceholders(decodeHtmlEntities(this.#i18n.earns || ''), { amount: formatMoney(earned, fmt, cur) })
+      )}</p>`;
+    }
+
+    this.innerHTML = `
+      <div class="at-mstrip__progress">
+        ${statusHtml ? `<p class="at-mstrip__status" role="status" aria-live="polite">${statusHtml}</p>` : ''}
+        ${barHtml}
+        ${earnHtml}
+      </div>
+      ${this.#renderShipCode(subtotal, fmt, cur)}
+    `;
+  }
+
+  /**
+   * Free-shipping code card (welcome / Pro monthly). Uses the committed cart subtotal: the code only
+   * counts once the items are in the cart. Below the minimum: "Add $X to use code ...". At or above:
+   * on the cart (assets/at-ship-code.js added it) or "applies at checkout" if the customer removed it.
+   * @param {number} subtotal
+   * @param {string} fmt
+   * @param {string} cur
+   */
+  #renderShipCode(subtotal, fmt, cur) {
+    const code = this.dataset.shipCode || '';
+    if (!code) return '';
+    const min = Number(this.dataset.shipMin) || 0;
+    const cap = Number(this.dataset.shipCap) || 0;
+    const codeHtml = `<code>${escapeHtml(code)}</code>`;
+    /** @param {string | undefined} key @param {Record<string, string>} vars */
+    const line = (key, vars) => {
+      const parts = escapeHtml(decodeHtmlEntities(this.#i18n[key || ''] || '')).split('{{ code }}');
+      return parts.map((p) => applyLiquidPlaceholders(p, vars)).join(codeHtml);
+    };
+    let text;
+    if (min > 0 && subtotal < min) {
+      text = line('shipAdd', { amount: escapeHtml(formatMoney(min - subtotal, fmt, cur)) });
+    } else if (this.#discountCodes && this.#discountCodes.includes(code.toUpperCase())) {
+      text = line('shipOn', {});
+    } else {
+      text = line('shipUse', {});
+    }
+    const capHtml = cap > 0 ? ` ${line('shipCap', { amount: escapeHtml(formatMoney(cap, fmt, cur)) })}` : '';
+    return `
+      <div class="at-mstrip__card" data-testid="at-ship-code-card">
+        <p class="at-mstrip__card-title">${textForInnerHtml(this.#i18n.shipTitle || '')}</p>
+        <p class="at-mstrip__card-text" role="status" aria-live="polite">${text}${capHtml}</p>
+      </div>
+    `;
+  }
+
   render() {
+    if (this.dataset.mode === 'tier') {
+      this.#renderTier();
+      return;
+    }
     const m = this.#milestones;
     const n = m.length;
     if (n === 0) {

@@ -1,3 +1,5 @@
+{%- capture at_section_visible -%}{% render 'at-section-visible', visibility: section.settings.at_visibility %}{%- endcapture -%}
+{%- if at_section_visible contains 'true' -%}
 {% liquid
   if section.settings.collection_list != blank
     assign section_collections = section.settings.collection_list
@@ -76,6 +78,7 @@
     test_id: 'collections-list-grid'
   %}
 </div>
+{%- endif -%}
 
 {% schema %}
 {
@@ -117,6 +120,18 @@
     "groups": ["header", "footer"]
   },
   "settings": [
+    {
+      "type": "select",
+      "id": "at_visibility",
+      "label": "Show to",
+      "info": "Home split: guest sections render for visitors who aren't members (signed out, or signed in without a member tier); the Personal home section only for members.",
+      "options": [
+        { "value": "all", "label": "Everyone" },
+        { "value": "guests", "label": "Guests (not members)" },
+        { "value": "customers", "label": "Members (Member, Pro, Wholesale)" }
+      ],
+      "default": "all"
+    },
     {
       "type": "collection_list",
       "id": "collection_list",

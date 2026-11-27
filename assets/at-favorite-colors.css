@@ -1,0 +1,192 @@
+.at-save-color:not([hidden]) {
+  display: block;
+  align-self: flex-start;
+}
+
+.at-favorite-color__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+  min-block-size: var(--minimum-touch-target, 44px);
+  min-inline-size: var(--minimum-touch-target, 44px);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #243e34;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Icon layout: a square heart button in the buy buttons row, beside Add to cart. */
+.product-form-buttons > at-favorite-color.at-save-color--icon {
+  position: relative;
+  flex: 0 0 var(--height-buy-buttons);
+  min-width: 0;
+  align-self: stretch;
+}
+
+.product-form-buttons > at-favorite-color.at-save-color--icon[hidden] {
+  display: none;
+}
+
+/* Quantity + Add to cart + heart need about 400px. On narrower rows, quantity takes its own
+   line so Add to cart and the heart stay together. */
+.product-form-buttons:has(> .at-save-color--icon:not([hidden])) {
+  container-type: inline-size;
+}
+
+@container (max-width: 420px) {
+  .product-form-buttons > .quantity-selector-wrapper {
+    flex-basis: 100%;
+  }
+}
+
+.product-form-buttons > .at-save-color--icon .at-favorite-color__button {
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: var(--height-buy-buttons);
+  padding: 0;
+  border: 1px solid currentColor;
+  border-radius: var(--style-border-radius-buttons-secondary, 0);
+  color: var(--color-foreground);
+  transition: background-color 0.15s ease;
+}
+
+.product-form-buttons > .at-save-color--icon .at-favorite-color__button:hover {
+  background-color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.06);
+}
+
+.product-form-buttons > .at-save-color--icon .at-favorite-color__button svg {
+  inline-size: 22px;
+  block-size: 22px;
+}
+
+.product-form-buttons > .at-save-color--icon .at-favorite-color__error:not(.visually-hidden):not(:empty) {
+  position: absolute;
+  inset-block-start: calc(100% + 4px);
+  inset-inline-end: 0;
+  inline-size: max-content;
+  max-inline-size: 16rem;
+  text-align: end;
+}
+
+.at-favorite-color__button:disabled {
+  cursor: progress;
+  opacity: 0.65;
+}
+
+.at-favorite-color__button svg {
+  inline-size: 1.15em;
+  block-size: 1.15em;
+  flex-shrink: 0;
+}
+
+.at-favorite-color__button[aria-pressed='true'] svg {
+  fill: currentColor;
+}
+
+.at-favorite-color__error:not(:empty) {
+  display: block;
+  font-size: var(--font-size--xs, 0.8125rem);
+  color: var(--color-foreground);
+}
+
+.at-favorite-color__error:empty {
+  position: absolute;
+}
+
+#at-favorites-account shopify-account {
+  --shopify-account-font-heading: var(--font-heading--family);
+  --shopify-account-font-heading-weight: var(--font-heading--weight);
+  --shopify-account-font-body: var(--font-body--family);
+  --shopify-account-font-body-weight: var(--font-body--weight);
+  --shopify-account-radius-base: var(--style-border-radius-popover);
+  --shopify-account-radius-button: var(--style-border-radius-buttons-primary);
+  --shopify-account-radius-button-small: var(--style-border-radius-buttons-primary);
+  --shopify-account-radius-input: var(--style-border-radius-buttons-primary);
+  --shopify-account-color-background: var(--color-background);
+  --shopify-account-color-text: var(--color-foreground);
+  --shopify-account-color-accent: var(--color-primary-button-background);
+  --shopify-account-color-accent-text: var(--color-primary-button-text);
+  --shopify-account-dialog-position-top: 1rem;
+}
+
+#at-favorites-account shopify-account::part(signed-out-avatar) {
+  display: none;
+}
+
+#at-favorites-account shopify-account::part(dialog) {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(22.5rem, calc(100% - 2rem));
+  max-width: none;
+  /* An auto-height fixed dialog stretches when both vertical insets are set. */
+  height: fit-content;
+  min-height: 0;
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  border-radius: var(--shopify-account-radius-dialog);
+}
+
+.at-save-color-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  inline-size: min(28rem, calc(100% - 2rem));
+  max-block-size: calc(100dvh - 2rem);
+  padding: 1.5rem;
+  border: var(--style-border-popover);
+  box-shadow: var(--shadow-popover);
+  border-radius: var(--style-border-radius-popover);
+  background: var(--color-background);
+  color: var(--color-foreground);
+  overflow-y: auto;
+}
+
+.at-save-color-dialog::backdrop {
+  background: rgb(0 0 0 / 50%);
+}
+
+.at-save-color-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-block-end: 1rem;
+}
+
+.at-save-color-dialog__header h2 {
+  margin: 0;
+}
+
+.at-save-color-dialog__close {
+  flex: none;
+  margin-block-start: -0.5rem;
+  margin-inline-end: -0.5rem;
+}
+
+.at-save-color-dialog__close button {
+  display: grid;
+  place-items: center;
+  min-inline-size: var(--minimum-touch-target, 44px);
+  min-block-size: var(--minimum-touch-target, 44px);
+}
+
+.at-save-color-dialog__close svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+
+.at-save-color-dialog__actions {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+}
+
+.at-save-color-dialog__actions > a {
+  inline-size: 100%;
+  text-align: center;
+}

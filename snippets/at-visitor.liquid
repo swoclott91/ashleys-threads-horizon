@@ -1,0 +1,33 @@
+{%- doc -%}
+  Outputs the visitor kind for the personal home and For you page:
+  guest | member-new | member | pro | wholesale
+  Capture it: {% capture at_visitor %}{% render 'at-visitor' %}{% endcapture %}{% assign at_visitor = at_visitor | strip %}
+
+  Tier: 1C's `at-member-tier` (B2B location name, then customer `wagner.tier`; absent = guest,
+  so a signed-in customer who isn't a member is a guest, contract §4–5). Its editor-only
+  "Preview tier as" setting (Theme settings › Cart › Member pricing) previews tiers here too.
+  Lifecycle: customer `wagner.lifecycle`; when absent, `new` for a customer with no orders.
+  A Member or Pro customer in lifecycle `new` is `member-new`. A tier previewed in the
+  editor with no customer signed in is shown as an active member.
+{%- enddoc -%}
+{%- capture at_v -%}{% render 'at-member-tier' %}{%- endcapture -%}
+{%- liquid
+  assign at_v = at_v | strip
+  if at_v == 'member' or at_v == 'pro'
+    assign at_life = ''
+    if customer
+      assign at_life = customer.metafields.wagner.lifecycle.value | default: ''
+      if at_life == blank
+        if customer.orders_count > 0
+          assign at_life = 'active'
+        else
+          assign at_life = 'new'
+        endif
+      endif
+    endif
+    if at_life == 'new'
+      assign at_v = 'member-new'
+    endif
+  endif
+  echo at_v
+-%}

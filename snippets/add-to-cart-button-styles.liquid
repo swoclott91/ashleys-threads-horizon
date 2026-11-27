@@ -27,16 +27,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--gap-2xs);
+    gap: var(--button-icon-gap);
     user-select: none;
-    transition-property: color, box-shadow, background-color, scale, translate;
+    transition-property: color, box-shadow, background-color;
     transition-duration: var(--animation-speed);
     transition-timing-function: var(--ease-out-cubic);
-
-    &:active {
-      scale: 0.99;
-      translate: 0 1px;
-    }
   }
 
   .add-to-cart-button .svg-wrapper .checkmark-burst {
@@ -49,7 +44,7 @@
     --atc-destination: -1em;
 
     display: flex;
-    gap: var(--gap-2xs);
+    gap: var(--button-icon-gap);
     align-items: center;
     justify-content: center;
     animation-duration: var(--animation-speed);

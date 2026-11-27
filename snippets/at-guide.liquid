@@ -1,0 +1,21 @@
+{%- doc -%}
+  Outputs the guide collection handle for a Q1 segment (design §15; `wagner.segment` slug or a
+  `use:*` value). Decorators ("Clients' designs") have no single guide: outputs blank.
+
+  @param {string} segment - e.g. graphic-tees or use:graphic-tees
+{%- enddoc -%}
+{%- liquid
+  assign at_seg = segment | default: '' | remove: 'use:' | strip
+  case at_seg
+    when 'graphic-tees'
+      echo 'graphic-tees-boutique-sellers'
+    when 'apparel-brand'
+      echo 'building-your-apparel-brand'
+    when 'groups-events'
+      echo 'groups-events'
+    when 'business-merch'
+      echo 'business-merch'
+    when 'personal'
+      echo 'family-matching-sets'
+  endcase
+-%}

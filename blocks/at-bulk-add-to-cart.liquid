@@ -38,9 +38,8 @@
     <button
       type="button"
       on:click="/showDialog"
-      class="button at-buy-buttons__bulk-trigger {{ style_class }} {{ scoped_class }}"
+      class="at-buy-buttons__bulk-trigger {{ style_class }} {{ scoped_class }}"
       data-at-bulk-grid-trigger
-      style="--add-to-cart-font-case: {{ settings.button_text_case }};"
     >
       <span class="add-to-cart-text">
         <span
@@ -106,13 +105,7 @@
 
   .at-buy-buttons__bulk-trigger {
     width: 100%;
-    height: var(--height-buy-buttons);
-    padding-block: var(--padding-lg);
-    text-transform: var(--button-text-case-primary);
-  }
-
-  .at-buy-buttons__bulk-trigger.button-secondary {
-    text-transform: var(--button-text-case-secondary);
+    min-height: var(--height-buy-buttons);
   }
 
   .at-buy-buttons__bulk-dialog {

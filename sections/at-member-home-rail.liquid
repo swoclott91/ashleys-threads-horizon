@@ -1,0 +1,237 @@
+{%- capture member_visible -%}{% render 'at-section-visible', visibility: 'customers' %}{%- endcapture -%}
+{%- if member_visible == 'true' -%}
+  {%- liquid
+    assign kind = section.settings.kind
+    assign card_type = 'product'
+    assign card_ratio = '4 / 3'
+    assign sample = false
+    assign hydrate = false
+    assign show_favorite = false
+
+    case kind
+      when 'favorites'
+        assign entries = customer.metafields.wagner.favorite_products.value
+        if request.design_mode and entries == blank and section.settings.preview_products != blank
+          assign entries = section.settings.preview_products
+          assign sample = true
+        endif
+      when 'brands'
+        assign card_type = 'collection'
+        assign card_ratio = '3 / 2'
+        assign entries = customer.metafields.wagner.home_brand_collections.value
+        if request.design_mode and entries == blank and section.settings.preview_brands != blank
+          assign entries = section.settings.preview_brands
+          assign sample = true
+        endif
+      when 'companions'
+        assign show_favorite = true
+        assign anchor = customer.metafields.wagner.home_most_purchased_product.value
+        if request.design_mode and section.settings.preview_products != blank
+          assign entries = section.settings.preview_products
+          if anchor == blank
+            assign anchor = section.settings.preview_anchor
+          endif
+          assign sample = true
+        elsif anchor.id != blank and anchor.url != blank
+          assign hydrate = true
+          if recommendations.performed and recommendations.intent == 'complementary'
+            assign entries = recommendations.products
+          endif
+        endif
+    endcase
+
+    assign entry_count = 0
+    capture cards
+      for entry in entries limit: section.settings.max_items
+        if entry == blank or entry.url == blank
+          continue
+        endif
+        if entry_count > 0
+          echo '<!--@list/split-->'
+        endif
+        assign entry_count = entry_count | plus: 1
+        render 'resource-card', resource_type: card_type, resource: entry, image_width: 640, image_aspect_ratio: card_ratio, image_sizes: '(min-width: 990px) 24vw, 55vw', show_favorite: show_favorite
+      endfor
+    endcapture
+    assign slides = cards | strip | split: '<!--@list/split-->'
+  -%}
+
+  {%- if hydrate -%}
+    {%- unless recommendations.performed -%}
+      <script src="{{ 'product-recommendations.js' | asset_url }}" type="module" fetchpriority="low"></script>
+    {%- endunless -%}
+    <product-recommendations
+      id="product-recommendations-{{ section.id }}"
+      data-hydration-key="product-recommendations-{{ section.id }}"
+      data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.max_items }}"
+      data-section-id="{{ section.id }}"
+      data-product-id="{{ anchor.id }}"
+      data-intent="complementary"
+      data-recommendations-performed="{{ recommendations.performed }}"
+      {% if recommendations.performed and entry_count == 0 %}hidden{% else %}style="display: block;"{% endif %}
+    >
+  {%- endif -%}
+
+  {%- if entry_count > 0 or kind == 'favorites' -%}
+    <div class="section section--{{ section.settings.section_width }}">
+      <section class="at-member-rail" aria-labelledby="MemberRailHeading-{{ section.id }}">
+        <header class="at-member-rail__header">
+          <div>
+            <h2 class="h3" id="MemberRailHeading-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+            {%- if kind == 'companions' and anchor.title != blank -%}
+              <p>{{ 'at_member_home.rails.anchor' | t: product: anchor.title | escape }}</p>
+            {%- elsif section.settings.description != blank -%}
+              <p>{{ section.settings.description | escape }}</p>
+            {%- endif -%}
+            {%- if sample -%}<p>{{ 'at_member_home.sample' | t }}</p>{%- endif -%}
+          </div>
+          {%- if section.settings.link != blank and section.settings.link_label != blank -%}
+            <a class="button-unstyled button-link at-member-rail__link" href="{{ section.settings.link }}">
+              <span class="button-link__label">{{ section.settings.link_label | escape }}</span>
+              <span class="button-link__icon svg-wrapper" aria-hidden="true">
+                {{- 'icon-arrow.svg' | inline_asset_content -}}
+              </span>
+            </a>
+          {%- endif -%}
+        </header>
+
+        {%- if entry_count > 0 -%}
+          <div
+            class="resource-list at-member-rail__carousel"
+            style="--column-count: {{ section.settings.columns }}; --mobile-card-size: 56cqw; --resource-list-column-gap-desktop: 10px; --peek-next-slide-size: 0px;"
+          >
+            {%- render 'resource-list-styles' -%}
+            {%- render 'resource-list-carousel', slides: slides, slide_count: entry_count, settings: section.settings, slide_width_max: '420px' -%}
+          </div>
+        {%- else -%}
+          <p class="at-member-rail__empty">{{ 'at_member_home.rails.favorites_empty' | t }}</p>
+        {%- endif -%}
+      </section>
+    </div>
+  {%- elsif hydrate and recommendations.performed != true -%}
+    <div style="block-size: 1px;" aria-hidden="true"></div>
+  {%- endif -%}
+
+  {%- if hydrate -%}</product-recommendations>{%- endif -%}
+
+  {%- if entry_count > 0 or kind == 'favorites' -%}
+    {% style %}
+      .at-member-rail { display: grid; gap: 12px; padding-block: 14px; }
+      .at-member-rail__header { display: flex; align-items: end; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; }
+      .at-member-rail__header :is(h2, p), .at-member-rail__empty { margin: 0; }
+      .at-member-rail__header h2 { color: #103823; }
+      .at-member-rail__header p { margin-block-start: 3px; font-size: .875rem; }
+      .at-member-rail__link { font-weight: 600; color: #103823; }
+      .at-member-rail__empty { background: #f4e4d5; border-radius: 10px; padding: 16px; }
+      .at-member-rail__carousel {
+        --util-page-margin-offset: 0px;
+        --color-background: #fcf0e5;
+        --color-background-rgb: 252 240 229;
+      }
+      .at-member-rail__carousel :is(slideshow-container, slideshow-slides, .resource-list__slide) { background: transparent; }
+      .at-member-rail__carousel .resource-list__slide { max-inline-size: 100%; }
+      .at-member-rail__carousel .resource-card__wrapper { display: block; min-width: 0; }
+      .at-member-rail__carousel .resource-card {
+        min-width: 0;
+        border: 1px solid #dfcbb8;
+        border-radius: 12px;
+        background: #f5e4d4;
+        overflow: hidden;
+      }
+      .at-member-rail__carousel .resource-card__media {
+        position: relative;
+        height: clamp(116px, 13vw, 208px);
+        min-height: 0;
+        overflow: hidden;
+        background: #efdbc7;
+      }
+      .at-member-rail__carousel .resource-card__media > :is(img, svg) {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        mix-blend-mode: multiply;
+      }
+      .at-member-rail__carousel .resource-card__content { padding: 8px 12px; }
+    {% endstyle %}
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:names.at_member_home_rail",
+  "tag": "section",
+  "class": "at-member-home-rail-section",
+  "enabled_on": { "templates": ["index"] },
+  "settings": [
+    {
+      "type": "select",
+      "id": "kind",
+      "label": "t:settings.at_member_home_rail_kind",
+      "options": [
+        { "value": "favorites", "label": "t:options.at_member_home_favorites" },
+        { "value": "brands", "label": "t:options.at_member_home_brands" },
+        { "value": "companions", "label": "t:options.at_member_home_companions" }
+      ],
+      "default": "favorites"
+    },
+    { "type": "text", "id": "heading", "label": "t:settings.heading" },
+    { "type": "text", "id": "description", "label": "t:settings.at_member_home_row_description" },
+    { "type": "text", "id": "link_label", "label": "t:settings.at_member_home_row_link_label" },
+    { "type": "url", "id": "link", "label": "t:settings.link" },
+    { "type": "range", "id": "max_items", "label": "t:settings.at_member_home_max_items", "min": 2, "max": 10, "step": 1, "default": 8 },
+    { "type": "range", "id": "columns", "label": "t:settings.columns", "min": 2, "max": 6, "step": 1, "default": 4 },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.section_width",
+      "options": [
+        { "value": "page-width", "label": "t:options.page" },
+        { "value": "full-width", "label": "t:options.full" }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "icons_style",
+      "label": "t:settings.icon",
+      "options": [
+        { "value": "arrow", "label": "t:options.arrows" },
+        { "value": "none", "label": "t:options.none" }
+      ],
+      "default": "arrow"
+    },
+    {
+      "type": "select",
+      "id": "icons_shape",
+      "label": "t:settings.icon_background",
+      "options": [
+        { "value": "circle", "label": "t:options.circle" },
+        { "value": "none", "label": "t:options.none" }
+      ],
+      "default": "circle"
+    },
+    {
+      "type": "product_list",
+      "id": "preview_products",
+      "label": "t:settings.at_member_home_preview_products",
+      "limit": 8
+    },
+    {
+      "type": "product",
+      "id": "preview_anchor",
+      "label": "t:settings.at_member_home_preview_anchor"
+    },
+    {
+      "type": "collection_list",
+      "id": "preview_brands",
+      "label": "t:settings.at_member_home_preview_brands",
+      "limit": 8
+    }
+  ],
+  "presets": [
+    { "name": "t:names.at_member_home_rail" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,468 @@
+{
+  "capturedAt": "2026-10-13T03:41:52.872Z",
+  "sleeve": {
+    "nodes": [
+      {
+        "id": "gid://shopify/Metaobject/210642075923",
+        "displayName": "Short",
+        "type": "shopify--sleeve-length-type",
+        "fields": [
+          {
+            "key": "label",
+            "value": "Short"
+          },
+          {
+            "key": "taxonomy_reference",
+            "value": "gid://shopify/TaxonomyValue/169"
+          }
+        ]
+      }
+    ]
+  },
+  "pilots": [
+    {
+      "id": "gid://shopify/Product/10425148440851",
+      "title": "5000 Heavy Cotton 100% Cotton T-Shirt",
+      "handle": "gildan-5000-heavy-cotton-100-cotton-t-shirt",
+      "description": "The Gildan 5000 is the traditional midweight workhorse in Gildan's tee assortment, built for group orders, event merchandise, and dependable shop basics. Its 5.3-ounce open-end construction delivers the substantial, classic feel many established programs expect.An unusually broad color assortment, extended adult sizing, and a tear-away label help small shops reuse one proven blank across schools, clubs, fundraisers, and recurring programs.",
+      "templateSuffix": null,
+      "category": {
+        "id": "gid://shopify/TaxonomyCategory/aa-1-13-8",
+        "name": "T-Shirts",
+        "fullName": "Apparel & Accessories > Clothing > Clothing Tops > T-Shirts"
+      },
+      "breadcrumb": null,
+      "sleeve": {
+        "type": "list.metaobject_reference",
+        "value": "[\"gid://shopify/Metaobject/210642075923\"]"
+      },
+      "collections": {
+        "nodes": [
+          {
+            "id": "gid://shopify/Collection/523157438739",
+            "title": "Gildan",
+            "handle": "gildan"
+          },
+          {
+            "id": "gid://shopify/Collection/523278450963",
+            "title": "100% Cotton",
+            "handle": "100-cotton"
+          },
+          {
+            "id": "gid://shopify/Collection/523278516499",
+            "title": "100% Cotton T-Shirts",
+            "handle": "100-cotton-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/523280482579",
+            "title": "Sale",
+            "handle": "sale"
+          },
+          {
+            "id": "gid://shopify/Collection/523280777491",
+            "title": "T-Shirts",
+            "handle": "t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/523281432851",
+            "title": "Unisex",
+            "handle": "unisex"
+          },
+          {
+            "id": "gid://shopify/Collection/523281465619",
+            "title": "Unisex/Men's",
+            "handle": "unisex-mens"
+          },
+          {
+            "id": "gid://shopify/Collection/525843595539",
+            "title": "Short Sleeve T-Shirts",
+            "handle": "long-sleeve-t-shirts-copy"
+          },
+          {
+            "id": "gid://shopify/Collection/525878755603",
+            "title": "Unisex T-Shirts",
+            "handle": "unisex-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/525879378195",
+            "title": "Crew Neck T-Shirts",
+            "handle": "crew-neck-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/525963002131",
+            "title": "Open-End Cotton T-Shirts",
+            "handle": "open-end-cotton-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/528203415827",
+            "title": "Popular",
+            "handle": "popular"
+          },
+          {
+            "id": "gid://shopify/Collection/528534798611",
+            "title": "Seller Staples",
+            "handle": "seller-staples"
+          },
+          {
+            "id": "gid://shopify/Collection/528537452819",
+            "title": "Volume Winners",
+            "handle": "volume-winners"
+          },
+          {
+            "id": "gid://shopify/Collection/528538927379",
+            "title": "Assortment Builders",
+            "handle": "assortment-builders"
+          },
+          {
+            "id": "gid://shopify/Collection/528594862355",
+            "title": "Everyday Family Tees",
+            "handle": "everyday-family-tees"
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1Mjg1OTQ4NjIzNTUsImxhc3RfdmFsdWUiOjUyODU5NDg2MjM1NX0="
+        }
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10426121421075",
+      "title": "PC54LS Long Sleeve Core Cotton Tee",
+      "handle": "port-company-pc54ls-long-sleeve-core-cotton-tee",
+      "templateSuffix": null,
+      "category": {
+        "id": "gid://shopify/TaxonomyCategory/aa-1-13-8",
+        "name": "T-Shirts",
+        "fullName": "Apparel & Accessories > Clothing > Clothing Tops > T-Shirts"
+      },
+      "description": "Port & Company PC54LS is a classic cotton long-sleeve tee for everyday group apparel. Natural is minimally processed undyed cotton; Ash, Athletic Heather, Dark Heather Grey, Heather Navy, Athletic Maroon, S. Green and S. Orange use cotton/polyester blends.",
+      "breadcrumb": null,
+      "collections": {
+        "nodes": [
+          {
+            "id": "gid://shopify/Collection/523158814995",
+            "title": "Port & Company",
+            "handle": "port-company"
+          },
+          {
+            "id": "gid://shopify/Collection/523278450963",
+            "title": "100% Cotton",
+            "handle": "100-cotton"
+          },
+          {
+            "id": "gid://shopify/Collection/523278516499",
+            "title": "100% Cotton T-Shirts",
+            "handle": "100-cotton-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/523278582035",
+            "title": "50/50 Blend T-Shirts",
+            "handle": "50-50-blend-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/523279794451",
+            "title": "Long Sleeve T-Shirts",
+            "handle": "long-sleeve-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/523280023827",
+            "title": "Non-Sale Items",
+            "handle": "non-sale-items"
+          },
+          {
+            "id": "gid://shopify/Collection/523280318739",
+            "title": "Port & Company",
+            "handle": "port-and-company"
+          },
+          {
+            "id": "gid://shopify/Collection/523280777491",
+            "title": "T-Shirts",
+            "handle": "t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/523281432851",
+            "title": "Unisex",
+            "handle": "unisex"
+          },
+          {
+            "id": "gid://shopify/Collection/523281465619",
+            "title": "Unisex/Men's",
+            "handle": "unisex-mens"
+          },
+          {
+            "id": "gid://shopify/Collection/525878755603",
+            "title": "Unisex T-Shirts",
+            "handle": "unisex-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/525879378195",
+            "title": "Crew Neck T-Shirts",
+            "handle": "crew-neck-t-shirts"
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1MjU4NzkzNzgxOTUsImxhc3RfdmFsdWUiOjUyNTg3OTM3ODE5NX0="
+        }
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10426124534035",
+      "title": "PC78H Core Fleece Pullover Hooded Sweatshirt",
+      "handle": "port-company-pc78h-core-fleece-pullover-hooded-sweatshirt",
+      "templateSuffix": null,
+      "category": {
+        "id": "gid://shopify/TaxonomyCategory/aa-1-13-13",
+        "name": "Hoodies",
+        "fullName": "Apparel & Accessories > Clothing > Clothing Tops > Hoodies"
+      },
+      "description": "The Port & Company PC78H Core Fleece Hoodie is a value-focused choice for schools, community groups, local businesses, and seasonal merchandise. Its soft 7.8-ounce cotton-poly fleece, two-ply hood, 74 colors, and S–6XL range give shops exceptional coverage for varied groups. Decorators commonly use it for DTF and vinyl programs.It is the broad-assortment core hoodie in Port & Company's value fleece range, well suited to programs where color choice and extended sizing drive reorders.",
+      "breadcrumb": null,
+      "collections": {
+        "nodes": [
+          {
+            "id": "gid://shopify/Collection/523158814995",
+            "title": "Port & Company",
+            "handle": "port-company"
+          },
+          {
+            "id": "gid://shopify/Collection/523279499539",
+            "title": "Hoodies",
+            "handle": "hoodies"
+          },
+          {
+            "id": "gid://shopify/Collection/523280318739",
+            "title": "Port & Company",
+            "handle": "port-and-company"
+          },
+          {
+            "id": "gid://shopify/Collection/523280482579",
+            "title": "Sale",
+            "handle": "sale"
+          },
+          {
+            "id": "gid://shopify/Collection/523280744723",
+            "title": "Sweatshirts & Hoodies",
+            "handle": "sweatshirts-hoodies"
+          },
+          {
+            "id": "gid://shopify/Collection/523281432851",
+            "title": "Unisex",
+            "handle": "unisex"
+          },
+          {
+            "id": "gid://shopify/Collection/523281465619",
+            "title": "Unisex/Men's",
+            "handle": "unisex-mens"
+          },
+          {
+            "id": "gid://shopify/Collection/526016282899",
+            "title": "Unisex Sweatshirts",
+            "handle": "unisex-sweatshirts"
+          },
+          {
+            "id": "gid://shopify/Collection/526109802771",
+            "title": "50/50 Cotton Polyester Sweatshirts",
+            "handle": "50-50-cotton-polyester-sweatshirts"
+          },
+          {
+            "id": "gid://shopify/Collection/526113407251",
+            "title": "Fleece Sweatshirts",
+            "handle": "fleece-sweatshirts"
+          },
+          {
+            "id": "gid://shopify/Collection/526113734931",
+            "title": "Ultra Heavyweight Sweatshirts",
+            "handle": "ultra-heavyweight-sweatshirts"
+          },
+          {
+            "id": "gid://shopify/Collection/528203415827",
+            "title": "Popular",
+            "handle": "popular"
+          },
+          {
+            "id": "gid://shopify/Collection/528534798611",
+            "title": "Seller Staples",
+            "handle": "seller-staples"
+          },
+          {
+            "id": "gid://shopify/Collection/528538927379",
+            "title": "Assortment Builders",
+            "handle": "assortment-builders"
+          },
+          {
+            "id": "gid://shopify/Collection/528594927891",
+            "title": "Family Fleece",
+            "handle": "family-fleece"
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1Mjg1OTQ5Mjc4OTEsImxhc3RfdmFsdWUiOjUyODU5NDkyNzg5MX0="
+        }
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10425198379283",
+      "title": "CP90 Knit Cap",
+      "handle": "port-authority-cp90-knit-cap",
+      "templateSuffix": null,
+      "category": {
+        "id": "gid://shopify/TaxonomyCategory/aa-2-17-2",
+        "name": "Beanies",
+        "fullName": "Apparel & Accessories > Clothing Accessories > Hats > Beanies"
+      },
+      "description": "The Knit Cap has a three-inch foldable cuff designed to accommodate embroidery. Fabric blends vary by color: solids are acrylic, while Athletic Oxford and other mixed colors use different acrylic-polyester blends. White has a creamy tone rather than a bright true white.",
+      "breadcrumb": null,
+      "collections": {
+        "nodes": [
+          {
+            "id": "gid://shopify/Collection/523158782227",
+            "title": "Port Authority",
+            "handle": "port-authority"
+          },
+          {
+            "id": "gid://shopify/Collection/523278942483",
+            "title": "Beanies",
+            "handle": "beanies"
+          },
+          {
+            "id": "gid://shopify/Collection/523279335699",
+            "title": "Hats",
+            "handle": "hats"
+          },
+          {
+            "id": "gid://shopify/Collection/523280482579",
+            "title": "Sale",
+            "handle": "sale"
+          },
+          {
+            "id": "gid://shopify/Collection/523281432851",
+            "title": "Unisex",
+            "handle": "unisex"
+          },
+          {
+            "id": "gid://shopify/Collection/523281465619",
+            "title": "Unisex/Men's",
+            "handle": "unisex-mens"
+          },
+          {
+            "id": "gid://shopify/Collection/526254833939",
+            "title": "Knit Hats",
+            "handle": "knit-hats"
+          },
+          {
+            "id": "gid://shopify/Collection/526322532627",
+            "title": "Unisex Hats",
+            "handle": "unisex-hats"
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1MjYzMjI1MzI2MjcsImxhc3RfdmFsdWUiOjUyNjMyMjUzMjYyN30="
+        }
+      }
+    },
+    {
+      "id": "gid://shopify/Product/10426119618835",
+      "title": "PC380H Performance Pullover Hooded Tee",
+      "handle": "port-company-pc380h-performance-pullover-hooded-tee",
+      "templateSuffix": null,
+      "category": {
+        "id": "gid://shopify/TaxonomyCategory/aa-1-1-2-2",
+        "name": "T-Shirts",
+        "fullName": "Apparel & Accessories > Clothing > Activewear > Activewear Tops > T-Shirts"
+      },
+      "description": "The Port & Company PC380H Performance Hooded Tee adds lightweight coverage to outdoor teams, events, and active staff programs. Its 3.8-ounce moisture-wicking polyester, raglan sleeves, and UPF 50 rating deliver shirt-like comfort with a casual hooded silhouette. It comes in 10 colors and sizes S–4XL.This is a shirt-weight hooded layer rather than fleece, useful when outdoor programs need moisture management and sun coverage without sweatshirt bulk.",
+      "breadcrumb": null,
+      "collections": {
+        "nodes": [
+          {
+            "id": "gid://shopify/Collection/523158814995",
+            "title": "Port & Company",
+            "handle": "port-company"
+          },
+          {
+            "id": "gid://shopify/Collection/523278713107",
+            "title": "Activewear",
+            "handle": "activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/523280318739",
+            "title": "Port & Company",
+            "handle": "port-and-company"
+          },
+          {
+            "id": "gid://shopify/Collection/523280482579",
+            "title": "Sale",
+            "handle": "sale"
+          },
+          {
+            "id": "gid://shopify/Collection/523280777491",
+            "title": "T-Shirts",
+            "handle": "t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/523281432851",
+            "title": "Unisex",
+            "handle": "unisex"
+          },
+          {
+            "id": "gid://shopify/Collection/523281465619",
+            "title": "Unisex/Men's",
+            "handle": "unisex-mens"
+          },
+          {
+            "id": "gid://shopify/Collection/525858570515",
+            "title": "Performance T-Shirts",
+            "handle": "raglan-t-shirts-copy"
+          },
+          {
+            "id": "gid://shopify/Collection/525878755603",
+            "title": "Unisex T-Shirts",
+            "handle": "unisex-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/525905428755",
+            "title": "100% Polyester T-Shirts",
+            "handle": "100-polyester-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/526491091219",
+            "title": "Activewear T-Shirts",
+            "handle": "activewear-t-shirts"
+          },
+          {
+            "id": "gid://shopify/Collection/526632452371",
+            "title": "Unisex Activewear",
+            "handle": "unisex-activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/526632780051",
+            "title": "100% Polyester Activewear",
+            "handle": "100-polyester-activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/526633304339",
+            "title": "Moisture-Wicking Activewear",
+            "handle": "moisture-wicking-activewear"
+          },
+          {
+            "id": "gid://shopify/Collection/527229190419",
+            "title": "Fishing & Sun Activewear Apparel",
+            "handle": "fishing-sun-activewear-apparel"
+          },
+          {
+            "id": "gid://shopify/Collection/528203415827",
+            "title": "Popular",
+            "handle": "popular"
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1MjgyMDM0MTU4MjcsImxhc3RfdmFsdWUiOjUyODIwMzQxNTgyN30="
+        }
+      }
+    }
+  ]
+}

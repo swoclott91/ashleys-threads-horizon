@@ -1444,7 +1444,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -1577,7 +1578,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -1710,7 +1712,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -2284,7 +2287,8 @@
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
                         "padding-inline-end": 0,
-                        "show_variant_image": true
+                        "show_variant_image": true,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -2417,7 +2421,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -2550,7 +2555,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -3149,7 +3155,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -3282,7 +3289,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },
@@ -3415,7 +3423,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "show_favorite": true
                       },
                       "blocks": {}
                     },

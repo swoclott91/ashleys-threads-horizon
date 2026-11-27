@@ -1,0 +1,162 @@
+{%- doc -%}
+  One "What are you making?" project card (sections/at-make-tiles.liquid).
+
+  - With a Shopify Forms block inside it and no signed-in customer, the whole card is a button
+    that opens that form in a popup. The form's own "Redirect to URL after submission"
+    setting (in the Shopify Forms app) sends the guest to the card's collection afterwards;
+    the popup also links straight to the collection.
+  - Without a form, or for a signed-in customer, the whole card links to its collection.
+  - Either way a click records the project in localStorage `at_guest_hint` (read by the
+    section's script for "Pick up where you left off").
+{%- enddoc -%}
+{%- liquid
+  assign bs = block.settings
+  assign project = bs.project | default: 'use:decorator'
+
+  # Project collection: the picked collection, else the project's guide collection.
+  assign tile_url = bs.collection.url
+  if tile_url == blank
+    case project
+      when 'use:graphic-tees'
+        assign tile_url = '/collections/graphic-tees-boutique-sellers'
+      when 'use:apparel-brand'
+        assign tile_url = '/collections/building-your-apparel-brand'
+      when 'use:groups-events'
+        assign tile_url = '/collections/groups-events'
+      when 'use:business-merch'
+        assign tile_url = '/collections/business-merch'
+      when 'use:personal'
+        assign tile_url = '/collections/family-matching-sets'
+      else
+        assign tile_url = routes.all_products_collection_url
+    endcase
+  endif
+  assign tile_label = bs.label | default: 'Project'
+  assign tile_image = bs.image
+-%}
+{%- capture at_tile_form -%}{% content_for 'blocks' %}{%- endcapture -%}
+{%- assign at_tile_form_check = at_tile_form | strip -%}
+{%- assign use_form = false -%}
+{%- if at_tile_form_check != blank -%}
+  {%- if request.design_mode or customer == blank -%}
+    {%- capture tile_tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
+    {%- if tile_tier == 'guest' -%}
+      {%- assign use_form = true -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- capture tile_inner -%}
+  {%- if tile_image != blank -%}
+    <span class="at-tiles__media">
+      {{
+        tile_image
+        | image_url: width: 600
+        | image_tag:
+          class: 'at-tiles__image',
+          loading: 'lazy',
+          widths: '240, 360, 480, 600',
+          sizes: '(min-width: 990px) 16vw, (min-width: 750px) 33vw, 50vw',
+          alt: ''
+      }}
+    </span>
+  {%- endif -%}
+  <span class="at-tiles__label">{{ tile_label | escape }}</span>
+{%- endcapture -%}
+
+<li class="at-tiles__item" {{ block.shopify_attributes }}>
+  {%- if use_form -%}
+    <dialog-component class="at-tiles__popup" data-at-tile-popup>
+      <button
+        type="button"
+        class="at-tiles__tile{% if tile_image != blank %} at-tiles__tile--photo{% endif %}"
+        on:click="/showDialog"
+        aria-haspopup="dialog"
+        data-at-q1="{{ project }}"
+        data-at-title="{{ tile_label | escape }}"
+        data-at-url="{{ tile_url }}"
+      >
+        {{- tile_inner -}}
+      </button>
+      <dialog
+        ref="dialog"
+        class="at-tiles__dialog dialog-modal color-custom-popover"
+        scroll-lock
+        aria-label="{{ tile_label | escape }}"
+      >
+        <div class="at-tiles__dialog-inner">
+          <div class="at-tiles__form">{{ at_tile_form }}</div>
+          <p class="at-tiles__skip">
+            <a href="{{ tile_url }}">Skip to the collection</a>
+          </p>
+        </div>
+        <button
+          type="button"
+          ref="closeButton"
+          on:click="/closeDialog"
+          class="button button-unstyled close-button at-tiles__close"
+          aria-label="{{ 'accessibility.close_dialog' | t }}"
+        >
+          {{- 'icon-close.svg' | inline_asset_content -}}
+        </button>
+      </dialog>
+    </dialog-component>
+  {%- else -%}
+    <a
+      class="at-tiles__tile{% if tile_image != blank %} at-tiles__tile--photo{% endif %}"
+      href="{{ tile_url }}"
+      data-at-q1="{{ project }}"
+      data-at-title="{{ tile_label | escape }}"
+      data-at-url="{{ tile_url }}"
+    >
+      {{- tile_inner -}}
+    </a>
+  {%- endif -%}
+</li>
+
+{% schema %}
+{
+  "name": "Project card",
+  "tag": null,
+  "blocks": [{ "type": "@app" }],
+  "settings": [
+    {
+      "type": "select",
+      "id": "project",
+      "label": "Project",
+      "info": "Saved as the guest's project answer. Keep it matched to the form's tag.",
+      "options": [
+        { "value": "use:decorator", "label": "Clients' designs (use:decorator)" },
+        { "value": "use:graphic-tees", "label": "My own designs (use:graphic-tees)" },
+        { "value": "use:apparel-brand", "label": "My own label (use:apparel-brand)" },
+        { "value": "use:groups-events", "label": "Group, team, or event (use:groups-events)" },
+        { "value": "use:business-merch", "label": "Company apparel (use:business-merch)" },
+        { "value": "use:personal", "label": "Me and my family (use:personal)" }
+      ],
+      "default": "use:decorator"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Clients' designs"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo",
+      "info": "Optional. Without a photo the card shows its label only."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Defaults to the project's guide collection (all products for Clients' designs)."
+    },
+    {
+      "type": "paragraph",
+      "content": "Add a Shopify Forms block to this card to open the form when a guest clicks the card. In Shopify Forms, set that form's redirect after submission to this card's collection."
+    }
+  ]
+}
+{% endschema %}

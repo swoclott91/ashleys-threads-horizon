@@ -1,0 +1,77 @@
+{%- comment -%}
+  Pro savings estimate for Members: the compact homepage presentation of `snippets/at-pro-value`,
+  the same source the Pro membership PDP expands on, so the tile and the PDP show the same number.
+  - Amount: total potential Pro value (pricing savings, plus Threads Cash and shipping when Wagner
+    provides them), before the fee. Today that is `wagner.savings_ytd.pro_would_save`; the proposed
+    `wagner.pro_value` key adds the other lines (docs/pro-membership-pdp.md).
+  - Shown only for customer states c and d (a value of at least Theme settings › Membership ›
+    Smallest personal estimate). Otherwise the general Pro message, as on the PDP.
+  - Currency, year and fee rules live in at-pro-value / at-pro-config.
+  - Theme editor: the PDP's labeled state D sample, never shopper data.
+  - Link: this block's link, else the Pro membership product (Theme settings › Membership), else the account.
+{%- endcomment -%}
+{%- liquid
+  assign preview = 'off'
+  if request.design_mode
+    assign preview = 'd'
+  endif
+-%}
+{%- capture pv -%}{% render 'at-pro-value', preview: preview %}{%- endcapture -%}
+{%- liquid
+  assign state = pv | split: ';state=' | last | split: ';' | first
+  assign amount = pv | split: ';total=' | last | split: ';' | first | plus: 0
+  assign fee = pv | split: ';fee=' | last | split: ';' | first | plus: 0
+  assign basis = pv | split: ';basis=' | last | split: ';' | first
+  assign sample = pv | split: ';sample=' | last | split: ';' | first | plus: 0
+
+  assign show_numbers = false
+  if state == 'c' or state == 'd'
+    assign show_numbers = true
+  endif
+
+  assign pro_url = block.settings.pro_url
+  if pro_url == blank and settings.at_pro_product != blank
+    assign pro_url = settings.at_pro_product.url
+  endif
+-%}
+<div class="at-home-pro" {{ block.shopify_attributes }}>
+  {%- if sample == 1 -%}
+    <p class="at-home-pro__caption">{{ 'at_member_home.sample' | t }}</p>
+  {%- endif -%}
+  {%- if show_numbers -%}
+    <p class="at-home-pro__amount">
+      {{ amount | plus: 50 | divided_by: 100 | times: 100 | money_with_currency }}
+      <span>{{ 'at_member_home.pro.could_save' | t }}</span>
+    </p>
+    <p class="at-home-pro__caption">
+      {%- if basis == 'calendar_ytd' -%}
+        {{ 'at_member_home.pro.basis_ytd' | t }}
+      {%- else -%}
+        {{ 'at_member_home.pro.basis' | t }}
+      {%- endif -%}
+    </p>
+    {%- if fee > 0 -%}
+      {%- assign fee_display = fee | money_with_currency -%}
+      <p class="at-home-pro__caption">{{ 'at_member_home.pro.annual_fee' | t: fee: fee_display }}</p>
+    {%- endif -%}
+  {%- else -%}
+    <p>{{ 'at_member_home.pro.empty' | t }}</p>
+  {%- endif -%}
+
+  {%- if pro_url != blank -%}
+    <a class="button-secondary" href="{{ pro_url }}">{{ 'at_member_home.pro.cta' | t }}</a>
+  {%- else -%}
+    <a class="button-secondary" href="{{ routes.account_url }}">{{ 'at_member_home.pro.account' | t }}</a>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "t:names.at_home_pro_estimate",
+  "tag": null,
+  "settings": [
+    { "type": "url", "id": "pro_url", "label": "t:settings.at_home_pro_url" }
+  ],
+  "presets": [{ "name": "t:names.at_home_pro_estimate" }]
+}
+{% endschema %}

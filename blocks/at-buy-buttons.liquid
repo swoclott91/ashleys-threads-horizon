@@ -1,5 +1,5 @@
 {%- comment -%}
-  AT: Access Threads buy buttons container. Nested blocks (Bulk Add to Cart, quantity/ATC form,
+  AT: Access Threads buy buttons container. Nested blocks (Bulk Add to Cart, Save color, quantity/ATC form,
   discount progress) are reorderable via {% content_for 'blocks' %}.
 {%- endcomment -%}
 {% liquid
@@ -203,7 +203,6 @@
 
   .product-form-buttons button {
     width: 100%;
-    padding-block: var(--padding-lg);
   }
 
   .quantity-selector {
@@ -262,12 +261,7 @@
   }
 
   .add-to-cart-button {
-    height: var(--height-buy-buttons);
-    text-transform: var(--button-text-case-primary);
-  }
-
-  .add-to-cart-button.button-secondary {
-    text-transform: var(--button-text-case-secondary);
+    min-height: var(--height-buy-buttons);
   }
 
   .product-form-text__error {
@@ -562,6 +556,9 @@
       "type": "at-bulk-add-to-cart"
     },
     {
+      "type": "at-save-color"
+    },
+    {
       "type": "_at-buy-buttons-form"
     },
     {
@@ -580,6 +577,9 @@
             "at_bulk_behavior": "default",
             "style_class": "button-secondary"
           }
+        },
+        "save-color": {
+          "type": "at-save-color"
         },
         "buy-buttons-form": {
           "type": "_at-buy-buttons-form",
@@ -612,7 +612,7 @@
           }
         }
       },
-      "block_order": ["bulk-add-to-cart", "buy-buttons-form", "discount-progress"]
+      "block_order": ["bulk-add-to-cart", "save-color", "buy-buttons-form", "discount-progress"]
     }
   ]
 }

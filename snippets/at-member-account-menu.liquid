@@ -1,0 +1,46 @@
+{%- doc -%}
+  Membership artwork for Shopify's original account avatar.
+
+  @param {string} tier - member | pro | wholesale
+{%- enddoc -%}
+{%- liquid
+  assign tier_name_key = 'at_member.menu.tier_' | append: tier
+  assign tier_badge_key = 'at_member.tiers.' | append: tier
+  assign preview_badge = false
+  if request.design_mode and settings.at_member_preview_tier != 'off' and settings.at_member_preview_tier != blank
+    assign preview_badge = true
+  endif
+-%}
+<svg
+  slot="at-member-avatar"
+  class="at-acct__badge"
+  data-at-tier-label="{{ tier_name_key | t | escape }}"
+  {% if preview_badge %}
+    data-at-preview
+  {% endif %}
+  xmlns="http://www.w3.org/2000/svg"
+  width="49"
+  height="54"
+  viewBox="0 0 180 200"
+  aria-hidden="true"
+  focusable="false"
+>
+  <defs>
+    <path id="AtMemberBadgeTop" d="M 12,100 A 78,78 0 0 1 168,100"/>
+    <path id="AtMemberBadgeBottom" d="M -4,100 A 94,94 0 0 0 184,100"/>
+  </defs>
+  {% if preview_badge %}
+    <g class="at-acct__badge-preview">
+      <circle cx="90" cy="100" r="60"/>
+      <path fill="#fff9ee" d="M57 76h11l8 33 9-33h10l9 33 8-33h11l-14 45H99l-9-32-9 32H71z"/>
+    </g>
+  {% endif %}
+  <circle class="at-acct__badge-border" cx="90" cy="100" r="64"/>
+  <circle class="at-acct__badge-ring" cx="90" cy="100" r="64"/>
+  <text class="at-acct__badge-lettering at-acct__badge-tier">
+    <textPath href="#AtMemberBadgeTop" startOffset="50%">{{ tier_badge_key | t | upcase | escape }}</textPath>
+  </text>
+  <text class="at-acct__badge-lettering">
+    <textPath href="#AtMemberBadgeBottom" startOffset="50%">ASHLEY’S</textPath>
+  </text>
+</svg>

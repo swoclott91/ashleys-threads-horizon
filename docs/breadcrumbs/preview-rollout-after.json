@@ -1,0 +1,649 @@
+{
+  "capturedAt": "2026-10-13T03:44:04.580Z",
+  "store": "ashleys-threads-3.myshopify.com",
+  "readback": {
+    "productDefinition": {
+      "nodes": [
+        {
+          "id": "gid://shopify/MetafieldDefinition/300210356499",
+          "namespace": "custom",
+          "key": "breadcrumb_collection",
+          "type": {
+            "name": "collection_reference"
+          },
+          "access": {
+            "storefront": "PUBLIC_READ"
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "eyJsYXN0X2lkIjozMDAyMTAzNTY0OTksImxhc3RfdmFsdWUiOiIzMDAyMTAzNTY0OTkifQ=="
+      }
+    },
+    "collectionDefinitions": {
+      "nodes": [
+        {
+          "id": "gid://shopify/MetafieldDefinition/226247147795",
+          "namespace": "custom",
+          "key": "brand",
+          "type": {
+            "name": "metaobject_reference"
+          },
+          "access": {
+            "storefront": "NONE"
+          }
+        },
+        {
+          "id": "gid://shopify/MetafieldDefinition/228141728019",
+          "namespace": "custom",
+          "key": "pretty_title",
+          "type": {
+            "name": "single_line_text_field"
+          },
+          "access": {
+            "storefront": "PUBLIC_READ"
+          }
+        },
+        {
+          "id": "gid://shopify/MetafieldDefinition/300210389267",
+          "namespace": "custom",
+          "key": "breadcrumb_parent",
+          "type": {
+            "name": "collection_reference"
+          },
+          "access": {
+            "storefront": "PUBLIC_READ"
+          }
+        },
+        {
+          "id": "gid://shopify/MetafieldDefinition/300210422035",
+          "namespace": "custom",
+          "key": "breadcrumb_label",
+          "type": {
+            "name": "single_line_text_field"
+          },
+          "access": {
+            "storefront": "PUBLIC_READ"
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": "eyJsYXN0X2lkIjozMDAyMTA0MjIwMzUsImxhc3RfdmFsdWUiOiIzMDAyMTA0MjIwMzUifQ=="
+      }
+    },
+    "collections": [
+      {
+        "id": "gid://shopify/Collection/523280777491",
+        "title": "T-Shirts",
+        "handle": "t-shirts",
+        "parent": null,
+        "label": {
+          "id": "gid://shopify/Metafield/190848245006611",
+          "type": "single_line_text_field",
+          "value": "T-Shirts",
+          "compareDigest": "55efc6643bf24d72c4b742cc64c8b68ade0d662d9e3e8ccde5addeb737babcb0"
+        }
+      },
+      {
+        "id": "gid://shopify/Collection/525843595539",
+        "title": "Short Sleeve T-Shirts",
+        "handle": "long-sleeve-t-shirts-copy",
+        "parent": {
+          "id": "gid://shopify/Metafield/190848244941075",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523280777491",
+          "compareDigest": "e974868560b39dff44371b1c2058845e59914167bd5b4743d1902923b9cb2d8f"
+        },
+        "label": {
+          "id": "gid://shopify/Metafield/190848244973843",
+          "type": "single_line_text_field",
+          "value": "Short Sleeve",
+          "compareDigest": "380dee19ab08af453b47d76b23cef270503e6368880bc2cd09acb59638813d60"
+        }
+      },
+      {
+        "id": "gid://shopify/Collection/523279794451",
+        "title": "Long Sleeve T-Shirts",
+        "handle": "long-sleeve-t-shirts",
+        "parent": {
+          "id": "gid://shopify/Metafield/190848244875539",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523280777491",
+          "compareDigest": "e974868560b39dff44371b1c2058845e59914167bd5b4743d1902923b9cb2d8f"
+        },
+        "label": {
+          "id": "gid://shopify/Metafield/190848244908307",
+          "type": "single_line_text_field",
+          "value": "Long Sleeve",
+          "compareDigest": "a1020abf0e115f21e79f4c01999f38d294165ab40f7c29adb932f97363831ea1"
+        }
+      },
+      {
+        "id": "gid://shopify/Collection/523280744723",
+        "title": "Sweatshirts & Hoodies",
+        "handle": "sweatshirts-hoodies",
+        "parent": null,
+        "label": {
+          "id": "gid://shopify/Metafield/190848244842771",
+          "type": "single_line_text_field",
+          "value": "Sweatshirts & Hoodies",
+          "compareDigest": "dab447386f55c6b65cd64ea25636f29f09cdabf852e73bae74ee964dc3a7deaa"
+        }
+      },
+      {
+        "id": "gid://shopify/Collection/523279499539",
+        "title": "Hoodies",
+        "handle": "hoodies",
+        "parent": {
+          "id": "gid://shopify/Metafield/190848244777235",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523280744723",
+          "compareDigest": "e8fc48ce36ec3b7e5a78c0a03f84c9b907644fe056ae9a1eb5191489c6a0bbc4"
+        },
+        "label": {
+          "id": "gid://shopify/Metafield/190848244810003",
+          "type": "single_line_text_field",
+          "value": "Hoodies",
+          "compareDigest": "b39938649c6d9fad40d1651f10909465bf1c92aef3e6d23e08d20bd0cea62019"
+        }
+      },
+      {
+        "id": "gid://shopify/Collection/523279335699",
+        "title": "Hats",
+        "handle": "hats",
+        "parent": null,
+        "label": {
+          "id": "gid://shopify/Metafield/190848244744467",
+          "type": "single_line_text_field",
+          "value": "Hats",
+          "compareDigest": "f4bb6b4f09bef84c5d7e304a6ef4d3168eb5015238cb5d0c55e7b81e7ef29eee"
+        }
+      },
+      {
+        "id": "gid://shopify/Collection/523281236243",
+        "title": "Trucker Hats",
+        "handle": "trucker-hats",
+        "parent": {
+          "id": "gid://shopify/Metafield/190848244678931",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523279335699",
+          "compareDigest": "8903a6a839f4ca5f89d51100c9eb0516001429ed922d8e0d322bc48ef6bf9e3c"
+        },
+        "label": {
+          "id": "gid://shopify/Metafield/190848244711699",
+          "type": "single_line_text_field",
+          "value": "Trucker Hats",
+          "compareDigest": "abf028aba38d8e7d7911ee0090144ee1a882ca344637d7a5d6713e3e946e1df4"
+        }
+      },
+      {
+        "id": "gid://shopify/Collection/523278942483",
+        "title": "Beanies",
+        "handle": "beanies",
+        "parent": {
+          "id": "gid://shopify/Metafield/190848244613395",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523279335699",
+          "compareDigest": "8903a6a839f4ca5f89d51100c9eb0516001429ed922d8e0d322bc48ef6bf9e3c"
+        },
+        "label": {
+          "id": "gid://shopify/Metafield/190848244646163",
+          "type": "single_line_text_field",
+          "value": "Beanies",
+          "compareDigest": "6e22af85a2c252d16554f90175f6ac46ab82252353617c966e722a323161a7aa"
+        }
+      }
+    ],
+    "products": [
+      {
+        "id": "gid://shopify/Product/10425148440851",
+        "title": "5000 Heavy Cotton 100% Cotton T-Shirt",
+        "handle": "gildan-5000-heavy-cotton-100-cotton-t-shirt",
+        "breadcrumb": {
+          "id": "gid://shopify/Metafield/190848244580627",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/525843595539",
+          "compareDigest": "6aa502a0856e0f49fdc59c67f6de266d92fb1dfee976d2bc23b1f71384172f35"
+        },
+        "collections": {
+          "nodes": [
+            {
+              "id": "gid://shopify/Collection/523157438739"
+            },
+            {
+              "id": "gid://shopify/Collection/523278450963"
+            },
+            {
+              "id": "gid://shopify/Collection/523278516499"
+            },
+            {
+              "id": "gid://shopify/Collection/523280482579"
+            },
+            {
+              "id": "gid://shopify/Collection/523280777491"
+            },
+            {
+              "id": "gid://shopify/Collection/523281432851"
+            },
+            {
+              "id": "gid://shopify/Collection/523281465619"
+            },
+            {
+              "id": "gid://shopify/Collection/525843595539"
+            },
+            {
+              "id": "gid://shopify/Collection/525878755603"
+            },
+            {
+              "id": "gid://shopify/Collection/525879378195"
+            },
+            {
+              "id": "gid://shopify/Collection/525963002131"
+            },
+            {
+              "id": "gid://shopify/Collection/528203415827"
+            },
+            {
+              "id": "gid://shopify/Collection/528534798611"
+            },
+            {
+              "id": "gid://shopify/Collection/528537452819"
+            },
+            {
+              "id": "gid://shopify/Collection/528538927379"
+            },
+            {
+              "id": "gid://shopify/Collection/528594862355"
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "eyJsYXN0X2lkIjo1Mjg1OTQ4NjIzNTUsImxhc3RfdmFsdWUiOjUyODU5NDg2MjM1NX0="
+          }
+        }
+      },
+      {
+        "id": "gid://shopify/Product/10426121421075",
+        "title": "PC54LS Long Sleeve Core Cotton Tee",
+        "handle": "port-company-pc54ls-long-sleeve-core-cotton-tee",
+        "breadcrumb": {
+          "id": "gid://shopify/Metafield/190848244547859",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523279794451",
+          "compareDigest": "2576ac4fffc1ff57aa6a923fbd9cb29e6a1901032f0290285770fdb2e117c2f7"
+        },
+        "collections": {
+          "nodes": [
+            {
+              "id": "gid://shopify/Collection/523158814995"
+            },
+            {
+              "id": "gid://shopify/Collection/523278450963"
+            },
+            {
+              "id": "gid://shopify/Collection/523278516499"
+            },
+            {
+              "id": "gid://shopify/Collection/523278582035"
+            },
+            {
+              "id": "gid://shopify/Collection/523279794451"
+            },
+            {
+              "id": "gid://shopify/Collection/523280023827"
+            },
+            {
+              "id": "gid://shopify/Collection/523280318739"
+            },
+            {
+              "id": "gid://shopify/Collection/523280777491"
+            },
+            {
+              "id": "gid://shopify/Collection/523281432851"
+            },
+            {
+              "id": "gid://shopify/Collection/523281465619"
+            },
+            {
+              "id": "gid://shopify/Collection/525878755603"
+            },
+            {
+              "id": "gid://shopify/Collection/525879378195"
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "eyJsYXN0X2lkIjo1MjU4NzkzNzgxOTUsImxhc3RfdmFsdWUiOjUyNTg3OTM3ODE5NX0="
+          }
+        }
+      },
+      {
+        "id": "gid://shopify/Product/10426124534035",
+        "title": "PC78H Core Fleece Pullover Hooded Sweatshirt",
+        "handle": "port-company-pc78h-core-fleece-pullover-hooded-sweatshirt",
+        "breadcrumb": {
+          "id": "gid://shopify/Metafield/190848244515091",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523279499539",
+          "compareDigest": "9c727e8d5ca26df16bfaee4a36b9a8123af07f0d98217c32b6d89f5271eccc4b"
+        },
+        "collections": {
+          "nodes": [
+            {
+              "id": "gid://shopify/Collection/523158814995"
+            },
+            {
+              "id": "gid://shopify/Collection/523279499539"
+            },
+            {
+              "id": "gid://shopify/Collection/523280318739"
+            },
+            {
+              "id": "gid://shopify/Collection/523280482579"
+            },
+            {
+              "id": "gid://shopify/Collection/523280744723"
+            },
+            {
+              "id": "gid://shopify/Collection/523281432851"
+            },
+            {
+              "id": "gid://shopify/Collection/523281465619"
+            },
+            {
+              "id": "gid://shopify/Collection/526016282899"
+            },
+            {
+              "id": "gid://shopify/Collection/526109802771"
+            },
+            {
+              "id": "gid://shopify/Collection/526113407251"
+            },
+            {
+              "id": "gid://shopify/Collection/526113734931"
+            },
+            {
+              "id": "gid://shopify/Collection/528203415827"
+            },
+            {
+              "id": "gid://shopify/Collection/528534798611"
+            },
+            {
+              "id": "gid://shopify/Collection/528538927379"
+            },
+            {
+              "id": "gid://shopify/Collection/528594927891"
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "eyJsYXN0X2lkIjo1Mjg1OTQ5Mjc4OTEsImxhc3RfdmFsdWUiOjUyODU5NDkyNzg5MX0="
+          }
+        }
+      },
+      {
+        "id": "gid://shopify/Product/10425198379283",
+        "title": "CP90 Knit Cap",
+        "handle": "port-authority-cp90-knit-cap",
+        "breadcrumb": {
+          "id": "gid://shopify/Metafield/190848244482323",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523278942483",
+          "compareDigest": "32b231ebef8a69367c01db8a942f34d308f3ff091f0c5bb35969395946140ccd"
+        },
+        "collections": {
+          "nodes": [
+            {
+              "id": "gid://shopify/Collection/523158782227"
+            },
+            {
+              "id": "gid://shopify/Collection/523278942483"
+            },
+            {
+              "id": "gid://shopify/Collection/523279335699"
+            },
+            {
+              "id": "gid://shopify/Collection/523280482579"
+            },
+            {
+              "id": "gid://shopify/Collection/523281432851"
+            },
+            {
+              "id": "gid://shopify/Collection/523281465619"
+            },
+            {
+              "id": "gid://shopify/Collection/526254833939"
+            },
+            {
+              "id": "gid://shopify/Collection/526322532627"
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "eyJsYXN0X2lkIjo1MjYzMjI1MzI2MjcsImxhc3RfdmFsdWUiOjUyNjMyMjUzMjYyN30="
+          }
+        }
+      },
+      {
+        "id": "gid://shopify/Product/10426119618835",
+        "title": "PC380H Performance Pullover Hooded Tee",
+        "handle": "port-company-pc380h-performance-pullover-hooded-tee",
+        "breadcrumb": {
+          "id": "gid://shopify/Metafield/190848244449555",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523280777491",
+          "compareDigest": "e974868560b39dff44371b1c2058845e59914167bd5b4743d1902923b9cb2d8f"
+        },
+        "collections": {
+          "nodes": [
+            {
+              "id": "gid://shopify/Collection/523158814995"
+            },
+            {
+              "id": "gid://shopify/Collection/523278713107"
+            },
+            {
+              "id": "gid://shopify/Collection/523280318739"
+            },
+            {
+              "id": "gid://shopify/Collection/523280482579"
+            },
+            {
+              "id": "gid://shopify/Collection/523280777491"
+            },
+            {
+              "id": "gid://shopify/Collection/523281432851"
+            },
+            {
+              "id": "gid://shopify/Collection/523281465619"
+            },
+            {
+              "id": "gid://shopify/Collection/525858570515"
+            },
+            {
+              "id": "gid://shopify/Collection/525878755603"
+            },
+            {
+              "id": "gid://shopify/Collection/525905428755"
+            },
+            {
+              "id": "gid://shopify/Collection/526491091219"
+            },
+            {
+              "id": "gid://shopify/Collection/526632452371"
+            },
+            {
+              "id": "gid://shopify/Collection/526632780051"
+            },
+            {
+              "id": "gid://shopify/Collection/526633304339"
+            },
+            {
+              "id": "gid://shopify/Collection/527229190419"
+            },
+            {
+              "id": "gid://shopify/Collection/528203415827"
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "eyJsYXN0X2lkIjo1MjgyMDM0MTU4MjcsImxhc3RfdmFsdWUiOjUyODIwMzQxNTgyN30="
+          }
+        }
+      }
+    ]
+  },
+  "writeResult": {
+    "metafieldsSet": {
+      "metafields": [
+        {
+          "id": "gid://shopify/Metafield/190848245006611",
+          "namespace": "custom",
+          "key": "breadcrumb_label",
+          "type": "single_line_text_field",
+          "value": "T-Shirts",
+          "compareDigest": "55efc6643bf24d72c4b742cc64c8b68ade0d662d9e3e8ccde5addeb737babcb0"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244973843",
+          "namespace": "custom",
+          "key": "breadcrumb_label",
+          "type": "single_line_text_field",
+          "value": "Short Sleeve",
+          "compareDigest": "380dee19ab08af453b47d76b23cef270503e6368880bc2cd09acb59638813d60"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244941075",
+          "namespace": "custom",
+          "key": "breadcrumb_parent",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523280777491",
+          "compareDigest": "e974868560b39dff44371b1c2058845e59914167bd5b4743d1902923b9cb2d8f"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244908307",
+          "namespace": "custom",
+          "key": "breadcrumb_label",
+          "type": "single_line_text_field",
+          "value": "Long Sleeve",
+          "compareDigest": "a1020abf0e115f21e79f4c01999f38d294165ab40f7c29adb932f97363831ea1"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244875539",
+          "namespace": "custom",
+          "key": "breadcrumb_parent",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523280777491",
+          "compareDigest": "e974868560b39dff44371b1c2058845e59914167bd5b4743d1902923b9cb2d8f"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244842771",
+          "namespace": "custom",
+          "key": "breadcrumb_label",
+          "type": "single_line_text_field",
+          "value": "Sweatshirts & Hoodies",
+          "compareDigest": "dab447386f55c6b65cd64ea25636f29f09cdabf852e73bae74ee964dc3a7deaa"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244810003",
+          "namespace": "custom",
+          "key": "breadcrumb_label",
+          "type": "single_line_text_field",
+          "value": "Hoodies",
+          "compareDigest": "b39938649c6d9fad40d1651f10909465bf1c92aef3e6d23e08d20bd0cea62019"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244777235",
+          "namespace": "custom",
+          "key": "breadcrumb_parent",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523280744723",
+          "compareDigest": "e8fc48ce36ec3b7e5a78c0a03f84c9b907644fe056ae9a1eb5191489c6a0bbc4"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244744467",
+          "namespace": "custom",
+          "key": "breadcrumb_label",
+          "type": "single_line_text_field",
+          "value": "Hats",
+          "compareDigest": "f4bb6b4f09bef84c5d7e304a6ef4d3168eb5015238cb5d0c55e7b81e7ef29eee"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244711699",
+          "namespace": "custom",
+          "key": "breadcrumb_label",
+          "type": "single_line_text_field",
+          "value": "Trucker Hats",
+          "compareDigest": "abf028aba38d8e7d7911ee0090144ee1a882ca344637d7a5d6713e3e946e1df4"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244678931",
+          "namespace": "custom",
+          "key": "breadcrumb_parent",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523279335699",
+          "compareDigest": "8903a6a839f4ca5f89d51100c9eb0516001429ed922d8e0d322bc48ef6bf9e3c"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244646163",
+          "namespace": "custom",
+          "key": "breadcrumb_label",
+          "type": "single_line_text_field",
+          "value": "Beanies",
+          "compareDigest": "6e22af85a2c252d16554f90175f6ac46ab82252353617c966e722a323161a7aa"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244613395",
+          "namespace": "custom",
+          "key": "breadcrumb_parent",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523279335699",
+          "compareDigest": "8903a6a839f4ca5f89d51100c9eb0516001429ed922d8e0d322bc48ef6bf9e3c"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244580627",
+          "namespace": "custom",
+          "key": "breadcrumb_collection",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/525843595539",
+          "compareDigest": "6aa502a0856e0f49fdc59c67f6de266d92fb1dfee976d2bc23b1f71384172f35"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244547859",
+          "namespace": "custom",
+          "key": "breadcrumb_collection",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523279794451",
+          "compareDigest": "2576ac4fffc1ff57aa6a923fbd9cb29e6a1901032f0290285770fdb2e117c2f7"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244515091",
+          "namespace": "custom",
+          "key": "breadcrumb_collection",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523279499539",
+          "compareDigest": "9c727e8d5ca26df16bfaee4a36b9a8123af07f0d98217c32b6d89f5271eccc4b"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244482323",
+          "namespace": "custom",
+          "key": "breadcrumb_collection",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523278942483",
+          "compareDigest": "32b231ebef8a69367c01db8a942f34d308f3ff091f0c5bb35969395946140ccd"
+        },
+        {
+          "id": "gid://shopify/Metafield/190848244449555",
+          "namespace": "custom",
+          "key": "breadcrumb_collection",
+          "type": "collection_reference",
+          "value": "gid://shopify/Collection/523280777491",
+          "compareDigest": "e974868560b39dff44371b1c2058845e59914167bd5b4743d1902923b9cb2d8f"
+        }
+      ],
+      "userErrors": []
+    }
+  }
+}

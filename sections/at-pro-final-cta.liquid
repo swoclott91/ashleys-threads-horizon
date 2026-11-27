@@ -1,0 +1,39 @@
+{%- comment -%}
+  Pro PDP section 8: closing purchase CTA. Pro members get their membership link instead;
+  Wholesale customers see nothing.
+{%- endcomment -%}
+{%- capture pv -%}{% render 'at-pro-value' %}{%- endcapture -%}
+{%- liquid
+  assign state = pv | split: ';state=' | last | split: ';' | first
+  assign pro_product = product | default: settings.at_pro_product
+-%}
+{%- unless state == 'f' -%}
+{{ 'at-pro.css' | asset_url | stylesheet_tag }}
+<div class="section section--page-width at-pro-page at-pro-section at-pro-final">
+  <div class="at-pro-final__card">
+    <span class="at-pro-final__monogram" aria-hidden="true">{{ 'at-monogram.svg' | inline_asset_content }}</span>
+    {%- if state == 'e' -%}
+      <h2 class="at-pro-serif at-pro-final__heading">{{ section.settings.pro_heading | escape }}</h2>
+    {%- else -%}
+      <h2 class="at-pro-serif at-pro-final__heading">{{ section.settings.heading | escape }}</h2>
+      {%- if section.settings.body != blank -%}<p class="at-pro-final__body">{{ section.settings.body | escape }}</p>{%- endif -%}
+    {%- endif -%}
+    {% render 'at-pro-cta', product: pro_product, state: state, label: section.settings.cta_label, with_price: true, form_id: 'AtProFinalForm' %}
+  </div>
+</div>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Pro: closing CTA",
+  "tag": "section",
+  "class": "at-pro-section-wrap",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Make more. Keep more." },
+    { "type": "textarea", "id": "body", "label": "Text", "default": "Lower costs on every order, rewards on what you buy, and a shipping credit every month." },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Become a Pro", "info": "The price and “/year” are added automatically." },
+    { "type": "text", "id": "pro_heading", "label": "Heading for Pro members", "default": "Thanks for choosing Ashley’s Threads." }
+  ],
+  "presets": [{ "name": "Pro: closing CTA" }]
+}
+{% endschema %}

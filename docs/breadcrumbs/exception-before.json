@@ -1,0 +1,174 @@
+{
+  "capturedAt": "2026-10-13T02:56:13.540Z",
+  "store": "ashleys-threads-3.myshopify.com",
+  "productReferenceDefinitions": {
+    "nodes": [],
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": null
+    }
+  },
+  "products": {
+    "nodes": [
+      {
+        "id": "gid://shopify/Product/10426119618835",
+        "title": "PC380H Performance Pullover Hooded Tee",
+        "handle": "port-company-pc380h-performance-pullover-hooded-tee",
+        "templateSuffix": null,
+        "description": "The Port & Company PC380H Performance Hooded Tee adds lightweight coverage to outdoor teams, events, and active staff programs. Its 3.8-ounce moisture-wicking polyester, raglan sleeves, and UPF 50 rating deliver shirt-like comfort with a casual hooded silhouette. It comes in 10 colors and sizes S–4XL.This is a shirt-weight hooded layer rather than fleece, useful when outdoor programs need moisture management and sun coverage without sweatshirt bulk.",
+        "breadcrumb": null,
+        "collections": {
+          "nodes": [
+            {
+              "id": "gid://shopify/Collection/523158814995",
+              "title": "Port & Company",
+              "handle": "port-company"
+            },
+            {
+              "id": "gid://shopify/Collection/523278713107",
+              "title": "Activewear",
+              "handle": "activewear"
+            },
+            {
+              "id": "gid://shopify/Collection/523279499539",
+              "title": "Hoodies",
+              "handle": "hoodies"
+            },
+            {
+              "id": "gid://shopify/Collection/523280318739",
+              "title": "Port & Company",
+              "handle": "port-and-company"
+            },
+            {
+              "id": "gid://shopify/Collection/523280482579",
+              "title": "Sale",
+              "handle": "sale"
+            },
+            {
+              "id": "gid://shopify/Collection/523280711955",
+              "title": "Sweatshirts",
+              "handle": "sweatshirts"
+            },
+            {
+              "id": "gid://shopify/Collection/523280744723",
+              "title": "Sweatshirts & Hoodies",
+              "handle": "sweatshirts-hoodies"
+            },
+            {
+              "id": "gid://shopify/Collection/523281432851",
+              "title": "Unisex",
+              "handle": "unisex"
+            },
+            {
+              "id": "gid://shopify/Collection/523281465619",
+              "title": "Unisex/Men's",
+              "handle": "unisex-mens"
+            },
+            {
+              "id": "gid://shopify/Collection/526015660307",
+              "title": "Performance Sweatshirts",
+              "handle": "performance-sweatshirts"
+            },
+            {
+              "id": "gid://shopify/Collection/526016282899",
+              "title": "Unisex Sweatshirts",
+              "handle": "unisex-sweatshirts"
+            },
+            {
+              "id": "gid://shopify/Collection/526566064403",
+              "title": "Activewear Sweatshirts & Hoodies",
+              "handle": "activewear-sweatshirts-hoodies"
+            },
+            {
+              "id": "gid://shopify/Collection/526632452371",
+              "title": "Unisex Activewear",
+              "handle": "unisex-activewear"
+            },
+            {
+              "id": "gid://shopify/Collection/526632780051",
+              "title": "100% Polyester Activewear",
+              "handle": "100-polyester-activewear"
+            },
+            {
+              "id": "gid://shopify/Collection/526633304339",
+              "title": "Moisture-Wicking Activewear",
+              "handle": "moisture-wicking-activewear"
+            },
+            {
+              "id": "gid://shopify/Collection/527227781395",
+              "title": "100% Polyester Sweatshirts & Hoodies",
+              "handle": "100-polyester-sweatshirts-hoodies"
+            },
+            {
+              "id": "gid://shopify/Collection/527229190419",
+              "title": "Fishing & Sun Activewear Apparel",
+              "handle": "fishing-sun-activewear-apparel"
+            },
+            {
+              "id": "gid://shopify/Collection/528203415827",
+              "title": "Popular",
+              "handle": "popular"
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "eyJsYXN0X2lkIjo1MjgyMDM0MTU4MjcsImxhc3RfdmFsdWUiOjUyODIwMzQxNTgyN30="
+          }
+        }
+      }
+    ],
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "eyJsYXN0X2lkIjoxMDQyNjExOTYxODgzNSwibGFzdF92YWx1ZSI6MTA0MjYxMTk2MTg4MzV9"
+    }
+  },
+  "categoryEvidence": {
+    "product": {
+      "id": "gid://shopify/Product/10426119618835",
+      "title": "PC380H Performance Pullover Hooded Tee",
+      "category": {
+        "id": "gid://shopify/TaxonomyCategory/aa-1-1-7-2",
+        "name": "Hoodies",
+        "fullName": "Apparel & Accessories > Clothing > Activewear > Activewear Sweatshirts & Hoodies > Hoodies"
+      },
+      "metafields": {
+        "nodes": [
+          {
+            "key": "neckline",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/210642501907\"]"
+          },
+          {
+            "key": "target-gender",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/210642469139\"]"
+          },
+          {
+            "key": "color-pattern",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/211269714195\",\"gid://shopify/Metaobject/211269746963\",\"gid://shopify/Metaobject/211269779731\",\"gid://shopify/Metaobject/211269812499\",\"gid://shopify/Metaobject/211269845267\",\"gid://shopify/Metaobject/211269878035\",\"gid://shopify/Metaobject/211269910803\",\"gid://shopify/Metaobject/211269943571\",\"gid://shopify/Metaobject/211269976339\",\"gid://shopify/Metaobject/210791825683\"]"
+          },
+          {
+            "key": "clothing-features",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/225870577939\",\"gid://shopify/Metaobject/210643452179\",\"gid://shopify/Metaobject/210643550483\"]"
+          },
+          {
+            "key": "fabric",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/210642862355\",\"gid://shopify/Metaobject/236267962643\"]"
+          },
+          {
+            "key": "activewear-clothing-features",
+            "type": "list.metaobject_reference",
+            "value": "[\"gid://shopify/Metaobject/239133229331\",\"gid://shopify/Metaobject/241953603859\"]"
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "eyJsYXN0X2lkIjo1MjU5Mzg0MDk4MDI0MywibGFzdF92YWx1ZSI6IjUyNTkzODQwOTgwMjQzIn0="
+        }
+      }
+    }
+  }
+}

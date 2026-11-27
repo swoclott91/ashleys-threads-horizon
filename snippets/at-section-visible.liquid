@@ -1,0 +1,34 @@
+{%- doc -%}
+  Returns whether the current visitor matches a section's audience.
+  @param {string} visibility - all | guests | customers | member | guests_and_member | pro_and_wholesale
+{%- enddoc -%}
+{%- capture tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
+{%- liquid
+  assign tier = tier | strip
+  assign visible = true
+
+  case visibility
+    when 'guests'
+      if tier != 'guest'
+        assign visible = false
+      endif
+    when 'customers'
+      if tier == 'guest'
+        assign visible = false
+      endif
+    when 'member'
+      if tier != 'member'
+        assign visible = false
+      endif
+    when 'guests_and_member'
+      if tier != 'guest' and tier != 'member'
+        assign visible = false
+      endif
+    when 'pro_and_wholesale'
+      if tier != 'pro' and tier != 'wholesale'
+        assign visible = false
+      endif
+  endcase
+
+  echo visible
+-%}

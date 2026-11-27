@@ -1,0 +1,69 @@
+{%- doc -%}
+  The one place Ashley's Pro program values are read (docs/pro-membership-pdp.md, "Config").
+  Every Pro surface (Pro PDP, homepage Pro tile, later cart and account) reads these through
+  this snippet or `at-pro-value`, so they can't disagree.
+
+  Output (capture it): `;key=value;key=value;` Money is in cents, rates in basis points.
+  - fee: shop `wagner.tier_thresholds.pro.fee` → Theme settings › Membership product price → 7900
+  - ratio_bp: Pro price of $100 at Member prices, in cents = ratio × 10000 (setting, default 8553)
+  - cash_bp / member_cash_bp: Threads Cash rates (Pro 200, Member 0)
+  - ship_max, ship_min: monthly shipping credit cap and minimum merchandise order
+  - free_ship: free standard shipping threshold (unchanged for every tier)
+  - history_min: smallest personal estimate the Pro PDP and homepage will show
+  - promise: off | preview | live, after design mode is applied (preview → off for shoppers)
+  - currency_ok: 1 when the storefront currency is the shop currency (money metafields are shop currency)
+
+  Read one value:
+  {% capture at_pc %}{% render 'at-pro-config' %}{% endcapture %}
+  {% assign at_fee = at_pc | split: ';fee=' | last | split: ';' | first | plus: 0 %}
+{%- enddoc -%}
+{%- liquid
+  assign at_pc_fee = shop.metafields.wagner.tier_thresholds.value.pro.fee
+  if at_pc_fee != blank
+    assign at_pc_fee = at_pc_fee | times: 100 | round
+  else
+    assign at_pc_product = settings.at_pro_product
+    if at_pc_product != blank
+      assign at_pc_fee = at_pc_product.selected_or_first_available_variant.price
+    else
+      assign at_pc_fee = 7900
+    endif
+  endif
+
+  assign at_pc_ratio = settings.at_pro_price_per_100 | default: 8553 | round
+  if at_pc_ratio <= 0 or at_pc_ratio > 10000
+    assign at_pc_ratio = 8553
+  endif
+  assign at_pc_cash = settings.at_pro_cash_rate | default: 2 | times: 100 | round
+  assign at_pc_member_cash = settings.at_member_cash_rate | default: 0 | times: 100 | round
+  assign at_pc_ship_max = settings.at_pro_ship_credit_max | default: 15 | times: 100 | round
+  assign at_pc_ship_min = settings.at_pro_ship_credit_min_order | default: 100 | times: 100 | round
+  assign at_pc_free_ship = settings.at_free_shipping_threshold | default: 200 | times: 100 | round
+  assign at_pc_history_min = settings.at_pro_history_min_value | default: 20 | times: 100 | round
+
+  assign at_pc_promise = settings.at_pro_promise_mode | default: 'preview'
+  if at_pc_promise == 'preview'
+    if request.design_mode
+      assign at_pc_promise = 'preview'
+    else
+      assign at_pc_promise = 'off'
+    endif
+  endif
+
+  assign at_pc_currency_ok = 0
+  if localization.country.currency.iso_code == shop.currency
+    assign at_pc_currency_ok = 1
+  endif
+
+  echo ';fee=' | append: at_pc_fee
+  echo ';ratio_bp=' | append: at_pc_ratio
+  echo ';cash_bp=' | append: at_pc_cash
+  echo ';member_cash_bp=' | append: at_pc_member_cash
+  echo ';ship_max=' | append: at_pc_ship_max
+  echo ';ship_min=' | append: at_pc_ship_min
+  echo ';free_ship=' | append: at_pc_free_ship
+  echo ';history_min=' | append: at_pc_history_min
+  echo ';promise=' | append: at_pc_promise
+  echo ';currency_ok=' | append: at_pc_currency_ok
+  echo ';'
+-%}

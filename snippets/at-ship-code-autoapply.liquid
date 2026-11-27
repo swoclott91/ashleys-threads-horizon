@@ -1,0 +1,33 @@
+{%- doc -%}
+  Free-shipping code auto-apply (welcome code and Pro monthly codes). For a signed-in customer whose
+  `wagner.ship_code` is usable today (`at-ship-code-valid`: status `issued`, open date bounds), this
+  hands the code and its minimum to `assets/at-ship-code.js`, which adds it to the cart once per cart
+  when the subtotal reaches `min_subtotal`, alongside any codes already on the cart.
+  Reads contract metafields only. Never runs in the theme editor (sample data there).
+{%- enddoc -%}
+{%- liquid
+  assign at_ship_ok = ''
+  if customer != blank and request.design_mode == false
+    assign at_ship = customer.metafields.wagner.ship_code.value
+    capture at_ship_ok
+      render 'at-ship-code-valid', ship: at_ship
+    endcapture
+  endif
+-%}
+{%- if at_ship_ok contains 'true' -%}
+  {%- liquid
+    assign at_ship_min = 0
+    if at_ship.min_subtotal != blank
+      assign at_ship_min = at_ship.min_subtotal | times: 100 | round
+    endif
+  -%}
+  <script type="application/json" id="AtShipCodeConfig">
+    {
+      "code": {{ at_ship.code | json }},
+      "kind": {{ at_ship.kind | default: '' | json }},
+      "min": {{ at_ship_min | json }},
+      "customer": {{ customer.id | json }}
+    }
+  </script>
+  <script src="{{ 'at-ship-code.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{%- endif -%}

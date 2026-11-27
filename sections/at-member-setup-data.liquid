@@ -1,0 +1,41 @@
+{%- comment -%}
+  Data-only section for the Member setup notice (snippets/at-member-setup.liquid →
+  assets/at-member-setup.js). Not placed in any template. Fetched while a signed-in customer's
+  session has no B2B company location yet:
+    /?sections=at-member-setup-data
+
+  Wagner sets up a new account a few seconds after sign-up (company, Member location, then the
+  `wagner.tier` customer metafield). Until the session buys for that location, the page shows
+  guest prices. This reports, from Shopify only (never Wagner):
+  - tier: the `wagner.tier` customer metafield ('' until Wagner writes it).
+  - b2b: the session is buying for a company location, so catalog prices apply.
+  - setLocationUrl: Shopify's URL that makes the customer's tier location current without
+    signing out (`location.url_to_set_as_current`), or '' when there is none yet. The location
+    named after the tier wins; otherwise the first available one.
+{%- endcomment -%}
+{%- liquid
+  assign at_tier = ''
+  assign at_b2b = false
+  assign at_set_url = ''
+  if customer
+    assign at_tier = customer.metafields.wagner.tier.value | default: '' | downcase | strip
+    if customer.b2b? and customer.current_location
+      assign at_b2b = true
+    endif
+    unless at_b2b
+      for location in customer.company_available_locations
+        assign at_loc_name = location.name | downcase
+        if at_set_url == ''
+          assign at_set_url = location.url_to_set_as_current
+        endif
+        if at_tier != '' and at_loc_name contains at_tier
+          assign at_set_url = location.url_to_set_as_current
+          break
+        endif
+      endfor
+    endunless
+  endif
+-%}
+<script type="application/json" data-at-member-setup>
+  {"signedIn":{% if customer %}true{% else %}false{% endif %},"tier":{{ at_tier | json }},"b2b":{{ at_b2b }},"setLocationUrl":{{ at_set_url | json }}}
+</script>

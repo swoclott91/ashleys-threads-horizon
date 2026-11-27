@@ -1,0 +1,358 @@
+{%- comment -%}
+  Ashley's Pro membership PDP, above the fold (docs/pro-membership-pdp.md).
+  Left: the financial value panel, by customer state (snippets/at-pro-value).
+  Right: the purchase panel, the same for every state except the action (snippets/at-pro-cta).
+  Mobile order: identity and price → value panel → benefits and purchase → sticky bar.
+{%- endcomment -%}
+{%- liquid
+  assign pro_product = product | default: settings.at_pro_product
+  assign preview = 'off'
+  if request.design_mode
+    assign preview = section.settings.preview_state
+  endif
+-%}
+{%- capture pv -%}{% render 'at-pro-value', preview: preview %}{%- endcapture -%}
+{%- capture pc -%}{% render 'at-pro-config' %}{%- endcapture -%}
+{%- liquid
+  assign state = pv | split: ';state=' | last | split: ';' | first
+  assign sample = pv | split: ';sample=' | last | split: ';' | first | plus: 0
+  assign basis = pv | split: ';basis=' | last | split: ';' | first
+  assign v_pricing = pv | split: ';pricing=' | last | split: ';' | first | plus: 0
+  assign v_cash = pv | split: ';cash=' | last | split: ';' | first | plus: 0
+  assign v_ship = pv | split: ';ship=' | last | split: ';' | first | plus: 0
+  assign v_total = pv | split: ';total=' | last | split: ';' | first | plus: 0
+  assign v_net = pv | split: ';net=' | last | split: ';' | first | plus: 0
+  assign v_fee = pv | split: ';fee=' | last | split: ';' | first | plus: 0
+  assign v_recovered = pv | split: ';recovered_bp=' | last | split: ';' | first | plus: 0
+  assign v_monthly_hint = pv | split: ';monthly_hint=' | last | split: ';' | first | plus: 0
+  assign v_balance = pv | split: ';balance=' | last | split: ';' | first | plus: 0
+  assign v_renew = pv | split: ';renew=' | last | split: ';' | first
+  assign v_ship_status = pv | split: ';ship_status=' | last | split: ';' | first
+  assign v_ship_code = pv | split: ';ship_code=' | last | split: ';' | first
+
+  assign c_cash_bp = pc | split: ';cash_bp=' | last | split: ';' | first | plus: 0
+  assign c_member_cash_bp = pc | split: ';member_cash_bp=' | last | split: ';' | first | plus: 0
+  assign c_ship_max = pc | split: ';ship_max=' | last | split: ';' | first | plus: 0
+  assign c_ship_min = pc | split: ';ship_min=' | last | split: ';' | first | plus: 0
+  assign c_promise = pc | split: ';promise=' | last | split: ';' | first
+
+  assign cash_pct = c_cash_bp | minus: c_member_cash_bp | times: 1.0 | divided_by: 100 | round: 1 | append: '' | remove: '.0' | append: '%'
+  assign ship_max_money = c_ship_max | money_without_trailing_zeros
+  assign ship_min_money = c_ship_min | money_without_trailing_zeros
+  assign fee_money = v_fee | money_without_trailing_zeros
+
+  assign recovered_pct = v_recovered | divided_by: 100
+  assign progress = v_recovered | at_most: 10000 | times: 1.0 | divided_by: 10000
+
+  assign variant = pro_product.selected_or_first_available_variant
+  assign price_money = variant.price | default: v_fee | money_without_trailing_zeros
+
+  # Calculator prefill: the customer's own monthly average when it is larger than the illustration.
+  assign calc_monthly = section.settings.calculator_default_monthly
+  assign calc_personal = false
+  assign hint_dollars = v_monthly_hint | divided_by: 100
+  if state == 'b' and hint_dollars > calc_monthly
+    assign calc_monthly = hint_dollars
+    assign calc_personal = true
+  endif
+
+  case state
+    when 'a'
+      assign headline = section.settings.headline_a
+      assign lead = section.settings.lead_a
+    when 'b'
+      assign headline = section.settings.headline_b
+      assign lead = section.settings.lead_b
+    when 'c'
+      assign headline = section.settings.headline_c
+      assign lead = section.settings.lead_c
+    when 'd'
+      assign headline = section.settings.headline_d
+      assign lead = section.settings.lead_d
+    when 'e'
+      assign headline = section.settings.headline_e
+      assign lead = ''
+    when 'f'
+      assign headline = section.settings.headline_f
+      assign lead = section.settings.lead_f
+  endcase
+
+  case basis
+    when 'trailing_12m'
+      assign basis_text = 'at_pro.value.basis_trailing' | t
+    when 'calendar_ytd'
+      assign basis_text = 'at_pro.value.basis_ytd' | t
+    when 'membership_year'
+      assign basis_text = 'at_pro.value.basis_membership_year' | t
+    else
+      assign basis_text = ''
+  endcase
+-%}
+
+{{ 'at-pro.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'at-pro-value.js' | asset_url }}" type="module"></script>
+{% style %}
+  {{ settings.at_editorial_serif_font | font_face: font_display: 'swap' }}
+  .at-pro-page { --at-pro-serif: {{ settings.at_editorial_serif_font.family }}, {{ settings.at_editorial_serif_font.fallback_families }}; }
+  main:has(.at-pro-page) { background: var(--at-membership-surface); }
+{% endstyle %}
+
+<div class="section section--page-width at-pro-page at-pro-hero at-pro-hero--state-{{ state }}" data-pro-state="{{ state }}">
+  <div class="at-pro-hero__grid">
+    {%- comment -%} Identity and price (first on mobile, top of the right column on desktop) {%- endcomment -%}
+    <header class="at-pro-hero__identity">
+      <div class="at-pro-hero__identity-row">
+        {% render 'at-pro-emblem', size: 'md' %}
+        <div>
+          <p class="at-pro-kicker">{{ 'at_pro.kicker' | t }}</p>
+          <h1 class="at-pro-hero__title h3">{{ pro_product.title | default: section.settings.fallback_title | escape }}</h1>
+        </div>
+      </div>
+      {%- unless state == 'e' or state == 'f' -%}
+        <p class="at-pro-hero__price">
+          <span class="at-pro-figure at-pro-figure--lg">{{ price_money }}</span>
+          <span class="at-pro-hero__price-unit">{{ 'at_pro.price.per_year' | t }}</span>
+        </p>
+      {%- endunless -%}
+    </header>
+
+    {%- comment -%} Financial value panel {%- endcomment -%}
+    <div class="at-pro-panel at-pro-panel--{{ state }}">
+      {%- if sample == 1 -%}
+        <p class="at-pro-panel__sample">{{ 'at_pro.sample' | t }} · {% case state %}{% when 'a' %}{{ 'at_pro.states.a' | t }}{% when 'b' %}{{ 'at_pro.states.b' | t }}{% when 'c' %}{{ 'at_pro.states.c' | t }}{% when 'd' %}{{ 'at_pro.states.d' | t }}{% when 'e' %}{{ 'at_pro.states.e' | t }}{% else %}{{ 'at_pro.states.f' | t }}{% endcase %}</p>
+      {%- endif -%}
+      <h2 class="at-pro-panel__headline at-pro-serif">{{ headline | escape }}</h2>
+      {%- if lead != blank -%}
+        <p class="at-pro-panel__lead">{{ lead | escape }}</p>
+      {%- endif -%}
+
+      {%- case state -%}
+        {%- when 'a', 'b' -%}
+          {% render 'at-pro-calculator',
+            id: 'at-pro-hero-calc',
+            variant: 'compact',
+            monthly: calc_monthly,
+            restocks: section.settings.calculator_default_restocks,
+            ship: section.settings.calculator_default_ship,
+            personal: calc_personal
+          %}
+
+        {%- when 'c', 'd' -%}
+          <p class="at-pro-panel__figure-label">{{ 'at_pro.value.could_have_saved' | t }}</p>
+          <p class="at-pro-figure at-pro-figure--hero">{{ v_total | plus: 50 | divided_by: 100 | times: 100 | money_without_trailing_zeros }}</p>
+          <dl class="at-pro-ledger at-pro-ledger--panel">
+            {%- if v_pricing >= 0 -%}
+              <div class="at-pro-ledger__row at-pro-ledger__row--primary"><dt>{{ 'at_pro.value.pricing' | t }}</dt><dd>{{ v_pricing | money_without_trailing_zeros }}</dd></div>
+            {%- endif -%}
+            {%- if v_cash >= 0 -%}
+              <div class="at-pro-ledger__row"><dt>{{ 'at_pro.value.cash' | t: rate: cash_pct }}</dt><dd>{{ v_cash | money_without_trailing_zeros }}</dd></div>
+            {%- endif -%}
+            {%- if v_ship >= 0 -%}
+              <div class="at-pro-ledger__row"><dt>{{ 'at_pro.value.shipping' | t }}</dt><dd>{{ v_ship | money_without_trailing_zeros }}</dd></div>
+            {%- endif -%}
+            <div class="at-pro-ledger__row at-pro-ledger__row--total"><dt>{{ 'at_pro.value.total_potential' | t }}</dt><dd>{{ v_total | money_without_trailing_zeros }}</dd></div>
+            <div class="at-pro-ledger__row at-pro-ledger__row--fee"><dt>{{ 'at_pro.value.fee' | t }}</dt><dd>−{{ v_fee | money_without_trailing_zeros }}</dd></div>
+            {%- if state == 'd' -%}
+              <div class="at-pro-ledger__row at-pro-ledger__row--net"><dt>{{ 'at_pro.value.net' | t }}</dt><dd>{{ v_net | money_without_trailing_zeros }}</dd></div>
+            {%- endif -%}
+          </dl>
+          <div class="at-pro-progress" style="--at-pro-progress: {{ progress }}" role="img" aria-label="{{ 'at_pro.value.recovered_aria' | t: percent: recovered_pct }}">
+            <span class="at-pro-progress__bar"></span>
+          </div>
+          {%- if state == 'd' -%}
+            <p class="at-pro-panel__status at-pro-panel__status--paid">{{ 'at_pro.value.would_have_paid' | t }}</p>
+          {%- else -%}
+            <p class="at-pro-panel__status">{{ 'at_pro.value.covered' | t: percent: recovered_pct, fee: fee_money }}</p>
+            <p class="at-pro-panel__note">{{ 'at_pro.value.future' | t }}</p>
+            {%- if c_promise != 'off' -%}
+              <p class="at-pro-panel__note">{{ 'at_pro.promise.short' | t }}</p>
+            {%- endif -%}
+          {%- endif -%}
+          {%- if basis_text != blank -%}
+            <p class="at-pro-panel__basis">{{ basis_text }}</p>
+          {%- endif -%}
+          <a class="at-pro-panel__link" href="#at-pro-calculator">{{ 'at_pro.value.estimate_next' | t }}</a>
+
+        {%- when 'e' -%}
+          {%- if v_total >= v_fee and v_fee > 0 -%}
+            <p class="at-pro-panel__status at-pro-panel__status--paid">{{ 'at_pro.member.paid' | t }}</p>
+          {%- endif -%}
+          <p class="at-pro-panel__figure-label">{{ 'at_pro.member.value_received' | t }}</p>
+          <p class="at-pro-figure at-pro-figure--hero">{{ v_total | plus: 50 | divided_by: 100 | times: 100 | money_without_trailing_zeros }}</p>
+          <dl class="at-pro-ledger at-pro-ledger--panel">
+            {%- if v_pricing >= 0 -%}
+              <div class="at-pro-ledger__row at-pro-ledger__row--primary"><dt>{{ 'at_pro.member.pricing' | t }}</dt><dd>{{ v_pricing | money_without_trailing_zeros }}</dd></div>
+            {%- endif -%}
+            {%- if v_cash >= 0 -%}
+              <div class="at-pro-ledger__row"><dt>{{ 'at_pro.member.cash_earned' | t }}</dt><dd>{{ v_cash | money_without_trailing_zeros }}</dd></div>
+            {%- endif -%}
+            {%- if v_ship >= 0 -%}
+              <div class="at-pro-ledger__row"><dt>{{ 'at_pro.member.shipping' | t }}</dt><dd>{{ v_ship | money_without_trailing_zeros }}</dd></div>
+            {%- endif -%}
+            <div class="at-pro-ledger__row at-pro-ledger__row--total"><dt>{{ 'at_pro.member.total' | t }}</dt><dd>{{ v_total | money_without_trailing_zeros }}</dd></div>
+          </dl>
+          <div class="at-pro-progress" style="--at-pro-progress: {{ progress }}" role="img" aria-label="{{ 'at_pro.value.recovered_aria' | t: percent: recovered_pct }}">
+            <span class="at-pro-progress__bar"></span>
+          </div>
+          {%- if v_total >= v_fee -%}
+            {%- assign net_money = v_net | money_without_trailing_zeros -%}
+            <p class="at-pro-panel__status">{{ 'at_pro.member.recovered_full' | t: fee: fee_money, extra: net_money }}</p>
+          {%- else -%}
+            <p class="at-pro-panel__status">{{ 'at_pro.member.recovered' | t: percent: recovered_pct, fee: fee_money }}</p>
+          {%- endif -%}
+          <dl class="at-pro-facts">
+            {%- if v_balance >= 0 -%}
+              <div><dt>{{ 'at_pro.member.balance' | t }}</dt><dd>{{ v_balance | money_without_trailing_zeros }}</dd></div>
+            {%- endif -%}
+            <div>
+              <dt>{{ 'at_pro.member.ship_credit' | t }}</dt>
+              <dd>
+                {%- case v_ship_status -%}
+                  {%- when 'ready' -%}{{ 'at_pro.member.ship_ready' | t }} <code>{{ v_ship_code }}</code>
+                  {%- when 'used' -%}{{ 'at_pro.member.ship_used' | t }}
+                  {%- else -%}{{ 'at_pro.member.ship_none' | t }}
+                {%- endcase -%}
+              </dd>
+            </div>
+            {%- if v_renew != blank -%}
+              <div><dt>{{ 'at_pro.member.renews' | t }}</dt><dd>{{ v_renew | date: '%B %-d, %Y' }}</dd></div>
+            {%- endif -%}
+          </dl>
+          {%- if v_total == 0 -%}
+            <p class="at-pro-panel__note">{{ 'at_pro.member.empty' | t }}</p>
+          {%- endif -%}
+          {%- if basis_text != blank -%}
+            <p class="at-pro-panel__basis">{{ basis_text }}</p>
+          {%- endif -%}
+
+        {%- when 'f' -%}
+          <a class="button-secondary at-pro-panel__wholesale" href="{{ settings.at_wholesale_page_url | default: routes.account_url }}">{{ 'at_pro.wholesale.benefits' | t }}</a>
+      {%- endcase -%}
+    </div>
+
+    {%- comment -%} Purchase panel {%- endcomment -%}
+    <div class="at-pro-hero__purchase">
+      {%- if state == 'e' -%}
+        <p class="at-pro-hero__tagline at-pro-serif">{{ 'at_pro.member.tagline' | t }}</p>
+      {%- elsif state == 'f' -%}
+        <p class="at-pro-hero__tagline at-pro-serif">{{ 'at_pro.wholesale.tagline' | t }}</p>
+        <p class="at-pro-hero__value-prop">{{ 'at_pro.wholesale.description' | t }}</p>
+      {%- else -%}
+        {%- unless state == 'a' and section.settings.tagline == section.settings.headline_a -%}
+          <p class="at-pro-hero__tagline at-pro-serif">{{ section.settings.tagline | escape }}</p>
+        {%- endunless -%}
+        <p class="at-pro-hero__value-prop">{{ section.settings.value_prop | escape }}</p>
+      {%- endif -%}
+
+      {%- unless state == 'f' -%}
+        <ul class="at-pro-benefits-list" role="list">
+          <li class="at-pro-benefits-list__item at-pro-benefits-list__item--primary">
+            <strong>{{ 'at_pro.benefits.pricing_title' | t }}</strong>
+            <span>{{ 'at_pro.benefits.pricing_detail' | t }}</span>
+          </li>
+          <li class="at-pro-benefits-list__item">
+            <strong>{{ 'at_pro.benefits.cash_title' | t: rate: cash_pct }}</strong>
+            <span>{{ 'at_pro.benefits.cash_detail' | t }}</span>
+          </li>
+          <li class="at-pro-benefits-list__item">
+            <strong>{{ 'at_pro.benefits.shipping_title' | t: max: ship_max_money }}</strong>
+            <span>{{ 'at_pro.benefits.shipping_detail' | t: max: ship_max_money, min: ship_min_money }}</span>
+          </li>
+          <li class="at-pro-benefits-list__item">
+            <strong>{{ 'at_pro.benefits.member_title' | t }}</strong>
+            <span>{{ 'at_pro.benefits.member_detail' | t }}</span>
+          </li>
+        </ul>
+      {%- endunless -%}
+
+      <div class="at-pro-hero__actions">
+        {% render 'at-pro-cta', product: pro_product, state: state, label: section.settings.cta_label, id: 'AtProPrimaryCta', form_id: 'AtProHeroForm' %}
+        {%- unless state == 'e' or state == 'f' -%}
+          {%- unless customer -%}
+            <p class="at-pro-hero__fine">{{ 'at_pro.cta.sign_in_note' | t }}</p>
+          {%- endunless -%}
+          <p class="at-pro-hero__fine">{{ section.settings.billing_note | escape }}</p>
+        {%- endunless -%}
+      </div>
+
+      {%- if c_promise != 'off' and state != 'f' -%}
+        <div class="at-pro-promise-chip">
+          {% render 'at-pro-emblem', size: 'sm' %}
+          <p>
+            <strong>{{ 'at_pro.promise.chip_title' | t }}</strong>
+            {{ 'at_pro.promise.chip_body' | t }}
+            {%- if settings.at_pro_promise_terms_url != blank %} <a href="{{ settings.at_pro_promise_terms_url }}">{{ 'at_pro.promise.terms' | t }}</a>{% endif -%}
+          </p>
+          {%- if c_promise == 'preview' -%}
+            <span class="at-pro-draft">{{ 'at_pro.promise.draft' | t }}</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if section.settings.sticky_bar and state != 'e' and state != 'f' -%}
+    <at-pro-sticky-bar class="at-pro-sticky" data-target="AtProPrimaryCta">
+      <span class="at-pro-sticky__price">
+        <span class="at-pro-figure">{{ price_money }}</span>{{ 'at_pro.price.per_year_suffix' | t }}
+      </span>
+      {% render 'at-pro-cta', product: pro_product, state: state, label: section.settings.cta_label, form_id: 'AtProStickyForm' %}
+    </at-pro-sticky-bar>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Pro membership hero",
+  "tag": "section",
+  "class": "at-pro-hero-section",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    {
+      "type": "select",
+      "id": "preview_state",
+      "label": "Theme editor preview",
+      "info": "Labeled sample data for each customer state. Shoppers always see their own state.",
+      "options": [
+        { "value": "auto", "label": "Signed-in customer / Preview tier" },
+        { "value": "a", "label": "A · No purchase history" },
+        { "value": "b", "label": "B · Limited history" },
+        { "value": "c", "label": "C · Below break-even" },
+        { "value": "d", "label": "D · Pro pays for itself" },
+        { "value": "e", "label": "E · Active Pro" },
+        { "value": "f", "label": "F · Wholesale" }
+      ],
+      "default": "auto"
+    },
+    { "type": "text", "id": "fallback_title", "label": "Title when no product", "default": "Ashley’s Pro Membership" },
+    { "type": "header", "content": "Purchase panel" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Better margins for your business." },
+    { "type": "textarea", "id": "value_prop", "label": "Value proposition", "default": "Lower your apparel costs, earn rewards on your orders, and save on your regular restocks." },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Become a Pro" },
+    { "type": "textarea", "id": "billing_note", "label": "Billing and renewal note", "default": "Billed once for 12 months of Pro. We’ll remind you before your membership is due to renew.", "info": "Pending: renewal and cancellation terms." },
+    { "type": "checkbox", "id": "sticky_bar", "label": "Mobile sticky purchase bar", "default": true },
+    { "type": "header", "content": "A · No purchase history" },
+    { "type": "text", "id": "headline_a", "label": "Headline", "default": "Better margins for your business." },
+    { "type": "textarea", "id": "lead_a", "label": "Lead", "default": "Exclusive Pro pricing lowers what you pay for blanks. Threads Cash and a monthly shipping credit add to it. See what it could mean for you." },
+    { "type": "header", "content": "B · Limited history" },
+    { "type": "text", "id": "headline_b", "label": "Headline", "default": "Make your next order go further." },
+    { "type": "textarea", "id": "lead_b", "label": "Lead", "default": "Count everything you spend on blank apparel, not just your orders with us, to see what Pro could save you." },
+    { "type": "header", "content": "C · Below break-even" },
+    { "type": "text", "id": "headline_c", "label": "Headline", "default": "Your orders are already working toward Pro." },
+    { "type": "textarea", "id": "lead_c", "label": "Lead", "default": "Here’s what Pro could have saved you on your recent orders." },
+    { "type": "header", "content": "D · Pro pays for itself" },
+    { "type": "text", "id": "headline_d", "label": "Headline", "default": "Your business is ready for Pro." },
+    { "type": "textarea", "id": "lead_d", "label": "Lead", "default": "Based on your recent orders, Pro would already have paid for itself." },
+    { "type": "header", "content": "E · Active Pro" },
+    { "type": "text", "id": "headline_e", "label": "Headline", "default": "Your Pro membership at work." },
+    { "type": "header", "content": "F · Wholesale" },
+    { "type": "text", "id": "headline_f", "label": "Headline", "default": "You already have wholesale pricing." },
+    { "type": "textarea", "id": "lead_f", "label": "Lead", "default": "Your wholesale account has its own pricing and terms, so there’s nothing more to add here." },
+    { "type": "header", "content": "Compact calculator" },
+    { "type": "range", "id": "calculator_default_monthly", "label": "Illustrative monthly spend", "min": 100, "max": 3000, "step": 50, "unit": "$", "default": 500 },
+    { "type": "range", "id": "calculator_default_restocks", "label": "Illustrative restocks a month", "min": 1, "max": 6, "step": 1, "default": 3, "info": "One a month can use the shipping credit when it is at least the credit minimum and below the free shipping threshold." },
+    { "type": "range", "id": "calculator_default_ship", "label": "Illustrative shipping per restock", "min": 0, "max": 40, "step": 1, "unit": "$", "default": 12 }
+  ],
+  "presets": [{ "name": "Pro membership hero" }]
+}
+{% endschema %}

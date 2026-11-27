@@ -392,6 +392,14 @@
   font-size: var(--font-size--sm);
 }
 
+.at-bulk-grid__table caption,
+.at-bulk-grid__mobile-accordions > h3 {
+  padding-block: var(--padding-sm);
+  font-size: var(--font-size--sm);
+  font-weight: 600;
+  text-align: start;
+}
+
 /* Sticky table header so Color/sizes stay visible when scrolling */
 .at-bulk-grid__table thead {
   position: sticky;
@@ -436,6 +444,14 @@
   min-height: max(100%, 3.5rem);
 }
 
+.at-bulk-grid__favorite {
+  flex-shrink: 0;
+}
+
+.at-bulk-grid__favorite .at-favorite-color__error {
+  max-inline-size: 12rem;
+}
+
 .at-bulk-grid__swatch {
   flex-shrink: 0;
   width: var(--variant-picker-swatch-width, 20px);
@@ -467,6 +483,14 @@
   text-align: center;
   font-size: 16px;
   transition: border-color var(--animation-speed) ease;
+}
+
+/* Rapid taps on − / + read as a double-tap, which zooms the page on mobile. `manipulation`
+   keeps scrolling and pinch-zoom but drops double-tap zoom. */
+.at-bulk-grid__qty-selector,
+.at-bulk-grid__qty-selector button,
+.at-bulk-grid__qty-input {
+  touch-action: manipulation;
 }
 
 /* Accent the quantity field once it has a value (desktop table + mobile stepper) */
@@ -519,6 +543,15 @@
   gap: var(--gap-sm);
   align-items: center;
   margin-top: var(--gap-md);
+}
+
+.at-bulk-grid__cart-error {
+  flex-basis: 100%;
+  color: var(--color-error, currentColor);
+}
+
+.at-bulk-grid__cart-error:empty {
+  position: absolute;
 }
 
 @media screen and (min-width: 750px) {
@@ -581,8 +614,7 @@
 
 /* Match theme buy buttons: same height, no quantity selector in this row */
 .at-bulk-grid__actions .button {
-  height: var(--height-buy-buttons);
-  min-height: var(--height-buy-buttons);
+  min-height: max(var(--height-buy-buttons), var(--button-min-height));
 }
 
 .at-bulk-grid__actions .add-to-cart-button {
@@ -790,6 +822,46 @@
     font-weight: 600;
     text-align: left;
     cursor: pointer;
+  }
+
+  .at-bulk-grid__mobile-accordion-heading:has(.at-bulk-grid__favorite) {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-inline-end: calc(var(--icon-size-xs) + var(--padding-md) + 2.25rem);
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-5));
+  }
+
+  .at-bulk-grid__mobile-accordion-heading:has(.at-bulk-grid__favorite) .at-bulk-grid__mobile-accordion-header {
+    width: auto;
+    min-inline-size: 0;
+    padding-inline-end: 0;
+    align-self: stretch;
+    background: transparent;
+  }
+
+  .at-bulk-grid__mobile-accordion-heading:has(.at-bulk-grid__favorite) .at-bulk-grid__mobile-accordion-header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .at-bulk-grid__mobile-accordion-heading > .at-bulk-grid__favorite {
+    z-index: 1;
+  }
+
+  .at-bulk-grid__mobile-accordion-heading:has(.at-bulk-grid__favorite) .at-bulk-grid__color-count {
+    position: absolute;
+    inset-inline-end: calc(var(--icon-size-xs) + var(--padding-md) + var(--padding-sm));
+  }
+
+  .at-bulk-grid__mobile-accordion-heading:has(.at-bulk-grid__favorite) .at-bulk-grid__accordion-icon {
+    position: absolute;
+    inset-inline-end: var(--padding-md);
+  }
+
+  .at-bulk-grid__mobile-accordion--has-items .at-bulk-grid__mobile-accordion-heading:has(.at-bulk-grid__favorite) {
+    background: var(--at-bulk-surface, rgb(var(--color-foreground-rgb) / var(--opacity-5)));
   }
 
   .at-bulk-grid__mobile-accordion-header .at-bulk-grid__swatch {

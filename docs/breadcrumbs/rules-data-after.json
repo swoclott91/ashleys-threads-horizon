@@ -1,0 +1,428 @@
+{
+  "capturedAt": "2026-10-13T04:06:28.773Z",
+  "definition": {
+    "metaobjectDefinitionCreate": {
+      "metaobjectDefinition": {
+        "id": "gid://shopify/MetaobjectDefinition/25396085011",
+        "type": "at_breadcrumb_rule"
+      },
+      "userErrors": []
+    }
+  },
+  "seed": {
+    "r0": {
+      "metaobject": {
+        "id": "gid://shopify/Metaobject/617993666835",
+        "handle": "tees",
+        "type": "at_breadcrumb_rule",
+        "fields": [
+          {
+            "key": "name",
+            "type": "single_line_text_field",
+            "value": "T-Shirts root"
+          },
+          {
+            "key": "family",
+            "type": "single_line_text_field",
+            "value": "tee"
+          },
+          {
+            "key": "category_ids",
+            "type": "list.single_line_text_field",
+            "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-7\",\"gid://shopify/TaxonomyCategory/aa-1-13-8\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-8\",\"gid://shopify/TaxonomyCategory/aa-1-1-2-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-1\"]"
+          },
+          {
+            "key": "attribute_namespace",
+            "type": "single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "attribute_key",
+            "type": "single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "attribute_values",
+            "type": "list.single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "destination",
+            "type": "collection_reference",
+            "value": "gid://shopify/Collection/523280777491"
+          },
+          {
+            "key": "priority",
+            "type": "number_integer",
+            "value": "0"
+          }
+        ]
+      },
+      "userErrors": []
+    },
+    "r1": {
+      "metaobject": {
+        "id": "gid://shopify/Metaobject/617993699603",
+        "handle": "short_sleeve",
+        "type": "at_breadcrumb_rule",
+        "fields": [
+          {
+            "key": "name",
+            "type": "single_line_text_field",
+            "value": "Short sleeve tees"
+          },
+          {
+            "key": "family",
+            "type": "single_line_text_field",
+            "value": "tee"
+          },
+          {
+            "key": "category_ids",
+            "type": "list.single_line_text_field",
+            "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-7\",\"gid://shopify/TaxonomyCategory/aa-1-13-8\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-8\",\"gid://shopify/TaxonomyCategory/aa-1-1-2-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-1\"]"
+          },
+          {
+            "key": "attribute_namespace",
+            "type": "single_line_text_field",
+            "value": "shopify"
+          },
+          {
+            "key": "attribute_key",
+            "type": "single_line_text_field",
+            "value": "sleeve-length-type"
+          },
+          {
+            "key": "attribute_values",
+            "type": "list.single_line_text_field",
+            "value": "[\"gid://shopify/TaxonomyValue/169\"]"
+          },
+          {
+            "key": "destination",
+            "type": "collection_reference",
+            "value": "gid://shopify/Collection/525843595539"
+          },
+          {
+            "key": "priority",
+            "type": "number_integer",
+            "value": "10"
+          }
+        ]
+      },
+      "userErrors": []
+    },
+    "r2": {
+      "metaobject": {
+        "id": "gid://shopify/Metaobject/617993732371",
+        "handle": "long_sleeve",
+        "type": "at_breadcrumb_rule",
+        "fields": [
+          {
+            "key": "name",
+            "type": "single_line_text_field",
+            "value": "Long sleeve tees"
+          },
+          {
+            "key": "family",
+            "type": "single_line_text_field",
+            "value": "tee"
+          },
+          {
+            "key": "category_ids",
+            "type": "list.single_line_text_field",
+            "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-7\",\"gid://shopify/TaxonomyCategory/aa-1-13-8\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-8\",\"gid://shopify/TaxonomyCategory/aa-1-1-2-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-1\"]"
+          },
+          {
+            "key": "attribute_namespace",
+            "type": "single_line_text_field",
+            "value": "shopify"
+          },
+          {
+            "key": "attribute_key",
+            "type": "single_line_text_field",
+            "value": "sleeve-length-type"
+          },
+          {
+            "key": "attribute_values",
+            "type": "list.single_line_text_field",
+            "value": "[\"gid://shopify/TaxonomyValue/17094\"]"
+          },
+          {
+            "key": "destination",
+            "type": "collection_reference",
+            "value": "gid://shopify/Collection/523279794451"
+          },
+          {
+            "key": "priority",
+            "type": "number_integer",
+            "value": "10"
+          }
+        ]
+      },
+      "userErrors": []
+    },
+    "r3": {
+      "metaobject": {
+        "id": "gid://shopify/Metaobject/617993765139",
+        "handle": "sweatshirts",
+        "type": "at_breadcrumb_rule",
+        "fields": [
+          {
+            "key": "name",
+            "type": "single_line_text_field",
+            "value": "Sweatshirts and hoodies root"
+          },
+          {
+            "key": "family",
+            "type": "single_line_text_field",
+            "value": "sweatshirt"
+          },
+          {
+            "key": "category_ids",
+            "type": "list.single_line_text_field",
+            "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-11\",\"gid://shopify/TaxonomyCategory/aa-1-13-13\",\"gid://shopify/TaxonomyCategory/aa-1-1-7-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-2\",\"gid://shopify/TaxonomyCategory/aa-1-25-9-13\",\"gid://shopify/TaxonomyCategory/aa-1-13-14\",\"gid://shopify/TaxonomyCategory/aa-1-1-7-4\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-4\",\"gid://shopify/TaxonomyCategory/aa-1-1-7\"]"
+          },
+          {
+            "key": "attribute_namespace",
+            "type": "single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "attribute_key",
+            "type": "single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "attribute_values",
+            "type": "list.single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "destination",
+            "type": "collection_reference",
+            "value": "gid://shopify/Collection/523280744723"
+          },
+          {
+            "key": "priority",
+            "type": "number_integer",
+            "value": "0"
+          }
+        ]
+      },
+      "userErrors": []
+    },
+    "r4": {
+      "metaobject": {
+        "id": "gid://shopify/Metaobject/617993797907",
+        "handle": "hoodies",
+        "type": "at_breadcrumb_rule",
+        "fields": [
+          {
+            "key": "name",
+            "type": "single_line_text_field",
+            "value": "Hoodies"
+          },
+          {
+            "key": "family",
+            "type": "single_line_text_field",
+            "value": "sweatshirt"
+          },
+          {
+            "key": "category_ids",
+            "type": "list.single_line_text_field",
+            "value": "[\"gid://shopify/TaxonomyCategory/aa-1-25-9-11\",\"gid://shopify/TaxonomyCategory/aa-1-13-13\",\"gid://shopify/TaxonomyCategory/aa-1-1-7-2\",\"gid://shopify/TaxonomyCategory/aa-1-7-8-4-2\"]"
+          },
+          {
+            "key": "attribute_namespace",
+            "type": "single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "attribute_key",
+            "type": "single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "attribute_values",
+            "type": "list.single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "destination",
+            "type": "collection_reference",
+            "value": "gid://shopify/Collection/523279499539"
+          },
+          {
+            "key": "priority",
+            "type": "number_integer",
+            "value": "10"
+          }
+        ]
+      },
+      "userErrors": []
+    },
+    "r5": {
+      "metaobject": {
+        "id": "gid://shopify/Metaobject/617993830675",
+        "handle": "hats",
+        "type": "at_breadcrumb_rule",
+        "fields": [
+          {
+            "key": "name",
+            "type": "single_line_text_field",
+            "value": "Hats root"
+          },
+          {
+            "key": "family",
+            "type": "single_line_text_field",
+            "value": "hat"
+          },
+          {
+            "key": "category_ids",
+            "type": "list.single_line_text_field",
+            "value": "[\"gid://shopify/TaxonomyCategory/aa-2-17\"]"
+          },
+          {
+            "key": "attribute_namespace",
+            "type": "single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "attribute_key",
+            "type": "single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "attribute_values",
+            "type": "list.single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "destination",
+            "type": "collection_reference",
+            "value": "gid://shopify/Collection/523279335699"
+          },
+          {
+            "key": "priority",
+            "type": "number_integer",
+            "value": "0"
+          }
+        ]
+      },
+      "userErrors": []
+    },
+    "r6": {
+      "metaobject": {
+        "id": "gid://shopify/Metaobject/617993863443",
+        "handle": "trucker",
+        "type": "at_breadcrumb_rule",
+        "fields": [
+          {
+            "key": "name",
+            "type": "single_line_text_field",
+            "value": "Trucker hats"
+          },
+          {
+            "key": "family",
+            "type": "single_line_text_field",
+            "value": "hat"
+          },
+          {
+            "key": "category_ids",
+            "type": "list.single_line_text_field",
+            "value": "[\"gid://shopify/TaxonomyCategory/aa-2-17-14\"]"
+          },
+          {
+            "key": "attribute_namespace",
+            "type": "single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "attribute_key",
+            "type": "single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "attribute_values",
+            "type": "list.single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "destination",
+            "type": "collection_reference",
+            "value": "gid://shopify/Collection/523281236243"
+          },
+          {
+            "key": "priority",
+            "type": "number_integer",
+            "value": "10"
+          }
+        ]
+      },
+      "userErrors": []
+    },
+    "r7": {
+      "metaobject": {
+        "id": "gid://shopify/Metaobject/617993896211",
+        "handle": "beanies",
+        "type": "at_breadcrumb_rule",
+        "fields": [
+          {
+            "key": "name",
+            "type": "single_line_text_field",
+            "value": "Beanies"
+          },
+          {
+            "key": "family",
+            "type": "single_line_text_field",
+            "value": "hat"
+          },
+          {
+            "key": "category_ids",
+            "type": "list.single_line_text_field",
+            "value": "[\"gid://shopify/TaxonomyCategory/aa-2-17-2\"]"
+          },
+          {
+            "key": "attribute_namespace",
+            "type": "single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "attribute_key",
+            "type": "single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "attribute_values",
+            "type": "list.single_line_text_field",
+            "value": null
+          },
+          {
+            "key": "destination",
+            "type": "collection_reference",
+            "value": "gid://shopify/Collection/523278942483"
+          },
+          {
+            "key": "priority",
+            "type": "number_integer",
+            "value": "10"
+          }
+        ]
+      },
+      "userErrors": []
+    }
+  },
+  "activation": {
+    "metafieldsSet": {
+      "metafields": [
+        {
+          "id": "gid://shopify/Metafield/190848744456467",
+          "key": "breadcrumb_rules",
+          "type": "list.metaobject_reference",
+          "value": "[\"gid://shopify/Metaobject/617993666835\",\"gid://shopify/Metaobject/617993699603\",\"gid://shopify/Metaobject/617993732371\",\"gid://shopify/Metaobject/617993765139\",\"gid://shopify/Metaobject/617993797907\",\"gid://shopify/Metaobject/617993830675\",\"gid://shopify/Metaobject/617993863443\",\"gid://shopify/Metaobject/617993896211\"]",
+          "compareDigest": "0a7212478b3b521875e10b0a476fee0bc0ca89b0906b20289ff91fb96284a0dc"
+        }
+      ],
+      "userErrors": []
+    }
+  }
+}

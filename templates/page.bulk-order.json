@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "bulk_order": {
+      "type": "at-multi-style-bulk-order",
+      "settings": {}
+    }
+  },
+  "order": [
+    "bulk_order"
+  ]
+}

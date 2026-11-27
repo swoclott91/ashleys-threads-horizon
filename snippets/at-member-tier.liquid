@@ -1,0 +1,41 @@
+{%- doc -%}
+  Outputs the visitor's member tier: guest | member | pro | wholesale.
+  Capture it: {% capture at_tier %}{% render 'at-member-tier' %}{% endcapture %}{% assign at_tier = at_tier | strip %}
+
+  Order (membership contract §4–5):
+  1. B2B customers buying for a company location named after its tier ("Member", "Pro",
+     "Wholesale"): that location's tier, because it decides the catalog prices on the page.
+  2. Otherwise the `wagner.tier` customer metafield (absent = guest).
+  3. Theme editor only: the "Preview tier as" setting (Theme settings › Prices) overrides both,
+     so each tier can be checked without signing in. Shoppers never see it (request.design_mode).
+{%- enddoc -%}
+{%- liquid
+  assign at_t = 'guest'
+
+  if customer
+    assign at_mf = customer.metafields.wagner.tier.value | default: '' | downcase | strip
+    if at_mf == 'member' or at_mf == 'pro' or at_mf == 'wholesale'
+      assign at_t = at_mf
+    endif
+
+    if customer.b2b? and customer.current_location
+      assign at_loc_words = customer.current_location.name | downcase | replace: '-', ' ' | replace: '_', ' ' | split: ' '
+      if at_loc_words contains 'wholesale'
+        assign at_t = 'wholesale'
+      elsif at_loc_words contains 'pro'
+        assign at_t = 'pro'
+      elsif at_loc_words contains 'member'
+        assign at_t = 'member'
+      endif
+    endif
+  endif
+
+  if request.design_mode
+    assign at_preview = settings.at_member_preview_tier | default: 'off'
+    if at_preview != 'off'
+      assign at_t = at_preview
+    endif
+  endif
+
+  echo at_t
+-%}

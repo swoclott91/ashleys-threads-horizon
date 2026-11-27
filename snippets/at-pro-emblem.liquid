@@ -1,0 +1,10 @@
+{%- doc -%}
+  Ashley's Pro emblem: the needle-and-thread monogram in a circular, stitched Pro seal
+  (Theme settings › Membership › Pro identity color). Decorative unless a label is given.
+
+  @param {string} [size] - sm | md | lg (default md)
+  @param {boolean} [inverse] - Cream seal for use on the burgundy panel.
+{%- enddoc -%}
+<span class="at-pro-emblem at-pro-emblem--{{ size | default: 'md' }}{% if inverse %} at-pro-emblem--inverse{% endif %}" aria-hidden="true">
+  <span class="at-pro-emblem__mark">{{ 'at-monogram.svg' | inline_asset_content }}</span>
+</span>

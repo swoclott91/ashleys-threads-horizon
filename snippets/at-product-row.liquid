@@ -1,0 +1,88 @@
+{%- doc -%}
+  A titled row of product cards for the personal home and For you page. Uses Horizon's
+  resource-card, so each card shows the visitor's own catalog (tier) price.
+
+  @param {string} id - Anchor id for the row
+  @param {string} title - Row heading
+  @param {string} [note] - Short line next to the heading ("why these")
+  @param {object[]} products - Products (a product_reference list value or collection.products)
+  @param {number} [limit] - Max cards, default 8
+  @param {string} [link_url] - "See all" link
+  @param {string} [link_label] - "See all" label
+{%- enddoc -%}
+{%- liquid
+  assign at_limit = limit | default: 8
+  assign at_count = products.size | default: 0
+-%}
+{%- if at_count > 0 -%}
+  <section class="at-row" id="{{ id }}" aria-labelledby="{{ id }}-title">
+    <div class="at-row__head">
+      <h2 class="at-row__title h4" id="{{ id }}-title">{{ title }}</h2>
+      {%- if note != blank -%}<p class="at-row__note">{{ note }}</p>{%- endif -%}
+      {%- if link_url != blank -%}<a class="at-row__link" href="{{ link_url }}">{{ link_label | default: 'See all' }}</a>{%- endif -%}
+    </div>
+    <ul class="at-row__grid" role="list">
+      {%- for p in products limit: at_limit -%}
+        <li class="at-row__item">
+          {% render 'resource-card',
+            resource_type: 'product',
+            resource: p,
+            image_width: 500,
+            image_aspect_ratio: '4 / 5'
+          %}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  .at-row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .at-row__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 16px;
+  }
+  .at-row__title {
+    margin: 0;
+  }
+  .at-row__note {
+    margin: 0;
+    font-size: 0.875rem;
+    color: rgb(var(--color-foreground-rgb) / 0.72);
+  }
+  .at-row__link {
+    margin-inline-start: auto;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .at-row__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(150px, 42%);
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 4px;
+  }
+  .at-row__item {
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+  @media screen and (min-width: 750px) {
+    .at-row__grid {
+      grid-auto-flow: row;
+      grid-auto-columns: auto;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      overflow: visible;
+    }
+  }
+{% endstylesheet %}
