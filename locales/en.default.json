@@ -17,7 +17,8 @@
       "c": "Below break-even",
       "d": "Pro pays for itself",
       "e": "Active Pro",
-      "f": "Wholesale"
+      "f": "Wholesale",
+      "ytd": "Calendar-year data"
     },
     "price": {
       "per_year": "per year",
@@ -29,75 +30,96 @@
       "manage": "Manage my membership",
       "wholesale": "Go to my wholesale account",
       "unavailable": "Pro membership is unavailable",
-      "sign_in_note": "Pro is added to your Ashley’s Threads account. You’ll sign in or create a free account first."
+      "sign_in_note": "You’ll sign in or create a free account first, because Pro is added to your account."
     },
     "benefits": {
       "pricing_title": "Exclusive Pro pricing",
-      "pricing_detail": "Pay less than Member prices on eligible blanks, every order.",
+      "pricing_detail": "Pay less than Member prices on eligible blanks, on every order.",
       "cash_title": "{{ rate }} back in Threads Cash",
-      "cash_detail": "On eligible net merchandise purchases.",
+      "cash_detail": "Earned on eligible merchandise, toward future orders.",
       "shipping_title": "Up to {{ max }} off shipping monthly",
-      "shipping_detail": "One credit a month toward standard shipping on merchandise orders of {{ min }} or more.",
+      "shipping_detail": "On one standard-shipping merchandise order of {{ min }} or more each month.",
       "member_title": "Every Member benefit",
       "member_detail": "Favorites, bulk ordering from favorites and past purchases, and personalized picks.",
-      "see_prices": "See Pro prices on real styles"
+      "see_prices": "See Pro prices on real styles",
+      "cash_unit": "back in Threads Cash",
+      "ship_up_to": "Up to"
     },
     "value": {
       "pricing": "Exclusive Pro pricing savings",
       "cash": "Threads Cash ({{ rate }})",
       "shipping": "Shipping savings",
-      "total": "Total annual value",
-      "total_potential": "Total potential value",
       "fee": "Annual membership",
-      "net": "Net annual value",
-      "could_have_saved": "What Pro could have saved you",
+      "could_have_saved": "Pro could have saved you",
       "covered": "Those savings would have covered {{ percent }}% of the {{ fee }} membership.",
-      "future": "Every order you consolidate with us adds to your savings.",
       "would_have_paid": "Pro would have paid for itself.",
       "recovered_aria": "{{ percent }}% of the membership fee",
       "estimate_next": "Estimate your next 12 months",
-      "basis_trailing": "Based on your eligible orders in the last 12 months, priced at Pro. This is what you could have saved, not a credit we’ll issue.",
-      "basis_ytd": "Based on your eligible orders this year, priced at Pro. This is what you could have saved, not a credit we’ll issue.",
-      "basis_membership_year": "This membership year, measured against what you would have paid as a Member."
+      "could_have_earned": "In total, Pro could have saved you",
+      "net_caption": "after the {{ fee }} membership, on your orders {{ period }}.",
+      "total_caption": "on your orders {{ period }}, before the membership fee.",
+      "pricing_only_label": "Potential Pro pricing savings",
+      "pricing_only_caption": "on your orders {{ period }}.",
+      "pricing_alone_covers": "Pro pricing alone would have covered the {{ fee }} membership.",
+      "not_a_credit": "This is what Pro could have saved you, priced at Pro. It isn’t a credit and isn’t applied to past orders.",
+      "estimated": "Some Pro prices are estimated.",
+      "estimate_next_note": "A separate, hypothetical estimate. It doesn’t change the figures above.",
+      "period": {
+        "trailing_12m": "in the last 12 months",
+        "calendar_ytd": "so far this year",
+        "membership_year": "this membership year"
+      },
+      "missing": {
+        "both": "Threads Cash and shipping savings aren’t included yet, so this isn’t your full Pro value.",
+        "cash": "Threads Cash isn’t included yet, so this isn’t your full Pro value.",
+        "shipping": "Shipping savings aren’t included yet, so this isn’t your full Pro value."
+      }
     },
     "calculator": {
       "monthly_label": "Monthly blank apparel spend",
-      "monthly_help": "Illustrative amount. Include what you buy from other suppliers, at our Member prices.",
-      "monthly_help_personal": "Prefilled from your average month with us. Add what you buy elsewhere.",
+      "monthly_help": "What you spend on blank apparel in a typical month, at Ashley’s Threads Member prices. Count what you buy elsewhere as if you bought it here; this isn’t a comparison with other suppliers’ prices.",
+      "monthly_help_personal": "Prefilled from your average month with us. Add what you buy elsewhere, at our Member prices.",
       "restocks_label": "Restocks a month",
-      "restocks_help": "Orders of {{ min }} or more can use the monthly shipping credit.",
       "ship_label": "Shipping per restock",
-      "ship_help": "The credit covers up to {{ max }} of standard shipping once a month.",
-      "ship_ineligible": "At this spend, your average restock either doesn’t reach {{ min }} or already ships free, so no shipping credit is counted.",
-      "total_label": "Estimated annual value",
-      "pays_for_itself": "Pro pays for itself at this spend.",
+      "ship_ineligible": "At this spend, an average restock is below {{ min }} at Pro prices or already ships free at {{ free }}, so no shipping credit is counted.",
+      "total_label": "Pro could add an estimated",
       "payback": {
-        "one": "Your fee is covered in your first month of orders.",
-        "other": "Your fee is covered in about [count] months of orders."
+        "one": "Pro could pay for itself in your first month of orders.",
+        "other": "Pro could pay for itself in about [count] months of orders."
       },
-      "breakeven_prefix": "Pricing and Threads Cash cover the fee from about",
-      "breakeven_suffix": " a month. The {{ fee }} fee is billed once a year.",
-      "compact_assumption": "Assumes {{ count }} restocks a month with {{ ship }} shipping on each.",
-      "adjust": "Adjust",
-      "disclaimer": "Estimate only, based on typical Pro pricing. Actual savings vary by product, variant, promotions and bulk pricing."
+      "breakeven_prefix": "Pro pricing and Threads Cash cover the fee from about",
+      "breakeven_suffix": " a month in spend.",
+      "adjust": "Adjust spending and shipping assumptions",
+      "disclaimer": "Estimate based on typical Pro pricing and the assumptions above, after the {{ fee }} fee. It isn’t a promise of when your membership will pay for itself. Actual savings vary by product, variant, promotions and bulk pricing.",
+      "net_label": "You could save an estimated",
+      "net_caption": "per year, even after your membership fee.",
+      "total_caption": "a year in savings at this spend.",
+      "ship_rules": "One credit a month, up to {{ max }} of the actual standard shipping charge, on a merchandise order of {{ min }} or more at Pro prices. Orders of {{ free }} or more already ship free and don’t use it.",
+      "assumption": {
+        "one": "Assumes 1 restock a month at [ship] shipping.",
+        "other": "Assumes [count] restocks a month at [ship] shipping each."
+      }
     },
     "member": {
       "tagline": "Thanks for being a Pro.",
       "value_received": "Value received this membership year",
-      "paid": "Your membership has paid for itself.",
       "pricing": "Pro pricing savings",
       "cash_earned": "Threads Cash earned",
       "shipping": "Shipping savings received",
-      "total": "Total membership value",
       "recovered": "{{ percent }}% of your {{ fee }} membership recovered.",
-      "recovered_full": "Your {{ fee }} membership is fully recovered, with {{ extra }} more in value.",
+      "recovered_full": "Your membership has paid for itself, with {{ extra }} in value beyond the {{ fee }} fee.",
       "balance": "Available Threads Cash",
       "ship_credit": "This month’s shipping credit",
-      "ship_ready": "Ready to use:",
       "ship_used": "Used this month",
       "ship_none": "Issued on the 1st of each month",
       "renews": "Membership renews",
-      "empty": "Your Pro pricing is active. Savings appear here as you place orders."
+      "empty": "Your Pro pricing is active. Savings appear here as you place orders.",
+      "value_ytd": "Pro savings so far this year",
+      "partial": "Some savings aren’t included yet.",
+      "ytd_note": "Shown for the calendar year. Your membership-year total, and progress toward your fee, will appear here once it’s available.",
+      "ship_ready_title": "Your {{ max }} shipping credit is ready",
+      "ship_ready_body": "Use it this month on a merchandise order of {{ min }} or more.",
+      "ship_ready_cta": "Start a restock"
     },
     "wholesale": {
       "tagline": "Your wholesale benefits",
@@ -105,37 +127,47 @@
       "benefits": "See my wholesale benefits"
     },
     "compare": {
-      "style": "Style",
       "member_price": "Member price",
       "pro_price": "Pro price",
-      "per_garment": "Saved per garment",
-      "on_qty": "Saved on {{ quantity }}",
-      "estimate_pro": "Estimated Pro price, from your Member price at typical Pro pricing.",
-      "estimate_member": "Estimated Member price, from your Pro price at typical Pro pricing.",
-      "footnote": "Prices shown for the first available size and color. Actual prices vary by variant, sales and bulk pricing.",
+      "estimate_pro": "Pro prices are estimated from your Member price at typical Pro pricing; they aren’t prices you can buy at yet.",
+      "estimate_member": "Member prices are estimated from your Pro price at typical Pro pricing.",
+      "footnote": "Prices are for the size and color shown. Actual prices vary by variant, sales and bulk pricing.",
       "at_member": "At Member prices",
       "at_pro": "The same order at Pro prices",
       "kept": "Stays in your business",
       "guest_body": "Sign in to compare Member and Pro prices on the styles you buy most.",
       "guest_cta": "Sign in to compare",
       "illustration_note": "Illustration at typical Pro pricing. Actual savings vary by product.",
-      "pick_products": "Choose styles to compare in this section’s settings."
+      "pick_products": "Editor note: no styles to show. Pick seller staples in this section’s settings.",
+      "member_price_estimated": "Member price (est.)",
+      "pro_price_estimated": "Pro price (est.)",
+      "price_for": "Price for {{ variant }}",
+      "save_each": "Save {{ amount }} per garment",
+      "save_qty": "On {{ quantity }} pieces:",
+      "at_bulk": "at bulk pricing",
+      "before_bulk": "before quantity discounts",
+      "source_often": "You order this often",
+      "source_ordered": "In your recent orders",
+      "source_favorite": "One of your favorites",
+      "source_staple": "Seller staple",
+      "signed_in_body": "On every $100 you spend at Member prices, Pro pricing keeps this much in your business."
     },
     "cash": {
-      "pending_editor": "Editor note: Threads Cash earning timing, expiry, redemption limits and excluded products are not final. Turn on “Terms are final” only when they are."
+      "pending_editor": "Editor note (not shown to shoppers): Threads Cash posting delay, expiry, redemption limits and excluded products are not final. Turn on “Terms are final” only when they are."
     },
     "promise": {
-      "short": "The Pro Promise covers the difference if your membership doesn’t pay for itself.",
-      "chip_title": "The Pro Promise",
-      "chip_body": "If your Pro savings don’t add up to the cost of your membership, we’ll refund the difference.",
+      "short": "Once finalized, the Pro Promise refunds the difference if your membership doesn’t pay for itself.",
+      "chip_title": "Pro pays for itself. We promise.",
+      "chip_body": "If your qualifying Pro savings don’t cover the cost of your membership, we’ll refund the difference.",
       "terms": "Pro Promise terms",
       "draft": "Draft · not visible to shoppers",
-      "counts": "Counts toward it: exclusive Pro pricing savings, Threads Cash earned and shipping credits used.",
-      "example_title": "Example year",
+      "counts": "Qualifying savings combine exclusive Pro pricing, Threads Cash earned and shipping savings.",
+      "example_title": "An example year",
       "example_cash": "Threads Cash",
-      "example_shipping": "Shipping credits used",
-      "example_total": "Membership value",
-      "example_refund": "We refund"
+      "example_shipping": "Shipping savings",
+      "example_total": "Total membership value",
+      "example_refund": "Refund of the difference",
+      "example_fee": "Membership fee"
     },
     "versus": {
       "benefit": "Benefit",

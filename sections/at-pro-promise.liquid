@@ -1,8 +1,10 @@
 {%- comment -%}
-  Pro PDP section 5: The Pro Promise (membership value guarantee).
+  Pro PDP section: The Pro Promise (membership value guarantee).
   Visible only per Theme settings › Membership › Pro Promise visibility: hidden, editor preview
-  (default, marked as draft) or live. Terms (first year vs every year, refund timing) are not final.
-  The worked example's amounts are editor settings; the total and refund are calculated.
+  (default, marked as draft) or live. When hidden it renders nothing, so it leaves no gap.
+  Terms (first year vs every year, eligible benefits, refund timing and method) are not final.
+  The worked example's amounts are editor settings; the total and refund are calculated from the
+  configured fee, and the refund is the shortfall on combined value, not on Threads Cash alone.
 {%- endcomment -%}
 {%- capture pc -%}{% render 'at-pro-config' %}{%- endcapture -%}
 {%- capture tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
@@ -20,9 +22,11 @@
 {{ 'at-pro.css' | asset_url | stylesheet_tag }}
 <div class="section section--page-width at-pro-page at-pro-section at-pro-promise">
   <div class="at-pro-promise__card">
-    {% render 'at-pro-emblem', size: 'lg', inverse: true %}
     <div class="at-pro-promise__copy">
-      {%- if promise == 'preview' -%}<span class="at-pro-draft at-pro-draft--inverse">{{ 'at_pro.promise.draft' | t }}</span>{%- endif -%}
+      <div class="at-pro-promise__seal">
+        {% render 'at-pro-emblem', size: 'lg', inverse: true %}
+        {%- if promise == 'preview' -%}<span class="at-pro-draft at-pro-draft--inverse">{{ 'at_pro.promise.draft' | t }}</span>{%- endif -%}
+      </div>
       <h2 class="at-pro-serif at-pro-promise__heading">{{ section.settings.heading | escape }}</h2>
       <div class="at-pro-promise__body">{% render 'at-pro-tokens', text: section.settings.body %}</div>
       <p class="at-pro-promise__counts">{{ 'at_pro.promise.counts' | t }}</p>
@@ -30,18 +34,22 @@
         <a class="at-pro-promise__terms" href="{{ settings.at_pro_promise_terms_url }}">{{ 'at_pro.promise.terms' | t }}</a>
       {%- endif -%}
     </div>
-    {%- if section.settings.show_example -%}
-      <div class="at-pro-promise__example">
-        <p class="at-pro-promise__example-title">{{ 'at_pro.promise.example_title' | t }}</p>
-        <dl class="at-pro-ledger at-pro-ledger--inverse">
-          <div class="at-pro-ledger__row"><dt>{{ 'at_pro.value.pricing' | t }}</dt><dd>{{ ex_pricing | money_without_trailing_zeros }}</dd></div>
-          <div class="at-pro-ledger__row"><dt>{{ 'at_pro.promise.example_cash' | t }}</dt><dd>{{ ex_cash | money_without_trailing_zeros }}</dd></div>
-          <div class="at-pro-ledger__row"><dt>{{ 'at_pro.promise.example_shipping' | t }}</dt><dd>{{ ex_ship | money_without_trailing_zeros }}</dd></div>
-          <div class="at-pro-ledger__row at-pro-ledger__row--total"><dt>{{ 'at_pro.promise.example_total' | t }}</dt><dd>{{ ex_total | money_without_trailing_zeros }}</dd></div>
-          <div class="at-pro-ledger__row"><dt>{{ 'at_pro.value.fee' | t }}</dt><dd>{{ fee | money_without_trailing_zeros }}</dd></div>
-          <div class="at-pro-ledger__row at-pro-ledger__row--net"><dt>{{ 'at_pro.promise.example_refund' | t }}</dt><dd>{{ ex_refund | money_without_trailing_zeros }}</dd></div>
-        </dl>
-      </div>
+    {%- if section.settings.show_example and ex_refund > 0 -%}
+      <figure class="at-pro-promise__example">
+        <figcaption class="at-pro-promise__example-title">{{ 'at_pro.promise.example_title' | t }}</figcaption>
+        <table class="at-pro-promise__table">
+          <tbody>
+            <tr><th scope="row">{{ 'at_pro.value.pricing' | t }}</th><td>{{ ex_pricing | money_without_trailing_zeros }}</td></tr>
+            <tr><th scope="row">{{ 'at_pro.promise.example_cash' | t }}</th><td>{{ ex_cash | money_without_trailing_zeros }}</td></tr>
+            <tr><th scope="row">{{ 'at_pro.promise.example_shipping' | t }}</th><td>{{ ex_ship | money_without_trailing_zeros }}</td></tr>
+            <tr class="at-pro-promise__table-total"><th scope="row">{{ 'at_pro.promise.example_total' | t }}</th><td>{{ ex_total | money_without_trailing_zeros }}</td></tr>
+            <tr><th scope="row">{{ 'at_pro.promise.example_fee' | t }}</th><td>{{ fee | money_without_trailing_zeros }}</td></tr>
+          </tbody>
+          <tfoot>
+            <tr class="at-pro-promise__table-refund"><th scope="row">{{ 'at_pro.promise.example_refund' | t }}</th><td>{{ ex_refund | money_without_trailing_zeros }}</td></tr>
+          </tfoot>
+        </table>
+      </figure>
     {%- endif -%}
   </div>
 </div>
@@ -55,11 +63,11 @@
   "settings": [
     { "type": "paragraph", "content": "Shown per Theme settings › Membership › Pro Promise visibility. Keep it on editor preview until the guarantee terms are final." },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Pro pays for itself. We promise." },
-    { "type": "richtext", "id": "body", "label": "Text", "default": "<p>If your exclusive Pro pricing savings, Threads Cash and shipping savings don’t add up to the [fee] cost of your membership, we’ll refund you the difference.</p>" },
-    { "type": "checkbox", "id": "show_example", "label": "Show worked example", "default": true },
+    { "type": "richtext", "id": "body", "label": "Text", "default": "<p>If your qualifying Pro savings don’t cover the [fee] cost of your membership, we’ll refund the difference.</p>" },
+    { "type": "checkbox", "id": "show_example", "label": "Show worked example", "default": true, "info": "Hidden automatically when the example adds up to the fee or more." },
     { "type": "range", "id": "example_pricing", "label": "Example: Pro pricing savings", "min": 0, "max": 100, "step": 1, "unit": "$", "default": 40 },
     { "type": "range", "id": "example_cash", "label": "Example: Threads Cash", "min": 0, "max": 50, "step": 1, "unit": "$", "default": 10 },
-    { "type": "range", "id": "example_shipping", "label": "Example: shipping credits used", "min": 0, "max": 50, "step": 1, "unit": "$", "default": 15 }
+    { "type": "range", "id": "example_shipping", "label": "Example: shipping savings", "min": 0, "max": 50, "step": 1, "unit": "$", "default": 15 }
   ],
   "presets": [{ "name": "Pro: Pro Promise" }]
 }

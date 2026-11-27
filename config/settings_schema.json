@@ -2738,6 +2738,12 @@
         "type": "url",
         "id": "at_pro_promise_terms_url",
         "label": "Pro Promise terms page"
+      },
+      {
+        "type": "url",
+        "id": "at_pro_restock_url",
+        "label": "Pro restock link",
+        "info": "Where “Start a restock” goes when a Pro member’s monthly shipping credit is ready. Defaults to all products."
       }
     ]
   }

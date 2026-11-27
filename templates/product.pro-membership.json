@@ -11,12 +11,15 @@
     "price_compare": {
       "type": "at-pro-price-compare",
       "settings": {
+        "products": [
+          "gildan-64000-softstyle-t-shirt",
+          "comfort-colors-1717-heavyweight-ring-spun-tee",
+          "gildan-18500-heavy-blend-hooded-sweatshirt",
+          "richardson-112-trucker-cap"
+        ],
+        "max_products": 4,
         "quantity": 72
       }
-    },
-    "calculator": {
-      "type": "at-pro-calculator",
-      "settings": {}
     },
     "threads_cash": {
       "type": "at-pro-threads-cash",
@@ -25,7 +28,7 @@
           "type": "step",
           "settings": {
             "title": "Shop as usual",
-            "body": "<p>Buy your blanks at Pro prices.</p>"
+            "body": "<p>Buy your blanks at Pro prices, the same way you order today.</p>"
           }
         },
         "s2": {
@@ -38,8 +41,8 @@
         "s3": {
           "type": "step",
           "settings": {
-            "title": "Use it on your next order",
-            "body": "<p>Your Threads Cash is added to your account as store credit you can put toward future orders.</p>"
+            "title": "Use it toward a future order",
+            "body": "<p>Once it posts to your account, apply it as store credit at checkout.</p>"
           }
         }
       },
@@ -70,7 +73,8 @@
           "settings": {
             "label": "Everyday pricing",
             "member": "Member pricing",
-            "pro": "Exclusive Pro pricing"
+            "pro": "Exclusive Pro pricing",
+            "difference": true
           }
         },
         "r3": {
@@ -94,7 +98,8 @@
           "settings": {
             "label": "Threads Cash",
             "member": "—",
-            "pro": "[cash_rate] back"
+            "pro": "[cash_rate] back",
+            "difference": true
           }
         },
         "r6": {
@@ -102,7 +107,8 @@
           "settings": {
             "label": "Monthly shipping credit",
             "member": "—",
-            "pro": "Up to [ship_max]"
+            "pro": "Up to [ship_max]",
+            "difference": true
           }
         },
         "r7": {
@@ -164,7 +170,7 @@
           "type": "question",
           "settings": {
             "question": "How much do I need to spend for Pro to pay for itself?",
-            "answer": "<p>At our current pricing, about [breakeven_annual] a year of blank apparel at Member prices (roughly [breakeven_monthly] a month) covers the [fee] membership through Pro pricing and Threads Cash alone, before any shipping savings. Your products and quantities change this, so try the calculator with your own numbers.</p>",
+            "answer": "<p>At our current pricing, about [breakeven_annual] a year of blank apparel at Member prices (roughly [breakeven_monthly] a month) covers the [fee] membership through Pro pricing and Threads Cash alone, before any shipping savings. Your products and quantities change this, so try the calculator at the top of this page with your own numbers.</p>",
             "pending": false
           }
         },
@@ -232,9 +238,8 @@
     "main",
     "benefits",
     "price_compare",
-    "calculator",
-    "threads_cash",
     "promise",
+    "threads_cash",
     "versus",
     "faq",
     "final_cta"

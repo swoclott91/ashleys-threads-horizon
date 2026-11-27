@@ -1,6 +1,9 @@
 {%- comment -%}
-  Pro PDP section 1: "Three ways Pro works for your business". Pricing leads and carries the
-  most weight; Threads Cash and shipping support it. Figures come from at-pro-config.
+  Pro PDP section: "Three ways Pro works for your business". Editorial, not a repeat of the
+  purchase panel: one big idea per card. Pricing leads (burgundy), Threads Cash (cream, the rate is
+  the visual), shipping (muted green, the annual maximum is the visual and is labeled a maximum).
+  Figures come from at-pro-config; copy accepts [tokens] (snippets/at-pro-tokens).
+  Stitching is reserved for the hero and the Promise, so these cards are plain.
 {%- endcomment -%}
 {%- capture tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
 {%- capture pc -%}{% render 'at-pro-config' %}{%- endcapture -%}
@@ -9,7 +12,8 @@
   assign cash_bp = pc | split: ';cash_bp=' | last | split: ';' | first | plus: 0
   assign member_cash_bp = pc | split: ';member_cash_bp=' | last | split: ';' | first | plus: 0
   assign cash_pct = cash_bp | minus: member_cash_bp | times: 1.0 | divided_by: 100 | round: 1 | append: '' | remove: '.0' | append: '%'
-  assign ship_max = pc | split: ';ship_max=' | last | split: ';' | first | plus: 0 | money_without_trailing_zeros
+  assign ship_max_cents = pc | split: ';ship_max=' | last | split: ';' | first | plus: 0
+  assign ship_year = ship_max_cents | times: 12 | money_without_trailing_zeros
 -%}
 {%- unless tier == 'wholesale' -%}
 {{ 'at-pro.css' | asset_url | stylesheet_tag }}
@@ -19,21 +23,28 @@
     {%- if section.settings.intro != blank -%}<p class="at-pro-section__intro">{{ section.settings.intro | escape }}</p>{%- endif -%}
   </div>
   <div class="at-pro-benefits__grid">
-    <article class="at-pro-card at-pro-card--primary">
-      <p class="at-pro-card__eyebrow">1 · {{ section.settings.title_1 | escape }}</p>
-      <p class="at-pro-figure at-pro-figure--lg">{{ 'at_pro.benefits.pricing_title' | t }}</p>
-      <div class="at-pro-card__body">{% render 'at-pro-tokens', text: section.settings.body_1 %}</div>
-      <a class="at-pro-card__link" href="#at-pro-price-compare">{{ 'at_pro.benefits.see_prices' | t }}</a>
+    <article class="at-pro-benefit at-pro-benefit--pricing">
+      <p class="at-pro-benefit__eyebrow"><span class="at-pro-figure">01</span> {{ section.settings.title_1 | escape }}</p>
+      <p class="at-pro-benefit__figure at-pro-serif">{{ 'at_pro.benefits.pricing_title' | t }}</p>
+      <div class="at-pro-benefit__body">{% render 'at-pro-tokens', text: section.settings.body_1 %}</div>
+      <a class="at-pro-benefit__link" href="#at-pro-price-compare">{{ 'at_pro.benefits.see_prices' | t }} <span aria-hidden="true">→</span></a>
     </article>
-    <article class="at-pro-card">
-      <p class="at-pro-card__eyebrow">2 · {{ section.settings.title_2 | escape }}</p>
-      <p class="at-pro-figure at-pro-figure--lg">{{ 'at_pro.benefits.cash_title' | t: rate: cash_pct }}</p>
-      <div class="at-pro-card__body">{% render 'at-pro-tokens', text: section.settings.body_2 %}</div>
+    <article class="at-pro-benefit at-pro-benefit--cash">
+      <p class="at-pro-benefit__eyebrow"><span class="at-pro-figure">02</span> {{ section.settings.title_2 | escape }}</p>
+      <p class="at-pro-benefit__figure">
+        <span class="at-pro-figure at-pro-benefit__number">{{ cash_pct }}</span>
+        <span class="at-pro-benefit__unit">{{ 'at_pro.benefits.cash_unit' | t }}</span>
+      </p>
+      <div class="at-pro-benefit__body">{% render 'at-pro-tokens', text: section.settings.body_2 %}</div>
     </article>
-    <article class="at-pro-card">
-      <p class="at-pro-card__eyebrow">3 · {{ section.settings.title_3 | escape }}</p>
-      <p class="at-pro-figure at-pro-figure--lg">{{ 'at_pro.benefits.shipping_title' | t: max: ship_max }}</p>
-      <div class="at-pro-card__body">{% render 'at-pro-tokens', text: section.settings.body_3 %}</div>
+    <article class="at-pro-benefit at-pro-benefit--shipping">
+      <p class="at-pro-benefit__eyebrow"><span class="at-pro-figure">03</span> {{ section.settings.title_3 | escape }}</p>
+      <p class="at-pro-benefit__figure">
+        <span class="at-pro-benefit__unit">{{ 'at_pro.benefits.ship_up_to' | t }}</span>
+        <span class="at-pro-figure at-pro-benefit__number">{{ ship_year }}</span>
+        <span class="at-pro-benefit__unit">{{ 'at_pro.price.per_year_suffix' | t }}</span>
+      </p>
+      <div class="at-pro-benefit__body">{% render 'at-pro-tokens', text: section.settings.body_3 %}</div>
     </article>
   </div>
 </div>
@@ -48,12 +59,12 @@
     { "type": "paragraph", "content": "Tokens: [fee] [cash_rate] [ship_max] [ship_min] [free_ship] come from Theme settings › Membership." },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Three ways Pro works for your business" },
     { "type": "text", "id": "intro", "label": "Intro" },
-    { "type": "text", "id": "title_1", "label": "Benefit 1 title", "default": "Lower your costs" },
-    { "type": "richtext", "id": "body_1", "label": "Benefit 1 text", "default": "<p>Pro members pay less than Member prices on eligible blanks, so every order leaves more room in your own margins. This is where most of Pro’s value comes from.</p>" },
-    { "type": "text", "id": "title_2", "label": "Benefit 2 title", "default": "Earn as you grow" },
-    { "type": "richtext", "id": "body_2", "label": "Benefit 2 text", "default": "<p>Earn [cash_rate] back in Threads Cash on eligible net merchandise purchases. The more of your blanks you buy with us, the more you earn.</p>" },
-    { "type": "text", "id": "title_3", "label": "Benefit 3 title", "default": "Restock for less" },
-    { "type": "richtext", "id": "body_3", "label": "Benefit 3 text", "default": "<p>Once a month, take up to [ship_max] off standard shipping on a merchandise order of [ship_min] or more. Orders over [free_ship] still ship free.</p>" }
+    { "type": "text", "id": "title_1", "label": "Benefit 1 eyebrow", "default": "Lower your costs" },
+    { "type": "richtext", "id": "body_1", "label": "Benefit 1 text", "default": "<p>Pay less than Member prices on eligible blanks, on every order. Lower costs leave more room in your own margins, and this is where most of Pro’s value comes from.</p>" },
+    { "type": "text", "id": "title_2", "label": "Benefit 2 eyebrow", "default": "Earn as you grow" },
+    { "type": "richtext", "id": "body_2", "label": "Benefit 2 text", "default": "<p>Eligible merchandise purchases earn Threads Cash you can put toward future orders. The more of your blanks you buy with us, the more you earn.</p>" },
+    { "type": "text", "id": "title_3", "label": "Benefit 3 eyebrow", "default": "Restock for less" },
+    { "type": "richtext", "id": "body_3", "label": "Benefit 3 text", "default": "<p>Take up to [ship_max] off standard shipping on one merchandise order of [ship_min] or more each month. Twelve months of full credits is the most you can save, not a guaranteed amount.</p>" }
   ],
   "presets": [{ "name": "Pro: three benefits" }]
 }
