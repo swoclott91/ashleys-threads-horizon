@@ -1,0 +1,116 @@
+{%- comment -%}
+  Pro PDP section 2: "See the difference Pro pricing makes" on real catalog styles.
+
+  The storefront only knows the shopper's own tier price (B2B catalogs). There is no Pro price
+  metafield yet (owner decision, November 2026: show a labeled estimate), so:
+  - Member: Member price = the price they see; Pro price = estimate (Member × ratio).
+  - Pro: Pro price = the price they see; Member price = estimate (Pro ÷ ratio).
+  - Guest: no product numbers (MAP rule, membership contract §5); the per-$100 illustration and
+    a sign-in prompt instead.
+  - Wholesale: hidden.
+  Prices are for the first available variant (usually the smallest size, regular color).
+{%- endcomment -%}
+{%- capture tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
+{%- capture pc -%}{% render 'at-pro-config' %}{%- endcapture -%}
+{%- liquid
+  assign tier = tier | strip
+  assign ratio_bp = pc | split: ';ratio_bp=' | last | split: ';' | first | plus: 0
+  assign ratio = ratio_bp | times: 1.0 | divided_by: 10000
+  assign qty = section.settings.quantity
+  assign per_100_pro = 10000 | times: ratio | round
+  assign per_100_save = 10000 | minus: per_100_pro
+-%}
+{%- unless tier == 'wholesale' -%}
+{{ 'at-pro.css' | asset_url | stylesheet_tag }}
+<div class="section section--page-width at-pro-page at-pro-section at-pro-compare" id="at-pro-price-compare">
+  <div class="at-pro-section__head">
+    <h2 class="at-pro-serif at-pro-section__heading">{{ section.settings.heading | escape }}</h2>
+    {%- if section.settings.intro != blank -%}<p class="at-pro-section__intro">{{ section.settings.intro | escape }}</p>{%- endif -%}
+  </div>
+
+  {%- if tier == 'member' or tier == 'pro' -%}
+    {%- if section.settings.products != blank -%}
+      <div class="at-pro-compare__table-wrap">
+        <table class="at-pro-table at-pro-compare__table">
+          <thead>
+            <tr>
+              <th scope="col">{{ 'at_pro.compare.style' | t }}</th>
+              <th scope="col">{{ 'at_pro.compare.member_price' | t }}{% if tier == 'pro' %}<sup>*</sup>{% endif %}</th>
+              <th scope="col" class="at-pro-table__pro">{{ 'at_pro.compare.pro_price' | t }}{% if tier == 'member' %}<sup>*</sup>{% endif %}</th>
+              <th scope="col">{{ 'at_pro.compare.per_garment' | t }}</th>
+              <th scope="col">{{ 'at_pro.compare.on_qty' | t: quantity: qty }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for item in section.settings.products -%}
+              {%- liquid
+                assign variant = item.selected_or_first_available_variant
+                if tier == 'member'
+                  assign member_price = variant.price
+                  assign pro_price = variant.price | times: ratio | round
+                else
+                  assign pro_price = variant.price
+                  assign member_price = variant.price | divided_by: ratio | round
+                endif
+                assign per = member_price | minus: pro_price
+                assign on_qty = per | times: qty
+              -%}
+              <tr>
+                <th scope="row">
+                  <a href="{{ item.url }}" class="at-pro-compare__product">
+                    {%- if item.featured_image -%}
+                      {{ item.featured_image | image_url: width: 160 | image_tag: width: 56, height: 56, loading: 'lazy', alt: '' }}
+                    {%- endif -%}
+                    <span>
+                      {{ item.title | escape }}
+                      {%- if variant.title != 'Default Title' -%}<small>{{ variant.title | escape }}</small>{%- endif -%}
+                    </span>
+                  </a>
+                </th>
+                <td data-label="{{ 'at_pro.compare.member_price' | t }}">{{ member_price | money }}</td>
+                <td data-label="{{ 'at_pro.compare.pro_price' | t }}" class="at-pro-table__pro">{{ pro_price | money }}</td>
+                <td data-label="{{ 'at_pro.compare.per_garment' | t }}">{{ per | money }}</td>
+                <td data-label="{{ 'at_pro.compare.on_qty' | t: quantity: qty }}" class="at-pro-table__strong">{{ on_qty | money }}</td>
+              </tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+      <p class="at-pro-section__footnote">
+        * {% if tier == 'member' %}{{ 'at_pro.compare.estimate_pro' | t }}{% else %}{{ 'at_pro.compare.estimate_member' | t }}{% endif %}
+        {{ 'at_pro.compare.footnote' | t }}
+      </p>
+    {%- elsif request.design_mode -%}
+      <p class="at-pro-draft">{{ 'at_pro.compare.pick_products' | t }}</p>
+    {%- endif -%}
+  {%- else -%}
+    <div class="at-pro-compare__illustration">
+      <dl class="at-pro-ledger">
+        <div class="at-pro-ledger__row"><dt>{{ 'at_pro.compare.at_member' | t }}</dt><dd>{{ 10000 | money }}</dd></div>
+        <div class="at-pro-ledger__row at-pro-ledger__row--primary"><dt>{{ 'at_pro.compare.at_pro' | t }}</dt><dd>{{ per_100_pro | money }}</dd></div>
+        <div class="at-pro-ledger__row at-pro-ledger__row--net"><dt>{{ 'at_pro.compare.kept' | t }}</dt><dd>{{ per_100_save | money }}</dd></div>
+      </dl>
+      <div>
+        <p>{{ 'at_pro.compare.guest_body' | t }}</p>
+        <a class="button-secondary" href="{{ routes.account_login_url }}?return_url={{ request.path | url_encode }}">{{ 'at_pro.compare.guest_cta' | t }}</a>
+      </div>
+    </div>
+    <p class="at-pro-section__footnote">{{ 'at_pro.compare.illustration_note' | t }}</p>
+  {%- endif -%}
+</div>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Pro: price comparison",
+  "tag": "section",
+  "class": "at-pro-section-wrap",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "See the difference Pro pricing makes" },
+    { "type": "text", "id": "intro", "label": "Intro", "default": "What Pro pricing means on the blanks you already buy." },
+    { "type": "product_list", "id": "products", "label": "Styles to compare", "limit": 5, "info": "Popular cotton tees, premium garment-dyed tees, sweatshirts. Signed-in Members and Pros see real prices with a labeled estimate for the other tier; guests see an illustration." },
+    { "type": "range", "id": "quantity", "label": "Representative quantity", "min": 12, "max": 288, "step": 12, "default": 72 }
+  ],
+  "presets": [{ "name": "Pro: price comparison" }]
+}
+{% endschema %}

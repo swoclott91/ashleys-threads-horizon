@@ -1,0 +1,67 @@
+{%- doc -%}
+  The Ashley's Pro purchase or account action, by customer state (snippets/at-pro-value).
+  Used by the PDP purchase panel, the mobile sticky bar and the closing CTA so they never disagree.
+
+  - a–d, signed in: adds the membership variant to the cart and goes straight to checkout
+    (`return_to=/checkout`), alongside anything already in the cart. No enrollment page.
+  - a–d, signed out: Pro is attached to a customer account, so the button opens sign-in and
+    returns here (docs/pro-membership-pdp.md, open question on guest purchase).
+  - Pro already in the cart: "Check out".
+  - e (Pro): manage membership. f (Wholesale): wholesale account.
+
+  @param {object} product - The Pro membership product.
+  @param {string} state - a | b | c | d | e | f
+  @param {string} [label] - Purchase button label (default "Become a Pro").
+  @param {boolean} [with_price] - Append "— $79/year" to the purchase label.
+  @param {string} [id] - id for the purchase button (the sticky bar watches it).
+  @param {string} [form_id] - Unique form id.
+{%- enddoc -%}
+{%- liquid
+  assign at_cta_variant = product.selected_or_first_available_variant
+  assign at_cta_label = 'at_pro.cta.become' | t
+  if label != blank
+    assign at_cta_label = label
+  endif
+  if with_price and at_cta_variant
+    assign at_cta_price = at_cta_variant.price | money_without_trailing_zeros
+    assign at_cta_suffix = 'at_pro.price.per_year_suffix' | t
+    assign at_cta_label = at_cta_label | append: ' — ' | append: at_cta_price | append: at_cta_suffix
+  endif
+
+  assign at_cta_in_cart = false
+  for item in cart.items
+    if item.variant_id == at_cta_variant.id
+      assign at_cta_in_cart = true
+      break
+    endif
+  endfor
+-%}
+{%- case state -%}
+  {%- when 'e' -%}
+    <a class="button at-pro-cta" href="{{ settings.at_my_membership_page_url | default: routes.account_url }}"{% if id %} id="{{ id }}"{% endif %}>
+      {{- 'at_pro.cta.manage' | t -}}
+    </a>
+  {%- when 'f' -%}
+    <a class="button-secondary at-pro-cta" href="{{ routes.account_url }}"{% if id %} id="{{ id }}"{% endif %}>
+      {{- 'at_pro.cta.wholesale' | t -}}
+    </a>
+  {%- else -%}
+    {%- if at_cta_variant == blank or at_cta_variant.available == false -%}
+      <button type="button" class="button at-pro-cta" disabled{% if id %} id="{{ id }}"{% endif %}>{{ 'at_pro.cta.unavailable' | t }}</button>
+    {%- elsif at_cta_in_cart -%}
+      <a class="button at-pro-cta" href="/checkout"{% if id %} id="{{ id }}"{% endif %}>
+        {{- 'at_pro.cta.checkout' | t -}}
+      </a>
+    {%- elsif customer or request.design_mode -%}
+      <form method="post" action="{{ routes.cart_add_url }}" class="at-pro-cta-form"{% if form_id %} id="{{ form_id }}"{% endif %}>
+        <input type="hidden" name="id" value="{{ at_cta_variant.id }}">
+        <input type="hidden" name="quantity" value="1">
+        <input type="hidden" name="return_to" value="/checkout">
+        <button type="submit" class="button at-pro-cta"{% if id %} id="{{ id }}"{% endif %}>{{ at_cta_label }}</button>
+      </form>
+    {%- else -%}
+      <a class="button at-pro-cta" href="{{ routes.account_login_url }}?return_url={{ product.url | url_encode }}"{% if id %} id="{{ id }}"{% endif %}>
+        {{- at_cta_label -}}
+      </a>
+    {%- endif -%}
+{%- endcase -%}

@@ -1,0 +1,37 @@
+{%- doc -%}
+  Replaces Pro program tokens in editor text with values from `at-pro-config`, so copy written in
+  the theme editor never hardcodes the fee, rates or shipping rules.
+
+  Tokens: [fee] [cash_rate] [ship_max] [ship_min] [free_ship] [breakeven_annual] [breakeven_monthly]
+
+  @param {string} text - Text or rich text containing tokens.
+{%- enddoc -%}
+{%- capture at_tk_config -%}{% render 'at-pro-config' %}{%- endcapture -%}
+{%- liquid
+  assign at_tk_fee = at_tk_config | split: ';fee=' | last | split: ';' | first | plus: 0
+  assign at_tk_ratio = at_tk_config | split: ';ratio_bp=' | last | split: ';' | first | times: 1.0 | divided_by: 10000
+  assign at_tk_cash = at_tk_config | split: ';cash_bp=' | last | split: ';' | first | times: 1.0 | divided_by: 10000
+  assign at_tk_member_cash = at_tk_config | split: ';member_cash_bp=' | last | split: ';' | first | times: 1.0 | divided_by: 10000
+  assign at_tk_ship_max = at_tk_config | split: ';ship_max=' | last | split: ';' | first | plus: 0
+  assign at_tk_ship_min = at_tk_config | split: ';ship_min=' | last | split: ';' | first | plus: 0
+  assign at_tk_free_ship = at_tk_config | split: ';free_ship=' | last | split: ';' | first | plus: 0
+
+  assign at_tk_incr_cash = at_tk_cash | minus: at_tk_member_cash
+  assign at_tk_cash_on_pro = at_tk_ratio | times: at_tk_incr_cash
+  assign at_tk_per_dollar = 1.0 | minus: at_tk_ratio | plus: at_tk_cash_on_pro
+  assign at_tk_breakeven = 0
+  if at_tk_per_dollar > 0
+    assign at_tk_breakeven = at_tk_fee | divided_by: at_tk_per_dollar | divided_by: 100 | ceil | times: 100
+  endif
+  assign at_tk_breakeven_monthly = at_tk_breakeven | divided_by: 1200.0 | ceil | times: 100
+
+  assign at_tk_fee_m = at_tk_fee | money_without_trailing_zeros
+  assign at_tk_ship_max_m = at_tk_ship_max | money_without_trailing_zeros
+  assign at_tk_ship_min_m = at_tk_ship_min | money_without_trailing_zeros
+  assign at_tk_free_ship_m = at_tk_free_ship | money_without_trailing_zeros
+  assign at_tk_breakeven_m = at_tk_breakeven | money_without_trailing_zeros
+  assign at_tk_breakeven_monthly_m = at_tk_breakeven_monthly | money_without_trailing_zeros
+  assign at_tk_cash_pct = at_tk_incr_cash | times: 100 | round: 1 | append: '' | remove: '.0' | append: '%'
+
+  echo text | replace: '[fee]', at_tk_fee_m | replace: '[cash_rate]', at_tk_cash_pct | replace: '[ship_max]', at_tk_ship_max_m | replace: '[ship_min]', at_tk_ship_min_m | replace: '[free_ship]', at_tk_free_ship_m | replace: '[breakeven_annual]', at_tk_breakeven_m | replace: '[breakeven_monthly]', at_tk_breakeven_monthly_m
+-%}

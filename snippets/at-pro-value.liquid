@@ -1,0 +1,261 @@
+{%- doc -%}
+  Customer-level Ashley's Pro value: the shared source for the Pro PDP and the homepage Pro tile
+  (docs/pro-membership-pdp.md). Presentation lives in the sections; this snippet only decides the
+  state and the figures, so a compact tile and the expanded PDP always report the same numbers.
+
+  @param {string} [preview] - Theme editor only: a | b | c | d | e | f loads a labeled fixture.
+
+  States
+  - a: guest, or a Member with no orders → sell the opportunity, calculator.
+  - b: Member with orders but a potential value below `history_min` → future-focused, calculator.
+  - c: Member whose potential value is below the annual fee → itemized value + progress.
+  - d: Member whose potential value covers the fee → "Your business is ready for Pro".
+  - e: active Pro → actual value received this membership year.
+  - f: Wholesale → recognize the account, no upsell.
+
+  Figures (cents; -1 = not known, so the line is hidden rather than shown as $0)
+  1. `wagner.pro_value` (proposed contract key, see the doc): pricing, Threads Cash and shipping,
+     `kind` potential (Members, trailing 12 months) or actual (Pro, membership year).
+  2. Fallback, the contract keys the homepage already reads: `wagner.savings_ytd`
+     (`pro_would_save` for pricing; for Pro also `threads_cash` and `shipping_saved`).
+  Personal figures need the storefront currency to match the shop currency and the current year.
+  Nothing is annualized or projected here; the calculator (assets/at-pro-value.js) does projections.
+
+  `spend_12m` / `monthly_hint` tally merchandise lines (shipped, not gift cards) on the first 20
+  orders of the last 365 days, skipping cancelled and refunded orders. They only prefill the
+  calculator; they are never shown as savings.
+
+  Output (capture it): `;key=value;` — keys: state tier source sample basis pricing cash ship total
+  net fee recovered_bp has_orders spend_12m monthly_hint balance renew ship_status ship_code
+  {% capture at_pv %}{% render 'at-pro-value' %}{% endcapture %}
+  {% assign at_pv_state = at_pv | split: ';state=' | last | split: ';' | first %}
+{%- enddoc -%}
+{%- capture at_pv_tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
+{%- capture at_pv_config -%}{% render 'at-pro-config' %}{%- endcapture -%}
+{%- liquid
+  assign at_pv_tier = at_pv_tier | strip
+  assign at_pv_fee = at_pv_config | split: ';fee=' | last | split: ';' | first | plus: 0
+  assign at_pv_history_min = at_pv_config | split: ';history_min=' | last | split: ';' | first | plus: 0
+  assign at_pv_currency_ok = at_pv_config | split: ';currency_ok=' | last | split: ';' | first | plus: 0
+  assign at_pv_this_year = 'now' | date: '%Y' | plus: 0
+
+  assign at_pv_state = 'a'
+  assign at_pv_source = 'none'
+  assign at_pv_sample = 0
+  assign at_pv_basis = 'none'
+  assign at_pv_pricing = -1
+  assign at_pv_cash = -1
+  assign at_pv_ship = -1
+  assign at_pv_has_orders = 0
+  assign at_pv_spend = 0
+  assign at_pv_balance = -1
+  assign at_pv_renew = ''
+  assign at_pv_ship_status = 'none'
+  assign at_pv_ship_code = ''
+
+  # ---------- Real customer data ----------
+  if customer
+    assign at_pv_since = 'now' | date: '%s' | minus: 31536000
+    for order in customer.orders limit: 20
+      assign at_pv_has_orders = 1
+      if order.cancelled or order.financial_status == 'refunded'
+        continue
+      endif
+      assign at_pv_created = order.created_at | date: '%s' | plus: 0
+      if at_pv_created < at_pv_since
+        continue
+      endif
+      for line_item in order.line_items
+        if line_item.requires_shipping == false or line_item.gift_card
+          continue
+        endif
+        assign at_pv_spend = at_pv_spend | plus: line_item.final_line_price
+      endfor
+    endfor
+
+    assign at_pv_pv = customer.metafields.wagner.pro_value.value
+    assign at_pv_ytd = customer.metafields.wagner.savings_ytd.value
+    assign at_pv_pv_currency = at_pv_pv.currency | default: shop.currency | upcase
+    assign at_pv_ytd_currency = at_pv_ytd.currency | default: at_pv_ytd.currency_code | default: shop.currency | upcase
+    assign at_pv_ytd_year = at_pv_ytd.year | default: 0 | plus: 0
+
+    assign at_pv_use_pv = false
+    if at_pv_pv != blank and at_pv_currency_ok == 1 and at_pv_pv_currency == shop.currency
+      if at_pv_tier == 'pro' and at_pv_pv.kind == 'actual'
+        assign at_pv_use_pv = true
+      elsif at_pv_tier == 'member' and at_pv_pv.kind == 'potential'
+        assign at_pv_use_pv = true
+      endif
+    endif
+    assign at_pv_use_ytd = false
+    if at_pv_ytd != blank and at_pv_currency_ok == 1 and at_pv_ytd_currency == shop.currency and at_pv_ytd_year == at_pv_this_year
+      assign at_pv_use_ytd = true
+    endif
+
+    if at_pv_use_pv
+      assign at_pv_source = 'pro_value'
+      assign at_pv_basis = at_pv_pv.period.basis | default: 'trailing_12m'
+      if at_pv_pv.pricing_savings != blank
+        assign at_pv_pricing = at_pv_pv.pricing_savings | times: 100 | round
+      endif
+      if at_pv_pv.threads_cash != blank
+        assign at_pv_cash = at_pv_pv.threads_cash | times: 100 | round
+      endif
+      if at_pv_pv.shipping_savings != blank
+        assign at_pv_ship = at_pv_pv.shipping_savings | times: 100 | round
+      endif
+      if at_pv_pv.other_savings != blank and at_pv_pricing >= 0
+        assign at_pv_other = at_pv_pv.other_savings | times: 100 | round
+        assign at_pv_pricing = at_pv_pricing | plus: at_pv_other
+      endif
+    elsif at_pv_use_ytd
+      assign at_pv_source = 'savings_ytd'
+      assign at_pv_basis = 'calendar_ytd'
+      if at_pv_ytd.pro_would_save != blank
+        assign at_pv_pricing = at_pv_ytd.pro_would_save | times: 100 | round
+      endif
+      if at_pv_tier == 'pro'
+        if at_pv_ytd.threads_cash != blank
+          assign at_pv_cash = at_pv_ytd.threads_cash | times: 100 | round
+        endif
+        if at_pv_ytd.shipping_saved != blank
+          assign at_pv_ship = at_pv_ytd.shipping_saved | times: 100 | round
+        endif
+      endif
+    endif
+
+    if at_pv_tier == 'pro'
+      assign at_pv_tc = customer.metafields.wagner.threads_cash.value
+      assign at_pv_tc_currency = at_pv_tc.currency | default: shop.currency | upcase
+      if at_pv_tc.balance != blank and at_pv_currency_ok == 1 and at_pv_tc_currency == shop.currency
+        assign at_pv_balance = at_pv_tc.balance | times: 100 | round
+      endif
+      assign at_pv_renew = customer.metafields.wagner.pro_expires.value | default: ''
+      assign at_pv_sc = customer.metafields.wagner.ship_code.value
+      if at_pv_sc.kind == 'pro_monthly'
+        capture at_pv_sc_ok
+          render 'at-ship-code-valid', ship: at_pv_sc
+        endcapture
+        assign at_pv_sc_ok = at_pv_sc_ok | strip
+        if at_pv_sc_ok == 'true'
+          assign at_pv_ship_status = 'ready'
+          assign at_pv_ship_code = at_pv_sc.code | escape
+        elsif at_pv_sc.status == 'redeemed' or at_pv_sc.status == 'used'
+          assign at_pv_ship_status = 'used'
+        endif
+      endif
+    endif
+  endif
+
+  # ---------- Theme editor fixtures (never shopper data) ----------
+  if request.design_mode and preview != blank and preview != 'off' and preview != 'auto'
+    assign at_pv_sample = 1
+    assign at_pv_source = 'sample'
+    assign at_pv_pricing = -1
+    assign at_pv_cash = -1
+    assign at_pv_ship = -1
+    assign at_pv_balance = -1
+    assign at_pv_renew = ''
+    assign at_pv_ship_status = 'none'
+    assign at_pv_has_orders = 1
+    assign at_pv_spend = 0
+    case preview
+      when 'a'
+        assign at_pv_tier = 'member'
+        assign at_pv_has_orders = 0
+      when 'b'
+        assign at_pv_tier = 'member'
+        assign at_pv_pricing = 434
+        assign at_pv_cash = 51
+        assign at_pv_ship = 0
+        assign at_pv_spend = 3000
+        assign at_pv_basis = 'trailing_12m'
+      when 'c'
+        assign at_pv_tier = 'member'
+        assign at_pv_pricing = 3400
+        assign at_pv_cash = 402
+        assign at_pv_ship = 1500
+        assign at_pv_spend = 23500
+        assign at_pv_basis = 'trailing_12m'
+      when 'd'
+        assign at_pv_tier = 'member'
+        assign at_pv_pricing = 57900
+        assign at_pv_cash = 6800
+        assign at_pv_ship = 9000
+        assign at_pv_spend = 400000
+        assign at_pv_basis = 'trailing_12m'
+      when 'e'
+        assign at_pv_tier = 'pro'
+        assign at_pv_pricing = 41200
+        assign at_pv_cash = 7050
+        assign at_pv_ship = 6000
+        assign at_pv_balance = 4268
+        assign at_pv_renew = 'now' | date: '%s' | plus: 17280000 | date: '%Y-%m-%d'
+        assign at_pv_ship_status = 'ready'
+        assign at_pv_ship_code = 'PRO-SAMPLE'
+        assign at_pv_basis = 'membership_year'
+      when 'f'
+        assign at_pv_tier = 'wholesale'
+    endcase
+  endif
+
+  # ---------- State ----------
+  assign at_pv_total = 0
+  if at_pv_pricing > 0
+    assign at_pv_total = at_pv_total | plus: at_pv_pricing
+  endif
+  if at_pv_cash > 0
+    assign at_pv_total = at_pv_total | plus: at_pv_cash
+  endif
+  if at_pv_ship > 0
+    assign at_pv_total = at_pv_total | plus: at_pv_ship
+  endif
+  assign at_pv_net = at_pv_total | minus: at_pv_fee
+  assign at_pv_recovered = 0
+  if at_pv_fee > 0
+    assign at_pv_recovered = at_pv_total | times: 10000 | divided_by: at_pv_fee
+  endif
+
+  case at_pv_tier
+    when 'wholesale'
+      assign at_pv_state = 'f'
+    when 'pro'
+      assign at_pv_state = 'e'
+    when 'member'
+      if at_pv_has_orders == 0
+        assign at_pv_state = 'a'
+      elsif at_pv_total < at_pv_history_min
+        assign at_pv_state = 'b'
+      elsif at_pv_total < at_pv_fee
+        assign at_pv_state = 'c'
+      else
+        assign at_pv_state = 'd'
+      endif
+    else
+      assign at_pv_state = 'a'
+  endcase
+
+  # Calculator prefill: average month over the last 12 months, rounded down to $10.
+  assign at_pv_monthly = at_pv_spend | divided_by: 12 | divided_by: 1000 | times: 1000
+
+  echo ';state=' | append: at_pv_state
+  echo ';tier=' | append: at_pv_tier
+  echo ';source=' | append: at_pv_source
+  echo ';sample=' | append: at_pv_sample
+  echo ';basis=' | append: at_pv_basis
+  echo ';pricing=' | append: at_pv_pricing
+  echo ';cash=' | append: at_pv_cash
+  echo ';ship=' | append: at_pv_ship
+  echo ';total=' | append: at_pv_total
+  echo ';net=' | append: at_pv_net
+  echo ';fee=' | append: at_pv_fee
+  echo ';recovered_bp=' | append: at_pv_recovered
+  echo ';has_orders=' | append: at_pv_has_orders
+  echo ';spend_12m=' | append: at_pv_spend
+  echo ';monthly_hint=' | append: at_pv_monthly
+  echo ';balance=' | append: at_pv_balance
+  echo ';renew=' | append: at_pv_renew
+  echo ';ship_status=' | append: at_pv_ship_status
+  echo ';ship_code=' | append: at_pv_ship_code
+  echo ';'
+-%}
