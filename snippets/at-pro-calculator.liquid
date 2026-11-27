@@ -1,0 +1,160 @@
+{%- doc -%}
+  Ashley's Pro savings calculator. One markup and one script (assets/at-pro-value.js) for the
+  compact calculator in the Pro PDP value panel and the expanded "Calculate your annual savings"
+  section, so both always compute the same way. Values come from `at-pro-config`.
+
+  @param {string} id - Unique id prefix for the fields.
+  @param {string} [variant] - compact | expanded (default compact).
+  @param {number} monthly - Prefilled monthly Member-price spend, in dollars.
+  @param {number} [restocks] - Prefilled qualifying restocks a month (expanded only; default 1).
+  @param {number} [ship] - Prefilled shipping charge per restock, in dollars (default 12).
+  @param {boolean} [personal] - The prefill came from the customer's own orders.
+  @param {number} [max_monthly] - Slider maximum, in dollars (default 3000).
+{%- enddoc -%}
+{%- capture at_calc_config -%}{% render 'at-pro-config' %}{%- endcapture -%}
+{%- liquid
+  assign at_calc_variant = variant | default: 'compact'
+  assign at_calc_restocks = restocks | default: 1
+  assign at_calc_ship = ship | default: 12
+  assign at_calc_max = max_monthly | default: 3000
+  if monthly > at_calc_max
+    assign at_calc_max = monthly
+  endif
+
+  assign at_calc_fee = at_calc_config | split: ';fee=' | last | split: ';' | first | plus: 0
+  assign at_calc_ratio = at_calc_config | split: ';ratio_bp=' | last | split: ';' | first | times: 1.0 | divided_by: 10000
+  assign at_calc_cash = at_calc_config | split: ';cash_bp=' | last | split: ';' | first | times: 1.0 | divided_by: 10000
+  assign at_calc_member_cash = at_calc_config | split: ';member_cash_bp=' | last | split: ';' | first | times: 1.0 | divided_by: 10000
+  assign at_calc_ship_max = at_calc_config | split: ';ship_max=' | last | split: ';' | first | plus: 0
+  assign at_calc_ship_min = at_calc_config | split: ';ship_min=' | last | split: ';' | first | plus: 0
+  assign at_calc_free_ship = at_calc_config | split: ';free_ship=' | last | split: ';' | first | plus: 0
+
+  assign at_calc_fee_money = at_calc_fee | money_without_trailing_zeros
+  assign at_calc_ship_max_money = at_calc_ship_max | money_without_trailing_zeros
+  assign at_calc_ship_min_money = at_calc_ship_min | money_without_trailing_zeros
+  assign at_calc_cash_pct = at_calc_cash | minus: at_calc_member_cash | times: 100 | round: 1 | append: '' | remove: '.0' | append: '%'
+-%}
+<at-pro-calculator
+  class="at-pro-calc at-pro-calc--{{ at_calc_variant }}"
+  data-currency="{{ shop.currency }}"
+  data-default-restocks="{{ at_calc_restocks }}"
+  data-default-ship="{{ at_calc_ship }}"
+  data-config='{"fee":{{ at_calc_fee }},"ratio":{{ at_calc_ratio }},"cashRate":{{ at_calc_cash }},"memberCashRate":{{ at_calc_member_cash }},"shipMax":{{ at_calc_ship_max }},"shipMin":{{ at_calc_ship_min }},"freeShip":{{ at_calc_free_ship }}}'
+>
+  <div class="at-pro-calc__inputs">
+    <div class="at-pro-calc__field">
+      <label for="{{ id }}-monthly">{{ 'at_pro.calculator.monthly_label' | t }}</label>
+      <div class="at-pro-calc__slider-row">
+        <input
+          type="range"
+          id="{{ id }}-monthly-range"
+          min="0"
+          max="{{ at_calc_max }}"
+          step="25"
+          value="{{ monthly }}"
+          aria-label="{{ 'at_pro.calculator.monthly_label' | t }}"
+          oninput="this.closest('.at-pro-calc__field').querySelector('[data-pro-input]').value=this.value"
+        >
+        <span class="at-pro-calc__money-input">
+          <span aria-hidden="true">{{ cart.currency.symbol | default: '$' }}</span>
+          <input
+            type="number"
+            id="{{ id }}-monthly"
+            inputmode="numeric"
+            min="0"
+            step="25"
+            value="{{ monthly }}"
+            data-pro-input="monthly"
+            oninput="this.closest('.at-pro-calc__field').querySelector('[type=range]').value=this.value"
+          >
+        </span>
+      </div>
+      <p class="at-pro-calc__help">
+        {%- if personal -%}
+          {{ 'at_pro.calculator.monthly_help_personal' | t }}
+        {%- else -%}
+          {{ 'at_pro.calculator.monthly_help' | t }}
+        {%- endif -%}
+      </p>
+    </div>
+
+    {%- if at_calc_variant == 'expanded' -%}
+      <div class="at-pro-calc__field">
+        <label for="{{ id }}-restocks">{{ 'at_pro.calculator.restocks_label' | t }}</label>
+        <select id="{{ id }}-restocks" data-pro-input="restocks">
+          {%- for n in (0..6) -%}
+            <option value="{{ n }}"{% if n == at_calc_restocks %} selected{% endif %}>{{ n }}</option>
+          {%- endfor -%}
+        </select>
+        <p class="at-pro-calc__help">
+          {{ 'at_pro.calculator.restocks_help' | t: min: at_calc_ship_min_money }}
+        </p>
+      </div>
+      <div class="at-pro-calc__field">
+        <label for="{{ id }}-ship">{{ 'at_pro.calculator.ship_label' | t }}</label>
+        <span class="at-pro-calc__money-input">
+          <span aria-hidden="true">{{ cart.currency.symbol | default: '$' }}</span>
+          <input type="number" id="{{ id }}-ship" inputmode="decimal" min="0" step="1" value="{{ at_calc_ship }}" data-pro-input="ship">
+        </span>
+        <p class="at-pro-calc__help">{{ 'at_pro.calculator.ship_help' | t: max: at_calc_ship_max_money }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="at-pro-calc__results" aria-live="polite">
+    <p class="at-pro-calc__headline">
+      <span class="at-pro-calc__headline-label">{{ 'at_pro.calculator.total_label' | t }}</span>
+      <span class="at-pro-figure at-pro-figure--xl" data-pro-out="total"></span>
+    </p>
+    <dl class="at-pro-ledger">
+      <div class="at-pro-ledger__row at-pro-ledger__row--primary">
+        <dt>{{ 'at_pro.value.pricing' | t }}</dt>
+        <dd data-pro-out="pricing"></dd>
+      </div>
+      <div class="at-pro-ledger__row">
+        <dt>{{ 'at_pro.value.cash' | t: rate: at_calc_cash_pct }}</dt>
+        <dd data-pro-out="cash"></dd>
+      </div>
+      <div class="at-pro-ledger__row">
+        <dt>{{ 'at_pro.value.shipping' | t }}</dt>
+        <dd data-pro-out="shipping"></dd>
+      </div>
+      {%- if at_calc_variant == 'expanded' -%}
+        <div class="at-pro-ledger__row at-pro-ledger__row--total">
+          <dt>{{ 'at_pro.value.total' | t }}</dt>
+          <dd data-pro-out="total"></dd>
+        </div>
+      {%- endif -%}
+      <div class="at-pro-ledger__row at-pro-ledger__row--fee">
+        <dt>{{ 'at_pro.value.fee' | t }}</dt>
+        <dd data-pro-out="fee"></dd>
+      </div>
+      <div class="at-pro-ledger__row at-pro-ledger__row--net">
+        <dt>{{ 'at_pro.value.net' | t }}</dt>
+        <dd data-pro-out="net"></dd>
+      </div>
+    </dl>
+    <div class="at-pro-progress" role="presentation">
+      <span class="at-pro-progress__bar"></span>
+    </div>
+    <p class="at-pro-calc__status">
+      <span data-pro-show="net-positive" hidden>
+        {{ 'at_pro.calculator.pays_for_itself' | t }}
+        <span data-pro-show="payback" hidden data-pro-out="payback-text" data-one="{{ 'at_pro.calculator.payback.one' | t | escape }}" data-other="{{ 'at_pro.calculator.payback.other' | t | escape }}"></span>
+      </span>
+      <span data-pro-show="net-negative" hidden>
+        {{ 'at_pro.calculator.breakeven_prefix' | t }} <strong data-pro-out="breakeven"></strong>{{ 'at_pro.calculator.breakeven_suffix' | t: fee: at_calc_fee_money }}
+      </span>
+    </p>
+    {%- if at_calc_variant == 'expanded' -%}
+      <p class="at-pro-calc__help" data-pro-show="ship-ineligible" hidden>
+        {{ 'at_pro.calculator.ship_ineligible' | t: min: at_calc_ship_min_money }}
+      </p>
+    {%- endif -%}
+    {%- if at_calc_variant == 'compact' -%}
+      {%- assign at_calc_ship_money = at_calc_ship | times: 100 | money_without_trailing_zeros -%}
+      <p class="at-pro-calc__help">{{ 'at_pro.calculator.compact_assumption' | t: count: at_calc_restocks, ship: at_calc_ship_money }} <a href="#at-pro-calculator">{{ 'at_pro.calculator.adjust' | t }}</a></p>
+    {%- endif -%}
+    <p class="at-pro-calc__disclaimer">{{ 'at_pro.calculator.disclaimer' | t }}</p>
+  </div>
+</at-pro-calculator>

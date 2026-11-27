@@ -2607,5 +2607,138 @@
         "info": "Fallback when wagner.for_you_deals is empty."
       }
     ]
+  },
+  {
+    "name": "Membership",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Ashley’s Pro identity and program values used by the Pro membership page, the homepage Pro tile and (later) cart and account. Financial math reads only these values and Wagner metafields (snippets/at-pro-config)."
+      },
+      {
+        "type": "product",
+        "id": "at_pro_product",
+        "label": "Pro membership product",
+        "info": "The $79/year membership product. The homepage Pro tile links here."
+      },
+      {
+        "type": "header",
+        "content": "Pro identity"
+      },
+      {
+        "type": "color",
+        "id": "at_pro_identity_color",
+        "label": "Pro identity color",
+        "default": "#6C2639",
+        "info": "Burgundy that marks Ashley’s Pro (emblem, value panel, Pro labels). Buy buttons stay on the primary (forest green) button style."
+      },
+      {
+        "type": "color",
+        "id": "at_pro_identity_ink",
+        "label": "Text on Pro identity color",
+        "default": "#FFF0D7"
+      },
+      {
+        "type": "color",
+        "id": "at_membership_surface",
+        "label": "Membership page background",
+        "default": "#FCF0E5"
+      },
+      {
+        "type": "color",
+        "id": "at_membership_card",
+        "label": "Membership card background",
+        "default": "#FFFAF3"
+      },
+      {
+        "type": "font_picker",
+        "id": "at_editorial_serif_font",
+        "label": "Editorial serif",
+        "default": "fraunces_n4",
+        "info": "Used only for membership editorial headlines. Prices, numbers and controls keep the body font."
+      },
+      {
+        "type": "header",
+        "content": "Pro program values"
+      },
+      {
+        "type": "paragraph",
+        "content": "Pending final financial validation: keep these in step with Wagner. The annual fee comes from the shop metafield wagner.tier_thresholds.pro.fee, then the Pro product price."
+      },
+      {
+        "type": "number",
+        "id": "at_pro_price_per_100",
+        "label": "Pro price of $100 at Member prices (cents)",
+        "default": 8553,
+        "info": "8553 means $100 of merchandise at Member prices costs about $85.53 at Pro prices (target margins Member 35%, Pro 24%). Used by the calculator and labeled price estimates."
+      },
+      {
+        "type": "number",
+        "id": "at_pro_cash_rate",
+        "label": "Pro Threads Cash rate (%)",
+        "default": 2
+      },
+      {
+        "type": "number",
+        "id": "at_member_cash_rate",
+        "label": "Member Threads Cash rate (%)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "at_pro_ship_credit_max",
+        "label": "Monthly shipping credit, maximum ($)",
+        "default": 15
+      },
+      {
+        "type": "number",
+        "id": "at_pro_ship_credit_min_order",
+        "label": "Monthly shipping credit, minimum merchandise order ($)",
+        "default": 100
+      },
+      {
+        "type": "number",
+        "id": "at_free_shipping_threshold",
+        "label": "Free standard shipping threshold ($)",
+        "default": 200
+      },
+      {
+        "type": "number",
+        "id": "at_pro_history_min_value",
+        "label": "Smallest personal estimate to show ($)",
+        "default": 20,
+        "info": "Below this, the Pro page sells the opportunity instead of showing a small historical number."
+      },
+      {
+        "type": "header",
+        "content": "Pro Promise"
+      },
+      {
+        "type": "select",
+        "id": "at_pro_promise_mode",
+        "label": "Pro Promise visibility",
+        "options": [
+          {
+            "value": "off",
+            "label": "Hidden"
+          },
+          {
+            "value": "preview",
+            "label": "Theme editor preview only"
+          },
+          {
+            "value": "live",
+            "label": "Live for shoppers"
+          }
+        ],
+        "default": "preview",
+        "info": "Keep on editor preview until the guarantee terms are final."
+      },
+      {
+        "type": "url",
+        "id": "at_pro_promise_terms_url",
+        "label": "Pro Promise terms page"
+      }
+    ]
   }
 ]
