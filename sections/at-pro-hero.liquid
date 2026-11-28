@@ -1,11 +1,16 @@
 {%- comment -%}
   Ashley's Pro membership PDP, above the fold (docs/pro-membership-pdp.md).
   Left: the burgundy membership card. Prospective Pros (states a–d) all see the same offer, no
-  interaction needed: exclusive Pro pricing first, then Threads Cash and the annual shipping
-  maximum. Members with meaningful history get one personal line; nothing on the page depends on it.
-  Active Pros (e) see their operational benefits; Wholesale (f) sees its account.
-  Right: title and the annual fee, the four benefits, the action (snippets/at-pro-cta) and the
-  compact Pro Promise. Mobile order: title and price → card → benefits and purchase → sticky bar.
+  interaction needed: exclusive Pro pricing first, then Threads Cash and the monthly shipping credit
+  side by side, and "plus everything in your free membership". Eligibility details live further
+  down the page (rewards section, FAQ). Members with meaningful history get one personal line;
+  nothing on the page depends on it. Active Pros (e) see their operational benefits; Wholesale (f)
+  sees its account.
+  Right: title and the annual fee, the action (snippets/at-pro-cta), the billing note and the
+  compact Pro Promise. The card already names every benefit, so there is no second benefits list.
+  Mobile order: title and price (one row) → card → button → billing note → Promise chip, sized so
+  the button is inside the first screen at 390×844 and 375×667 (docs: mobile above the fold).
+  The sticky bar takes over once the button scrolls away.
 
   Personal line (states b–d), most specific first, and only where the data supports it:
   1. "You could have saved an additional $X with Pro pricing on your orders [period]": Wagner's
@@ -52,7 +57,6 @@
   assign cash_pct = c_cash_bp | minus: c_member_cash_bp | times: 1.0 | divided_by: 100 | round: 1 | append: '' | remove: '.0' | append: '%'
   assign ship_max_money = c_ship_max | money_without_trailing_zeros
   assign ship_min_money = c_ship_min | money_without_trailing_zeros
-  assign ship_year_money = c_ship_max | times: 12 | money_without_trailing_zeros
   assign fee_money = v_fee | money_without_trailing_zeros
 
   # Whole dollars.
@@ -138,9 +142,11 @@
       {%- endif -%}
       <div class="at-pro-panel__brand">
         {% render 'at-pro-emblem', size: 'lg', inverse: true %}
-        <p class="at-pro-kicker at-pro-kicker--inverse">{{ 'at_pro.kicker' | t }}</p>
+        <div class="at-pro-panel__brand-text">
+          <p class="at-pro-kicker at-pro-kicker--inverse">{{ 'at_pro.kicker' | t }}</p>
+          <h2 class="at-pro-panel__headline at-pro-serif">{{ headline | escape }}</h2>
+        </div>
       </div>
-      <h2 class="at-pro-panel__headline at-pro-serif">{{ headline | escape }}</h2>
 
       {%- case state -%}
         {%- when 'e' -%}
@@ -219,14 +225,15 @@
             </p>
             <ul class="at-pro-offer__stats" role="list">
               <li class="at-pro-offer__stat">
-                <span class="at-pro-offer__figure"><span class="at-pro-figure at-pro-offer__number">{{ cash_pct }}</span> <span class="at-pro-offer__unit">{{ 'at_pro.offer.cash_unit' | t }}</span></span>
-                <span class="at-pro-offer__note">{{ 'at_pro.offer.cash_note' | t }}</span>
+                <span class="at-pro-figure at-pro-offer__number">{{ cash_pct }}</span>
+                <span class="at-pro-offer__unit">{{ 'at_pro.offer.cash_unit' | t }}</span>
               </li>
               <li class="at-pro-offer__stat">
-                <span class="at-pro-offer__figure"><span class="at-pro-offer__unit at-pro-offer__unit--pre">{{ 'at_pro.offer.up_to' | t }}</span> <span class="at-pro-figure at-pro-offer__number">{{ ship_year_money }}</span> <span class="at-pro-offer__unit">{{ 'at_pro.offer.ship_unit' | t }}</span></span>
-                <span class="at-pro-offer__note">{{ 'at_pro.offer.ship_note' | t: max: ship_max_money }}</span>
+                <span class="at-pro-offer__number-row"><span class="at-pro-offer__pre">{{ 'at_pro.offer.up_to' | t }}</span> <span class="at-pro-figure at-pro-offer__number">{{ ship_max_money }}</span></span>
+                <span class="at-pro-offer__unit">{{ 'at_pro.offer.ship_unit_monthly' | t }}</span>
               </li>
             </ul>
+            <p class="at-pro-offer__plus">{{ 'at_pro.offer.plus_member' | t }}</p>
           </div>
           {%- if personal_text != blank -%}
             <p class="at-pro-panel__personal">{{ personal_text }}</p>
@@ -243,38 +250,6 @@
         <p class="at-pro-hero__value-prop">{{ 'at_pro.wholesale.description' | t }}</p>
       {%- endif -%}
 
-      {%- unless state == 'e' or state == 'f' -%}
-        <ul class="at-pro-benefits-list" role="list">
-          <li class="at-pro-benefits-list__item at-pro-benefits-list__item--primary">
-            <span class="at-pro-benefits-list__icon svg-wrapper" aria-hidden="true">{{ 'icon-discount.svg' | inline_asset_content }}</span>
-            <span class="at-pro-benefits-list__text">
-              <strong>{{ 'at_pro.benefits.pricing_title' | t }}</strong>
-              <span>{{ 'at_pro.benefits.pricing_detail' | t }}</span>
-            </span>
-          </li>
-          <li class="at-pro-benefits-list__item">
-            <span class="at-pro-benefits-list__icon svg-wrapper" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="6.25" stroke="currentColor" stroke-width="var(--icon-stroke-width)"/><path d="M11.75 8.1c-.3-.55-.95-.85-1.75-.85-.97 0-1.75.5-1.75 1.25 0 1.75 3.5 1 3.5 2.75 0 .75-.78 1.25-1.75 1.25-.8 0-1.45-.3-1.75-.85M10 6.25v1M10 12.75v1" stroke="currentColor" stroke-width="var(--icon-stroke-width)" stroke-linecap="round"/></svg></span>
-            <span class="at-pro-benefits-list__text">
-              <strong>{{ 'at_pro.benefits.cash_title' | t: rate: cash_pct }}</strong>
-              <span>{{ 'at_pro.benefits.cash_detail' | t }}</span>
-            </span>
-          </li>
-          <li class="at-pro-benefits-list__item">
-            <span class="at-pro-benefits-list__icon svg-wrapper" aria-hidden="true">{{ 'icon-orders.svg' | inline_asset_content }}</span>
-            <span class="at-pro-benefits-list__text">
-              <strong>{{ 'at_pro.benefits.shipping_title' | t: max: ship_max_money }}</strong>
-              <span>{{ 'at_pro.benefits.shipping_detail' | t: min: ship_min_money }}</span>
-            </span>
-          </li>
-          <li class="at-pro-benefits-list__item">
-            <span class="at-pro-benefits-list__icon svg-wrapper" aria-hidden="true">{{ 'icon-checkmark.svg' | inline_asset_content }}</span>
-            <span class="at-pro-benefits-list__text">
-              <strong>{{ 'at_pro.benefits.member_title' | t }}</strong>
-              <span>{{ 'at_pro.benefits.member_detail' | t }}</span>
-            </span>
-          </li>
-        </ul>
-      {%- endunless -%}
 
       <div class="at-pro-hero__actions">
         {% render 'at-pro-cta', product: pro_product, state: state, label: section.settings.cta_label, with_price: true, id: 'AtProPrimaryCta', form_id: 'AtProHeroForm' %}
@@ -303,7 +278,7 @@
   </div>
 
   {%- if section.settings.sticky_bar and state != 'e' and state != 'f' -%}
-    <at-pro-sticky-bar class="at-pro-sticky" data-target="AtProPrimaryCta">
+    <at-pro-sticky-bar class="at-pro-sticky" data-target="AtProPrimaryCta" data-guard=".at-pro-hero__purchase">
       <span class="at-pro-sticky__price">
         <span class="at-pro-figure">{{ fee_money }}</span>{{ 'at_pro.price.per_year_suffix' | t }}
       </span>

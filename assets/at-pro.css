@@ -120,26 +120,6 @@
 .at-pro-hero__fine { font-size: 0.8125rem; color: var(--at-pro-muted); }
 .at-pro-cta-form { display: contents; }
 
-/* Benefits list: pricing leads. */
-.at-pro-benefits-list { display: grid; gap: 16px; padding: 0; list-style: none; }
-.at-pro-benefits-list__item { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 14px; align-items: start; }
-.at-pro-benefits-list__icon {
-  --icon-stroke-width: 1.5px;
-  display: grid;
-  place-items: center;
-  inline-size: 36px;
-  block-size: 36px;
-  border-radius: 50%;
-  background: rgb(var(--at-pro-identity-rgb) / 0.08);
-  color: var(--at-pro-identity);
-}
-.at-pro-benefits-list__icon svg { inline-size: 20px; block-size: 20px; }
-.at-pro-benefits-list__text { display: grid; gap: 2px; padding-block-start: 6px; }
-.at-pro-benefits-list__text strong { font-size: 1rem; line-height: 1.3; }
-.at-pro-benefits-list__text > span { font-size: 0.875rem; color: var(--at-pro-muted); }
-.at-pro-benefits-list__item--primary .at-pro-benefits-list__icon { background: var(--at-pro-identity); color: var(--at-pro-identity-ink); }
-.at-pro-benefits-list__item--primary strong { font-size: 1.1875rem; color: var(--at-pro-identity); }
-
 /* ---------- Membership card (Pro identity) ---------- */
 .at-pro-panel {
   grid-area: value;
@@ -173,8 +153,9 @@
   font-weight: 600;
   background: rgb(255 255 255 / 0.16);
 }
-.at-pro-panel__brand { display: flex; gap: 16px; align-items: center; }
-.at-pro-panel__headline { font-size: clamp(2.5rem, 4.6vw, 4rem); max-inline-size: 12ch; text-wrap: balance; }
+.at-pro-panel__brand { display: flex; gap: clamp(14px, 1.6vw, 20px); align-items: center; }
+.at-pro-panel__brand-text { display: grid; gap: 4px; min-inline-size: 0; }
+.at-pro-panel__headline { font-size: clamp(2.25rem, 4.2vw, 3.75rem); max-inline-size: 12ch; text-wrap: balance; }
 .at-pro-panel__lead { font-size: 1.0625rem; max-inline-size: 46ch; color: var(--at-pro-on-identity-muted); }
 .at-pro-panel__note { font-size: 0.875rem; color: var(--at-pro-on-identity-muted); max-inline-size: 58ch; }
 .at-pro-panel__wholesale { justify-self: start; }
@@ -187,30 +168,25 @@
   max-inline-size: 44ch;
 }
 
-/* The offer: exclusive pricing leads, then two figures. */
-.at-pro-offer { display: grid; gap: 22px; }
+/* The offer: exclusive pricing leads, then two figures side by side (no enclosed boxes), then the
+   free-membership line. Eligibility details are further down the page. */
+.at-pro-offer { display: grid; gap: 18px; }
 .at-pro-offer__primary {
   display: grid;
   gap: 6px;
-  padding-block-start: 20px;
+  padding-block-start: 18px;
   border-block-start: 1px solid rgb(255 240 215 / 0.22);
 }
 .at-pro-offer__title { font-size: clamp(1.75rem, 2.8vw, 2.375rem); }
 .at-pro-offer__detail { font-size: 1.0625rem; color: var(--at-pro-on-identity-muted); max-inline-size: 42ch; }
-.at-pro-offer__stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0; list-style: none; }
-.at-pro-offer__stat {
-  display: grid;
-  gap: 8px;
-  align-content: start;
-  padding: 18px 20px;
-  border-radius: calc(var(--at-pro-radius) - 4px);
-  background: rgb(255 255 255 / 0.08);
-}
-.at-pro-offer__figure { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 6px; row-gap: 2px; }
-.at-pro-offer__number { font-size: clamp(2.75rem, 4.4vw, 3.75rem); letter-spacing: -0.04em; }
-.at-pro-offer__unit { flex-basis: 100%; font-size: 1rem; font-weight: 600; }
-.at-pro-offer__unit--pre { flex-basis: auto; font-size: 1.125rem; }
-.at-pro-offer__note { font-size: 0.875rem; color: var(--at-pro-on-identity-muted); }
+.at-pro-offer__stats { display: grid; grid-template-columns: 1fr 1fr; padding: 0; list-style: none; }
+.at-pro-offer__stat { display: grid; gap: 4px; align-content: start; padding-inline-end: 16px; }
+.at-pro-offer__stat + .at-pro-offer__stat { padding-inline: 16px 0; border-inline-start: 1px solid rgb(255 240 215 / 0.22); }
+.at-pro-offer__number-row { display: flex; align-items: baseline; gap: 6px; }
+.at-pro-offer__number { font-size: clamp(2.5rem, 4vw, 3.5rem); line-height: 1; letter-spacing: -0.04em; }
+.at-pro-offer__pre { font-size: 1rem; font-weight: 600; }
+.at-pro-offer__unit { font-size: 1rem; font-weight: 600; line-height: 1.3; }
+.at-pro-offer__plus { font-size: 0.9375rem; color: var(--at-pro-on-identity-muted); }
 
 /* State E: qualifying value, progress, facts. */
 .at-pro-figure-block { display: grid; gap: 8px; justify-items: start; }
@@ -321,14 +297,16 @@
 @media screen and (min-width: 990px) { .at-pro-sticky { display: none; } }
 @media (prefers-reduced-motion: reduce) { .at-pro-sticky { transition: none; } }
 
-/* Shopify Inbox chat: while the sticky bar shows, lift only the chat launcher above it through the
-   widget's exposed `activator` part (the chat window itself is untouched, and the chat stays
-   available). The launcher sits 20px from the bottom, so it moves up by the bar height less 12px. */
+/* Shopify Inbox chat, through the widget's exposed `activator` part (the chat window itself is
+   untouched). While the sticky bar shows, the launcher moves up above it (it sits 20px from the
+   bottom, so it moves by the bar height less 12px; the bar height includes the safe area). On the
+   first screen, while it would cover the purchase block, it is hidden (assets/at-pro-sticky.js). */
 @media screen and (max-width: 989px) {
-  shopify-chat::part(activator) { transition: transform 0.2s ease; }
+  shopify-chat::part(activator) { transition: transform 0.2s ease, opacity 0.2s ease, visibility 0.2s; }
   html[data-at-pro-sticky] shopify-chat::part(activator) {
     transform: translateY(calc(-1 * (var(--at-pro-sticky-height, 68px) - 12px)));
   }
+  html[data-at-pro-chat-covering] shopify-chat::part(activator) { opacity: 0; visibility: hidden; pointer-events: none; }
 }
 
 /* ---------- Below-the-fold rhythm ----------
@@ -340,60 +318,69 @@
 .at-pro-section__intro { font-size: 1.0625rem; color: var(--at-pro-muted); }
 .at-pro-section__footnote { margin-block-start: 14px; font-size: 0.8125rem; color: var(--at-pro-muted); max-inline-size: 90ch; }
 
-/* Section: price comparison cards (product-card language: image, then title and price). */
+/* Section: price comparison cards. Compact and horizontal: a small product image, then the saving
+   as the dominant figure, the two actual prices, and the representative order saving. */
 .at-pro-price-cards {
   display: grid;
-  gap: var(--at-pro-gap);
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
-  max-inline-size: calc(var(--at-pro-cards, 4) * 340px);
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+  max-inline-size: calc(var(--at-pro-cards, 4) * 560px);
   padding: 0;
   list-style: none;
 }
+.at-pro-price-cards[hidden] { display: none; }
 .at-pro-price-card {
   display: grid;
-  grid-template-rows: auto 1fr;
-  overflow: hidden;
+  grid-template-columns: clamp(80px, 9vw, 112px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  padding: 14px;
   border-radius: var(--at-pro-radius);
   background: var(--at-membership-card);
   box-shadow: 0 0 0 1px var(--at-pro-line);
 }
-.at-pro-price-card__media { display: block; aspect-ratio: 1; background: #fff; }
+.at-pro-price-card__media { display: block; aspect-ratio: 1; overflow: hidden; border-radius: 8px; background: #fff; }
 .at-pro-price-card__media img { display: block; inline-size: 100%; block-size: 100%; object-fit: contain; }
-.at-pro-price-card__body { display: grid; gap: 8px; align-content: start; padding: 16px 18px 18px; }
+.at-pro-price-card__body { display: grid; gap: 6px; align-content: start; min-inline-size: 0; }
 .at-pro-price-card__source { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--at-pro-muted); }
-.at-pro-price-card__title { display: grid; gap: 2px; font-family: var(--font-body--family); font-size: 1rem; font-weight: 600; line-height: 1.3; }
+.at-pro-price-card__title { display: grid; gap: 1px; font-family: var(--font-body--family); font-size: 0.9375rem; font-weight: 600; line-height: 1.3; }
 .at-pro-price-card__title a { color: inherit; text-decoration: none; }
-.at-pro-price-card__title a:hover { text-decoration: underline; }
-.at-pro-price-card__vendor { font-size: 0.8125rem; font-weight: 500; color: var(--at-pro-muted); }
+.at-pro-price-card__title a[href]:hover { text-decoration: underline; }
+.at-pro-price-card__vendor { font-size: 0.75rem; font-weight: 600; color: var(--at-pro-muted); }
 .at-pro-price-card__variant { font-size: 0.8125rem; color: var(--at-pro-muted); }
-.at-pro-price-card__prices {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-block-start: 4px;
-  font-variant-numeric: tabular-nums;
+.at-pro-price-card__save { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; row-gap: 2px; margin-block-start: 2px; color: var(--at-pro-identity); }
+.at-pro-price-card__save-amount { font-size: clamp(1.75rem, 2.4vw, 2.125rem); line-height: 1; letter-spacing: -0.03em; }
+.at-pro-price-card__save-unit { font-size: 0.875rem; font-weight: 600; }
+.at-pro-price-card__percent {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--at-pro-identity);
+  color: var(--at-pro-identity-ink);
+  font-size: 0.75rem;
+  font-weight: 700;
 }
-.at-pro-price-card__prices > div { display: grid; gap: 2px; padding: 10px 12px; border-radius: 8px; }
-.at-pro-price-card__prices dt { font-size: 0.75rem; font-weight: 600; }
-.at-pro-price-card__member { box-shadow: inset 0 0 0 1px var(--at-pro-line); color: var(--at-pro-muted); }
-.at-pro-price-card__member dd { font-size: 1.125rem; font-weight: 600; }
-.at-pro-price-card__pro { background: var(--at-pro-identity); color: var(--at-pro-identity-ink); }
-.at-pro-price-card__pro dd { font-size: 1.375rem; font-weight: 700; letter-spacing: -0.02em; }
-.at-pro-price-card__save { font-size: 0.9375rem; font-weight: 700; color: var(--at-pro-identity); }
-.at-pro-price-card__qty { font-size: 0.8125rem; color: var(--at-pro-muted); }
+.at-pro-price-card__prices { display: flex; flex-wrap: wrap; gap: 4px 16px; font-variant-numeric: tabular-nums; }
+.at-pro-price-card__prices > div { display: flex; gap: 6px; align-items: baseline; }
+.at-pro-price-card__prices dt { font-size: 0.75rem; font-weight: 600; color: var(--at-pro-muted); }
+.at-pro-price-card__member dd { font-size: 0.9375rem; color: var(--at-pro-muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+.at-pro-price-card__pro dd { font-size: 1.0625rem; font-weight: 700; color: var(--at-pro-green); }
+.at-pro-price-card__qty { padding-block-start: 6px; border-block-start: 1px solid var(--at-pro-line); font-size: 0.8125rem; color: var(--at-pro-muted); }
 .at-pro-price-card__qty strong { color: var(--at-pro-ink); font-variant-numeric: tabular-nums; }
-.at-pro-price-card__qty span { display: block; }
 
-/* No prices to show (guests, or no eligible styles): one prompt. */
+.at-pro-compare__status { color: var(--at-pro-muted); }
+.at-pro-compare__fallback { max-inline-size: 64ch; font-size: 1.0625rem; color: var(--at-pro-muted); }
+.at-pro-compare__fallback[hidden], .at-pro-compare__live [hidden] { display: none; }
+
+/* Guests: a short explanation and one sign-in prompt, no products or prices. */
 .at-pro-compare__guest {
   display: flex;
   flex-wrap: wrap;
   gap: 14px 24px;
   align-items: center;
+  max-inline-size: 960px;
   font-size: 1.0625rem;
 }
-.at-pro-price-cards + .at-pro-compare__guest { margin-block-start: 18px; }
-.at-pro-price-cards--guest .at-pro-price-card__body { padding-block: 14px 16px; }
+.at-pro-compare__guest p { flex: 1 1 36ch; color: var(--at-pro-muted); }
 
 /* Section: the Promise (stitched, reassuring, one simple example). */
 .at-pro-promise__card {
@@ -537,50 +524,68 @@
 .at-pro-final__body { color: var(--at-pro-muted); max-inline-size: 48ch; font-size: 1.0625rem; }
 .at-pro-final__card .at-pro-cta { margin-block-start: 6px; min-block-size: 52px; padding-inline: 32px; }
 
-/* ---------- Mobile ---------- */
+/* ---------- Mobile ----------
+   Above the fold (docs: mobile above the fold): title and price share one row, the card is compact,
+   and the purchase button follows it directly, so title, price, benefits and button fit the first
+   screen at 390×844 and 375×667 without shrinking text below 13px. */
 @media screen and (max-width: 749px) {
-  .at-pro-hero__grid { gap: 16px; }
-  .at-pro-hero__identity { padding-block-end: 14px; }
-  .at-pro-hero__price-amount { font-size: 3rem; }
-  .at-pro-panel { gap: 16px; padding: 26px 22px; }
-  .at-pro-panel__headline { font-size: 2.375rem; }
-  .at-pro-panel__brand .at-pro-emblem--lg { --emblem-size: 56px; }
-  .at-pro-offer { gap: 16px; }
-  .at-pro-offer__primary { padding-block-start: 16px; }
-  .at-pro-offer__stats { gap: 8px; }
-  .at-pro-offer__stat { gap: 6px; padding: 14px 12px; }
-  .at-pro-offer__number { font-size: 2.25rem; }
-  .at-pro-offer__unit { font-size: 0.875rem; line-height: 1.25; }
-  .at-pro-offer__unit--pre { font-size: 0.9375rem; }
-  .at-pro-offer__note { font-size: 0.8125rem; }
-  .at-pro-offer__detail { font-size: 1rem; }
-  .at-pro-figure--hero { font-size: 3.5rem; }
+  .at-pro-hero { padding-block-start: 12px; }
+  .at-pro-hero__grid { gap: 14px; }
+  .at-pro-hero__identity {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    column-gap: 12px;
+    padding-block-end: 12px;
+  }
+  .at-pro-hero__title { font-size: 1.25rem; }
+  .at-pro-hero__price-amount { font-size: 2.25rem; }
+  .at-pro-hero__price-unit { font-size: 1rem; }
+  .at-pro-hero__purchase { gap: 14px; }
+  .at-pro-hero__actions { gap: 8px; }
+
+  .at-pro-panel { gap: 14px; padding: 20px 20px 22px; }
+  .at-pro-panel::after { inset: 6px; }
+  .at-pro-panel__brand { gap: 12px; }
+  .at-pro-panel__brand .at-pro-emblem--lg { --emblem-size: 48px; }
+  .at-pro-panel__headline { font-size: 1.875rem; }
+  .at-pro-offer { gap: 14px; }
+  .at-pro-offer__primary { gap: 4px; padding-block-start: 14px; }
+  .at-pro-offer__title { font-size: 1.5rem; }
+  .at-pro-offer__detail { font-size: 0.9375rem; }
+  .at-pro-offer__stat { padding-inline-end: 12px; }
+  .at-pro-offer__stat + .at-pro-offer__stat { padding-inline: 12px 0; }
+  .at-pro-offer__number { font-size: 2.125rem; }
+  .at-pro-offer__pre { font-size: 0.875rem; }
+  .at-pro-offer__unit { font-size: 0.875rem; }
+  .at-pro-offer__plus { font-size: 0.8125rem; }
+  .at-pro-figure--hero { font-size: 3.25rem; }
   .at-pro-figure-block__label,
   .at-pro-conclusion,
-  .at-pro-panel__personal { font-size: 1rem; }
-  .at-pro-benefits-list { gap: 14px; }
+  .at-pro-panel__personal { font-size: 0.9375rem; }
+  .at-pro-panel__personal { padding-block-start: 12px; }
 
-  /* Price cards: a swipeable row of readable cards. */
-  .at-pro-price-cards {
-    grid-auto-flow: column;
-    grid-auto-columns: 78%;
-    grid-template-columns: none;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    margin-inline: calc(-1 * var(--page-margin, 16px));
-    padding-inline: var(--page-margin, 16px);
-    padding-block-end: 6px;
-    scroll-padding-inline: var(--page-margin, 16px);
-  }
-  .at-pro-price-cards--guest { grid-auto-columns: 58%; }
-  .at-pro-price-card { scroll-snap-align: start; }
+  .at-pro-price-card { grid-template-columns: 76px minmax(0, 1fr); gap: 12px; padding: 12px; }
+  .at-pro-price-card__save-amount { font-size: 1.75rem; }
 
   .at-pro-promise__table-refund :is(th, td) { padding: 10px 12px; font-size: 1rem; }
   .at-pro-table :is(th, td) { padding: 12px 10px; }
   .at-pro-versus__table thead th:first-child { inline-size: 40%; }
 }
 
-/* Leave room for the sticky bar on small screens. */
+/* Short phones (375×667 and similar): trim a little more so the button stays in view. */
+@media screen and (max-width: 749px) and (max-height: 700px) {
+  .at-pro-hero { padding-block-start: 8px; }
+  .at-pro-hero__grid { gap: 10px; }
+  .at-pro-hero__identity { padding-block-end: 10px; }
+  .at-pro-panel { gap: 12px; padding: 16px 18px 18px; }
+  .at-pro-panel__headline { font-size: 1.625rem; }
+  .at-pro-offer { gap: 12px; }
+  .at-pro-offer__primary { padding-block-start: 12px; }
+  .at-pro-offer__title { font-size: 1.375rem; }
+  .at-pro-offer__number { font-size: 1.875rem; }
+}
+
+/* Leave room for the sticky bar (and the home indicator) on small screens. */
 @media screen and (max-width: 989px) {
-  main:has(.at-pro-sticky) { padding-block-end: 80px; }
+  main:has(.at-pro-sticky) { padding-block-end: calc(80px + env(safe-area-inset-bottom)); }
 }

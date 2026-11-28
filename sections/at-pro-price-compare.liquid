@@ -1,306 +1,112 @@
 {%- comment -%}
   Pro PDP section 2: "Better prices on the blanks you build your business with"
-  (docs/pro-membership-pdp.md). A major selling section: three or four real styles.
+  (docs/pro-membership-pdp.md, "Price comparison").
 
-  Which styles, in priority order (signed-in Members and Pros, up to `max_products`):
-  1. Styles from their own orders (first 20 orders), most often bought first.
-  2. Their favorites (customer `wagner.favorite_products`).
-  3. The curated seller staples in this section's settings.
-  A first pass takes one style per product type (tees, fleece, headwear…) so the row shows variety;
-  a second pass fills any remaining places in the same priority order.
-  Recently viewed styles are not used: that list only exists in the browser, and prices must be
-  rendered on the server for the signed-in customer (no restricted prices in client-side markup).
-
-  Prices. The storefront knows only the shopper's own tier price (B2B catalogs).
-  - Actual: the variant's `wagner.pro_price` (for Members) or `wagner.member_price` (for Pros), a
-    proposed optional decimal in shop currency. Used as is, not labeled an estimate.
-  - Otherwise a labeled estimate at Theme settings › Membership › Pro price of $100 (owner decision,
-    November 2026): Member → Pro = price × ratio; Pro → Member = price ÷ ratio.
-  - Best price wins: a style is left out when Pro would not add a discount: the actual prices are
-    equal, or (estimates only) it is in the Member Deals collection (Theme settings), whose
-    strategically low prices may be the same for every tier. Compare-at prices are not used: this
-    store sets them on most products as a retail reference, not as a sale signal.
-  - Quantity savings use the variant's quantity price break at the representative quantity when the
-    catalog has one, and otherwise say "before quantity discounts".
-  - Guest: the staples' images and names with one sign-in prompt, never a price (MAP rule,
-    membership contract §5). Wholesale: hidden.
+  Actual catalog prices only. The theme never calculates or estimates a tier price:
+  - Signed-in Members and Pros: <at-pro-price-compare> asks Wagner's signed app proxy route
+    GET /apps/wagner/pro-compare for up to `max_products` variants where the customer's actual
+    Member and Pro prices differ by at least `min_savings` percent. Wagner picks them (their
+    purchases, then favorites, then recently viewed, then the curated collection), from the tier
+    prices it publishes to the Shopify Member and Pro catalogs, and returns the figures to that
+    customer only. The page HTML holds no tier prices, and nothing renders for search engines.
+  - The route is a proposed Wagner integration (not live yet). Until it answers, or when it finds
+    nothing worth showing, the section shows a non-numeric explanation instead of cards.
+  - Guests: the same non-numeric explanation with a sign-in prompt, no products and no prices.
+  - Wholesale: hidden.
+  - Theme editor: a layout preview with sample figures (labeled, never rendered for shoppers).
 {%- endcomment -%}
 {%- capture tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
-{%- capture pc -%}{% render 'at-pro-config' %}{%- endcapture -%}
 {%- liquid
   assign tier = tier | strip
-  assign ratio_bp = pc | split: ';ratio_bp=' | last | split: ';' | first | plus: 0
-  assign ratio = ratio_bp | times: 1.0 | divided_by: 10000
-  assign qty = section.settings.quantity
-  assign max_products = section.settings.max_products
-  assign pro_handle = settings.at_pro_product.handle | default: 'ashleys-threads-pro-membership'
-  assign deals_handle = settings.at_member_deals_collection.handle
   assign priced = false
-  if tier == 'member' or tier == 'pro'
+  if customer
+    if tier == 'member' or tier == 'pro'
+      assign priced = true
+    endif
+  endif
+  assign preview_cards = false
+  if request.design_mode and section.settings.editor_preview
+    assign preview_cards = true
     assign priced = true
   endif
-
-  # Candidates in priority order: "handle:source,".
-  assign candidates = ''
-  if priced and customer
-    # 1. Their orders, most often bought first. Each line is stored as "|handle|", so
-    #    occurrences never overlap when counted.
-    assign bought = ''
-    assign bought_unique = ','
-    for order in customer.orders limit: 20
-      if order.cancelled
-        continue
-      endif
-      for line_item in order.line_items
-        if line_item.product == blank or line_item.gift_card or line_item.requires_shipping == false
-          continue
-        endif
-        assign h = line_item.product.handle
-        if h == pro_handle
-          continue
-        endif
-        assign bought = bought | append: '|' | append: h | append: '|'
-        assign needle = ',' | append: h | append: ','
-        unless bought_unique contains needle
-          assign bought_unique = bought_unique | append: h | append: ','
-        endunless
-      endfor
-    endfor
-
-    assign ranked = ''
-    assign uniq = bought_unique | split: ','
-    for h in uniq
-      if h == blank
-        continue
-      endif
-      assign needle = '|' | append: h | append: '|'
-      assign without = bought | remove: needle
-      assign times_bought = bought.size | minus: without.size | divided_by: needle.size | at_most: 999
-      assign rank = 1000 | minus: times_bought
-      assign ranked = ranked | append: rank | append: ':' | append: times_bought | append: ':' | append: h | append: ','
-    endfor
-    assign ranked = ranked | split: ',' | sort
-    for entry in ranked
-      assign parts = entry | split: ':'
-      assign times_bought = parts[1] | plus: 0
-      if times_bought > 1
-        assign candidates = candidates | append: parts[2] | append: ':often,'
-      else
-        assign candidates = candidates | append: parts[2] | append: ':ordered,'
-      endif
-    endfor
-
-    # 2. Favorites.
-    assign favorites = customer.metafields.wagner.favorite_products.value
-    if favorites != blank
-      for p in favorites
-        if p != blank
-          assign candidates = candidates | append: p.handle | append: ':favorite,'
-        endif
-      endfor
-    endif
-  endif
-  # 3. Curated seller staples (also the guest row).
-  for p in section.settings.products
-    if p != blank
-      assign candidates = candidates | append: p.handle | append: ':staple,'
-    endif
-  endfor
-  assign candidates = candidates | split: ','
-
-  # Pick: pass 1 one per product type, pass 2 fills. "handle:source," so none is shown twice.
-  assign picked = ','
-  assign picked_types = ','
-  assign picked_count = 0
-  for pass in (1..2)
-    for candidate in candidates
-      if picked_count >= max_products
-        break
-      endif
-      assign parts = candidate | split: ':'
-      assign h = parts[0]
-      assign p = all_products[h]
-      if p == blank or p.available == false or h == pro_handle or p.gift_card?
-        continue
-      endif
-      assign needle = ',' | append: h | append: ':'
-      if picked contains needle
-        continue
-      endif
-      assign type_needle = ',' | append: p.type | append: ','
-      if pass == 1 and p.type != blank and picked_types contains type_needle
-        continue
-      endif
-      if priced
-        assign v = p.selected_or_first_available_variant
-        if v.price <= 0
-          continue
-        endif
-        if tier == 'member'
-          assign other = v.metafields.wagner.pro_price.value
-        else
-          assign other = v.metafields.wagner.member_price.value
-        endif
-        if other != blank
-          assign other_cents = other | times: 100 | round
-          if tier == 'member' and other_cents >= v.price
-            continue
-          elsif tier == 'pro' and other_cents <= v.price
-            continue
-          endif
-        elsif deals_handle != blank
-          assign p_collections = p.collections | map: 'handle'
-          if p_collections contains deals_handle
-            continue
-          endif
-        endif
-      endif
-      assign picked = picked | append: h | append: ':' | append: parts[1] | append: ','
-      assign picked_types = picked_types | append: p.type | append: ','
-      assign picked_count = picked_count | plus: 1
-    endfor
-  endfor
-
-  assign picks = picked | split: ','
-  assign any_estimate = false
+  assign return_to = request.path | url_encode
+  assign login_url = routes.account_login_url | append: '?return_url=' | append: return_to
 -%}
 {%- unless tier == 'wholesale' -%}
 {{ 'at-pro.css' | asset_url | stylesheet_tag }}
 <div class="section section--page-width at-pro-page at-pro-section at-pro-compare" id="at-pro-price-compare">
   <div class="at-pro-section__head">
     <h2 class="at-pro-serif at-pro-section__heading">{{ section.settings.heading | escape }}</h2>
-    {%- if section.settings.intro != blank -%}<p class="at-pro-section__intro">{{ section.settings.intro | escape }}</p>{%- endif -%}
+    {%- if section.settings.intro != blank and priced -%}<p class="at-pro-section__intro">{{ section.settings.intro | escape }}</p>{%- endif -%}
   </div>
 
-  {%- if picked_count > 0 -%}
-    <ul class="at-pro-price-cards{% unless priced %} at-pro-price-cards--guest{% endunless %}" role="list" style="--at-pro-cards: {{ picked_count }}">
-      {%- for pick in picks -%}
-        {%- if pick == blank -%}{%- continue -%}{%- endif -%}
-        {%- liquid
-          assign parts = pick | split: ':'
-          assign item = all_products[parts[0]]
-          assign pick_source = parts[1]
-          assign variant = item.selected_or_first_available_variant
-          assign image = variant.featured_media.preview_image | default: item.featured_media.preview_image | default: item.featured_image
+  {%- if priced -%}
+    <script src="{{ 'at-pro-compare.js' | asset_url }}" type="module"></script>
+    <at-pro-price-compare
+      class="at-pro-compare__live"
+      data-endpoint="/apps/wagner/pro-compare"
+      data-limit="{{ section.settings.max_products }}"
+      data-quantity="{{ section.settings.quantity }}"
+      data-min-savings="{{ section.settings.min_savings }}"
+      {%- if section.settings.curated != blank %} data-curated="{{ section.settings.curated.handle | escape }}"{% endif %}
+      data-currency="{{ shop.currency }}"
+      data-locale="{{ request.locale.iso_code }}"
+      {%- if preview_cards %} data-preview{% endif %}
+      aria-busy="true"
+    >
+      <p class="at-pro-compare__status" data-status>{{ 'at_pro.compare.loading' | t }}</p>
+      <ul class="at-pro-price-cards" role="list" data-cards hidden></ul>
+      <p class="at-pro-section__footnote" data-footnote hidden>{{ 'at_pro.compare.footnote' | t }}</p>
+      <p class="at-pro-compare__fallback" data-fallback hidden>{{ 'at_pro.compare.fallback' | t }}</p>
+      {%- if preview_cards -%}
+        <p class="at-pro-draft at-pro-editor-note">{{ 'at_pro.compare.editor_pending' | t }}</p>
+      {%- endif -%}
 
-          if priced
-            assign shown_price = variant.price
-
-            # The quantity price break that applies at the representative quantity, if any.
-            assign qty_price = shown_price
-            assign qty_break = false
-            for price_break in variant.quantity_price_breaks
-              if price_break.minimum_quantity <= qty and price_break.price < qty_price
-                assign qty_price = price_break.price
-                assign qty_break = true
-              endif
-            endfor
-
-            if tier == 'member'
-              assign other = variant.metafields.wagner.pro_price.value
-            else
-              assign other = variant.metafields.wagner.member_price.value
-            endif
-            assign estimated = true
-            if other != blank
-              assign estimated = false
-              assign other_price = other | times: 100 | round
-              # At the quantity break, assume the same price relationship as on the unit price.
-              assign other_qty_price = qty_price | times: other_price | divided_by: shown_price
-            elsif tier == 'member'
-              assign other_price = shown_price | times: ratio | round
-              assign other_qty_price = qty_price | times: ratio | round
-            else
-              assign other_price = shown_price | divided_by: ratio | round
-              assign other_qty_price = qty_price | divided_by: ratio | round
-            endif
-            if estimated
-              assign any_estimate = true
-            endif
-
-            if tier == 'member'
-              assign member_price = shown_price
-              assign pro_price = other_price
-              assign member_qty_price = qty_price
-              assign pro_qty_price = other_qty_price
-            else
-              assign pro_price = shown_price
-              assign member_price = other_price
-              assign pro_qty_price = qty_price
-              assign member_qty_price = other_qty_price
-            endif
-            assign per = member_price | minus: pro_price
-            assign on_qty = member_qty_price | minus: pro_qty_price | times: qty
-          endif
-        -%}
+      <template data-card>
         <li class="at-pro-price-card">
-          <a class="at-pro-price-card__media" href="{{ item.url }}" tabindex="-1" aria-hidden="true">
-            {%- if image != blank -%}
-              {{ image | image_url: width: 480 | image_tag: loading: 'lazy', widths: '240, 360, 480', sizes: '(min-width: 990px) 22vw, 45vw', alt: '' }}
-            {%- endif -%}
-          </a>
+          <a class="at-pro-price-card__media" data-link tabindex="-1" aria-hidden="true"><img data-image alt="" loading="lazy" width="160" height="160"></a>
           <div class="at-pro-price-card__body">
-            {%- if priced -%}
-              <p class="at-pro-price-card__source">
-                {%- case pick_source -%}
-                  {%- when 'often' -%}{{ 'at_pro.compare.source_often' | t }}
-                  {%- when 'ordered' -%}{{ 'at_pro.compare.source_ordered' | t }}
-                  {%- when 'favorite' -%}{{ 'at_pro.compare.source_favorite' | t }}
-                  {%- else -%}{{ 'at_pro.compare.source_staple' | t }}
-                {%- endcase -%}
-              </p>
-            {%- endif -%}
+            <p class="at-pro-price-card__source" data-source></p>
             <h3 class="at-pro-price-card__title">
-              {%- if item.vendor != blank -%}<span class="at-pro-price-card__vendor">{{ item.vendor | escape }}</span>{%- endif -%}
-              <a href="{{ item.url }}">{{ item.title | escape }}</a>
+              <span class="at-pro-price-card__vendor" data-brand></span>
+              <a data-link data-title></a>
             </h3>
-            {%- if priced -%}
-              {%- if variant.title != 'Default Title' -%}
-                <p class="at-pro-price-card__variant">{{ 'at_pro.compare.price_for' | t: variant: variant.title }}</p>
-              {%- endif -%}
-              <dl class="at-pro-price-card__prices">
-                <div class="at-pro-price-card__member">
-                  <dt>{% if tier == 'pro' and estimated %}{{ 'at_pro.compare.member_price_estimated' | t }}{% else %}{{ 'at_pro.compare.member_price' | t }}{% endif %}</dt>
-                  <dd>{{ member_price | money }}</dd>
-                </div>
-                <div class="at-pro-price-card__pro">
-                  <dt>{% if tier == 'member' and estimated %}{{ 'at_pro.compare.pro_price_estimated' | t }}{% else %}{{ 'at_pro.compare.pro_price' | t }}{% endif %}</dt>
-                  <dd>{{ pro_price | money }}</dd>
-                </div>
-              </dl>
-              {%- assign per_money = per | money -%}
-              <p class="at-pro-price-card__save">{{ 'at_pro.compare.save_each' | t: amount: per_money }}</p>
-              <p class="at-pro-price-card__qty">
-                {{ 'at_pro.compare.save_qty' | t: quantity: qty }} <strong>{{ on_qty | money }}</strong>
-                <span>{% if qty_break %}{{ 'at_pro.compare.at_bulk' | t }}{% else %}{{ 'at_pro.compare.before_bulk' | t }}{% endif %}</span>
-              </p>
-            {%- endif -%}
+            <p class="at-pro-price-card__variant" data-variant></p>
+            <p class="at-pro-price-card__save">
+              <span class="at-pro-figure at-pro-price-card__save-amount" data-save></span>
+              <span class="at-pro-price-card__save-unit">{{ 'at_pro.compare.per_garment' | t }}</span>
+              <span class="at-pro-price-card__percent" data-percent></span>
+            </p>
+            <dl class="at-pro-price-card__prices">
+              <div class="at-pro-price-card__member"><dt><span aria-hidden="true">{{ 'at_pro.compare.member_price' | t }}</span><span class="visually-hidden">{{ 'at_pro.compare.member_price_label' | t }}</span></dt><dd data-member></dd></div>
+              <div class="at-pro-price-card__pro"><dt><span aria-hidden="true">{{ 'at_pro.compare.pro_price' | t }}</span><span class="visually-hidden">{{ 'at_pro.compare.pro_price_label' | t }}</span></dt><dd data-pro></dd></div>
+            </dl>
+            <p class="at-pro-price-card__qty" data-qty-row>
+              <span data-qty-label></span> <strong data-qty-save></strong>
+            </p>
           </div>
         </li>
-      {%- endfor -%}
-    </ul>
-    {%- if priced -%}
-      <p class="at-pro-section__footnote">
-        {%- if any_estimate -%}
-          {% if tier == 'member' %}{{ 'at_pro.compare.estimate_pro' | t }}{% else %}{{ 'at_pro.compare.estimate_member' | t }}{% endif %}
-        {% endif -%}
-        {{ 'at_pro.compare.footnote' | t }}
-      </p>
-    {%- else -%}
-      <div class="at-pro-compare__guest">
-        <p>{{ 'at_pro.compare.guest_body' | t }}</p>
-        <a class="button-secondary" href="{{ routes.account_login_url }}?return_url={{ request.path | url_encode }}">{{ 'at_pro.compare.guest_cta' | t }}</a>
-      </div>
-    {%- endif -%}
+      </template>
+      <script type="application/json" data-strings>
+        {
+          "save": {{ 'at_pro.compare.save_each' | t: amount: '[amount]' | json }},
+          "percent": {{ 'at_pro.compare.percent_less' | t: percent: '[percent]' | json }},
+          "order": {{ 'at_pro.compare.order_label' | t: quantity: '[quantity]' | json }},
+          "variant": {{ 'at_pro.compare.variant' | t: color: '[color]', size: '[size]' | json }},
+          "sources": {
+            "ordered": {{ 'at_pro.compare.source_ordered' | t | json }},
+            "favorite": {{ 'at_pro.compare.source_favorite' | t | json }},
+            "recent": {{ 'at_pro.compare.source_recent' | t | json }},
+            "curated": {{ 'at_pro.compare.source_curated' | t | json }}
+          },
+          "sample": {{ 'at_pro.compare.sample' | t | json }}
+        }
+      </script>
+    </at-pro-price-compare>
   {%- else -%}
     <div class="at-pro-compare__guest">
-      {%- if priced -%}
-        <p>{{ 'at_pro.compare.signed_in_empty' | t }}</p>
-        {%- if request.design_mode -%}<p class="at-pro-draft">{{ 'at_pro.compare.pick_products' | t }}</p>{%- endif -%}
-      {%- else -%}
-        <p>{{ 'at_pro.compare.guest_body' | t }}</p>
-        <a class="button-secondary" href="{{ routes.account_login_url }}?return_url={{ request.path | url_encode }}">{{ 'at_pro.compare.guest_cta' | t }}</a>
-      {%- endif -%}
+      <p>{{ 'at_pro.compare.guest_body' | t }}</p>
+      <a class="button-secondary" href="{{ login_url }}">{{ 'at_pro.compare.guest_cta' | t }}</a>
     </div>
   {%- endif -%}
 </div>
@@ -312,11 +118,14 @@
   "tag": "section",
   "class": "at-pro-section-wrap",
   "settings": [
+    { "type": "paragraph", "content": "Signed-in Members and Pros see their actual Member and Pro prices, from Wagner’s signed price comparison route. Guests see a sign-in prompt and no prices. Nothing is estimated in the theme: when actual prices aren’t available the section shows a short explanation instead of cards." },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Better prices on the blanks you build your business with." },
-    { "type": "text", "id": "intro", "label": "Intro", "default": "Member and Pro prices, side by side, on styles you know." },
-    { "type": "product_list", "id": "products", "label": "Seller staples", "limit": 8, "info": "Used after a signed-in customer’s own frequently ordered styles and favorites, and shown to guests without prices (MAP). Pick styles from different categories where Pro has a real advantage: an everyday tee, a premium tee, fleece, a cap. Member Deals styles, and styles whose actual Pro and Member prices match, are skipped." },
+    { "type": "text", "id": "intro", "label": "Intro", "default": "Your Member and Pro prices, side by side, on styles you know.", "info": "Signed-in customers only." },
+    { "type": "collection", "id": "curated", "label": "Curated Pro picks", "info": "Used after a customer’s own purchases, favorites and recently viewed styles. Choose styles across the assortment where Pro has a real advantage (premium fleece, specialty tees, polos, performance, workwear). A style is shown only when its actual Pro saving meets the minimum below." },
+    { "type": "range", "id": "min_savings", "label": "Minimum Pro saving", "min": 1, "max": 20, "step": 1, "unit": "%", "default": 5, "info": "Pending validation. Wagner may apply a higher floor of its own." },
     { "type": "range", "id": "max_products", "label": "Styles to show", "min": 2, "max": 4, "step": 1, "default": 4 },
-    { "type": "range", "id": "quantity", "label": "Representative quantity", "min": 12, "max": 288, "step": 12, "default": 72 }
+    { "type": "range", "id": "quantity", "label": "Representative quantity", "min": 12, "max": 288, "step": 12, "default": 72 },
+    { "type": "checkbox", "id": "editor_preview", "label": "Show sample cards in the theme editor", "default": true, "info": "Layout preview with sample figures. Never shown to shoppers." }
   ],
   "presets": [{ "name": "Pro: price comparison" }]
 }

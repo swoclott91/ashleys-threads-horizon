@@ -4,8 +4,8 @@
   this snippet or `at-pro-value`, so they can't disagree.
 
   Output (capture it): `;key=value;key=value;` Money is in cents, rates in basis points.
+  There is no tier price ratio: product prices come only from the Shopify tier catalogs (Wagner).
   - fee: shop `wagner.tier_thresholds.pro.fee` → Theme settings › Membership product price → 7900
-  - ratio_bp: Pro price of $100 at Member prices, in cents = ratio × 10000 (setting, default 8553)
   - cash_bp / member_cash_bp: Threads Cash rates (Pro 200, Member 0)
   - ship_max, ship_min: monthly shipping credit cap and minimum merchandise order
   - free_ship: free standard shipping threshold (unchanged for every tier)
@@ -30,10 +30,6 @@
     endif
   endif
 
-  assign at_pc_ratio = settings.at_pro_price_per_100 | default: 8553 | round
-  if at_pc_ratio <= 0 or at_pc_ratio > 10000
-    assign at_pc_ratio = 8553
-  endif
   assign at_pc_cash = settings.at_pro_cash_rate | default: 2 | times: 100 | round
   assign at_pc_member_cash = settings.at_member_cash_rate | default: 0 | times: 100 | round
   assign at_pc_ship_max = settings.at_pro_ship_credit_max | default: 15 | times: 100 | round
@@ -56,7 +52,6 @@
   endif
 
   echo ';fee=' | append: at_pc_fee
-  echo ';ratio_bp=' | append: at_pc_ratio
   echo ';cash_bp=' | append: at_pc_cash
   echo ';member_cash_bp=' | append: at_pc_member_cash
   echo ';ship_max=' | append: at_pc_ship_max
