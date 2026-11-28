@@ -140,7 +140,9 @@ class AtProPriceCompare extends HTMLElement {
       else link.setAttribute('href', item.url);
     });
     $('[data-title]').textContent = item.title;
-    const brand = [item.brand, item.style].filter((v) => typeof v === 'string' && v).join(' ');
+    // Many titles already start with the style number ("108084 Transfer Duffel"); don't repeat it.
+    const style = typeof item.style === 'string' && item.style && !item.title.includes(item.style) ? item.style : '';
+    const brand = [item.brand, style].filter((v) => typeof v === 'string' && v).join(' ');
     if (brand) $('[data-brand]').textContent = brand;
     else $('[data-brand]').remove();
 

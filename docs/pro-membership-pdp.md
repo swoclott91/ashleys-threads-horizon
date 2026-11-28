@@ -5,7 +5,7 @@ Status:
 - Second design iteration: November 27, 2026 ([PR #32](https://github.com/swoclott91/ashleys-threads-horizon/pull/32)). It is merged into `dev` only.
 - Third iteration: November 27, 2026 ([PR #33](https://github.com/swoclott91/ashleys-threads-horizon/pull/33), into `dev`). It simplifies the page around the revised membership strategy.
 - Fourth iteration (this document): November 27, 2026, same branch `pro/membership-pdp-v3`. Mobile above-the-fold purchase, no repeated benefits, and the price comparison moved to actual catalog prices (see Price comparison).
-- Theme only. This work makes no Wagner, Shopify admin, product or policy changes. The Wagner price comparison route it calls is a proposal (see "Price comparison route").
+- Theme only. This work makes no Wagner, Shopify admin, product or policy changes. The Wagner route it calls, `GET /apps/wagner/pro-compare`, was built separately in Wagner PR #65 (merged November 27, 2026, behind `PRO_COMPARE_ENABLED`; contract in Wagner `docs/MEMBER_CONTRACT.md` §7).
 
 Live status:
 - `main` (the live theme) has the first version, and the Pro product uses the `pro-membership` template, so shoppers see version one.
@@ -42,7 +42,7 @@ Rules the page follows:
 3. **Promise.** Leave *Pro Promise visibility* on **Theme editor preview only** until the guarantee terms and refund process are final.
 4. **Restock link.** Optionally set Theme settings › Membership › *Pro restock link*, the target of "Start a restock" when a Pro member's shipping credit is ready. The default is all products.
 5. **Price comparison.** In *Pro: price comparison*, optionally choose a *Curated Pro picks* collection (styles across the assortment where Pro has a real advantage). Wagner shows a curated style only when its actual Pro saving meets *Minimum Pro saving* (5% by default, pending validation).
-6. **Wagner route.** Signed-in customers see actual price cards only once Wagner serves `GET /apps/wagner/pro-compare` (see "Price comparison route"). Until then they see a short explanation instead.
+6. **Wagner route.** Signed-in customers see actual price cards when Wagner's `GET /apps/wagner/pro-compare` answers (flag `PRO_COMPARE_ENABLED`, member app proxy secret set). Otherwise they see a short explanation instead.
 7. **Product description.** A draft for review is in `docs/pro-membership-product-description.md`. It hasn't been applied.
 
 ## Page sequence (template order)
@@ -235,7 +235,9 @@ Checked November 27, 2026 against Wagner `main` and the live store (read-only):
 
 Conclusion: reuse Wagner's `TierVariantPrice` data through a signed app proxy route. No second price sync is needed, and the same service can feed product-level and cart-level upsells later.
 
-### Price comparison route (proposed Wagner integration, not built)
+### Price comparison route (Wagner PR #65)
+
+Built in Wagner (`membership/proxy/pro_compare.py`, `membership/pro/compare.py`, `membership/pricing/compare.py`), as specified below. It also serves Ashley's customization proxy path. Wagner caches each customer's answer for 120 seconds and rate-limits at 20 a minute. Not yet verified end to end from a signed-in storefront session (see Validation).
 
 ```
 GET /apps/wagner/pro-compare?limit=4&quantity=72&min_savings=5&curated=<collection handle>&recent=<product ids>
@@ -366,7 +368,7 @@ Pending (editor only):
 | customer `wagner.pro_expires` | State E "active through" |
 | shop `wagner.tier_thresholds.pro.fee` | Fee (falls back to the Pro product price, then $79). Not set in the store today |
 | `customer.orders` (first 20) | "Great fit" spend test |
-| `GET /apps/wagner/pro-compare` (proposed) | Price comparison cards for signed-in Members and Pros |
+| `GET /apps/wagner/pro-compare` (Wagner PR #65) | Price comparison cards for signed-in Members and Pros |
 
 ### Proposed: customer `wagner.pro_value`, reconsidered
 
@@ -447,7 +449,7 @@ Checked on the development theme (`shopify theme dev`) as a guest. A temporary l
 | Translations | No missing keys on the page |
 | Theme Check | 0 offenses in the Pro files |
 
-Not checked: a real signed-in Member or Pro (the dev theme has no test login), and real route responses (the route doesn't exist yet). States A–F were checked in iteration 3; iteration 4 changed only the shared card header and the A–D figures.
+Not checked: a real signed-in Member or Pro (the dev theme has no test login), and real route responses. Wagner's route is now merged, but `shopify theme dev` gets a 302 on `/apps/wagner/*` and the storefront is password-protected, so it needs a check in a signed-in storefront session. The theme's checks match the route's output format (two-decimal money strings, one-decimal percent, relative product URL, `cdn.shopify.com` images, `USD`). States A–F were checked in iteration 3; iteration 4 changed only the shared card header and the A–D figures.
 
 Iteration 3 checks (still valid, see PR #33): states A–F, the personal line, no duplicate Pro purchase, Wholesale, Promise hidden, pending FAQs hidden, homepage Pro tile and tokens.
 
@@ -506,7 +508,7 @@ Iteration 3 checks (still valid, see PR #33): states A–F, the personal line, n
 - A membership-year record for Pros (fee paid, Threads Cash earned/issued/available, shipping redeemed, qualifying total, settlement status). See the suggested shape.
 - Guarantee settlement at each anniversary, in Wagner, not the theme.
 - Authoritative cart Pro pricing and same-order activation (cart upsell).
-- **Price comparison route** `GET /apps/wagner/pro-compare` (see "Price comparison route"): signed, flagged, published prices only, selection by actual saving. Until it ships, signed-in customers see the explanation instead of cards.
+- **Price comparison route:** built (Wagner PR #65). Remaining: confirm the flag and proxy secret in production, then check it as a signed-in Member and Pro on the storefront.
 - Populate shop `wagner.tier_thresholds` (fee, rates).
 - Pro activation, the monthly `ship_code` and the Threads Cash ledger (2C; flags off).
 - Migrate `sections/at-for-you`, `sections/at-personal-home` and `snippets/at-home-tier-benefits` to `at-pro-value`.
