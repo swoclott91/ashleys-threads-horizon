@@ -39,24 +39,13 @@
       "pricing_title": "Exclusive Pro pricing",
       "pricing_detail": "Lower prices than Member pricing on eligible blanks, built into every order.",
       "cash_unit": "back in Threads Cash",
-      "cash_note": "On eligible purchases, available on the first of each month.",
       "up_to": "Up to",
-      "ship_unit": "a year in shipping savings",
-      "ship_note": "Up to {{ max }} off shipping on one qualifying order each month."
+      "ship_unit_monthly": "off shipping monthly",
+      "plus_member": "Plus everything in your free Ashley’s Threads membership."
     },
     "personal": {
       "saved": "You could have saved an additional {{ amount }} with Pro pricing on your orders {{ period }}.",
       "fit": "Based on your orders over the past year, Pro could be a great fit for your business."
-    },
-    "benefits": {
-      "pricing_title": "Exclusive Pro pricing",
-      "pricing_detail": "Lower prices on eligible products, on every order.",
-      "cash_title": "{{ rate }} back in Threads Cash",
-      "cash_detail": "On eligible purchases, available on the first of each month.",
-      "shipping_title": "Up to {{ max }} off shipping monthly",
-      "shipping_detail": "On one qualifying order of {{ min }} or more each month.",
-      "member_title": "All your Member benefits",
-      "member_detail": "Favorites, bulk ordering from favorites and past purchases, and personalized picks."
     },
     "member": {
       "tagline": "Thanks for being a Pro.",
@@ -87,26 +76,26 @@
       "benefits": "See my wholesale benefits"
     },
     "compare": {
-      "member_price": "Member price",
-      "pro_price": "Pro price",
-      "member_price_estimated": "Member price (est.)",
-      "pro_price_estimated": "Pro price (est.)",
-      "estimate_pro": "Prices marked (est.) are estimated from your Member price at typical Pro pricing; they aren’t prices you can buy at yet.",
-      "estimate_member": "Prices marked (est.) are estimated from your Pro price at typical Pro pricing.",
-      "footnote": "Prices are for the size and color shown. Actual prices vary by variant, sales and bulk pricing.",
-      "price_for": "Price for {{ variant }}",
-      "save_each": "Save {{ amount }} per garment",
-      "save_qty": "On {{ quantity }} pieces:",
-      "at_bulk": "at bulk pricing",
-      "before_bulk": "before quantity discounts",
-      "source_often": "You order this often",
-      "source_ordered": "In your recent orders",
+      "member_price": "Member",
+      "pro_price": "Pro",
+      "member_price_label": "Member price",
+      "pro_price_label": "Pro price",
+      "save_each": "Save {{ amount }}",
+      "per_garment": "per garment",
+      "percent_less": "{{ percent }} less",
+      "order_label": "On {{ quantity }} pieces, before quantity discounts:",
+      "variant": "{{ color }} · {{ size }}",
+      "source_ordered": "You’ve ordered this",
       "source_favorite": "One of your favorites",
-      "source_staple": "Seller staple",
-      "guest_body": "Sign in to compare Member and Pro prices on these styles and the ones you buy most.",
+      "source_recent": "Recently viewed",
+      "source_curated": "Pro pick",
+      "footnote": "Your current Member and Pro prices for the exact color and size shown. Order savings are examples, not a checkout quote: prices can change, and your cart always shows the price you pay.",
+      "loading": "Finding styles where Pro saves you the most…",
+      "fallback": "Pro pricing is lower than Member pricing on many styles across our assortment, from premium fleece and specialty tees to polos, performance apparel and workwear. Once you’re a Pro, it’s applied automatically on every eligible product.",
+      "guest_body": "Pro pricing is lower than Member pricing on many styles across our assortment, from premium fleece and specialty tees to polos, performance apparel and workwear. Sign in to see your Member and Pro prices side by side.",
       "guest_cta": "Sign in to compare",
-      "signed_in_empty": "Your Pro price appears on every eligible product once you join.",
-      "pick_products": "Editor note: no styles to show. Pick seller staples in this section’s settings."
+      "sample": "Sample · editor only",
+      "editor_pending": "Editor note (not shown to shoppers): actual prices come from Wagner’s signed app proxy route /apps/wagner/pro-compare. Until it responds, signed-in customers see the text above instead of cards. The cards below are a layout preview with sample figures."
     },
     "cash": {
       "pending_editor": "Editor note (not shown to shoppers): Threads Cash vesting, expiry, return adjustments, redemption limits and excluded products are not final. Turn on “Terms are final” only when they are."

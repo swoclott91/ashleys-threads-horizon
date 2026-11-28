@@ -2667,13 +2667,6 @@
       },
       {
         "type": "number",
-        "id": "at_pro_price_per_100",
-        "label": "Pro price of $100 at Member prices (cents)",
-        "default": 8553,
-        "info": "8553 means $100 of merchandise at Member prices costs about $85.53 at Pro prices. Used only for the price comparison’s labeled estimates when a variant has no actual Pro price."
-      },
-      {
-        "type": "number",
         "id": "at_pro_cash_rate",
         "label": "Pro Threads Cash rate (%)",
         "default": 2

@@ -7,14 +7,10 @@
     "price_compare": {
       "type": "at-pro-price-compare",
       "settings": {
-        "products": [
-          "gildan-64000-softstyle-t-shirt",
-          "comfort-colors-1717-heavyweight-ring-spun-tee",
-          "gildan-18500-heavy-blend-hooded-sweatshirt",
-          "richardson-112-trucker-cap"
-        ],
+        "min_savings": 5,
         "max_products": 4,
-        "quantity": 72
+        "quantity": 72,
+        "editor_preview": true
       }
     },
     "threads_cash": {
