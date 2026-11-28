@@ -1,10 +1,16 @@
 {%- comment -%}
-  Pro PDP section: The Pro Promise (membership value guarantee).
+  Pro PDP section: The Ashley's Pro Promise (annual membership guarantee).
   Visible only per Theme settings › Membership › Pro Promise visibility: hidden, editor preview
   (default, marked as draft) or live. When hidden it renders nothing, so it leaves no gap.
-  Terms (first year vs every year, eligible benefits, refund timing and method) are not final.
-  The worked example's amounts are editor settings; the total and refund are calculated from the
-  configured fee, and the refund is the shortfall on combined value, not on Threads Cash alone.
+
+  Intended rule (owner direction, November 2026; terms and backend not final):
+    refund = max(0, fee paid − qualifying Threads Cash − redeemed shipping savings),
+    settled at each membership anniversary, every membership year.
+  Exclusive Pro pricing savings never count toward it; they are the customer's to keep.
+
+  The worked example: annual eligible purchases and shipping savings are editor settings; Threads
+  Cash, the total and the refund are calculated from the configured rate and fee. A second line
+  states the spend whose Threads Cash alone covers the fee ([cash_cover_spend], snippets/at-pro-tokens).
 {%- endcomment -%}
 {%- capture pc -%}{% render 'at-pro-config' %}{%- endcapture -%}
 {%- capture tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
@@ -12,10 +18,12 @@
   assign tier = tier | strip
   assign promise = pc | split: ';promise=' | last | split: ';' | first
   assign fee = pc | split: ';fee=' | last | split: ';' | first | plus: 0
-  assign ex_pricing = section.settings.example_pricing | times: 100
-  assign ex_cash = section.settings.example_cash | times: 100
+  assign cash_bp = pc | split: ';cash_bp=' | last | split: ';' | first | plus: 0
+  assign cash_pct = cash_bp | times: 1.0 | divided_by: 100 | round: 1 | append: '' | remove: '.0' | append: '%'
+  assign ex_spend = section.settings.example_spend | times: 100
+  assign ex_cash = ex_spend | times: cash_bp | divided_by: 10000
   assign ex_ship = section.settings.example_shipping | times: 100
-  assign ex_total = ex_pricing | plus: ex_cash | plus: ex_ship
+  assign ex_total = ex_cash | plus: ex_ship
   assign ex_refund = fee | minus: ex_total | at_least: 0
 -%}
 {%- if promise != 'off' and tier != 'wholesale' -%}
@@ -27,9 +35,12 @@
         {% render 'at-pro-emblem', size: 'lg', inverse: true %}
         {%- if promise == 'preview' -%}<span class="at-pro-draft at-pro-draft--inverse">{{ 'at_pro.promise.draft' | t }}</span>{%- endif -%}
       </div>
+      <p class="at-pro-kicker at-pro-kicker--inverse">{{ section.settings.kicker | escape }}</p>
       <h2 class="at-pro-serif at-pro-promise__heading">{{ section.settings.heading | escape }}</h2>
       <div class="at-pro-promise__body">{% render 'at-pro-tokens', text: section.settings.body %}</div>
-      <p class="at-pro-promise__counts">{{ 'at_pro.promise.counts' | t }}</p>
+      {%- if section.settings.keep != blank -%}
+        <p class="at-pro-promise__keep">{% render 'at-pro-tokens', text: section.settings.keep %}</p>
+      {%- endif -%}
       {%- if settings.at_pro_promise_terms_url != blank -%}
         <a class="at-pro-promise__terms" href="{{ settings.at_pro_promise_terms_url }}">{{ 'at_pro.promise.terms' | t }}</a>
       {%- endif -%}
@@ -39,8 +50,8 @@
         <figcaption class="at-pro-promise__example-title">{{ 'at_pro.promise.example_title' | t }}</figcaption>
         <table class="at-pro-promise__table">
           <tbody>
-            <tr><th scope="row">{{ 'at_pro.value.pricing' | t }}</th><td>{{ ex_pricing | money_without_trailing_zeros }}</td></tr>
-            <tr><th scope="row">{{ 'at_pro.promise.example_cash' | t }}</th><td>{{ ex_cash | money_without_trailing_zeros }}</td></tr>
+            <tr class="at-pro-promise__table-context"><th scope="row">{{ 'at_pro.promise.example_spend' | t }}</th><td>{{ ex_spend | money_without_trailing_zeros }}</td></tr>
+            <tr><th scope="row">{{ 'at_pro.promise.example_cash' | t: rate: cash_pct }}</th><td>{{ ex_cash | money_without_trailing_zeros }}</td></tr>
             <tr><th scope="row">{{ 'at_pro.promise.example_shipping' | t }}</th><td>{{ ex_ship | money_without_trailing_zeros }}</td></tr>
             <tr class="at-pro-promise__table-total"><th scope="row">{{ 'at_pro.promise.example_total' | t }}</th><td>{{ ex_total | money_without_trailing_zeros }}</td></tr>
             <tr><th scope="row">{{ 'at_pro.promise.example_fee' | t }}</th><td>{{ fee | money_without_trailing_zeros }}</td></tr>
@@ -49,6 +60,9 @@
             <tr class="at-pro-promise__table-refund"><th scope="row">{{ 'at_pro.promise.example_refund' | t }}</th><td>{{ ex_refund | money_without_trailing_zeros }}</td></tr>
           </tfoot>
         </table>
+        {%- if section.settings.cover_line != blank -%}
+          <p class="at-pro-promise__cover">{% render 'at-pro-tokens', text: section.settings.cover_line %}</p>
+        {%- endif -%}
       </figure>
     {%- endif -%}
   </div>
@@ -61,13 +75,15 @@
   "tag": "section",
   "class": "at-pro-section-wrap",
   "settings": [
-    { "type": "paragraph", "content": "Shown per Theme settings › Membership › Pro Promise visibility. Keep it on editor preview until the guarantee terms are final." },
+    { "type": "paragraph", "content": "Shown per Theme settings › Membership › Pro Promise visibility. Keep it on editor preview until the guarantee terms and refund process are final. Only Threads Cash and shipping savings count; Pro pricing savings never reduce the refund. Tokens: [fee] [cash_rate] [ship_year] [cash_cover_spend] [cash_cover_cash]." },
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "The Ashley’s Pro Promise" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Pro pays for itself. We promise." },
-    { "type": "richtext", "id": "body", "label": "Text", "default": "<p>If your qualifying Pro savings don’t cover the [fee] cost of your membership, we’ll refund the difference.</p>" },
+    { "type": "richtext", "id": "body", "label": "Text", "default": "<p>If your Threads Cash and shipping savings don’t cover the cost of your annual membership, we’ll refund the difference.</p>" },
+    { "type": "text", "id": "keep", "label": "Pricing savings line", "default": "And every dollar you save through exclusive Pro pricing is yours to keep." },
     { "type": "checkbox", "id": "show_example", "label": "Show worked example", "default": true, "info": "Hidden automatically when the example adds up to the fee or more." },
-    { "type": "range", "id": "example_pricing", "label": "Example: Pro pricing savings", "min": 0, "max": 100, "step": 1, "unit": "$", "default": 40 },
-    { "type": "range", "id": "example_cash", "label": "Example: Threads Cash", "min": 0, "max": 50, "step": 1, "unit": "$", "default": 10 },
-    { "type": "range", "id": "example_shipping", "label": "Example: shipping savings", "min": 0, "max": 50, "step": 1, "unit": "$", "default": 15 }
+    { "type": "range", "id": "example_spend", "label": "Example: annual eligible purchases", "min": 500, "max": 3500, "step": 100, "unit": "$", "default": 1000, "info": "Threads Cash is calculated from the Pro Threads Cash rate." },
+    { "type": "range", "id": "example_shipping", "label": "Example: shipping savings", "min": 0, "max": 60, "step": 5, "unit": "$", "default": 30 },
+    { "type": "text", "id": "cover_line", "label": "Rewards-alone line", "default": "About [cash_cover_spend] a year in eligible purchases earns [cash_cover_cash] in Threads Cash, enough to cover the membership through rewards alone." }
   ],
   "presets": [{ "name": "Pro: Pro Promise" }]
 }

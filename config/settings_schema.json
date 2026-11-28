@@ -2670,7 +2670,7 @@
         "id": "at_pro_price_per_100",
         "label": "Pro price of $100 at Member prices (cents)",
         "default": 8553,
-        "info": "8553 means $100 of merchandise at Member prices costs about $85.53 at Pro prices (target margins Member 35%, Pro 24%). Used by the calculator and labeled price estimates."
+        "info": "8553 means $100 of merchandise at Member prices costs about $85.53 at Pro prices. Used only for the price comparison’s labeled estimates when a variant has no actual Pro price."
       },
       {
         "type": "number",
@@ -2707,7 +2707,7 @@
         "id": "at_pro_history_min_value",
         "label": "Smallest personal estimate to show ($)",
         "default": 20,
-        "info": "Below this, the Pro page sells the opportunity instead of showing a small historical number."
+        "info": "The Pro page shows a Member’s own Pro pricing figure only at or above this amount, and the homepage Pro tile shows its number only from here."
       },
       {
         "type": "header",
@@ -2732,7 +2732,7 @@
           }
         ],
         "default": "preview",
-        "info": "Keep on editor preview until the guarantee terms are final."
+        "info": "Keep on editor preview until the guarantee terms and refund process are final. The Promise counts Threads Cash and shipping savings only, never Pro pricing savings."
       },
       {
         "type": "url",

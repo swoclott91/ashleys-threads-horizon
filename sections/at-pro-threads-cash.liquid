@@ -1,50 +1,95 @@
 {%- comment -%}
-  Pro PDP section: "How Threads Cash works", a horizontal three-step process on desktop.
-  Steps are editor blocks with [tokens]. Earning timing (posting delay), expiry, redemption
-  limits and eligible merchandise are not final: keep "Terms are final" off until they are. While
-  off, the theme editor shows what is still open and shoppers see only the optional shopper note
-  (blank by default), never an unfinished-policy notice. Step copy must stay true without those
-  terms: say "once it posts", never "on your next order".
+  Pro PDP sections 4 and 5 combined: "How Threads Cash works" and the monthly shipping benefit,
+  side by side on desktop (one section keeps the page shorter than two full-width ones).
+
+  Threads Cash: three steps (editor blocks with [tokens]). Decided: the rate and that Threads Cash
+  becomes available on the first of each month. Not decided: vesting, expiry, return adjustments,
+  redemption limits and excluded products, so the copy names none of them. Keep "Terms are final"
+  off until they are; while off, the theme editor shows what is still open and shoppers see only
+  the optional shopper note (blank by default).
+
+  Shipping: up to [ship_max] off one qualifying order a month, [ship_year] a year at most, with the
+  rules list from the section settings. The minimum order ([ship_min]) is pending final validation
+  and comes from Theme settings › Membership, so it updates everywhere when it changes.
 {%- endcomment -%}
 {%- capture tier -%}{% render 'at-member-tier' %}{%- endcapture -%}
-{%- assign tier = tier | strip -%}
+{%- capture pc -%}{% render 'at-pro-config' %}{%- endcapture -%}
+{%- liquid
+  assign tier = tier | strip
+  assign ship_max = pc | split: ';ship_max=' | last | split: ';' | first | plus: 0
+  assign ship_max_money = ship_max | money_without_trailing_zeros
+  assign ship_year_money = ship_max | times: 12 | money_without_trailing_zeros
+-%}
 {%- unless tier == 'wholesale' -%}
 {{ 'at-pro.css' | asset_url | stylesheet_tag }}
-<div class="section section--page-width at-pro-page at-pro-section at-pro-cash">
-  <div class="at-pro-section__head">
-    <h2 class="at-pro-serif at-pro-section__heading">{{ section.settings.heading | escape }}</h2>
-    {%- if section.settings.intro != blank -%}<div class="at-pro-section__intro">{% render 'at-pro-tokens', text: section.settings.intro %}</div>{%- endif -%}
+<div class="section section--page-width at-pro-page at-pro-section at-pro-rewards">
+  {%- if section.settings.heading != blank -%}
+    <div class="at-pro-section__head">
+      <h2 class="at-pro-serif at-pro-section__heading">{{ section.settings.heading | escape }}</h2>
+      {%- if section.settings.intro != blank -%}<div class="at-pro-section__intro">{% render 'at-pro-tokens', text: section.settings.intro %}</div>{%- endif -%}
+    </div>
+  {%- endif -%}
+  <div class="at-pro-rewards__grid">
+    <div class="at-pro-rewards__panel at-pro-rewards__panel--cash">
+      <h3 class="at-pro-rewards__title">{% render 'at-pro-tokens', text: section.settings.cash_heading %}</h3>
+      <ol class="at-pro-steps" role="list">
+        {%- for block in section.blocks -%}
+          <li class="at-pro-steps__item" {{ block.shopify_attributes }}>
+            <span class="at-pro-steps__number at-pro-figure" aria-hidden="true">{{ forloop.index }}</span>
+            <h4 class="at-pro-steps__title">{% render 'at-pro-tokens', text: block.settings.title %}</h4>
+            <div class="at-pro-steps__body">{% render 'at-pro-tokens', text: block.settings.body %}</div>
+          </li>
+        {%- endfor -%}
+      </ol>
+      {%- unless section.settings.terms_final -%}
+        {%- if section.settings.pending_note != blank -%}
+          <p class="at-pro-section__footnote">{{ section.settings.pending_note | escape }}</p>
+        {%- endif -%}
+        {%- if request.design_mode -%}
+          <p class="at-pro-draft at-pro-editor-note">{{ 'at_pro.cash.pending_editor' | t }}</p>
+        {%- endif -%}
+      {%- endunless -%}
+    </div>
+
+    {%- if section.settings.show_shipping -%}
+      <div class="at-pro-rewards__panel at-pro-rewards__panel--ship">
+        <h3 class="at-pro-rewards__title">{% render 'at-pro-tokens', text: section.settings.ship_heading %}</h3>
+        <p class="at-pro-rewards__figure">
+          <span class="at-pro-rewards__unit">{{ 'at_pro.offer.up_to' | t }}</span>
+          <span class="at-pro-figure at-pro-rewards__number">{{ ship_max_money }}</span>
+          <span class="at-pro-rewards__unit">{{ 'at_pro.shipping.per_month' | t }}</span>
+        </p>
+        <p class="at-pro-rewards__year">{{ 'at_pro.shipping.per_year' | t: amount: ship_year_money }}</p>
+        <div class="at-pro-rewards__rules">{% render 'at-pro-tokens', text: section.settings.ship_rules %}</div>
+        {%- unless section.settings.ship_terms_final -%}
+          {%- if request.design_mode -%}
+            <p class="at-pro-draft at-pro-editor-note">{{ 'at_pro.shipping.pending_editor' | t }}</p>
+          {%- endif -%}
+        {%- endunless -%}
+      </div>
+    {%- endif -%}
   </div>
-  <ol class="at-pro-steps" role="list">
-    {%- for block in section.blocks -%}
-      <li class="at-pro-steps__item" {{ block.shopify_attributes }}>
-        <span class="at-pro-steps__number at-pro-figure" aria-hidden="true">{{ forloop.index }}</span>
-        <h3 class="at-pro-steps__title">{% render 'at-pro-tokens', text: block.settings.title %}</h3>
-        <div class="at-pro-steps__body">{% render 'at-pro-tokens', text: block.settings.body %}</div>
-      </li>
-    {%- endfor -%}
-  </ol>
-  {%- unless section.settings.terms_final -%}
-    {%- if section.settings.pending_note != blank -%}
-      <p class="at-pro-section__footnote">{{ section.settings.pending_note | escape }}</p>
-    {%- endif -%}
-    {%- if request.design_mode -%}
-      <p class="at-pro-draft at-pro-editor-note">{{ 'at_pro.cash.pending_editor' | t }}</p>
-    {%- endif -%}
-  {%- endunless -%}
 </div>
 {%- endunless -%}
 
 {% schema %}
 {
-  "name": "Pro: Threads Cash",
+  "name": "Pro: rewards",
   "tag": "section",
   "class": "at-pro-section-wrap",
   "settings": [
-    { "type": "text", "id": "heading", "label": "Heading", "default": "How Threads Cash works" },
-    { "type": "richtext", "id": "intro", "label": "Intro", "default": "<p>Pro members earn [cash_rate] back on eligible net merchandise purchases.</p>" },
-    { "type": "checkbox", "id": "terms_final", "label": "Terms are final", "default": false, "info": "Leave off until earning timing, expiry, redemption and eligible merchandise are confirmed." },
-    { "type": "text", "id": "pending_note", "label": "Shopper note while terms are pending", "info": "Optional. Leave blank so shoppers don’t see unfinished-policy notices; the theme editor always shows what is still open." }
+    { "type": "paragraph", "content": "Tokens: [fee] [cash_rate] [ship_max] [ship_min] [free_ship] [ship_year]." },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Rewards that come back every month" },
+    { "type": "richtext", "id": "intro", "label": "Intro" },
+    { "type": "header", "content": "Threads Cash" },
+    { "type": "text", "id": "cash_heading", "label": "Heading", "default": "How Threads Cash works" },
+    { "type": "checkbox", "id": "terms_final", "label": "Terms are final", "default": false, "info": "Leave off until vesting, expiry, return adjustments, redemption limits and eligible merchandise are confirmed." },
+    { "type": "text", "id": "pending_note", "label": "Shopper note while terms are pending", "info": "Optional. Leave blank so shoppers don’t see unfinished-policy notices; the theme editor always shows what is still open." },
+    { "type": "header", "content": "Monthly shipping" },
+    { "type": "checkbox", "id": "show_shipping", "label": "Show monthly shipping benefit", "default": true },
+    { "type": "text", "id": "ship_heading", "label": "Heading", "default": "Monthly shipping savings" },
+    { "type": "richtext", "id": "ship_rules", "label": "Rules", "default": "<ul><li>Take up to [ship_max] off shipping on one qualifying order each month.</li><li>Qualifying orders have at least [ship_min] in merchandise. Orders of [free_ship] or more already ship free.</li><li>The credit can’t exceed the actual shipping charge, and unused credits don’t roll over.</li></ul>" },
+    { "type": "checkbox", "id": "ship_terms_final", "label": "Shipping terms are final", "default": false, "info": "The minimum order is pending final validation; the rules come from the owner brief (November 2026)." }
   ],
   "blocks": [
     {
@@ -58,11 +103,11 @@
   ],
   "presets": [
     {
-      "name": "Pro: Threads Cash",
+      "name": "Pro: rewards",
       "blocks": [
-        { "type": "step", "settings": { "title": "Shop as usual", "body": "<p>Buy your blanks at Pro prices, the same way you order today.</p>" } },
-        { "type": "step", "settings": { "title": "Earn [cash_rate] back", "body": "<p>Threads Cash is calculated on what you pay for eligible merchandise, after discounts, returns and cancellations.</p>" } },
-        { "type": "step", "settings": { "title": "Use it toward a future order", "body": "<p>Once it posts to your account, apply it as store credit at checkout.</p>" } }
+        { "type": "step", "settings": { "title": "Shop as usual", "body": "<p>Earn [cash_rate] back on eligible purchases, the same way you order today.</p>" } },
+        { "type": "step", "settings": { "title": "It’s yours on the 1st", "body": "<p>Eligible Threads Cash becomes available in your account on the first of each month.</p>" } },
+        { "type": "step", "settings": { "title": "Put it toward your next order", "body": "<p>Use available Threads Cash toward future eligible orders.</p>" } }
       ]
     }
   ]

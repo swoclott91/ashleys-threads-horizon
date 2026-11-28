@@ -4,10 +4,6 @@
       "type": "at-pro-hero",
       "settings": {}
     },
-    "benefits": {
-      "type": "at-pro-benefits",
-      "settings": {}
-    },
     "price_compare": {
       "type": "at-pro-price-compare",
       "settings": {
@@ -28,21 +24,21 @@
           "type": "step",
           "settings": {
             "title": "Shop as usual",
-            "body": "<p>Buy your blanks at Pro prices, the same way you order today.</p>"
+            "body": "<p>Earn [cash_rate] back on eligible purchases, the same way you order today.</p>"
           }
         },
         "s2": {
           "type": "step",
           "settings": {
-            "title": "Earn [cash_rate] back",
-            "body": "<p>Threads Cash is calculated on what you pay for eligible merchandise, after discounts, returns and cancellations.</p>"
+            "title": "It’s yours on the 1st",
+            "body": "<p>Eligible Threads Cash becomes available in your account on the first of each month.</p>"
           }
         },
         "s3": {
           "type": "step",
           "settings": {
-            "title": "Use it toward a future order",
-            "body": "<p>Once it posts to your account, apply it as store credit at checkout.</p>"
+            "title": "Put it toward your next order",
+            "body": "<p>Use available Threads Cash toward future eligible orders.</p>"
           }
         }
       },
@@ -77,38 +73,30 @@
             "difference": true
           }
         },
-        "r3": {
-          "type": "row",
-          "settings": {
-            "label": "Favorites and bulk ordering",
-            "member": "Included",
-            "pro": "Included"
-          }
-        },
-        "r4": {
-          "type": "row",
-          "settings": {
-            "label": "Personalized shopping",
-            "member": "Included",
-            "pro": "Included"
-          }
-        },
         "r5": {
           "type": "row",
           "settings": {
             "label": "Threads Cash",
             "member": "—",
-            "pro": "[cash_rate] back",
+            "pro": "[cash_rate] back, available monthly",
             "difference": true
           }
         },
         "r6": {
           "type": "row",
           "settings": {
-            "label": "Monthly shipping credit",
+            "label": "Monthly shipping savings",
             "member": "—",
-            "pro": "Up to [ship_max]",
+            "pro": "Up to [ship_max] off one order a month",
             "difference": true
+          }
+        },
+        "r3": {
+          "type": "row",
+          "settings": {
+            "label": "Favorites, bulk ordering and personalized shopping",
+            "member": "Included",
+            "pro": "Included"
           }
         },
         "r7": {
@@ -123,10 +111,9 @@
       "block_order": [
         "r1",
         "r2",
-        "r3",
-        "r4",
         "r5",
         "r6",
+        "r3",
         "r7"
       ],
       "settings": {}
@@ -138,7 +125,7 @@
           "type": "question",
           "settings": {
             "question": "How much better is Pro pricing?",
-            "answer": "<p>Pro prices are lower than Member prices on eligible products. The difference varies by style, color, size, sale and bulk pricing, so sign in to see your own prices and compare them on real styles above.</p>",
+            "answer": "<p>Pro prices are lower than Member prices on eligible products. The difference varies by style, color, size and quantity, and products already on sale keep whichever price is lower, so Pro isn’t a flat percentage off. Compare Member and Pro prices on real styles above.</p>",
             "pending": false
           }
         },
@@ -146,39 +133,39 @@
           "type": "question",
           "settings": {
             "question": "How does Threads Cash work?",
-            "answer": "<p>You earn [cash_rate] back on eligible net merchandise purchases as Threads Cash, added to your account as store credit for future orders. When it posts, how long it lasts and which products are excluded will be confirmed before launch.</p>",
-            "pending": true
+            "answer": "<p>Pro members earn [cash_rate] back in Threads Cash on eligible purchases. Eligible Threads Cash becomes available in your account on the first of each month, and you can use it toward future eligible orders.</p>",
+            "pending": false
           }
         },
         "q03": {
           "type": "question",
           "settings": {
-            "question": "How does the monthly shipping credit work?",
-            "answer": "<p>Once a month, take up to [ship_max] off the actual standard shipping charge on a merchandise order of [ship_min] or more. Credits don’t roll over, and orders that already ship free at [free_ship]+ don’t use your credit.</p>",
-            "pending": true
+            "question": "How do the monthly shipping savings work?",
+            "answer": "<p>Once a month, take up to [ship_max] off shipping on a qualifying order with at least [ship_min] in merchandise. That’s up to [ship_year] a year. The credit can’t exceed the actual shipping charge, unused credits don’t roll over, and orders of [free_ship] or more already ship free.</p>",
+            "pending": false
           }
         },
         "q04": {
           "type": "question",
           "settings": {
             "question": "Can Pro benefits be combined with sales and bulk discounts?",
-            "answer": "<p>Pending policy: how Pro pricing stacks with sales, Member Deals and bulk pricing.</p>",
+            "answer": "<p>Pending policy: how Pro pricing works with Member Deals and bulk pricing. Products already on sale keep whichever price is lower.</p>",
             "pending": true
           }
         },
         "q05": {
           "type": "question",
           "settings": {
-            "question": "How much do I need to spend for Pro to pay for itself?",
-            "answer": "<p>At our current pricing, about [breakeven_annual] a year of blank apparel at Member prices (roughly [breakeven_monthly] a month) covers the [fee] membership through Pro pricing and Threads Cash alone, before any shipping savings. Your products and quantities change this, so try the calculator at the top of this page with your own numbers.</p>",
+            "question": "How much do I need to buy for Pro to pay for itself?",
+            "answer": "<p>About [cash_cover_spend] a year in eligible purchases earns [cash_cover_cash] in Threads Cash, enough to cover the [fee] membership through rewards alone. Monthly shipping savings add up to [ship_year] a year, and everything you save through exclusive Pro pricing is on top.</p>",
             "pending": false
           }
         },
         "q06": {
           "type": "question",
           "settings": {
-            "question": "What happens if my membership doesn’t pay for itself?",
-            "answer": "<p>Pending policy: the Pro Promise refunds the difference between your membership value and the fee. First-year vs every-year eligibility and refund timing are still being finalized.</p>",
+            "question": "What if my rewards don’t cover the membership?",
+            "answer": "<p>Pending policy: the Pro Promise refunds the difference when your Threads Cash and shipping savings don’t cover the [fee] fee, at each membership anniversary. Pro pricing savings don’t reduce the refund. Rewards still pending at the anniversary, settlement timing and the refund method are being finalized.</p>",
             "pending": true
           }
         },
@@ -213,6 +200,14 @@
             "answer": "<p>Pending policy: confirm whether Pro is open to every Ashley’s Threads account.</p>",
             "pending": true
           }
+        },
+        "q11": {
+          "type": "question",
+          "settings": {
+            "question": "Does Threads Cash expire?",
+            "answer": "<p>Pending policy: expiry, return adjustments, redemption limits and excluded products.</p>",
+            "pending": true
+          }
         }
       },
       "block_order": [
@@ -225,7 +220,8 @@
         "q07",
         "q08",
         "q09",
-        "q10"
+        "q10",
+        "q11"
       ],
       "settings": {}
     },
@@ -236,7 +232,6 @@
   },
   "order": [
     "main",
-    "benefits",
     "price_compare",
     "promise",
     "threads_cash",
