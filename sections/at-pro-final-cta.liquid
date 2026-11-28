@@ -1,5 +1,5 @@
 {%- comment -%}
-  Pro PDP section 8: closing purchase CTA. Pro members get their membership link instead;
+  Pro PDP section 8: closing purchase CTA (fee from at-pro-config, action from at-pro-cta). Pro members get their membership link instead;
   Wholesale customers see nothing.
 {%- endcomment -%}
 {%- capture pv -%}{% render 'at-pro-value' %}{%- endcapture -%}
@@ -30,7 +30,7 @@
   "class": "at-pro-section-wrap",
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Make more. Keep more." },
-    { "type": "textarea", "id": "body", "label": "Text", "default": "Lower costs on every order, rewards on what you buy, and a shipping credit every month." },
+    { "type": "textarea", "id": "body", "label": "Text", "default": "Better everyday pricing. Monthly rewards. Monthly shipping savings." },
     { "type": "text", "id": "cta_label", "label": "Button label", "default": "Become a Pro", "info": "The price and “/year” are added automatically." },
     { "type": "text", "id": "pro_heading", "label": "Heading for Pro members", "default": "Thanks for choosing Ashley’s Threads." }
   ],

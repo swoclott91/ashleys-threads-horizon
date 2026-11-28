@@ -2,7 +2,7 @@
    Colors: Theme settings › Membership (--at-pro-identity, --at-membership-surface …, from
    snippets/color-palette). Buttons: the theme's .button (forest green) and .button-secondary.
    Type: theme body font (DM Sans) for numbers and controls; --at-pro-serif for editorial headlines.
-   Stitching is reserved for the hero value panel and the Pro Promise. */
+   Stitching is reserved for the hero membership card and the Pro Promise. */
 
 .at-pro-page {
   --at-pro-ink: var(--color-foreground, #2c2c2c);
@@ -32,6 +32,7 @@
   text-transform: uppercase;
   color: var(--at-pro-identity);
 }
+.at-pro-kicker--inverse { color: var(--at-pro-on-identity-muted); }
 
 /* Strong numerical typography: body sans, tabular, heavy. */
 .at-pro-figure {
@@ -92,34 +93,23 @@
   }
 }
 
-/* Identity and price: one group. */
+/* Title and price: one group, the fee as the largest figure in the purchase column. */
 .at-pro-hero__identity {
   grid-area: identity;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  column-gap: 16px;
-  row-gap: 18px;
+  gap: 10px;
+  padding-block-end: 20px;
+  border-block-end: 1px solid var(--at-pro-line);
 }
-.at-pro-hero__identity-text { display: grid; gap: 4px; }
 .at-pro-hero__title {
   font-family: var(--font-heading--family);
   font-size: clamp(1.375rem, 2.2vw, 1.875rem);
   font-weight: var(--font-heading--weight, 700);
   line-height: 1.15;
 }
-.at-pro-hero__price {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  column-gap: 10px;
-  row-gap: 2px;
-  padding-block-start: 18px;
-  border-block-start: 1px solid var(--at-pro-line);
-}
-.at-pro-hero__price-amount { font-size: clamp(2.75rem, 4.4vw, 3.75rem); }
-.at-pro-hero__price-unit { font-size: 1.0625rem; color: var(--at-pro-muted); }
+.at-pro-hero__price { display: flex; align-items: baseline; gap: 4px; color: var(--at-pro-ink); }
+.at-pro-hero__price-amount { font-size: clamp(3.25rem, 5.2vw, 4.5rem); letter-spacing: -0.04em; }
+.at-pro-hero__price-unit { font-size: clamp(1.25rem, 1.8vw, 1.5rem); font-weight: 600; color: var(--at-pro-muted); }
 
 /* Purchase: open layout, no enclosing card. */
 .at-pro-hero__purchase { grid-area: purchase; display: grid; gap: 22px; }
@@ -150,15 +140,15 @@
 .at-pro-benefits-list__item--primary .at-pro-benefits-list__icon { background: var(--at-pro-identity); color: var(--at-pro-identity-ink); }
 .at-pro-benefits-list__item--primary strong { font-size: 1.1875rem; color: var(--at-pro-identity); }
 
-/* ---------- Value panel (Pro identity) ---------- */
+/* ---------- Membership card (Pro identity) ---------- */
 .at-pro-panel {
   grid-area: value;
   position: relative;
   isolation: isolate;
   display: grid;
-  gap: 18px;
+  gap: 20px;
   align-content: start;
-  padding: clamp(26px, 3.4vw, 52px);
+  padding: clamp(28px, 3.6vw, 56px);
   border-radius: var(--at-pro-radius);
   background: var(--at-pro-identity);
   color: var(--at-pro-identity-ink);
@@ -183,31 +173,49 @@
   font-weight: 600;
   background: rgb(255 255 255 / 0.16);
 }
-.at-pro-panel__headline { font-size: clamp(2rem, 3.6vw, 3.125rem); max-inline-size: 16ch; }
+.at-pro-panel__brand { display: flex; gap: 16px; align-items: center; }
+.at-pro-panel__headline { font-size: clamp(2.5rem, 4.6vw, 4rem); max-inline-size: 12ch; text-wrap: balance; }
 .at-pro-panel__lead { font-size: 1.0625rem; max-inline-size: 46ch; color: var(--at-pro-on-identity-muted); }
-.at-pro-panel__note,
-.at-pro-panel__basis { font-size: 0.8125rem; color: var(--at-pro-on-identity-muted); max-inline-size: 58ch; }
+.at-pro-panel__note { font-size: 0.875rem; color: var(--at-pro-on-identity-muted); max-inline-size: 58ch; }
 .at-pro-panel__wholesale { justify-self: start; }
-.at-pro-panel :is(a, button, summary, input, select):focus-visible { outline: 2px solid var(--at-pro-identity-ink); outline-offset: 2px; }
-.at-pro-panel__promise { display: flex; gap: 10px; align-items: center; font-size: 0.875rem; }
+.at-pro-panel :is(a, button):focus-visible { outline: 2px solid var(--at-pro-identity-ink); outline-offset: 2px; }
+.at-pro-panel__personal {
+  padding-block-start: 16px;
+  border-block-start: 1px solid rgb(255 240 215 / 0.22);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  max-inline-size: 44ch;
+}
 
-/* Primary number: label → figure → what it means. */
+/* The offer: exclusive pricing leads, then two figures. */
+.at-pro-offer { display: grid; gap: 22px; }
+.at-pro-offer__primary {
+  display: grid;
+  gap: 6px;
+  padding-block-start: 20px;
+  border-block-start: 1px solid rgb(255 240 215 / 0.22);
+}
+.at-pro-offer__title { font-size: clamp(1.75rem, 2.8vw, 2.375rem); }
+.at-pro-offer__detail { font-size: 1.0625rem; color: var(--at-pro-on-identity-muted); max-inline-size: 42ch; }
+.at-pro-offer__stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0; list-style: none; }
+.at-pro-offer__stat {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding: 18px 20px;
+  border-radius: calc(var(--at-pro-radius) - 4px);
+  background: rgb(255 255 255 / 0.08);
+}
+.at-pro-offer__figure { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 6px; row-gap: 2px; }
+.at-pro-offer__number { font-size: clamp(2.75rem, 4.4vw, 3.75rem); letter-spacing: -0.04em; }
+.at-pro-offer__unit { flex-basis: 100%; font-size: 1rem; font-weight: 600; }
+.at-pro-offer__unit--pre { flex-basis: auto; font-size: 1.125rem; }
+.at-pro-offer__note { font-size: 0.875rem; color: var(--at-pro-on-identity-muted); }
+
+/* State E: qualifying value, progress, facts. */
 .at-pro-figure-block { display: grid; gap: 8px; justify-items: start; }
-.at-pro-figure-block__label { font-size: 1.0625rem; font-weight: 600; color: var(--at-pro-on-identity-muted); }
-.at-pro-figure-block__caption { font-size: 1.0625rem; max-inline-size: 36ch; }
-.at-pro-figure-block [hidden] { display: none; }
-
-/* Breakdown: light rows, one divider above the fee. */
-.at-pro-breakdown { display: grid; gap: 6px; max-inline-size: 30rem; font-variant-numeric: tabular-nums; }
-.at-pro-breakdown__row { display: flex; justify-content: space-between; gap: 16px; font-size: 0.9375rem; color: var(--at-pro-on-identity-muted); }
-.at-pro-breakdown__row dd { font-weight: 600; white-space: nowrap; color: var(--at-pro-identity-ink); }
-.at-pro-breakdown__row--primary { font-size: 1rem; color: var(--at-pro-identity-ink); }
-.at-pro-breakdown__row--primary dd { font-weight: 700; }
-.at-pro-breakdown__row--fee { margin-block-start: 4px; padding-block-start: 10px; border-block-start: 1px solid rgb(255 240 215 / 0.22); }
-.at-pro-breakdown__row--fee dd { font-weight: 500; color: var(--at-pro-on-identity-muted); }
-
-/* Break-even conclusion */
-.at-pro-conclusion { font-size: 1.0625rem; font-weight: 600; max-inline-size: 40ch; }
+.at-pro-figure-block__label { font-size: 1.0625rem; font-weight: 600; color: var(--at-pro-on-identity-muted); max-inline-size: 36ch; }
+.at-pro-conclusion { font-size: 1.0625rem; font-weight: 600; max-inline-size: 44ch; }
 .at-pro-conclusion__success { display: inline-flex; gap: 10px; align-items: flex-start; }
 .at-pro-conclusion__success::before {
   display: inline-grid;
@@ -221,12 +229,8 @@
   color: var(--at-pro-identity);
   font-size: 0.8125rem;
   font-weight: 800;
-  content: '✓';
+  content: '\2713';
 }
-.at-pro-conclusion--celebrate { font-size: 1.1875rem; }
-.at-pro-conclusion [hidden] { display: none; }
-
-/* State E */
 .at-pro-facts { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
 .at-pro-facts > div { display: grid; gap: 4px; padding: 12px 14px; border-radius: 8px; background: rgb(255 255 255 / 0.08); }
 .at-pro-facts dt { font-size: 0.75rem; font-weight: 600; color: var(--at-pro-on-identity-muted); }
@@ -245,7 +249,7 @@
 .at-pro-credit code { padding: 1px 6px; border-radius: 4px; background: rgb(var(--at-pro-identity-rgb) / 0.1); font-size: 0.875em; }
 .at-pro-credit__action { margin-block-start: 6px; }
 
-/* ---------- Progress toward the fee (below break-even only) ---------- */
+/* Progress toward the fee (active Pros, membership-year data only). */
 .at-pro-progress {
   position: relative;
   block-size: 8px;
@@ -254,7 +258,6 @@
   overflow: hidden;
   background: rgb(255 240 215 / 0.2);
 }
-.at-pro-progress[hidden] { display: none; }
 .at-pro-progress__bar {
   position: absolute;
   inset: 0;
@@ -262,145 +265,7 @@
   transform: scaleX(var(--at-pro-progress, 0));
   border-radius: inherit;
   background: var(--at-pro-identity-ink);
-  transition: transform 0.25s ease;
 }
-@media (prefers-reduced-motion: reduce) { .at-pro-progress__bar { transition: none; } }
-
-/* ---------- Calculator (value first, then controls) ---------- */
-.at-pro-calc { display: grid; gap: 22px; }
-.at-pro-calc__results { display: grid; gap: 18px; }
-.at-pro-calc__inputs {
-  display: grid;
-  gap: 14px;
-  padding-block-start: 20px;
-  border-block-start: 1px solid rgb(255 240 215 / 0.22);
-}
-.at-pro-calc__field { display: grid; gap: 8px; }
-.at-pro-calc__field-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.at-pro-calc__field label { font-weight: 600; font-size: 0.9375rem; }
-.at-pro-calc__money-input {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  padding-inline: 10px;
-  border: 1px solid rgb(255 240 215 / 0.5);
-  border-radius: var(--style-border-radius-inputs, 6px);
-  background: rgb(255 255 255 / 0.06);
-  font-variant-numeric: tabular-nums;
-}
-.at-pro-calc .at-pro-calc__money-input input {
-  inline-size: 6ch;
-  min-block-size: 40px;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  font-weight: 700;
-}
-.at-pro-calc__money-input input:focus { outline: none; }
-.at-pro-calc__money-input:focus-within { outline: 2px solid currentColor; outline-offset: 2px; }
-.at-pro-calc select {
-  justify-self: start;
-  min-inline-size: 6rem;
-  min-block-size: 40px;
-  padding: 6px 10px;
-  border: 1px solid rgb(255 240 215 / 0.5);
-  border-radius: var(--style-border-radius-inputs, 6px);
-  background: rgb(255 255 255 / 0.06);
-  color: inherit;
-  font: inherit;
-}
-.at-pro-calc select option { color: var(--at-pro-ink); }
-
-/* Touch-friendly range: 32px hit area, 6px track. */
-.at-pro-calc .at-pro-calc__range {
-  --thumb: 26px;
-  inline-size: 100%;
-  block-size: 32px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  appearance: none;
-  -webkit-appearance: none;
-  cursor: pointer;
-}
-.at-pro-calc__range::-webkit-slider-runnable-track { block-size: 6px; border-radius: 999px; background: rgb(255 240 215 / 0.3); }
-.at-pro-calc__range::-moz-range-track { block-size: 6px; border-radius: 999px; background: rgb(255 240 215 / 0.3); }
-.at-pro-calc__range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  inline-size: var(--thumb);
-  block-size: var(--thumb);
-  margin-block-start: calc((6px - var(--thumb)) / 2);
-  border: 3px solid var(--at-pro-identity);
-  border-radius: 50%;
-  background: var(--at-pro-identity-ink);
-  box-shadow: 0 0 0 1px var(--at-pro-identity-ink);
-}
-.at-pro-calc__range::-moz-range-thumb {
-  inline-size: calc(var(--thumb) - 6px);
-  block-size: calc(var(--thumb) - 6px);
-  border: 3px solid var(--at-pro-identity);
-  border-radius: 50%;
-  background: var(--at-pro-identity-ink);
-  box-shadow: 0 0 0 1px var(--at-pro-identity-ink);
-}
-.at-pro-calc__range:focus-visible { outline: 2px solid var(--at-pro-identity-ink); outline-offset: 4px; }
-
-.at-pro-calc__help,
-.at-pro-calc__disclaimer { font-size: 0.8125rem; color: var(--at-pro-on-identity-muted); }
-.at-pro-calc__help[hidden] { display: none; }
-.at-pro-calc__disclaimer { font-size: 0.75rem; }
-
-.at-pro-calc__advanced summary {
-  display: grid;
-  gap: 2px;
-  padding-block: 4px;
-  cursor: pointer;
-  list-style: none;
-}
-.at-pro-calc__advanced summary::-webkit-details-marker { display: none; }
-.at-pro-calc__advanced summary > span:first-child {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.at-pro-calc__advanced summary > span:first-child::after { font-size: 0.75em; content: '▾'; text-decoration: none; transition: transform 0.2s ease; }
-.at-pro-calc__advanced[open] summary > span:first-child::after { transform: rotate(180deg); }
-.at-pro-calc__assumption { font-size: 0.8125rem; color: var(--at-pro-on-identity-muted); }
-.at-pro-calc__advanced-body {
-  display: grid;
-  gap: 14px;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  padding-block-start: 14px;
-}
-.at-pro-calc__advanced-body > p { grid-column: 1 / -1; }
-
-/* States C and D: the future estimate is a separate scenario. */
-.at-pro-panel__future {
-  border-radius: calc(var(--at-pro-radius) - 4px);
-  background: rgb(255 255 255 / 0.06);
-}
-.at-pro-panel__future > summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 14px 18px;
-  font-weight: 600;
-  cursor: pointer;
-  list-style: none;
-}
-.at-pro-panel__future > summary::-webkit-details-marker { display: none; }
-.at-pro-panel__future > summary::after { content: '+'; font-size: 1.25rem; line-height: 1; }
-.at-pro-panel__future[open] > summary::after { content: '−'; }
-.at-pro-panel__future > :not(summary) { margin-inline: 18px; }
-.at-pro-panel__future > .at-pro-calc { margin-block: 14px 18px; }
-.at-pro-panel__future .at-pro-figure--hero { font-size: clamp(2.5rem, 4.6vw, 3.5rem); }
 
 /* ---------- Compact Pro Promise (purchase panel) ---------- */
 .at-pro-promise-chip {
@@ -471,48 +336,9 @@
    between sections (about 30% less than the first pass, which padded both sides). */
 .at-pro-section { padding-block: 0 clamp(40px, 5.6vw, 88px); }
 .at-pro-section__head { display: grid; gap: 8px; margin-block-end: clamp(18px, 2.2vw, 32px); max-inline-size: 62ch; }
-.at-pro-section__heading { font-size: clamp(1.875rem, 3.4vw, 2.75rem); }
+.at-pro-section__heading { font-size: clamp(1.875rem, 3.4vw, 2.75rem); text-wrap: balance; }
 .at-pro-section__intro { font-size: 1.0625rem; color: var(--at-pro-muted); }
 .at-pro-section__footnote { margin-block-start: 14px; font-size: 0.8125rem; color: var(--at-pro-muted); max-inline-size: 90ch; }
-
-/* Section: three benefits, one big idea per card. */
-.at-pro-benefits__grid { display: grid; gap: var(--at-pro-gap); }
-@media screen and (min-width: 750px) {
-  .at-pro-benefits__grid { grid-template-columns: 1.35fr 1fr 1fr; }
-}
-.at-pro-benefit {
-  display: grid;
-  gap: 14px;
-  align-content: start;
-  padding: clamp(22px, 2.6vw, 36px);
-  border-radius: var(--at-pro-radius);
-}
-.at-pro-benefit__eyebrow {
-  display: flex;
-  gap: 10px;
-  align-items: baseline;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.at-pro-benefit__eyebrow .at-pro-figure { font-size: 0.8125rem; letter-spacing: 0.04em; opacity: 0.7; }
-.at-pro-benefit__figure { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; row-gap: 4px; }
-.at-pro-benefit__number { font-size: clamp(3.25rem, 6vw, 5rem); letter-spacing: -0.04em; }
-.at-pro-benefit__unit { font-size: 1.0625rem; font-weight: 600; }
-.at-pro-benefit__body { font-size: 0.9375rem; }
-.at-pro-benefit__body > * + * { margin-block-start: 0.6em; }
-.at-pro-benefit__link { justify-self: start; margin-block-start: 4px; color: inherit; font-weight: 600; text-underline-offset: 3px; }
-
-.at-pro-benefit--pricing { background: var(--at-pro-identity); color: var(--at-pro-identity-ink); }
-.at-pro-benefit--pricing .at-pro-benefit__figure { font-size: clamp(2.25rem, 3.8vw, 3.25rem); line-height: 1.02; max-inline-size: 11ch; }
-.at-pro-benefit--pricing .at-pro-benefit__body { color: var(--at-pro-on-identity-muted); font-size: 1rem; max-inline-size: 44ch; }
-.at-pro-benefit--cash { background: var(--at-membership-card); box-shadow: 0 0 0 1px var(--at-pro-line); }
-.at-pro-benefit--cash .at-pro-benefit__number { color: var(--at-pro-identity); }
-.at-pro-benefit--cash .at-pro-benefit__body,
-.at-pro-benefit--shipping .at-pro-benefit__body { color: var(--at-pro-muted); }
-.at-pro-benefit--shipping { background: var(--at-pro-green-tint); }
-.at-pro-benefit--shipping .at-pro-benefit__number { color: var(--at-pro-green); }
 
 /* Section: price comparison cards (product-card language: image, then title and price). */
 .at-pro-price-cards {
@@ -558,24 +384,16 @@
 .at-pro-price-card__qty strong { color: var(--at-pro-ink); font-variant-numeric: tabular-nums; }
 .at-pro-price-card__qty span { display: block; }
 
-.at-pro-compare__illustration {
-  display: grid;
-  gap: clamp(18px, 3vw, 40px);
+/* No prices to show (guests, or no eligible styles): one prompt. */
+.at-pro-compare__guest {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 24px;
   align-items: center;
-  padding: clamp(22px, 2.6vw, 36px);
-  border-radius: var(--at-pro-radius);
-  background: var(--at-membership-card);
-  box-shadow: 0 0 0 1px var(--at-pro-line);
+  font-size: 1.0625rem;
 }
-@media screen and (min-width: 750px) { .at-pro-compare__illustration { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); } }
-.at-pro-compare__steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.at-pro-compare__steps > div { display: grid; gap: 8px; align-content: start; padding: 14px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--at-pro-line); }
-.at-pro-compare__steps dt { font-size: 0.8125rem; font-weight: 600; color: var(--at-pro-muted); }
-.at-pro-compare__steps dd { font-size: clamp(1.375rem, 2.4vw, 2rem); }
-.at-pro-compare__steps-pro { background: var(--at-pro-identity); color: var(--at-pro-identity-ink); box-shadow: none !important; }
-.at-pro-compare__steps-pro dt { color: inherit !important; opacity: 0.85; }
-.at-pro-compare__steps-kept dd { color: var(--at-pro-green); }
-.at-pro-compare__illustration-copy { display: grid; gap: 14px; justify-items: start; font-size: 1.0625rem; }
+.at-pro-price-cards + .at-pro-compare__guest { margin-block-start: 18px; }
+.at-pro-price-cards--guest .at-pro-price-card__body { padding-block: 14px 16px; }
 
 /* Section: the Promise (stitched, reassuring, one simple example). */
 .at-pro-promise__card {
@@ -595,7 +413,8 @@
 .at-pro-promise__seal { display: flex; gap: 14px; align-items: center; }
 .at-pro-promise__heading { font-size: clamp(2.125rem, 4.2vw, 3.5rem); max-inline-size: 14ch; }
 .at-pro-promise__body { font-size: 1.125rem; max-inline-size: 46ch; }
-.at-pro-promise__counts, .at-pro-promise__terms { font-size: 0.875rem; color: var(--at-pro-on-identity-muted); }
+.at-pro-promise__keep { font-size: 1.125rem; font-weight: 600; max-inline-size: 44ch; }
+.at-pro-promise__terms { font-size: 0.875rem; color: var(--at-pro-on-identity-muted); }
 .at-pro-promise__example {
   padding: clamp(18px, 2vw, 28px);
   border-radius: calc(var(--at-pro-radius) - 2px);
@@ -617,35 +436,43 @@
 .at-pro-promise__table-refund th { border-start-start-radius: 8px; border-end-start-radius: 8px; }
 .at-pro-promise__table-refund td { border-start-end-radius: 8px; border-end-end-radius: 8px; }
 .at-pro-promise__table tfoot tr:first-child :is(th, td) { border-block-start: 8px solid transparent; background-clip: padding-box; }
+.at-pro-promise__table-context :is(th, td) { color: var(--at-pro-muted); }
+.at-pro-promise__cover { margin-block-start: 10px; padding-block-start: 12px; border-block-start: 1px solid var(--at-pro-line); font-size: 0.875rem; color: var(--at-pro-muted); }
 
-/* Section: Threads Cash as a horizontal process. */
-.at-pro-steps { display: grid; gap: 22px; padding: 0; list-style: none; counter-reset: none; }
-.at-pro-steps__item { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); column-gap: 16px; row-gap: 4px; align-content: start; }
+/* Section: Threads Cash and monthly shipping, side by side. */
+.at-pro-rewards__grid { display: grid; gap: var(--at-pro-gap); }
+@media screen and (min-width: 990px) { .at-pro-rewards__grid { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); } }
+.at-pro-rewards__panel {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  padding: clamp(22px, 2.6vw, 36px);
+  border-radius: var(--at-pro-radius);
+}
+.at-pro-rewards__panel--cash { background: var(--at-membership-card); box-shadow: 0 0 0 1px var(--at-pro-line); }
+.at-pro-rewards__panel--ship { background: var(--at-pro-green-tint); }
+.at-pro-rewards__title { font-family: var(--font-body--family); font-size: 1.125rem; font-weight: 700; line-height: 1.3; }
+.at-pro-rewards__figure { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; }
+.at-pro-rewards__number { font-size: clamp(3rem, 5vw, 4.25rem); letter-spacing: -0.04em; color: var(--at-pro-green); }
+.at-pro-rewards__unit { font-size: 1.0625rem; font-weight: 600; }
+.at-pro-rewards__year { margin-block-start: -8px; font-weight: 600; color: var(--at-pro-green); }
+.at-pro-rewards__rules { font-size: 0.9375rem; color: var(--at-pro-muted); }
+.at-pro-rewards__rules ul { display: grid; gap: 8px; margin: 0; padding-inline-start: 1.1em; }
+
+.at-pro-steps { display: grid; gap: 18px; padding: 0; list-style: none; }
+.at-pro-steps__item { display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 14px; row-gap: 2px; align-content: start; }
 .at-pro-steps__number {
-  grid-row: span 2;
   display: grid;
   place-items: center;
-  inline-size: 44px;
-  block-size: 44px;
+  inline-size: 40px;
+  block-size: 40px;
   border-radius: 50%;
   background: var(--at-pro-identity);
   color: var(--at-pro-identity-ink);
-  font-size: 1.0625rem;
+  font-size: 1rem;
 }
-.at-pro-steps__title { align-self: end; font-family: var(--font-body--family); font-size: 1.125rem; font-weight: 700; line-height: 1.3; }
-.at-pro-steps__body { color: var(--at-pro-muted); font-size: 0.9375rem; max-inline-size: 36ch; }
-@media screen and (min-width: 750px) {
-  .at-pro-steps { grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: clamp(20px, 3vw, 48px); }
-  .at-pro-steps__item { grid-template-columns: minmax(0, 1fr); row-gap: 10px; }
-  .at-pro-steps__number { grid-row: auto; }
-  .at-pro-steps__item:not(:last-child)::after {
-    position: absolute;
-    inset-block-start: 22px;
-    inset-inline: 60px calc(-1 * clamp(20px, 3vw, 48px) + 12px);
-    border-block-start: 2px dashed rgb(var(--at-pro-identity-rgb) / 0.35);
-    content: '';
-  }
-}
+.at-pro-steps__title { align-self: center; font-family: var(--font-body--family); font-size: 1.0625rem; font-weight: 700; line-height: 1.3; }
+.at-pro-steps__body { grid-column: 2; color: var(--at-pro-muted); font-size: 0.9375rem; max-inline-size: 44ch; }
 
 /* Section: Member vs. Pro. Differences carry the emphasis; shared benefits stay quiet. */
 .at-pro-table { inline-size: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
@@ -713,20 +540,24 @@
 /* ---------- Mobile ---------- */
 @media screen and (max-width: 749px) {
   .at-pro-hero__grid { gap: 16px; }
-  .at-pro-hero .at-pro-emblem--md { --emblem-size: 44px; }
-  .at-pro-hero__price { padding-block-start: 12px; }
-  .at-pro-hero__price-amount { font-size: 2.5rem; }
-  .at-pro-panel { gap: 14px; padding: 24px 20px; }
-  .at-pro-panel__headline { font-size: 1.875rem; }
+  .at-pro-hero__identity { padding-block-end: 14px; }
+  .at-pro-hero__price-amount { font-size: 3rem; }
+  .at-pro-panel { gap: 16px; padding: 26px 22px; }
+  .at-pro-panel__headline { font-size: 2.375rem; }
+  .at-pro-panel__brand .at-pro-emblem--lg { --emblem-size: 56px; }
+  .at-pro-offer { gap: 16px; }
+  .at-pro-offer__primary { padding-block-start: 16px; }
+  .at-pro-offer__stats { gap: 8px; }
+  .at-pro-offer__stat { gap: 6px; padding: 14px 12px; }
+  .at-pro-offer__number { font-size: 2.25rem; }
+  .at-pro-offer__unit { font-size: 0.875rem; line-height: 1.25; }
+  .at-pro-offer__unit--pre { font-size: 0.9375rem; }
+  .at-pro-offer__note { font-size: 0.8125rem; }
+  .at-pro-offer__detail { font-size: 1rem; }
   .at-pro-figure--hero { font-size: 3.5rem; }
   .at-pro-figure-block__label,
-  .at-pro-figure-block__caption,
-  .at-pro-conclusion { font-size: 1rem; }
-  .at-pro-calc { gap: 18px; }
-  .at-pro-calc__results { gap: 14px; }
-  .at-pro-calc__field .at-pro-calc__help { display: none; }
-  .at-pro-panel__future > summary { padding: 14px 16px; }
-  .at-pro-panel__future > :not(summary) { margin-inline: 16px; }
+  .at-pro-conclusion,
+  .at-pro-panel__personal { font-size: 1rem; }
   .at-pro-benefits-list { gap: 14px; }
 
   /* Price cards: a swipeable row of readable cards. */
@@ -741,12 +572,10 @@
     padding-block-end: 6px;
     scroll-padding-inline: var(--page-margin, 16px);
   }
+  .at-pro-price-cards--guest { grid-auto-columns: 58%; }
   .at-pro-price-card { scroll-snap-align: start; }
-  .at-pro-compare__steps { gap: 6px; }
-  .at-pro-compare__steps > div { padding: 10px 8px; }
-  .at-pro-compare__steps dt { font-size: 0.6875rem; line-height: 1.25; }
-  .at-pro-compare__steps dd { font-size: 1.25rem; }
 
+  .at-pro-promise__table-refund :is(th, td) { padding: 10px 12px; font-size: 1rem; }
   .at-pro-table :is(th, td) { padding: 12px 10px; }
   .at-pro-versus__table thead th:first-child { inline-size: 40%; }
 }

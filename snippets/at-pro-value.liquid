@@ -3,16 +3,19 @@
   (docs/pro-membership-pdp.md). Presentation lives in the sections; this snippet only decides the
   state and the figures, so a compact tile and the expanded PDP always report the same numbers.
 
-  @param {string} [preview] - Theme editor only: a | b | c | d | e | f loads a labeled fixture;
-    d_ytd and e_ytd load the `savings_ytd` fallback shape (calendar year, pricing only for Members).
+  @param {string} [preview] - Theme editor only: a | b | c | d | e | e_full | f loads a labeled
+    fixture (e: benefits below the fee, e_full: benefits cover it); d_ytd and e_ytd load the
+    `savings_ytd` fallback shape (calendar year, pricing only for Members).
 
   States
-  - a: guest, or a Member with no orders → sell the opportunity, calculator.
-  - b: Member with orders but a potential value below `history_min` → future-focused, calculator.
-  - c: Member whose potential value is below the annual fee → itemized value + progress.
-  - d: Member whose potential value covers the fee → "Your business is ready for Pro".
-  - e: active Pro → actual value received this membership year.
+  - a: guest, or a Member with no orders.
+  - b: Member with orders but a potential value below `history_min`.
+  - c: Member whose potential value is below the annual fee.
+  - d: Member whose potential value covers the fee.
+  - e: active Pro → Threads Cash, shipping savings and progress toward the fee.
   - f: Wholesale → recognize the account, no upsell.
+  The Pro PDP shows the same membership presentation for a–d and adds one personal line for
+  members with meaningful history; the homepage tile shows its number for c and d.
 
   Figures (cents; -1 = not known, so the line is hidden rather than shown as $0)
   1. `wagner.pro_value` (proposed contract key, see the doc): pricing, Threads Cash and shipping,
@@ -20,18 +23,21 @@
   2. Fallback, the contract keys the homepage already reads: `wagner.savings_ytd`
      (`pro_would_save` for pricing; for Pro also `threads_cash` and `shipping_saved`).
   Personal figures need the storefront currency to match the shop currency and the current year.
-  Nothing is annualized or projected here; the calculator (assets/at-pro-value.js) does projections.
+  Nothing is annualized or projected here.
 
   `spend_12m` / `monthly_hint` tally merchandise lines (shipped, not gift cards) on the first 20
-  orders of the last 365 days, skipping cancelled and refunded orders. They only prefill the
-  calculator; they are never shown as savings.
+  orders of the last 365 days, skipping cancelled and refunded orders. They only decide whether a
+  Member has meaningful history; they are never shown as savings.
 
   Output (capture it): `;key=value;` — keys: state tier source sample basis pricing cash ship total
   net fee recovered_bp has_orders spend_12m monthly_hint balance renew ship_status ship_code
-  complete exact
+  complete exact qualifying qualifying_bp
   - complete: 1 when pricing, Threads Cash and shipping are all known. 0 means `total` is only the
     known part (today: Members get pricing alone), so it must not be labeled a total or a net.
   - exact: 0 when `wagner.pro_value.exact` is false (Pro prices were estimated), else 1.
+  - qualifying: Pro Promise value = Threads Cash + shipping savings (known parts only; pricing
+    savings never count). qualifying_bp: qualifying as basis points of the fee. Display only: the
+    theme is not the ledger or the settlement engine (Wagner is).
   {% capture at_pv %}{% render 'at-pro-value' %}{% endcapture %}
   {% assign at_pv_state = at_pv | split: ';state=' | last | split: ';' | first %}
 {%- enddoc -%}
@@ -197,6 +203,16 @@
       when 'e'
         assign at_pv_tier = 'pro'
         assign at_pv_pricing = 41200
+        assign at_pv_cash = 3240
+        assign at_pv_ship = 3000
+        assign at_pv_balance = 1460
+        assign at_pv_renew = 'now' | date: '%s' | plus: 17280000 | date: '%Y-%m-%d'
+        assign at_pv_ship_status = 'ready'
+        assign at_pv_ship_code = 'PRO-SAMPLE'
+        assign at_pv_basis = 'membership_year'
+      when 'e_full'
+        assign at_pv_tier = 'pro'
+        assign at_pv_pricing = 41200
         assign at_pv_cash = 7050
         assign at_pv_ship = 6000
         assign at_pv_balance = 4268
@@ -243,6 +259,17 @@
   if at_pv_fee > 0
     assign at_pv_recovered = at_pv_total | times: 10000 | divided_by: at_pv_fee
   endif
+  assign at_pv_qualifying = 0
+  if at_pv_cash > 0
+    assign at_pv_qualifying = at_pv_qualifying | plus: at_pv_cash
+  endif
+  if at_pv_ship > 0
+    assign at_pv_qualifying = at_pv_qualifying | plus: at_pv_ship
+  endif
+  assign at_pv_qualifying_bp = 0
+  if at_pv_fee > 0
+    assign at_pv_qualifying_bp = at_pv_qualifying | times: 10000 | divided_by: at_pv_fee
+  endif
 
   case at_pv_tier
     when 'wholesale'
@@ -263,7 +290,7 @@
       assign at_pv_state = 'a'
   endcase
 
-  # Calculator prefill: average month over the last 12 months, rounded down to $10.
+  # Average month over the last 12 months, rounded down to $10.
   assign at_pv_monthly = at_pv_spend | divided_by: 12 | divided_by: 1000 | times: 1000
 
   echo ';state=' | append: at_pv_state
@@ -287,5 +314,7 @@
   echo ';ship_code=' | append: at_pv_ship_code
   echo ';complete=' | append: at_pv_complete
   echo ';exact=' | append: at_pv_exact
+  echo ';qualifying=' | append: at_pv_qualifying
+  echo ';qualifying_bp=' | append: at_pv_qualifying_bp
   echo ';'
 -%}

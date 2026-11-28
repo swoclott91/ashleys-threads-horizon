@@ -1,6 +1,6 @@
 {%- comment -%}
   Pro PDP section: Member vs. Pro. Rows are editor blocks; values accept [tokens].
-  Rows marked "Pro difference" (pricing, Threads Cash, shipping credit) carry the emphasis; shared
+  Rows marked "Pro difference" (pricing, Threads Cash, monthly shipping) carry the emphasis; shared
   benefits are quieter. A Pro Promise row is added automatically while the Promise is visible.
   Guest and Wholesale are deliberately left out so they don't distract from the upgrade decision.
 {%- endcomment -%}
@@ -57,7 +57,7 @@
   "tag": "section",
   "class": "at-pro-section-wrap",
   "settings": [
-    { "type": "paragraph", "content": "Tokens: [fee] [cash_rate] [ship_max] [ship_min] [free_ship]." },
+    { "type": "paragraph", "content": "Tokens: [fee] [cash_rate] [ship_max] [ship_min] [free_ship] [ship_year]. Keep to the benefits Pro adds; no Wholesale column." },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Member vs. Pro" }
   ],
   "blocks": [
@@ -78,10 +78,9 @@
       "blocks": [
         { "type": "row", "settings": { "label": "Annual membership", "member": "Free", "pro": "[fee]" } },
         { "type": "row", "settings": { "label": "Everyday pricing", "member": "Member pricing", "pro": "Exclusive Pro pricing", "difference": true } },
-        { "type": "row", "settings": { "label": "Favorites and bulk ordering", "member": "Included", "pro": "Included" } },
-        { "type": "row", "settings": { "label": "Personalized shopping", "member": "Included", "pro": "Included" } },
-        { "type": "row", "settings": { "label": "Threads Cash", "member": "—", "pro": "[cash_rate] back", "difference": true } },
-        { "type": "row", "settings": { "label": "Monthly shipping credit", "member": "—", "pro": "Up to [ship_max]", "difference": true } },
+        { "type": "row", "settings": { "label": "Threads Cash", "member": "—", "pro": "[cash_rate] back, available monthly", "difference": true } },
+        { "type": "row", "settings": { "label": "Monthly shipping savings", "member": "—", "pro": "Up to [ship_max] off one order a month", "difference": true } },
+        { "type": "row", "settings": { "label": "Favorites, bulk ordering and personalized shopping", "member": "Included", "pro": "Included" } },
         { "type": "row", "settings": { "label": "Free standard shipping", "member": "[free_ship]+", "pro": "[free_ship]+" } }
       ]
     }
