@@ -95,7 +95,7 @@
       "guest_body": "Pro pricing is lower than Member pricing on many styles across our assortment, from premium fleece and specialty tees to polos, performance apparel and workwear. Sign in to see your Member and Pro prices side by side.",
       "guest_cta": "Sign in to compare",
       "sample": "Sample · editor only",
-      "editor_pending": "Editor note (not shown to shoppers): actual prices come from Wagner’s signed app proxy route /apps/wagner/pro-compare. Until it responds, signed-in customers see the text above instead of cards. The cards below are a layout preview with sample figures."
+      "editor_pending": "Editor note (not shown to shoppers): signed-in Members and Pros get their actual prices from Wagner (/apps/wagner/pro-compare, flag PRO_COMPARE_ENABLED). When it has nothing to show or doesn’t answer, they see the text above instead of cards. The cards below are a layout preview with sample figures."
     },
     "cash": {
       "pending_editor": "Editor note (not shown to shoppers): Threads Cash vesting, expiry, return adjustments, redemption limits and excluded products are not final. Turn on “Terms are final” only when they are."
